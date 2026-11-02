@@ -1,0 +1,131 @@
+[
+ {
+  "t": "Ein Job im Hafen",
+  "d": "Der Vorarbeiter braucht jemanden, der nachts Kisten vom Kutter schleppt. Keiner fragt, was drin ist. Eine Kiste bewegt sich.",
+  "o": [
+   {
+    "l": "Lohn kassieren: ein zufälliges Item",
+    "fx": [
+     {
+      "op": "give_random"
+     }
+    ]
+   },
+   {
+    "l": "Werkzeug statt Lohn: +1 Slot für Waffen & Schilde",
+    "fx": [
+     {
+      "op": "add_slot",
+      "area": "waffe"
+     }
+    ],
+    "if": {
+     "slot_below_max": "waffe"
+    }
+   },
+   {
+    "l": "In die Kiste schauen: +8 max. Leben, aber -6 Leben",
+    "fx": [
+     {
+      "op": "max_hp",
+      "v": 8
+     },
+     {
+      "op": "lose_hp",
+      "v": 6
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "t": "Die Pfandleihe",
+  "d": "Der alte Mendel hat Dinge im Hinterzimmer, die er nicht verkaufen will. Für dich macht er eine Ausnahme.",
+  "o": [
+   {
+    "l": "Ein Mantel mit tiefen Taschen: +1 Kleidungs-Slot",
+    "fx": [
+     {
+      "op": "add_slot",
+      "area": "kleidung"
+     }
+    ],
+    "if": {
+     "slot_below_max": "kleidung"
+    }
+   },
+   {
+    "l": "Im Hinterzimmer ausruhen: volles Leben",
+    "fx": [
+     {
+      "op": "full_heal"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "t": "Eine Stimme im Brunnen",
+  "d": "Sie kennt deinen Namen. Sie bietet dir Platz an deinem Hals an, für etwas, das du trägst.",
+  "o": [
+   {
+    "l": "Annehmen: +1 Talisman-Slot, -6 max. Leben",
+    "fx": [
+     {
+      "op": "add_slot",
+      "area": "talisman"
+     },
+     {
+      "op": "max_hp",
+      "v": -6
+     }
+    ],
+    "if": {
+     "slot_below_max": "talisman"
+    }
+   },
+   {
+    "l": "Weggehen: +10 Leben",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 10
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "t": "Der Nachtwächter",
+  "d": "Er hat es auch gesehen. Er gibt dir, was er hat, damit du weitergehst und er nicht muss.",
+  "o": [
+   {
+    "l": "Seine Sturmlaterne nehmen",
+    "fx": [
+     {
+      "op": "give_item",
+      "item": "lantern"
+     }
+    ]
+   },
+   {
+    "l": "Sein Silberkreuz nehmen",
+    "fx": [
+     {
+      "op": "give_item",
+      "item": "cross"
+     }
+    ]
+   },
+   {
+    "l": "Seinen Revolver nehmen",
+    "fx": [
+     {
+      "op": "give_item",
+      "item": "revolver"
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,83 @@
+[
+ {
+  "n": "Friedhofswärter",
+  "i": [
+   "shovel",
+   "woolcoat",
+   "boots"
+  ],
+  "t": "Nach jedem Sieg liegt ein Knochen im Rucksack.",
+  "bonus": {
+   "type": "after_victory_item",
+   "item": "bone"
+  }
+ },
+ {
+  "n": "Fischer",
+  "i": [
+   "harpoon",
+   "oilcoat",
+   "boots"
+  ],
+  "t": "Karten mit Wasser: +3 Schaden bzw. Block.",
+  "bonus": {
+   "type": "stoff_flat",
+   "stoff": "W",
+   "amount": 3
+  }
+ },
+ {
+  "n": "Pfarrerin",
+  "i": [
+   "bible",
+   "rosary",
+   "veil"
+  ],
+  "t": "Karten mit Glaube geben zusätzlich 2 Block.",
+  "bonus": {
+   "type": "stoff_block",
+   "stoff": "G",
+   "amount": 2
+  }
+ },
+ {
+  "n": "Detektiv",
+  "i": [
+   "revolver",
+   "cap",
+   "trench"
+  ],
+  "t": "Du ziehst 6 statt 5 Karten.",
+  "bonus": {
+   "type": "hand_size",
+   "amount": 6
+  }
+ },
+ {
+  "n": "Okkultist",
+  "i": [
+   "dagger",
+   "candle",
+   "robe"
+  ],
+  "t": "Karten mit Blut kosten keine Energie.",
+  "bonus": {
+   "type": "stoff_free",
+   "stoff": "B"
+  }
+ },
+ {
+  "n": "Kneipenschläger",
+  "i": [
+   "bottle",
+   "gloves",
+   "cap"
+  ],
+  "t": "Jede dritte Karte im Zug wirkt doppelt.",
+  "bonus": {
+   "type": "every_nth_mult",
+   "n": 3,
+   "mult": 2
+  }
+ }
+]

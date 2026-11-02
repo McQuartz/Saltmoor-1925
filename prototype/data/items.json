@@ -1,0 +1,516 @@
+{
+ "poker": {
+  "n": "Schürhaken",
+  "a": "waffe",
+  "st": [
+   "E"
+  ],
+  "spr": "poker",
+  "cards": [
+   {
+    "n": "Zuschlagen",
+    "c": 1,
+    "atk": 6
+   }
+  ]
+ },
+ "knife": {
+  "n": "Fischmesser",
+  "a": "waffe",
+  "st": [
+   "E"
+  ],
+  "spr": "knife",
+  "cards": [
+   {
+    "n": "Stechen",
+    "c": 0,
+    "atk": 3
+   }
+  ]
+ },
+ "harpoon": {
+  "n": "Harpune",
+  "a": "waffe",
+  "st": [
+   "W"
+  ],
+  "spr": "harpoon",
+  "cards": [
+   {
+    "n": "Harpunieren",
+    "c": 2,
+    "atk": 12
+   }
+  ]
+ },
+ "revolver": {
+  "n": "Revolver",
+  "a": "waffe",
+  "st": [
+   "F"
+  ],
+  "spr": "revolver",
+  "cards": [
+   {
+    "n": "Schuss",
+    "c": 1,
+    "atk": 4,
+    "h": 2
+   }
+  ]
+ },
+ "pan": {
+  "n": "Bratpfanne",
+  "a": "waffe",
+  "st": [
+   "E"
+  ],
+  "spr": "pan",
+  "cards": [
+   {
+    "n": "Pfanne hoch",
+    "c": 1,
+    "blk": 7
+   }
+  ]
+ },
+ "plank": {
+  "n": "Holzbrett",
+  "a": "waffe",
+  "st": [],
+  "spr": "plank",
+  "cards": [
+   {
+    "n": "Deckung",
+    "c": 1,
+    "blk": 6
+   }
+  ]
+ },
+ "bible": {
+  "n": "Familienbibel",
+  "a": "waffe",
+  "st": [
+   "G"
+  ],
+  "spr": "bible",
+  "cards": [
+   {
+    "n": "Psalm",
+    "c": 1,
+    "blk": 5,
+    "heal": 1
+   }
+  ]
+ },
+ "pick": {
+  "n": "Spitzhacke",
+  "a": "waffe",
+  "st": [
+   "E"
+  ],
+  "spr": "pick",
+  "cards": [
+   {
+    "n": "Hacken",
+    "c": 2,
+    "atk": 13
+   }
+  ]
+ },
+ "shovel": {
+  "n": "Schaufel",
+  "a": "waffe",
+  "st": [
+   "E"
+  ],
+  "spr": "shovel",
+  "cards": [
+   {
+    "n": "Graben",
+    "c": 1,
+    "atk": 4,
+    "blk": 3
+   }
+  ]
+ },
+ "dagger": {
+  "n": "Ritualdolch",
+  "a": "waffe",
+  "st": [
+   "B"
+  ],
+  "spr": "dagger",
+  "cards": [
+   {
+    "n": "Aderlass",
+    "c": 1,
+    "atk": 8,
+    "self": 2
+   }
+  ]
+ },
+ "torch": {
+  "n": "Fackel",
+  "a": "waffe",
+  "st": [
+   "F"
+  ],
+  "spr": "torch",
+  "cards": [
+   {
+    "n": "Fackel schwingen",
+    "c": 1,
+    "atk": 4,
+    "burn": 1
+   }
+  ]
+ },
+ "bottle": {
+  "n": "Flasche",
+  "a": "waffe",
+  "st": [],
+  "spr": "bottle",
+  "cards": [
+   {
+    "n": "Flaschenhieb",
+    "c": 1,
+    "atk": 6
+   }
+  ]
+ },
+ "woolcoat": {
+  "n": "Wollmantel",
+  "a": "kleidung",
+  "st": [],
+  "hp": 4,
+  "spr": "woolcoat",
+  "cards": [
+   {
+    "n": "Ducken",
+    "c": 1,
+    "blk": 5
+   }
+  ]
+ },
+ "oilcoat": {
+  "n": "Ölmantel",
+  "a": "kleidung",
+  "st": [
+   "W"
+  ],
+  "hp": 2,
+  "spr": "oilcoat",
+  "cards": [
+   {
+    "n": "Abperlen",
+    "c": 1,
+    "blk": 6
+   }
+  ]
+ },
+ "boots": {
+  "n": "Gummistiefel",
+  "a": "kleidung",
+  "st": [
+   "W"
+  ],
+  "hp": 3,
+  "spr": "boots",
+  "cards": [
+   {
+    "n": "Waten",
+    "c": 0,
+    "blk": 3
+   }
+  ]
+ },
+ "cap": {
+  "n": "Schiebermütze",
+  "a": "kleidung",
+  "st": [],
+  "hp": 2,
+  "spr": "cap",
+  "cards": [
+   {
+    "n": "Kopfnuss",
+    "c": 1,
+    "atk": 5
+   }
+  ]
+ },
+ "gloves": {
+  "n": "Arbeitshandschuhe",
+  "a": "kleidung",
+  "st": [
+   "E"
+  ],
+  "hp": 1,
+  "spr": "gloves",
+  "cards": [
+   {
+    "n": "Faust",
+    "c": 0,
+    "atk": 3
+   }
+  ]
+ },
+ "veil": {
+  "n": "Trauerschleier",
+  "a": "kleidung",
+  "st": [
+   "G"
+  ],
+  "hp": 2,
+  "spr": "veil",
+  "cards": [
+   {
+    "n": "Trauern",
+    "c": 1,
+    "blk": 4,
+    "heal": 2
+   }
+  ]
+ },
+ "robe": {
+  "n": "Kultistenrobe",
+  "a": "kleidung",
+  "st": [
+   "B"
+  ],
+  "hp": 2,
+  "spr": "robe",
+  "cards": [
+   {
+    "n": "Blutzeichen",
+    "c": 0,
+    "en": 1,
+    "self": 3
+   }
+  ]
+ },
+ "trench": {
+  "n": "Trenchcoat",
+  "a": "kleidung",
+  "st": [],
+  "hp": 3,
+  "spr": "trench",
+  "cards": [
+   {
+    "n": "Beschatten",
+    "c": 0,
+    "draw": 1
+   }
+  ]
+ },
+ "rosary": {
+  "n": "Rosenkranz",
+  "a": "talisman",
+  "st": [
+   "G"
+  ],
+  "spr": "rosary",
+  "cards": [
+   {
+    "n": "Gebet",
+    "c": 1,
+    "heal": 5
+   }
+  ]
+ },
+ "lantern": {
+  "n": "Sturmlaterne",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "lantern",
+  "cards": [
+   {
+    "n": "Blenden",
+    "c": 1,
+    "atk": 3,
+    "all": 1
+   }
+  ]
+ },
+ "salt": {
+  "n": "Salzbeutel",
+  "a": "talisman",
+  "st": [
+   "S"
+  ],
+  "spr": "salt",
+  "cards": [
+   {
+    "n": "Salz streuen",
+    "c": 0,
+    "blk": 3
+   }
+  ]
+ },
+ "shell": {
+  "n": "Seltsame Muschel",
+  "a": "talisman",
+  "st": [
+   "V"
+  ],
+  "spr": "shell",
+  "cards": [
+   {
+    "n": "Lauschen",
+    "c": 1,
+    "poison": 3
+   }
+  ]
+ },
+ "watch": {
+  "n": "Taschenuhr",
+  "a": "talisman",
+  "st": [],
+  "spr": "watch",
+  "cards": [
+   {
+    "n": "Aufziehen",
+    "c": 0,
+    "draw": 2
+   }
+  ]
+ },
+ "candle": {
+  "n": "Schwarze Kerze",
+  "a": "talisman",
+  "st": [
+   "F"
+  ],
+  "spr": "candle",
+  "cards": [
+   {
+    "n": "Entzünden",
+    "c": 1,
+    "burn": 3
+   }
+  ]
+ },
+ "cross": {
+  "n": "Silberkreuz",
+  "a": "talisman",
+  "st": [
+   "G"
+  ],
+  "spr": "cross",
+  "cards": [
+   {
+    "n": "Kreuz zeigen",
+    "c": 1,
+    "atk": 6
+   }
+  ]
+ },
+ "holywater": {
+  "n": "Weihwasser",
+  "a": "talisman",
+  "st": [
+   "S",
+   "G"
+  ],
+  "spr": "holywater",
+  "rare": 1,
+  "cards": [
+   {
+    "n": "Besprengen",
+    "c": 1,
+    "blk": 6,
+    "heal": 2
+   }
+  ]
+ },
+ "tartorch": {
+  "n": "Teerfackel",
+  "a": "waffe",
+  "st": [
+   "F",
+   "L"
+  ],
+  "spr": "tartorch",
+  "rare": 1,
+  "cards": [
+   {
+    "n": "Teer und Flamme",
+    "c": 1,
+    "atk": 5,
+    "burn": 2
+   }
+  ]
+ },
+ "silverknife": {
+  "n": "Salzklinge",
+  "a": "waffe",
+  "st": [
+   "E",
+   "S"
+  ],
+  "spr": "silverknife",
+  "rare": 1,
+  "cards": [
+   {
+    "n": "Silberschnitt",
+    "c": 1,
+    "atk": 8
+   }
+  ]
+ },
+ "saltgun": {
+  "n": "Salzflinte",
+  "a": "waffe",
+  "st": [
+   "S",
+   "F"
+  ],
+  "spr": "saltgun",
+  "rare": 1,
+  "cards": [
+   {
+    "n": "Salzladung",
+    "c": 2,
+    "atk": 6,
+    "all": 1
+   }
+  ]
+ },
+ "bloodrosary": {
+  "n": "Blutrosenkranz",
+  "a": "talisman",
+  "st": [
+   "B",
+   "G"
+  ],
+  "spr": "bloodrosary",
+  "rare": 1,
+  "cards": [
+   {
+    "n": "Blutgebet",
+    "c": 1,
+    "heal": 4,
+    "atk": 4
+   }
+  ]
+ },
+ "bone": {
+  "n": "Knochen",
+  "a": "talisman",
+  "st": [
+   "V"
+  ],
+  "spr": "bone",
+  "cards": [
+   {
+    "n": "Splitter",
+    "c": 0,
+    "atk": 3
+   }
+  ],
+  "nodrop": 1
+ }
+}

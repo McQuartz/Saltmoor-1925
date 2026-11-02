@@ -1,0 +1,40 @@
+// ===================== SPRITES =====================
+const PAL={k:'#14110f',g:'#7c7f86',G:'#c4c7cc',b:'#6e4426',B:'#a8723f',y:'#e2bd45',o:'#d9772b',r:'#a8322c',R:'#d9574c',w:'#ece6d6',c:'#5fa8a8',C:'#9fd8d0',n:'#3d7048',N:'#78b066',p:'#5d3f82',P:'#9b72c9',s:'#d6a27a',d:'#2a3956',D:'#4b6390',e:'#7affc8',t:'#8a7f6a',T:'#b7a98a'};
+const SPR={
+poker:['............','.........gg.','........g..g','.......g...g','......g.....','.....g......','....g.......','...g........','..bb........','.bbb........','.bb.........','............'],
+knife:['............','..........G.','.........GG.','........GG..','.......GG...','......GG....','.....GG.....','....bb......','...bb.......','..bb........','............','............'],
+harpoon:['..........GG','.........GGG','........gGG.','.......b.G..','......b.....','.....b......','....b.......','...b........','..b.........','.bb.........','bb..........','............'],
+revolver:['............','............','.gggggggggk.','.gGGGGGGgk..','.ggggggggk..','.....bbk.k..','....bbb.kk..','...bbb......','...bb.......','............','............','............'],
+pan:['............','...kkkk.....','..kgggGk....','.kggggGgk...','.kgggggGk...','.kgggggggk..','..kgggggk...','...kkkkbb...','........bb..','.........bb.','..........b.','............'],
+plank:['............','..bbbbbbbb..','..bBbBbBbb..','..bBbBbBbb..','..bbbbbbbb..','..bBbBbBbb..','..bBbBbBbb..','..bbbbbbbb..','..bBbBbBbb..','..bbbbbbbb..','............','............'],
+bible:['............','..kkkkkkkk..','..kddddddk..','..kddyyddk..','..kdyyyydk..','..kddyddk...','..kddyyddk..','..kddddddk..','..kwwwwwwk..','..kkkkkkkk..','............','............'],
+pick:['............','..gggggggg..','.gg..bb..gg.','.g...bb...g.','.....bb.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','............','............'],
+shovel:['..........gg','.........ggg','........ggg.','.......bgg..','......bb....','.....bb.....','....bb......','...bb.......','..bb........','.bbb........','.bb.........','............'],
+dagger:['............','.........GG.','........GGG.','.......GGG..','......GGG...','.....rGG....','....rrr.....','...kr.r.....','..kk........','.kk.........','............','............'],
+torch:['.....oy.....','....oyyo....','....oyyo....','.....oo.....','.....kk.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','............'],
+bottle:['.....kk.....','.....nn.....','.....nn.....','....nNNn....','...nNnnnn...','...nNnnnn...','...nNnnnn...','...nwwwwn...','...nnnnnn...','...nnnnnn...','............','............'],
+coat:['............','...bb..bb...','..bbbbbbbb..','.bbbBbbBbbb.','.bb.bbbb.bb.','.bb.bBbb.bb.','.bb.bbbb.bb.','.bb.bBbb.bb.','....bbbb....','....bb.bb...','............','............'],
+boots:['............','............','..kk....kk..','..kk....kk..','..kk....kk..','..kk....kk..','..kk....kk..','..kkk...kkk.','..kkkk..kkkk','..gggg..gggg','............','............'],
+cap:['............','............','............','............','....gggg....','...gGGGGg...','..gGGgGGGg..','..gggggggggg','...........g','............','............','............'],
+gloves:['............','..b.b.b.....','..b.b.b.b...','..bbbbbbb...','..bbbbbbb.b.','..bbbbbbbbb.','..bbbbbbbb..','...bbbbbb...','...BBBBBB...','...BBBBBB...','............','............'],
+veil:['....kkkk....','...kppppk...','..kppppppk..','..kpssssPk..','..kpskskPk..','..kpssssPk..','.kpppssppPk.','.kppppppppk.','kpppppppppPk','kppppppppppk','............','............'],
+rosary:['....rrrr....','...r....r...','..r......r..','..r......r..','...r....r...','....r..r....','.....rr.....','.....yy.....','....yyyy....','.....yy.....','.....yy.....','............'],
+lantern:['.....kk.....','....k..k....','....kkkk....','...kyyyyk...','...kyooyk...','...kyooyk...','...kyooyk...','...kyyyyk...','....kkkk....','............','............','............'],
+watch:['.....yy.....','....y..y....','...yyyyyy...','..ywwwwwwy..','..ywwkwwwy..','..ywwkwwwy..','..ywwkkkwy..','..ywwwwwwy..','...yyyyyy...','............','............','............'],
+shell:['............','.....cc.....','....cCcc....','...cCcCcc...','..cCcCcCcc..','..cCcCcCcc..','..cCcCcCcc..','...cccccc...','....cccc....','............','............','............'],
+salt:['............','.....kk.....','....wkkw....','...wwwwww...','..wwGwwwww..','..wwwwGwww..','..wGwwwwww..','..wwwwwGww..','...wwwwww...','............','............','............'],
+candle:['.....y......','....yoy.....','.....o......','.....k......','....kkk.....','....kpk.....','....kkk.....','....kpk.....','....kkk.....','...kkkkk....','............','............'],
+bone:['............','............','.ww......ww.','wwww....wwww','.wwwwwwwwww.','.wwwwwwwwww.','wwww....wwww','.ww......ww.','............','............','............','............'],
+cross:['.....GG.....','.....GG.....','..GGGGGGGG..','..GGGGGGGG..','.....GG.....','.....GG.....','.....GG.....','.....GG.....','.....GG.....','............','............','............'],
+cultist:['....rrrr....','...rrrrrr...','..rrkkkkrr..','..rrkyykrr..','..rrkkkkrr..','...rrrrrr...','..rrrRrrrr..','.rrrrRrrrrr.','.rrrrRrrrrr.','.rrrrrrrrrr.','..rr....rr..','..kk....kk..'],
+fishman:['...nnnnnn...','..nnnnnnnn..','.nwknnnnwkn.','.nnnnnnnnnn.','.nnNNNNNNnn.','..nnnnnnnn..','...nnNNnn...','..nnnnnnnn..','.nn.nnnn.nn.','.n..nnnn..n.','....n..n....','...nn..nn...'],
+drowned:['....dddd....','...dCCCCd...','...CkCCkC...','...CCCCCC...','....CddC....','..CCcccCCC..','.CC.cccc.CC.','.C..cccc..C.','....cccc....','....c..c....','....c..c....','...cc..cc...'],
+shade:['............','....pppp....','...pppppp...','..ppeppepp..','..pppppppp..','.pppppppppp.','.pPpppppPpp.','pppppppppppp','pp.pp.pp.pp.','p..p..p..p..','............','............'],
+boss:['...pppppp...','..pPPPPPPp..','.ppyppppypp.','.pppeppeppp.','..pppppppp..','.p.pPppPp.p.','p..p.pp.p..p','p.p..pp..p.p','.p..p..p..p.','p..p.pp.p..p','.pp..pp..pp.','............']
+};
+const SWAP={oilcoat:['coat',{b:'y',B:'o'}],robe:['coat',{b:'r',B:'R'}],trench:['coat',{b:'t',B:'T'}],woolcoat:['coat',{}],holywater:['bottle',{n:'d',N:'D',w:'C'}],tartorch:['torch',{b:'k',o:'n'}],silverknife:['dagger',{r:'y',G:'w'}],saltgun:['revolver',{g:'w',G:'T',b:'t'}],bloodrosary:['rosary',{r:'R',y:'r'}]};
+const sprCache={};
+function spr(name){if(sprCache[name])return sprCache[name];let g=SPR[name],map={};if(!g&&SWAP[name]){g=SPR[SWAP[name][0]];map=SWAP[name][1];}if(!g)g=SPR.bone;
+ const c=document.createElement('canvas');c.width=12;c.height=12;const x=c.getContext('2d');
+ g.forEach((row,y)=>{[...row].forEach((ch,i)=>{const k=map[ch]||ch;if(PAL[k]){x.fillStyle=PAL[k];x.fillRect(i,y,1,1);}});});return sprCache[name]=c.toDataURL();}
+

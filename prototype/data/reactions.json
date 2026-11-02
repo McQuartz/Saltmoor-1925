@@ -1,0 +1,214 @@
+{
+ "_doc": "pairs: zwei Stoffe direkt nacheinander (oder beide in einer Karte). same: gleicher Stoff zweimal. triples: Hochreaktionen, einmal pro Zug. Effekte siehe data/README.md",
+ "pairs": [
+  {
+   "k": "EF",
+   "n": "Glühend",
+   "t": "4 Schaden am Ziel und Brand 2.",
+   "fx": [
+    {
+     "op": "damage",
+     "to": "target",
+     "v": 4
+    },
+    {
+     "op": "status",
+     "to": "target",
+     "status": "burn",
+     "v": 2
+    }
+   ]
+  },
+  {
+   "k": "FW",
+   "n": "Dampf",
+   "t": "Alle Gegner geschwächt: ihr nächster Angriff halbiert.",
+   "fx": [
+    {
+     "op": "status",
+     "to": "all",
+     "status": "weak",
+     "v": 1
+    }
+   ]
+  },
+  {
+   "k": "FS",
+   "n": "Knistern",
+   "t": "3 Schaden und Brand 1 an allen Gegnern.",
+   "fx": [
+    {
+     "op": "damage",
+     "to": "all",
+     "v": 3
+    },
+    {
+     "op": "status",
+     "to": "all",
+     "status": "burn",
+     "v": 1
+    }
+   ]
+  },
+  {
+   "k": "GS",
+   "n": "Bannkreis",
+   "t": "+8 Block jetzt, +4 Block im nächsten Zug.",
+   "fx": [
+    {
+     "op": "block",
+     "v": 8
+    },
+    {
+     "op": "ward",
+     "v": 4
+    }
+   ]
+  },
+  {
+   "k": "BG",
+   "n": "Opfer",
+   "t": "Du zahlst 4 Leben, die Karte wirkt doppelt.",
+   "pre": {
+    "repeat": 2,
+    "self_damage": 4
+   }
+  },
+  {
+   "k": "BE",
+   "n": "Klinge",
+   "t": "+4 Leben.",
+   "fx": [
+    {
+     "op": "heal",
+     "v": 4
+    }
+   ]
+  },
+  {
+   "k": "VW",
+   "n": "Brackwasser",
+   "t": "Gift 3 am Ziel.",
+   "fx": [
+    {
+     "op": "status",
+     "to": "target",
+     "status": "poison",
+     "v": 3
+    }
+   ]
+  },
+  {
+   "k": "BV",
+   "n": "Seuche",
+   "t": "Gift 2 an allen Gegnern.",
+   "fx": [
+    {
+     "op": "status",
+     "to": "all",
+     "status": "poison",
+     "v": 2
+    }
+   ]
+  },
+  {
+   "k": "LV",
+   "n": "Läuterung",
+   "t": "Das Gift aller Gegner wird sofort zu doppeltem Schaden.",
+   "fx": [
+    {
+     "op": "poison_burst",
+     "to": "all",
+     "mult": 2
+    }
+   ]
+  },
+  {
+   "k": "FL",
+   "n": "Fanal",
+   "t": "+1 Energie.",
+   "fx": [
+    {
+     "op": "energy",
+     "v": 1
+    }
+   ]
+  },
+  {
+   "k": "ES",
+   "n": "Zersetzen",
+   "t": "Der Block des Ziels zerbricht, dazu 2 Schaden.",
+   "fx": [
+    {
+     "op": "break_block",
+     "to": "target"
+    },
+    {
+     "op": "damage",
+     "to": "target",
+     "v": 2
+    }
+   ]
+  },
+  {
+   "k": "GL",
+   "n": "Segen",
+   "t": "+5 Leben.",
+   "fx": [
+    {
+     "op": "heal",
+     "v": 5
+    }
+   ]
+  }
+ ],
+ "same": {
+  "n": "Verstärkt",
+  "t": "Gleicher Stoff zweimal hintereinander: Die Karte wirkt 50 % stärker.",
+  "pre": {
+   "mult": 1.5
+  }
+ },
+ "triples": [
+  {
+   "s": "FGS",
+   "n": "Reinigendes Feuer",
+   "t": "12 Schaden an allen Gegnern.",
+   "fx": [
+    {
+     "op": "damage",
+     "to": "all",
+     "v": 12
+    }
+   ]
+  },
+  {
+   "s": "BVW",
+   "n": "Ertrinken",
+   "t": "Das Gift aller Gegner verdreifacht sich.",
+   "fx": [
+    {
+     "op": "poison_mult",
+     "to": "all",
+     "mult": 3
+    }
+   ]
+  },
+  {
+   "s": "EGL",
+   "n": "Erzengel",
+   "t": "15 Block und 10 Schaden am Ziel.",
+   "fx": [
+    {
+     "op": "block",
+     "v": 15
+    },
+    {
+     "op": "damage",
+     "to": "target",
+     "v": 10
+    }
+   ]
+  }
+ ]
+}

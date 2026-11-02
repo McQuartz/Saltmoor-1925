@@ -1,0 +1,106 @@
+{
+ "cultist": {
+  "n": "Kultist",
+  "hp": 18,
+  "weak": "G",
+  "spr": "cultist",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 6
+   },
+   {
+    "t": "blk",
+    "v": 6
+   },
+   {
+    "t": "atk",
+    "v": 9
+   }
+  ]
+ },
+ "fishman": {
+  "n": "Tiefling",
+  "hp": 22,
+  "weak": "S",
+  "spr": "fishman",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 4,
+    "h": 2
+   },
+   {
+    "t": "atk",
+    "v": 7
+   }
+  ]
+ },
+ "drowned": {
+  "n": "Ertrunkener",
+  "hp": 28,
+  "weak": "F",
+  "spr": "drowned",
+  "pat": [
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 5
+   },
+   {
+    "t": "atk",
+    "v": 6
+   }
+  ]
+ },
+ "shade": {
+  "n": "Schatten",
+  "hp": 13,
+  "weak": "L",
+  "spr": "shade",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 3,
+    "h": 3
+   },
+   {
+    "t": "atk",
+    "v": 8
+   }
+  ]
+ },
+ "boss": {
+  "n": "Das, was ruft",
+  "hp": 140,
+  "weak": "S",
+  "spr": "boss",
+  "pat": [
+   {
+    "t": "buff",
+    "v": 3
+   },
+   {
+    "t": "atk",
+    "v": 12
+   },
+   {
+    "t": "atk",
+    "v": 5,
+    "h": 3
+   },
+   {
+    "t": "blk",
+    "v": 15
+   },
+   {
+    "t": "atk",
+    "v": 16
+   }
+  ],
+  "variant": "eye"
+ }
+}

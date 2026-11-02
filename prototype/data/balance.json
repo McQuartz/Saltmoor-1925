@@ -1,0 +1,105 @@
+{
+ "start_hp": 40,
+ "energy_per_turn": 3,
+ "hand_size": 5,
+ "start_slots": 2,
+ "max_slots": 4,
+ "bag_size": 5,
+ "victory_heal_pct": 0.15,
+ "gold_per_victory": {
+  "min": 12,
+  "max": 20,
+  "per_enemy": 3,
+  "boss": 60
+ },
+ "enemy_scaling": {
+  "hp_per_depth": 0.1,
+  "atk_every_n_depths": 2
+ },
+ "encounters": {
+  "boss_depth": 12,
+  "count": {
+   "1": 1,
+   "2": 2,
+   "3": 2,
+   "default": [
+    2,
+    3
+   ]
+  },
+  "pool_from_depth": {
+   "cultist": 1,
+   "fishman": 1,
+   "drowned": 2,
+   "shade": 3
+  }
+ },
+ "rewards": {
+  "choices": 3,
+  "rare_from_depth": 4,
+  "rare_chance": 0.45
+ },
+ "workshop": {
+  "every": 5,
+  "offset": 3
+ },
+ "shop": {
+  "every": 5,
+  "offset": 0,
+  "normal_items": 3,
+  "rare_items": 1,
+  "normal_price": [
+   25,
+   35
+  ],
+  "rare_price": 55,
+  "heal": {
+   "price": 15,
+   "v": 20
+  }
+ },
+ "event": {
+  "every": 5,
+  "offset": 1
+ },
+ "forge": {
+  "bump": 3,
+  "max_stoffe": 2,
+  "double_needs_reaction": true,
+  "double_cost_extra": 1
+ },
+ "zones": [
+  {
+   "until": 4,
+   "id": "hafen",
+   "name": "Hafenviertel"
+  },
+  {
+   "until": 8,
+   "id": "wald",
+   "name": "Der Moorwald"
+  },
+  {
+   "until": 11,
+   "id": "kapelle",
+   "name": "Die überflutete Kapelle"
+  },
+  {
+   "until": 99,
+   "id": "grund",
+   "name": "Der Grund"
+  }
+ ],
+ "jumpscare": {
+  "windows_min": [
+   [
+    0.5,
+    5
+   ],
+   [
+    5,
+    20
+   ]
+  ]
+ }
+}

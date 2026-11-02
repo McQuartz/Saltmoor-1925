@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saltmoor Galerie</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Galerie: jeder Baustein des Spiels einzeln, zum Anschauen und Weiterentwerfen */
+body{overflow-y:auto}
+#gal{max-width:1180px;margin:0 auto;padding:24px 16px 80px}
+#gal>header h1{font-family:var(--fd);font-size:18px;color:var(--parch);margin:0 0 8px}
+#gal>header p{color:var(--dim);margin:0 0 6px;font-size:19px}
+#gal nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+#gal nav a{font-family:var(--fd);font-size:9px;color:var(--eld);text-decoration:none;border:2px solid #2e3a35;padding:7px 9px;background:#0b0f0e}
+#gal section{margin-top:34px}
+#gal h2{font-family:var(--fd);font-size:12px;color:var(--parch);border-bottom:2px solid #2e3a35;padding-bottom:8px;margin:0 0 6px}
+#gal .lead{color:var(--dim);font-size:18px;margin:0 0 14px}
+#gal code{font-family:monospace;font-size:14px;color:#b9c9bf;background:#111716;padding:1px 4px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.tile{background:#0b0f0e;border:2px solid #1f2826;padding:12px;display:flex;flex-direction:column;gap:6px}
+.tile canvas.spr{image-rendering:pixelated;width:100%;background:radial-gradient(ellipse at 50% 85%,#1a2422,#060807 70%);border:1px solid #1a2220}
+.tile .n{font-family:var(--fd);font-size:10px;color:var(--parch);line-height:1.5}
+.tile .meta{font-size:16px;color:#9aa39a;line-height:1.1}
+.tile .id{font-family:monospace;font-size:12px;color:#5a6a64}
+.tile a{color:var(--eld);font-size:16px}
+.items{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.items .tile{flex-direction:row;align-items:center;padding:8px}
+.items img{width:48px;height:48px;image-rendering:pixelated;flex:none}
+.items .n{font-size:8px;overflow-wrap:anywhere}
+.items .tile>div{min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end}
+.spec{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.spec>.lbl{font-family:var(--fd);font-size:8px;color:#6a7a74;margin-bottom:14px}
+.cq{container-type:inline-size;width:min(100%,900px);position:relative}
+.cq .info{position:static;transform:none}
+.cardrow{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;padding:10px 0 20px}
+.cardrow .card{position:relative;transform:none;margin:0}
+.scenes canvas{width:100%;image-rendering:pixelated;border:1px solid #1a2220}
+#demoToast{position:relative;left:auto;top:auto;transform:none;width:100%;min-height:140px}
+.chainDemo{position:relative;height:330px}
+.chainDemo #chainbox{position:absolute;right:0;left:0;top:0;bottom:0;width:auto}
+button.sm{font-size:9px;padding:8px 10px}
+</style>
+</head>
+<body>
+<canvas id="scene" width="320" height="180" style="display:none"></canvas>
+<div id="gal">
+ <header>
+  <h1>SALTMOOR · GALERIE</h1>
+  <p>Alle Bausteine des Prototyps einzeln: Gegner, Boss-Entwürfe, Items, Oberfläche, Szenen. Alles hier kommt aus denselben Dateien wie das Spiel.</p>
+  <p>Zum Spiel: <a href="index.html" style="color:var(--eld)">index.html</a></p>
+  <nav><a href="#bosse">Boss-Entwürfe</a><a href="#gegner">Gegner</a><a href="#items">Items</a><a href="#ui">Oberfläche</a><a href="#karten">Karten</a><a href="#feedback">Schaden und Meldungen</a><a href="#szenen">Szenen</a><a href="#stoffe">Stoffe</a></nav>
+ </header>
+
+ <section id="bosse"><h2>BOSS-ENTWÜRFE</h2>
+  <p class="lead">Zeichner in <code>js/sprites/foes.js</code> → <code>BOSS_VARIANTS</code>. Welcher im Spiel kommt, steht in <code>data/foes.json</code> bei <code>boss.variant</code>. Zum Ausprobieren im Kampf den Link unter dem Entwurf öffnen. Beim Auge folgt die Pupille der Maus.</p>
+  <div class="grid big" id="bossGrid"></div></section>
+
+ <section id="gegner"><h2>GEGNER</h2>
+  <p class="lead">Zeichner in <code>js/sprites/foes.js</code> → <code>FOE_DRAW</code>, Werte in <code>data/foes.json</code>. Jeder Gegner ist 64×80 Pixel, die Füße stehen bei 32,78.</p>
+  <div class="grid" id="foeGrid"></div></section>
+
+ <section id="items"><h2>ITEMS</h2>
+  <p class="lead">12×12-Pixel-Sprites in <code>js/sprites/items.js</code> (<code>SPR</code>, Farbtausch in <code>SWAP</code>), Werte und Karten in <code>data/items.json</code>. Gold umrandet = selten mit zwei Stoffen.</p>
+  <div class="items" id="itemGrid"></div></section>
+
+ <section id="ui"><h2>OBERFLÄCHE</h2>
+  <p class="lead">Bausteine aus <code>js/ui/components.js</code>. Jede Funktion bekommt Daten und gibt HTML zurück; Aussehen in <code>style.css</code>.</p>
+  <div class="cq" id="uiBox"></div></section>
+
+ <section id="karten"><h2>KARTEN</h2>
+  <p class="lead"><code>cardHtml(karte, optionen)</code>. Zustände: normal, reagiert mit der Karte davor, zu teuer, Doppel-Stoff (kostet mehr Energie).</p>
+  <div class="cq"><div class="cardrow" id="cardRow"></div></div></section>
+
+ <section id="feedback"><h2>SCHADEN UND MELDUNGEN</h2>
+  <p class="lead">Wie Treffer, Heilung und Block aussehen, stellt <code>js/ui/feedback.js</code> ein. Farben der schwebenden Zahlen: <code>FLOAT_COL</code> in components.js.</p>
+  <div class="row" id="fbRow"></div>
+  <div class="cq" style="margin-top:14px"><div class="grid big"><div class="tile"><div class="n">Meldung (toast)</div><div id="toast" class="demoT" style="position:relative;left:auto;top:auto;transform:none;width:100%;min-height:150px"></div></div>
+   <div class="tile"><div class="n">Ketten-Anzeige</div><div class="chainDemo"><div id="chainbox"></div></div></div></div></div></section>
+
+ <section id="szenen"><h2>SZENEN</h2>
+  <p class="lead">Hintergründe aus <code>js/scenes/zones.js</code>, gemalt mit den Helfern in <code>js/scenes/pixel.js</code>. Welche Tiefe welche Zone ist, steht in <code>data/balance.json</code> → <code>zones</code>.</p>
+  <div class="grid big scenes" id="sceneGrid"></div></section>
+
+ <section id="stoffe"><h2>STOFFE UND REAKTIONEN</h2>
+  <p class="lead">Aus <code>data/stoffe.json</code> und <code>data/reactions.json</code>.</p>
+  <div id="stoffBox"></div></section>
+</div>
+<div id="vig"></div>
+
+<script src="js/data.js"></script>
+<script src="js/core/bus.js"></script>
+<script src="js/core/state.js"></script>
+<script src="js/core/rules.js"></script>
+<script src="js/scenes/pixel.js"></script>
+<script src="js/sprites/items.js"></script>
+<script src="js/sprites/foes.js"></script>
+<script src="js/scenes/zones.js"></script>
+<script src="js/ui/components.js"></script>
+<script src="js/gallery.js"></script>
+</body>
+</html>

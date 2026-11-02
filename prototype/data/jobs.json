@@ -1,0 +1,56 @@
+[
+ {
+  "n": "Hafenarbeiter",
+  "d": "Kennt das Wasser. Und was darin wohnt.",
+  "w": [
+   "harpoon",
+   "knife"
+  ],
+  "k": [
+   "oilcoat",
+   "cap"
+  ],
+  "t": [
+   "salt"
+  ],
+  "bag": [
+   "boots"
+  ]
+ },
+ {
+  "n": "Totengräber",
+  "d": "Gräbt für die Gemeinde. Manchmal gräbt etwas zurück.",
+  "w": [
+   "shovel",
+   "pan"
+  ],
+  "k": [
+   "woolcoat",
+   "gloves"
+  ],
+  "t": [
+   "lantern"
+  ],
+  "bag": [
+   "boots"
+  ]
+ },
+ {
+  "n": "Pfarrerswitwe",
+  "d": "Ihr Mann predigte von Dingen unter der Kirche.",
+  "w": [
+   "revolver",
+   "bible"
+  ],
+  "k": [
+   "woolcoat",
+   "cap"
+  ],
+  "t": [
+   "rosary"
+  ],
+  "bag": [
+   "veil"
+  ]
+ }
+]

@@ -1,0 +1,64 @@
+{
+ "stoffe": {
+  "E": {
+   "n": "Eisen",
+   "s": "EI",
+   "c": "#a6acb4"
+  },
+  "F": {
+   "n": "Feuer",
+   "s": "FE",
+   "c": "#e8873a"
+  },
+  "W": {
+   "n": "Wasser",
+   "s": "WA",
+   "c": "#6d9be0"
+  },
+  "S": {
+   "n": "Salz",
+   "s": "SA",
+   "c": "#f1ede2"
+  },
+  "B": {
+   "n": "Blut",
+   "s": "BL",
+   "c": "#d0453e"
+  },
+  "G": {
+   "n": "Glaube",
+   "s": "GL",
+   "c": "#e8c547"
+  },
+  "L": {
+   "n": "Licht",
+   "s": "LI",
+   "c": "#fff6b8"
+  },
+  "V": {
+   "n": "Fäulnis",
+   "s": "FÄ",
+   "c": "#86c062"
+  }
+ },
+ "suffix": {
+  "E": "aus Stahl",
+  "F": "der Glut",
+  "W": "der Gezeiten",
+  "S": "des Salzes",
+  "B": "des Blutes",
+  "G": "der Weihe",
+  "L": "des Lichts",
+  "V": "der Fäulnis"
+ },
+ "areas": [
+  "waffe",
+  "kleidung",
+  "talisman"
+ ],
+ "area_names": {
+  "waffe": "WAFFEN & SCHILDE",
+  "kleidung": "KLEIDUNG",
+  "talisman": "TALISMANE"
+ }
+}
