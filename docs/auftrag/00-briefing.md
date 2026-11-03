@@ -59,3 +59,12 @@ Details stehen in M1, M5 und M9.
 ## 8. Runübergreifende Progression
 
 Die runübergreifende Progression wird **schon jetzt angesehen und eingebaut**, nicht erst später. Grundlage sind die Wandbild-Fragmente und das Tagebuch. Dazu schreibt der Agent in M5 zuerst ein kurzes Konzept `docs/auftrag/progression.md`: was über Runs bleibt, was man freischaltet (Figuren, Items im Fundpool, Startvarianten, Schwierigkeitsstufen nach dem ersten Sieg), wie oft etwas Neues kommt und warum das motiviert. Er vergleicht zwei bis drei Varianten kurz, wählt eine nach den Regeln in [01-regeln.md](01-regeln.md) und baut sie in einer kleinen, spielbaren Fassung ein. Alles bleibt in `localStorage` und ist im Dev-Modus zurücksetzbar.
+
+## 9. Effekte: pixelfx darf benutzt werden
+
+Für Pixel-Effekte darf **[pixelfx](https://github.com/patch-gg/pixelfx)** benutzt werden (MIT-Lizenz, reines JavaScript ohne Abhängigkeiten, alles per Seed). Es bringt über 240 Effekte als Code mit, zum Beispiel Treffer, Brand, Gift, Frost, Schatten, Wasser, Heilen, Übergänge und Tod oder Auflösen, und kann Sprite-Sheets exportieren.
+
+- **Einbau:** Nur `src/core` und die tatsächlich genutzten Effekte nach `prototype/js/vendor/pixelfx/` kopieren, mit `LICENSE` und `NOTICE.md` daneben, und die Quelle in `prototype/data/README.md` notieren. Kein npm und kein Build-Schritt. pixelfx ist als ES-Modul geschrieben. Darum lädt eine kleine Brücke (`<script type="module">`) es und stellt es als `window.PixelFX` bereit. Die Pixel-Schrift aus `gallery/fonts` wird nicht übernommen, weil sie nicht unter MIT steht.
+- **Wofür:** Trefferwirkung, Zustände (Brand, Gift, Geschwächt), Reaktionen und Hochreaktionen, Heilen, Block-Splitter, Tod der Gegner, Übergänge zwischen Akten und Partikel in den Hintergründen (Ebene „Luft“). Das Timing aus `act` (Anlauf, Einfrieren beim Treffer, Erholung) darf für die Gegneranimationen und den Ruck der Szene übernommen werden.
+- **Look:** Jeder Effekt bekommt eine `palette` aus den Zonenfarben bzw. der Stofffarbe, damit er zum Ziel-Look passt (dunkel, gedämpft, Licht nur als Akzent). Nichts Grelles, kein Comic-Effekt („cartoon pow“, Konfetti und Ähnliches bleiben weg). Die Pixelgröße muss zur Szene passen (480 × 270).
+- **Arbeitsweise:** Die pixelfx-Methode „zeichnen, rendern, ansehen, verbessern“ (Kontaktbogen mit `tools/render.mjs`, Prüfung mit `tools/check.mjs`) gilt auch für eigene Effekte und für die Sprites in M6. Neue oder angepasste Effekte entstehen im pixelfx-Format.

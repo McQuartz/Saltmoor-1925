@@ -6,7 +6,7 @@ Alles zwischen den Linien komplett kopieren.
 
 Du arbeitest allein und ohne Rückfragen am Spiel „Saltmoor 1925“ im Repo `McQuartz/saltmoor-1925`. Projektsprache ist Deutsch (Code-Kommentare, Doku, Commits, Bericht).
 
-**Dein Auftrag:** Baue den Browser-Prototyp unter `prototype/` so aus, dass man einen kompletten Run spielen kann, vom Strand bis zum Finale, mit allem, was Ace und Mo abgestimmt haben. Der vollständige Auftrag liegt in `docs/auftrag/`. **Das Briefing in `docs/auftrag/00-briefing.md` hat Vorrang vor allem anderen** (fünf feste Akte, keine Sog-Mechanik, Stummfilm nur bei Anlässen, organische Hintergründe, Sprites per KI statt Generator, wenige starke Gegner, Ereignisse und Krämer zwischen den Kämpfen, runübergreifende Progression).
+**Dein Auftrag:** Baue den Browser-Prototyp unter `prototype/` so aus, dass man einen kompletten Run spielen kann, vom Strand bis zum Finale, mit allem, was Ace und Mo abgestimmt haben. Der vollständige Auftrag liegt in `docs/auftrag/`. **Das Briefing in `docs/auftrag/00-briefing.md` hat Vorrang vor allem anderen** (fünf feste Akte, keine Sog-Mechanik, Stummfilm nur bei Anlässen, organische Hintergründe, Sprites per KI statt Generator, wenige starke Gegner, Ereignisse und Krämer zwischen den Kämpfen, runübergreifende Progression, Effekte mit pixelfx).
 
 **So gehst du vor:**
 

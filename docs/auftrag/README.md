@@ -21,7 +21,7 @@ Wenn die Sitzung abbricht: Eine neue Sitzung mit demselben Prompt starten. Der A
 
 | Datei | Inhalt |
 |---|---|
-| [00-briefing.md](00-briefing.md) | **Nachtrag mit Vorrang**: fünf feste Akte, keine Sog-Mechanik, Stummfilm nur bei Anlässen, Hintergründe, KI-Sprites, Gegner, Knoten zwischen Kämpfen, Progression |
+| [00-briefing.md](00-briefing.md) | **Nachtrag mit Vorrang**: fünf feste Akte, keine Sog-Mechanik, Stummfilm nur bei Anlässen, Hintergründe, KI-Sprites, Gegner, Knoten zwischen Kämpfen, Progression, Effekte mit pixelfx |
 | [PROMPT.md](PROMPT.md) | Der Start-Prompt für den Agenten, zum Kopieren |
 | [01-regeln.md](01-regeln.md) | Arbeitsregeln: keine Rückfragen, Reihenfolge der Quellen, verbotene Abkürzungen, Git, Tests, Bericht |
 | [02-entscheidungen.md](02-entscheidungen.md) | Alles Festgelegte auf einen Blick, inklusive der Antworten auf alle offenen Fragen |

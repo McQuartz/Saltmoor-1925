@@ -29,12 +29,12 @@ Wenn auch das nichts sagt: Nimm die Lösung, die **den Run spielbarer und lesbar
 
 - **Keine KI-Sounds.** Kein Aufruf von Musik- oder Stimmen-Generatoren. Klang entsteht aus WebAudio-Synthese (oder später aus Aufnahmen von Ace).
 - **KI-Bilder nur für Gegner-Sprites** (und Item-Sprites, wenn es hilft), nach [00-briefing.md](00-briefing.md) Abschnitt 5 und M6. Jedes Sprite muss die Pixel-Art-Regeln aus `zielbild.md` einhalten und die Regel-Prüfung bestehen. Hintergründe, UI und Effekte entstehen weiter aus Code.
-- **Keine fremden Assets** (Sprites, Tilesets, Fonts außer den bereits genutzten Google Fonts, Sounds aus Asset-Packs). CC0-Aufnahmen nur, wenn die Quelle in `data/audio.json` steht; im Zweifel weglassen.
+- **Keine fremden Assets** (Sprites, Tilesets, Fonts außer den bereits genutzten Google Fonts, Sounds aus Asset-Packs). CC0-Aufnahmen nur, wenn die Quelle in `data/audio.json` steht; im Zweifel weglassen. **Ausnahme:** pixelfx (MIT) für Effekte, siehe [00-briefing.md](00-briefing.md) Abschnitt 9.
 - Die Regel „keine vorgezeichneten Körperteile, alles aus dem Generator“ aus AGENTS.md gilt in diesem Auftrag **nicht** (Briefing Abschnitt 5). Der Generator ist nachrangig und wird nicht gebraucht.
 - **Nicht das alte Sprite-Labor als Generator ausgeben.** `prototype/js/procgen/creature.js` und `js/sprites/foes.js` sind Teile-Kombination. Sie dürfen als Rückfall bleiben, bis die neuen Sprites eingebaut sind, und fliegen dann aus dem Spiel (in der Galerie dürfen sie als „alt“ bleiben).
 - **Keine Ersatz-Effekte**: kein Weichzeichner, keine geglättete Skalierung, kein Rauschen über alles, um Schwächen zu verstecken. Pixel bleiben scharf (`image-rendering: pixelated`, ganzzahlige Skalierung).
 - **Tests nicht aufweichen**: Golden-Tests des Generators nicht löschen oder lockern. Goldens nur bewusst neu erzeugen, mit Eintrag in `docs/spritegen/entscheidungen.md`.
-- **Keine neuen Abhängigkeiten** im Spiel (kein npm-Paket, kein Framework, kein Build-Schritt). Der Prototyp bleibt reines HTML/CSS/JS, das über einen einfachen lokalen Server läuft. Für Werkzeuge (Tests, Bildschirmfotos) sind Node-Bordmittel, Playwright/Chromium aus der Umgebung und Godot 4.3 headless erlaubt.
+- **Keine neuen Abhängigkeiten** im Spiel (kein npm-Paket, kein Framework, kein Build-Schritt). Einzige Ausnahme: pixelfx als kopierter Code unter `prototype/js/vendor/pixelfx/` (Briefing Abschnitt 9). Der Prototyp bleibt reines HTML/CSS/JS, das über einen einfachen lokalen Server läuft. Für Werkzeuge (Tests, Bildschirmfotos) sind Node-Bordmittel, Playwright/Chromium aus der Umgebung und Godot 4.3 headless erlaubt.
 - **Kein globaler Zufall für Inhalte.** Run, Biome, Begegnungen, Gegner, Hintergründe hängen an einem Seed (siehe M1). `Math.random()` nur für reine Kosmetik (Partikel, Funkeln).
 
 ## 4. Technik und Architektur

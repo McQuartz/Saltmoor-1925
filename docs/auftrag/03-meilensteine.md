@@ -187,7 +187,8 @@ Quellen: [00-briefing.md](00-briefing.md) Abschnitt 5, [docs/spritegen/zielbild.
    - **Kein Bild-Generator (Ersatzweg):** Der Agent zeichnet jedes Sprite selbst als Pixel-Art, als Formen und Pixel in einem Skript je Gegner (`tools/sprites/gegner/<id>.js`), das die PNG-Sheets schreibt. Fase, Randlicht und Dither dürfen dabei aus gemeinsamen Hilfsfunktionen kommen.
 3. **Animation:** je Gegner Idle (2–4 Bilder, ruhig), Angriff, Treffer, Tod als **PNG-Sheets mit JSON-Beschreibung** (Bildgröße, Bildzahl, Bildrate, Fußpunkt, Augenpositionen für Glühen, Kopfpunkt für die Absicht) nach `prototype/assets/gegner/`. Bewegung auf ganze Pixel, kein Flackern.
 4. **Lader im Prototyp:** `js/sprites/` lädt Sheets, spielt Animationen (Idle-Loop, Angriff beim Gegnerzug, Treffer beim Treffer, Tod), Augen glühen gedithert. Das alte Teile-Labor (`creature.js`, `foes.js`) fliegt aus dem Kampf.
-5. Weg und Arbeitsschritte in `docs/auftrag/sprites.md` dokumentieren, damit Ace und Mo später weitere Sprites genauso erzeugen können.
+5. Arbeitsweise wie bei pixelfx (zeichnen, rendern, Kontaktbogen ansehen, verbessern), siehe Briefing Abschnitt 9.
+6. Weg und Arbeitsschritte in `docs/auftrag/sprites.md` dokumentieren, damit Ace und Mo später weitere Sprites genauso erzeugen können.
 
 **Abnahme**
 
@@ -279,7 +280,7 @@ Quellen: [02-entscheidungen.md](02-entscheidungen.md) (Ideenkiste), `prototype/d
 **Aufgaben** (nach Wirkung sortiert, so weit die Zeit reicht)
 
 1. Übergangsbilder zwischen Akten als echte Szenen (M8-Bausteine) mit Satz und Klang.
-2. Trefferwirkung: kurzer Ruck der Szene, Treffer-Bild am Gegner, Zahlen im Stil von Variante A, Block-Splitter. Alles ruhig, nichts Grelles.
+2. Trefferwirkung mit **pixelfx** (Briefing Abschnitt 9): kurzer Ruck der Szene und Einfrieren beim Treffer nach dem `act`-Timing, Treffer-Effekt am Gegner, Zustände (Brand, Gift) als Effekte am Körper, Reaktionen mit Effekt in Stofffarbe, Tod als Auflösen, Block-Splitter, Zahlen im Stil von Variante A. Alles in Zonen- und Stofffarben, ruhig, nichts Grelles. Kontaktbogen der benutzten Effekte nach `docs/auftrag/bilder/M10/`.
 3. Hochreaktion als Höhepunkt: Atemholen (Musik), Zwischentitel, Licht flammt in der Szene auf. Kein Stummfilm-Rauschen dabei.
 4. Einstellungen vollständig (Lautstärken, Stummfilm, Jumpscare, Bildschirmwackeln, Textgeschwindigkeit).
 5. Freischaltbare Zusatzfiguren Geologe, Wahrsagerin, Kriegsveteran (04, Abschnitt 5), wenn Zeit ist.
