@@ -5,3 +5,4 @@ Gesamtbudget: 150 €. Die Sitzung trägt Etappe, Datum und Ergebnis ein. Die **
 | Datum | Etappe | Ergebnis (kurz) | Kosten | Summe |
 |---|---|---|---|---|
 | 2026-11-02 | Recherche | Recherche, Sprite-Labor-Demo, diese Unterlagen | (außerhalb des Budgets) | 0 € |
+| 2026-11-03 | M1 Technik-Probe | JS-Referenz (Godot-Download gesperrt): Skelett, SDF, Lambert 4 Stufen, 3 Aufräumregeln, Umriss; Bogen Seeds 1–16, deterministisch, 15 Tests grün | (Mensch trägt ein) | |

@@ -18,6 +18,7 @@ prototype/        Browser-Prototyp zum Ausprobieren und Entwerfen
   js/audio/       Soundeffekte (WebAudio, ohne Dateien)
   style.css       Aussehen der Oberfläche
 game/             Godot-4-Projekt (folgt)
+tools/spritegen/  Sprite-Generator, JS-Referenz (wird nach Godot portiert)
 docs/spritegen/   Plan, Recherche und Agenten-Regeln für den prozeduralen Sprite-Generator
 ```
 
