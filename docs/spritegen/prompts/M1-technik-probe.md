@@ -14,4 +14,4 @@ Auftrag:
 
 Bevor du Code schreibst: schreibe deinen Plan für diese Sitzung in 5–10 Zeilen auf (was ja, was nein). Arbeite dann in kleinen Schritten, committe nach jeder funktionierenden Stufe, sieh dir jedes erzeugte Bild selbst an und beschreibe ehrlich, was gut und was schlecht aussieht.
 
-Am Ende: Kontaktbogen nach docs/spritegen/sheets/, entscheidungen.md, budget-log.md und Status in README.md aktualisieren, Pull Request gegen main auf einem Branch spritegen/..., Bericht nach Abschnitt 6 in AGENTS.md. Antworte auf Deutsch.
+Am Ende: Kontaktbogen nach docs/spritegen/sheets/, entscheidungen.md, budget-log.md und Status in README.md aktualisieren, Pull Request gegen main auf einem Branch spritegen/..., Bericht nach Abschnitt 7 in AGENTS.md. Antworte auf Deutsch.
