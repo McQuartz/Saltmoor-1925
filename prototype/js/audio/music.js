@@ -192,7 +192,7 @@ function targets(){
 function update(){
  const now=ctx.currentTime,dt=Math.min(.2,now-lastUpd);lastUpd=now;
  S.momentum*=Math.exp(-dt/10);
- const [tw,tg]=targets();
+ let [tw,tg]=targets();if(S.solo){tw=S.solo.drive?.7:.5;tg=S.solo.dark?.7:0;}
  const ease=(c,t)=>c+(t-c)*(1-Math.exp(-dt/(t>c?.5:7))); // schnell hoch, langsam runter
  S.wucht=ease(S.wucht,tw);S.gefahr=ease(S.gefahr,tg);
  dissG.gain.setTargetAtTime(S.gefahr*.045,now,.5);
@@ -208,12 +208,13 @@ function barStart(t,bar){
  windG.gain.setTargetAtTime(BIOME[S.biome].amb==='wind'?(S.scene==='menu'?.06:.09):0,t,1.2);
  S.spike=Math.max(0,S.spike-.25);
  // Layer schalten (mit Hysterese), nur auf Taktgrenzen
+ if(S.solo){soloGates(t);}else{
  for(let i=1;i<4;i++){const on=S.gate[i]?S.wucht>=TH[i]-HYST:S.wucht>=TH[i];setGate(i,on,t);}
  // Tutti bleibt etwas Besonderes: nur nach einer Hochreaktion oder im Boss bei voller Wucht
  setGate(4,S.spike>0||(S.scene==='boss'&&S.wucht>=TH[4]),t);
  S.drive=S.drive?S.wucht>=TH_DRIVE-HYST:S.wucht>=TH_DRIVE;
  voiceBus.gain.setTargetAtTime(combat()&&S.foes.length?1:0,t,combat()?.2:.8);
- L[0].gain.setTargetAtTime(S.scene==='menu'?.7:1,t,1);
+ L[0].gain.setTargetAtTime(S.scene==='menu'?.7:1,t,1);}
  // Stimmen-Plätze: Typen in Auftrittsreihenfolge, höchstens 2, im Wechsel
  const types=[...new Set(S.foes.map(f=>f.type))].slice(0,2);
  S.duel=combat()&&S.foes.length===1;
@@ -222,6 +223,10 @@ function barStart(t,bar){
 }
 function retune(t){const r=BIOME[S.biome].root;drones.forEach(([o,iv])=>o.frequency.setTargetAtTime(mtof(r+iv),t,.8));
  dissO.frequency.setTargetAtTime(mtof(r-11),t,.8);flirrO.forEach(([o,iv])=>o.frequency.setTargetAtTime(mtof(r+iv),t,.8));}
+// Vorhören einzelner Spuren (Klangliste): nur ein Layer oder nur die Gegnerstimme, festes Tempo
+function soloGates(t){const o=S.solo;S.bpm=80;S.dark=!!o.dark;S.drive=!!o.drive;
+ for(let i=1;i<5;i++)setGate(i,o.layer===i,t);
+ L[0].gain.setTargetAtTime(o.layer===0?1:0,t,.2);voiceBus.gain.setTargetAtTime(o.layer==='voice'?1:0,t,.2);}
 function setGate(i,on,t){if(S.gate[i]===on)return;S.gate[i]=on;L[i].gain.setTargetAtTime(on?1:0,t,on?.15:.9);}
 function chordNow(){const b=BIOME[S.biome],dark=S.dark;return {c:(dark?b.dark:b.prog)[S.chord],bass:(dark?b.darkBass:b.bass)[S.chord],deg:(dark?b.darkDeg:b.deg)[S.chord],name:(dark?b.darkNames:b.names)[S.chord],scale:dark?PHRYG:MINOR};}
 // Tonleiterstufe d über dem Akkord -> Halbtöne über dem Grundton. Auf der V wird die kleine Septime zum Leitton (harmonisch Moll).
@@ -303,6 +308,11 @@ return {
  telegraph(){S.telegraph=true;S.telegraphRiser=false;},
  victory(){if(!combat())return;S.foes=[];S.abgesang=[];S.victory=true;S.momentum=0;S.spike=0;S.telegraph=false;S.scene='karte';},
  role(r){if(ROLES[r])S.role=r;},
+ // Vorhören: {layer:0-4|'voice', biome, dark, drive, role, foe}. Ohne Argument zurück zum normalen Dirigenten.
+ solo(o){if(!o){S.solo=null;S.foes=[];S.scene='menu';S.momentum=0;S.spike=0;return;}
+  S.solo=o;if(o.biome&&BIOME[o.biome]){S.nextBiome=o.biome;}if(o.role&&ROLES[o.role])S.role=o.role;
+  S.hp=S.hpMax;S.telegraph=false;S.momentum=0;S.spike=0;S.pendingAns=[];S.abgesang=[];
+  if(o.layer==='voice'&&FOES[o.foe]){S.scene='kampf';S.foes=[{type:o.foe}];}else{S.scene='karte';S.foes=[];}},
  biome(k){if(BIOME[k])S.nextBiome=k;}, // wechselt auf der nächsten Taktgrenze
  // Für tonale SFX: Grundton und aktueller Akkord, damit Effekte in der Tonart klingen
  harmony(){const c=chordNow();return {root:BIOME[S.biome].root,chord:c.c,scale:c.scale};},

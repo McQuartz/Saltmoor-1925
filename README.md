@@ -9,6 +9,8 @@ prototype/        Browser-Prototyp zum Ausprobieren und Entwerfen
   index.html      das Spiel
   artboard.html   der ganze Spielinhalt auf einer Seite: Stoffe, Reaktionen, Items, Sets, Gegner, Ereignisse, Run-Ablauf, Ideen
   ideen.html      Ideenkiste: vorgeschlagene neue Items und Mechaniken mit Ja/Vielleicht/Nein zum Durchgehen
+  musik.html      Musik-Labor: dynamische Layer-Musik zum Anhören
+  klangliste.html alle Audiodateien, die wir selbst erstellen müssen (Daten: data/audio.json)
   gallery.html    alle Bausteine einzeln: Gegner, Boss-Entwürfe, Items, UI, Szenen
   lab.html        Sprite-Labor: prozedurale Gegner, Varianten aus einem Bild, Welten aus Schichten
   data/           alle Spielwerte als JSON (Items, Gegner, Reaktionen, Balance ...), siehe data/README.md
@@ -21,6 +23,7 @@ prototype/        Browser-Prototyp zum Ausprobieren und Entwerfen
   style.css       Aussehen der Oberfläche
 game/             Godot-4-Projekt (folgt)
 docs/spritegen/   Plan, Recherche und Agenten-Regeln für den prozeduralen Sprite-Generator
+docs/auftrag/     Komplettauftrag für den spielbaren Prototyp-Run: Plan, Meilensteine, Entscheidungen, Agenten-Prompt
 docs/ui/          Kampf-UI: Ausgangslage (Variante A) und alle Gestaltungsideen aus den Entwürfen
 ```
 
