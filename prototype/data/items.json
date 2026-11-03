@@ -512,5 +512,391 @@
    }
   ],
   "nodrop": 1
+ },
+ "boathook": {
+  "n": "Bootshaken",
+  "a": "waffe",
+  "st": [
+   "W"
+  ],
+  "spr": "boathook",
+  "cards": [
+   {
+    "n": "Heranziehen",
+    "c": 1,
+    "atk": 5,
+    "strip": 1
+   }
+  ]
+ },
+ "boardaxe": {
+  "n": "Enterbeil",
+  "a": "waffe",
+  "st": [
+   "E"
+  ],
+  "spr": "boardaxe",
+  "cards": [
+   {
+    "n": "Entern",
+    "c": 1,
+    "atk": 7,
+    "eroeffnung": {
+     "atk": 5
+    }
+   }
+  ]
+ },
+ "sealskin": {
+  "n": "Robbenfell",
+  "a": "kleidung",
+  "st": [
+   "W"
+  ],
+  "hp": 5,
+  "spr": "sealskin",
+  "cards": [
+   {
+    "n": "Fettschicht",
+    "c": 1,
+    "blk": 5,
+    "eroeffnung": {
+     "blk": 3
+    }
+   }
+  ]
+ },
+ "scythe": {
+  "n": "Sense",
+  "a": "waffe",
+  "st": [
+   "V"
+  ],
+  "spr": "scythe",
+  "cards": [
+   {
+    "n": "Mähen",
+    "c": 2,
+    "atk": 5,
+    "all": 1,
+    "poison": 2
+   }
+  ]
+ },
+ "tarot": {
+  "n": "Tarotkarten",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "tarot",
+  "cards": [
+   {
+    "n": "Legen",
+    "c": 1,
+    "draw": 2,
+    "weak": 1
+   }
+  ]
+ },
+ "harefoot": {
+  "n": "Hasenpfote",
+  "a": "talisman",
+  "st": [],
+  "spr": "harefoot",
+  "cards": [],
+  "passiv": {
+   "typ": "glueck"
+  }
+ },
+ "collar": {
+  "n": "Priesterkragen",
+  "a": "kleidung",
+  "st": [
+   "G"
+  ],
+  "hp": 1,
+  "spr": "collar",
+  "cards": [
+   {
+    "n": "Segnen",
+    "c": 0,
+    "blk": 4,
+    "eroeffnung": {
+     "heal": 3
+    }
+   }
+  ]
+ },
+ "swordcane": {
+  "n": "Stockdegen",
+  "a": "waffe",
+  "st": [
+   "E"
+  ],
+  "spr": "swordcane",
+  "cards": [
+   {
+    "n": "Blankziehen",
+    "c": 0,
+    "atk": 4,
+    "eroeffnung": {
+     "draw": 1
+    }
+   }
+  ]
+ },
+ "witchbottle": {
+  "n": "Hexenflasche",
+  "a": "talisman",
+  "st": [
+   "S",
+   "B"
+  ],
+  "spr": "witchbottle",
+  "rare": 1,
+  "cards": [
+   {
+    "n": "Versiegeln",
+    "c": 1,
+    "blk": 6,
+    "weak": 1
+   }
+  ]
+ },
+ "musicbox": {
+  "n": "Spieluhr",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "musicbox",
+  "cards": [
+   {
+    "n": "Wiegenlied",
+    "c": 2,
+    "blk": 8,
+    "weak": 1,
+    "verbraucht": true
+   }
+  ]
+ },
+ "anchorchain": {
+  "n": "Ankerkette",
+  "a": "waffe",
+  "st": [
+   "E",
+   "W"
+  ],
+  "spr": "anchorchain",
+  "rare": 1,
+  "cards": [
+   {
+    "n": "Kette schwingen",
+    "c": 1,
+    "atk": 4,
+    "h": 3
+   }
+  ]
+ },
+ "cultmask": {
+  "n": "Kultmaske",
+  "a": "kleidung",
+  "st": [
+   "B"
+  ],
+  "hp": 2,
+  "spr": "cultmask",
+  "cards": [
+   {
+    "n": "Verstellen",
+    "c": 1,
+    "blk": 8
+   }
+  ]
+ },
+ "flaregun": {
+  "n": "Leuchtpistole",
+  "a": "waffe",
+  "st": [
+   "F",
+   "L"
+  ],
+  "spr": "flaregun",
+  "rare": 1,
+  "cards": [
+   {
+    "n": "Signal",
+    "c": 1,
+    "atk": 3,
+    "all": 1,
+    "burn": 1,
+    "weak": 1
+   }
+  ]
+ },
+ "gasmask": {
+  "n": "Gasmaske",
+  "a": "kleidung",
+  "st": [
+   "V"
+  ],
+  "hp": 2,
+  "spr": "gasmask",
+  "cards": [
+   {
+    "n": "Durchatmen",
+    "c": 1,
+    "blk": 5,
+    "draw": 1
+   }
+  ]
+ },
+ "officercoat": {
+  "n": "Offiziersmantel",
+  "a": "kleidung",
+  "st": [
+   "E"
+  ],
+  "hp": 4,
+  "spr": "officercoat",
+  "cards": [
+   {
+    "n": "Kommando",
+    "c": 1,
+    "blk": 5,
+    "eroeffnung": {
+     "en": 1
+    }
+   }
+  ]
+ },
+ "compass": {
+  "n": "Kompass, der nach unten zeigt",
+  "a": "talisman",
+  "st": [],
+  "spr": "compass",
+  "cards": [],
+  "passiv": {
+   "typ": "erste_karte_billiger"
+  }
+ },
+ "dynamite": {
+  "n": "Dynamit",
+  "a": "waffe",
+  "st": [
+   "F"
+  ],
+  "spr": "dynamite",
+  "cards": [
+   {
+    "n": "Lunte",
+    "c": 0,
+    "atk": 15,
+    "all": 1,
+    "self": 4,
+    "verbraucht": true
+   }
+  ]
+ },
+ "rum": {
+  "n": "Rum",
+  "a": "talisman",
+  "st": [
+   "F"
+  ],
+  "spr": "rum",
+  "cards": [
+   {
+    "n": "Schluck",
+    "c": 0,
+    "en": 2,
+    "verbraucht": true
+   }
+  ]
+ },
+ "laudanum": {
+  "n": "Laudanum",
+  "a": "talisman",
+  "st": [
+   "B"
+  ],
+  "spr": "laudanum",
+  "cards": [
+   {
+    "n": "Tropfen",
+    "c": 1,
+    "heal": 12,
+    "verbraucht": true
+   }
+  ]
+ },
+ "smellingsalts": {
+  "n": "Riechsalz",
+  "a": "talisman",
+  "st": [
+   "S"
+  ],
+  "spr": "smellingsalts",
+  "cards": [
+   {
+    "n": "Aufwachen",
+    "c": 0,
+    "draw": 2,
+    "verbraucht": true
+   }
+  ]
+ },
+ "deepscale": {
+  "n": "Tiefling-Schuppe",
+  "a": "talisman",
+  "st": [
+   "W"
+  ],
+  "spr": "deepscale",
+  "cards": [
+   {
+    "n": "Schuppenhaut",
+    "c": 0,
+    "blk": 4
+   }
+  ]
+ },
+ "divinghelm": {
+  "n": "Taucherhelm",
+  "a": "kleidung",
+  "st": [
+   "W",
+   "E"
+  ],
+  "hp": 6,
+  "spr": "divinghelm",
+  "rare": 1,
+  "cards": [
+   {
+    "n": "Luft anhalten",
+    "c": 1,
+    "blk": 12
+   }
+  ]
+ },
+ "minerlamp": {
+  "n": "Grubenlampe",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "minerlamp",
+  "cards": [
+   {
+    "n": "Ausleuchten",
+    "c": 1,
+    "atk": 2,
+    "all": 1,
+    "eroeffnung": {
+     "draw": 1
+    }
+   }
+  ]
  }
 }

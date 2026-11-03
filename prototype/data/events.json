@@ -1,7 +1,10 @@
 [
  {
+  "id": "alle_kistenjob",
+  "biom": "alle",
   "t": "Ein Job im Hafen",
   "d": "Der Vorarbeiter braucht jemanden, der nachts Kisten vom Kutter schleppt. Keiner fragt, was drin ist. Eine Kiste bewegt sich.",
+  "bild": "Ein Kutter am Kai, Kisten im Laternenlicht, und eine davon steht schief, als lehne sich etwas von innen dagegen.",
   "o": [
    {
     "l": "Lohn kassieren: ein zufälliges Item",
@@ -39,8 +42,11 @@
   ]
  },
  {
+  "id": "alle_pfandleihe",
+  "biom": "alle",
   "t": "Die Pfandleihe",
   "d": "Der alte Mendel hat Dinge im Hinterzimmer, die er nicht verkaufen will. Für dich macht er eine Ausnahme.",
+  "bild": "Ein Hinterzimmer voller verhängter Dinge, ein alter Mann mit Kerze, der einen Vorhang anhebt.",
   "o": [
    {
     "l": "Ein Mantel mit tiefen Taschen: +1 Kleidungs-Slot",
@@ -65,8 +71,11 @@
   ]
  },
  {
+  "id": "alle_brunnen",
+  "biom": "alle",
   "t": "Eine Stimme im Brunnen",
   "d": "Sie kennt deinen Namen. Sie bietet dir Platz an deinem Hals an, für etwas, das du trägst.",
+  "bild": "Ein gemauerter Brunnenrand bei Nacht, darin kein Spiegelbild, nur Dunkel.",
   "o": [
    {
     "l": "Annehmen: +1 Talisman-Slot, -6 max. Leben",
@@ -96,8 +105,11 @@
   ]
  },
  {
+  "id": "alle_nachtwaechter",
+  "biom": "alle",
   "t": "Der Nachtwächter",
   "d": "Er hat es auch gesehen. Er gibt dir, was er hat, damit du weitergehst und er nicht muss.",
+  "bild": "Ein Mann in einem Torbogen, der dir Laterne, Kreuz und Revolver hinhält, ohne dich anzusehen.",
   "o": [
    {
     "l": "Seine Sturmlaterne nehmen",
@@ -123,6 +135,986 @@
      {
       "op": "give_item",
       "item": "revolver"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hafen_netze",
+  "biom": "hafen",
+  "t": "Netze bei Nacht",
+  "d": "Eine Frau flickt am Kai ein Netz, das viel zu groß ist für jedes Boot im Hafen. Die Maschen sind so weit, dass ein Mensch mit den Schultern hindurchpasst. Sie bittet dich, das Ende zu halten, nur einen Augenblick.",
+  "bild": "Eine gebeugte Gestalt unter einer Gaslaterne, das Netz läuft von ihren Händen über die Kaikante ins schwarze Wasser.",
+  "o": [
+   {
+    "l": "Das Ende halten: −6 Leben, ein seltenes Item",
+    "fx": [
+     {
+      "op": "lose_hp",
+      "v": 6
+     },
+     {
+      "op": "give_rare"
+     }
+    ]
+   },
+   {
+    "l": "Fragen, für wen es ist: Kampf gegen die Netzflickerin",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "netzflickerin"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Weitergehen, ohne dich umzudrehen: +5 Leben",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 5
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hafen_kutter",
+  "biom": "hafen",
+  "t": "Der Kutter ohne Mannschaft",
+  "d": "Ein Kutter treibt an den Kai und legt sich sanft an, als stünde jemand am Ruder. Die Leinen sind ordentlich aufgeschossen, im Laderaum zappelt noch der Fang. Das Logbuch endet mitten im Satz.",
+  "bild": "Ein leerer Kutter im Nebel, an Deck eine brennende Laterne und eine offene Luke, aus der es silbern glitzert.",
+  "o": [
+   {
+    "l": "Den Fang verkaufen: +25 Gold, −4 max. Leben",
+    "fx": [
+     {
+      "op": "gold",
+      "v": 25
+     },
+     {
+      "op": "max_hp",
+      "v": -4
+     }
+    ]
+   },
+   {
+    "l": "In den Laderaum steigen: ein zufälliges Item, Kampf gegen den Tiefling",
+    "fx": [
+     {
+      "op": "give_random"
+     },
+     {
+      "op": "fight",
+      "foes": [
+       "tiefling"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Das Logbuch zu Ende lesen: eine Reaktion entdecken, −5 Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "lose_hp",
+      "v": 5
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hafen_steg",
+  "biom": "hafen",
+  "t": "Unter dem Steg",
+  "d": "Unter dem Steg wartet ein Mann mit Laterne, das Gesicht im Schatten. Er bietet dir an, was er heute Nacht nicht losgeworden ist. Unter seinem Mantel bewegt sich ein Arm zu viel, aber er zählt das Geld nur mit zweien.",
+  "bild": "Eine Laterne unter nassen Bohlen, ein Mantel, der sich an der falschen Stelle wölbt, und eine offene Kiste voll Stroh.",
+  "o": [
+   {
+    "l": "Bezahlen: −20 Gold, ein seltenes Item",
+    "fx": [
+     {
+      "op": "gold",
+      "v": -20
+     },
+     {
+      "op": "give_rare"
+     }
+    ],
+    "if": {
+     "gold_min": 20
+    }
+   },
+   {
+    "l": "Die Kiste nehmen, ohne zu zahlen: ein zufälliges Item, Kampf gegen den Schmuggler",
+    "fx": [
+     {
+      "op": "give_random"
+     },
+     {
+      "op": "fight",
+      "foes": [
+       "schmuggler"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Ihn nach dem Leuchtturm fragen: −10 Gold, eine Reaktion entdecken",
+    "fx": [
+     {
+      "op": "gold",
+      "v": -10
+     },
+     {
+      "op": "discover"
+     }
+    ],
+    "if": {
+     "gold_min": 10
+    }
+   }
+  ]
+ },
+ {
+  "id": "hafen_lichtkegel",
+  "biom": "hafen",
+  "t": "Der Lichtkegel",
+  "d": "Der Leuchtturm streicht nicht über das Meer, sondern über die Dächer, Gasse um Gasse. Dann findet er dich und bleibt stehen. Es ist warm in dem Licht, und sehr still.",
+  "bild": "Ein Lichtkegel, der von oben schräg in eine enge Gasse fällt, und darin ein einzelner, langer Schatten.",
+  "o": [
+   {
+    "l": "Im Licht stehen bleiben: volles Leben, −5 max. Leben",
+    "fx": [
+     {
+      "op": "full_heal"
+     },
+     {
+      "op": "max_hp",
+      "v": -5
+     }
+    ]
+   },
+   {
+    "l": "Hinaufsehen, bis es weh tut: +1 Talisman-Slot, −8 Leben",
+    "fx": [
+     {
+      "op": "add_slot",
+      "area": "talisman"
+     },
+     {
+      "op": "lose_hp",
+      "v": 8
+     }
+    ],
+    "if": {
+     "slot_below_max": "talisman"
+    }
+   },
+   {
+    "l": "Ins Dunkel zurücktreten: eine Karte streichen",
+    "fx": [
+     {
+      "op": "strike"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "moor_wasserloch",
+  "biom": "moor",
+  "t": "Fremde Sterne",
+  "d": "Im Wasserloch stehen Sterne, die es am Himmel nicht gibt. Als du dich darüber beugst, bewegt sich einer, langsam, auf dich zu. Das Wasser ist warm wie eine Hand.",
+  "bild": "Ein schwarzes Wasserloch zwischen toten Birken, darin ein Sternbild, das oben am Himmel fehlt.",
+  "o": [
+   {
+    "l": "Hineingreifen: −8 Leben, ein seltenes Item",
+    "fx": [
+     {
+      "op": "lose_hp",
+      "v": 8
+     },
+     {
+      "op": "give_rare"
+     }
+    ]
+   },
+   {
+    "l": "Dem Stern einen Namen geben: eine Reaktion entdecken, −4 max. Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "max_hp",
+      "v": -4
+     }
+    ]
+   },
+   {
+    "l": "Einen Stein hineinwerfen: +6 Leben",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 6
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "moor_steinkreis",
+  "biom": "moor",
+  "t": "Licht im Steinkreis",
+  "d": "In der Mitte des Steinkreises brennt eine Öllampe, daneben steht eine Schale mit Münzen. Die Bäume ringsum neigen sich herein, als hörten sie zu. Niemand ist zu sehen, aber das Gras ist frisch niedergetreten, im Kreis.",
+  "bild": "Ein Steinkreis auf einer Anhöhe, in der Mitte ein kleines Licht und eine Schale, ringsum Bäume, die sich zur Mitte neigen.",
+  "o": [
+   {
+    "l": "Die Münzen nehmen: +30 Gold, Kampf gegen den Hirten",
+    "fx": [
+     {
+      "op": "gold",
+      "v": 30
+     },
+     {
+      "op": "fight",
+      "foes": [
+       "hirte"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Etwas in die Schale legen: −15 Gold, +6 max. Leben",
+    "fx": [
+     {
+      "op": "gold",
+      "v": -15
+     },
+     {
+      "op": "max_hp",
+      "v": 6
+     }
+    ],
+    "if": {
+     "gold_min": 15
+    }
+   },
+   {
+    "l": "Die Lampe löschen: eine Karte streichen, −3 Leben",
+    "fx": [
+     {
+      "op": "strike"
+     },
+     {
+      "op": "lose_hp",
+      "v": 3
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "moor_torf",
+  "biom": "moor",
+  "t": "Die Torfstecherin",
+  "d": "Eine Frau sticht Torf mit bloßen Händen. Wo ihre Haut den Boden berührt hat, ist sie zu Rinde geworden, und sie scheint es nicht zu merken. Sie sagt, sie könne auch aus dir etwas herausstechen, das du nicht brauchst.",
+  "bild": "Eine gebückte Gestalt in einer Torfgrube, die Arme bis zu den Ellbogen dunkel und rissig, daneben sauber gestapelte Soden.",
+  "o": [
+   {
+    "l": "Sie stechen lassen: eine Karte streichen, −6 Leben",
+    "fx": [
+     {
+      "op": "strike"
+     },
+     {
+      "op": "lose_hp",
+      "v": 6
+     }
+    ]
+   },
+   {
+    "l": "Ihr beim Stechen helfen: ein zufälliges Item, −2 max. Leben",
+    "fx": [
+     {
+      "op": "give_random"
+     },
+     {
+      "op": "max_hp",
+      "v": -2
+     }
+    ]
+   },
+   {
+    "l": "Ihr die Hände festhalten: Kampf gegen die Torfstecherin",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "torfstecherin"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "kapelle_beichte",
+  "biom": "kapelle",
+  "t": "Der Beichtstuhl",
+  "d": "Der Beichtstuhl steht bis zur Hälfte im Wasser, und er ist besetzt. Hinter dem Gitter atmet jemand, langsam und nass. Er fragt nicht nach deinen Sünden, sondern nach dem, was du bei dir trägst.",
+  "bild": "Ein Beichtstuhl aus dunklem Holz im schrägen Wasser, hinter dem Gitter zwei helle Punkte.",
+  "o": [
+   {
+    "l": "Beichten: ein angelegtes Item verwandelt sich, +6 Leben",
+    "fx": [
+     {
+      "op": "transform"
+     },
+     {
+      "op": "heal",
+      "v": 6
+     }
+    ]
+   },
+   {
+    "l": "Ihm die Absolution erteilen: +1 Kleidungs-Slot, −6 max. Leben",
+    "fx": [
+     {
+      "op": "add_slot",
+      "area": "kleidung"
+     },
+     {
+      "op": "max_hp",
+      "v": -6
+     }
+    ],
+    "if": {
+     "slot_below_max": "kleidung"
+    }
+   },
+   {
+    "l": "Den Vorhang aufziehen: Kampf gegen den Ertrunkenen",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "ertrunkener"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "kapelle_kerze",
+  "biom": "kapelle",
+  "t": "Die Kerze unter Wasser",
+  "d": "Auf dem Boden des Seitenschiffs brennt eine Kerze unter Wasser. Die Flamme steht gerade, obwohl das Wasser schräg steht. Um sie herum ist das Wasser klar und schmeckt nach Weihrauch.",
+  "bild": "Eine kleine, ruhige Flamme unter einer schrägen Wasserfläche, darüber treibende Seiten aus einem Gesangbuch.",
+  "o": [
+   {
+    "l": "Das Wasser um die Flamme schöpfen: Weihwasser, −6 Leben",
+    "fx": [
+     {
+      "op": "give_item",
+      "item": "holywater"
+     },
+     {
+      "op": "lose_hp",
+      "v": 6
+     }
+    ]
+   },
+   {
+    "l": "Sie auszublasen versuchen: eine Reaktion entdecken, −3 max. Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "max_hp",
+      "v": -3
+     }
+    ]
+   },
+   {
+    "l": "Eine Münze in den Opferstock: −10 Gold, +15 Leben",
+    "fx": [
+     {
+      "op": "gold",
+      "v": -10
+     },
+     {
+      "op": "heal",
+      "v": 15
+     }
+    ],
+    "if": {
+     "gold_min": 10
+    }
+   }
+  ]
+ },
+ {
+  "id": "kapelle_glocke",
+  "biom": "kapelle",
+  "t": "Die Glocke läutet",
+  "d": "Die Glocke läutet unter dem Wasser, ohne Klöppel, und keiner zieht. Mit jedem Schlag steigt das Wasser eine Handbreit. In den Bänken stehen die Gläubigen auf, einer nach dem anderen, und das Wasser reicht ihnen schon bis zum Hals.",
+  "bild": "Ein überfluteter Kirchenraum im grünen Licht von unten, eine Glocke unter der Oberfläche und Köpfe, die sich in den Bänken erheben.",
+  "stummfilm": true,
+  "o": [
+   {
+    "l": "Die Schläge mitzählen bis zum Ende: +8 max. Leben, −12 Leben",
+    "fx": [
+     {
+      "op": "max_hp",
+      "v": 8
+     },
+     {
+      "op": "lose_hp",
+      "v": 12
+     }
+    ]
+   },
+   {
+    "l": "Das Glockenseil kappen: Kampf gegen Chorknabe und Kultist",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "chorknabe",
+       "kultist"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Untertauchen, bis es still ist: eine Karte streichen, −4 Leben",
+    "fx": [
+     {
+      "op": "strike"
+     },
+     {
+      "op": "lose_hp",
+      "v": 4
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "kapelle_taufe",
+  "biom": "kapelle",
+  "t": "Das Taufbecken",
+  "d": "Das Taufbecken hat keinen Boden. Dein Spiegelbild darin ist älter als du und sieht zufrieden aus. Aus der Tiefe steigen kleine Blasen, im Takt eines Atems.",
+  "bild": "Ein steinernes Becken vor einem halb abgeblätterten Fresko, darin ein Gesicht, das nicht ganz deines ist.",
+  "o": [
+   {
+    "l": "Dich taufen lassen: +6 max. Leben, ein angelegtes Item verwandelt sich",
+    "fx": [
+     {
+      "op": "max_hp",
+      "v": 6
+     },
+     {
+      "op": "transform"
+     }
+    ]
+   },
+   {
+    "l": "Eine Gabe hineinwerfen: −15 Gold, ein seltenes Item steigt auf",
+    "fx": [
+     {
+      "op": "gold",
+      "v": -15
+     },
+     {
+      "op": "give_rare"
+     }
+    ],
+    "if": {
+     "gold_min": 15
+    }
+   },
+   {
+    "l": "Das Becken abdecken: +5 Leben",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 5
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "salz_lore",
+  "biom": "salz",
+  "t": "Die Lore",
+  "d": "Eine Lore rollt bergab, ohne dass jemand schiebt, und hält genau neben dir. Sie ist halb voll mit Salz, und im Salz steckt Werkzeug. Die Schienen führen weiter hinab, als der Stollen auf der Karte reicht.",
+  "bild": "Eine einzelne Lore auf Schienen, die in einen dunklen Stollen abfallen, im Salz ein Hackenstiel.",
+  "o": [
+   {
+    "l": "Mitfahren: +1 Waffen-Slot, −8 Leben",
+    "fx": [
+     {
+      "op": "add_slot",
+      "area": "waffe"
+     },
+     {
+      "op": "lose_hp",
+      "v": 8
+     }
+    ],
+    "if": {
+     "slot_below_max": "waffe"
+    }
+   },
+   {
+    "l": "Die Ladung durchsuchen: ein zufälliges Item, −4 Leben",
+    "fx": [
+     {
+      "op": "give_random"
+     },
+     {
+      "op": "lose_hp",
+      "v": 4
+     }
+    ]
+   },
+   {
+    "l": "Unter die Lore sehen: Kampf gegen den Salzläufer",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "salzlaeufer"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "salz_schichtbuch",
+  "biom": "salz",
+  "t": "Der letzte Eintrag",
+  "d": "In einem toten Stollen brennt eine Grubenlampe. Daneben hängt eine Joppe am Haken, noch warm, und ein Schichtbuch, dessen letzter Eintrag von 1911 ist. Die Tinte darauf ist nicht trocken.",
+  "bild": "Eine Grubenlampe auf einem Holzbalken, eine Joppe am Haken und ein aufgeschlagenes Buch im kleinen Lichtkreis.",
+  "o": [
+   {
+    "l": "Die Kiste unter der Joppe öffnen: Dynamit, −4 Leben",
+    "fx": [
+     {
+      "op": "give_item",
+      "item": "dynamite"
+     },
+     {
+      "op": "lose_hp",
+      "v": 4
+     }
+    ]
+   },
+   {
+    "l": "Im Schichtbuch weiterschreiben: eine Reaktion entdecken, −4 max. Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "max_hp",
+      "v": -4
+     }
+    ]
+   },
+   {
+    "l": "Die Joppe anziehen: volles Leben, eine Karte streichen",
+    "fx": [
+     {
+      "op": "full_heal"
+     },
+     {
+      "op": "strike"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "salz_mauer",
+  "biom": "salz",
+  "t": "Der vermauerte Gang",
+  "d": "Über einem zugemauerten Gang stehen römische Zeichen, tief und hastig eingeschlagen. Von der anderen Seite klopft es, sehr langsam, im Takt deines Herzens. Wenn du den Atem anhältst, hält es auch inne.",
+  "bild": "Ein vermauerter Bogen im weißen Salz, darüber verwitterte Steinmetzzeichen, davor ein Häufchen Mörtelstaub.",
+  "o": [
+   {
+    "l": "Die Mauer aufbrechen: Kampf gegen den Grabwächter",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "grabwaechter"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Zurückklopfen: +6 max. Leben, −8 Leben",
+    "fx": [
+     {
+      "op": "max_hp",
+      "v": 6
+     },
+     {
+      "op": "lose_hp",
+      "v": 8
+     }
+    ]
+   },
+   {
+    "l": "Salz in die Fugen streuen: Salzbeutel, +4 Leben",
+    "fx": [
+     {
+      "op": "give_item",
+      "item": "salt"
+     },
+     {
+      "op": "heal",
+      "v": 4
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "stadt_trommel",
+  "biom": "stadt",
+  "t": "Die Trommel ohne Spieler",
+  "d": "In einer leeren Halle schlägt eine Trommel, und niemand schlägt sie. Ihr Takt ist der von Schritten, aber nicht von zwei Füßen. Je länger du zuhörst, desto mehr geht dein Herz mit.",
+  "bild": "Eine große, flache Trommel in einer Halle mit hüfthoher Decke, das Fell bebt, ringsum liegt der Sand in feinen Kreisen.",
+  "o": [
+   {
+    "l": "Im Takt weitergehen: +1 Kleidungs-Slot, −6 max. Leben",
+    "fx": [
+     {
+      "op": "add_slot",
+      "area": "kleidung"
+     },
+     {
+      "op": "max_hp",
+      "v": -6
+     }
+    ],
+    "if": {
+     "slot_below_max": "kleidung"
+    }
+   },
+   {
+    "l": "Das Fell aufschneiden: Kampf gegen den Boten",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "bote"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Dich flach hinlegen, bis sie schweigt: +12 Leben, −10 Gold",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 12
+     },
+     {
+      "op": "gold",
+      "v": -10
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "stadt_grabkammer",
+  "biom": "stadt",
+  "t": "Die geöffnete Grabkammer",
+  "d": "Jemand war vor dir hier, mit Werkzeug und Lampen, und hat die Kammer geöffnet. Die Gestalt darin wurde ausgewickelt und wieder eingewickelt, sorgfältig, aber falsch herum. Daneben liegen die Notizen der Expedition, die letzte Seite herausgerissen.",
+  "bild": "Eine niedrige Grabkammer im Lampenlicht, ein langer, gewickelter Körper mit zu vielen Gelenken, daneben ein Notizbuch.",
+  "o": [
+   {
+    "l": "Die Grabbeigaben nehmen: ein seltenes Item, Kampf gegen die Mumie",
+    "fx": [
+     {
+      "op": "give_rare"
+     },
+     {
+      "op": "fight",
+      "foes": [
+       "mumie"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Die Binden richtig wickeln: eine Karte streichen, +5 max. Leben",
+    "fx": [
+     {
+      "op": "strike"
+     },
+     {
+      "op": "max_hp",
+      "v": 5
+     }
+    ]
+   },
+   {
+    "l": "Die Notizen lesen: eine Reaktion entdecken, −5 Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "lose_hp",
+      "v": 5
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "stadt_wind",
+  "biom": "stadt",
+  "t": "Der Wind atmet ein",
+  "d": "Der Wind, der die ganze Zeit aus dem Abgrund nach oben blies, hört auf. Einen Herzschlag lang ist es still. Dann kehrt er sich um, und der Sand rieselt an dir vorbei nach unten, als hole etwas sehr Großes Luft.",
+  "bild": "Eine riesige Halle, in der der Sand in langen Fahnen in einen Abgrund gezogen wird, davor eine kleine Gestalt mit flatterndem Mantel.",
+  "stummfilm": true,
+  "o": [
+   {
+    "l": "Dich mitziehen lassen: +10 max. Leben, −14 Leben",
+    "fx": [
+     {
+      "op": "max_hp",
+      "v": 10
+     },
+     {
+      "op": "lose_hp",
+      "v": 14
+     }
+    ]
+   },
+   {
+    "l": "Dich festhalten: der Wind nimmt etwas, ein Item verwandelt sich",
+    "fx": [
+     {
+      "op": "transform"
+     }
+    ]
+   },
+   {
+    "l": "Gegen den Wind anschreien: Kampf gegen den Schatten",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "schatten"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "eis_zelt",
+  "biom": "eis",
+  "t": "Das Zelt der Expedition",
+  "d": "Das Zelt steht noch, steif gefroren, die Tür von innen verschnürt. Drinnen liegt ein Tagebuch auf einem Schlafsack. Die letzten Seiten sind in deiner Handschrift.",
+  "bild": "Ein vereistes Zelt auf schwarzem Eis, durch die Plane schimmert ein Licht, das niemand angezündet hat.",
+  "o": [
+   {
+    "l": "Die Vorräte nehmen: Rum, +10 Gold, −3 Leben",
+    "fx": [
+     {
+      "op": "give_item",
+      "item": "rum"
+     },
+     {
+      "op": "gold",
+      "v": 10
+     },
+     {
+      "op": "lose_hp",
+      "v": 3
+     }
+    ]
+   },
+   {
+    "l": "Das Tagebuch lesen: eine Reaktion entdecken, −6 max. Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "max_hp",
+      "v": -6
+     }
+    ]
+   },
+   {
+    "l": "Im Zelt schlafen: +20 Leben, ein angelegtes Item verwandelt sich",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 20
+     },
+     {
+      "op": "transform"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "eis_welle",
+  "biom": "eis",
+  "t": "Die Welle ist weiter",
+  "d": "Die Welle ist mitten im Brechen gefroren, schwarz und glatt. Vorhin stand sie weiter hinten, da bist du sicher. Unter ihrem Kamm schwimmt etwas auf das Ufer zu, das es hier nicht gibt.",
+  "bild": "Eine gefrorene Welle, höher als ein Haus, darin dunkle Formen, und ihr Schatten fällt über dich.",
+  "o": [
+   {
+    "l": "Unter den Kamm treten: ein seltenes Item, −10 Leben",
+    "fx": [
+     {
+      "op": "give_rare"
+     },
+     {
+      "op": "lose_hp",
+      "v": 10
+     }
+    ]
+   },
+   {
+    "l": "Das Eis aufschlagen: Kampf gegen das Eisgesicht",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "eisgesicht"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Rückwärts weggehen, ohne sie aus den Augen zu lassen: +8 Leben",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 8
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "eis_name",
+  "biom": "eis",
+  "t": "Jemand ruft deinen Namen",
+  "d": "Weit vorn ruft jemand deinen Namen, mit deiner Stimme. Er weiß Dinge, die nur du weißt, und er sagt sie freundlich. Er sagt, du seist spät dran.",
+  "bild": "Eine endlose schwarze Eisfläche, ganz hinten eine dünne, aufrechte Gestalt mit zu langem Hals, die winkt.",
+  "stummfilm": true,
+  "o": [
+   {
+    "l": "Antworten: +1 Talisman-Slot, −8 max. Leben",
+    "fx": [
+     {
+      "op": "add_slot",
+      "area": "talisman"
+     },
+     {
+      "op": "max_hp",
+      "v": -8
+     }
+    ],
+    "if": {
+     "slot_below_max": "talisman"
+    }
+   },
+   {
+    "l": "Hingehen: Kampf gegen den Rufer",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "rufer"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Dir die Ohren zuhalten, bis es aufhört: eine Karte streichen, −6 Leben",
+    "fx": [
+     {
+      "op": "strike"
+     },
+     {
+      "op": "lose_hp",
+      "v": 6
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "eis_schlitten",
+  "biom": "eis",
+  "t": "Der Schlitten",
+  "d": "Ein beladener Schlitten steckt im Eis, die Hunde noch im Geschirr, im Stehen gefroren. Sie blicken alle nach unten. Einer hat die Augen offen und folgt dir mit ihnen.",
+  "bild": "Ein Schlitten mit Kisten, davor eine Reihe Hunde im Eis, alle mit gesenktem Kopf, einer mit hellen Augen.",
+  "o": [
+   {
+    "l": "Die Kisten aufbrechen: zwei zufällige Items, −9 Leben",
+    "fx": [
+     {
+      "op": "give_random"
+     },
+     {
+      "op": "give_random"
+     },
+     {
+      "op": "lose_hp",
+      "v": 9
+     }
+    ]
+   },
+   {
+    "l": "Die Hunde losschneiden: Kampf gegen den Nachgeher",
+    "fx": [
+     {
+      "op": "fight",
+      "foes": [
+       "nachgeher"
+      ]
+     }
+    ]
+   },
+   {
+    "l": "Die Arzneikiste nehmen: Laudanum, −2 max. Leben",
+    "fx": [
+     {
+      "op": "give_item",
+      "item": "laudanum"
+     },
+     {
+      "op": "max_hp",
+      "v": -2
      }
     ]
    }

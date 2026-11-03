@@ -17,7 +17,8 @@
    ".TTTTTTTTTT.",
    "............"
   ],
-  "notes": "Behebt das Hauptproblem direkt: Ein Run fühlt sich in Tiefe 2 anders an als in Tiefe 10. Bestehende Items werden einfach auf Zonen verteilt, ein kleiner allgemeiner Pool bleibt."
+  "notes": "Behebt das Hauptproblem direkt: Ein Run fühlt sich in Tiefe 2 anders an als in Tiefe 10. Bestehende Items werden einfach auf Zonen verteilt, ein kleiner allgemeiner Pool bleibt.",
+  "status": "übernommen"
  },
  {
   "n": "Gegner-Beute",
@@ -37,7 +38,8 @@
    "....bbbb....",
    "............"
   ],
-  "notes": "Gibt Kämpfen einen zweiten Grund und macht Gegner wiedererkennbar. Passt zu »Knochen vom Friedhofswärter«, das gibt es schon als Sonderfall."
+  "notes": "Gibt Kämpfen einen zweiten Grund und macht Gegner wiedererkennbar. Passt zu »Knochen vom Friedhofswärter«, das gibt es schon als Sonderfall.",
+  "status": "übernommen"
  },
  {
   "n": "Proviant",
@@ -77,7 +79,8 @@
    "............",
    "............"
   ],
-  "notes": "Gibt dem Horror-Thema eine Mechanik und dem Stoff Glaube eine zweite Aufgabe. Verknüpft den bestehenden Jumpscare mit dem Spiel statt mit der Uhr."
+  "notes": "Gibt dem Horror-Thema eine Mechanik und dem Stoff Glaube eine zweite Aufgabe. Verknüpft den bestehenden Jumpscare mit dem Spiel statt mit der Uhr.",
+  "status": "gestrichen (Sog)"
  },
  {
   "n": "Verfluchte Items",
@@ -97,7 +100,8 @@
    ".....e......",
    "....e.e....."
   ],
-  "notes": "Echte Risiko-Entscheidungen. Gibt der Werkstatt einen weiteren Zweck."
+  "notes": "Echte Risiko-Entscheidungen. Gibt der Werkstatt einen weiteren Zweck.",
+  "status": "gestrichen (Sog)"
  },
  {
   "n": "Gezeiten",
@@ -177,7 +181,8 @@
    "..bbbbbbbb..",
    "............"
   ],
-  "notes": "Die Reihenfolge der Karten zählt heute nur für Reaktionen. Damit wird jeder Zug ein kleines Rätsel."
+  "notes": "Die Reihenfolge der Karten zählt heute nur für Reaktionen. Damit wird jeder Zug ein kleines Rätsel.",
+  "status": "übernommen"
  },
  {
   "n": "Erbstücke (passiv)",
@@ -197,7 +202,8 @@
    "............",
    "............"
   ],
-  "notes": "Heute gibt jedes Item genau eine Karte, deshalb fühlen sich alle gleich an. Erbstücke sind die schnellste Art, Abwechslung zu schaffen."
+  "notes": "Heute gibt jedes Item genau eine Karte, deshalb fühlen sich alle gleich an. Erbstücke sind die schnellste Art, Abwechslung zu schaffen.",
+  "status": "übernommen"
  },
  {
   "n": "Tagebuch und Freischalten",
@@ -217,7 +223,8 @@
    "..wwwwwwww..",
    "............"
   ],
-  "notes": "Neue Spieler sehen nicht alles auf einmal, erfahrene finden immer noch etwas Neues. Das Reaktionsbuch gibt es schon, das Tagebuch wäre die zweite Hälfte."
+  "notes": "Neue Spieler sehen nicht alles auf einmal, erfahrene finden immer noch etwas Neues. Das Reaktionsbuch gibt es schon, das Tagebuch wäre die zweite Hälfte.",
+  "status": "übernommen"
  },
  {
   "n": "Bootshaken",
@@ -241,7 +248,8 @@
    "............"
   ],
   "notes": "Fund: Hafenviertel. Mechanik: Zonen-Beute.",
-  "a": "waffe"
+  "a": "waffe",
+  "status": "übernommen"
  },
  {
   "n": "Enterbeil",
@@ -265,7 +273,8 @@
    "............"
   ],
   "notes": "Fund: Hafenviertel. Mechanik: Zonen-Beute, Karten-Takt.",
-  "a": "waffe"
+  "a": "waffe",
+  "status": "übernommen"
  },
  {
   "n": "Robbenfell",
@@ -289,7 +298,8 @@
    "............"
   ],
   "notes": "Fund: Hafenviertel. Mechanik: Zonen-Beute, Karten-Takt. +5 Leben.",
-  "a": "kleidung"
+  "a": "kleidung",
+  "status": "übernommen"
  },
  {
   "n": "Zitteraal im Glas",
@@ -337,7 +347,8 @@
    ".....b......"
   ],
   "notes": "Fund: Der Moorwald. Mechanik: Zonen-Beute.",
-  "a": "waffe"
+  "a": "waffe",
+  "status": "übernommen"
  },
  {
   "n": "Tarotkarten",
@@ -361,7 +372,8 @@
    ".....wwwwww."
   ],
   "notes": "Fund: Der Moorwald (Wahrsagerin). Mechanik: Zonen-Beute.",
-  "a": "talisman"
+  "a": "talisman",
+  "status": "übernommen"
  },
  {
   "n": "Hasenpfote",
@@ -383,7 +395,8 @@
    "............"
   ],
   "notes": "Fund: Der Moorwald. Mechanik: Erbstücke (passiv), Zonen-Beute.",
-  "a": "talisman"
+  "a": "talisman",
+  "status": "übernommen"
  },
  {
   "n": "Auge im Glas",
@@ -407,7 +420,8 @@
    "............"
   ],
   "notes": "Fund: Der Moorwald, selten. Mechanik: Verfluchte Items, Wahnsinn.",
-  "a": "talisman"
+  "a": "talisman",
+  "status": "gestrichen (Sog)"
  },
  {
   "n": "Priesterkragen",
@@ -431,7 +445,8 @@
    "............"
   ],
   "notes": "Fund: Die überflutete Kapelle. Mechanik: Zonen-Beute, Erbstücke (passiv), Wahnsinn. +1 Leben.",
-  "a": "kleidung"
+  "a": "kleidung",
+  "status": "übernommen"
  },
  {
   "n": "Stockdegen",
@@ -455,7 +470,8 @@
    "......kk...."
   ],
   "notes": "Fund: Die überflutete Kapelle. Mechanik: Zonen-Beute, Karten-Takt.",
-  "a": "waffe"
+  "a": "waffe",
+  "status": "übernommen"
  },
  {
   "n": "Hexenflasche",
@@ -480,7 +496,8 @@
    "............"
   ],
   "notes": "Fund: Die überflutete Kapelle, selten. Mechanik: Erbstücke (passiv), Zonen-Beute.",
-  "a": "talisman"
+  "a": "talisman",
+  "status": "übernommen"
  },
  {
   "n": "Spieluhr",
@@ -504,7 +521,8 @@
    "............"
   ],
   "notes": "Fund: Die überflutete Kapelle. Mechanik: Zonen-Beute.",
-  "a": "talisman"
+  "a": "talisman",
+  "status": "übernommen"
  },
  {
   "n": "Ankerkette",
@@ -529,7 +547,8 @@
    ".....gg....."
   ],
   "notes": "Fund: Der Grund, selten. Mechanik: Zonen-Beute.",
-  "a": "waffe"
+  "a": "waffe",
+  "status": "übernommen"
  },
  {
   "n": "Taucherhelm",
@@ -554,7 +573,8 @@
    ".gGgGgGgGgg."
   ],
   "notes": "Fund: Der Grund, selten. Mechanik: Zonen-Beute, Gezeiten. +6 Leben.",
-  "a": "kleidung"
+  "a": "kleidung",
+  "status": "übernommen"
  },
  {
   "n": "Glimmender Götze",
@@ -578,7 +598,8 @@
    "..gGGGGGGg.."
   ],
   "notes": "Fund: Der Grund. Mechanik: Verfluchte Items, Erbstücke (passiv), Zonen-Beute.",
-  "a": "talisman"
+  "a": "talisman",
+  "status": "gestrichen (Sog)"
  },
  {
   "n": "Gezeitentafel",
@@ -626,7 +647,8 @@
    "............"
   ],
   "notes": "Fund: Beute vom Kultisten. Mechanik: Gegner-Beute. +2 Leben.",
-  "a": "kleidung"
+  "a": "kleidung",
+  "status": "übernommen"
  },
  {
   "n": "Tiefling-Schuppe",
@@ -650,7 +672,8 @@
    "............"
   ],
   "notes": "Fund: Beute vom Tiefling. Mechanik: Gegner-Beute, Gezeiten.",
-  "a": "talisman"
+  "a": "talisman",
+  "status": "übernommen"
  },
  {
   "n": "Schattenfetzen",
@@ -699,7 +722,8 @@
    "............"
   ],
   "notes": "Fund: Krämer. Mechanik: Munition.",
-  "a": "waffe"
+  "a": "waffe",
+  "status": "übernommen"
  },
  {
   "n": "Maschinenpistole",
@@ -747,7 +771,8 @@
    "............"
   ],
   "notes": "Fund: überall. Mechanik: Wahnsinn. +2 Leben.",
-  "a": "kleidung"
+  "a": "kleidung",
+  "status": "übernommen"
  },
  {
   "n": "Offiziersmantel",
@@ -771,7 +796,8 @@
    "............"
   ],
   "notes": "Fund: überall. Mechanik: Karten-Takt. +4 Leben.",
-  "a": "kleidung"
+  "a": "kleidung",
+  "status": "übernommen"
  },
  {
   "n": "Kompass, der nach unten zeigt",
@@ -793,7 +819,8 @@
    "............"
   ],
   "notes": "Fund: Ereignis. Mechanik: Erbstücke (passiv).",
-  "a": "talisman"
+  "a": "talisman",
+  "status": "übernommen"
  },
  {
   "n": "Wachstuchschürze",
@@ -862,7 +889,8 @@
    "...rrrrr....",
    "............"
   ],
-  "notes": "Fund: Krämer, Ereignis. Mechanik: Proviant."
+  "notes": "Fund: Krämer, Ereignis. Mechanik: Proviant.",
+  "status": "übernommen"
  },
  {
   "n": "Rum",
@@ -885,7 +913,8 @@
    "............",
    "............"
   ],
-  "notes": "Fund: Krämer, Hafenviertel. Mechanik: Proviant, Wahnsinn."
+  "notes": "Fund: Krämer, Hafenviertel. Mechanik: Proviant, Wahnsinn.",
+  "status": "übernommen"
  },
  {
   "n": "Laudanum",
@@ -906,7 +935,8 @@
    "...bbbbbb...",
    "............"
   ],
-  "notes": "Fund: Krämer, Kapelle. Mechanik: Proviant, Wahnsinn."
+  "notes": "Fund: Krämer, Kapelle. Mechanik: Proviant, Wahnsinn.",
+  "status": "übernommen"
  },
  {
   "n": "Riechsalz",
@@ -929,7 +959,8 @@
    "............",
    "............"
   ],
-  "notes": "Fund: überall. Mechanik: Proviant, Wahnsinn."
+  "notes": "Fund: überall. Mechanik: Proviant, Wahnsinn.",
+  "status": "übernommen"
  },
  {
   "n": "Kurzschluss",
@@ -1123,6 +1154,7 @@
    ".wwwwwwwwww.",
    "............"
   ],
-  "notes": "Idee von Ace aus der Kampf-UI-Runde 1 (Entwurf 3 „Ermittlerakte“). Gezeigt in Runde 2 als vierte Karte auf der Hand: https://claude.ai/artifact/QvLNHfTxECFGoY2gEBXFjc"
+  "notes": "Idee von Ace aus der Kampf-UI-Runde 1 (Entwurf 3 „Ermittlerakte“). Gezeigt in Runde 2 als vierte Karte auf der Hand: https://claude.ai/artifact/QvLNHfTxECFGoY2gEBXFjc",
+  "status": "übernommen"
  }
 ]

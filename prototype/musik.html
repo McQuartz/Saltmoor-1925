@@ -46,6 +46,11 @@ input[type=range]{width:100%;accent-color:#d0453a}
 .badge.on{border-color:var(--red);color:var(--red)}
 .quad{font-family:var(--fd);font-size:10px;color:var(--eld)}
 .hint{font-size:16px!important;color:#6a6f66!important}
+.fgrp{font-size:15px;color:#6a6f66;width:100%;margin-top:4px}
+.fgrp.cur{color:var(--parch)}
+#log{font-size:16px;color:#9aa39a;display:flex;flex-direction:column-reverse;gap:2px;max-height:260px;overflow-y:auto;min-height:60px}
+#log b{color:var(--txt);font-weight:normal}
+#log small{color:#6a6f66;font-size:14px}
 </style>
 </head>
 <body>
@@ -65,9 +70,9 @@ input[type=range]{width:100%;accent-color:#d0453a}
    <div class="meter"><span>Wucht</span><div class="bar"><i id="mW"></i><b style="left:15%"></b><b style="left:40%"></b><b style="left:62%"></b><b style="left:88%"></b></div><span id="tW">0</span></div>
    <div class="meter"><span>Gefahr</span><div class="bar g"><i id="mG"></i><b style="left:50%"></b></div><span id="tG">0</span></div>
    <div class="facts"><span>Stimmung <b class="quad" id="fQ">–</b></span></div>
-   <div class="facts"><span>Tempo <b id="fB">80</b> BPM</span><span>Akkord <b id="fC">–</b></span><span>Szene <b id="fS">menu</b></span></div>
+   <div class="facts"><span>Tempo <b id="fB">80</b> BPM</span><span>Akkord <b id="fC">–</b></span><span>Szene <b id="fS">menu</b></span><span>Takt <b id="fT">–</b></span><span>Spitze <b id="fP">–</b> dBFS</span></div>
    <div class="layers" id="lays">
-    <div class="lay" data-i="0"><span class="dot"></span><span>0 Grund <small>Meer, Drone</small></span><small>immer</small></div>
+    <div class="lay" data-i="0"><span class="dot"></span><span>0 Grund <small id="fO">Meer, Drone</small></span><small>immer</small></div>
     <div class="lay" data-i="1"><span class="dot"></span><span>1 Puls <small>Herzschlag, Bass</small></span><small>ab 0,15</small></div>
     <div class="lay" data-i="2"><span class="dot"></span><span>2 Rhythmus <small id="fV">ruhig</small></span><small>ab 0,40</small></div>
     <div class="lay" data-i="3"><span class="dot"></span><span>3 Bedrohung <small>Fläche, Melodie</small></span><small>ab 0,62</small></div>
@@ -78,10 +83,11 @@ input[type=range]{width:100%;accent-color:#d0453a}
 
   <section class="panel">
    <h2>SZENE</h2>
-   <div class="ctl"><label>Biom<select id="sBiome"></select></label></div>
+   <div class="ctl"><label>Biom<select id="sBiome"></select></label><label>Akt (Grundgefahr)<select id="sAkt"><option value="0">1 Einstieg</option><option value="1">2 Kapelle</option><option value="2">3 Tiefe</option><option value="3">4 Schwarzes Eis</option><option value="4">5 Pforte</option></select></label></div>
    <div class="btns" id="scenes">
-    <button class="sm" data-s="menu">MENÜ</button><button class="sm" data-s="karte">KARTE</button><button class="sm" data-s="kampf">KAMPF</button><button class="sm" data-s="boss">BOSS</button>
+    <button class="sm" data-s="menu">MENÜ</button><button class="sm" data-s="karte">KARTE</button><button class="sm" data-s="kampf">KAMPF</button><button class="sm" data-s="waechter">WÄCHTER</button><button class="sm" data-s="boss">BOSS</button>
    </div>
+   <div class="btns"><button class="sm" id="bUeb">ÜBERGANG</button><button class="sm" id="bBleiben">ENDE: BLEIBEN</button><button class="sm" id="bUmkehren">ENDE: UMKEHREN</button><button class="sm" id="bNieder">NIEDERLAGE</button></div>
    <h2 style="margin-top:6px">LEBEN <span id="tHp" style="color:var(--txt)">40/40</span></h2>
    <input type="range" id="rHp" min="0" max="40" value="40">
    <div class="btns"><button class="sm" id="bHit">TREFFER −6</button><button class="sm" id="bHeal">HEILEN +8</button><button class="sm" id="bTel">ANGRIFF ANGEKÜNDIGT</button></div>
@@ -92,6 +98,7 @@ input[type=range]{width:100%;accent-color:#d0453a}
 
   <section class="panel">
    <h2>GEGNER</h2>
+   <p class="hint">Stimmen nach Biom. Wächter (★) singen die Stimme ihres Bioms eine Oktave tiefer und gedoppelt.</p>
    <div class="btns" id="spawns"></div>
    <p class="hint">Gegner im Kampf (antippen = besiegen). Grün umrandet = spielt gerade sein Motiv.</p>
    <div class="chips" id="foes"></div>
@@ -101,8 +108,15 @@ input[type=range]{width:100%;accent-color:#d0453a}
     <label>Dominanter Stoff (Effekt)<select id="sStoff"></select></label>
    </div>
   </section>
+
+  <section class="panel">
+   <h2>ENTSCHEIDUNGEN DES DIRIGENTEN</h2>
+   <p class="hint">Die letzten 20 Entscheidungen mit Grund (wie im Dev-Modus über <code>Music.onEvent</code>).</p>
+   <div id="log"></div>
+   <div class="btns"><button class="sm" id="bPeak">SPITZE ZURÜCKSETZEN</button></div>
+  </section>
  </div>
- <p class="hint" style="margin-top:18px">Code: <code>js/audio/music.js</code>. Das Spiel selbst nutzt die Musik noch nicht.</p>
+ <p class="hint" style="margin-top:18px">Code: <code>js/audio/music.js</code>. Alle sieben Biome, alle Gegnerstimmen, Rollen und Stoffe sind hier anwählbar.</p>
 </div>
 
 <script src="js/audio/sfx.js"></script>
@@ -129,15 +143,32 @@ const act={
 };
 $('bHit').onclick=()=>{ensure();act.hit();};$('bHeal').onclick=()=>{ensure();act.heal();};$('bTel').onclick=()=>{ensure();act.tel();};
 $('bReact').onclick=()=>{ensure();act.react();};$('bStrike').onclick=()=>{ensure();act.strike();};$('bBlock').onclick=()=>{ensure();act.block();};$('bHoch').onclick=()=>{ensure();act.hoch();};$('bWin').onclick=()=>{ensure();act.win();};
-Object.entries(Music.FOES).forEach(([k,f])=>{const b=document.createElement('button');b.className='sm';b.textContent='+ '+f.n.toUpperCase();
- b.onclick=()=>{ensure();const st=Music.state();if(st.scene!=='kampf'&&st.scene!=='boss')Music.scene(k==='ruft'?'boss':'kampf');Music.foeSpawn(k);play('pick');};$('spawns').appendChild(b);});
+// Gegner nach Biom gruppiert; Wächter und Boss setzen ihre Szene
+const SC={normal:'kampf',waechter:'waechter',boss:'boss'};
+Object.entries(Music.BIOME).forEach(([bk,bi])=>{
+ const h=document.createElement('div');h.className='fgrp';h.dataset.b=bk;h.textContent=bi.n+' · '+bi.key;$('spawns').appendChild(h);
+ Object.entries(Music.FOES).filter(([,f])=>f.biom===bk).forEach(([k,f])=>{const b=document.createElement('button');b.className='sm';
+  b.textContent='+ '+(f.rang==='normal'?'':'★ ')+f.n.toUpperCase();b.title=f.k;
+  b.onclick=()=>{ensure();const st=Music.state(),want=SC[f.rang];if(st.scene!==want&&!(want==='kampf'&&(st.scene==='waechter'||st.scene==='boss')))Music.scene(want);Music.foeSpawn(k);play('pick');};
+  $('spawns').appendChild(b);});});
 Object.entries(Music.ROLES).forEach(([k,r])=>$('sRole').add(new Option(r.n+' · '+r.k,k)));$('sRole').value='fischer';
 Object.entries(Music.STOFFE).forEach(([k,s])=>$('sStoff').add(new Option(s.n,k)));
-Object.entries(Music.BIOME).forEach(([k,b])=>$('sBiome').add(new Option(b.n,k)));$('sBiome').onchange=e=>{ensure();Music.biome(e.target.value);};
+Object.entries(Music.BIOME).forEach(([k,b])=>$('sBiome').add(new Option(b.n+' · '+b.key,k)));$('sBiome').onchange=e=>{ensure();Music.biome(e.target.value);};
+$('sAkt').onchange=e=>{ensure();Music.akt(+e.target.value);};
+$('bUeb').onclick=()=>{ensure();Music.uebergang();};
+$('bBleiben').onclick=()=>{ensure();Music.ende('bleiben');};
+$('bUmkehren').onclick=()=>{ensure();Music.ende('umkehren');};
+$('bNieder').onclick=()=>{ensure();Music.niederlage();};
+$('bPeak').onclick=()=>Music.resetPeak();
+// Entscheidungen mitlesen
+const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function drawLog(){$('log').innerHTML=Music.state().log.map(e=>`<span><small>T${e.bar} · ${e.t.toFixed(1)} s</small> <b>${esc(e.was)}</b> ${esc(e.why)}</span>`).join('');}
+Music.onEvent(drawLog);
 $('sRole').onchange=e=>Music.role(e.target.value);$('sStoff').onchange=e=>{ensure();Music.stoff(e.target.value);};
 
 // Anzeige
 let lastFoes='';
+const pendingBiome=()=>$('sBiome').value!==Music.state().biome&&Date.now()-biomeAt<4000;let biomeAt=0;$('sBiome').addEventListener('change',()=>biomeAt=Date.now());
 function quad(w,g){if(w<.15&&g<.2)return 'Ruhe';const hi=w>=.55,gg=g>=.5;return gg?(hi?'Panik':'Gespenstisch'):(hi?'Heldenhaft':'Lauernd');}
 function draw(){
  const s=Music.state();
@@ -145,7 +176,10 @@ function draw(){
  $('tW').textContent=s.wucht.toFixed(2);$('tG').textContent=s.gefahr.toFixed(2);
  $('fB').textContent=s.bpm;$('fC').textContent=s.chord+(s.dark?' (gekippt)':'');$('fS').textContent=s.scene;$('fQ').textContent=quad(s.wucht,s.gefahr);
  document.querySelectorAll('.lay').forEach(el=>el.classList.toggle('on',s.gate[+el.dataset.i]));
- $('fV').textContent=s.drive?'Ketten, Pauke · treibend':'Ketten, Pauke · ruhig';
+ const bi=Music.BIOME[s.biome];$('fV').textContent=bi.rhyN+(s.drive?' · treibend':' · ruhig');$('fO').textContent=bi.ort+', Drone';
+ $('fT').textContent=s.bar+'.'+s.beat;$('fP').textContent=s.peak<=-120?'–':s.peak.toFixed(1);
+ document.querySelectorAll('.fgrp').forEach(el=>el.classList.toggle('cur',el.dataset.b===s.biome));
+ if(document.activeElement!==$('sBiome')&&$('sBiome').value!==s.biome&&!pendingBiome())$('sBiome').value=s.biome;
  $('bgDuel').classList.toggle('on',s.duel);$('bgTel').classList.toggle('on',s.telegraph);
  $('tHp').textContent=Math.round(s.hp)+'/'+s.hpMax;if(document.activeElement!==$('rHp'))$('rHp').value=s.hp;
  document.querySelectorAll('#scenes button').forEach(b=>b.classList.toggle('on',b.dataset.s===s.scene));

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hintergrund-Labor</title>
+<style>
+:root { --bg:#08090c; --fg:#cfd6e0; --mute:#7a8494; --rand:#232833; --akz:#ffe9a0; }
+body { margin:0; background:var(--bg); color:var(--fg); font:13px/1.4 ui-monospace, Menlo, Consolas, monospace; }
+header { padding:10px 16px; border-bottom:1px solid var(--rand); display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+header h1 { font-size:14px; margin:0 12px 0 0; color:var(--akz); letter-spacing:.06em; }
+label { display:inline-flex; gap:6px; align-items:center; color:var(--mute); }
+select, input[type=number] { background:#11141a; color:var(--fg); border:1px solid var(--rand); padding:3px 4px; font:inherit; }
+input[type=number] { width:70px; }
+button { background:#141822; color:var(--fg); border:1px solid #3a4250; padding:4px 10px; font:inherit; cursor:pointer; }
+button:hover { border-color:var(--akz); }
+main { padding:16px; }
+#bild { image-rendering:pixelated; image-rendering:crisp-edges; display:block; border:1px solid var(--rand); background:#000; }
+#ebenen label { margin-right:10px; }
+#info { color:var(--mute); margin-top:8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>HINTERGRUND-LABOR</h1>
+  <label>Biom <select id="biom"></select></label>
+  <label>Variante <select id="variante"><option>0</option><option>1</option><option>2</option></select></label>
+  <label>Art <select id="art"></select></label>
+  <label>Seed <input id="seed" type="number" value="1"></label>
+  <label>Fremdheit <input id="fremd" type="range" min="0" max="1" step="0.05" value="0"> <span id="fremdW">0</span></label>
+  <label>Skala <select id="skala"><option>2</option><option selected>3</option><option>4</option></select></label>
+  <label><input id="wackeln" type="checkbox" checked> Kamera</label>
+  <label><input id="gegner" type="checkbox" checked> Gegner-Platzhalter</label>
+  <button id="png">PNG speichern</button>
+</header>
+<main>
+  <div id="ebenen"></div>
+  <canvas id="bild" width="480" height="270"></canvas>
+  <div id="info"></div>
+</main>
+<script src="js/scenes/world/basis.js"></script>
+<script src="js/scenes/world/hafen.js"></script>
+<script src="js/scenes/world/moor.js"></script>
+<script src="js/scenes/world/kapelle.js"></script>
+<script src="js/scenes/world/salz.js"></script>
+<script src="js/scenes/world/stadt.js"></script>
+<script src="js/scenes/world/eis.js"></script>
+<script src="js/scenes/world/pforte.js"></script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id), B = World.B;
+  const q = new URLSearchParams(location.search);
+  World.BIOME.forEach(b => $('biom').add(new Option(b, b)));
+  World.ARTEN.forEach(a => $('art').add(new Option(a, a)));
+  const NAMEN = ['0 Himmel', '1 Ferne', '2 hinterer MG', '3 vorderer MG', '4 Spielebene', 'Animiert', 'Gegner', '5 Vordergrund', '6 Luft'];
+  const an = NAMEN.map(() => true);
+  NAMEN.forEach((n, i) => { const l = document.createElement('label'); l.innerHTML = '<input type="checkbox" checked> ' + n; l.firstChild.onchange = e => { an[i] = e.target.checked; }; $('ebenen').appendChild(l); });
+  for (const k of ['biom', 'variante', 'art', 'seed', 'skala']) if (q.get(k)) $(k).value = q.get(k);
+  if (q.get('fremdheit')) $('fremd').value = q.get('fremdheit');
+  if (q.get('gegner') === '0') $('gegner').checked = false;
+  if (q.get('wackeln') === '0') $('wackeln').checked = false;
+  const cv = $('bild'), ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = false;
+  let S = null, ph = [], biom = '';
+  // Platzhalter mit Luftperspektive (gedithert zur Nebelfarbe aufgehellt)
+  function platz(pal, nr, nebel) {
+    const c = B.platzhalter(pal, nr); if (!nebel) return c;
+    const x = c.getContext('2d'), id = x.getImageData(0, 0, 96, 120), d = id.data, f = B.col(pal.nebel[1]);
+    for (let i = 0; i < d.length; i += 4) { if (!d[i + 3]) continue; const p = i / 4, X = p % 96, Y = (p / 96) | 0; if (nebel * .8 > B.bay(X, Y)) { d[i] = (d[i] + f[0]) >> 1; d[i + 1] = (d[i + 1] + f[1]) >> 1; d[i + 2] = (d[i + 2] + f[2]) >> 1; } }
+    x.putImageData(id, 0, 0); return c;
+  }
+  function bauen() {
+    const t0 = performance.now();
+    biom = $('biom').value;
+    S = World.build(biom, { variante: +$('variante').value, seed: +$('seed').value, fremdheit: +$('fremd').value, art: $('art').value });
+    const pal = World.palette(biom);
+    ph = S.reihen.map((r, i) => platz(pal, i + 1, r.nebel));
+    $('fremdW').textContent = (+$('fremd').value).toFixed(2);
+    $('info').textContent = 'Aufbau ' + (performance.now() - t0).toFixed(0) + ' ms · Reihen ' + S.reihen.map(r => 'y' + r.y + '/s' + r.skala + '/n' + r.nebel).join(', ') + ' · Lichter ' + S.lichter.length;
+    const s = +$('skala').value; cv.style.width = 480 * s + 'px'; cv.style.height = 270 * s + 'px';
+  }
+  const XS = [[240], [128, 352], [300]];
+  function gegner(c, reihen) {
+    reihen.forEach((r, i) => XS[i].forEach((x, j) => {
+      const img = ph[i]; const w = Math.round(96 * r.skala), h = Math.round(120 * r.skala);
+      c.drawImage(img, Math.round(x - w / 2 + (i === 2 ? 0 : 0)), r.y - h + 2, w, h);
+    }));
+  }
+  window.labZeichne = function (t, kam, mitGegner) {
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 480, 270);
+    for (let i = 0; i < 5; i++) if (an[i]) S.zeichneEbene(ctx, i, kam);
+    if (an[5]) S.zeichneAnimiert(ctx, t, kam);
+    if (an[6] && mitGegner) gegner(ctx, S.reihen);
+    if (an[7]) S.zeichneEbene(ctx, 5, kam);
+    if (an[8]) S.zeichneVordergrund(ctx, t, kam, true);
+  };
+  function schleife(ms) {
+    const t = ms / 1000;
+    const kam = $('wackeln').checked ? { x: Math.sin(t * .4) * 5, y: Math.sin(t * .3) * 2.5 } : { x: 0, y: 0 };
+    labZeichne(t, kam, $('gegner').checked);
+    requestAnimationFrame(schleife);
+  }
+  ['biom', 'variante', 'art', 'seed', 'fremd', 'skala'].forEach(k => $(k).addEventListener('change', bauen));
+  $('png').onclick = () => { const a = document.createElement('a'); a.download = 'hintergrund-' + biom + '-' + $('variante').value + '-' + $('art').value + '-' + $('seed').value + '.png'; a.href = cv.toDataURL('image/png'); a.click(); };
+  bauen(); requestAnimationFrame(schleife);
+  window.labBereit = true;
+})();
+</script>
+</body>
+</html>

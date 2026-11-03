@@ -1,0 +1,43 @@
+{
+ "_doc": "Aufbau eines Runs: fünf feste Akte (Anzahl und Reihenfolge nie ändern), Ebenen je Akt, Regeln für die Weg-Wahl, Knotenarten, Übergangstexte. Format in data/README.md.",
+ "akte": [
+  {"n": "Akt I", "titel": "Der Einstieg", "biome": ["hafen", "moor"], "wahl": "figur", "vorliebe": 0.7, "ebenen": ["e1", "e2", "e3", "waechter"]},
+  {"n": "Akt II", "titel": "Die Kapelle", "biome": ["kapelle"], "ebenen": ["e1", "e2", "e3", "waechter"]},
+  {"n": "Akt III", "titel": "Die Tiefe", "biome": ["salz", "stadt"], "wahl": "seed", "ebenen": ["e1", "e2", "e3", "waechter"]},
+  {"n": "Akt IV", "titel": "Das schwarze Eis", "biome": ["eis"], "ebenen": ["e1", "e2", "e3", "waechter"]},
+  {"n": "Akt V", "titel": "Die Pforte", "biome": ["pforte"], "ebenen": ["vorraum", "finale"]}
+ ],
+ "ebenen": {
+  "e1": {"pool": ["kampf", "kampf", "ereignis"], "wege": [2, 3], "mindestens": {"kampf": 1}},
+  "e2": {"pool": ["kampf", "ereignis", "wandbild", "kraemer", "fundstelle"], "wege": [2, 3], "verschiedene": 2},
+  "e3": {"pool": ["rast", "werkstatt", "kraemer", "kampf_schwer"], "wege": [2, 3], "einer_von": ["rast", "werkstatt"]},
+  "waechter": {"fest": "waechter"},
+  "vorraum": {"fest_wahl": ["rast", "wandbild"]},
+  "finale": {"fest": "finale"}
+ },
+ "kaempfe": {
+  "_doc": "Zahl der Gegner je Akt (Index 0 = Akt I) und Ebene. kampf_schwer: einer mehr und ein seltenes Item in der Auswahl.",
+  "zahl": [[1, 2, 2], [2, 2, 3], [2, 3, 3], [2, 3, 3], [3, 3, 3]],
+  "schwer_extra": 1
+ },
+ "knoten": {
+  "kampf": {"n": "Kampf", "zeichen": "atk"},
+  "kampf_schwer": {"n": "Schwerer Kampf", "zeichen": "atk2"},
+  "ereignis": {"n": "Ereignis", "zeichen": "ereignis"},
+  "wandbild": {"n": "Wandbild", "zeichen": "wandbild"},
+  "kraemer": {"n": "Krämer", "zeichen": "kraemer"},
+  "werkstatt": {"n": "Werkstatt", "zeichen": "werkstatt"},
+  "rast": {"n": "Rast", "zeichen": "rast"},
+  "fundstelle": {"n": "Fundstelle", "zeichen": "fund"},
+  "waechter": {"n": "Wächter", "zeichen": "waechter"},
+  "finale": {"n": "Das, was ruft", "zeichen": "finale"}
+ },
+ "rast": {"heil_anteil": 0.3},
+ "fundstelle": {"gold": [18, 34], "haken_chance": 0.35, "haken_schaden": 5},
+ "strand": {"titel": "Die Tiefe spuckt dich aus.", "text": "Morgenlicht. Möwen. Salz in der Lunge. Der Sand ist kalt, und du weißt nicht, wie du hierher gekommen bist."},
+ "ankunft": {
+  "bild": "Die Pforte steht offen. Dahinter ist nichts, das sich beschreiben lässt, und es kennt dich.",
+  "bleiben": {"knopf": "Bleiben", "text": "Du bist zu Hause."},
+  "umkehren": {"knopf": "Umkehren", "text": "Du steigst auf. Oben ist es still. Aber du hörst es noch."}
+ }
+}

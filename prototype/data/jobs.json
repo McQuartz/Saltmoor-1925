@@ -1,56 +1,26 @@
 [
- {
-  "n": "Hafenarbeiter",
-  "d": "Kennt das Wasser. Und was darin wohnt.",
-  "w": [
-   "harpoon",
-   "knife"
-  ],
-  "k": [
-   "oilcoat",
-   "cap"
-  ],
-  "t": [
-   "salt"
-  ],
-  "bag": [
-   "boots"
-  ]
- },
- {
-  "n": "Totengräber",
-  "d": "Gräbt für die Gemeinde. Manchmal gräbt etwas zurück.",
-  "w": [
-   "shovel",
-   "pan"
-  ],
-  "k": [
-   "woolcoat",
-   "gloves"
-  ],
-  "t": [
-   "lantern"
-  ],
-  "bag": [
-   "boots"
-  ]
- },
- {
-  "n": "Pfarrerswitwe",
-  "d": "Ihr Mann predigte von Dingen unter der Kirche.",
-  "w": [
-   "revolver",
-   "bible"
-  ],
-  "k": [
-   "woolcoat",
-   "cap"
-  ],
-  "t": [
-   "rosary"
-  ],
-  "bag": [
-   "veil"
-  ]
- }
+ {"id": "fischer", "n": "Fischer", "d": "Kennt das Wasser. Und was darin wohnt.", "set": "Fischer",
+  "ausrede": "Mein Bruder ist mit dem Boot nicht zurückgekommen.", "wahrheit": "Er ist nicht ertrunken. Er ist hinabgeschwommen.",
+  "vorliebe": "hafen", "instrument": "Ziehharmonika", "musik": "fischer", "frei_ab": 0,
+  "w": ["harpoon", "knife"], "k": ["oilcoat", "cap"], "t": ["salt"], "bag": []},
+ {"id": "friedhofswaerter", "n": "Friedhofswärter", "d": "Gräbt für die Gemeinde. Manchmal gräbt etwas zurück.", "set": "Friedhofswärter",
+  "ausrede": "Die Gräber sind leer. Ich will wissen, wohin die Toten gehen.", "wahrheit": "Sie gehen nach unten.",
+  "vorliebe": "moor", "instrument": "Spieluhr", "musik": "friedhofswaerter", "frei_ab": 0,
+  "w": ["shovel", "pan"], "k": ["woolcoat", "gloves"], "t": ["lantern"], "bag": []},
+ {"id": "pfarrerin", "n": "Pfarrerin", "d": "Ihr Vorgänger predigte von Dingen unter der Kirche.", "set": "Pfarrerin",
+  "ausrede": "Ich muss meine Gemeinde vor dem Kult in der Kapelle retten.", "wahrheit": "Ihre Glocke läutet auch unter Wasser weiter.",
+  "vorliebe": "moor", "instrument": "Orgel", "musik": "pfarrerin", "frei_ab": 0,
+  "w": ["bible", "revolver"], "k": ["woolcoat", "cap"], "t": ["rosary"], "bag": []},
+ {"id": "detektiv", "n": "Detektiv", "d": "Raucht zu viel. Schläft zu wenig. Liest Akten, die niemand lesen wollte.", "set": "Detektiv",
+  "ausrede": "Eine Reihe von Vermisstenfällen. Alle Spuren führen zum Wasser.", "wahrheit": "Er ist der nächste Fall.",
+  "vorliebe": "hafen", "instrument": "Gedämpfte Trompete", "musik": "detektiv", "frei_ab": 3,
+  "w": ["revolver", "knife"], "k": ["trench"], "t": ["lantern"], "bag": []},
+ {"id": "okkultist", "n": "Okkultist", "d": "Hat die Bücher gelesen. Alle. Auch die, die man nicht liest.", "set": "Okkultist",
+  "ausrede": "Ich suche das Wissen der Erbauer.", "wahrheit": "Der Einzige, der ehrlich war. Und der Erste, der den Verstand verlor.",
+  "vorliebe": "moor", "instrument": "Glasharfe", "musik": "okkultist", "frei_ab": 6,
+  "w": ["dagger"], "k": ["robe", "gloves"], "t": ["salt"], "bag": []},
+ {"id": "kneipenschlaeger", "n": "Kneipenschläger", "d": "Hat in jeder Hafenkneipe Hausverbot. In zweien zweimal.", "set": "Kneipenschläger",
+  "ausrede": "Ich habe Schulden. Man sagt, da unten liegt Gold.", "wahrheit": "Das Gold ist alt. Sehr alt.",
+  "vorliebe": "hafen", "instrument": "Verstimmtes Klavier", "musik": "kneipenschlaeger", "frei_ab": 9,
+  "w": ["bottle"], "k": ["gloves", "oilcoat"], "t": ["lantern"], "bag": []}
 ]

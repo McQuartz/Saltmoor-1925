@@ -17,7 +17,9 @@
     "t": "atk",
     "v": 9
    }
-  ]
+  ],
+  "rang": "normal",
+  "beute": "cultmask"
  },
  "fishman": {
   "n": "Tiefling",
@@ -34,7 +36,9 @@
     "t": "atk",
     "v": 7
    }
-  ]
+  ],
+  "rang": "normal",
+  "beute": "deepscale"
  },
  "drowned": {
   "n": "Ertrunkener",
@@ -54,7 +58,8 @@
     "t": "atk",
     "v": 6
    }
-  ]
+  ],
+  "rang": "normal"
  },
  "shade": {
   "n": "Schatten",
@@ -71,7 +76,8 @@
     "t": "atk",
     "v": 8
    }
-  ]
+  ],
+  "rang": "normal"
  },
  "boss": {
   "n": "Das, was ruft",
@@ -101,6 +107,212 @@
     "v": 16
    }
   ],
-  "variant": "eye"
+  "variant": "eye",
+  "rang": "boss",
+  "besonders": {
+   "art": "phasen",
+   "bei": [
+    0.66,
+    0.33
+   ],
+   "muster": [
+    [
+     {
+      "t": "atk",
+      "v": 10,
+      "h": 2
+     },
+     {
+      "t": "buff",
+      "v": 3
+     },
+     {
+      "t": "atk",
+      "v": 18
+     }
+    ],
+    [
+     {
+      "t": "atk",
+      "v": 6,
+      "h": 3
+     },
+     {
+      "t": "atk",
+      "v": 14
+     },
+     {
+      "t": "blk",
+      "v": 12
+     },
+     {
+      "t": "atk",
+      "v": 20
+     }
+    ]
+   ]
+  }
+ },
+ "lotse": {
+  "n": "Der Lotse",
+  "hp": 52,
+  "weak": "L",
+  "spr": "fishman",
+  "rang": "waechter",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 8
+   },
+   {
+    "t": "blk",
+    "v": 10
+   },
+   {
+    "t": "atk",
+    "v": 5,
+    "h": 2
+   },
+   {
+    "t": "buff",
+    "v": 2
+   }
+  ],
+  "vorlaeufig": true
+ },
+ "opfernde": {
+  "n": "Der Opfernde",
+  "hp": 56,
+  "weak": "F",
+  "spr": "cultist",
+  "rang": "waechter",
+  "pat": [
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 9
+   },
+   {
+    "t": "atk",
+    "v": 4,
+    "h": 3
+   },
+   {
+    "t": "blk",
+    "v": 8
+   }
+  ],
+  "vorlaeufig": true
+ },
+ "glockenmutter": {
+  "n": "Die Glockenmutter",
+  "hp": 64,
+  "weak": "E",
+  "spr": "drowned",
+  "rang": "waechter",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 10
+   },
+   {
+    "t": "buff",
+    "v": 3
+   },
+   {
+    "t": "atk",
+    "v": 6,
+    "h": 2
+   },
+   {
+    "t": "blk",
+    "v": 12
+   }
+  ],
+  "vorlaeufig": true
+ },
+ "wurm": {
+  "n": "Der Wurm im Salz",
+  "hp": 72,
+  "weak": "F",
+  "spr": "drowned",
+  "rang": "waechter",
+  "pat": [
+   {
+    "t": "blk",
+    "v": 14
+   },
+   {
+    "t": "atk",
+    "v": 13
+   },
+   {
+    "t": "atk",
+    "v": 5,
+    "h": 3
+   },
+   {
+    "t": "buff",
+    "v": 2
+   }
+  ],
+  "vorlaeufig": true
+ },
+ "windgestalt": {
+  "n": "Der Wind, der Gestalt hat",
+  "hp": 66,
+  "weak": "W",
+  "spr": "shade",
+  "rang": "waechter",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 4,
+    "h": 4
+   },
+   {
+    "t": "blk",
+    "v": 10
+   },
+   {
+    "t": "atk",
+    "v": 14
+   },
+   {
+    "t": "buff",
+    "v": 2
+   }
+  ],
+  "vorlaeufig": true
+ },
+ "chor": {
+  "n": "Der Chor im Eis",
+  "hp": 78,
+  "weak": "G",
+  "spr": "drowned",
+  "rang": "waechter",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 7,
+    "h": 2
+   },
+   {
+    "t": "buff",
+    "v": 3
+   },
+   {
+    "t": "atk",
+    "v": 16
+   },
+   {
+    "t": "blk",
+    "v": 14
+   }
+  ],
+  "vorlaeufig": true
  }
 }

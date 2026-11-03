@@ -30,6 +30,29 @@ Schlüssel = Item-ID.
 
 Karte: `n` Name, `c` Energiekosten, `atk` Schaden, `h` Anzahl Treffer, `all` trifft alle Gegner, `blk` Block, `heal` Heilung, `poison` Gift, `burn` Brand, `draw` Karten ziehen, `en` Energie zurück, `self` kostet so viel eigenes Leben. Karten von Items mit zwei Stoffen kosten automatisch `balance.forge.double_cost_extra` mehr.
 
+### Neue Kartenfelder (M9)
+
+| Feld | Bedeutung |
+|---|---|
+| `eroeffnung` | Bonus, wenn die Karte als **erste im Zug** gespielt wird. Enthält normale Kartenfelder, Zahlen werden addiert, z. B. `{"atk": 5}`, `{"draw": 1}`, `{"en": 1}`, `{"heal": 3}` |
+| `verbraucht` | `true`: Die Karte ist nach dem Ausspielen für den Rest des Kampfes weg (Ablage „verbraucht“). Das Item bleibt angelegt. Für Dynamit, Rum, Laudanum, Riechsalz, Spieluhr |
+| `weak` | Ziel geschwächt: sein nächster Angriff halbiert |
+| `strip` | Block des Ziels fällt auf 0 |
+
+`poison`, `burn`, `weak` und `strip` wirken auf das aktuelle Ziel, auch wenn die Karte mit `all` alle Gegner trifft.
+
+### Passive Talismane (`passiv`)
+
+Talismane ohne Karte: `"cards": []` und `"passiv": {"typ": …}`. Sie belegen einen Slot, geben aber keine Karte ins Deck.
+
+| typ | Felder | Wirkung |
+|---|---|---|
+| `gold_bonus` | `v` | mehr Gold nach jedem Sieg |
+| `start_block` | `v` | Block zu Beginn jedes Kampfes |
+| `heil_nach_sieg` | `v` | Heilung nach jedem Sieg |
+| `erste_karte_billiger` | | die erste Karte im Kampf kostet 0 (Kompass) |
+| `glueck` | | ein Fund hat ein Item mehr zur Auswahl (Hasenpfote) |
+
 ## foes.json
 
 Schlüssel = Gegner-ID. `n` Name, `hp` Leben auf Tiefe 1, `weak` Schwachstelle (Stoff, 1,5-facher Schaden), `spr` Zeichner in `js/sprites/foes.js`, `pat` Muster der Züge der Reihe nach: `{t:"atk", v, h}` Angriff, `{t:"blk", v}` Schutz, `{t:"buff", v}` Stärke. Beim Boss legt `variant` fest, welcher Entwurf gezeichnet wird (`eye`, `maw`, `king`).
@@ -64,9 +87,48 @@ Jede Reaktion hat `n` Name, `t` Text für Spieler, `fx` Effektliste und optional
 
 `to` ist `target` (aktuelles Ziel) oder `all` (alle Gegner). Der Interpreter steht in `js/core/rules.js` → `runFx`.
 
+### Weitere Effekte für Ereignisse (M9)
+
+| op | Felder | Wirkung |
+|---|---|---|
+| `heal` | `v` | Leben heilen (auch außerhalb des Kampfes) |
+| `gold` | `v` | Gold dazu; negativ = Preis (nie unter 0) |
+| `give_rare` | | zufälliges seltenes Item |
+| `max_hp` | `v` | darf negativ sein (Preis) |
+| `strike` | | der Spieler wählt eine Karte, die gestrichen wird; ihr Item bleibt angelegt und zählt für Sets und Leben, gibt aber keine Karte mehr |
+| `transform` | | ein zufälliges angelegtes Item verwandelt sich in ein anderes desselben Bereichs |
+| `fight` | `foes` (optional) | startet nach dem Ereignis einen Kampf mit diesen Gegnern des Bioms (IDs aus foes.json); ohne `foes` zufällige Gegner des Bioms |
+| `discover` | | eine zufällige, noch unentdeckte Reaktion wird entdeckt |
+
 ## events.json
 
 Ereignisse zwischen den Kämpfen. `t` Titel, `d` Text, `o` Optionen: `l` Beschriftung, `fx` Effekte (siehe oben), optional `if` Bedingung (`slot_below_max: <bereich>`).
+
+Seit M9 ist die Datei eine Liste mit diesen Feldern je Ereignis:
+
+| Feld | Bedeutung |
+|---|---|
+| `id` | eindeutige ID, auf die `biomes.json` → `ereignisse` verweist (Präfix = Biom, z. B. `hafen_netze`) |
+| `biom` | `hafen`, `moor`, `kapelle`, `salz`, `stadt`, `eis` oder `alle` (kann überall kommen) |
+| `t`, `d` | Titel und Text (2–4 Sätze, keine Erklärungen) |
+| `bild` | ein Satz, was die Szene zeigt (Vorlage für das Ereignisbild) |
+| `stummfilm` | optional `true`: löst beim Öffnen das Stummfilm-Rauschen aus. Nur für wenige, besonders starke Momente (höchstens drei im Spiel) |
+| `o` | zwei bis drei Optionen: `l` Beschriftung mit Preis und Folge, `fx` Effekte, optional `if` |
+
+Bedingungen in `if`: `{"slot_below_max": "<bereich>"}` (Bereich hat noch Platz), `{"gold_min": 20}` (mindestens so viel Gold), `{"hp_min": 10}` (mindestens so viel Leben). Ist die Bedingung nicht erfüllt, ist die Option gesperrt.
+
+## fragmente.json
+
+Die 21 Wandbild-Fragmente (drei je Biom), Grundlage der runübergreifenden Progression. Lesefassung: `docs/auftrag/fragmente.md`.
+
+| Feld | Bedeutung |
+|---|---|
+| `id` | `<biom>_<1–3>` |
+| `biom` | `hafen`, `moor`, `kapelle`, `salz`, `stadt`, `eis`, `pforte` |
+| `titel` | Überschrift auf dem Zettel |
+| `text` | 2–4 Sätze, Bruchstück der Geschichte der Tiefe |
+| `relief` | ein Satz, was das Relief zeigt (Vorlage für das prozedurale Bild) |
+| `schaltet` | was das Lesen freischaltet: `{"art": "item", "id": "<item-id>"}` (Item kommt in den Fundpool), `{"art": "figur", "id": "<job-id>"}` (erzählerischer Hinweis; die Figur selbst schaltet über die Zahl gelesener Fragmente frei, siehe `jobs.json` → `frei_ab`) oder `{"art": "satz"}` (nur ein Satz im Tagebuch) |
 
 ## roles.json
 
@@ -104,6 +166,7 @@ Entwürfe, die noch nicht im Spiel sind. Nur `artboard.html` liest diese Datei (
 | `px` | optional: eigenes 12×12-Raster mit den Buchstaben aus `PAL` (wie in `SPR`), geht vor `spr` |
 | `cards` | optional: Karten im selben Format wie bei items.json |
 | `notes` | optional: offene Fragen, Balance-Gedanken |
+| `status` | optional: `übernommen` (ist im Spiel, Werte können abweichen, siehe items.json) oder `gestrichen (Sog)` (hing an der gestrichenen Sog-Mechanik) |
 
 Wird eine Idee umgesetzt, wandert sie nach items.json (bzw. reactions.json, foes.json …) und fliegt hier raus.
 
