@@ -32,7 +32,11 @@ Budget: rund **150 € Claude-Guthaben** für das ganze Vorhaben. Aufteilung in 
 | Etappe | Stand |
 |---|---|
 | Recherche | erledigt (2026-11-02) |
-| M1 Technik-Probe | umgesetzt in Godot (`game/addons/spritegen/`, 2026-11-03) mit JS-Referenz (`tools/spritegen/`), **Abnahme offen**; Bogen: [sheets/M1/godot_biped_seed1-16.png](sheets/M1/godot_biped_seed1-16.png); offene Leistungsfrage siehe entscheidungen.md |
-| M2–M6 | offen |
+| M1 Technik-Probe | umgesetzt (JS-Referenz `tools/spritegen/`, Godot-Port), Bogen [sheets/M1/](sheets/M1/) – **Abnahme offen** |
+| M2 Kern in Godot | umgesetzt 2026-11-03 (`game/addons/spritegen/`, Tests, Goldens, README) – **Abnahme offen** |
+| M3 Körperbaupläne | umgesetzt 2026-11-03, 5 Pläne + 4 Zonen, Bögen [sheets/M3/](sheets/M3/) (64 Seeds je Plan, je 16 pro Zone) – **Abnahme offen** |
+| M4 Oberfläche und Details | umgesetzt 2026-11-03, Bögen [sheets/M4/](sheets/M4/) (ohne/mit, Markierungen in 3 Posen) – **Abnahme offen** |
+| M5 Animation | umgesetzt 2026-11-03, Sheets + Flacker-Maß [sheets/M5/](sheets/M5/), Kampfszene `game/scenes/combat_test.tscn` – **Abnahme offen** |
+| M6 Editor und Hintergründe | umgesetzt 2026-11-03, Dock `game/addons/spritegen/editor/`, Hintergründe [sheets/M6/](sheets/M6/) – **Abnahme offen** |
 
 Das Sprite-Labor (`prototype/lab.html`) ist eine frühe Demo mit kombinierten Bauteilen. Es zeigt Paletten, Animationsloops und Welten-Schichten, ist aber **nicht** die Grundlage des Generators (siehe [01-recherche.md](01-recherche.md)).

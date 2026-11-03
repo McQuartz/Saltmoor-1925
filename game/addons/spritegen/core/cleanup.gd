@@ -35,7 +35,8 @@ static func _pick(img: Dictionary, x: int, y: int, candidates: Array) -> int:
 
 
 ## Regel 1: Einzelpixel (Sporne, Kerben, einzelne Töne).
-static func rule_orphans(img: Dictionary) -> Dictionary:
+## Mit dither = true gilt die Ton-Regel nur bei Sprüngen von mindestens 2 Stufen (Dither erzeugt nur ±1).
+static func rule_orphans(img: Dictionary, dither: bool = false) -> Dictionary:
 	var w: int = img["w"]
 	var out: PackedByteArray = img["px"].duplicate()
 	for y in img["h"]:
@@ -50,112 +51,139 @@ static func rule_orphans(img: Dictionary) -> Dictionary:
 				if nb.size() <= 1:
 					out[y * w + x] = Indexed.TRANSPARENT
 				elif not nb.has(v):
-					out[y * w + x] = _pick(img, x, y, nb)
+					var far := true
+					if dither:
+						for nv in nb:
+							if absi(nv - v) < 2:
+								far = false
+					if far:
+						out[y * w + x] = _pick(img, x, y, nb)
 			elif v == Indexed.TRANSPARENT and nb.size() >= 3:
 				out[y * w + x] = _pick(img, x, y, nb)
 	return Indexed.make(w, img["h"], out)
 
 
-## Ausrichtungen für die Treppenregel: links, rechts, oben, unten.
-static func _dims(o: int, w: int, h: int) -> Vector2i:
-	return Vector2i(w, h) if o < 2 else Vector2i(h, w)
+## Regel 2: Treppen glätten. Für "linke Kanten" umgesetzt; die anderen drei Ausrichtungen entstehen
+## durch Spiegeln/Transponieren in einen Arbeitspuffer (U×V) und zurück.
+static func _to_oriented(img: Dictionary, o: int) -> Array:
+	var w: int = img["w"]
+	var h: int = img["h"]
+	var px: PackedByteArray = img["px"]
+	var U := w if o < 2 else h
+	var V := h if o < 2 else w
+	var arr := PackedByteArray()
+	arr.resize(U * V)
+	var idx := PackedInt32Array()
+	idx.resize(U * V)
+	for v in V:
+		for u in U:
+			var x: int
+			var y: int
+			match o:
+				0:
+					x = u
+					y = v
+				1:
+					x = w - 1 - u
+					y = v
+				2:
+					x = v
+					y = u
+				_:
+					x = v
+					y = h - 1 - u
+			arr[v * U + u] = px[y * w + x]
+			idx[v * U + u] = y * w + x
+	return [arr, idx, U, V]
 
 
-static func _map(o: int, u: int, v: int, w: int, h: int) -> Vector2i:
-	match o:
-		0: return Vector2i(u, v)
-		1: return Vector2i(w - 1 - u, v)
-		2: return Vector2i(v, u)
-		_: return Vector2i(v, h - 1 - u)
-
-
-static func _get_o(img: Dictionary, o: int, u: int, v: int) -> int:
-	var d := _dims(o, img["w"], img["h"])
-	if u < 0 or v < 0 or u >= d.x or v >= d.y:
-		return Indexed.TRANSPARENT
-	var p := _map(o, u, v, img["w"], img["h"])
-	return img["px"][p.y * img["w"] + p.x]
-
-
-static func _body_o(img: Dictionary, o: int, u: int, v: int) -> bool:
-	return Indexed.is_body(_get_o(img, o, u, v))
-
-
-static func _edge_o(img: Dictionary, o: int, u: int, v: int) -> bool:
-	return _body_o(img, o, u, v) and not _body_o(img, o, u - 1, v)
-
-
-## Regel 2 für eine Ausrichtung: Stufenfolge wie 4,1,4 an der Kante wird 3,2,4.
-static func _staircase_one(img: Dictionary, o: int) -> Dictionary:
-	var dim := _dims(o, img["w"], img["h"])
-	var U := dim.x
-	var V := dim.y
-	var succ := {}
-	var claimed := {}
+## Treppenregel auf einem Arbeitspuffer mit linken Kanten. Gibt Liste von Änderungen [i, value].
+static func _staircase_edits(arr: PackedByteArray, U: int, V: int) -> Array:
+	var edge := PackedByteArray()
+	edge.resize(U * V)
+	for v in V:
+		for u in U:
+			var i := v * U + u
+			if Indexed.is_body(arr[i]) and (u == 0 or not Indexed.is_body(arr[i - 1])):
+				edge[i] = 1
+	var succ := PackedInt32Array()
+	succ.resize(U * V)
+	succ.fill(-1)
+	var claimed := PackedByteArray()
+	claimed.resize(U * V)
 	for v in V - 1:
 		for u in U:
-			if not _edge_o(img, o, u, v):
+			if edge[v * U + u] == 0:
 				continue
 			for du in [0, -1, 1]:
-				var k: int = (v + 1) * U + u + du
-				if u + du >= 0 and u + du < U and _edge_o(img, o, u + du, v + 1) and not claimed.has(k):
-					succ[v * U + u] = u + du
-					claimed[k] = true
+				var nu: int = u + du
+				if nu < 0 or nu >= U:
+					continue
+				var k: int = (v + 1) * U + nu
+				if edge[k] == 1 and claimed[k] == 0:
+					succ[v * U + u] = nu
+					claimed[k] = 1
 					break
-
 	var edits := []
 	for v in V:
 		for u in U:
-			if not _edge_o(img, o, u, v) or claimed.has(v * U + u):
+			var i0 := v * U + u
+			if edge[i0] == 0 or claimed[i0] == 1:
 				continue
-			var chain := []
+			var runs := []  # [u, len, start]
 			var cu := u
 			var cv := v
 			while true:
-				chain.append(cu)
-				var k := cv * U + cu
-				if not succ.has(k):
+				if runs.size() > 0 and runs[-1][0] == cu:
+					runs[-1][1] += 1
+				else:
+					runs.append([cu, 1, cv])
+				var nxt := succ[cv * U + cu]
+				if nxt < 0:
 					break
-				cu = succ[k]
+				cu = nxt
 				cv += 1
-			var runs := []
-			for i in chain.size():
-				if runs.size() > 0 and runs[-1]["u"] == chain[i]:
-					runs[-1]["len"] += 1
-				else:
-					runs.append({"u": chain[i], "len": 1, "start": v + i})
 			for i in range(1, runs.size() - 1):
-				var p: Dictionary = runs[i - 1]
-				var c: Dictionary = runs[i]
-				var n: Dictionary = runs[i + 1]
-				var s: int = c["u"] - p["u"]
-				if c["len"] != 1 or s == 0 or n["u"] - c["u"] != s:
+				var p: Array = runs[i - 1]
+				var c: Array = runs[i]
+				var n: Array = runs[i + 1]
+				var s: int = c[0] - p[0]
+				if c[1] != 1 or s == 0 or n[0] - c[0] != s:
 					continue
-				if mini(p["len"], n["len"]) < 2 or maxi(p["len"], n["len"]) < 3:
+				if mini(p[1], n[1]) < 2 or maxi(p[1], n[1]) < 3:
 					continue
-				if p["len"] >= n["len"]:
-					var r: int = c["start"] - 1
-					if s > 0:
-						edits.append({"u": p["u"], "v": r, "op": "remove"})
-					else:
-						edits.append({"u": p["u"] - 1, "v": r, "op": "add", "fu": p["u"], "fv": r})
+				var r: int
+				var tu: int
+				var remove: bool
+				var from_u: int
+				if p[1] >= n[1]:
+					r = c[2] - 1
+					remove = s > 0
+					tu = p[0] if remove else p[0] - 1
+					from_u = p[0]
 				else:
-					var r: int = n["start"]
-					if s > 0:
-						edits.append({"u": n["u"] - 1, "v": r, "op": "add", "fu": n["u"], "fv": r})
-					else:
-						edits.append({"u": n["u"], "v": r, "op": "remove"})
+					r = n[2]
+					remove = s < 0
+					tu = n[0] if remove else n[0] - 1
+					from_u = n[0]
+				var ti := r * U + tu
+				if remove:
+					# Nicht ausdünnen: nur entfernen, wenn innen weiter Körper ist.
+					if tu + 1 < U and Indexed.is_body(arr[ti + 1]):
+						edits.append([ti, Indexed.TRANSPARENT])
+				elif tu >= 0 and arr[ti] == Indexed.TRANSPARENT:
+					edits.append([ti, arr[r * U + from_u]])
+	return edits
 
-	var w: int = img["w"]
+
+static func _staircase_one(img: Dictionary, o: int) -> Dictionary:
+	var t := _to_oriented(img, o)
+	var arr: PackedByteArray = t[0]
+	var idx: PackedInt32Array = t[1]
 	var out: PackedByteArray = img["px"].duplicate()
-	for e in edits:
-		var p := _map(o, e["u"], e["v"], w, img["h"])
-		if e["op"] == "remove":
-			if _body_o(img, o, e["u"] + 1, e["v"]):
-				out[p.y * w + p.x] = Indexed.TRANSPARENT
-		elif _get_o(img, o, e["u"], e["v"]) == Indexed.TRANSPARENT:
-			out[p.y * w + p.x] = _get_o(img, o, e["fu"], e["fv"])
-	return Indexed.make(w, img["h"], out)
+	for e in _staircase_edits(arr, t[2], t[3]):
+		out[idx[e[0]]] = e[1]
+	return Indexed.make(img["w"], img["h"], out)
 
 
 static func rule_staircase(img: Dictionary) -> Dictionary:
@@ -192,12 +220,12 @@ static func rule_banding(img: Dictionary) -> Dictionary:
 	return Indexed.make(w, img["h"], out)
 
 
-static func cleanup(img: Dictionary, enabled: Dictionary = {"orphans": true, "staircase": true, "banding": true}) -> Dictionary:
+static func cleanup(img: Dictionary, enabled: Dictionary = {"orphans": true, "staircase": true, "banding": true}, dither: bool = false) -> Dictionary:
 	var cur := img
 	for name in DEFAULT_ORDER:
 		if enabled.get(name, false):
 			match name:
-				"orphans": cur = rule_orphans(cur)
+				"orphans": cur = rule_orphans(cur, dither)
 				"staircase": cur = rule_staircase(cur)
 				"banding": cur = rule_banding(cur)
 	return cur

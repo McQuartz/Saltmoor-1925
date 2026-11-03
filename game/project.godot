@@ -6,6 +6,10 @@ config_version=5
 config/name="Saltmoor 1925"
 config/features=PackedStringArray("4.3")
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/spritegen/plugin.cfg")
+
 [display]
 
 window/size/viewport_width=480

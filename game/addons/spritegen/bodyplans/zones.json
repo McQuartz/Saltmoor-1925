@@ -1,0 +1,133 @@
+{
+  "_doc": "Zonen-Regeln: Paletten je Zone, Oberflächenmuster, und Wertebereiche je Körperbau (Parameter 0..1 wird in [lo, hi] abgebildet). '*' gilt für alle Körperbaupläne.",
+  "hafen": {
+    "palettes": [
+      "hafen",
+      "rost"
+    ],
+    "surface": "slime",
+    "params": {
+      "*": {
+        "bulk": [
+          0.2,
+          0.9
+        ],
+        "asym": [
+          0.2,
+          0.8
+        ]
+      },
+      "biped": {
+        "headFwd": [
+          0.4,
+          1.0
+        ],
+        "hunch": [
+          0.3,
+          1.0
+        ]
+      },
+      "floater": {
+        "tentacles": [
+          0.5,
+          1.0
+        ]
+      }
+    }
+  },
+  "wald": {
+    "palettes": [
+      "wald",
+      "moor"
+    ],
+    "surface": "skin",
+    "params": {
+      "*": {
+        "limbThick": [
+          0.0,
+          0.6
+        ]
+      },
+      "biped": {
+        "arms": [
+          0.5,
+          1.0
+        ],
+        "height": [
+          0.4,
+          1.0
+        ]
+      },
+      "crawler": {
+        "legPairs": [
+          0.5,
+          1.0
+        ]
+      }
+    }
+  },
+  "kapelle": {
+    "palettes": [
+      "kapelle"
+    ],
+    "surface": "skin",
+    "params": {
+      "*": {
+        "bulk": [
+          0.0,
+          0.5
+        ],
+        "asym": [
+          0.0,
+          0.4
+        ]
+      },
+      "biped": {
+        "neck": [
+          0.5,
+          1.0
+        ],
+        "hunch": [
+          0.0,
+          0.4
+        ]
+      },
+      "floater": {
+        "tentacles": [
+          0.0,
+          0.5
+        ]
+      }
+    }
+  },
+  "grund": {
+    "palettes": [
+      "grund"
+    ],
+    "surface": "scales",
+    "params": {
+      "*": {
+        "bulk": [
+          0.5,
+          1.0
+        ]
+      },
+      "biped": {
+        "head": [
+          0.5,
+          1.0
+        ],
+        "limbThick": [
+          0.5,
+          1.0
+        ]
+      },
+      "worm": {
+        "segments": [
+          0.5,
+          1.0
+        ]
+      }
+    }
+  }
+}

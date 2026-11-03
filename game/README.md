@@ -15,4 +15,5 @@ Details stehen im Tech-Stack-Dokument (Link in der Haupt-README).
 
 ## Schon da
 
-- `addons/spritegen/`: prozeduraler Sprite-Generator (M1), siehe dort.
+- `addons/spritegen/`: prozeduraler Sprite-Generator (M1–M6), siehe README dort. Editor-Plugin ist aktiviert.
+- `scenes/combat_test.tscn`: Einbau-Test mit generiertem Gegner. `scenes/spritegen_tool.tscn`: das Generator-Dock als eigene Szene.

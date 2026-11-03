@@ -1,4 +1,6 @@
-# Sprite-Generator – JS-Referenz (M1)
+# Sprite-Generator – JS-Referenz (M1, eingefroren)
+
+**Stand 2026-11-03: eingefroren.** Ab M2 wird nur in Godot gearbeitet (`game/addons/spritegen/`). Dieser Code ist die M1-Referenz (64×80, helle Palette, Umriss) und spiegelt den aktuellen Generator nicht mehr.
 
 Referenzimplementierung der Generator-Kette aus [docs/spritegen/03-architektur.md](../../docs/spritegen/03-architektur.md) in JavaScript (Node, ohne Abhängigkeiten).
 Der Godot-Port liegt unter `game/addons/spritegen/` und ist bitgleich; dieser Code bleibt als schnelle Vergleichs-Implementierung. Änderungen an der Kette immer in beiden machen und Hashes vergleichen (siehe Entscheidung vom 2026-11-03 in `docs/spritegen/entscheidungen.md`).
