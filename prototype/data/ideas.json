@@ -1104,5 +1104,25 @@
    "............"
   ],
   "notes": "5 Layer pro Biom: 0 Grund (immer), 1 Puls (ab 0,2), 2 Rhythmus (ab 0,45), 3 Bedrohung (ab 0,7), 4 Tutti (1,0). Rolle wählt die Klangfarbe der Melodie, der dominante Stoff nur einen Effekt (Wasser = Hall, Feuer = Verzerrung, Glaube = Kirchenhall), einzelne Items gar nichts. Keine KI-Musik: prozedural mit WebAudio, CC0-Geräusche und von Ace eingespielte Spuren. Godot 4.3+ kann das mit AudioStreamSynchronized. Erster Schritt: Musik-Labor-Seite für den Hafen. Konzept: https://claude.ai/artifact/JXujgRxwk5MbRHoNQESCQ4"
+ },
+ {
+  "n": "Sonderkarten als Zettel",
+  "kind": "optik",
+  "d": "Bestimmte Sonderkarten sehen nicht aus wie normale Karten, sondern wie ein abgerissener Zettel: Papier, Schreibmaschinen-Titel, handschriftliche Notiz, Kosten mit Bleistift umkreist. Zum Beispiel Funde aus Ereignissen („Notiz aus der Kapelle: Sie meiden das Salz.“ Nächste Salz-Karte wirkt doppelt.). Nicht alle Karten, nur besondere.",
+  "px": [
+   "............",
+   ".w.ww.w.ww..",
+   ".wwwwwwwwww.",
+   ".wkkkkkkww..",
+   ".wwwwwwwwww.",
+   ".wddddwwwww.",
+   ".wwwwwwwwww.",
+   ".wddddddwww.",
+   ".wwwwwwwwww.",
+   ".wdddwwwwrw.",
+   ".wwwwwwwwww.",
+   "............"
+  ],
+  "notes": "Idee von Ace aus der Kampf-UI-Runde 1 (Entwurf 3 „Ermittlerakte“). Gezeigt in Runde 2 als vierte Karte auf der Hand: https://claude.ai/artifact/QvLNHfTxECFGoY2gEBXFjc"
  }
 ]

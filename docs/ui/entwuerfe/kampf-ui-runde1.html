@@ -1,0 +1,819 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saltmoor Kampf-UI, Runde 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Pixelify+Sans:wght@400;600;700&family=Special+Elite&family=Caveat:wght@500;700&family=Limelight&family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* Layout: eine lange Vergleichsseite, jeder Entwurf als skalierter 960×540-Rahmen mit Notizen daneben/darunter. Bewusst nur dunkel (Spiel-Look). */
+:root{
+ --bg:#08090b; --panel:#0f1114; --line:#23262b; --txt:#dcd6c4; --dim:#8e918c; --head:#e0c992; --acc:#ffd27a;
+ --f-pix:'Press Start 2P',ui-monospace,monospace; --f-term:'VT323',ui-monospace,monospace; --f-ui:'Pixelify Sans','VT323',ui-monospace,monospace;
+ color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--txt)}
+body{font-family:var(--f-term);font-size:20px;line-height:1.15;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 60px}
+main{max-width:1240px;margin:0 auto}
+h1{font-family:var(--f-pix);font-size:16px;line-height:1.6;color:var(--head);margin:0 0 10px;text-wrap:balance}
+h2{font-family:var(--f-pix);font-size:12px;line-height:1.6;color:var(--head);margin:0;text-wrap:balance}
+p{margin:0 0 8px;color:var(--dim);max-width:70ch}
+b{color:var(--txt);font-weight:normal}
+.intro{display:grid;gap:14px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:start;margin-bottom:18px}
+@media (max-width:820px){.intro{grid-template-columns:1fr}}
+.box{background:var(--panel);border:2px solid var(--line);padding:12px 14px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:6px;font-size:19px}
+.legend img{width:27px;height:27px;image-rendering:pixelated}
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:8px 0;border-bottom:2px solid var(--line);margin-bottom:22px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.toolbar .lbl{font-family:var(--f-pix);font-size:9px;color:var(--dim);letter-spacing:.06em}
+.seg{display:flex;gap:4px;flex-wrap:wrap}
+.seg button,.jump a{font:inherit;font-size:18px;background:var(--panel);color:var(--txt);border:2px solid var(--line);padding:2px 10px;cursor:pointer;text-decoration:none}
+.seg button[aria-pressed="true"]{border-color:var(--acc);color:var(--acc)}
+.seg button:focus-visible,.jump a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.jump{display:flex;gap:4px;flex-wrap:wrap}
+.mock{display:grid;gap:14px;grid-template-columns:minmax(0,1fr) minmax(0,300px);align-items:start;margin:0 0 44px;scroll-margin-top:70px}
+.mock.portrait{grid-template-columns:minmax(0,380px) minmax(0,1fr)}
+@media (max-width:980px){.mock,.mock.portrait{grid-template-columns:1fr}}
+.fit{position:relative;width:100%;overflow:hidden;border:2px solid var(--line)}
+.mock.portrait .fit{max-width:380px}
+.frame{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden}
+.notes h2{margin-bottom:8px}
+.notes .tag{font-family:var(--f-pix);font-size:9px;color:var(--acc);letter-spacing:.06em;margin-bottom:6px}
+.notes ul{margin:6px 0 10px;padding-left:18px;color:var(--dim)}
+.notes li{margin:0 0 4px}
+.notes li b{color:var(--txt)}
+.notes .q{border-left:3px solid var(--line);padding-left:10px;color:var(--txt)}
+.frame b{color:inherit}
+.pix{image-rendering:pixelated;image-rendering:crisp-edges}
+canvas.scene{position:absolute;image-rendering:pixelated;image-rendering:crisp-edges}
+.ico{image-rendering:pixelated;vertical-align:middle;display:inline-block}
+.end{margin-top:30px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ============ 1 KLARTEXT ============ */
+.m1{font-family:var(--f-ui);color:#e8e2d0}
+.m1 .top{position:absolute;left:0;right:0;top:0;height:34px;display:flex;align-items:center;gap:18px;padding:0 16px;background:linear-gradient(#000c,#0000);font-size:16px}
+.m1 .top .d{font-weight:700;color:#ffe0a0;letter-spacing:.04em}
+.m1 .top .sp{flex:1}
+.m1 .top .chip{border:1px solid #fff3;padding:1px 8px;background:#0008}
+.m1 .intent{position:absolute;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:3px 10px 3px 6px;border:2px solid;background:#0b0606e6;font-weight:700;font-size:24px;line-height:1;white-space:nowrap}
+.m1 .intent small{font-size:13px;font-weight:400;opacity:.85}
+.m1 .intent.atk{border-color:#ff5a4a;color:#ffb0a4}
+.m1 .intent.buff{border-color:#c48aff;color:#e2c8ff}
+.m1 .intent s{opacity:.5;font-size:16px}
+.m1 .einfo{position:absolute;transform:translateX(-50%);width:190px;display:flex;flex-direction:column;gap:3px}
+.m1 .nm{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#f0e6cc;text-shadow:0 1px 0 #000}
+.m1 .weak{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:#ccc;background:#000a;border:1px solid #fff3;padding:0 4px}
+.m1 .hp{position:relative;height:16px;background:#1a0d0d;border:2px solid #000;box-shadow:0 0 0 1px #fff2}
+.m1 .hp>i{position:absolute;left:0;top:0;bottom:0;background:#c83a32}
+.m1 .hp>.ghost{background:repeating-linear-gradient(90deg,#ffd7a0 0 2px,#6a1a16 2px 6px)}
+.m1 .hp>span{position:absolute;inset:0;text-align:center;font-size:12px;line-height:12px;color:#fff;text-shadow:0 0 3px #000,0 0 3px #000,1px 1px 0 #000}
+.m1 .hp.blk{box-shadow:0 0 0 2px #9fc4ff}
+.m1 .shield{position:absolute;left:-14px;top:-7px;width:28px;height:28px;display:grid;place-items:center;background:#2a4a7a;border:2px solid #9fc4ff;font-size:13px;font-weight:700;color:#fff;clip-path:polygon(50% 0,100% 15%,100% 55%,50% 100%,0 55%,0 15%)}
+.m1 .sts{display:flex;gap:4px}
+.m1 .st{display:inline-flex;align-items:center;gap:2px;background:#000b;border:1px solid #fff2;padding:0 4px 0 2px;font-size:13px}
+.m1 .pp{position:absolute;left:14px;top:384px;width:222px;display:flex;flex-direction:column;gap:6px}
+.m1 .pp .row{display:flex;align-items:center;gap:8px}
+.m1 .pp .hp{height:24px;flex:1}
+.m1 .pp .hp>span{font-size:16px;line-height:20px}
+.m1 .pp .shield{width:36px;height:36px;font-size:17px;left:-6px;top:-8px}
+.m1 .inc{font-size:14px;background:#2a0b0b;border:2px solid #ff5a4a;padding:4px 8px;color:#ffc8c0;line-height:1.15}
+.m1 .inc b{color:#fff;font-weight:700}
+.m1 .en{display:flex;align-items:center;gap:6px;font-size:28px;font-weight:700;color:#ffe08a}
+.m1 .en .pip{width:20px;height:20px;border-radius:50%;background:radial-gradient(#fff8c8,#e8a83a 60%,#7a4a10);box-shadow:0 0 8px #ffb84a}
+.m1 .en .pip.o{background:#221a10;box-shadow:inset 0 0 0 2px #5a4420}
+.m1 .hand{position:absolute;left:250px;top:378px;display:flex;gap:6px}
+.m1 .card{position:relative;width:100px;height:152px;background:#16130f;border:2px solid #4a4030;display:flex;flex-direction:column;overflow:hidden}
+.m1 .card.lift{transform:translateY(-14px);border-color:#ffe08a;box-shadow:0 0 0 2px #000,0 8px 20px #000}
+.m1 .card.off{filter:saturate(.3) brightness(.6)}
+.m1 .card .band{display:flex;height:22px}
+.m1 .card .band>div{flex:1;display:flex;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:700;color:#000}
+.m1 .card .cost{position:absolute;right:4px;top:26px;width:24px;height:24px;border-radius:50%;background:#ffe08a;color:#000;display:grid;place-items:center;font-weight:700;font-size:15px;border:2px solid #000}
+.m1 .card .cost.bad{background:#5a4a30;color:#d09090}
+.m1 .card .n{padding:4px 6px 0;font-size:13px;font-weight:600;line-height:1.05;min-height:32px;padding-right:30px}
+.m1 .card .art{height:44px;display:grid;place-items:center}
+.m1 .card .fx{display:flex;flex-wrap:wrap;gap:2px 8px;justify-content:center;font-size:20px;font-weight:700}
+.m1 .card .fx span{display:inline-flex;align-items:center;gap:2px}
+.m1 .card .rx{margin-top:auto;font-size:11px;padding:3px 4px;text-align:center;line-height:1.05;font-weight:700}
+.m1 .card .rx.on{background:#3a2a08;color:#ffe08a;border-top:2px solid #ffe08a}
+.m1 .card .rx.unk{background:#1e1a2a;color:#b8a8ff;border-top:2px dashed #8878d8}
+.m1 .card .rx.self{background:#0e2430;color:#a8e0ff;border-top:2px solid #6ab8e8}
+.m1 .card.rare{border-color:#e8c547;box-shadow:inset 0 0 0 1px #e8c547}
+.m1 .side{position:absolute;right:14px;top:380px;width:150px;display:flex;flex-direction:column;gap:8px}
+.m1 .chain{background:#0d0b08e6;border:2px solid #4a4030;padding:5px 7px;font-size:12px;line-height:1.2}
+.m1 .chain .h{font-size:11px;color:#a89a7a;letter-spacing:.06em}
+.m1 .chain .c{display:flex;align-items:center;gap:4px;font-size:15px;margin:2px 0}
+.m1 .btn{font-family:inherit;font-weight:700;font-size:16px;background:#3a2a10;color:#ffe08a;border:2px solid #ffe08a;padding:8px 0;cursor:pointer}
+.m1 .piles{display:flex;justify-content:space-between;font-size:13px;color:#b8ae94}
+.m1 .tgt{position:absolute;border:2px dashed #ffe08a;transform:translateX(-50%)}
+.m1 .tgtl{position:absolute;transform:translateX(-50%);font-family:var(--f-term);font-size:19px;line-height:1;padding:1px 6px!important;letter-spacing:.05em;color:#000;background:#ffe08a;padding:0 6px;font-weight:700}
+
+/* ============ 2 LATERNE ============ */
+.m2{font-family:var(--f-term);color:#e6dcc0}
+.m2 .sig{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;filter:drop-shadow(0 0 6px var(--g))}
+.m2 .sig .num{font-family:var(--f-pix);font-size:16px;color:var(--g);text-shadow:0 0 6px var(--g)}
+.m2 .sig .w{font-size:16px;color:#c8bca0;opacity:.9}
+.m2 .life{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:3px;width:170px}
+.m2 .ember{display:flex;gap:2px}
+.m2 .ember i{width:6px;height:6px;background:var(--rim);box-shadow:0 0 6px var(--rim)}
+.m2 .ember i.o{background:#1a1612;box-shadow:inset 0 0 0 1px #3a332a}
+.m2 .ember i.b{background:#9fc4ff;box-shadow:0 0 6px #9fc4ff}
+.m2 .life .t{font-size:17px;color:#c8bca0;display:flex;gap:8px;align-items:center}
+.m2 .lantern{position:absolute;left:34px;top:300px}
+.m2 .lp{position:absolute;font-family:var(--f-pix);text-shadow:0 2px 0 #000}
+.m2 .candles{position:absolute;left:166px;top:440px;display:flex;gap:10px;align-items:flex-end}
+.m2 .hand{position:absolute;left:300px;top:352px;width:440px;height:170px}
+.m2 .card{position:absolute;width:104px;height:156px;background:linear-gradient(160deg,#1a1410,#080605);border:1px solid #000;box-shadow:inset -2px 2px 0 var(--rim),inset 2px -2px 0 #000,0 6px 16px #000c;transform-origin:50% 120%;display:flex;flex-direction:column;align-items:center;padding:10px 6px}
+.m2 .card .nm{font-family:var(--f-term);font-size:18px;text-align:center;line-height:.95;color:#e6dcc0;min-height:34px}
+.m2 .card .eye{margin:4px 0;display:flex;gap:4px}
+.m2 .card .eye img{filter:drop-shadow(0 0 5px var(--c))}
+.m2 .card .val{font-family:var(--f-pix);font-size:14px;color:#fff;margin-top:6px;text-align:center;line-height:1.5}
+.m2 .card .cst{position:absolute;left:6px;top:6px;display:flex;gap:2px}
+.m2 .card .cst i{width:4px;height:10px;background:#ffd27a;box-shadow:0 0 4px #ffb040}
+.m2 .card.off{opacity:.45}
+.m2 .card.react{box-shadow:inset -2px 2px 0 var(--rim),0 0 0 1px #ffd27a,0 0 18px #ffb04080,0 6px 16px #000c}
+.m2 .card .rxn{position:absolute;bottom:8px;font-size:16px;color:#ffd27a;text-shadow:0 0 6px #ffb040}
+.m2 .card .rxn.u{color:#b8a8ff;text-shadow:0 0 6px #8878d8}
+.m2 svg.threads{position:absolute;left:0;top:0;pointer-events:none}
+.m2 .lastember{position:absolute;left:196px;top:370px;display:flex;flex-direction:column;align-items:center;font-size:15px;color:#c8bca0}
+.m2 .plate{position:absolute;right:24px;top:470px;font-family:var(--f-pix);font-size:10px;color:#1a1208;background:linear-gradient(#e0b860,#8a6420);border:2px solid #3a2808;padding:10px 12px;box-shadow:0 4px 0 #000;cursor:pointer}
+.m2 .stack{position:absolute;width:40px;height:56px;border:1px solid #000;background:#120e0a;box-shadow:inset -2px 2px 0 var(--rim2),2px 2px 0 #0a0806,4px 4px 0 #000;font-family:var(--f-pix);font-size:10px;color:#c8bca0;display:grid;place-items:center}
+.m2 .stackl{position:absolute;font-size:15px;color:#8e8670}
+.m2 .depth{position:absolute;left:18px;top:14px;font-size:20px;color:#c8bca0;text-shadow:0 1px 0 #000}
+.m2 .depth b{font-family:var(--f-pix);font-size:12px;color:var(--rim)}
+
+/* ============ 3 ERMITTLERAKTE ============ */
+.m3{background:#2a1c12 radial-gradient(ellipse at 40% 30%,#4a3220,#1c120a 75%);font-family:'Special Elite',var(--f-term);color:#2a2418}
+.m3 .wood{position:absolute;inset:0;background:repeating-linear-gradient(92deg,#0000 0 38px,#0002 38px 40px,#0000 40px 90px,#ffffff06 90px 92px);pointer-events:none}
+.m3 .photo{position:absolute;left:26px;top:18px;width:580px;height:320px;background:#ece4d0;padding:10px 10px 0;transform:rotate(-1.2deg);box-shadow:3px 6px 14px #000a}
+.m3 .photo .cap{font-family:'Caveat',cursive;font-size:22px;color:#3a3020;padding:2px 4px;line-height:1}
+.m3 .tape{position:absolute;width:70px;height:20px;background:#e8dcb0b0;box-shadow:0 1px 2px #0004}
+.m3 svg.pencil{position:absolute;left:0;top:0;pointer-events:none}
+.m3 .ann{position:absolute;font-family:'Caveat',cursive;font-weight:700;color:#f4ecd8;text-shadow:0 0 3px #000,0 0 6px #000;line-height:.9;white-space:nowrap}
+.m3 .form{position:absolute;left:628px;top:14px;width:316px;height:330px;background:#efe8d4;transform:rotate(.8deg);box-shadow:3px 6px 14px #000a;padding:30px 14px 10px;font-size:14px;line-height:1.25}
+.m3 .clip{position:absolute;left:50%;top:-8px;transform:translateX(-50%);width:110px;height:26px;background:linear-gradient(#b8b8b0,#6a6a64);border-radius:3px;box-shadow:0 2px 3px #0008}
+.m3 .form h3{font-family:'Special Elite';font-size:15px;margin:0 0 6px;letter-spacing:.08em;border-bottom:2px solid #2a2418;padding-bottom:2px}
+.m3 .form table{border-collapse:collapse;width:100%;font-size:13px;color:#2a2418}
+.m3 .form td{border-bottom:1px solid #b8ae94;padding:3px 2px;vertical-align:middle}
+.m3 .form td:first-child{font-family:'Caveat';font-size:19px;font-weight:700;color:#2a3a6a;width:22px}
+.m3 .form .r{color:#a02a1a}
+.m3 .form .me{margin-top:8px;border:2px solid #2a2418;padding:5px 7px;font-size:13px}
+.m3 .form .me b{color:#a02a1a;font-weight:normal}
+.m3 .stamp{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:2px solid var(--c);background:color-mix(in srgb,var(--c) 18%,transparent);vertical-align:middle;transform:rotate(-8deg)}
+.m3 .stamp img{filter:drop-shadow(0 0 0 #0000)}
+.m3 .hand{position:absolute;left:150px;top:360px;width:620px;height:180px}
+.m3 .card{position:absolute;width:118px;height:164px;background:#f3ecd8 repeating-linear-gradient(#0000 0 21px,#9ab4d880 21px 22px);background-position:0 36px;border:1px solid #c8bc9c;box-shadow:2px 4px 8px #0008;padding:6px 7px;font-size:13px;line-height:1.1}
+.m3 .card::before{content:"";position:absolute;left:0;right:0;top:33px;border-top:2px solid #d84a3a99}
+.m3 .card .nm{font-size:14px;font-weight:bold;min-height:28px;padding-right:22px;letter-spacing:-.02em}
+.m3 .card .cs{position:absolute;right:6px;top:4px;font-family:'Caveat';font-weight:700;font-size:26px;color:#2a3a6a;line-height:1}
+.m3 .card .cs::after{content:"";position:absolute;inset:-1px -7px -1px -6px;border:2px solid #2a3a6a;border-radius:50%;transform:rotate(-6deg)}
+.m3 .card .row{display:flex;flex-wrap:wrap;align-items:center;gap:3px 5px;margin:6px 0 2px}
+.m3 .card .stp{display:inline-flex;align-items:center;gap:3px;border:2px solid var(--c);color:var(--cd);padding:1px 4px;font-size:12px;letter-spacing:.06em;transform:rotate(-3deg);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.m3 .card .tx{font-size:14px;margin-top:4px}
+.m3 .card .pn{position:absolute;bottom:6px;left:7px;right:7px;font-family:'Caveat';font-weight:700;font-size:19px;line-height:.95;color:#a02a1a}
+.m3 .card .pn.u{color:#5a4a9a}
+.m3 .card.off{filter:grayscale(.7) brightness(.75)}
+.m3 .card.rare{outline:3px double #b8902a;outline-offset:-5px}
+.m3 .tray{position:absolute;left:786px;top:372px;width:150px;height:150px;border:3px solid #1a120a;background:#120c06;box-shadow:inset 0 4px 10px #000}
+.m3 .tray .l{position:absolute;bottom:-22px;left:0;right:0;text-align:center;color:#d8c8a0;font-size:12px;letter-spacing:.1em}
+.m3 .matches{position:absolute;left:24px;top:366px;width:120px}
+.m3 .ml{font-family:'Caveat';font-size:20px;color:#e8dcc0;font-weight:700;line-height:1}
+.m3 .endst{position:absolute;left:20px;top:500px;transform:rotate(-4deg);border:3px solid #c83a2a;color:#e85a4a;font-size:16px;letter-spacing:.1em;padding:4px 8px;background:#0003;cursor:pointer;font-family:'Special Elite'}
+.m3 svg.thread{position:absolute;left:0;top:0;pointer-events:none}
+
+/* ============ 4 STOFFKREIS ============ */
+.m4{font-family:'IM Fell English',Georgia,serif;color:#e8dcc0}
+.m4 .floor{position:absolute;left:0;right:0;top:330px;bottom:0;background:linear-gradient(#0000,#07060aee 40px,#07060a)}
+.m4 .tab{position:absolute;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:4px 12px 4px 8px;background:#0a0808e8;border:1px solid #5a4a30;font-family:'Cinzel',serif;font-weight:700;font-size:22px;line-height:1;white-space:nowrap}
+.m4 .tab.atk{color:#ff9a8a}.m4 .tab.buff{color:#d8b8ff}
+.m4 .tab small{font-family:'IM Fell English';font-size:14px;font-weight:400;color:#bfb49a}
+.m4 .ei{position:absolute;transform:translateX(-50%);width:170px;display:flex;align-items:center;gap:6px}
+.m4 .medal{flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#0c0a08;border:2px solid var(--c);box-shadow:0 0 10px color-mix(in srgb,var(--c) 50%,transparent)}
+.m4 .ei .col{flex:1;display:flex;flex-direction:column;gap:2px}
+.m4 .ei .nm{font-family:'Cinzel';font-size:12px;color:#e8dcc0;text-shadow:0 1px 0 #000}
+.m4 .bar{position:relative;height:10px;background:#1a0c0c;border:1px solid #000}
+.m4 .bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(#e85a4a,#8a2a20)}
+.m4 .bar b{position:absolute;right:0;top:0;bottom:0;background:repeating-linear-gradient(45deg,#9fc4ff 0 3px,#5a7ab0 3px 6px)}
+.m4 .ei .meta{display:flex;justify-content:space-between;font-size:14px;color:#bfb49a}
+.m4 .wheel{position:absolute;left:8px;top:322px}
+.m4 .wheel .lab{position:absolute;font-family:'Cinzel';font-size:10px;letter-spacing:.1em;color:#bfb49a}
+.m4 .hand{position:absolute;left:236px;top:358px;display:flex;gap:10px}
+.m4 .card{position:relative;width:98px;height:152px;background:linear-gradient(#1c1812,#0e0c09);border:1px solid #5a4a30;padding:26px 6px 6px;display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:16px}
+.m4 .card .md{position:absolute;top:-18px;left:50%;transform:translateX(-50%);display:flex}
+.m4 .card .md .medal{width:40px;height:40px}
+.m4 .card .md .medal+.medal{margin-left:-10px}
+.m4 .card .cost{position:absolute;left:4px;top:4px;font-family:'Cinzel';font-weight:700;font-size:18px;color:#ffd27a}
+.m4 .card .nm{font-family:'Cinzel';font-weight:700;font-size:12px;line-height:1.1;min-height:28px;margin-top:4px}
+.m4 .card .tx{font-size:15px;line-height:1.05;color:#d8ccb0}
+.m4 .card .rx{margin-top:auto;font-family:'Cinzel';font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 0;width:100%;border-top:1px solid #5a4a30}
+.m4 .card.react{border-color:var(--rc);box-shadow:0 0 0 1px var(--rc),0 0 16px color-mix(in srgb,var(--rc) 45%,transparent)}
+.m4 .card.react .rx{color:var(--rc)}
+.m4 .card.unk .rx{color:#a898e8;border-top-style:dashed}
+.m4 .card.off{opacity:.45}
+.m4 .card.rare{background:linear-gradient(#2a2010,#120e08);border-color:#e8c547}
+.m4 .orb{position:absolute;right:12px;top:318px;width:180px;height:200px}
+.m4 .orb .l{position:absolute;left:0;right:0;text-align:center}
+.m4 .endb{position:absolute;right:30px;top:494px;font-family:'Cinzel';font-weight:700;font-size:13px;letter-spacing:.08em;background:#1c1610;color:#ffd27a;border:1px solid #ffd27a;padding:7px 14px;cursor:pointer}
+.m4 .topl{position:absolute;left:16px;top:12px;font-family:'Cinzel';font-size:14px;letter-spacing:.12em;color:#e8dcc0;text-shadow:0 1px 2px #000}
+.m4 .topl small{display:block;font-family:'IM Fell English';font-style:italic;letter-spacing:0;font-size:15px;color:#bfb49a}
+
+/* ============ 5 STUMMFILM ============ */
+.m5{background:#000;font-family:'Limelight',Georgia,serif;color:#efe4c8}
+.m5 .bar{position:absolute;left:0;right:0;background:#000;display:flex;align-items:center;justify-content:center}
+.m5 .title{font-size:17px;letter-spacing:.14em;color:#efe4c8}
+.m5 .title em{font-style:normal;color:#ffcf6a}
+.m5 .deco{position:absolute;pointer-events:none}
+.m5 .plq{position:absolute;transform:translateX(-50%);padding:4px 14px;background:#000d;border:1px solid #c8a050;outline:1px solid #c8a05066;outline-offset:3px;text-align:center;white-space:nowrap}
+.m5 .plq .k{font-family:'Cinzel';font-size:10px;letter-spacing:.2em;color:#c8a050}
+.m5 .plq .v{font-size:22px;line-height:1.05;color:#fff}
+.m5 .plq .v s{color:#8a7a5a;font-size:15px}
+.m5 .gauge{position:absolute;transform:translateX(-50%);width:230px;text-align:center}
+.m5 .gauge .nm{font-size:13px;letter-spacing:.1em;color:#efe4c8;text-shadow:0 1px 3px #000}
+.m5 .gauge .tr{position:relative;height:8px;margin:3px 0;background:#000;border:1px solid #c8a050}
+.m5 .gauge .tr i{position:absolute;left:1px;top:1px;bottom:1px;background:#efe4c8}
+.m5 .gauge .tr b{position:absolute;right:-1px;top:-4px;bottom:-4px;border:1px solid #9fc4ff;background:#9fc4ff33;width:0}
+.m5 .gauge .sm{font-family:'IM Fell English';font-size:14px;color:#c8bca0;white-space:nowrap;display:flex;justify-content:center;gap:8px;align-items:center}
+.m5 .hand{position:absolute;left:236px;top:388px;display:flex;gap:10px}
+.m5 .card{position:relative;width:92px;height:142px;background:#0a0a0a;border:1px solid #c8a050;outline:1px solid #c8a05055;outline-offset:-5px;padding:10px 6px 6px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.m5 .card .cost{position:absolute;top:-12px;left:50%;transform:translateX(-50%) rotate(45deg);width:22px;height:22px;background:#000;border:1px solid #c8a050;display:grid;place-items:center}
+.m5 .card .cost span{transform:rotate(-45deg);font-size:13px;color:#ffcf6a}
+.m5 .card .nm{font-size:12px;line-height:1.1;letter-spacing:.06em;min-height:28px;margin-top:4px}
+.m5 .card .med{display:flex;gap:4px;margin:4px 0}
+.m5 .card .med span{width:28px;height:28px;border:1px solid var(--c);transform:rotate(45deg);display:grid;place-items:center;background:#000}
+.m5 .card .med img{transform:rotate(-45deg)}
+.m5 .card .tx{font-family:'IM Fell English';font-size:15px;line-height:1.05;color:#d8ccb0;margin-top:4px}
+.m5 .card .rx{margin-top:auto;font-size:11px;letter-spacing:.12em;color:#ffcf6a}
+.m5 .card .rx.u{color:#a8a0c8}
+.m5 .card.react{border-color:#ffcf6a;box-shadow:0 0 14px #ffcf6a55}
+.m5 .card.off{opacity:.4}
+.m5 .dial{position:absolute;left:24px;top:400px;width:190px}
+.m5 .dial .l{font-family:'Cinzel';font-size:10px;letter-spacing:.2em;color:#c8a050;text-align:center}
+.m5 .enb{position:absolute;right:28px;top:382px;width:150px;text-align:center}
+.m5 .enb .l{font-family:'Cinzel';font-size:10px;letter-spacing:.2em;color:#c8a050}
+.m5 .dia{display:inline-block;width:18px;height:18px;transform:rotate(45deg);margin:8px 6px;border:1px solid #ffcf6a;background:#ffcf6a;box-shadow:0 0 8px #ffcf6a88}
+.m5 .dia.o{background:none;box-shadow:none;border-color:#6a5a3a}
+.m5 .endb{margin-top:8px;font-family:'Limelight';font-size:15px;letter-spacing:.12em;background:#000;color:#efe4c8;border:1px solid #c8a050;outline:1px solid #c8a05066;outline-offset:3px;padding:6px 12px;cursor:pointer}
+.m5 .inter{position:absolute;right:24px;top:70px;width:200px;height:118px;background:#000;border:1px solid #c8a050;outline:1px solid #c8a05066;outline-offset:-6px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 0 0 4px #000}
+.m5 .inter .a{font-family:'Cinzel';font-size:9px;letter-spacing:.24em;color:#c8a050}
+.m5 .inter .b{font-size:26px;letter-spacing:.08em;color:#fff;margin:4px 0}
+.m5 .inter .c{font-family:'IM Fell English';font-style:italic;font-size:14px;color:#c8bca0;padding:0 10px}
+.m5 .inter .tag{position:absolute;top:-10px;right:8px;font-family:var(--f-term);font-size:14px;background:#c8a050;color:#000;padding:0 5px}
+
+/* ============ 6 HOCHFORMAT ============ */
+.m6{background:#08070a;font-family:var(--f-ui);color:#ece4d0}
+.m6 .top{position:absolute;left:0;right:0;top:0;height:30px;display:flex;align-items:center;gap:8px;padding:0 10px;font-size:13px;background:#000}
+.m6 .top .d{font-weight:700;color:#ffe0a0}
+.m6 .top .sp{flex:1}
+.m6 .mini{position:absolute;transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:1px 5px 1px 3px;font-weight:700;font-size:15px;background:#000c;border:1px solid}
+.m6 .mini.atk{border-color:#ff5a4a;color:#ffb0a4}.m6 .mini.buff{border-color:#c48aff;color:#e2c8ff}
+.m6 .list{position:absolute;left:8px;right:8px;top:238px;display:flex;flex-direction:column;gap:4px}
+.m6 .er{display:grid;grid-template-columns:18px 1fr auto;gap:6px;align-items:center;background:#121014;border:2px solid #2a2630;padding:3px 6px;height:54px}
+.m6 .er.sel{border-color:#ffe08a;background:#1c1810}
+.m6 .er .ix{font-weight:700;font-size:14px;color:#8a8478;text-align:center}
+.m6 .er .mid{min-width:0;display:flex;flex-direction:column;gap:2px}
+.m6 .er .nm{font-size:13px;display:flex;gap:6px;align-items:center}
+.m6 .er .hp{position:relative;height:10px;background:#2a1010}
+.m6 .er .hp i{position:absolute;left:0;top:0;bottom:0;background:#c83a32}
+.m6 .er .hp .g{background:repeating-linear-gradient(90deg,#ffd7a0 0 2px,#c83a32 2px 4px)}
+.m6 .er .ln{display:flex;gap:6px;font-size:12px;color:#b8b0a0;align-items:center}
+.m6 .er .ln .bk{color:#9fc4ff}
+.m6 .er .it{font-weight:700;font-size:20px;display:flex;align-items:center;gap:3px;padding:2px 6px;border:2px solid}
+.m6 .er .it.atk{color:#ffb0a4;border-color:#ff5a4a}.m6 .er .it.buff{color:#e2c8ff;border-color:#c48aff}
+.m6 .er .it s{font-size:12px;opacity:.6}
+.m6 .pl{position:absolute;left:8px;right:8px;top:420px;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center}
+.m6 .pl .hp{position:relative;height:20px;background:#2a1010;border:2px solid #000;box-shadow:0 0 0 2px #9fc4ff}
+.m6 .pl .hp i{position:absolute;left:0;top:0;bottom:0;background:#c83a32}
+.m6 .pl .hp .g{background:repeating-linear-gradient(90deg,#8a3a30 0 3px,#3a1210 3px 6px)}
+.m6 .pl .hp span{position:absolute;inset:0;text-align:center;font-size:13px;font-weight:700;line-height:16px;text-shadow:0 0 3px #000,0 0 3px #000,1px 1px 0 #000}
+.m6 .pl .bk{position:absolute;left:-4px;top:-6px;width:28px;height:28px;display:grid;place-items:center;background:#2a4a7a;border:2px solid #9fc4ff;font-size:13px;font-weight:700;clip-path:polygon(50% 0,100% 15%,100% 55%,50% 100%,0 55%,0 15%)}
+.m6 .pl .en{display:flex;gap:3px;align-items:center;font-size:20px;font-weight:700;color:#ffe08a}
+.m6 .pl .en i{width:14px;height:14px;border-radius:50%;background:radial-gradient(#fff8c8,#e8a83a 60%,#7a4a10);box-shadow:0 0 6px #ffb84a}
+.m6 .pl .en i.o{background:#221a10;box-shadow:inset 0 0 0 2px #5a4420}
+.m6 .pl .inc{grid-column:1/-1;font-size:12px;color:#ffb0a4;white-space:nowrap}
+.m6 .ch{position:absolute;left:8px;right:8px;top:472px;display:flex;align-items:center;gap:5px;font-size:12px;color:#b8b0a0;background:#121014;border:1px solid #2a2630;padding:3px 6px}
+.m6 .hand{position:absolute;left:6px;right:6px;top:506px;display:flex;gap:4px;justify-content:center}
+.m6 .card{position:relative;width:66px;height:112px;background:#16130f;border:2px solid #4a4030;display:flex;flex-direction:column;align-items:center;padding:16px 2px 4px;overflow:hidden}
+.m6 .card .bd{position:absolute;left:0;right:0;top:0;height:8px;display:flex}
+.m6 .card .bd i{flex:1}
+.m6 .card .c{position:absolute;left:3px;top:10px;font-weight:700;font-size:15px;color:#ffe08a}
+.m6 .card .gl{display:flex;gap:2px;margin:2px 0 2px auto;position:absolute;right:3px;top:11px}
+.m6 .card .art{margin-top:12px}
+.m6 .card .v{font-weight:700;font-size:17px;display:flex;align-items:center;gap:2px;margin-top:2px}
+.m6 .card .r{margin-top:auto;font-size:10px;font-weight:700;width:100%;text-align:center;padding:1px 0}
+.m6 .card .r.on{background:#3a2a08;color:#ffe08a}
+.m6 .card .r.u{background:#1e1a2a;color:#b8a8ff}
+.m6 .card .r.s{background:#0e2430;color:#a8e0ff}
+.m6 .card.sel{border-color:#ffe08a;transform:translateY(-10px);box-shadow:0 6px 12px #000}
+.m6 .card.off{filter:saturate(.3) brightness(.55)}
+.m6 .card.rare{border-color:#e8c547}
+.m6 .det{position:absolute;left:8px;right:8px;top:622px;background:#16130f;border:2px solid #ffe08a;padding:4px 8px;font-size:12px;line-height:1.2}
+.m6 .det b{color:#ffe08a;font-weight:700}
+.m6 .bot{position:absolute;left:8px;right:8px;top:678px;display:flex;align-items:center;gap:8px}
+.m6 .bot .pile{font-size:12px;color:#b8b0a0;border:1px solid #2a2630;padding:6px 8px;background:#121014}
+.m6 .bot button{flex:1;font-family:inherit;font-weight:700;font-size:16px;background:#3a2a10;color:#ffe08a;border:2px solid #ffe08a;padding:6px 0;cursor:pointer}
+</style>
+<main>
+<div class="intro">
+ <div>
+  <h1>SALTMOOR · KAMPF-UI, RUNDE 1</h1>
+  <p>Sechs Entwürfe für den Kampfbildschirm. Jeder verfolgt eine andere Idee, wie man <b>Stoffe, Block, Gegner-Absichten, Leben, Energie und Reaktionen</b> auf einen Blick lesbar macht und dabei zum Ziel-Look passt. Alle sechs zeigen genau dieselbe Kampfsituation, damit man direkt vergleichen kann.</p>
+  <p>Die Gegner sind die Ziel-Look-Figuren von gestern (Chorknabe, Hirte, Netzflickerin), live mit derselben Licht- und Dither-Kette gerendert. Keine KI-Bilder. Oben kann man die Zone wechseln: die ganze Szene und die Randlicht-Farben ziehen mit.</p>
+ </div>
+ <div class="box">
+  <h2>DIE SITUATION</h2>
+  <p style="margin-top:6px">Tiefe 9, Zug 3. Du hast <b>27/44 Leben, 8 Block, 2 von 3 Energie</b>. Zuletzt gespielt: <b>Salz streuen</b>. Chorknabe greift 4×3 an, Netzflickerin 14 (geschwächt, also nur 7), der Hirte sammelt Kraft und hat 10 Block. Auf der Hand: Fackel (reagiert: Knistern), Psalm (reagiert: Bannkreis), Spitzhacke (reagiert, noch unentdeckt), Harpune (keine Reaktion) und ein Doppel-Stoff-Item, das 3 Energie kostet.</p>
+  <h2 style="margin-top:10px">NEU IN ALLEN SECHS: STOFF-ZEICHEN</h2>
+  <p style="margin-top:6px">Statt Kürzeln wie „FE“ hat jeder Stoff ein eigenes Zeichen. Form und Farbe tragen beide, damit es auch bei Farbschwäche und auf kleinem Bildschirm klappt.</p>
+  <div class="legend" id="legend"></div>
+ </div>
+</div>
+
+<div class="toolbar">
+ <span class="lbl">ZONE</span>
+ <div class="seg" id="zoneSeg"></div>
+ <span class="lbl">ZU ENTWURF</span>
+ <nav class="jump"><a href="#e1">1</a><a href="#e2">2</a><a href="#e3">3</a><a href="#e4">4</a><a href="#e5">5</a><a href="#e6">6</a></nav>
+</div>
+
+<section class="mock" id="e1">
+ <div class="fit"><div class="frame m1" data-w="960" data-h="540" id="f1"></div></div>
+ <div class="notes">
+  <div class="tag">ENTWURF 1</div><h2>KLARTEXT</h2>
+  <p style="margin-top:8px">Alles, was für die Entscheidung zählt, steht als große Zahl dort, wo es hingehört. Die Szene bleibt, die Oberfläche ist aufgeräumt wie in einem guten Taktikspiel.</p>
+  <ul>
+   <li><b>Absicht als Schild</b> über dem Kopf, rot für Angriff, violett für Kraft. Geschwächt zeigt die alte Zahl durchgestrichen.</li>
+   <li><b>Block als blaues Wappen</b> direkt am Lebensbalken, der Balken bekommt dann einen blauen Rand.</li>
+   <li><b>Vorschau:</b> Die angehobene Karte zeigt auf jedem Balken schraffiert, wie viel sie abzieht, inklusive Reaktion.</li>
+   <li><b>Warnung unten links:</b> 19 kommen, 8 Block, also −11 Leben. Kein Kopfrechnen mehr.</li>
+   <li><b>Stoff-Band</b> oben auf jeder Karte, die Reaktion als Leiste unten.</li>
+  </ul>
+  <p class="q">Zum Schnacken: Nimmt die Warnung Spannung raus, oder ist genau das gut?</p>
+ </div>
+</section>
+
+<section class="mock" id="e2">
+ <div class="fit"><div class="frame m2" data-w="960" data-h="540" id="f2"></div></div>
+ <div class="notes">
+  <div class="tag">ENTWURF 2</div><h2>LATERNE</h2>
+  <p style="margin-top:8px">Die Oberfläche gehört zur Welt. Alles ist dunkel mit Randlicht wie die Figuren, und nur, was wichtig ist, leuchtet.</p>
+  <ul>
+   <li><b>Leben = Ölstand</b> deiner Laterne, <b>Block = Bretter</b>, die davor genagelt sind, <b>Energie = Kerzen</b>.</li>
+   <li><b>Absichten</b> schweben als leuchtende Zeichen in der Augenfarbe der Zone über den Wesen.</li>
+   <li><b>Gegner-Leben als Glutpunkte</b> (ein Punkt = 2 Leben), Block als blaue Punkte davor.</li>
+   <li><b>Karten wie Tarot</b>: der Stoff ist das leuchtende „Auge“ der Karte.</li>
+   <li><b>Fäden</b> laufen von der Glut des zuletzt gespielten Stoffs zu den Karten, die reagieren.</li>
+  </ul>
+  <p class="q">Zum Schnacken: Am stimmungsvollsten, aber Zahlen sind kleiner. Reicht das zum Spielen?</p>
+ </div>
+</section>
+
+<section class="mock" id="e3">
+ <div class="fit"><div class="frame m3" data-w="960" data-h="540" id="f3"></div></div>
+ <div class="notes">
+  <div class="tag">ENTWURF 3</div><h2>ERMITTLERAKTE</h2>
+  <p style="margin-top:8px">Neuengland 1925: Du bist jemand, der einer Sache nachgeht. Der Kampf liegt als Akte auf dem Schreibtisch.</p>
+  <ul>
+   <li><b>Szene als Foto</b> mit Bleistift-Kreisen und Notizen an jedem Wesen.</li>
+   <li><b>Lagebericht</b> am Klemmbrett: alle Gegner als Tabelle zum Nachlesen, darunter deine eigene Lage.</li>
+   <li><b>Karteikarten</b> mit Schreibmaschine, Stoffe als farbige Gummistempel, Kosten mit Bleistift umkreist.</li>
+   <li><b>Der rote Faden</b> (wörtlich) läuft von der zuletzt gespielten Karte in der Ablage zu den Karten, die reagieren.</li>
+   <li><b>Energie = Streichhölzer</b>, Zug beenden ist ein Stempel.</li>
+  </ul>
+  <p class="q">Zum Schnacken: Eigener, 1925-typischer Look. Ist die Szene als Foto zu klein für die Gegner?</p>
+ </div>
+</section>
+
+<section class="mock" id="e4">
+ <div class="fit"><div class="frame m4" data-w="960" data-h="540" id="f4"></div></div>
+ <div class="notes">
+  <div class="tag">ENTWURF 4</div><h2>STOFFKREIS</h2>
+  <p style="margin-top:8px">Die Reaktionen sind der Kern des Spiels, also bekommen sie die Bühne. Unten links sitzt ein Stoffrad wie aus einem alten Alchemie-Buch.</p>
+  <ul>
+   <li><b>Das Rad</b> zeigt alle 8 Stoffe. Entdeckte Reaktionen sind Linien, der zuletzt gespielte Stoff steht in der Mitte, und seine möglichen Partner glühen.</li>
+   <li><b>Medaillons</b> oben auf den Karten haben dieselbe Form und Farbe wie im Rad. Reagierende Karten leuchten in der Farbe der Linie.</li>
+   <li><b>Schwachstelle</b> der Gegner als Medaillon neben dem Namen.</li>
+   <li><b>Lebens-Ring</b> rechts: außen Leben, innen Block, oben die Energie.</li>
+  </ul>
+  <p class="q">Zum Schnacken: Hilft das Rad beim Entdecken, oder verrät es zu viel?</p>
+ </div>
+</section>
+
+<section class="mock" id="e5">
+ <div class="fit"><div class="frame m5" data-w="960" data-h="540" id="f5"></div></div>
+ <div class="notes">
+  <div class="tag">ENTWURF 5</div><h2>STUMMFILM</h2>
+  <p style="margin-top:8px">1925 ist Stummfilmzeit. Die Szene läuft wie ein viragierter Film: Schwarzweiß, in der Zonenfarbe eingefärbt (das hat man damals wirklich so gemacht). Nur die Augen behalten ihre Farbe.</p>
+  <ul>
+   <li><b>Oberer Balken</b> als Zwischentitel: was im Zug auf dich zukommt.</li>
+   <li><b>Art-Déco-Tafeln</b> mit den Absichten, Messing-Leisten für Leben und Block.</li>
+   <li><b>Reaktionen</b> blitzen als Zwischentitel kurz auf (Beispiel unten).</li>
+   <li><b>Energie als Rauten</b>, Leben als Zeigerinstrument.</li>
+  </ul>
+  <div class="m5" style="position:relative;height:130px;margin:10px 0;border:2px solid var(--line)"><div class="inter" style="left:12px;right:12px;width:auto;top:8px;height:110px"><span class="tag">REAKTION, 0,6 s</span><div class="a">SALZ · FEUER</div><div class="b">KNISTERN!</div><div class="c">Die Funken springen auf alle über.</div></div></div>
+  <p class="q">Zum Schnacken: Stärkster Stil, aber frisst das Gold die Stoff-Farben?</p>
+ </div>
+</section>
+
+<section class="mock portrait" id="e6">
+ <div class="fit"><div class="frame m6" data-w="360" data-h="720" id="f6"></div></div>
+ <div class="notes">
+  <div class="tag">ENTWURF 6</div><h2>HOCHFORMAT</h2>
+  <p style="margin-top:8px">Fürs Handy und eine Hand. Die Szene steht oben, darunter kommt eine Liste, die man mit dem Daumen trifft.</p>
+  <ul>
+   <li><b>Gegnerliste</b>: jede Zeile ist ein Gegner, rechts steht groß die Absicht, darunter Leben, Block, Zustände und Schwachstelle. Die gewählte Zeile ist das Ziel.</li>
+   <li><b>Kleine Karten</b> mit nur Kosten, Zeichen und Hauptwert. Die Details der gewählten Karte stehen in einer Leiste darunter.</li>
+   <li><b>Großer Knopf</b> zum Zug beenden, unten, wo der Daumen ist.</li>
+   <li>Die Szene läuft in echter Pixelgröße (1:1), also besonders scharf.</li>
+  </ul>
+  <p class="q">Zum Schnacken: Soll das Spiel überhaupt aufs Handy? Dann könnte das die Basis sein, und die anderen Ideen kommen als Stil oben drauf.</p>
+ </div>
+</section>
+
+<div class="box end">
+ <h2>WIE WEITER</h2>
+ <p style="margin-top:6px">Die Entwürfe lassen sich mischen, zum Beispiel die Lesbarkeit von 1 mit der Stimmung von 2 oder das Stoffrad aus 4 als eigenes Fenster. Sagt einfach, was ihr behalten wollt und was raus soll. Daraus mache ich Runde 2 und danach den echten Umbau im Prototyp.</p>
+</div>
+</main>
+<script>
+const lerp=(a,b,q)=>a+(b-a)*q;
+const mixc=(a,b,q)=>[lerp(a[0],b[0],q),lerp(a[1],b[1],q),lerp(a[2],b[2],q)];
+const TAU=Math.PI*2,clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const BAY=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5].map(v=>(v+.5)/16);const bay=(x,y)=>BAY[(y&3)*4+(x&3)];
+const hx=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+// Formen
+const E=(x,y,rx,ry,m,o={})=>({t:'e',x,y,rx,ry,m,...o});
+const C=(x1,y1,x2,y2,r1,r2,m,o={})=>({t:'c',x1,y1,x2,y2,r1,r2,m,...o});
+const Pg=(v,m,o={})=>({t:'p',v,m,...o});
+function sdPoly(px,py,v){let d=(px-v[0][0])**2+(py-v[0][1])**2,s=1;const n=v.length;for(let i=0,j=n-1;i<n;j=i,i++){const ex=v[j][0]-v[i][0],ey=v[j][1]-v[i][1],wx=px-v[i][0],wy=py-v[i][1];const h=clamp((wx*ex+wy*ey)/(ex*ex+ey*ey||1),0,1);const bx=wx-ex*h,by=wy-ey*h;d=Math.min(d,bx*bx+by*by);const c1=py>=v[i][1],c2=py<v[j][1],c3=ex*wy>ey*wx;if((c1&&c2&&c3)||(!c1&&!c2&&!c3))s=-s;}return s*Math.sqrt(d);}
+function sd(px,py,p){if(p.t==='p')return[sdPoly(px,py,p.v)-(p.rd||0),p.b??2.5];if(p.t==='e'){const dx=(px-p.x)/p.rx,dy=(py-p.y)/p.ry;const k=Math.hypot(dx,dy);return[(k-1)*Math.min(p.rx,p.ry),Math.min(p.rx,p.ry)];}
+ const ax=px-p.x1,ay=py-p.y1,bx=p.x2-p.x1,by=p.y2-p.y1;const h=clamp((ax*bx+ay*by)/(bx*bx+by*by||1),0,1);const r=p.r1+(p.r2-p.r1)*h;return[Math.hypot(ax-bx*h,ay-by*h)-r,r];}
+// Kette aus Kapseln (Tentakel, Arme)
+function chain(x,y,a,n,len,r0,r1,m,wig,o={}){const out=[];for(let i=0;i<n;i++){const q=i/n;a+=wig(q,i);const nx=x+Math.cos(a)*len,ny=y+Math.sin(a)*len;out.push(C(x,y,nx,ny,r0+(r1-r0)*q,r0+(r1-r0)*(q+1/n),m,o));x=nx;y=ny;}out.end=[x,y];return out;}
+
+function render(img,W,H,groups,st,t){
+ const N=W*H,tone=new Float32Array(N),gid=new Int16Array(N).fill(-1),mat=new Array(N),z=new Float32Array(N),dd=new Float32Array(N);
+ groups.forEach((g,gi)=>{const k=g.k??3;const pr=g.p;
+  // Begrenzungsrahmen
+  let x0=W,y0=H,x1=0,y1=0;pr.forEach(p=>{if(p.t==='p'){p.v.forEach(([a,b])=>{x0=Math.min(x0,a-k-1);x1=Math.max(x1,a+k+1);y0=Math.min(y0,b-k-1);y1=Math.max(y1,b+k+1);});return;}const r=p.t==='e'?Math.max(p.rx,p.ry):Math.max(p.r1,p.r2);const xs=p.t==='e'?[p.x]:[p.x1,p.x2],ys=p.t==='e'?[p.y]:[p.y1,p.y2];xs.forEach(v=>{x0=Math.min(x0,v-r-k);x1=Math.max(x1,v+r+k);});ys.forEach(v=>{y0=Math.min(y0,v-r-k);y1=Math.max(y1,v+r+k);});});
+  x0=Math.max(0,x0|0);y0=Math.max(0,y0|0);x1=Math.min(W-1,Math.ceil(x1));y1=Math.min(H-1,Math.ceil(y1));
+  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){let D=1e9,R=1,M=null,best=1e9;
+   let PF=null,TN=0;for(const p of pr){const[d,r]=sd(x+.5,y+.5,p);if(d<best){best=d;M=p.m;R=r*(p.hz??1);PF=p.pf||g.pf||'dome';TN=p.tone||0;}
+    if(D===1e9)D=d;else if(k<=0)D=Math.min(D,d);else{const h=Math.max(k-Math.abs(D-d),0)/k;D=Math.min(D,d)-h*h*k/4;}}
+   if(D<0){const i=y*W+x;gid[i]=gi;mat[i]=M;dd[i]=D;tone[i]=TN;const u=-D;z[i]=(PF==='flat'?Math.min(u,1):PF==='bevel'?Math.min(u,R)*.9:(u>=R?R:Math.sqrt(2*R*u-u*u)))*(g.hz??1);}}});
+ const L=st.light,Ln=Math.hypot(...L),lx=L[0]/Ln,ly=L[1]/Ln,lz=L[2]/Ln;const d=img.data;
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=y*W+x,o=i*4;if(gid[i]<0){d[o+3]=0;continue;}
+  const g=gid[i],zz=z[i],zl=x>0&&gid[i-1]===g?z[i-1]:0,zr=x<W-1&&gid[i+1]===g?z[i+1]:0,zu=y>0&&gid[i-W]===g?z[i-W]:0,zd=y<H-1&&gid[i+W]===g?z[i+W]:0;
+  let nx=-(zr-zl)/2,ny=-(zd-zu)/2,nz=1;const nl=Math.hypot(nx,ny,nz);nx/=nl;ny/=nl;nz/=nl;
+  const diff=Math.max(0,nx*lx+ny*ly+nz*lz);let rimOk=true,rimK=0;if(st.rimOuter){rimOk=false;for(let k=1;k<=st.rimOuter;k++){const sx=Math.round(x+st.rimDir[0]*k),sy=Math.round(y+st.rimDir[1]*k);if(sx<0||sy<0||sx>=W||sy>=H||gid[sy*W+sx]<0){rimOk=true;rimK=k;break;}}}const outer=rimOk;const ox=Math.round(x-st.rimDir[0]),oy=Math.round(y-st.rimDir[1]);const thin=ox<0||oy<0||ox>=W||oy>=H||gid[oy*W+ox]<0;const rim=!rimOk?0:Math.pow(1-nz,2)*Math.max(0,nx*st.rimDir[0]+ny*st.rimDir[1]+.3);
+  // Kontaktschatten: ein Teil davor wirft einen Strich
+  const front=(x>0&&gid[i-1]>g)||(x<W-1&&gid[i+1]>g)||(y>0&&gid[i-W]>g)||(y<H-1&&gid[i+W]>g);
+  const c=st.shade(mat[i],diff,rim,x,y,{front,z:zz,depth:-dd[i],nz,tone:tone[i],outer,thin,rimK});d[o]=c[0];d[o+1]=c[1];d[o+2]=c[2];d[o+3]=255;}
+ // Außenumriss
+ if(st.outline){const oc=hx(st.outline);for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=y*W+x;if(gid[i]>=0)continue;if((x>0&&gid[i-1]>=0)||(x<W-1&&gid[i+1]>=0)||(y>0&&gid[i-W]>=0)||(y<H-1&&gid[i+W]>=0)){const o=i*4;d[o]=oc[0];d[o+1]=oc[1];d[o+2]=oc[2];d[o+3]=255;}}}
+ return{gid,z};}
+
+// Rampen-Abbildung mit geordnetem Dither
+function rampPick(ramp,v,x,y,dither=1){const n=ramp.length-1;const t=clamp(v,0,.9999)*n;const k=Math.floor(t);const f=t-k;return hx(ramp[Math.min(n,f>(dither?bay(x,y):.5)?k+1:k)]);}
+// Pixel-Werkzeuge für Details auf dem fertigen Bild
+function P(img,W,H){const d=img.data;const set=(x,y,c,a=1)=>{x=Math.round(x);y=Math.round(y);if(x<0||y<0||x>=W||y>=H)return;const o=(y*W+x)*4;const C=typeof c==='string'?hx(c):c;if(a>=1){d[o]=C[0];d[o+1]=C[1];d[o+2]=C[2];d[o+3]=255;}else if(a>bay(x,y)){d[o]=C[0];d[o+1]=C[1];d[o+2]=C[2];d[o+3]=255;}};
+ const add=(x,y,c,a)=>{x=Math.round(x);y=Math.round(y);if(x<0||y<0||x>=W||y>=H)return;const o=(y*W+x)*4;const C=hx(c);if(!d[o+3]){if(a*.9>bay(x,y)*.6){d[o]=C[0]*.8;d[o+1]=C[1]*.8;d[o+2]=C[2]*.8;d[o+3]=255;}return;}d[o]=Math.min(255,d[o]+C[0]*a);d[o+1]=Math.min(255,d[o+1]+C[1]*a);d[o+2]=Math.min(255,d[o+2]+C[2]*a);};
+ return{set,add,
+  el(cx,cy,rx,ry,c){for(let y=Math.floor(cy-ry);y<=cy+ry;y++)for(let x=Math.floor(cx-rx);x<=cx+rx;x++){if(((x+.5-cx)/rx)**2+((y+.5-cy)/ry)**2<=1)set(x,y,c);}},
+  line(x0,y0,x1,y1,c){const n=Math.ceil(Math.hypot(x1-x0,y1-y0));for(let k=0;k<=n;k++){const q=k/(n||1);set(x0+(x1-x0)*q,y0+(y1-y0)*q,c);}},
+  glow(cx,cy,r,c,a){for(let y=Math.floor(cy-r);y<=cy+r;y++)for(let x=Math.floor(cx-r);x<=cx+r;x++){const q=Math.hypot(x-cx,y-cy)/r;if(q<1){const v=a*(1-q)*(1-q);if(v>bay(x,y)*.9)add(x,y,c,.55);}}},
+  get:(x,y)=>{const o=(y*W+x)*4;return d[o+3]?[d[o],d[o+1],d[o+2]]:null;}};}
+
+// Runde 2: Stimmung von Nr. 6 (Silhouette, Randlicht, Nebel, leuchtende Augen), Tiefe von Nr. 3, Fremdheit von Nr. 1.
+// Jede Zone hat ihre eigene Lichtfarbe.
+const ZONES={
+ hafen:{n:'Hafen',body:['#05070a','#0b1016','#141c26','#22303e'],rim:['#4a6a8a','#cfe6ff'],fogA:[22,30,42],fogB:[70,92,116],eye:'#ffe9a0',glow:'#6a5a20'},
+ wald:{n:'Wald',body:['#060508','#0e0b14','#1a1424','#2a2238'],rim:['#6a5a9a','#e0d0ff'],fogA:[16,14,26],fogB:[64,58,96],eye:'#9affe0',glow:'#2a8a70'},
+ kapelle:{n:'Kapelle',body:['#070504','#120c08','#22160e','#382618'],rim:['#a06a2a','#ffe0a0'],fogA:[20,14,10],fogB:[96,66,36],eye:'#fff4d0',glow:'#7a4a10'},
+ grund:{n:'Grund',body:['#030606','#081010','#0e1c1c','#163030'],rim:['#2a8a7a','#a0fff0'],fogA:[6,14,16],fogB:[30,74,76],eye:'#ff6ad8',glow:'#6a1a5a'},
+ moor:{n:'Moor',body:['#050704','#0c100a','#162012','#22321c'],rim:['#6a8a3a','#e0ffa0'],fogA:[14,20,10],fogB:[66,84,44],eye:'#ffffff',glow:'#4a6a20'},
+ rost:{n:'Rost-Dämmerung',body:['#080404','#140a0a','#241212','#3a1c18'],rim:['#a0402a','#ffc0a0'],fogA:[26,10,10],fogB:[110,46,34],eye:'#ffe060',glow:'#7a3a08'}
+};
+function style(Z){const B=Z.body.map(hx),R1=hx(Z.rim[0]),R2=hx(Z.rim[1]);return{light:[-.6,-.7,.6],rimDir:[.9,-.5],rimOuter:3,outline:null,
+ shade(m,df,rim,x,y,o){if(o.outer&&!o.front&&y<100){if(o.rimK===1)return o.thin?R1:R2;if(o.rimK===2&&!o.thin)return R1;}if(rim>.36)return R2;if(rim>.18)return R1;let v=.02+df*.75+(o.tone||0)+(m==='pale'?.25:0)-(m==='dark'?.25:0);if(o.front)v=0;const n=B.length-1,t=clamp(v,0,.999)*n,k=Math.floor(t);return B[Math.min(n,(t-k)>bay(x,y)?k+1:k)];}};}
+function fogBg(Z,props){return x=>{for(let y=0;y<H;y++)for(let i=0;i<W;i++){const f=Math.exp(-(((i-48)/44)**2)-(((y-58)/46)**2));const n=.5+.5*Math.sin(i*.11+y*.07)*Math.sin(y*.19-i*.03);const q=clamp(f*.85+n*.15,0,1);const lv=q*5,k0=Math.floor(lv),use=mixc(Z.fogA,Z.fogB,Math.min(5,(lv-k0)>bay(i,y)?k0+1:k0)/5);x.fillStyle=`rgb(${use[0]|0},${use[1]|0},${use[2]|0})`;x.fillRect(i,y,1,1);}
+ props&&props(x);
+ // Bodennebel
+ for(let y=96;y<H;y++)for(let i=0;i<W;i++){const v=.5+.5*Math.sin(i*.09+y*.4)*Math.cos(i*.05-y*.2);if(v*(y-96)/24>bay(i,y)*.8){const c=mixc(Z.fogA,Z.fogB,.55);x.fillStyle=`rgb(${c[0]|0},${c[1]|0},${c[2]|0})`;x.fillRect(i,y,1,1);}}};}
+const sil=(x,Z,f)=>{const c=mixc(Z.fogA,Z.fogB,.25);x.fillStyle=`rgb(${c[0]|0},${c[1]|0},${c[2]|0})`;f(x);};
+const eyes=(p,Z,list,t,blink=4)=>{const bl=((t/blink)%1)<.05;if(bl)return;list.forEach(([x,y])=>{p.set(x,y,Z.eye);p.glow(x,y,5,Z.glow,.8);});};
+
+
+// Kantige Bausteine
+const Q=(x1,y1,x2,y2,w1,w2,m,o={})=>{const a=Math.atan2(y2-y1,x2-x1)+Math.PI/2,c=Math.cos(a),s=Math.sin(a);return Pg([[x1+c*w1,y1+s*w1],[x2+c*w2,y2+s*w2],[x2-c*w2,y2-s*w2],[x1-c*w1,y1-s*w1]],m,{pf:'bevel',b:1.5,...o});};
+function rag(cx,yT,wT,yB,wB,n,seed,sway,m,o={}){const r=rng(seed);const pts=[[cx-wT,yT],[cx+wT,yT]];for(let i=0;i<=n*2;i++){const q=i/(n*2);const x=cx+wB-q*2*wB+sway*(1-Math.abs(q-.5));const deep=i%2?-(3+r()*7):0;pts.push([x,yB+deep]);}return Pg(pts,m,{pf:'bevel',b:2.5,...o});}
+function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const fold=(p,c,list)=>list.forEach(l=>p.line(l[0],l[1],l[2],l[3],c));
+
+
+const B=(x,y,rx,ry,m,o={})=>E(x,y,rx,ry,m,{pf:'bevel',b:2,...o});
+const DESIGNS=[
+{z:'kapelle',n:'Der Chorknabe',d:'Unverändert, nur der Kerzenschein flackert jetzt ruhiger und breiter, wie in Runde 2.',
+ props:x=>sil(x,ZONES.kapelle,x=>{x.fillRect(10,6,7,104);x.fillRect(79,6,7,104);x.fillRect(8,6,11,4);x.fillRect(77,6,11,4);}),
+ shapes(t){const s=Math.sin(t*TAU/2.4);const g=[];
+  g.push({k:0,p:[Pg([[34,96],[62,96],[66,114],[30,114]],'dark',{pf:'bevel',b:2})]});
+  g.push({k:0,p:[rag(48,66,9,100,19,7,5,s*.6,'pale',{tone:-.05}),Pg([[38,66],[58,66],[56,61],[40,61]],'pale',{pf:'bevel',b:1.5,tone:.05})]});
+  g.push({k:3,p:[E(48,55+s*.3,8,7,'body'),E(48,43+s*.6,7,6.5,'body'),E(48,32+s*.9,6,6,'body'),C(48,61,48,28,3,2,'body')]});
+  g.push({k:0,p:[Q(40,70,34,80,2.6,2.2,'pale'),Q(34,80,40,84,2.2,2,'pale'),Q(40,84,40,74,1.4,1.4,'pale')]});g.candle=[40,72];return g;},
+ detail(p,t,g,Z){const s=Math.sin(t*TAU/2.4);const[cx,cy]=g.candle;const fl=Math.sin(t*TAU*1.3)+Math.sin(t*TAU*2.1)*.5>.4;p.set(cx,cy-(fl?1:0),'#ffb040');p.set(cx,cy-1-(fl?1:0),'#fff4d0');p.glow(cx+2,cy-3,26,'#a06020',.8+Math.sin(t*TAU*.7)*.05);
+  fold(p,Z.body[2],[[44,70,40,96],[52,70,56,96],[48,72,48,98]]);
+  [[55,.3],[43,.6],[32,.9]].forEach(([y,k],i)=>{const yy=y+s*k;const sing=Math.max(0,Math.sin(t*TAU/2.4-i*2.1));p.el(48,yy+2,1.6,1+sing*2,Z.body[0]);eyes(p,Z,[[46,yy-2],[50,yy-2]],t+i*.7,3.3);});}},
+
+{z:'wald',n:'Der Hirte aus dem Nebel',d:'Schultern und Schädel fließen jetzt natürlicher, der Mantel bleibt zerfetzt.',
+ props:x=>sil(x,ZONES.wald,x=>{[[8,0,4,110],[86,0,5,110],[20,30,2,80]].forEach(([a,b,w,h])=>x.fillRect(a,b,w,h));}),
+ shapes(t){const s=Math.sin(t*TAU/3.2);const g=[];
+  g.push({k:0,p:[Q(66,52,76,114,1.2,1.2,'dark'),Q(58,50,64,66,2.2,1.8,'body'),B(64,66,2,2,'body'),Q(64,66,67,54,1.8,1.4,'body')]});
+  g.push({k:2,p:[rag(48,48,9,114,22,6,3,s*2,'body',{tone:-.05}),B(48,50,14,6.5,'body',{tone:.05})]});
+  g.push({k:0,p:[Pg([[45+s*.6,23],[51+s*.6,23],[53+s*.6,31],[48+s*.6,41],[43+s*.6,31]],'pale',{pf:'bevel',b:2,rd:1.6})]});
+  g.push({k:0,p:[Q(37,50,32,76,2.2,1.6,'body'),B(32,76,1.8,1.8,'body'),Q(32,76,30,96+s,1.6,1.2,'body')]});return g;},
+ detail(p,t,g,Z){const s=Math.sin(t*TAU/3.2);const hx0=48+s*.6,hy=24;
+  const br=(x,y,a,l,d)=>{const ex=x+Math.cos(a)*l,ey=y+Math.sin(a)*l;p.line(x,y,ex,ey,Z.body[1]);if(d>0){br(ex,ey,a-.45,l*.68,d-1);br(ex,ey,a+.35,l*.62,d-1);}else if(Math.sin(t*TAU/1.6+ex*.7)>.2){p.set(ex,ey,Z.eye);p.glow(ex,ey,3,Z.glow,.6);}};
+  br(hx0-3,hy,-2.2,9,3);br(hx0+3,hy,-.95,9,3);p.el(hx0,hy+9,3,5.5,Z.body[0]);eyes(p,Z,[[hx0-1.5,hy+7],[hx0+1.5,hy+7],[hx0,hy+11]],t);
+  fold(p,Z.body[0],[[42,60,38,100],[50,58,52,104],[56,62,60,98]]);}},
+{z:'hafen',n:'Die Netzflickerin',d:'Buckel, Schultern und Kopf sind organischer geformt, mit spitzem Kinn, das nach oben zeigt. Die langen Glieder knicken unheimlich ab.',
+ props:x=>sil(x,ZONES.hafen,x=>{[[6,40,3,70],[14,52,2,58],[82,36,3,74]].forEach(([a,b,w,h])=>x.fillRect(a,b,w,h));x.fillRect(0,92,30,2);}),
+ shapes(t){const s=Math.sin(t*TAU/2.8),b=s*.8;const g=[];
+  g.push({k:0,p:[Q(46,96,40,106,3,2.4,'body'),Q(40,106,44,114,2.4,2,'body'),Q(66,96,72,106,3,2.4,'body'),Q(72,106,68,114,2.4,2,'body')]});
+  g.push({k:5,p:[B(58,76+b,18,20,'body',{b:3}),B(60,58+b,14,11,'body',{b:3}),B(48,62+b,9,7,'body'),rag(56,86,19,104,22,5,8,s,'body',{tone:-.06})]});
+  g.push({k:2,p:[Q(46,60+b,37,67+b,3.6,3,'body'),Q(37,67+b,32,74+b,3,2.6,'body'),B(37,67+b,3.2,3.2,'body')]});
+  g.push({k:1.5,p:[B(30,84+b,7,8,'pale'),Pg([[30,72+b],[35,79+b],[25,79+b]],'pale',{pf:'bevel',b:1.5,rd:1})]});g.head=[30,83+b];
+  const a1=[[52,64+b],[60,80],[50,90]],a2=[[64,60+b],[76,74],[66,88]];
+  g.push({k:0,p:[Q(...a1[0],...a1[1],2.2,1.8,'body'),Q(...a1[1],...a1[2],1.8,1.2,'body'),Q(...a2[0],...a2[1],2.2,1.8,'body'),Q(...a2[1],...a2[2],1.8,1.2,'body')]});g.hands=[a1[2],a2[2]];return g;},
+ detail(p,t,g,Z){const[hx0,hy]=g.head;p.line(hx0-4,hy-6,hx0+4,hy-6,Z.body[0]);p.line(hx0-3,hy-5,hx0+3,hy-5,Z.body[0]);for(let i=-3;i<=3;i+=2)p.set(hx0+i,hy-5,Z.rim[1]);
+  eyes(p,Z,[[hx0-3,hy+4],[hx0+3,hy+4]],t,5);
+  const[a,b]=g.hands;for(let k=0;k<6;k++){const q=k/5;const x0=lerp(a[0],b[0],q),y0=lerp(a[1],b[1],q);for(let j=0;j<22;j++){p.set(x0+Math.sin(t*TAU/2.8+j*.3+k)*1.5,y0+j,j%5?Z.body[3]:Z.rim[0]);}}
+  for(let j=0;j<5;j++)p.line(a[0],a[1]+4+j*4,b[0],b[1]+4+j*4,Z.body[2]);fold(p,Z.body[0],[[50,60,44,96],[62,58,60,96]]);}}
+];
+// ===================== Daten der Beispielsituation =====================
+const ST={E:{n:'Eisen',c:'#a6acb4'},F:{n:'Feuer',c:'#e8873a'},W:{n:'Wasser',c:'#6d9be0'},S:{n:'Salz',c:'#f1ede2'},B:{n:'Blut',c:'#d0453e'},G:{n:'Glaube',c:'#e8c547'},L:{n:'Licht',c:'#fff6b8'},V:{n:'Fäulnis',c:'#86c062'}};
+const HAND=[
+ {n:'Fackel schwingen',it:'Fackel',spr:'torch',st:['F'],c:1,fx:[['atk',4],['burn',1]],t:'4 Schaden, Brand 1',rx:{n:'Knistern',k:'FS',t:'+3 Schaden und Brand 1 an allen',d:1}},
+ {n:'Psalm',it:'Familienbibel',spr:'bible',st:['G'],c:1,fx:[['blk',5],['heal',1]],t:'5 Block, +1 Leben',rx:{n:'Bannkreis',k:'GS',t:'+8 Block, +4 im nächsten Zug',d:1}},
+ {n:'Hacken',it:'Spitzhacke',spr:'pick',st:['E'],c:2,fx:[['atk',13]],t:'13 Schaden',rx:{n:'???',k:'ES',t:'Etwas wird passieren.',d:0}},
+ {n:'Harpunieren',it:'Harpune',spr:'harpoon',st:['W'],c:2,fx:[['atk',12]],t:'12 Schaden',rx:null},
+ {n:'Glutstoß',it:'Harpune der Glut',spr:'harpoon',st:['W','F'],c:3,fx:[['atk',15]],t:'15 Schaden',rare:1,rx:{n:'Dampf',k:'FW',t:'in sich: alle Gegner geschwächt',d:1,self:1}},
+];
+const FOES=[
+ {n:'Der Chorknabe',sh:'Chorknabe',hp:15,max:22,blk:0,weak:'L',it:{k:'atk',v:4,h:3,tot:12},sts:[['burn',2]],prev:7},
+ {n:'Der Hirte',sh:'Hirte',hp:31,max:38,blk:10,weak:'F',it:{k:'buff',v:2},sts:[['poison',3]],prev:0,prevBlk:3},
+ {n:'Die Netzflickerin',sh:'Netzflickerin',hp:19,max:26,blk:0,weak:'S',it:{k:'atk',v:14,half:7,tot:7},sts:[['weak',1]],prev:3},
+];
+const ME={hp:27,max:44,blk:8,en:2,enMax:3,gold:47,deck:7,disc:4,inc:19,lose:11};
+const STN={burn:'Brand',poison:'Gift',weak:'Geschwächt'};
+const ZLIST=[['hafen','Hafen'],['wald','Wald'],['kapelle','Kapelle'],['grund','Grund']];
+const ZNAME={hafen:'Hafenviertel',wald:'Der Moorwald',kapelle:'Die überflutete Kapelle',grund:'Der Grund'};
+let zone='kapelle';
+try{const z=localStorage.getItem('smui-zone');if(z&&ZONES[z])zone=z;}catch(e){}
+
+// ===================== Pixel-Zeichen =====================
+const GLY={
+F:['....#....','....#....','...##....','...###...','..####.#.','..#####..','.###.###.','.##...##.','..#####..'],
+W:['.........','.##...##.','#..#.#..#','....#....','.........','.##...##.','#..#.#..#','....#....','.........'],
+B:['....#....','...###...','...###...','..#####..','.###.###.','.##.####.','.#######.','..#####..','...###...'],
+E:['.....####','......###','.....#.##','..###...#','.#...#...','#.....#..','#.....#..','.#...#...','..###....'],
+S:['..#####..','.#.....#.','#.......#','#.......#','#########','#.......#','#.......#','.#.....#.','..#####..'],
+G:['....#....','....#....','..#####..','....#....','....#....','....#....','....#....','....#....','...###...'],
+L:['....#....','.#.....#.','...###...','..#####..','#.#####.#','..#####..','...###...','.#.....#.','....#....'],
+V:['..##.....','.####....','.####.##.','..##.####','......##.','..##.....','.####.##.','.####.##.','..##.....'],
+atk:['........#','.......##','......##.','.....##..','#...##...','.#.##....','..##.....','.#.#.....','#...#....'],
+blk:['#########','#.......#','#.#####.#','#.#####.#','#.#####.#','.#.###.#.','.#.###.#.','..#.#.#..','....#....'],
+buff:['....#....','...###...','..#####..','.#######.','...###...','...###...','...###...','...###...','.........'],
+heal:['.##...##.','####.####','#########','#########','.#######.','..#####..','...###...','....#....','.........'],
+weak:['...###...','...###...','...###...','...###...','.#######.','..#####..','...###...','....#....','.........'],
+poison:['.....##..','....#..#.','....#..#.','.##..##..','#..#.....','#..#..#..','.##..#.#.','......#..','.........'],
+};
+GLY.burn=GLY.F;
+const FXC={atk:'#ff8a7a',blk:'#9fc4ff',heal:'#ff6a6a',burn:'#e8873a',poison:'#86c062',weak:'#c8a0ff',buff:'#d0a8ff'};
+const _gc={};
+function glyph(k,col){col=col||(ST[k]?ST[k].c:FXC[k]);const key=k+col;if(_gc[key])return _gc[key];const g=GLY[k];const c=document.createElement('canvas');c.width=9;c.height=9;const x=c.getContext('2d');x.fillStyle=col;g.forEach((r,y)=>[...r].forEach((ch,i)=>{if(ch==='#')x.fillRect(i,y,1,1);}));return _gc[key]=c.toDataURL();}
+const gi=(k,s=18,col)=>`<img class="ico" src="${glyph(k,col)}" width="${s}" height="${s}" alt="${ST[k]?ST[k].n:(STN[k]||k)}">`;
+const IPAL={k:'#14110f',g:'#7c7f86',G:'#c4c7cc',b:'#6e4426',B:'#a8723f',y:'#e2bd45',o:'#d9772b',w:'#ece6d6',d:'#2a3956'};
+const ISPR={
+harpoon:['..........GG','.........GGG','........gGG.','.......b.G..','......b.....','.....b......','....b.......','...b........','..b.........','.bb.........','bb..........','............'],
+bible:['............','..kkkkkkkk..','..kddddddk..','..kddyyddk..','..kdyyyydk..','..kddyddk...','..kddyyddk..','..kddddddk..','..kwwwwwwk..','..kkkkkkkk..','............','............'],
+pick:['............','..gggggggg..','.gg..bb..gg.','.g...bb...g.','.....bb.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','............','............'],
+torch:['.....oy.....','....oyyo....','....oyyo....','.....oo.....','.....kk.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','.....bb.....','............'],
+salt:['............','.....kk.....','....wkkw....','...wwwwww...','..wwGwwwww..','..wwwwGwww..','..wGwwwwww..','..wwwwwGww..','...wwwwww...','............','............','............'],
+};
+const _ic={};
+function item(n,s=36){if(!_ic[n]){const c=document.createElement('canvas');c.width=12;c.height=12;const x=c.getContext('2d');ISPR[n].forEach((r,y)=>[...r].forEach((ch,i)=>{if(ch!=='.'){x.fillStyle=IPAL[ch];x.fillRect(i,y,1,1);}}));_ic[n]=c.toDataURL();}return `<img class="ico" src="${_ic[n]}" width="${s}" height="${s}" alt="">`;}
+const fxs=(c,s=16,sep='')=>c.fx.map(([k,v])=>`<span>${gi(k,s)}${v}</span>`).join(sep);
+const pct=(a,b)=>(a/b*100).toFixed(1)+'%';
+
+// ===================== Szene: Hintergrund + Figuren =====================
+const SW=96,SH=120;
+const sprites=DESIGNS.map(()=>{const c=document.createElement('canvas');c.width=SW;c.height=SH;return{c,x:c.getContext('2d'),img:new ImageData(SW,SH)};});
+const STY={};
+function renderSprites(t){const Z=ZONES[zone];const st=STY[zone]||(STY[zone]=style(Z));
+ DESIGNS.forEach((D,i)=>{const S=sprites[i];const g=D.shapes(t);S.img.data.fill(0);render(S.img,SW,SH,g,st,t);const p=P(S.img,SW,SH);D.detail(p,t,g,Z);S.x.putImageData(S.img,0,0);});}
+const scenes=[];
+function addScene(frame,o){const c=document.createElement('canvas');c.width=o.w;c.height=o.h;c.className='scene';const s=o.scale||2;
+ Object.assign(c.style,{left:o.x+'px',top:o.y+'px',width:o.w*s+'px',height:o.h*s+'px'});(o.parent||frame).prepend(c);
+ const sc={...o,c,ctx:c.getContext('2d',{willReadFrequently:true}),bg:null};scenes.push(sc);return sc;}
+function backdrop(sc){const Z=ZONES[zone],w=sc.w,h=sc.h,[c,x]=[document.createElement('canvas'),null];c.width=w;c.height=h;const g=c.getContext('2d');
+ const img=g.createImageData(w,h),d=img.data;const hor=sc.slots[0].y-14;
+ for(let y=0;y<h;y++)for(let i=0;i<w;i++){let f=0;sc.slots.forEach(s=>{f=Math.max(f,Math.exp(-(((i-s.x)/58)**2)-(((y-(s.y-62))/66)**2)));});
+  const n=.5+.5*Math.sin(i*.11+y*.07)*Math.sin(y*.19-i*.03);let q=clamp(f*.8+n*.14+.04,0,1);if(y>hor)q*=.55;
+  const lv=q*5,k0=Math.floor(lv),cc=mixc(Z.fogA,Z.fogB,Math.min(5,(lv-k0)>bay(i,y)?k0+1:k0)/5);const o=(y*w+i)*4;d[o]=cc[0];d[o+1]=cc[1];d[o+2]=cc[2];d[o+3]=255;}
+ g.putImageData(img,0,0);
+ const sil=mixc(Z.fogA,Z.fogB,.2);g.fillStyle=`rgb(${sil.map(v=>v|0)})`;const R=rng(7);
+ if(zone==='kapelle'){[[.04,8],[.96,8],[.22,5],[.78,5]].forEach(([fx,pw])=>{const px=fx*w|0;g.fillRect(px-pw/2,0,pw,hor+4);g.fillRect(px-pw/2-2,8,pw+4,4);});
+  const win=mixc(Z.fogA,Z.fogB,.55);g.fillStyle=`rgb(${win.map(v=>v|0)})`;[.36,.64].forEach(fx=>{const px=fx*w|0;g.fillRect(px-3,14,6,26);g.fillRect(px-2,12,4,2);g.fillRect(px-1,11,2,1);});}
+ else if(zone==='wald'){for(let k=0;k<7;k++){const px=(k/6*w+R()*20-10)|0,pw=2+R()*5|0;g.fillRect(px,0,pw,hor+4);for(let b=0;b<3;b++){const by=10+R()*hor*.6|0;for(let j=0;j<10;j++)g.fillRect(px+(k%2?j:-j),by-j*.6|0,1,1);}}}
+ else if(zone==='hafen'){[[.06,3],[.92,3],[.16,2]].forEach(([fx,pw])=>{const px=fx*w|0;g.fillRect(px,6,pw,hor);g.fillRect(px-8,16,18,1);});for(let j=0;j<60;j++){g.fillRect((.06*w|0)+j,8+j*.5|0,1,1);}g.fillRect(0,hor-2,w,2);}
+ else{for(let k=0;k<6;k++){const px=R()*w|0,rr=6+R()*10;g.beginPath();g.ellipse(px,R()*20,rr,rr*.7,0,0,TAU);g.fill();}for(let k=0;k<4;k++){const px=R()*w|0;g.beginPath();g.ellipse(px,hor+6,10+R()*12,5,0,0,TAU);g.fill();}}
+ // Bodennebel und Schatten
+ const fogc=mixc(Z.fogA,Z.fogB,.5);g.fillStyle=`rgb(${fogc.map(v=>v|0)})`;
+ for(let y=hor;y<h;y++)for(let i=0;i<w;i++){const v=.5+.5*Math.sin(i*.09+y*.4)*Math.cos(i*.05-y*.2);if(v*Math.min(1,(y-hor)/20)*.7>bay(i,y))g.fillRect(i,y,1,1);}
+ const sd=g.getImageData(0,0,w,h),dd=sd.data;sc.slots.forEach(s=>{for(let y=s.y-6;y<s.y+6;y++)for(let i=s.x-36;i<s.x+36;i++){if(i<0||y<0||i>=w||y>=h)continue;const q=((i-s.x)/34)**2+((y-s.y)/4.5)**2;if(q<1&&(1-q)*.85>bay(i,y)){const o=(y*w+i)*4;dd[o]*=.4;dd[o+1]*=.4;dd[o+2]*=.4;}}});g.putImageData(sd,0,0);
+ return c;}
+function drawScene(sc,t){if(!sc.bg)sc.bg=backdrop(sc);const x=sc.ctx;x.drawImage(sc.bg,0,0);
+ sc.slots.forEach((s,i)=>x.drawImage(sprites[i].c,s.x-48,s.y-114));
+ if(sc.filter==='film'){const Z=ZONES[zone];const im=x.getImageData(0,0,sc.w,sc.h),d=im.data;const tint=hx(Z.rim[1]);const fl=.92+.08*Math.sin(t*23)*Math.sin(t*7.1);
+  for(let k=0;k<d.length;k+=4){const L=(d[k]*.3+d[k+1]*.55+d[k+2]*.15)/255;const sat=Math.max(d[k],d[k+1],d[k+2])-Math.min(d[k],d[k+1],d[k+2]);if(sat>120&&L>.45)continue;
+   let v=Math.pow(L,.8)*1.7*fl+(Math.random()-.5)*.06;v=clamp(v,0,1);d[k]=tint[0]*v;d[k+1]=tint[1]*v;d[k+2]=tint[2]*v;}
+  if(Math.sin(t*3.3)>.6){const sx=(Math.sin(t*1.7)*.5+.5)*sc.w|0;for(let y=0;y<sc.h;y++){const o=(y*sc.w+sx)*4;d[o]=d[o+1]=d[o+2]=Math.min(255,d[o]+40);}}
+  x.putImageData(im,0,0);}
+ else if(sc.filter==='photo'){const im=x.getImageData(0,0,sc.w,sc.h),d=im.data;for(let k=0;k<d.length;k+=4){const L=d[k]*.3+d[k+1]*.55+d[k+2]*.15;const sat=Math.max(d[k],d[k+1],d[k+2])-Math.min(d[k],d[k+1],d[k+2]);if(sat>120&&L>110)continue;d[k]=d[k]*.45+L*.55*1.12+8;d[k+1]=d[k+1]*.45+L*.55*1.0+4;d[k+2]=d[k+2]*.45+L*.55*.82;}x.putImageData(im,0,0);}}
+
+// ===================== Hilfen =====================
+const H=(s)=>{const t=document.createElement('template');t.innerHTML=s.trim();return t.content;};
+const intentTxt=f=>f.it.k==='atk'?(f.it.h?`${f.it.v}×${f.it.h}`:(f.it.half?`${f.it.half}`:`${f.it.v}`)):`+${f.it.v}`;
+const intentWord=f=>f.it.k==='atk'?'Angriff':'Kraft';
+const rxCls=c=>!c.rx?'':c.rx.self?'self':c.rx.d?'on':'unk';
+function rxLine(c){if(!c.rx)return 'keine Reaktion';if(c.rx.self)return `in sich: ${c.rx.n}`;return c.rx.d?`+ ${c.rx.n.toUpperCase()}`:'+ ???';}
+const zoneVars=fr=>{const Z=ZONES[zone];fr.style.setProperty('--rim',Z.rim[1]);fr.style.setProperty('--rim2',Z.rim[0]);fr.style.setProperty('--g',Z.eye);};
+const SLOTX=[260,490,720];
+
+// ===================== 1 KLARTEXT =====================
+function build1(fr){fr.innerHTML='';const sc=addScene(fr,{x:0,y:0,w:480,h:270,slots:[{x:130,y:150},{x:245,y:150},{x:360,y:150}]});
+ let h=`<div style="position:absolute;left:0;right:0;top:290px;bottom:0;background:linear-gradient(#0000,#0a0806e8 70px)"></div>
+ <div class="top"><span class="d">TIEFE 9</span><span>${ZNAME[zone]}</span><span>Zug 3</span><span class="sp"></span><span style="color:#ffd23f">● ${ME.gold} Gold</span><span class="chip">Buch der Reaktionen 7/16</span></div>`;
+ FOES.forEach((f,i)=>{const x=SLOTX[i];const it=f.it;
+  h+=`<div class="intent ${it.k}" style="left:${x}px;top:${i===1?40:50}px">${gi(it.k==='atk'?'atk':'buff',22,it.k==='atk'?'#ff8a7a':'#d0a8ff')}${it.half?`<s>${it.v}</s>`:''}${intentTxt(f)}${it.h?`<small>= ${it.tot}</small>`:''}${it.k==='buff'?'<small>Kraft</small>':''}${it.half?'<small>geschwächt</small>':''}</div>`;
+  const pv=f.prev,after=Math.max(0,f.hp-pv);
+  h+=`<div class="einfo" style="left:${x}px;top:304px">${i===0?`<div class="tgtl" style="left:50%;top:-24px">ZIEL · −${pv}</div>`:''}
+   <div class="nm"><span>${f.sh}</span><span class="weak" title="Schwachstelle">schwach ${gi(f.weak,12)}</span></div>
+   <div class="hp ${f.blk?'blk':''}"><i style="width:${pct(after,f.max)}"></i>${pv?`<i class="ghost" style="left:${pct(after,f.max)};width:${pct(f.hp-after,f.max)}"></i>`:''}<span>${f.hp}/${f.max}${pv?` → ${after}`:''}</span>${f.blk?`<div class="shield">${f.blk}</div>`:''}</div>
+   <div class="sts">${f.sts.map(([k,v])=>`<span class="st">${gi(k,14)}${STN[k]} ${v}</span>`).join('')}${f.prevBlk?`<span class="st" style="color:#9fc4ff">Block → ${10-f.prevBlk}</span>`:''}</div></div>`;});
+ h+=`<div class="pp"><div style="font-size:13px;color:#b8ae94">DU · HAFENARBEITER</div>
+   <div class="row" style="padding-left:12px"><div class="hp blk"><i style="width:${pct(ME.hp,ME.max)}"></i><span>${ME.hp}/${ME.max}</span><div class="shield">${ME.blk}</div></div></div>
+   <div class="inc">Gegner greifen mit <b>19</b> an. Dein Block fängt <b>8</b>.<br>Du verlierst <b>11 Leben</b>.</div>
+   <div class="en">${[...Array(ME.enMax)].map((_,k)=>`<span class="pip ${k<ME.en?'':'o'}"></span>`).join('')}<span>${ME.en}/${ME.enMax}</span><span style="font-size:13px;font-weight:400;color:#b8ae94">Energie</span></div></div>`;
+ h+=`<div class="hand">${HAND.map((c,i)=>{const off=c.c>ME.en;return `<div class="card ${i===0?'lift':''} ${off?'off':''} ${c.rare?'rare':''}">
+   <div class="band">${c.st.map(k=>`<div style="background:${ST[k].c}">${gi(k,12,'#000')}${ST[k].n.toUpperCase()}</div>`).join('')}</div>
+   <div class="cost ${off?'bad':''}">${c.c}</div><div class="n">${c.n}</div><div class="art">${item(c.spr,40)}</div>
+   <div class="fx">${fxs(c,18)}</div><div class="rx ${rxCls(c)}">${c.rx?rxLine(c):''}</div></div>`;}).join('')}</div>`;
+ h+=`<div class="side"><div class="chain"><div class="h">ZULETZT GESPIELT</div><div class="c">${gi('S',18)} Salz streuen</div><div class="h" style="margin-top:4px">REAGIERT MIT</div><div class="c">${gi('F',18)}${gi('G',18)}${gi('E',18)}<span style="color:#b8a8ff;font-size:12px">(1× neu)</span></div></div>
+  <button class="btn">ZUG BEENDEN</button><div class="piles"><span>Stapel ${ME.deck}</span><span>Ablage ${ME.disc}</span></div></div>`;
+ fr.append(H(h));}
+
+// ===================== 2 LATERNE =====================
+function lanternCanvas(){const c=document.createElement('canvas');c.width=36;c.height=56;const x=c.getContext('2d');const Z=ZONES[zone];const rim=Z.rim[1],rim2=Z.rim[0];
+ const R=(a,b,w,h,col)=>{x.fillStyle=col;x.fillRect(a,b,w,h);};
+ R(15,0,6,2,'#2a2018');R(13,2,10,2,'#1a140e');R(8,4,20,4,'#1a140e');R(27,5,1,3,rim2);R(10,8,16,38,'#0a0806');
+ const lvl=ME.hp/ME.max,top=8+38*(1-lvl);for(let y=9;y<46;y++)for(let i=11;i<25;i++){const lit=y>top;const q=lit?.35+.65*Math.exp(-(((i-18)/6)**2)-(((y-30)/12)**2)):.08;const cc=mixc([40,24,10],[255,200,110],q);if(q>bay(i,y)*.4||!lit){x.fillStyle=`rgb(${cc.map(v=>v|0)})`;x.fillRect(i,y,1,1);}}
+ R(17,26,2,4,'#fff4d0');R(16,28,4,3,'#ffb040');R(17,31,2,2,'#7a3a08');
+ [10,17,24].forEach(i=>R(i,8,2,38,'#1a140e'));R(26,8,1,38,rim2);R(27,9,1,36,rim);R(8,44,20,4,'#1a140e');R(10,48,16,6,'#120e0a');R(27,45,1,3,rim2);
+ R(10,top|0,15,1,'#ffe0a0');return c;}
+function plankCanvas(){const c=document.createElement('canvas');c.width=48;c.height=26;const x=c.getContext('2d');const rim=ZONES[zone].rim[0];
+ const pl=(y,col)=>{for(let i=0;i<48;i++){x.fillStyle=col;x.fillRect(i,y+(i*.08|0),1,9);}x.fillStyle=rim;for(let i=4;i<48;i++)x.fillRect(i,y+(i*.08|0),1,1);x.fillStyle='#000';x.fillRect(6,y+3,2,2);x.fillRect(40,y+6,2,2);};
+ pl(2,'#2a1e14');pl(14,'#22180f');return c;}
+function candleCanvas(lit){const c=document.createElement('canvas');c.width=8;c.height=22;const x=c.getContext('2d');x.fillStyle='#d8ccb0';x.fillRect(2,8,4,13);x.fillStyle='#a89a7a';x.fillRect(5,8,1,13);x.fillStyle='#1a140e';x.fillRect(1,20,6,2);x.fillRect(3,6,1,2);
+ if(lit){x.fillStyle='#ffb040';x.fillRect(3,2,2,4);x.fillStyle='#fff4d0';x.fillRect(3,3,1,2);}else{x.fillStyle='#4a4a4a';x.fillRect(3,4,1,1);x.fillRect(4,2,1,1);}return c;}
+function build2(fr){fr.innerHTML='';zoneVars(fr);const sc=addScene(fr,{x:0,y:0,w:480,h:270,slots:[{x:122,y:160},{x:240,y:160},{x:358,y:160}]});const X=[244,480,716];
+ let h=`<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#0000 45%,#000c 100%)"></div><div class="depth"><b>TIEFE 9</b> · ${ZNAME[zone]}</div>`;
+ FOES.forEach((f,i)=>{const it=f.it;h+=`<div class="sig" style="left:${X[i]}px;top:${i===1?30:46}px">${gi(it.k==='atk'?'atk':'buff',27,ZONES[zone].eye)}<span class="num">${intentTxt(f)}</span><span class="w">${it.k==='atk'?(it.half?'Angriff, geschwächt':'Angriff'):'sammelt Kraft'}</span></div>`;
+  const dots=Math.ceil(f.max/2),full=Math.ceil(f.hp/2),bd=Math.ceil(f.blk/2);
+  h+=`<div class="life" style="left:${X[i]}px;top:326px"><div class="ember">${[...Array(bd)].map(()=>'<i class="b"></i>').join('')}${[...Array(dots)].map((_,k)=>`<i class="${k<full?'':'o'}"></i>`).join('')}</div>
+   <div class="t">${f.hp}${f.blk?` <span style="color:#9fc4ff">+${f.blk}</span>`:''} ${f.sts.map(([k,v])=>`${gi(k,14)}${v}`).join(' ')} <span style="opacity:.7">schwach</span>${gi(f.weak,14)}</div></div>`;});
+ h+=`<div class="lantern" id="lan2"></div><div class="lp" style="left:84px;top:446px;font-size:18px;color:#fff;transform:rotate(5deg);z-index:2">${ME.blk}</div><div class="lp" style="left:22px;top:510px;font-size:9px;color:#ffe0a0;line-height:1.6">LEBEN ${ME.hp}/${ME.max}<br><span style="color:#9fc4ff">BLOCK ${ME.blk}</span></div>
+  <div class="candles" id="can2"></div><div class="lp" style="left:166px;top:516px;font-size:9px;color:#ffd27a">ENERGIE ${ME.en}/${ME.enMax}</div>
+  <div class="lastember"><span>zuletzt</span>${gi('S',27)}</div>
+  <svg class="threads" width="960" height="540" id="thr2"></svg><div class="hand" id="hand2"></div>
+  <div class="stack" style="right:84px;top:388px">${ME.deck}</div><div class="stackl" style="right:84px;top:446px;font-size:13px">Stapel</div>
+  <div class="stack" style="right:28px;top:388px;box-shadow:inset 2px 2px 0 #3a332a">${ME.disc}</div><div class="stackl" style="right:26px;top:446px;font-size:13px">Ablage</div>
+  <button class="plate">ZUG<br>BEENDEN</button>`;
+ fr.append(H(h));
+ const lc=lanternCanvas();lc.className='pix';lc.style.width='108px';lc.style.height='168px';fr.querySelector('#lan2').append(lc);
+ const pc=plankCanvas();pc.className='pix';Object.assign(pc.style,{position:'absolute',left:'14px',top:'430px',width:'132px',height:'72px'});fr.querySelector('#lan2').after(pc);
+ const cw=fr.querySelector('#can2');for(let k=0;k<ME.enMax;k++){const cc=candleCanvas(k<ME.en);cc.className='pix';cc.style.width='24px';cc.style.height='66px';if(k<ME.en)cc.style.filter='drop-shadow(0 0 6px #ffb040)';cw.append(cc);}
+ const hand=fr.querySelector('#hand2');const pos=[];
+ HAND.forEach((c,i)=>{const off=c.c>ME.en;const rot=(i-2)*5,x=i*86,y=Math.abs(i-2)*9;pos.push([300+x+52,352+y]);
+  const react=c.rx&&!c.rx.self;hand.append(H(`<div class="card ${off?'off':''} ${react&&c.rx.d?'react':''}" style="left:${x}px;top:${y}px;transform:rotate(${rot}deg)">
+   <div class="cst">${[...Array(c.c)].map(()=>'<i></i>').join('')}</div><div class="nm">${c.n}</div>
+   <div class="eye">${c.st.map(k=>`<span style="--c:${ST[k].c}">${gi(k,27)}</span>`).join('')}</div>
+   <div class="val">${c.fx.map(([k,v])=>`${gi(k,12)} ${v}`).join('<br>')}</div>
+   ${c.rx?`<div class="rxn ${c.rx.d?'':'u'}">${c.rx.self?'Dampf':c.rx.d?c.rx.n:'?'}</div>`:''}</div>`));});
+ const svg=fr.querySelector('#thr2');let p='';[[0,1],[1,1],[2,0]].forEach(([i,d])=>{const [tx,ty]=pos[i];p+=`<path d="M214 392 C ${214} ${330}, ${tx} ${350}, ${tx} ${ty+4}" fill="none" stroke="${d?'#ffd27a':'#b8a8ff'}" stroke-width="2" ${d?'':'stroke-dasharray="4 4"'} opacity=".8" style="filter:drop-shadow(0 0 3px ${d?'#ffb040':'#8878d8'})"/>`;});svg.innerHTML=p;}
+
+// ===================== 3 ERMITTLERAKTE =====================
+function build3(fr){fr.innerHTML='<div class="wood"></div>';
+ const ph=H(`<div class="photo"><div class="tape" style="left:-20px;top:-6px;transform:rotate(-30deg)"></div><div class="tape" style="right:-22px;top:-4px;transform:rotate(28deg)"></div><div id="ph3" style="position:relative;width:560px;height:280px;overflow:hidden"></div><div class="cap">Tiefe 9, ${ZNAME[zone]}. Drei von ihnen.</div></div>`);fr.append(ph);
+ const box=fr.querySelector('#ph3');addScene(fr,{parent:box,x:0,y:-20,w:280,h:150,slots:[{x:52,y:142},{x:140,y:142},{x:228,y:142}],filter:'photo'});
+ const X=[104,280,456];let a='';
+ const notes=[['① greift an','4 × 3 = 12'],['② sammelt Kraft','+2 · Block 10'],['③ greift an','14 → 7']];
+ X.forEach((x,i)=>{a+=`<ellipse cx="${x}" cy="${i===1?150:160}" rx="74" ry="${i===1?128:110}" fill="none" stroke="#f0e8d0" stroke-width="2" stroke-dasharray="1 0" opacity=".55" transform="rotate(${i*3-3} ${x} 150)"/>`;});
+ box.append(H(`<svg class="pencil" width="560" height="280">${a}</svg>`));
+ X.forEach((x,i)=>box.append(H(`<div class="ann" style="left:${x-60}px;top:${i===1?6:18}px;font-size:22px">${notes[i][0]}<br><span style="font-size:27px;color:#ffd0c0">${notes[i][1]}</span></div>`)));
+ let rows=FOES.map((f,i)=>`<tr><td>${'①②③'[i]}</td><td><b style="font-weight:bold">${f.sh}</b><br><span style="font-size:12px">Leben ${f.hp}/${f.max}${f.blk?` · Block ${f.blk}`:''}</span></td><td class="${f.it.k==='atk'?'r':''}">${f.it.k==='atk'?`Angriff ${intentTxt(f)}`:'Kraft +2'}<br><span style="font-size:12px;color:#2a2418">${f.sts.map(([k,v])=>`${STN[k]} ${v}`).join(', ')}</span></td><td><span class="stamp" style="--c:${ST[f.weak].c==='#fff6b8'||ST[f.weak].c==='#f1ede2'?'#8a7a3a':ST[f.weak].c}">${gi(f.weak,14,ST[f.weak].c==='#fff6b8'||ST[f.weak].c==='#f1ede2'?'#8a7a3a':ST[f.weak].c)}</span></td></tr>`).join('');
+ fr.append(H(`<div class="form"><div class="clip"></div><h3>LAGEBERICHT · ZUG 3</h3><table>${rows}</table><div style="font-size:11px;text-align:right;margin-top:2px">rechts: schwach gegen</div>
+  <div class="me">DU: Leben <b>${ME.hp}/${ME.max}</b> · Deckung ${ME.blk}<br>Es kommen <b>19</b> Schaden, ${ME.blk} fängst du ab.<br>Du verlierst <b>11</b>.</div>
+  <div style="margin-top:6px;font-size:12px">Stapel ${ME.deck} · Ablage ${ME.disc} · ${ME.gold} Dollar · Buch 7/16</div></div>`));
+ // Streichhölzer
+ let m='';for(let k=0;k<ME.enMax;k++){const used=k>=ME.en;m+=`<div style="position:absolute;left:${k*16}px;top:${k%2*4}px;width:5px;height:62px;background:${used?'#3a2a1a':'#d8b880'};transform:rotate(${(k-1)*6}deg)"><div style="position:absolute;left:-2px;top:-4px;width:9px;height:11px;border-radius:50% 50% 40% 40%;background:${used?'#111':'#b83020'}"></div></div>`;}
+ fr.append(H(`<div class="matches"><div style="position:relative;height:72px">${m}</div><div class="ml">${ME.en} von ${ME.enMax}<br>Streichhölzern</div></div><button class="endst">ZUG BEENDEN</button>`));
+ const hand=H('<div class="hand" id="hand3"></div>');fr.append(hand);const hd=fr.querySelector('#hand3');
+ const dark=c=>c==='#fff6b8'||c==='#f1ede2'?'#7a6a2a':c==='#e8c547'?'#9a7a10':c;
+ HAND.forEach((c,i)=>{const off=c.c>ME.en;const rot=[-3,1.5,-1,2.5,-2][i];
+  hd.append(H(`<div class="card ${off?'off':''} ${c.rare?'rare':''}" style="left:${i*124}px;top:${[6,0,10,2,12][i]}px;transform:rotate(${rot}deg)"><div class="cs">${c.c}</div><div class="nm">${c.n}</div>
+   <div class="row">${c.st.map(k=>`<span class="stp" style="--c:${dark(ST[k].c)};--cd:${dark(ST[k].c)}">${gi(k,12,dark(ST[k].c))}${ST[k].n.toUpperCase()}</span>`).join('')}</div>
+   <div class="tx">${c.t}.</div><div style="font-size:11px;color:#6a6050;margin-top:2px">${c.rare?'Doppel-Item':'von: '+c.it}</div>
+   ${c.rx?`<div class="pn ${c.rx.d?'':'u'}">${c.rx.self?'→ Dampf (in sich)':c.rx.d?'→ '+c.rx.n+'!':'→ ? (neu)'}</div>`:''}</div>`));});
+ fr.append(H(`<div class="tray"><div class="card" style="left:12px;top:-6px;transform:rotate(-8deg) scale(.9);width:118px"><div class="nm">Salz streuen</div><div class="row"><span class="stp" style="--c:#7a6a2a;--cd:#7a6a2a">${gi('S',12,'#7a6a2a')}SALZ</span></div><div class="tx">3 Block.</div></div><div class="l">ABLAGE · ZULETZT</div></div>`));
+ // roter Faden
+ const tx=[150+60,150+124+60,150+248+60];const ty=[372,366,376];let p='';tx.forEach((x,i)=>{p+=`<path d="M800 392 Q ${(800+x)/2} ${330-i*10} ${x} ${ty[i]}" fill="none" stroke="#c0201a" stroke-width="2" ${i===2?'stroke-dasharray="6 4"':''}/><circle cx="${x}" cy="${ty[i]}" r="4" fill="#d8302a" stroke="#000" stroke-width="1"/>`;});p+='<circle cx="800" cy="392" r="5" fill="#d8302a" stroke="#000"/>';
+ fr.append(H(`<svg class="thread" width="960" height="540">${p}</svg>`));}
+
+// ===================== 4 STOFFKREIS =====================
+const KNOWN=['EF','FW','FS','GS','BE','GL','VW'],ALLP=['EF','FW','FS','GS','BG','BE','VW','BV','LV','FL','ES','GL'];
+function build4(fr){fr.innerHTML='';const sc=addScene(fr,{x:0,y:0,w:480,h:270,slots:[{x:130,y:150},{x:245,y:150},{x:360,y:150}]});
+ let h=`<div class="floor"></div><div class="topl">TIEFE IX · ZUG 3<small>${ZNAME[zone]} · ${ME.gold} Gold · Buch 7/16</small></div>`;
+ FOES.forEach((f,i)=>{const x=SLOTX[i],it=f.it;h+=`<div class="tab ${it.k}" style="left:${x}px;top:${i===1?28:44}px">${gi(it.k==='atk'?'atk':'buff',20,it.k==='atk'?'#ff8a7a':'#d0a8ff')}${it.half?`<s style="font-size:15px;opacity:.6">${it.v}</s>`:''}${intentTxt(f)}<small>${it.k==='atk'?(it.h?'= 12':it.half?'geschwächt':''):'Kraft'}</small></div>`;
+  h+=`<div class="ei" style="left:${x}px;top:304px"><span class="medal" style="--c:${ST[f.weak].c}" title="Schwachstelle">${gi(f.weak,18)}</span><div class="col"><div class="nm">${f.n.toUpperCase()}</div>
+   <div class="bar"><i style="width:${pct(f.hp,f.max)}"></i>${f.blk?`<b style="width:${pct(f.blk,f.max)}"></b>`:''}</div>
+   <div class="meta"><span>${f.hp}/${f.max}${f.blk?` <span style="color:#9fc4ff">+${f.blk}</span>`:''}</span><span>${f.sts.map(([k,v])=>`${gi(k,12)}${v}`).join(' ')}</span></div></div></div>`;});
+ // Rad
+ const K=['S','F','L','G','E','B','W','V'];const cx=110,cy=110,R=80;const P0={};K.forEach((k,i)=>{const a=-Math.PI/2+i/K.length*TAU;P0[k]=[cx+Math.cos(a)*R,cy+Math.sin(a)*R];});P0.S=[cx,cy];
+ const K2=['F','L','G','E','B','W','V'];K2.forEach((k,i)=>{const a=-Math.PI/2+i/K2.length*TAU;P0[k]=[cx+Math.cos(a)*R,cy+Math.sin(a)*R];});
+ let s=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#5a4a30" stroke-width="1"/><circle cx="${cx}" cy="${cy}" r="${R+14}" fill="none" stroke="#3a3020" stroke-width="1" stroke-dasharray="2 4"/>`;
+ ALLP.forEach(pk=>{const [a,b]=[pk[0],pk[1]];const A=P0[a],B=P0[b];const known=KNOWN.includes(pk);const hot=pk.includes('S');if(hot)return;s+=`<line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="${known?'#6a5a3a':'#3a3226'}" stroke-width="1" ${known?'':'stroke-dasharray="2 3"'}/>`;});
+ [['F',1],['G',1],['E',0]].forEach(([k,d])=>{const B=P0[k];s+=`<line x1="${cx}" y1="${cy}" x2="${B[0]}" y2="${B[1]}" stroke="${d?ST[k].c:'#a898e8'}" stroke-width="${d?3:2}" ${d?'':'stroke-dasharray="4 3"'} style="filter:drop-shadow(0 0 4px ${d?ST[k].c:'#8878d8'})"/>`;});
+ K2.forEach(k=>{const [x,y]=P0[k];const hot='FGE'.includes(k);s+=`<circle cx="${x}" cy="${y}" r="15" fill="#0c0a08" stroke="${hot?ST[k].c:'#5a4a30'}" stroke-width="${hot?2:1}"/><image href="${glyph(k)}" x="${x-9}" y="${y-9}" width="18" height="18" style="image-rendering:pixelated" opacity="${hot?1:.55}"/>`;});
+ s+=`<circle cx="${cx}" cy="${cy}" r="22" fill="#14110c" stroke="#f1ede2" stroke-width="2" style="filter:drop-shadow(0 0 8px #f1ede2aa)"/><image href="${glyph('S')}" x="${cx-13}" y="${cy-13}" width="27" height="27" style="image-rendering:pixelated"/>`;
+ h+=`<div class="wheel"><svg width="220" height="220">${s}</svg><div class="lab" style="left:72px;top:136px;width:76px;text-align:center">ZULETZT</div><div class="lab" style="left:0;top:206px">STOFFRAD</div></div>`;
+ h+=`<div class="hand">${HAND.map(c=>{const off=c.c>ME.en;const rc=c.rx&&c.rx.d&&!c.rx.self?ST[c.st[0]].c:c.rx&&c.rx.self?'#6ab8e8':'';return `<div class="card ${rc?'react':''} ${c.rx&&!c.rx.d?'unk':''} ${off?'off':''} ${c.rare?'rare':''}" style="--rc:${rc}">
+   <div class="md">${c.st.map(k=>`<span class="medal" style="--c:${ST[k].c}">${gi(k,22)}</span>`).join('')}</div><div class="cost">${c.c}</div>
+   <div class="nm">${c.n}</div>${item(c.spr,30)}<div class="tx">${c.t}</div><div class="rx">${c.rx?(c.rx.self?'IN SICH: DAMPF':c.rx.d?c.rx.n.toUpperCase():'? UNBEKANNT'):'—'}</div></div>`;}).join('')}</div>`;
+ const C=2*Math.PI*62,Cb=2*Math.PI*48;
+ h+=`<div class="orb"><svg width="180" height="170"><circle cx="90" cy="86" r="62" fill="#0c0a08" stroke="#2a1010" stroke-width="10"/><circle cx="90" cy="86" r="62" fill="none" stroke="#c83a32" stroke-width="10" stroke-dasharray="${C*ME.hp/ME.max} ${C}" transform="rotate(-90 90 86)"/>
+   <circle cx="90" cy="86" r="48" fill="none" stroke="#1a2232" stroke-width="6"/><circle cx="90" cy="86" r="48" fill="none" stroke="#9fc4ff" stroke-width="6" stroke-dasharray="${Cb*ME.blk/ME.max} ${Cb}" transform="rotate(-90 90 86)"/>
+   ${[0,1,2].map(k=>`<circle cx="${70+k*20}" cy="12" r="7" fill="${k<ME.en?'#ffd27a':'#2a2216'}" stroke="#000" style="${k<ME.en?'filter:drop-shadow(0 0 4px #ffb040)':''}"/>`).join('')}</svg>
+   <div class="l" style="top:58px;font-family:Cinzel;font-weight:700;font-size:26px">${ME.hp}<span style="font-size:14px;color:#bfb49a">/${ME.max}</span></div><div class="l" style="top:92px;font-size:15px;color:#9fc4ff">Block ${ME.blk}</div><div class="l" style="top:110px;font-size:14px;color:#ff9a8a">19 kommen · −11</div></div>
+  <button class="endb">ZUG BEENDEN</button>`;
+ fr.append(H(h));}
+
+// ===================== 5 STUMMFILM =====================
+function build5(fr){fr.innerHTML='';const sc=addScene(fr,{x:0,y:44,w:480,h:172,slots:[{x:120,y:150},{x:240,y:150},{x:360,y:150}],filter:'film'});const X=[240,480,720];
+ let h=`<div class="bar" style="top:0;height:44px"><span class="title">ZUG III · <em>ES KOMMEN 19 SCHADEN</em> · DU HAST 8 DECKUNG</span></div>
+ <div style="position:absolute;left:0;right:0;top:44px;height:344px;background:radial-gradient(ellipse at 50% 45%,#0000 50%,#000d 100%);pointer-events:none"></div>
+ <svg class="deco" width="960" height="540" style="left:0;top:0">${[[14,52,1,1],[946,52,-1,1],[14,380,1,-1],[946,380,-1,-1]].map(([x,y,sx,sy])=>`<g transform="translate(${x} ${y}) scale(${sx} ${sy})" stroke="#c8a050" fill="none" stroke-width="1"><path d="M0 40 L0 0 L40 0"/><path d="M6 30 L6 6 L30 6"/><path d="M6 6 L22 22"/><circle cx="6" cy="6" r="2" fill="#c8a050"/></g>`).join('')}</svg>`;
+ FOES.forEach((f,i)=>{const it=f.it;h+=`<div class="plq" style="left:${X[i]}px;top:${i===1?56:68}px"><div class="k">${f.sh.toUpperCase()}</div><div class="v">${it.k==='atk'?(it.half?`<s>${it.v}</s> ${it.half}`:intentTxt(f)):'KRAFT +2'}</div><div class="k" style="letter-spacing:.12em">${it.k==='atk'?(it.h?'DREI SCHLÄGE':it.half?'GESCHWÄCHT':'SCHLAG'):'SAMMELT SICH'}</div></div>`;
+  h+=`<div class="gauge" style="left:${X[i]}px;top:340px"><div class="tr" style="width:170px;margin-inline:auto"><i style="width:calc(${pct(f.hp,f.max)} - 2px)"></i>${f.blk?`<b style="width:${pct(f.blk,f.max)}"></b>`:''}</div><div class="sm"><span>${f.hp}/${f.max}</span>${f.blk?`<span style="color:#9fc4ff">Deckung ${f.blk}</span>`:''}${f.sts.map(([k,v])=>`<span>${gi(k,13)}${v}</span>`).join('')}<span>schwach ${gi(f.weak,13)}</span></div></div>`;});
+ // Zeigerinstrument
+ const a=-Math.PI+Math.PI*ME.hp/ME.max;const nx=95+Math.cos(a)*64,ny=86+Math.sin(a)*64;let ticks='';for(let k=0;k<=10;k++){const t=-Math.PI+Math.PI*k/10;ticks+=`<line x1="${95+Math.cos(t)*70}" y1="${86+Math.sin(t)*70}" x2="${95+Math.cos(t)*(k%5?64:58)}" y2="${86+Math.sin(t)*(k%5?64:58)}" stroke="#c8a050"/>`;}
+ h+=`<div class="dial"><svg width="190" height="104"><path d="M17 86 A78 78 0 0 1 173 86" fill="none" stroke="#c8a050"/><path d="M25 86 A70 70 0 0 1 165 86" fill="none" stroke="#3a2a10" stroke-width="5"/><path d="M25 86 A70 70 0 0 1 ${95+Math.cos(a)*70} ${86+Math.sin(a)*70}" fill="none" stroke="#efe4c8" stroke-width="5"/>${ticks}<line x1="95" y1="86" x2="${nx}" y2="${ny}" stroke="#ffcf6a" stroke-width="2"/><circle cx="95" cy="86" r="5" fill="#000" stroke="#c8a050"/><text x="95" y="66" text-anchor="middle" font-family="Limelight" font-size="22" fill="#fff">${ME.hp}</text></svg>
+  <div class="l">LEBEN ${ME.hp}/${ME.max} · <span style="color:#9fc4ff">DECKUNG ${ME.blk}</span></div></div>`;
+ h+=`<div class="hand">${HAND.map(c=>{const off=c.c>ME.en;return `<div class="card ${c.rx&&c.rx.d&&!c.rx.self?'react':''} ${off?'off':''}"><div class="cost"><span>${c.c}</span></div><div class="nm">${c.n.toUpperCase()}</div>
+  <div class="med">${c.st.map(k=>`<span style="--c:${ST[k].c}">${gi(k,16)}</span>`).join('')}</div><div class="tx">${c.t}</div><div class="rx ${c.rx&&!c.rx.d?'u':''}">${c.rx?(c.rx.self?'DAMPF':c.rx.d?c.rx.n.toUpperCase():'? ? ?'):''}</div></div>`;}).join('')}</div>
+  <div class="enb"><div class="l">ENERGIE</div>${[0,1,2].map(k=>`<span class="dia ${k<ME.en?'':'o'}"></span>`).join('')}<div><button class="endb">ZUG BEENDEN</button></div><div style="font-family:'IM Fell English';font-size:14px;color:#8a7a5a;margin-top:6px">Stapel ${ME.deck} · Ablage ${ME.disc}<br>zuletzt: Salz ${gi('S',13)}</div></div>
+`;
+ fr.append(H(h));}
+
+// ===================== 6 HOCHFORMAT =====================
+function build6(fr){fr.innerHTML='';const sc=addScene(fr,{x:0,y:30,w:360,h:204,scale:1,slots:[{x:64,y:190},{x:180,y:190},{x:296,y:190}]});const X=[64,180,296];
+ let h=`<div class="top"><span class="d">T9</span><span>${ZNAME[zone]}</span><span class="sp"></span><span style="color:#ffd23f">● ${ME.gold}</span><span style="border:1px solid #fff3;padding:0 5px">Buch 7/16</span></div>`;
+ FOES.forEach((f,i)=>{h+=`<div class="mini ${f.it.k}" style="left:${X[i]}px;top:${i===1?44:60}px">${gi(f.it.k==='atk'?'atk':'buff',12,f.it.k==='atk'?'#ff8a7a':'#d0a8ff')}${intentTxt(f)}</div>`;});
+ h+=`<div class="list">${FOES.map((f,i)=>{const after=Math.max(0,f.hp-f.prev);return `<div class="er ${i===0?'sel':''}"><div class="ix">${i===0?'◎':i+1}</div><div class="mid"><div class="nm"><b style="font-weight:600">${f.sh}</b><span style="font-size:11px;color:#b8b0a0">schwach</span>${gi(f.weak,12)}</div>
+   <div class="hp"><i style="width:${pct(after,f.max)}"></i>${f.prev?`<i class="g" style="left:${pct(after,f.max)};width:${pct(f.hp-after,f.max)}"></i>`:''}</div>
+   <div class="ln"><span>${f.hp}/${f.max}${f.prev?` → ${after}`:''}</span>${f.blk?`<span class="bk">${gi('blk',11)}${f.blk}</span>`:''}${f.sts.map(([k,v])=>`<span>${gi(k,11)}${STN[k]} ${v}</span>`).join('')}</div></div>
+   <div class="it ${f.it.k}">${gi(f.it.k==='atk'?'atk':'buff',16,f.it.k==='atk'?'#ff8a7a':'#d0a8ff')}${f.it.half?`<s>${f.it.v}</s>`:''}${intentTxt(f)}</div></div>`;}).join('')}</div>`;
+ h+=`<div class="pl"><div class="hp"><i class="g" style="width:${pct(ME.hp,ME.max)}"></i><i style="width:${pct(ME.hp-ME.lose,ME.max)}"></i><span>${ME.hp}/${ME.max} → ${ME.hp-ME.lose}</span><div class="bk">${ME.blk}</div></div>
+   <div class="en">${[0,1,2].map(k=>`<i class="${k<ME.en?'':'o'}"></i>`).join('')}${ME.en}</div><div class="inc">19 Angriff − 8 Block = −11 Leben, wenn du jetzt beendest</div></div>
+  <div class="ch">zuletzt ${gi('S',14)} Salz → reagiert mit ${gi('F',14)}${gi('G',14)}${gi('E',14)}</div>`;
+ h+=`<div class="hand">${HAND.map((c,i)=>{const off=c.c>ME.en;const m=c.fx[0];return `<div class="card ${i===0?'sel':''} ${off?'off':''} ${c.rare?'rare':''}"><div class="bd">${c.st.map(k=>`<i style="background:${ST[k].c}"></i>`).join('')}</div><div class="c">${c.c}</div><div class="gl">${c.st.map(k=>gi(k,12)).join('')}</div>
+   <div class="art">${item(c.spr,28)}</div><div class="v">${gi(m[0],14)}${m[1]}</div><div class="r ${c.rx?(c.rx.self?'s':c.rx.d?'on':'u'):''}">${c.rx?(c.rx.self?'Dampf':c.rx.d?c.rx.n:'???'):''}</div></div>`;}).join('')}</div>
+  <div class="det"><b>Fackel schwingen</b> ${gi('F',12)} Feuer · 1 Energie<br>4 Schaden, Brand 1. <b>+ Knistern:</b> 3 Schaden und Brand 1 an allen.</div>
+  <div class="bot"><div class="pile">Stapel ${ME.deck}</div><button>ZUG BEENDEN</button><div class="pile">Ablage ${ME.disc}</div></div>`;
+ fr.append(H(h));}
+
+// ===================== Aufbau, Skalierung, Schleife =====================
+const BUILDS=[build1,build2,build3,build4,build5,build6];
+function buildAll(){scenes.length=0;BUILDS.forEach((b,i)=>b(document.getElementById('f'+(i+1))));renderSprites(performance.now()/1000);scenes.forEach(s=>drawScene(s,0));}
+function fit(){document.querySelectorAll('.fit').forEach(w=>{const f=w.firstElementChild;const W=+f.dataset.w,Hh=+f.dataset.h;const s=w.clientWidth/W;f.style.width=W+'px';f.style.height=Hh+'px';f.style.transform=`scale(${s})`;w.style.height=Hh*s+'px';});}
+document.getElementById('legend').innerHTML=Object.keys(ST).map(k=>`<span>${gi(k,27)}${ST[k].n}</span>`).join('');
+const seg=document.getElementById('zoneSeg');
+function segUI(){seg.innerHTML=ZLIST.map(([k,n])=>`<button type="button" id="z-${k}" aria-pressed="${k===zone}" data-z="${k}">${n}</button>`).join('');}
+seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;zone=b.dataset.z;try{localStorage.setItem('smui-zone',zone);}catch(err){}segUI();buildAll();});
+segUI();buildAll();fit();new ResizeObserver(fit).observe(document.querySelector('main'));
+const vis=new Set();const io=new IntersectionObserver(es=>es.forEach(e=>{e.isIntersecting?vis.add(e.target):vis.delete(e.target);}));document.querySelectorAll('.fit').forEach(f=>io.observe(f));
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const t0=performance.now();let fc=0;
+(function loop(now){requestAnimationFrame(loop);if(RM||fc++%3)return;const t=(now-t0)/1000;renderSprites(t);scenes.forEach(s=>{const fit=s.c.closest('.fit');if(vis.has(fit))drawScene(s,t);});})(t0);
+</script>
+</body></html>
