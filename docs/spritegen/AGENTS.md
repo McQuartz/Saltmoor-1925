@@ -8,8 +8,9 @@ Diese Datei gilt für **jede** Sitzung, die am Generator arbeitet. Sie geht kür
 2. diese Datei
 3. `docs/spritegen/03-architektur.md`
 4. den Abschnitt deiner Etappe in `docs/spritegen/04-fahrplan.md`
-5. `docs/spritegen/entscheidungen.md` und `docs/spritegen/budget-log.md`
-6. bei Bedarf `docs/spritegen/01-recherche.md`
+5. `docs/spritegen/zielbild.md` (wie es am Ende aussehen soll, mit Beispielbildern)
+6. `docs/spritegen/entscheidungen.md` und `docs/spritegen/budget-log.md`
+7. bei Bedarf `docs/spritegen/01-recherche.md`
 
 Danach: in 5–10 Zeilen aufschreiben, was du in dieser Sitzung machst und was nicht. Dieser Plan kommt in den Pull Request.
 
@@ -49,7 +50,14 @@ Du siehst deinen Verbrauch nicht. Darum:
 - Bilder, die du erzeugst, **selbst ansehen** und ehrlich beschreiben, was gut und was schlecht aussieht.
 - Determinismus prüfen: denselben Kontaktbogen zweimal rendern und Dateien vergleichen.
 
-## 5. Fertig heißt
+## 5. Ziel-Look
+
+- Der Look aus [zielbild.md](zielbild.md) ist das Ziel für alle Etappen ab M2: dunkle Körper in Zonenfarben, Gegenlicht mit Randlicht an der Außenkante, flache Flächen mit Fase statt Kuppeln, organische Silhouetten, geordneter Dither, leuchtende Augen als einzige helle Akzente.
+- Die Beispielbilder sind von Hand gesetzte Formen. **Nicht nachbauen, nicht abpausen, keine Koordinaten daraus übernehmen.** Der Generator muss den Look aus Skelett, Volumen und Regeln erreichen.
+- Feedback von Ace und Philipp **nicht wörtlich als starre Regel** umsetzen („organisch“ heißt nicht „rund hier, eckig dort“). Im Zweifel die Absicht hinter dem Feedback suchen und im Bericht sagen, wie du es gelesen hast.
+- Jeder Kontaktbogen-Bericht sagt kurz, wie nah das Ergebnis am Zielbild ist und was noch fehlt.
+
+## 6. Fertig heißt
 
 - Code und Tests im Repo, Tests headless grün.
 - Kontaktbogen als PNG in `docs/spritegen/sheets/<Etappe>/` mit Start-Seed im Dateinamen.
@@ -57,10 +65,10 @@ Du siehst deinen Verbrauch nicht. Darum:
 - Status in `docs/spritegen/README.md` aktualisiert.
 - Branch `spritegen/<etappe>-<stichwort>`, Pull Request gegen `main`. Nie direkt auf `main` pushen.
 
-## 6. Bericht am Ende (im Pull Request und im Chat)
+## 7. Bericht am Ende (im Pull Request und im Chat)
 
 1. Was gebaut wurde (3–6 Punkte)
-2. Kontaktbogen-Link und ehrliche Einschätzung des Looks
+2. Kontaktbogen-Link und ehrliche Einschätzung des Looks, gemessen am Zielbild
 3. Was nicht geschafft wurde und warum
 4. Offene Fragen an Ace/Philipp
 5. Vorschlag für die nächste Sitzung
