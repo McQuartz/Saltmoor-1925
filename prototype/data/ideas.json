@@ -1084,5 +1084,25 @@
   "n": "Rolle: Wahrsagerin",
   "kind": "rolle",
   "d": "Tarotkarten, Auge im Glas, Spieluhr. Bonus: Jeder Wahnsinn-Punkt gibt +1 Schaden auf alle Karten."
+ },
+ {
+  "n": "Dynamische Layer-Musik",
+  "kind": "sound",
+  "d": "Musik aus übereinanderliegenden Spuren, die alle synchron laufen. Ein Intensitätswert (Ort, eigenes Leben, Gegnerdruck, Hochreaktion) blendet sie auf Taktgrenzen ein und aus: im Menü nur Grundrauschen, bei einer Hochreaktion kurz alles. Jedes Biom hat eigene Spuren, jeder Gegnertyp ein eigenes Motiv, das verstummt, wenn der letzte stirbt (wie bei Wii Play Tanks). SFX bleiben gleich.",
+  "px": [
+   "............",
+   "..........e.",
+   "..........e.",
+   "........C.e.",
+   "........C.e.",
+   "......c.C.e.",
+   "......c.C.e.",
+   "....D.c.C.e.",
+   "..d.D.c.C.e.",
+   "..d.D.c.C.e.",
+   "kkkkkkkkkkkk",
+   "............"
+  ],
+  "notes": "5 Layer pro Biom: 0 Grund (immer), 1 Puls (ab 0,2), 2 Rhythmus (ab 0,45), 3 Bedrohung (ab 0,7), 4 Tutti (1,0). Rolle wählt die Klangfarbe der Melodie, der dominante Stoff nur einen Effekt (Wasser = Hall, Feuer = Verzerrung, Glaube = Kirchenhall), einzelne Items gar nichts. Keine KI-Musik: prozedural mit WebAudio, CC0-Geräusche und von Ace eingespielte Spuren. Godot 4.3+ kann das mit AudioStreamSynchronized. Erster Schritt: Musik-Labor-Seite für den Hafen. Konzept: https://claude.ai/artifact/JXujgRxwk5MbRHoNQESCQ4"
  }
 ]
