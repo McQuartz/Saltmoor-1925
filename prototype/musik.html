@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saltmoor Musik-Labor</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Musik-Labor: dynamische Layer-Musik zum Anhören und Ausprobieren, ohne das Spiel */
+body{overflow-y:auto;user-select:text;-webkit-user-select:text}
+#ml{max-width:1080px;margin:0 auto;padding-block:24px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#ml h1{font-family:var(--fd);font-size:18px;color:var(--parch);margin:0 0 10px;line-height:1.5}
+#ml p{color:var(--dim);margin:0 0 8px;font-size:19px;line-height:1.1}
+#ml h2{font-family:var(--fd);font-size:10px;color:var(--parch);margin:0 0 4px;line-height:1.5}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));margin-top:16px}
+.panel{background:#0b0f0e;border:2px solid #1f2826;padding:12px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button.sm{font-size:9px;padding:8px 10px}
+button.hot{border-color:#7affc8;color:#7affc8}
+button.on{border-color:var(--gold);color:var(--gold)}
+.meter{display:grid;grid-template-columns:80px 1fr 52px;align-items:center;gap:8px;font-size:18px}
+.bar{height:14px;background:#111716;border:2px solid #2e3a35;position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;width:0;background:#7affc8}
+.bar.g i{background:#d0453a}
+.bar b{position:absolute;top:0;bottom:0;width:2px;background:#39443f}
+.layers{display:flex;flex-direction:column-reverse;gap:4px}
+.lay{display:grid;grid-template-columns:14px 1fr auto;gap:8px;align-items:center;font-size:18px;color:#6a6f66;border:2px solid #1a2120;padding:3px 7px}
+.lay .dot{width:10px;height:10px;background:#1f2826}
+.lay.on{color:var(--txt);border-color:#2e3a35}
+.lay.on .dot{background:#7affc8;box-shadow:0 0 6px #7affc8}
+.lay[data-i="4"].on .dot{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.lay small{color:#6a6f66;font-size:15px}
+.facts{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:18px;color:#9aa39a}
+.facts b{color:var(--txt);font-weight:normal}
+.chips{display:flex;flex-wrap:wrap;gap:6px;min-height:34px}
+.chip{font-size:17px;border:2px solid #39443f;background:#161c1b;color:var(--txt);padding:2px 8px;cursor:pointer;font-family:var(--fb)}
+.chip.slot{border-color:#7affc8}
+.chip:hover{border-color:var(--red);color:#fff}
+.ctl{display:grid;gap:8px 12px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.ctl label{display:flex;flex-direction:column;gap:3px;font-size:16px;color:#9aa39a}
+.ctl select{font-family:var(--fb);font-size:18px;background:#111716;color:var(--txt);border:2px solid #2e3a35;padding:3px 5px;width:100%}
+input[type=range]{width:100%;accent-color:#d0453a}
+#story{font-size:20px;color:var(--parch);min-height:1.2em}
+.badge{font-family:var(--fd);font-size:8px;padding:4px 6px;border:2px solid #2e3a35;color:#6a6f66}
+.badge.on{border-color:var(--red);color:var(--red)}
+.quad{font-family:var(--fd);font-size:10px;color:var(--eld)}
+.hint{font-size:16px!important;color:#6a6f66!important}
+</style>
+</head>
+<body>
+<div id="ml">
+ <h1>MUSIK-LABOR</h1>
+ <p>Dynamische Layer-Musik, komplett im Browser erzeugt. Keine Audiodateien, keine KI. Zwei Achsen: <b style="color:#7affc8;font-weight:normal">Wucht</b> schaltet Layer dazu, <b style="color:#d0453a;font-weight:normal">Gefahr</b> ändert Tempo, Harmonie und Klang. Kopfhörer helfen. Effekte wie Heilen und Reaktion klingen immer in der Tonart der Musik.</p>
+ <div class="btns" style="margin-top:12px">
+  <button id="bStart" class="hot">▶ MUSIK STARTEN</button>
+  <button id="bDemo">DEMO-KAMPF ABSPIELEN</button>
+  <label class="facts" style="align-items:center;gap:6px"><input type="checkbox" id="cSfx" checked> SFX mitspielen</label>
+ </div>
+ <p id="story" style="margin-top:10px"></p>
+
+ <div class="grid">
+  <section class="panel">
+   <h2>ZUSTAND</h2>
+   <div class="meter"><span>Wucht</span><div class="bar"><i id="mW"></i><b style="left:15%"></b><b style="left:40%"></b><b style="left:62%"></b><b style="left:88%"></b></div><span id="tW">0</span></div>
+   <div class="meter"><span>Gefahr</span><div class="bar g"><i id="mG"></i><b style="left:50%"></b></div><span id="tG">0</span></div>
+   <div class="facts"><span>Stimmung <b class="quad" id="fQ">–</b></span></div>
+   <div class="facts"><span>Tempo <b id="fB">80</b> BPM</span><span>Akkord <b id="fC">–</b></span><span>Szene <b id="fS">menu</b></span></div>
+   <div class="layers" id="lays">
+    <div class="lay" data-i="0"><span class="dot"></span><span>0 Grund <small>Meer, Drone</small></span><small>immer</small></div>
+    <div class="lay" data-i="1"><span class="dot"></span><span>1 Puls <small>Herzschlag, Bass</small></span><small>ab 0,15</small></div>
+    <div class="lay" data-i="2"><span class="dot"></span><span>2 Rhythmus <small id="fV">ruhig</small></span><small>ab 0,40</small></div>
+    <div class="lay" data-i="3"><span class="dot"></span><span>3 Bedrohung <small>Fläche, Melodie</small></span><small>ab 0,62</small></div>
+    <div class="lay" data-i="4"><span class="dot"></span><span>4 Tutti <small>Pauke, Akzente</small></span><small>ab 0,88</small></div>
+   </div>
+   <div class="btns"><span class="badge" id="bgDuel">DUELL</span><span class="badge" id="bgTel">ANGRIFF KOMMT</span></div>
+  </section>
+
+  <section class="panel">
+   <h2>SZENE</h2>
+   <div class="ctl"><label>Biom<select id="sBiome"></select></label></div>
+   <div class="btns" id="scenes">
+    <button class="sm" data-s="menu">MENÜ</button><button class="sm" data-s="karte">KARTE</button><button class="sm" data-s="kampf">KAMPF</button><button class="sm" data-s="boss">BOSS</button>
+   </div>
+   <h2 style="margin-top:6px">LEBEN <span id="tHp" style="color:var(--txt)">40/40</span></h2>
+   <input type="range" id="rHp" min="0" max="40" value="40">
+   <div class="btns"><button class="sm" id="bHit">TREFFER −6</button><button class="sm" id="bHeal">HEILEN +8</button><button class="sm" id="bTel">ANGRIFF ANGEKÜNDIGT</button></div>
+   <h2 style="margin-top:6px">AKTIONEN</h2>
+   <div class="btns"><button class="sm" id="bStrike">ANGRIFF</button><button class="sm" id="bBlock">BLOCKEN</button><button class="sm" id="bReact">REAKTION</button><button class="sm hot" id="bHoch">HOCHREAKTION</button><button class="sm" id="bWin">SIEG</button></div>
+   <p class="hint">Mehrere Reaktionen kurz hintereinander steigen die Tonleiter hoch.</p>
+  </section>
+
+  <section class="panel">
+   <h2>GEGNER</h2>
+   <div class="btns" id="spawns"></div>
+   <p class="hint">Gegner im Kampf (antippen = besiegen). Grün umrandet = spielt gerade sein Motiv.</p>
+   <div class="chips" id="foes"></div>
+   <h2 style="margin-top:6px">FÄRBUNG</h2>
+   <div class="ctl">
+    <label>Rolle (Klangfarbe der Melodie)<select id="sRole"></select></label>
+    <label>Dominanter Stoff (Effekt)<select id="sStoff"></select></label>
+   </div>
+  </section>
+ </div>
+ <p class="hint" style="margin-top:18px">Code: <code>js/audio/music.js</code>. Das Spiel selbst nutzt die Musik noch nicht.</p>
+</div>
+
+<script src="js/audio/sfx.js"></script>
+<script src="js/audio/music.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const sfxOn=()=>$('cSfx').checked&&typeof sfx!=='undefined';
+const play=(k,...a)=>{if(sfxOn()&&sfx[k])sfx[k](...a);};
+function ensure(){if(!Music.running){Music.start();$('bStart').textContent='■ MUSIK STOPPEN';$('bStart').classList.remove('hot');}}
+$('bStart').onclick=()=>{if(Music.running){Music.stop();$('bStart').textContent='▶ MUSIK STARTEN';$('bStart').classList.add('hot');stopDemo();}else ensure();};
+
+// Steuerung
+document.querySelectorAll('#scenes button').forEach(b=>b.onclick=()=>{ensure();Music.scene(b.dataset.s);play('click');});
+$('rHp').oninput=e=>{ensure();Music.hp(+e.target.value);};
+const act={
+ hit:()=>{Music.hit(6);play('hurt');},
+ heal:()=>{Music.heal(8);play('heal');},
+ tel:()=>{Music.telegraph();play('bad');},
+ react:()=>{Music.reaction(false);play('react',Music.state().chain);},
+ strike:()=>{Music.strike();play('hit',2+Math.floor(Math.random()*3));},
+ block:()=>{Music.block();play('block');},
+ hoch:()=>{Music.reaction(true);play('hoch');},
+ win:()=>{Music.victory();play('win');}
+};
+$('bHit').onclick=()=>{ensure();act.hit();};$('bHeal').onclick=()=>{ensure();act.heal();};$('bTel').onclick=()=>{ensure();act.tel();};
+$('bReact').onclick=()=>{ensure();act.react();};$('bStrike').onclick=()=>{ensure();act.strike();};$('bBlock').onclick=()=>{ensure();act.block();};$('bHoch').onclick=()=>{ensure();act.hoch();};$('bWin').onclick=()=>{ensure();act.win();};
+Object.entries(Music.FOES).forEach(([k,f])=>{const b=document.createElement('button');b.className='sm';b.textContent='+ '+f.n.toUpperCase();
+ b.onclick=()=>{ensure();const st=Music.state();if(st.scene!=='kampf'&&st.scene!=='boss')Music.scene(k==='ruft'?'boss':'kampf');Music.foeSpawn(k);play('pick');};$('spawns').appendChild(b);});
+Object.entries(Music.ROLES).forEach(([k,r])=>$('sRole').add(new Option(r.n+' · '+r.k,k)));$('sRole').value='fischer';
+Object.entries(Music.STOFFE).forEach(([k,s])=>$('sStoff').add(new Option(s.n,k)));
+Object.entries(Music.BIOME).forEach(([k,b])=>$('sBiome').add(new Option(b.n,k)));$('sBiome').onchange=e=>{ensure();Music.biome(e.target.value);};
+$('sRole').onchange=e=>Music.role(e.target.value);$('sStoff').onchange=e=>{ensure();Music.stoff(e.target.value);};
+
+// Anzeige
+let lastFoes='';
+function quad(w,g){if(w<.15&&g<.2)return 'Ruhe';const hi=w>=.55,gg=g>=.5;return gg?(hi?'Panik':'Gespenstisch'):(hi?'Heldenhaft':'Lauernd');}
+function draw(){
+ const s=Music.state();
+ $('mW').style.width=(s.wucht*100)+'%';$('mG').style.width=(s.gefahr*100)+'%';
+ $('tW').textContent=s.wucht.toFixed(2);$('tG').textContent=s.gefahr.toFixed(2);
+ $('fB').textContent=s.bpm;$('fC').textContent=s.chord+(s.dark?' (gekippt)':'');$('fS').textContent=s.scene;$('fQ').textContent=quad(s.wucht,s.gefahr);
+ document.querySelectorAll('.lay').forEach(el=>el.classList.toggle('on',s.gate[+el.dataset.i]));
+ $('fV').textContent=s.drive?'Ketten, Pauke · treibend':'Ketten, Pauke · ruhig';
+ $('bgDuel').classList.toggle('on',s.duel);$('bgTel').classList.toggle('on',s.telegraph);
+ $('tHp').textContent=Math.round(s.hp)+'/'+s.hpMax;if(document.activeElement!==$('rHp'))$('rHp').value=s.hp;
+ document.querySelectorAll('#scenes button').forEach(b=>b.classList.toggle('on',b.dataset.s===s.scene));
+ const key=s.foes.join(',')+'|'+s.slot;
+ if(key!==lastFoes){lastFoes=key;const box=$('foes');box.innerHTML='';
+  s.foes.forEach(t=>{const c=document.createElement('button');c.className='chip'+(t===s.slot?' slot':'');c.textContent=Music.FOES[t].n+' ✕';
+   c.onclick=()=>{Music.foeDie(t);play('die');if(!Music.state().foes.length)setTimeout(()=>{Music.victory();play('win');},700);};box.appendChild(c);});
+  if(!s.foes.length)box.innerHTML='<span class="hint" style="font-size:16px;color:#6a6f66">keine</span>';}
+ requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+// Demo-Kampf: ein ganzer Kampf in gut einer Minute, zum einfach Anhören
+let demoT=[];
+function stopDemo(){demoT.forEach(clearTimeout);demoT=[];$('bDemo').classList.remove('on');}
+const story=t=>$('story').textContent=t;
+$('bDemo').onclick=()=>{
+ if(demoT.length){stopDemo();story('');return;}
+ ensure();$('bDemo').classList.add('on');
+ const steps=[
+  [0,'Karte: man ist unterwegs. Grund und Puls.',()=>{Music.scene('karte');Music.hp(40,40);Music.stoff('keiner');$('sStoff').value='keiner';}],
+  [7,'Kampf beginnt: zwei Kultisten und ein Tiefling. Ihre Motive wechseln sich ab.',()=>{Music.scene('kampf');['kultist','kultist','tiefling'].forEach(Music.foeSpawn);play('pick');}],
+  [11,'Angriff und Block.',act.strike],[12.5,'',act.block],
+  [14,'Zwei Reaktionen hintereinander: die Antworttöne steigen.',act.react],
+  [15.5,'',act.react],
+  [19,'Treffer: die Musik zuckt kurz weg.',act.hit],
+  [22,'',act.strike],[23,'',act.strike],
+  [24,'Ein Kultist fällt. Der zweite lebt noch, sein Motiv bleibt.',()=>{Music.foeDie('kultist');play('die');}],
+  [29,'Der Tiefling kündigt einen großen Angriff an: etwas schwillt an.',act.tel],
+  [33,'Der Angriff trifft hart. Gefahr steigt: Tempo hoch, Harmonie kippt.',()=>{Music.hit(12);play('hurt');}],
+  [37,'Kette aus drei Reaktionen.',act.react],[38,'',act.react],[39,'',act.react],
+  [42,'Der letzte Kultist fällt: sein Abgesang. Jetzt ist nur noch der Tiefling da: Duell.',()=>{Music.foeDie('kultist');play('die');}],
+  [45,'Heilen: Akkordtöne nach oben, passend zur Musik.',act.heal],[47,'',act.strike],
+  [50,'Ein schwerer Treffer. Wenig Leben, eng.',()=>{Music.hit(16);play('hurt');}],
+  [56,'HOCHREAKTION: kurz Atem holen, dann alles.',act.hoch],
+  [68,'Der Tiefling stirbt. Sieg: Schlussakkord in Dur, dann Ruhe.',()=>{Music.foeDie('tiefling');play('die');setTimeout(act.win,600);}],
+  [80,'Zurück auf der Karte. Die Musik gleitet langsam herunter.',()=>{}],
+  [92,'',()=>{stopDemo();}]
+ ];
+ steps.forEach(([sec,txt,fn])=>demoT.push(setTimeout(()=>{if(txt)story(txt);fn();},sec*1000)));
+};
+</script>
+</body>
+</html>
