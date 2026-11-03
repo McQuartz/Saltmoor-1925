@@ -8,8 +8,8 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt. Eine neue 
 |---|---|---|
 | M0 Einlesen und Aufräumen | fertig | Bestandsaufnahme, Plan, Draft-PR |
 | M1 Run-Gerüst | fertig | Seed, fünf Akte, Gabelungen, Weg-Wahl, alle Knoten, Strand, Ankunft, Speichern |
-| M2 Kampf-UI Variante A | offen | |
-| M3 Dev-Modus und Autospieler | offen | |
+| M2 Kampf-UI Variante A | fertig | 480 × 270, Karten, Stoffzeichen, Balken, Vorschau, Stummfilm nur bei Anlässen; Galerie der Bausteine fehlt noch (M10) |
+| M3 Dev-Modus und Autospieler | fertig | sechs Reiter, Einblendungen, Bot in Node und Browser |
 | M4 Musik im Spiel | offen | |
 | M5 Meta und Progression | offen | |
 | M6 Sprite-Pipeline (KI-Sprites) | offen | |
@@ -64,7 +64,44 @@ Was der Prototyp heute kann (Stand `main`, 92b3cad), Bildschirmfotos in `bilder/
 
 **Abnahme:** `node tools/test-run.js`: alle vier Wege kommen in 20 Seeds vor (hafen/salz 8, hafen/stadt 6, moor/stadt 4, moor/salz 2), gleicher Seed = gleicher Weg und gleiche Weg-Wahl, Ebenen-Regeln für 100 Seeds (1800 Ebenen) eingehalten. Durchlauf bis zur Ankunft mit beiden Enden geprüft (Autospieler mit viel Leben), Strand nach Niederlage geprüft. Laden mitten im Run → derselbe Kampf mit derselben Hand. Keine Konsolenfehler außer den noch fehlenden Hintergrund-Dateien (M8).
 
-**Einschätzung:** Das Gerüst trägt: Akte, Gabelungen und Knoten fühlen sich schon wie ein Abstieg an, die Weg-Hinweise geben Ort. Schwach ist noch die Balance (der Autospieler kommt im Schnitt bis Tiefe 10, die Wächter ab Akt 2 sind zu stark), und die Gegner sind bis M7 die vier alten. Bilder: `bilder/M1/`.
+**Einschätzung (M1):** Das Gerüst trägt: Akte, Gabelungen und Knoten fühlen sich schon wie ein Abstieg an, die Weg-Hinweise geben Ort. Schwach ist noch die Balance (der Autospieler kommt im Schnitt bis Tiefe 10, die Wächter ab Akt 2 sind zu stark), und die Gegner sind bis M7 die vier alten. Bilder: `bilder/M1/`.
+
+### M2 Kampf-UI Variante A (fertig, Galerie-Seite fehlt)
+
+Neue Oberfläche: `index.html`, `css/spiel.css`, `js/ui/oberflaeche.js`, `js/ui/eingabe.js`, `js/ui/feedback.js`, `js/ui/zeichen.js`, `js/scenes/buehne.js`. Szene 480 × 270, ganzzahlig skaliert (`--u`), Pixel scharf.
+
+| Punkt aus „Ausgangslage Variante A“ | Stand |
+|---|---|
+| Stoffe als 9×9-Pixelzeichen | umgesetzt (ganzzahlig 9/18 px), auch Absichten, Zustände, Knotenarten |
+| Karten Art déco, Item-Bild im Bogenfenster, Stoffe klein oben rechts, Reaktion unten in Gold | umgesetzt |
+| Hand nebeneinander, leicht schief und versetzt | umgesetzt |
+| Reagiert: Gold mit Schein; unentdeckt „? ? ?“ violett; „In sich: …“ blau; zu teuer abgedunkelt | umgesetzt |
+| Absicht als Zeichen + Zahl, weiß mit schwarzem Rand, geschwächt durchgestrichen | umgesetzt |
+| Balken mit Block-Schraffur, Zahlen, Zustände als Zeichen, Name + Schwachstelle | umgesetzt (Name/Balken unter den Füßen wie im Entwurf) |
+| Spieler oben links mit Warnung „19 kommen → −11 Leben“ | umgesetzt |
+| Energie-Rauten, Art-déco-Knopf, Stapel/Ablage | umgesetzt |
+| Kopfzeile „TIEFE IX · ZUG 3“, kursiv Zone, Gold, Buch | umgesetzt |
+| Stoffrad nur mit Linien zu dem, was jetzt reagiert | umgesetzt (bekannt farbig, unentdeckt gestrichelt violett) |
+| Versetzte Aufstellung, hinten höher, 90 %, im Nebel | umgesetzt (Reihen kommen aus der Szene) |
+| Stummfilm nur bei Wächter, Boss, markiertem Ereignis | umgesetzt (`balance.stummfilm`, max. 1 pro Kampf, frühestens alle 3 min, 1,2 s, Augen behalten Farbe) |
+| Szene im Ziel-Look | kommt mit M8 |
+| keine Art-déco-Ecken um die Szene | eingehalten |
+
+Dazu: Schadens-Vorschau (schraffiert, „−8“), Hochreaktions-Zwischentitel (0,6 s), alle anderen Bildschirme im selben Stil (Titel, Figurwahl, Übergang, Weg-Wahl, Belohnung, Krämer, Ereignis als Zettel, Werkstatt, Rast, Wandbild, Fundstelle, Strand, Ankunft, Ende, Buch, Tagebuch, Einstellungen). Ausrüstung unter der Szene, Ziehen/Ablegen wie bisher.
+
+**Abnahme:** Vorschau gegen echten Schaden: `node tools/test-vorschau.js` → 309 Karten, 0 Abweichungen (die Vorschau spielt die Karte auf einer Kopie des Zustands, darum gleiche Rechnung). Stummfilm: wird im Code nur an drei Stellen ausgelöst (Wächter, Finale, `events.json` mit `stummfilm: true`), Hochreaktionen lösen ihn nicht aus. Lesbar bei 1280 × 720, keine Konsolenfehler.
+
+**Einschätzung:** Der Kampf sieht jetzt wie der Entwurf aus und liest sich klar. Schwach: Die alten Gegner (Kultist, Tiefling, Ertrunkener) sind bunt und cartoonig und brechen den Look bis M6. Die Gegner-Infos können sich bei vier Gegnern berühren. Eine eigene Galerie-Seite der UI-Bausteine fehlt noch (kommt mit M10). Bilder: `bilder/M2/`.
+
+### M3 Dev-Modus und Autospieler (fertig)
+
+- `js/dev/dev.js`: Knopf DEV, Taste D, `?dev=1`. Reiter **Jetzt** (letztes Warum, Kette, Hochreaktionen frei/benutzt, offene Kombos je Handkarte mit Reaktion, „unentdeckt“ und Vorschau-Schaden, letzte Ereignisse), **Kampf** (Muster mit nächstem Zug, Skalierung, Schadensrechnung der letzten 10 Treffer, Sets, Stapel/Ablage), **Run** (Seed kopierbar, Weg mit Grund, nächste Weg-Wahlen per Seed, Fundpool, Beute, Meta), **Musik** (Kurven, Layer, Stimmen, Entscheidungen), **Log** (filterbar, Export), **Cheats** (Akt, Gabelung, jeder Knoten, Gegner spawnen, Item, Karte, Leben, Energie, Gold, Reaktionen, Meta zurücksetzen/alles frei, Stummfilm, Jumpscare, Autospieler sichtbar mit Tempo oder schnell). Einblendungen in der Szene: ID, nächster Zug, Reihe, Warum-Zeile.
+- Alle Systeme melden über den Bus mit `why` (Reaktion, Schaden aufgeschlüsselt, Block, Zustände, Gegnerzüge, Set-Boni, Weg, Belohnung, Fragment, Freischaltung).
+- Autospieler `js/dev/bot.js` (gierig über die Vorschau), im Browser `?bot=50&seed=1`, in Node `node tools/bot.js 50 1`, im Browser headless `node tools/bot-browser.js 20 1`.
+
+**Abnahme:** 20 Seeds im Browser: alle Runs enden, 0 Fehler, keine Konsolenfehler (Tabelle unten). Stichprobe der Warum-Sätze: 120 Reaktionen in 3 Runs, jede mit Auslöser und Paar (z. B. „Zersetzen ausgelöst: Eisen von der Karte davor trifft Salz (Paar ES aus reactions.json)“). Offene Kombos = tatsächliches Ergebnis, weil beide dieselbe Rechnung nutzen (Vorschau-Test oben). Ohne Dev ist nur der kleine Knopf zu sehen.
+
+**Einschätzung:** Sehr nützlich, vor allem die Vorschau je Handkarte und die Weg-Vorschau. Schwach: Der Reiter Musik zeigt erst nach M4 alles. Bilder: `bilder/M3/`.
 
 ## Entscheidungen unterwegs
 
@@ -82,6 +119,7 @@ Was der Prototyp heute kann (Stand `main`, 92b3cad), Bildschirmfotos in `bilder/
 
 | Datum | Stand | Seeds | Gewinnrate | Ø Tiefe | häufigste Niederlage | Fehler |
 |---|---|---|---|---|---|---|
+| 2026-11-03 | M3, Browser (`tools/bot-browser.js 20 1`) | 1–20 | 0 % | 10,3 | Kapelle (7 von 20) | 0 |
 
 ## Probleme und Ersatzwege
 

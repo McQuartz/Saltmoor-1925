@@ -38,8 +38,8 @@ module.exports = {
       const ex = [r(hx - v.kb + 3), r(hx + v.kb - 4)], ey = r(hy - 1);
       ex.forEach(x => {
         if (P0.aus) { P.el(x + 0.5, ey + 0.5, v.auge * 0.7, v.auge * 0.7, 'k0', true); return; }
-        P.glow(x + 0.5, ey + 0.5, 7, 0.9);
-        P.el(x + 0.5, ey + 0.5, v.auge * 0.75, v.auge * 0.75, 'glut', true); P.set(x, ey, 'kern');
+        P.glow(x + 0.5, ey + 0.5, 6, 0.6);
+        P.el(x + 0.5, ey + 0.5, v.auge * 0.75, v.auge * 0.75, 'glutDim', true); P.set(x, ey, 'kern'); P.set(x - 1, ey, 'glut'); P.set(x, ey + 1, 'k0');
         augen.push([x, ey]);
       });
       for (let i = -4; i <= 3; i++) P.auf(hx + i, hy + 4, 'k0'); // Maul, breit

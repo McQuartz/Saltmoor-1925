@@ -139,7 +139,7 @@ Mk._bb = function (x0, y0, x1, y1) {
   x0 = Math.max(Math.floor(x0), -M); y0 = Math.max(Math.floor(y0), -M); x1 = Math.min(Math.ceil(x1), W + M - 1); y1 = Math.min(Math.ceil(y1), H + M - 1);
   return [x0, y0, x1, y1];
 };
-Mk._grow = function (x0, y0, x1, y1) { if (x0 < this.x0) this.x0 = x0; if (y0 < this.y0) this.y0 = y0; if (x1 > this.x1) this.x1 = x1; if (y1 > this.y1) this.y1 = y1; };
+Mk._grow = function (x0, y0, x1, y1) { if (x1 < x0 || y1 < y0) return; if (x0 < this.x0) this.x0 = x0; if (y0 < this.y0) this.y0 = y0; if (x1 > this.x1) this.x1 = x1; if (y1 > this.y1) this.y1 = y1; };
 Mk.has = function (x, y) { x = Math.floor(x) + M; y = Math.floor(y) + M; if (x < 0 || y < 0 || x >= EW || y >= EH) return false; return this.d[y * EW + x] > 0; };
 Mk.put = function (x, y, v) { const i = (y + M) * EW + x + M; this.d[i] = v; };
 Mk.fn = function (x0, y0, x1, y1, f, v) {
@@ -176,7 +176,7 @@ Mk.pfad = function (pts, r0, r1, v) {
   for (let i = 0; i < n; i++) this.kap(pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], r0 + (r1 - r0) * i / n, r0 + (r1 - r0) * (i + 1) / n, v);
   return this;
 };
-Mk.leer = function () { return this.x1 < this.x0; };
+Mk.leer = function () { return this.x1 < this.x0 || this.y1 < this.y0; };
 
 // ---------- Form: Maske mit Fase, Randlicht, Kontaktschatten rendern ----------
 B.L = [.75, -.66];

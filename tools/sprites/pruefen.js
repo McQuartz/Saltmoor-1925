@@ -63,7 +63,10 @@ for (const name of namen) {
     if (s.licht / s.n > 0.06) fehler.push(`${a} ${c}: helle Lichtfarben (Kern/Glut) auf ${Math.round(100 * s.licht / s.n)} % der Fläche (nur Akzente erlaubt)`);
     if (s.r2 / s.n > 0.15) fehler.push(`${a} ${c}: helles Randlicht auf ${Math.round(100 * s.r2 / s.n)} % der Fläche`);
     if (a === 'idle') {
-      if (idlePrev) { let d = 0; for (let i = 0; i < s.b.length; i++) if (s.b[i] !== idlePrev[i]) d++; flacker = Math.max(flacker, d / s.n); }
+      if (idlePrev) { // Unterschied zum Vorbild, beste ganzzahlige Verschiebung um ±1 px abgezogen (Bewegung ist kein Flackern)
+        const W = meta.w, H = meta.h; let best = 1e9;
+        for (let oy = -1; oy <= 1; oy++) for (let ox = -1; ox <= 1; ox++) { let d = 0; for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const sx = x - ox, sy = y - oy; const pv = sx >= 0 && sy >= 0 && sx < W && sy < H ? idlePrev[sy * W + sx] : 0; if (s.b[y * W + x] !== pv) d++; } best = Math.min(best, d); }
+        flacker = Math.max(flacker, best / s.n); }
       idlePrev = s.b;
       if (c === 0 && !s.licht) fehler.push('idle 0: keine Augen/Lichter');
     }
