@@ -1,7 +1,7 @@
 # Sprite-Generator – JS-Referenz (M1)
 
 Referenzimplementierung der Generator-Kette aus [docs/spritegen/03-architektur.md](../../docs/spritegen/03-architektur.md) in JavaScript (Node, ohne Abhängigkeiten).
-Ziel ist **Godot 4 / GDScript** unter `game/addons/spritegen/`; dieser Code ist die Vorlage für den Port (siehe Entscheidung vom 2026-11-03 in `docs/spritegen/entscheidungen.md`).
+Der Godot-Port liegt unter `game/addons/spritegen/` und ist bitgleich; dieser Code bleibt als schnelle Vergleichs-Implementierung. Änderungen an der Kette immer in beiden machen und Hashes vergleichen (siehe Entscheidung vom 2026-11-03 in `docs/spritegen/entscheidungen.md`).
 
 ## Benutzen
 
@@ -36,4 +36,4 @@ Index-Bild: `0` transparent, `1` Umriss, `2..5` Rampe dunkel → hell. Paletten:
 - RNG: Ganzzahlen in GDScript sind 64 Bit → nach jeder Operation `& 0xFFFFFFFF`; `Math.imul` = Produkt maskiert. Referenzfolge für Seed 1 steht im Test (`2527132011, 314344336, 2535364964`).
 - Gleitkomma: JS und GDScript rechnen beide mit double. `+ − × ÷ sqrt` sind bitgleich, `sin/cos` können je Plattform minimal abweichen → Goldens werden in Godot neu erzeugt, nicht übernommen.
 - Alle Regeln lesen aus dem Eingabebild und schreiben in eine Kopie; Reihenfolge der Schleifen ist darum egal.
-- Laufzeit hier ~80 ms je Sprite (ein Bild). Für 4 Animationen × 8 Bilder wird das zu langsam → in Godot Supersampling nur an Randpixeln, Knochen-Vorauswahl je Pixel oder Shader.
+- Laufzeit: JS ~45 ms je Bild, Godot ~1,4 s je Bild (Supersampling nur am Rand ist in beiden umgesetzt).

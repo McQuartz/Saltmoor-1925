@@ -12,3 +12,7 @@ Hier entsteht die richtige Version in Godot 4 mit GDScript. Geplante Aufteilung,
 | `js/ui/feedback.js` | `FeedbackPlayer`: Partikel, Screenshake, Hitstop, Sounds |
 
 Details stehen im Tech-Stack-Dokument (Link in der Haupt-README).
+
+## Schon da
+
+- `addons/spritegen/`: prozeduraler Sprite-Generator (M1), siehe dort.

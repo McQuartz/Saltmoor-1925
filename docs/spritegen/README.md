@@ -31,7 +31,7 @@ Budget: rund **150 € Claude-Guthaben** für das ganze Vorhaben. Aufteilung in 
 | Etappe | Stand |
 |---|---|
 | Recherche | erledigt (2026-11-02) |
-| M1 Technik-Probe | umgesetzt als JS-Referenz in `tools/spritegen/` (2026-11-03), **Abnahme offen**; Bogen: [sheets/M1/biped_seed1-16.png](sheets/M1/biped_seed1-16.png) |
+| M1 Technik-Probe | umgesetzt in Godot (`game/addons/spritegen/`, 2026-11-03) mit JS-Referenz (`tools/spritegen/`), **Abnahme offen**; Bogen: [sheets/M1/godot_biped_seed1-16.png](sheets/M1/godot_biped_seed1-16.png); offene Leistungsfrage siehe entscheidungen.md |
 | M2–M6 | offen |
 
 Das Sprite-Labor (`prototype/lab.html`) ist eine frühe Demo mit kombinierten Bauteilen. Es zeigt Paletten, Animationsloops und Welten-Schichten, ist aber **nicht** die Grundlage des Generators (siehe [01-recherche.md](01-recherche.md)).

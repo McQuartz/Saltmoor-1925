@@ -23,7 +23,7 @@ export const BIPED_PARAMS = [
   'asym',       // Asymmetrie nah/fern
 ];
 
-const round4 = (x) => Math.round(x * 10000) / 10000;
+const round4 = (x) => Math.floor(x * 10000 + 0.5) / 10000; // wie im Godot-Port
 
 export function makeGenome(seed, plan = 'biped', palette = 'tiefsee') {
   if (plan !== 'biped') throw new Error(`Körperbau ${plan} gibt es in M1 noch nicht`);

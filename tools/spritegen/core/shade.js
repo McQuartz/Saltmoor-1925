@@ -9,7 +9,7 @@ export const BACK_DARKEN = 0.16;
 export const THRESHOLDS = [0.3, 0.55, 0.8];
 
 function normalize(v) {
-  const l = Math.hypot(v[0], v[1], v[2]);
+  const l = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   return [v[0] / l, v[1] / l, v[2] / l];
 }
 

@@ -97,7 +97,8 @@ export function buildSkeleton(genome, size = { w: 64, h: 80, footX: 32, footY: 7
     const ankleY = ground - footR;
     const ankle = [hip[0] - s.swing * stance * 0.5, ankleY, hip[2]];
     // Kniebeugung: Knochen länger als der Abstand Hüfte–Knöchel, IK beugt das Knie nach vorne.
-    const dist = Math.hypot(ankle[0] - hip[0], ankle[1] - hip[1]);
+    const ddx = ankle[0] - hip[0], ddy = ankle[1] - hip[1];
+    const dist = Math.sqrt(ddx * ddx + ddy * ddy);
     const seg = (dist / 2) / lerp(0.99, 0.82, p.knee);
     const knee = ik2(hip, ankle, seg, seg, hip[2]);
     const toe = [ankle[0] - footR * 2.2, ankleY, hip[2]];

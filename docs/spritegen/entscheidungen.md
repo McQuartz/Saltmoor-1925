@@ -4,6 +4,12 @@ Neueste oben. Jede Sitzung trägt hier ein, was sie festgelegt hat und warum.
 
 | Datum | Entscheidung | Warum |
 |---|---|---|
+| 2026-11-03 | Godot **4.3-stable** (offizielle Linux-Version) für headless Render und Tests | Version für AGENTS.md notiert; Download wurde in der Sitzung freigegeben |
+| 2026-11-03 | M1 nach Godot portiert (`game/addons/spritegen/`), bitgleich zur JS-Referenz; JS bleibt als schnelle Vergleichs-Implementierung | gleicher Index-Hash über alle 32 Bilder des Bogens, Godot-Tests prüfen gegen dieselben Goldens |
+| 2026-11-03 | Positionen in GDScript als Float-Arrays (64 Bit), nicht `Vector3` | `Vector3` hat nur 32 Bit, wäre nicht bitgleich |
+| 2026-11-03 | Supersampling nur, wo die 3×3-Nachbarschaft der Pixelmitten gemischt ist | ~2× schneller, über 64 Seeds bitgleich zum vollen Supersampling (Goldens unverändert) |
+| 2026-11-03 | Vorerst eigener kleiner Test-Runner (`cli/test.gd`) statt GUT | keine neue Abhängigkeit in M1; GUT laut Fahrplan in M2 |
+| 2026-11-03 | **Offen (Mensch entscheidet):** Leistung. GDScript braucht ~1,4 s je Bild, Ziel war < 100 ms für 32 Bilder. Möglichkeiten: Sprites beim Bauen/im Editor vorab erzeugen und als PNG/`SpriteFrames` speichern; Shader; GDExtension (C++) | Architektur trägt für Erzeugung beim Laden so nicht |
 | 2026-11-03 | M1 als **JavaScript-Referenz** in `tools/spritegen/` statt in Godot (Mensch hat ausdrücklich entschieden) | Godot-Download in der Cloud-Sitzung war gesperrt; Algorithmen sind engine-unabhängig und werden in M2 nach GDScript portiert. Ziel bleibt Godot. |
 | 2026-11-03 | Keine neue Abhängigkeit: nur Node-Bordmittel (`node:zlib` für PNG, `node:test` für Tests) | Regel aus AGENTS.md |
 | 2026-11-03 | RNG = splitmix32 mit `fork(name)` je Parameter | nur 32-Bit-Ganzzahl-Arithmetik, leicht portierbar; neue Parameter verschieben alte Werte nicht |

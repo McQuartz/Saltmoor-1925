@@ -107,21 +107,36 @@ export function rasterize(skeleton) {
   const S = SUPERSAMPLE;
   const tmp = { bone: -1, group: -1 };
   const { box } = scene;
+  // Durchgang 1: nur Pixelmitten. Durchgang 2: Supersampling nur, wo die 3×3-Nachbarschaft
+  // gemischt ist (Rand). Ganz innen = voll abgedeckt, ganz außen = leer.
+  const centerZ = new Float64Array(n).fill(NaN);
+  const inBox = (x, y) => !(y + 1 < box.y0 || y > box.y1 || x + 1 < box.x0 || x > box.x1);
   for (let y = 0; y < h; y++) {
-    if (y + 1 < box.y0 || y > box.y1) continue;
     for (let x = 0; x < w; x++) {
-      if (x + 1 < box.x0 || x > box.x1) continue;
+      if (inBox(x, y)) centerZ[y * w + x] = march(scene, x + 0.5, y + 0.5);
+    }
+  }
+  const centerHit = (x, y) => x >= 0 && y >= 0 && x < w && y < h && !Number.isNaN(centerZ[y * w + x]);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (!inBox(x, y)) continue;
+      let nHit = 0;
+      for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) if (centerHit(x + i, y + j)) nHit++;
+      if (nHit === 0) continue;
       let hits = 0, sx = NaN, sy = NaN, sz = NaN;
-      // Mittelpunkt zuerst als Probe für Normale/Tiefe.
-      const cz = march(scene, x + 0.5, y + 0.5);
+      const cz = centerZ[y * w + x];
       if (!Number.isNaN(cz)) { sx = x + 0.5; sy = y + 0.5; sz = cz; }
-      for (let j = 0; j < S; j++) {
-        for (let i = 0; i < S; i++) {
-          const fx = x + (i + 0.5) / S, fy = y + (j + 0.5) / S;
-          const z = march(scene, fx, fy);
-          if (!Number.isNaN(z)) {
-            hits++;
-            if (Number.isNaN(sz)) { sx = fx; sy = fy; sz = z; }
+      if (nHit === 9) {
+        hits = S * S;
+      } else {
+        for (let j = 0; j < S; j++) {
+          for (let i = 0; i < S; i++) {
+            const fx = x + (i + 0.5) / S, fy = y + (j + 0.5) / S;
+            const z = march(scene, fx, fy);
+            if (!Number.isNaN(z)) {
+              hits++;
+              if (Number.isNaN(sz)) { sx = fx; sy = fy; sz = z; }
+            }
           }
         }
       }
