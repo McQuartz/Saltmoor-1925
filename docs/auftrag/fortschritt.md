@@ -11,8 +11,8 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt. Eine neue 
 | M2 Kampf-UI Variante A | offen | |
 | M3 Dev-Modus und Autospieler | offen | |
 | M4 Musik im Spiel | offen | |
-| M5 Sog und Meta | offen | |
-| M6 Sprite-Pipeline | offen | |
+| M5 Meta und Progression | offen | |
+| M6 Sprite-Pipeline (KI-Sprites) | offen | |
 | M7 Gegner-Besetzung | offen | |
 | M8 Hintergründe | offen | |
 | M9 Inhalte und Balance | offen | |

@@ -2,6 +2,8 @@
 
 Aces Urteil über die heutigen Hintergründe: zu neblig, zu dezent, Kapelle, Grund und Wald sehen sich ähnlich, die Wechsel sind kaum zu sehen. Gewünscht: **umfangreich neu**, im **Artstyle der Figuren**, mit **echter Tiefe**, so dass man das Gefühl hat, **wirklich an einem Ort zu sein**. Lovecraftartig, **intriguing**, nicht Standard-Horror.
 
+**Nachtrag aus dem [Briefing](00-briefing.md):** Hier ist deutlich mehr Aufwand vorgesehen. Details werden nicht nach starren, wiederkehrenden Regeln platziert. Jede Umgebung bekommt eine eigene Komposition und wirkt nicht nach Schema F. Die Ebenen unten sind das technische Gerüst, nicht der Bildaufbau. Vor dem Bauen wird jede Komposition in `hintergruende-kompositionen.md` in Worten skizziert (M8).
+
 Die Steckbriefe der sieben Orte (Wahrzeichen, falsches Detail, Palette) stehen in [04-welt-und-run.md](04-welt-und-run.md), Abschnitt 8. Diese Datei sagt, **wie** sie gebaut werden.
 
 ## 1. Gleicher Stil wie die Figuren

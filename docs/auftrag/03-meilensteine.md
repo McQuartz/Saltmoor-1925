@@ -6,20 +6,22 @@ Achtung Namensgleichheit: Die Etappen des Sprite-Generators in `docs/spritegen/`
 
 **Mindestens** markiert den Stand, der reicht, wenn die Zeit knapp wird. Alles andere im Meilenstein ist das Ziel.
 
+Das [Briefing](00-briefing.md) hat Vorrang. Die Meilensteine unten sind daran angepasst.
+
 Reihenfolge mit Absicht: **Nach M5 ist ein kompletter Run mit Motivation spielbar** (noch mit alter Grafik). M6 bis M10 machen ihn schön und reich. So gibt es auch bei einem Abbruch etwas Spielbares.
 
 | | Meilenstein | Ergebnis |
 |---|---|---|
-| M0 | Einlesen und Aufräumen | Branch, Mos Generator im Branch, Bestandsaufnahme, Draft-PR |
-| M1 | Run-Gerüst | Seed, fünf Akte, Gabelungen, Weg-Wahl, Strand, Ende, Speichern |
+| M0 | Einlesen und Aufräumen | Branch, Bestandsaufnahme, Draft-PR |
+| M1 | Run-Gerüst | Seed, fünf feste Akte, Gabelungen, Weg-Wahl, Knoten zwischen den Kämpfen, Strand, Ende, Speichern |
 | M2 | Kampf-UI Variante A | Kampfbildschirm wie abgestimmt, alle anderen Bildschirme im selben Stil |
 | M3 | Dev-Modus und Autospieler | sieht alles, erklärt alles, spielt selbst |
 | M4 | Musik im Spiel | Layer-Musik hängt am Spiel, alle sieben Biome, Einstellungen |
-| M5 | Sog und Meta | Sog-Leiste, Wandbilder, Tagebuch, Figuren mit Ausrede, Ankunft |
-| M6 | Sprite-Pipeline | Generator → PNG-Sheets → Spiel, mit Animation |
-| M7 | Gegner-Besetzung | alle Gegner, Wächter und der Finale-Boss im Ziel-Look |
-| M8 | Hintergründe | sieben Orte mit Tiefe, neu gebaut |
-| M9 | Inhalte und Balance | Items, Ereignisse, Fundpools, Balance per Autospieler |
+| M5 | Meta und Progression | Progressions-Konzept, Wandbilder, Freischaltungen, Tagebuch, Figuren mit Ausrede, Ankunft |
+| M6 | Sprite-Pipeline | KI-Sprites nach Pixel-Art-Regeln → Regel-Prüfung → PNG-Sheets → Spiel, mit Animation |
+| M7 | Gegner-Besetzung | wenige starke Gegner mit Konzept, Wächter und Finale-Boss im Ziel-Look |
+| M8 | Hintergründe | sieben Orte mit Tiefe und eigener Komposition, organisch, neu gebaut |
+| M9 | Inhalte und Balance | Items, Ereignisse, Krämer, Fundpools, Balance per Autospieler |
 | M10 | Politur | Übergänge, Effekte, Galerie, Extras |
 | M11 | Abschluss | Prüfung, Bildschirmfotos, Bericht |
 
@@ -31,16 +33,16 @@ Reihenfolge mit Absicht: **Nach M5 ist ein kompletter Run mit Motivation spielba
 
 1. Alles aus der Leseliste im [PROMPT.md](PROMPT.md) lesen. Dazu einmal den Prototyp starten und kurz spielen (Playwright, Bildschirmfotos), `prototype/artboard.html`, `ideen.html`, `musik.html`, `klangliste.html`, `docs/ui/entwuerfe/kampf-ui-runde2.html` ansehen.
 2. Branch `auftrag/prototyp-run` von `main` anlegen.
-3. Mos Generator-Branch `origin/claude/spritegen-implementation-is4a6p` in den Auftrags-Branch **mergen**. Konflikte (vor allem `docs/spritegen/*`, `README.md`, `CLAUDE.md`, `prototype/js/procgen/*`, `prototype/lab.html`) so lösen, dass der neuere Stand von `main` für Doku-Texte gilt und Mos Code vollständig erhalten bleibt. Prüfen, ob `game/` mit Godot 4.3 headless lädt und die Generator-Tests (`game/addons/spritegen/cli/test.gd`) laufen. Wenn Godot fehlt: offizielle Linux-Version 4.3-stable laden. Klappt das nicht, notieren (wird in M6 wichtig).
+3. Mos Generator-Branch wird **nicht** gemergt (Generator nachrangig, siehe Briefing). Prüfen, ob in der Sitzung ein Bild-Generator zur Verfügung steht (wird in M6 wichtig), und das Ergebnis notieren.
 4. Bestandsaufnahme in `fortschritt.md`: was der Prototyp heute kann (Kampf, Reaktionen, Werkstatt, Krämer, Ereignisse, Zonen, Jumpscare, Galerie), was davon bleibt, was umgebaut wird. 10–20 Zeilen.
 5. Plan der Sitzung in `fortschritt.md` (5–10 Zeilen).
 6. Draft-PR gegen `main` öffnen, Titel „Spielbarer Prototyp-Run (Auftrag)“, Beschreibung: Link auf `docs/auftrag/README.md` und Checkliste M0–M11.
 
 **Abnahme**
 
-- [ ] Branch existiert, Mos Branch ist gemergt, `git log` zeigt den Merge.
-- [ ] Prototyp läuft nach dem Merge wie vorher (Bildschirmfoto Kampf).
-- [ ] Generator-Tests: Ergebnis notiert (grün, oder warum nicht).
+- [ ] Branch existiert.
+- [ ] Prototyp läuft wie vorher (Bildschirmfoto Kampf).
+- [ ] Notiert, ob ein Bild-Generator verfügbar ist.
 - [ ] `fortschritt.md` hat Bestandsaufnahme und Plan. Draft-PR ist offen.
 
 ---
@@ -53,12 +55,13 @@ Quelle: [04-welt-und-run.md](04-welt-und-run.md), Abschnitte 1–3, 7.
 
 1. **Seed:** eigener kleiner Zufallsgenerator (z. B. splitmix32 wie im Generator, mit `fork(name)`), Seed pro Run, `?seed=` in der Adresse, Anzeige im Dev-Modus. Alle Inhaltsentscheidungen (Wege, Begegnungen, Belohnungen, Krämer, Ereignisse, Aufstellung) laufen über ihn. Gleicher Seed + gleiche Entscheidungen = gleicher Run.
 2. **Daten:** `data/run.json` (Akte, Gabelungen, Ebenen-Regeln, Knotenarten, Übergangstexte), `data/biomes.json` (sieben Biome: Name, Palette, Musik-Fassung, Gegner, Fundpool, Ereignisse, Szenen-Varianten). `balance.json` → `zones` und `encounters.boss_depth` werden davon abgelöst.
-3. **Ablauf** in `js/core/run.js`: Strand (Start) → Figurwahl → fünf Akte mit je vier Ebenen (Pforte zwei) → Weg-Wahl nach jedem Knoten → Wächter am Ende jedes Akts → Finale → Ankunft (Bleiben/Umkehren). Verlieren → „Die Tiefe spuckt dich aus“ → Strand.
+3. **Ablauf** in `js/core/run.js`: Strand (Start) → Figurwahl → fünf feste Akte (Anzahl und Reihenfolge nie ändern) mit je vier Ebenen (Pforte zwei) → Weg-Wahl nach jedem Knoten → Wächter am Ende jedes Akts → Finale → Ankunft (Bleiben/Umkehren). Verlieren → „Die Tiefe spuckt dich aus“ → Strand.
 4. **Weg-Wahl-Bildschirm:** zwei bis drei Wege mit Zeichen und Hinweistext. Der nächste Akt wird beim Wächter angekündigt („Hinter ihm führt eine Treppe nach unten“).
 5. **Figuren:** `data/jobs.json` auf die sechs Startfiguren umbauen (Tabelle in 04, Abschnitt 5), mit Feldern für Ausrede, Wahrheit, Einstieg-Vorliebe, Instrument, Freischaltung. Bis M5 sind alle sechs wählbar.
 6. **Neue Biome ohne neue Grafik:** Bis M8 nutzen Salzstollen, Stadt, Eis und Pforte vorläufig die vorhandenen Szenen (`grund`, `kapelle`, …) mit ihrer Palette. Gegner bis M7 aus dem vorhandenen Pool, nach Biom zugeordnet.
 7. **Speichern:** Run nach jedem Knoten in `localStorage` sichern, „Fortsetzen“ im Titel.
 8. Übergangsbild zwischen Akten (Text auf schwarzem Grund reicht vorerst).
+9. **Knoten zwischen den Kämpfen** spielbar machen: Ereignis, Krämer, Werkstatt, Rast, Wandbild (vorläufig schlicht, Inhalte in M5 und M9). Jeder Knoten hat einen eigenen Bildschirm, keinen leeren Platzhalter.
 
 **Abnahme**
 
@@ -82,7 +85,7 @@ Quellen: [docs/ui/kampf-ui.md](../ui/kampf-ui.md) (Tabelle „Ausgangslage“), 
 3. **Versetzte Aufstellung:** drei Tiefenreihen, hinten höher, 90 % Größe, leicht im Nebel, gezeichnet von hinten nach vorne, Aufstellung per Seed mit etwas Zufall, Gegner überdecken sich nie so, dass Absicht oder Balken verdeckt sind.
 4. **Schadens-Vorschau** beim Anheben/Ziehen einer Karte (schraffiert auf dem Balken, inklusive Reaktion und Schwachstelle).
 5. **Hochreaktions-Zwischentitel** (0,6 s, Art déco).
-6. **Stummfilm-Rauschen dezent und selten:** nur bei Anlässen (Hochreaktion, Wächter/Boss erscheint, Sog-Stufenwechsel), höchstens einmal pro Kampf, frühestens alle 3 Minuten, ca. 1,2 s, schwächer als im Entwurf. Werte in `balance.json` → `stummfilm`. Augen behalten ihre Farbe.
+6. **Stummfilm-Rauschen fest definiert, nur bei besonderen Anlässen:** wenn ein Elite-Gegner (Wächter) oder der Boss erscheint, oder ein besonderes Ereignis es anfordert (`stummfilm: true` in `events.json`). Nie dauerhaft, kein Takt, nicht bei Hochreaktionen, höchstens einmal pro Kampf, frühestens alle 3 Minuten, ca. 1,2 s, schwächer als im Entwurf. Werte in `balance.json` → `stummfilm`. Augen behalten ihre Farbe.
 7. **Alle anderen Bildschirme** in derselben Formensprache: Titel, Strand, Figurwahl, Weg-Wahl, Belohnung, Werkstatt, Krämer, Ereignis, Rast, Übergang, Ankunft, Tagebuch (Platzhalter bis M5), Einstellungen (Lautstärke Musik/Effekte, Stummfilm an/aus, Jumpscare an/aus, Dev-Schalter).
 8. Ausrüstung (Waffen, Kleidung, Talismane, Rucksack) unter der Szene im selben Stil, Ziehen und Ablegen funktioniert wie heute.
 9. `gallery.html` zeigt die neuen UI-Bausteine.
@@ -90,7 +93,7 @@ Quellen: [docs/ui/kampf-ui.md](../ui/kampf-ui.md) (Tabelle „Ausgangslage“), 
 **Abnahme**
 
 - [ ] Bildschirmfoto Kampf neben `variante-a.png` gelegt: Jeder Punkt der Tabelle ist umgesetzt oder als Abweichung mit Grund notiert.
-- [ ] Stummfilm kommt in einem 10-Minuten-Lauf des Autospielers (ab M3) höchstens bei Anlässen, nie in festem Takt.
+- [ ] Stummfilm kommt in einem 10-Minuten-Lauf des Autospielers (ab M3) nur bei Wächtern, Boss und markierten Ereignissen, nie sonst.
 - [ ] Schadens-Vorschau stimmt mit dem tatsächlichen Schaden überein (Test über 50 gespielte Karten im Autospieler, ab M3 nachholen).
 - [ ] Text und Zahlen sind bei 1280 × 720 lesbar. Keine Konsolenfehler.
 - **Mindestens:** Kampfbildschirm Variante A mit Stoffzeichen, Karten, Absichten, Balken mit Block, Energie, Kopfzeile, versetzter Aufstellung. Stoffrad und andere Bildschirme dürfen vereinfacht sein.
@@ -103,7 +106,7 @@ Quelle: [06-dev-modus.md](06-dev-modus.md).
 
 **Aufgaben**
 
-1. Alle Systeme melden über den Bus mit Grund (`why`): Reaktionen, Schaden (aufgeschlüsselt), Block, Zustände, Gegnerzüge, Set-Boni, Weg-Entscheidungen, Belohnungen, Sog (ab M5), Musik (ab M4).
+1. Alle Systeme melden über den Bus mit Grund (`why`): Reaktionen, Schaden (aufgeschlüsselt), Block, Zustände, Gegnerzüge, Set-Boni, Weg-Entscheidungen, Belohnungen, Freischaltungen (ab M5), Musik (ab M4).
 2. Dev-Panel mit den Reitern Jetzt, Kampf, Run, Musik (Platzhalter bis M4), Log, Cheats. Einblendungen in der Szene.
 3. Autospieler, sichtbar und schnell (`?bot=50&seed=1`), plus Kommandozeilen-Skript unter `tools/` mit Playwright.
 4. Die in M2 offenen Prüfungen (Schadens-Vorschau, Stummfilm-Häufigkeit) mit dem Autospieler nachholen.
@@ -145,75 +148,80 @@ Quellen: [quellen/layer-musik.md](quellen/layer-musik.md), `prototype/js/audio/m
 
 ---
 
-## M5 Sog und Meta
+## M5 Meta und Progression
 
-Quellen: [quellen/der-sog.md](quellen/der-sog.md), [04-welt-und-run.md](04-welt-und-run.md) Abschnitte 4–7.
+Quellen: [00-briefing.md](00-briefing.md) Abschnitte 2 und 8, [04-welt-und-run.md](04-welt-und-run.md) Abschnitte 5–7, [quellen/der-sog.md](quellen/der-sog.md) (nur Ton und Figuren). **Keine Sog-Leiste.**
 
 **Aufgaben**
 
-1. **Sog-Leiste** (0–10) mit Spiral-Zeichen oben links, Regeln und Stufen aus 04, Abschnitt 4, Werte in `data/sog.json`. Trugbild-Karte, Stärke-kostet-Verstand, Ertrinken. Sog speist die Gefahr-Achse der Musik.
+1. **Progressions-Konzept zuerst:** `docs/auftrag/progression.md`, höchstens eine Seite. Was bleibt über Runs, was wird freigeschaltet (Figuren, Items im Fundpool, Startvarianten, Schwierigkeitsstufen nach dem ersten Sieg), in welchem Takt kommt etwas Neues (Ziel: fast jeder Run schaltet etwas frei, auch ein verlorener), warum motiviert das. Zwei bis drei Varianten kurz vergleichen, eine wählen (Regel „Wie du entscheidest“), Entscheidung in `fortschritt.md`.
 2. **Wandbild-Knoten** mit prozeduralem Relief (vorläufig einfach, in M8 im Stil der Hintergründe) und Text auf abgerissenem Zettel. **21 Fragment-Texte** schreiben (drei je Biom), Regeln in 04, Abschnitt 6.
-3. **Meta-Speicher** `saltmoor.meta.v1`: Fragmente, Freischaltungen, Tagebuch-Statistik.
-4. **Figurwahl** am Strand: Figur, Ausrede, Set, Startdeck-Vorschau; gesperrte Figuren mit „… Fragmente“.
-5. **Tagebuch** im Titel.
-6. **Ankunft** nach dem Finale mit Bleiben/Umkehren und der Wahrheit der Figur.
-7. **Strand** nach Niederlage mit Zusammenfassung und neuen Freischaltungen.
-8. Ereignisse (vorhandene) um Sog-Preise ergänzen, wo es passt.
+3. **Meta-Speicher** `saltmoor.meta.v1`: Fragmente, Freischaltungen, Fortschritt nach dem gewählten Konzept, Tagebuch-Statistik.
+4. Die gewählte Progression in einer kleinen, spielbaren Fassung einbauen (Freischaltungen greifen sichtbar im nächsten Run).
+5. **Figurwahl** am Strand: Figur, Ausrede, Set, Startdeck-Vorschau; gesperrte Figuren mit Bedingung („… Fragmente“).
+6. **Tagebuch** im Titel.
+7. **Ankunft** nach dem Finale mit Bleiben/Umkehren und der Wahrheit der Figur.
+8. **Strand** nach Niederlage mit Zusammenfassung und neuen Freischaltungen.
 
 **Abnahme**
 
-- [ ] Autospieler-Lauf über 20 Seeds: Sog erreicht im Schnitt Stufe „Flüstern“ bis „Ruf“ im späten Run, selten 10. Werte notiert und bei Bedarf angepasst.
-- [ ] Fragmente bleiben nach Neuladen erhalten, Freischaltungen greifen, Dev-Reset setzt alles zurück.
+- [ ] `progression.md` liegt vor, mit gewählter Variante und Grund.
+- [ ] Autospieler-Lauf über 20 Seeds hintereinander mit gemeinsamem Meta-Speicher: Freischaltungen kommen in einem sinnvollen Takt (Tabelle in `fortschritt.md`: nach wie vielen Runs was frei ist).
+- [ ] Fragmente und Freischaltungen bleiben nach Neuladen erhalten, Dev-Reset setzt alles zurück.
 - [ ] Beide Enden und der Strand zeigen die richtigen Texte der Figur.
 - [ ] Die 21 Fragment-Texte stehen auch als Liste in `docs/auftrag/fragmente.md` (zum Gegenlesen für Ace).
-- **Ab hier ist ein kompletter Run mit Motivation spielbar.** Bildschirmfotos von Strand, Figurwahl, Weg-Wahl, Kampf, Wandbild, Ankunft nach `docs/auftrag/bilder/M5/`.
-- **Mindestens:** Sog-Leiste mit zwei Stufen, Wandbilder mit Texten, Ankunft, Strand. Tagebuch darf schlicht sein.
+- **Ab hier ist ein kompletter Run mit Motivation spielbar.** Bildschirmfotos von Strand, Figurwahl, Weg-Wahl, Kampf, Ereignis, Krämer, Wandbild, Ankunft nach `docs/auftrag/bilder/M5/`.
+- **Mindestens:** Konzept, Wandbilder mit Texten, Figuren-Freischaltung, Ankunft, Strand. Tagebuch darf schlicht sein.
 
 ---
 
-## M6 Sprite-Pipeline
+## M6 Sprite-Pipeline (KI-Sprites)
 
-Quellen: [docs/spritegen/](../spritegen/) (AGENTS.md, 03-architektur.md, zielbild.md, entscheidungen.md), Mos Code `game/addons/spritegen/`, `docs/spritegen/sheets/M3`–`M6`.
+Quellen: [00-briefing.md](00-briefing.md) Abschnitt 5, [docs/spritegen/zielbild.md](../spritegen/zielbild.md) (Pixel-Art-Regeln und Referenzbilder der bestätigten Figuren). Der Generator in `docs/spritegen/` ist **nachrangig** und wird nicht gebraucht.
 
 **Aufgaben**
 
-1. Mos Kontaktbögen M3–M6 ansehen und ehrlich gegen das Zielbild bewerten (in `fortschritt.md`): Wo stimmt der Look (Randlicht, Fase, dunkle Körper, Dither, Augen), wo nicht (Silhouetten, Lesbarkeit, Flackern laut `sheets/M5/README.md`).
-2. **Export-Weg** bauen: Ein Kommandozeilen-Skript rendert für eine Liste von Gegnern (aus `data/foes.json` → `generator`) die Animationen Idle, Angriff, Treffer, Tod als **PNG-Sheets mit JSON-Beschreibung** (Bildgröße, Bildzahl, Bildrate, Fußpunkt, Augenpositionen für Glühen, Kopfpunkt für die Absicht) nach `prototype/assets/gegner/`. Bevorzugt: Godot 4.3 headless mit Mos Generator. Ergebnisse werden committet (die Erzeugung ist deterministisch und dokumentiert, also kein Fremd-Asset).
-3. **Ersatzweg**, falls Godot nicht läuft: den Generator nach JavaScript portieren (aufbauend auf Mos M1-Referenz `tools/spritegen/`, Node-Bordmittel), gleiche Kette und Regeln, als Skript unter `tools/spritegen/`. Eintrag in `docs/spritegen/entscheidungen.md`. Bitgleichheit zu Godot ist dann kein Ziel, Determinismus schon.
-4. **Lader im Prototyp:** `js/sprites/` lädt Sheets, spielt Animationen (Idle-Loop, Angriff beim Gegnerzug, Treffer beim Treffer, Tod), Augen glühen gedithert, Zonenfarbe aus dem Biom. Das alte Teile-Labor (`creature.js`, `foes.js`) fliegt aus dem Kampf.
-5. Flackern senken, wenn es im Spiel stört (Hebel aus `sheets/M5/README.md`: Dither im Körperraum verankern, Randlicht mit Hysterese, Bewegung auf ganze Pixel runden). Goldens dabei bewusst neu erzeugen und notieren.
+1. **Regeln als Prüfskript** unter `tools/sprites/pruefen.js` (Node-Bordmittel): Bildgröße 96 × 120 (Wächter bis 128 × 160), nur Farben aus der Zonenpalette plus Augenfarbe, keine halbtransparenten Kantenpixel, kein durchgehender schwarzer Umriss, Randlicht vorhanden an der Lichtseite (oben rechts), hellste Pixel nur in den Augen. Gibt je Sprite einen kurzen Bericht aus.
+2. **Erzeugung per KI**, zwei Wege:
+   - **Bild-Generator verfügbar:** Sprite erzeugen und dann per Skript auf die Regeln bringen (auf Zielgröße mit Nächster-Nachbar herunterrechnen, auf die Zonenpalette quantisieren mit Bayer-Dither, Umriss entfernen, Randlicht nachziehen). Danach muss die Prüfung bestehen.
+   - **Kein Bild-Generator (Ersatzweg):** Der Agent zeichnet jedes Sprite selbst als Pixel-Art, als Formen und Pixel in einem Skript je Gegner (`tools/sprites/gegner/<id>.js`), das die PNG-Sheets schreibt. Fase, Randlicht und Dither dürfen dabei aus gemeinsamen Hilfsfunktionen kommen.
+3. **Animation:** je Gegner Idle (2–4 Bilder, ruhig), Angriff, Treffer, Tod als **PNG-Sheets mit JSON-Beschreibung** (Bildgröße, Bildzahl, Bildrate, Fußpunkt, Augenpositionen für Glühen, Kopfpunkt für die Absicht) nach `prototype/assets/gegner/`. Bewegung auf ganze Pixel, kein Flackern.
+4. **Lader im Prototyp:** `js/sprites/` lädt Sheets, spielt Animationen (Idle-Loop, Angriff beim Gegnerzug, Treffer beim Treffer, Tod), Augen glühen gedithert. Das alte Teile-Labor (`creature.js`, `foes.js`) fliegt aus dem Kampf.
+5. Arbeitsweise wie bei pixelfx (zeichnen, rendern, Kontaktbogen ansehen, verbessern), siehe Briefing Abschnitt 9.
+6. Weg und Arbeitsschritte in `docs/auftrag/sprites.md` dokumentieren, damit Ace und Mo später weitere Sprites genauso erzeugen können.
 
 **Abnahme**
 
-- [ ] Ein Befehl erzeugt alle Sheets neu, zweimal ausgeführt ergeben sich identische Dateien.
-- [ ] Generator-Tests grün (Godot) bzw. eigene Tests für den Port grün.
-- [ ] Im Kampf laufen Idle, Angriff, Treffer, Tod sichtbar und ruhig (Bildschirmfoto-Serie oder kurzes GIF aus Einzelbildern in `docs/auftrag/bilder/M6/`).
-- [ ] Silhouetten-Test: Jeder exportierte Gegner schwarz gefüllt bleibt erkennbar (Kontaktbogen mit Silhouetten in `docs/auftrag/bilder/M6/`).
-- **Mindestens:** Pipeline für Idle und Tod, drei Gegner im Spiel.
+- [ ] Alle Sprites im Spiel bestehen die Regel-Prüfung (Bericht in `fortschritt.md`).
+- [ ] Kontaktbogen der Sprites neben den Referenzbildern aus `zielbild.md` nach `docs/auftrag/bilder/M6/`, mit ehrlicher Einschätzung je Sprite: Passt es zu Chorknabe, Hirte, Netzflickerin?
+- [ ] Im Kampf laufen Idle, Angriff, Treffer, Tod sichtbar und ruhig (Bildschirmfoto-Serie in `docs/auftrag/bilder/M6/`).
+- [ ] Silhouetten-Test: Jeder Gegner schwarz gefüllt bleibt erkennbar (Kontaktbogen mit Silhouetten).
+- **Mindestens:** Prüfskript, die drei Favoriten mit Idle und Tod im Spiel.
 
 ---
 
 ## M7 Gegner-Besetzung
 
-Quellen: [04-welt-und-run.md](04-welt-und-run.md) Abschnitte 8–9, [zielbild.md](../spritegen/zielbild.md).
+Quellen: [00-briefing.md](00-briefing.md) Abschnitt 6, [04-welt-und-run.md](04-welt-und-run.md) Abschnitte 8–9 (Vorschläge), [zielbild.md](../spritegen/zielbild.md).
 
 **Aufgaben**
 
-1. **Archetypen** für alle Gegner aus den Steckbriefen als Generator-Vorgaben anlegen: Körperbauplan (biped, blob, crawler, floater, worm, bei Bedarf ein neuer Plan nach denselben Regeln), Parameterbereiche, Merkmale als Regeln („drei gestapelte Köpfe“, „Geweih mit leuchtenden Knoten“, „Mund senkrecht in der Brust“, „Kopf aufgeplatzt mit Tentakeln“, „zu lange Glieder, die abknicken“). **Keine Koordinaten aus den Zielbild-Bildern übernehmen.**
-2. Je Gegnertyp **Varianten per Seed** (gleicher Typ, leicht anders), damit zwei Kultisten nicht identisch sind.
-3. **Wächter** je Biom: größer (bis 128 × 160 erlaubt), eigener Archetyp, Besonderheit im Muster.
-4. **Finale-Boss „Das, was ruft“**: Handarbeit mit derselben Render-Kette (Formen im Code erlaubt), mehrere Phasen mit sichtbarer Veränderung, „Augen im Rand“ als Helfer. Die drei alten Entwürfe (`eye`, `maw`, `king`) dienen als Ideen.
+1. **Konzepte zuerst:** `docs/auftrag/gegner.md`. Je Gegner: Lovecraft-Motiv (z. B. das Ererbte, das Hybride, Wissen, das den Verstand kostet, unermessliche Zeit, falsche Geometrie), wer oder was er war, was an ihm falsch ist, Silhouette in einem Satz, Kampfverhalten passend zum Konzept (Muster, Schwachstelle mit Grund), Stimme in der Musik. Aus den Steckbriefen in 04 streichen, zusammenlegen oder ersetzen, wo das Konzept dadurch stärker wird. **Lieber wenige starke als viele schwache Gegner.**
+2. Erst wenn das Konzept steht: Sprites nach M6. Je Typ **zwei bis drei Varianten** (leicht anders), damit zwei Kultisten nicht identisch sind.
+3. **Wächter** je Akt (Elite): größer (bis 128 × 160), eigenes Konzept, Besonderheit im Muster. Sein Auftritt ist ein Anlass für das Stummfilm-Rauschen.
+4. **Finale-Boss „Das, was ruft“**: mehrere Phasen mit sichtbarer Veränderung, „Augen im Rand“ als Helfer. Die drei alten Entwürfe (`eye`, `maw`, `king`) dienen als Ideen.
 5. `data/foes.json` mit allen Gegnern, Werten, Mustern, Stimmen, Beute vervollständigen; Biome in `biomes.json` verweisen darauf.
-6. Kontaktbögen je Biom (alle Typen, je vier Seeds hintereinander, keine Auswahl der schönsten) nach `docs/auftrag/bilder/M7/`, mit ehrlicher Einschätzung je Gegner gegen das Zielbild.
-7. Galerie zeigt alle neuen Gegner.
+6. Kontaktbögen je Biom (alle Typen und Varianten, keine Auswahl der schönsten) nach `docs/auftrag/bilder/M7/`, mit ehrlicher Einschätzung je Gegner.
+7. Galerie zeigt alle neuen Gegner mit Kurzfassung ihres Konzepts.
 
 **Abnahme**
 
-- [ ] Jedes Biom hat drei Gegnertypen und einen Wächter im Spiel, Pforte den Finale-Boss.
-- [ ] Die drei Favoriten (Chorknabe, Hirte, Netzflickerin) sind als Generator-Archetyp erkennbar in ihrer Richtung, gemessen am Zielbild (Einschätzung im Bericht).
+- [ ] Jeder Gegner im Spiel hat einen Eintrag in `gegner.md`, und Muster, Schwachstelle und Aussehen passen erkennbar zum Konzept.
+- [ ] Jedes Biom hat **zwei bis drei** Gegnertypen und einen Wächter, die Pforte den Finale-Boss.
+- [ ] Die drei Favoriten (Chorknabe, Hirte, Netzflickerin) sind im Spiel und treffen ihre Richtung aus dem Zielbild (Einschätzung im Bericht).
 - [ ] Gegner-Regel nach Tiefe ist sichtbar: Hafen/Moorwald menschlich, Kapelle verwandelt, Salz/Stadt Nachahmer und Fremdes, Eis Nachahmer, Pforte formlos.
 - [ ] Autospieler: 20 Seeds ohne Fehler.
-- **Mindestens:** die drei Favoriten, ein weiterer Typ je Biom, ein Wächter je Biom aus einem gemeinsamen Archetyp mit anderer Zone, Finale-Boss einfach.
+- **Mindestens:** die drei Favoriten, ein weiterer Typ je Biom, ein Wächter je Akt, Finale-Boss einfach.
 
 ---
 
@@ -223,17 +231,21 @@ Quelle: [05-hintergruende.md](05-hintergruende.md), Steckbriefe in [04-welt-und-
 
 **Aufgaben**
 
-1. Gemeinsame Bausteine: Ebenen-System (7 Ebenen, Parallax, einmal rendern, dann verschieben), Licht, Randlicht, Fase, Dither, Boden mit Fluchtlinien und drei Tiefenreihen, Partikel, Lichtquellen mit Glühen.
-2. **Sieben Orte**, je mindestens drei Varianten und eine Wächter-Szene, mit Wahrzeichen und falschem Detail aus dem Steckbrief, `fremdheit` steigt pro Ebene.
-3. Szenen für Weg-Wahl, Rast, Werkstatt, Krämer, Ereignis, Wandbild, Übergänge, Strand, Ankunft aus denselben Bausteinen.
-4. Wandbild-Reliefs (M5) im Stil der Hintergründe neu.
-5. Hintergrund-Labor (Biom, Variante, Seed, `fremdheit`, Ebenen an/aus, PNG speichern).
-6. Alte Zonen-Szenen (`js/scenes/zones.js`) aus dem Spiel nehmen, in der Galerie als „alt“ lassen.
+Hier ist **deutlich mehr Aufwand** vorgesehen als für die anderen Meilensteine. **Organisch statt Schema F** (Briefing Abschnitt 4).
+
+1. **Kompositionen zuerst:** `docs/auftrag/hintergruende-kompositionen.md`. Je Ort und Variante in Worten: Horizonthöhe, Blickpunkt, wohin der Blick geführt wird, Lichtführung, Wahrzeichen, falsches Detail, und **wo welche Details stehen und warum** (Netze, wo geflickt wird; Kerzen, wo gebetet wird). Keine zwei Orte mit demselben Bildaufbau.
+2. Gemeinsame Bausteine: Ebenen-System (7 Ebenen, Parallax, einmal rendern, dann verschieben), Licht, Randlicht, Fase, Dither, Boden mit Fluchtlinien und drei Tiefenreihen, Partikel, Lichtquellen mit Glühen.
+3. **Sieben Orte** nach ihrer Komposition, je mindestens drei Varianten und eine Wächter-Szene, mit Wahrzeichen und falschem Detail aus dem Steckbrief, `fremdheit` steigt pro Ebene. Details werden **gesetzt, nicht gestreut**: keine festen Abstände, keine Wiederholung derselben Requisite in Reihe, keine Platzierung nur nach Zufall. Zufall (per Seed) nur für kleine Unterschiede innerhalb einer Komposition. Varianten sind andere Stellen desselben Ortes, nicht neu gewürfelte Teile.
+4. Szenen für Weg-Wahl, Rast, Werkstatt, Krämer, Ereignis, Wandbild, Übergänge, Strand, Ankunft aus denselben Bausteinen.
+5. Wandbild-Reliefs (M5) im Stil der Hintergründe neu.
+6. Hintergrund-Labor (Biom, Variante, Seed, `fremdheit`, Ebenen an/aus, PNG speichern).
+7. Alte Zonen-Szenen (`js/scenes/zones.js`) aus dem Spiel nehmen, in der Galerie als „alt“ lassen.
 
 **Abnahme**
 
-- [ ] Bildschirmfoto je Biom mit Gegnern im Kampf nach `docs/auftrag/bilder/M8/`. Prüffragen, je Bild ehrlich beantwortet: Erkennt man den Ort ohne Text? Sieht man das Wahrzeichen und das falsche Detail? Gibt es mindestens vier klar getrennte Tiefenebenen? Verdeckt Nebel weniger als ein Drittel? Ist ein Klischee aus der Nein-Liste drin? Passt der Stil zu den Figuren (Randlicht, Fase, Dither)?
-- [ ] Die sieben Biome sind nebeneinander klar unterscheidbar (ein Übersichtsbild mit allen sieben).
+- [ ] Bildschirmfoto je Biom mit Gegnern im Kampf nach `docs/auftrag/bilder/M8/`. Prüffragen, je Bild ehrlich beantwortet: Erkennt man den Ort ohne Text? Sieht man das Wahrzeichen und das falsche Detail? Gibt es mindestens vier klar getrennte Tiefenebenen? Verdeckt Nebel weniger als ein Drittel? Ist ein Klischee aus der Nein-Liste drin? Passt der Stil zu den Figuren (Randlicht, Fase, Dither)? Wirkt der Aufbau organisch, oder sieht man ein Raster oder Wiederholungen?
+- [ ] Die sieben Biome sind nebeneinander klar unterscheidbar (ein Übersichtsbild mit allen sieben), und kein Ort hat denselben Bildaufbau wie ein anderer.
+- [ ] Die drei Varianten eines Ortes nebeneinander wirken wie verschiedene Stellen desselben Ortes, nicht wie umgewürfelte Teile.
 - [ ] 60 fps im Kampf auf einem normalen Laptop (Chrome Performance-Messung im Bericht).
 - **Mindestens:** fünf Biome (beide Einstiege, Kapelle, eine Tiefe, Eis) neu mit je einer Variante, Pforte und das zweite Akt-3-Biom vereinfacht.
 
@@ -245,18 +257,21 @@ Quellen: [02-entscheidungen.md](02-entscheidungen.md) (Ideenkiste), `prototype/d
 
 **Aufgaben**
 
-1. Die freigegebenen Items aus der Ideenkiste in `data/items.json` übernehmen, mit 12 × 12 Pixel-Sprites in `js/sprites/items.js` (Items sind keine Körperteile, Pixel-Sprites wie die vorhandenen sind erlaubt). Schlüsselwort „Eröffnung“, „verbraucht“, „+Sog/−Sog“, passive Talismane, zwei verfluchte Items.
+1. Die freigegebenen Items aus der Ideenkiste in `data/items.json` übernehmen, mit 12 × 12 Pixel-Sprites in `js/sprites/items.js` (Items sind keine Körperteile, Pixel-Sprites wie die vorhandenen sind erlaubt). Schlüsselwort „Eröffnung“, „verbraucht“, passive Talismane. Keine Sog-Wirkungen, keine verfluchten Items.
 2. **Fundpools je Biom** (Zonen-Beute) und **Gegner-Beute**.
-3. **Ereignisse:** mindestens drei je Biom, im Ton der Sog-Quelle, mit Entscheidungen und Preisen. Kein Klischee, keine Erklärungen.
-4. **Balance** per Autospieler über 50 Seeds: Ziel-Gewinnrate des gierigen Autospielers 25–50 %, kein Biom, in dem mehr als 40 % der Niederlagen passieren, Kampf dauert im Schnitt 4–8 Züge. Änderungen nur in Daten, Liste der Änderungen in `fortschritt.md`.
-5. `artboard.html` und `ideen.html` mit den neuen Inhalten aktualisieren (in der Ideenkiste: übernommene Ideen als „übernommen“ markieren).
+3. **Ereignisse:** mindestens drei je Biom, im Ton der Welt, mit Bild, Text und zwei bis drei Entscheidungen, jede mit Preis und Folge (Leben, Gold, Items, Karten entfernen oder verwandeln, ein Kampf). Kein Klischee, keine Erklärungen. Nur wenige, besonders starke Ereignisse bekommen `stummfilm: true`.
+4. **Krämer:** je Biom eine eigene Figur mit Ort und einer Zeile Charakter, Sortiment aus dem Fundpool des Bioms, Preise nach Seltenheit, eine Karte entfernen gegen Gold. Werkstatt und Rast ebenfalls mit eigenem Bild je Biom.
+5. Weitere einfache Knotenarten nur, wenn sie wenig neues System brauchen (z. B. Fundstelle: Item oder Gold, manchmal mit Haken).
+6. **Balance** per Autospieler über 50 Seeds: Ziel-Gewinnrate des gierigen Autospielers 25–50 %, kein Biom, in dem mehr als 40 % der Niederlagen passieren, Kampf dauert im Schnitt 4–8 Züge. Änderungen nur in Daten, Liste der Änderungen in `fortschritt.md`.
+7. `artboard.html` und `ideen.html` mit den neuen Inhalten aktualisieren (in der Ideenkiste: übernommene Ideen als „übernommen“ markieren).
 
 **Abnahme**
 
 - [ ] Autospieler-Tabelle (50 Seeds) erfüllt die Ziele oder die Abweichung ist begründet.
 - [ ] Jedes neue Item taucht in mindestens einem Fundpool auf und hat ein Sprite.
 - [ ] Artboard zeigt alle Items, Gegner, Biome.
-- **Mindestens:** zehn neue Items, zwei Ereignisse je Biom, Balance-Lauf mit 20 Seeds.
+- [ ] Jedes Biom hat einen eigenen Krämer und mindestens drei Ereignisse.
+- **Mindestens:** zehn neue Items, zwei Ereignisse je Biom, Krämer je Biom mit eigenem Sortiment, Balance-Lauf mit 20 Seeds.
 
 ---
 
@@ -265,8 +280,8 @@ Quellen: [02-entscheidungen.md](02-entscheidungen.md) (Ideenkiste), `prototype/d
 **Aufgaben** (nach Wirkung sortiert, so weit die Zeit reicht)
 
 1. Übergangsbilder zwischen Akten als echte Szenen (M8-Bausteine) mit Satz und Klang.
-2. Trefferwirkung: kurzer Ruck der Szene, Treffer-Bild am Gegner, Zahlen im Stil von Variante A, Block-Splitter. Alles ruhig, nichts Grelles.
-3. Hochreaktion als Höhepunkt: Atemholen (Musik), Zwischentitel, Licht flammt in der Szene auf, ggf. das dezente Stummfilm-Rauschen.
+2. Trefferwirkung mit **pixelfx** (Briefing Abschnitt 9): kurzer Ruck der Szene und Einfrieren beim Treffer nach dem `act`-Timing, Treffer-Effekt am Gegner, Zustände (Brand, Gift) als Effekte am Körper, Reaktionen mit Effekt in Stofffarbe, Tod als Auflösen, Block-Splitter, Zahlen im Stil von Variante A. Alles in Zonen- und Stofffarben, ruhig, nichts Grelles. Kontaktbogen der benutzten Effekte nach `docs/auftrag/bilder/M10/`.
+3. Hochreaktion als Höhepunkt: Atemholen (Musik), Zwischentitel, Licht flammt in der Szene auf. Kein Stummfilm-Rauschen dabei.
 4. Einstellungen vollständig (Lautstärken, Stummfilm, Jumpscare, Bildschirmwackeln, Textgeschwindigkeit).
 5. Freischaltbare Zusatzfiguren Geologe, Wahrsagerin, Kriegsveteran (04, Abschnitt 5), wenn Zeit ist.
 6. Galerie: alle Gegner, Wächter, Boss, Biome, UI-Bausteine, Stoffzeichen.
