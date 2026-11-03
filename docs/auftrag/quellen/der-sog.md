@@ -1,5 +1,7 @@
 # Saltmoor 1925: Der Sog
 
+> **Hinweis (Briefing 2026-11-03):** Die Sog-Mechanik (Leiste, Stufen, Wahnsinn) wird **nicht** umgesetzt. Diese Quelle gilt nur noch für Ton, Welt und Figuren. Siehe [00-briefing.md](../00-briefing.md).
+
 Kopie des Konzeptdokuments vom 2026-11-03 (Original: https://claude.ai/artifact/RkMUD7jLD2JqbFn7GGLMWP). Stand und Inhalt unverändert, nur eingebettete Grafiken sind als Hinweis ersetzt.
 
 Etwas unter Saltmoor ruft, und du kannst nicht aufhören hinabzusteigen. Das ist die ganze Motivation. Es gibt keine Story, keinen Auftraggeber und kein Ziel, das man erklären müsste. Der Sog ist zugleich die Erklärung für das Roguelike: Du stirbst nicht, die Tiefe spuckt dich aus, du wachst am Strand auf und gehst wieder hinunter. Die Biome folgen einer einzigen Regel: Je tiefer du kommst, desto älter, fremder und weniger menschlich wird die Welt. Was dich ruft, ist am Ende vielleicht gar nicht fremd, sondern ein Teil von dir.

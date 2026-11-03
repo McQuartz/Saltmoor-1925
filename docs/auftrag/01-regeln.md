@@ -9,26 +9,28 @@ Ace hat ausdrücklich gesagt: keine Rückfragen, alles soll durchlaufen. Du bist
 - Du hältst nie an, um auf eine Antwort zu warten.
 - Unklares entscheidest du selbst (Abschnitt 2), schreibst die Entscheidung mit einem Satz Begründung in [fortschritt.md](fortschritt.md) unter „Entscheidungen unterwegs“ und arbeitest weiter.
 - Fragen, die du gern gestellt hättest, sammelst du im Bericht unter „Offene Fragen an Ace und Mo“. Sie halten nichts auf.
-- Wenn ein Weg nicht funktioniert, nimmst du den in diesem Auftrag genannten **Ersatzweg** (z. B. M6: Godot läuft nicht → JavaScript-Port). Du brichst nur ab, wenn wirklich nichts mehr geht (kein Schreibzugriff, Repo kaputt), und schreibst dann genau auf, warum.
+- Wenn ein Weg nicht funktioniert, nimmst du den in diesem Auftrag genannten **Ersatzweg** (z. B. M6: kein Bild-Generator verfügbar → Sprites selbst als Pixel-Art zeichnen). Du brichst nur ab, wenn wirklich nichts mehr geht (kein Schreibzugriff, Repo kaputt), und schreibst dann genau auf, warum.
 
 ## 2. Wie du entscheidest
 
 Bei Widersprüchen oder Lücken gilt diese Reihenfolge, das Höhere gewinnt:
 
-1. [02-entscheidungen.md](02-entscheidungen.md) (dort ist alles Festgelegte gesammelt)
-2. [quellen/ace-wunsch.md](quellen/ace-wunsch.md) (die Absicht hinter allem)
-3. die Meilensteine und Steckbriefe in diesem Ordner
-4. [docs/ui/kampf-ui.md](../ui/kampf-ui.md), [docs/spritegen/zielbild.md](../spritegen/zielbild.md), [quellen/layer-musik.md](quellen/layer-musik.md), [quellen/der-sog.md](quellen/der-sog.md)
-5. der bestehende Code und `prototype/data/*.json`
-6. die Ideenkiste `prototype/data/ideas.json` (nur Vorschläge, noch unbewertet)
+1. [00-briefing.md](00-briefing.md) (Nachtrag von Ace und Mo, schlägt alles)
+2. [02-entscheidungen.md](02-entscheidungen.md) (dort ist alles Festgelegte gesammelt)
+3. [quellen/ace-wunsch.md](quellen/ace-wunsch.md) (die Absicht hinter allem)
+4. die Meilensteine und Steckbriefe in diesem Ordner
+5. [docs/ui/kampf-ui.md](../ui/kampf-ui.md), [docs/spritegen/zielbild.md](../spritegen/zielbild.md), [quellen/layer-musik.md](quellen/layer-musik.md), [quellen/der-sog.md](quellen/der-sog.md) (nur Ton und Welt, keine Regeln)
+6. der bestehende Code und `prototype/data/*.json`
+7. die Ideenkiste `prototype/data/ideas.json` (nur Vorschläge, noch unbewertet)
 
 Wenn auch das nichts sagt: Nimm die Lösung, die **den Run spielbarer und lesbarer** macht und **weniger neue Systeme** braucht. Feedback nie wörtlich als starre Regel lesen, sondern die Absicht dahinter suchen (z. B. „organisch“ heißt natürlich fließend, nicht „überall rund“).
 
 ## 3. Verbotene Abkürzungen
 
-- **Keine KI-Bilder, keine KI-Sounds.** Kein Aufruf von Bild-, Musik- oder Stimmen-Generatoren, keine KI-Bilder als Vorlage oder Referenz. Grafik entsteht aus Code und Regeln, Klang aus WebAudio-Synthese (oder später aus Aufnahmen von Ace).
+- **Keine KI-Sounds.** Kein Aufruf von Musik- oder Stimmen-Generatoren. Klang entsteht aus WebAudio-Synthese (oder später aus Aufnahmen von Ace).
+- **KI-Bilder nur für Gegner-Sprites** (und Item-Sprites, wenn es hilft), nach [00-briefing.md](00-briefing.md) Abschnitt 5 und M6. Jedes Sprite muss die Pixel-Art-Regeln aus `zielbild.md` einhalten und die Regel-Prüfung bestehen. Hintergründe, UI und Effekte entstehen weiter aus Code.
 - **Keine fremden Assets** (Sprites, Tilesets, Fonts außer den bereits genutzten Google Fonts, Sounds aus Asset-Packs). CC0-Aufnahmen nur, wenn die Quelle in `data/audio.json` steht; im Zweifel weglassen.
-- **Keine vorgezeichneten Körperteile** für Gegner (Regel aus AGENTS.md): keine Pixel-Schablonen, keine Koordinatenlisten für Köpfe, Arme usw. Gegner kommen aus dem Generator (Skelett, Volumen, Regeln). Ausnahme: der Finale-Boss ist Handarbeit (siehe 02-entscheidungen.md, Bosse).
+- Die Regel „keine vorgezeichneten Körperteile, alles aus dem Generator“ aus AGENTS.md gilt in diesem Auftrag **nicht** (Briefing Abschnitt 5). Der Generator ist nachrangig und wird nicht gebraucht.
 - **Nicht das alte Sprite-Labor als Generator ausgeben.** `prototype/js/procgen/creature.js` und `js/sprites/foes.js` sind Teile-Kombination. Sie dürfen als Rückfall bleiben, bis die neuen Sprites eingebaut sind, und fliegen dann aus dem Spiel (in der Galerie dürfen sie als „alt“ bleiben).
 - **Keine Ersatz-Effekte**: kein Weichzeichner, keine geglättete Skalierung, kein Rauschen über alles, um Schwächen zu verstecken. Pixel bleiben scharf (`image-rendering: pixelated`, ganzzahlige Skalierung).
 - **Tests nicht aufweichen**: Golden-Tests des Generators nicht löschen oder lockern. Goldens nur bewusst neu erzeugen, mit Eintrag in `docs/spritegen/entscheidungen.md`.
@@ -56,7 +58,8 @@ Wenn auch das nichts sagt: Nimm die Lösung, die **den Run spielbarer und lesbar
 - **Autospieler** (M3): spielt Runs im Dev-Modus automatisch durch. Ab M3 läuft nach jedem Meilenstein ein Lauf mit mindestens 20 Seeds. Kein Absturz, keine Konsolenfehler, jeder Run endet (Sieg oder Strand).
 - **Bildschirmfotos** mit Playwright und Chromium (vorinstalliert, `require('playwright')`), mindestens: Titel, Figurwahl, Weg-Wahl, Kampf je Biom, Werkstatt, Krämer, Ereignis, Finale, Ende, Dev-Modus offen. Sieh sie dir an.
 - **Ehrlich bewerten**: Jeder Meilenstein-Eintrag in `fortschritt.md` sagt in 2–4 Sätzen, was gut aussieht, was schwach ist und was noch fehlt, gemessen an Zielbild und Kampf-UI-Ausgangslage.
-- Generator-Tests (`godot --headless`) müssen grün bleiben, falls du am Generator arbeitest.
+- Generator-Tests (`godot --headless`) müssen grün bleiben, falls du doch am Generator arbeitest (nicht vorgesehen).
+- Sprite-Regel-Prüfung (M6) läuft nach jedem neuen oder geänderten Sprite.
 
 ## 7. Zeit und Budget
 
@@ -68,10 +71,9 @@ Du siehst deinen Verbrauch nicht genau. Darum:
 
 ## 8. Verhältnis zu AGENTS.md
 
-[docs/spritegen/AGENTS.md](../spritegen/AGENTS.md) gilt für alle Arbeit am Generator, mit diesen Ausnahmen für diesen Auftrag:
+Der Generator ist in diesem Auftrag nachrangig (Briefing Abschnitt 5). Falls doch daran gearbeitet wird, gilt [docs/spritegen/AGENTS.md](../spritegen/AGENTS.md) mit diesen Ausnahmen:
 
 - „Stoppe und berichte“ wird zu „nimm den Ersatzweg, schreib es auf, mach weiter“ (Abschnitt 1).
-- „Nicht still den Weg wechseln (z. B. JavaScript statt Godot)“: Der Ersatzweg in M6 (JavaScript-Port des Generators, falls Godot nicht läuft) ist hiermit von Ace freigegeben. Er muss in `docs/spritegen/entscheidungen.md` stehen.
 - Abnahme je Etappe durch Menschen entfällt während der Arbeit; Ace und Mo nehmen am Ende den ganzen Pull Request ab.
 - Branch-Name ist `auftrag/prototyp-run` statt `spritegen/<etappe>-…`.
 

@@ -1,12 +1,14 @@
 # Welt und Run
 
-Wie ein Run aufgebaut ist, welche Biome es gibt und wer darin wohnt. Grundlage ist [quellen/der-sog.md](quellen/der-sog.md). Alle Zahlen hier sind Startwerte, sie kommen in Daten (`data/run.json`, `data/sog.json`, `data/biomes.json`, `data/foes.json`) und dürfen nach dem Autospieler-Lauf angepasst werden (Änderung in `fortschritt.md` notieren).
+Wie ein Run aufgebaut ist, welche Biome es gibt und wer darin wohnt. Grundlage ist [quellen/der-sog.md](quellen/der-sog.md) als Erzählrahmen (ohne Sog-Mechanik, siehe [Briefing](00-briefing.md)). Alle Zahlen hier sind Startwerte, sie kommen in Daten (`data/run.json`, `data/biomes.json`, `data/foes.json`) und dürfen nach dem Autospieler-Lauf angepasst werden (Änderung in `fortschritt.md` notieren).
 
 ## 1. Der Run in einem Satz
 
 Du wachst am Strand von Saltmoor auf, hörst den Ruf, steigst durch **fünf Biome** immer tiefer und in immer ältere Zeiten, bis zur **Pforte**, und entscheidest dort, ob du bleibst oder umkehrst. Verlierst du, spuckt dich die Tiefe aus und du wachst wieder am Strand auf.
 
-## 2. Abfolge: fünf Akte, vier mögliche Wege
+## 2. Abfolge: fünf feste Akte, vier mögliche Wege
+
+Die fünf Akte sind **fest gesetzt**: Anzahl und Reihenfolge ändern sich nie. Abwechslung entsteht innerhalb der Akte.
 
 ```
                  Strand (Start, Figurwahl)
@@ -26,7 +28,7 @@ Du wachst am Strand von Saltmoor auf, hörst den Ruf, steigst durch **fünf Biom
 ```
 
 - **Welcher Einstieg:** per Seed. Jede Figur hat eine Vorliebe mit 70 % (Fischer, Kneipenschläger, Detektiv → Hafen; Friedhofswärter, Okkultist, Pfarrerin → Moorwald). Die Pfarrerin ist eine Ausnahme mit Sinn: Sie will zur Kapelle, der Moorwald ist der Weg über den alten Kirchpfad.
-- **Welche Gabelung in Akt 3:** per Seed, 50/50. Ab Sog 6 beim Verlassen der Kapelle immer die Namenlose Stadt (der Ruf zieht dich dorthin). Im Dev-Modus wählbar.
+- **Welche Gabelung in Akt 3:** per Seed, 50/50. Im Dev-Modus wählbar.
 - **Logik der Reihenfolge** (nicht willkürlich): Jede Schicht ist älter als die darüber (1925 → Volksglaube/Kult → Römerzeit und Vorzeit / vor dem Menschen → vor dem Leben an Land → außerhalb der Zeit). Die Brücke ins Eis: Unter dem Salzmoor liegt Salz, also ein alter Meeresboden. Wer durch das Salz hinabsteigt, steigt in ein Meer hinab, das längst verschwunden ist, und ganz unten ist es noch da, schwarz und gefroren.
 - **Übergänge** zwischen Akten sind kurze Übergangsbilder (2–3 s, ein Satz, klickbar zum Überspringen): z. B. „Die Treppe hinter dem Altar führt nach unten. Sie ist nass, obwohl es nicht regnet.“
 
@@ -45,38 +47,14 @@ Die Pforte (Akt 5) hat nur zwei Ebenen: ein Vorraum (Rast oder Wandbild zur Wahl
 
 - **Tiefe** in der UI („TIEFE IX“) zählt die besuchten Ebenen über den ganzen Run: 1–16 bis zum Vorraum, 17 ist das Finale. Gegner skalieren mit der Tiefe (`balance.json` → `enemy_scaling`).
 - **Kämpfe**: Ebene 1 ein Gegner (Akt 1) bzw. zwei, später zwei bis drei. „Kampf (schwer)“ hat einen Gegner mehr und eine bessere Belohnung (Auswahl mit einem seltenen Item).
-- **Rast**: heilen (30 % Leben, **Sog +1**) oder ein Item verbessern (`forge.bump`) oder Sog −2 (nur Ruhe, keine Heilung). Rasten ist verlockend, aber der Sog wächst.
-- **Werkstatt** und **Krämer**: wie heute (`run.js`), Fundpool nach Biom (Zonen-Beute).
-- **Ereignis**: aus `data/events.json`, neu je Biom mindestens drei, im Ton der Sog-Quelle (Entscheidungen mit Preis, keine Erklärungen).
-- **Wandbild**: ein Fragment lesen (siehe 6). Gibt Wissen und Sog +1.
+- **Rast**: heilen (30 % Leben) oder ein Item verbessern (`forge.bump`).
+- **Werkstatt** und **Krämer**: auf Basis von heute (`run.js`), aber als vollwertige Knoten: Krämer mit eigener Figur je Biom, Sortiment aus dem Fundpool des Bioms (Zonen-Beute), Karte entfernen gegen Gold.
+- **Ereignis**: aus `data/events.json`, neu je Biom mindestens drei, im Ton der Welt, mit Bild, Text und zwei bis drei Entscheidungen mit Preis und Folge, keine Erklärungen.
+- **Wandbild**: ein Fragment lesen (siehe 6). Gibt Wissen und zählt für die runübergreifende Progression.
 
-## 4. Der Sog (Leiste 0–10)
+## 4. Der Sog (gestrichen)
 
-Ein Wert, oben links unter dem Leben, als kleine Leiste mit dem Zeichen einer Spirale. Werte in `data/sog.json`.
-
-**Steigt durch:**
-
-- Akt-Wechsel: +1 (der Ruf wird lauter, je tiefer man ist)
-- Rast mit Heilung: +1
-- Wandbild lesen: +1
-- verfluchte Items anlegen: +1 einmalig, manche Ereignisse
-- Karten mit „+Sog“ (z. B. Auge im Glas, Rum)
-
-**Sinkt durch:**
-
-- Rast ohne Heilung: −2
-- Karten mit „−Sog“ (Priesterkragen, Gasmaske, Laudanum)
-- Glaube-Reaktionen: −1 (höchstens einmal pro Kampf)
-- einzelne Ereignisse
-
-**Stufen** (Stufenwechsel ist ein Anlass für das dezente Stummfilm-Rauschen):
-
-| Sog | Stufe | Wirkung |
-|---|---|---|
-| 0–3 | Stille | keine |
-| 4–6 | Flüstern | Zu Beginn jedes Kampfes kommt eine **Trugbild-Karte** in den Ziehstapel (kostet 1, tut nichts, verschwindet beim Spielen; Riechsalz entfernt sie). Musik: Gefahr +0,1. |
-| 7–9 | Ruf | **Stärke kostet Verstand:** Jede Reaktion macht +2 Schaden, aber Gegner +1 Schaden pro Angriff. Musik: Gefahr +0,2, leises Flirren dauerhaft. |
-| 10 | Ertrinken | Zusätzlich: Hochreaktionen dürfen zweimal pro Zug kommen, aber du verlierst zu Beginn jedes Zuges 2 Leben. Musik: Gefahr +0,3, Harmonie bleibt gekippt. |
+Die Sog-Leiste mit Stufen, Trugbild-Karten und „+Sog/−Sog“ gibt es **nicht**. Ace und Mo haben sich dagegen entschieden ([Briefing](00-briefing.md) Abschnitt 2). Der Ruf aus der Tiefe bleibt nur Erzählung, in der Musik steigt die Grundgefahr leicht mit dem Akt.
 
 ## 5. Startfiguren
 
@@ -91,9 +69,11 @@ Ein Wert, oben links unter dem Leben, als kleine Leiste mit dem Zeichen einer Sp
 
 Regel: Jede Figur startet mit genau **zwei** Set-Teilen (das dritte findet man vielleicht), dazu 3–4 weiteren Teilen, sodass das Startdeck 8–10 Karten hat und die Figuren sich verschieden spielen. Die genaue Ausrüstung legt der Agent mit dem Autospieler fest; die Tabelle ist der Startpunkt.
 
-Freischaltbar, wenn Zeit bleibt (M10): **Geologe** (der Überlebende einer Expedition, steigt mit einer alten Karte hinab, sieht die nächste Gabelung voraus), **Wahrsagerin** (Tarotkarten, Auge im Glas, Spieluhr; jeder Sog-Punkt +1 Schaden auf die erste Karte im Zug), **Kriegsveteran** (Leuchtpistole, Gasmaske, Offiziersmantel; die erste Karte im Zug wirkt doppelt, ohne Munition).
+Freischaltbar, wenn Zeit bleibt (M10): **Geologe** (der Überlebende einer Expedition, steigt mit einer alten Karte hinab, sieht die nächste Gabelung voraus), **Wahrsagerin** (Tarotkarten, Spieluhr; sieht beim Ziehen die nächste Karte voraus, eigene Fähigkeit legt der Agent fest), **Kriegsveteran** (Leuchtpistole, Gasmaske, Offiziersmantel; die erste Karte im Zug wirkt doppelt, ohne Munition).
 
 ## 6. Wandbild-Fragmente (Meta-Fortschritt)
+
+Die runübergreifende Progression baut hierauf auf. Was darüber hinaus dazukommt, legt der Agent in M5 in `progression.md` fest.
 
 - Je Biom **drei** Fragmente (21 insgesamt). Ein Wandbild-Knoten zeigt ein Relief als Bild (prozedural, im Hintergrund-Stil: Ritzlinien, Randlicht) und einen kurzen Text (2–4 Sätze) auf einem abgerissenen Zettel (Idee „Sonderkarten als Zettel“).
 - Texte: im Ton von Lovecraft, aber eigene Worte. Andeuten, nichts erklären. Jedes Fragment ist ein Bruchstück der Geschichte der Tiefe (wer vor den Menschen hier war, was das Salz ist, wer ruft). Keine Namen aus dem Mythos (kein Cthulhu, kein Dagon), keine Zitate.
@@ -110,6 +90,8 @@ Freischaltbar, wenn Zeit bleibt (M10): **Geologe** (der Überlebende einer Exped
   Beide zählen als Sieg und stehen im Tagebuch.
 
 ## 8. Die sieben Biome
+
+Die Gegner in den Steckbriefen sind **Vorschläge**. Es braucht keine 20 bis 30 Gegner: zwei bis drei starke Typen je Biom plus Wächter reichen. Jeder Gegner braucht ein Konzept in `gegner.md` (M7). Streichen, zusammenlegen oder ersetzen ist erlaubt, die Favoriten bleiben.
 
 Jedes Biom hat: einen Ort mit **Wahrzeichen**, das man sofort wiedererkennt, ein **falsches Detail**, das neugierig macht statt zu erschrecken, eine Zonenpalette, eine Musik-Fassung, drei Gegnertypen plus einen Wächter, einen Fundpool. Die Hintergrund-Regeln stehen in [05-hintergruende.md](05-hintergruende.md).
 
@@ -186,7 +168,7 @@ Paletten der vorhandenen Zonen stehen in [zielbild.md](../spritegen/zielbild.md)
 
 ## 9. Gegner: Daten und Stimmen
 
-`data/foes.json` bekommt pro Gegner zusätzlich: `biom`, `rang` (`normal`, `waechter`, `boss`), `generator` (Körperbauplan, Parameterbereiche, Seed-Bereich, Zone), `stimme` (Motiv und Klangfarbe für die Musik), `beute` (optionales eigenes Item, kleine Chance). Werte (`hp`, `pat`, `weak`) nach dem bestehenden Muster; jeder Gegner hat 2–4 Züge im Muster, Wächter 4–5 und eine Besonderheit (z. B. ruft Verstärkung, wechselt die Schwachstelle).
+`data/foes.json` bekommt pro Gegner zusätzlich: `biom`, `rang` (`normal`, `waechter`, `boss`), `sprite` (Pfad zum Sheet, Varianten, Zone), `konzept` (Verweis auf den Eintrag in `docs/auftrag/gegner.md`), `stimme` (Motiv und Klangfarbe für die Musik), `beute` (optionales eigenes Item, kleine Chance). Werte (`hp`, `pat`, `weak`) nach dem bestehenden Muster; jeder Gegner hat 2–4 Züge im Muster, Wächter 4–5 und eine Besonderheit (z. B. ruft Verstärkung, wechselt die Schwachstelle).
 
 Schwachstellen über die Biome verteilen, damit alle acht Stoffe gebraucht werden.
 

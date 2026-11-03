@@ -2,7 +2,9 @@
 
 Stand 2026-11-03. Auftraggeber: Ace (Philipp). Ausführung: der Agent von Mo (Moritz), selbstständig über Nacht bzw. einen Tag lang.
 
-**Ziel:** Ein Browser-Prototyp, in dem man **einen kompletten Run spielen kann**, vom Strand bis zum Finale, mit echter Motivation („Der Sog“), der abgestimmten Kampf-UI (Variante A), der dynamischen Layer-Musik, prozedural erzeugten Gegnern im Ziel-Look, neuen Hintergründen mit echter Tiefe und einem Dev-Modus, der zeigt, was gerade passiert und warum.
+**Ziel:** Ein Browser-Prototyp, in dem man **einen kompletten Run spielen kann**, vom Strand bis zum Finale, in fünf festen Akten, mit echter Motivation (Erzählrahmen „Der Sog“, ohne Sog-Mechanik), der abgestimmten Kampf-UI (Variante A), der dynamischen Layer-Musik, wenigen starken Gegnern mit Konzept als KI-Sprites im Ziel-Look, organisch komponierten Hintergründen mit echter Tiefe, Ereignissen und Krämern zwischen den Kämpfen, runübergreifender Progression und einem Dev-Modus, der zeigt, was gerade passiert und warum.
+
+**Zuerst [00-briefing.md](00-briefing.md) lesen**, der Nachtrag von Ace und Mo hat Vorrang vor allem anderen.
 
 Alles, was dafür abgestimmt ist, liegt in diesem Repo. Offene Fragen sind in [02-entscheidungen.md](02-entscheidungen.md) bereits beantwortet. **Der Agent stellt keine Rückfragen**, er entscheidet nach den Regeln in [01-regeln.md](01-regeln.md) und schreibt seine Entscheidungen auf.
 
@@ -19,6 +21,7 @@ Wenn die Sitzung abbricht: Eine neue Sitzung mit demselben Prompt starten. Der A
 
 | Datei | Inhalt |
 |---|---|
+| [00-briefing.md](00-briefing.md) | **Nachtrag mit Vorrang**: fünf feste Akte, keine Sog-Mechanik, Stummfilm nur bei Anlässen, Hintergründe, KI-Sprites, Gegner, Knoten zwischen Kämpfen, Progression |
 | [PROMPT.md](PROMPT.md) | Der Start-Prompt für den Agenten, zum Kopieren |
 | [01-regeln.md](01-regeln.md) | Arbeitsregeln: keine Rückfragen, Reihenfolge der Quellen, verbotene Abkürzungen, Git, Tests, Bericht |
 | [02-entscheidungen.md](02-entscheidungen.md) | Alles Festgelegte auf einen Blick, inklusive der Antworten auf alle offenen Fragen |
@@ -34,10 +37,10 @@ Wenn die Sitzung abbricht: Eine neue Sitzung mit demselben Prompt starten. Der A
 | Bereich | Wo | Stand |
 |---|---|---|
 | Ziel-Look der Figuren | [docs/spritegen/zielbild.md](../spritegen/zielbild.md) | abgestimmt (Chorknabe, Hirte, Netzflickerin top) |
-| Sprite-Generator: Plan und Regeln | [docs/spritegen/](../spritegen/), vor allem [AGENTS.md](../spritegen/AGENTS.md) | verbindlich |
-| Sprite-Generator: Code M1–M6 | Branch `claude/spritegen-implementation-is4a6p` (Godot 4.3, `game/addons/spritegen/`) | gebaut, nicht gemergt, Abnahme offen |
+| Sprite-Generator: Plan und Regeln | [docs/spritegen/](../spritegen/), vor allem [AGENTS.md](../spritegen/AGENTS.md) | nachrangig, in diesem Auftrag nicht gebraucht |
+| Sprite-Generator: Code M1–M6 | Branch `claude/spritegen-implementation-is4a6p` (Godot 4.3, `game/addons/spritegen/`) | gebaut, nicht gemergt, bleibt für später liegen |
 | Kampf-UI | [docs/ui/kampf-ui.md](../ui/kampf-ui.md), Entwurf [docs/ui/entwuerfe/kampf-ui-runde2.html](../ui/entwuerfe/kampf-ui-runde2.html) | Variante A ist Ausgangslage |
 | Musik | [quellen/layer-musik.md](quellen/layer-musik.md), `prototype/musik.html`, `prototype/js/audio/music.js`, `sfx.js` | Konzept und Labor abgenickt |
 | Klangliste | `prototype/klangliste.html`, `prototype/data/audio.json` | Liste der Audiodateien |
-| Motivation | [quellen/der-sog.md](quellen/der-sog.md) | Ace findet es gut |
+| Motivation | [quellen/der-sog.md](quellen/der-sog.md) | nur Erzählrahmen, Sog-Mechanik gestrichen |
 | Inhalte | `prototype/artboard.html`, `prototype/ideen.html`, `prototype/data/*.json` | Spielwerte und Ideenkiste |
