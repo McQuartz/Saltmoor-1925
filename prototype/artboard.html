@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saltmoor Artboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Artboard: der ganze Spielinhalt auf einer Seite, direkt aus data/*.json und den Zeichnern des Spiels */
+body{overflow-y:auto}
+#ab{max-width:1400px;margin:0 auto;padding:24px 16px 90px}
+#ab>header h1{font-family:var(--fd);font-size:18px;color:var(--parch);margin:0 0 8px}
+#ab>header p{color:var(--dim);margin:0 0 6px;font-size:19px}
+#ab a{color:var(--eld)}
+#ab nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px;position:sticky;top:0;z-index:5;background:#060807;padding:8px 0;border-bottom:2px solid #1a2220}
+#ab nav a{font-family:var(--fd);font-size:9px;text-decoration:none;border:2px solid #2e3a35;padding:7px 9px;background:#0b0f0e}
+#ab nav input{font-family:var(--fb);font-size:18px;background:#0b0f0e;color:var(--txt);border:2px solid #2e3a35;padding:3px 8px;min-width:200px;flex:1}
+#ab section{margin-top:38px;scroll-margin-top:60px}
+#ab h2{font-family:var(--fd);font-size:12px;color:var(--parch);border-bottom:2px solid #2e3a35;padding-bottom:8px;margin:0 0 6px;display:flex;justify-content:space-between;gap:10px}
+#ab h2 small{font-size:9px;color:#5a6a64}
+#ab h3{font-family:var(--fd);font-size:9px;color:#9aa39a;margin:20px 0 10px}
+#ab .lead{color:var(--dim);font-size:18px;margin:0 0 14px}
+#ab code{font-family:monospace;font-size:14px;color:#b9c9bf;background:#111716;padding:1px 4px}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.stats a{display:block;text-decoration:none;background:#0b0f0e;border:2px solid #1f2826;padding:10px 12px;min-width:110px}
+.stats b{display:block;font-family:var(--fd);font-size:16px;color:var(--parch)}
+.stats span{color:#9aa39a;font-size:17px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.grid.wide{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.grid.narrow{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.tile{background:#0b0f0e;border:2px solid #1f2826;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tile.rare{border-color:#8a6a1a}
+.tile.idea{border-style:dashed;border-color:#3a6a5a}
+.tile .hd{display:flex;gap:10px;align-items:center}
+.tile .hd>div{min-width:0}
+.tile .n{font-family:var(--fd);font-size:9px;color:var(--parch);line-height:1.5;overflow-wrap:anywhere}
+.tile .meta{font-size:16px;color:#9aa39a;line-height:1.15}
+.tile .id{font-family:monospace;font-size:12px;color:#5a6a64}
+.tile .tx{font-size:17px;color:var(--txt);line-height:1.15}
+.tile .tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-family:var(--fd);font-size:7px;padding:3px 5px 2px;border:1px solid #2e3a35;color:#9aa39a;line-height:1.2}
+.tag.gold{color:#ffd23f;border-color:#8a6a1a}.tag.eld{color:var(--eld);border-color:#2a5a4a}.tag.red{color:#ff8a7a;border-color:#6a2a2a}
+.ico{image-rendering:pixelated;flex:none;background:#060807;border:1px solid #1a2220;padding:4px}
+.ico.s{padding:1px;vertical-align:middle;border:none;background:none}
+.cardl{border-left:3px solid var(--cb,#6a5a3a);padding:2px 0 2px 8px;font-size:17px;line-height:1.1}
+.cardl b{font-family:var(--fd);font-size:8px;color:var(--parch);font-weight:normal}
+.cardl .cost{display:inline-block;font-family:var(--fd);font-size:8px;color:#111;background:var(--gold);padding:2px 4px 1px;margin-right:4px}
+.xref{font-size:15px;color:#7a8a84;line-height:1.15}
+.xref i{font-style:normal;color:#b9c9bf}
+canvas.spr{image-rendering:pixelated;width:100%;background:radial-gradient(ellipse at 50% 85%,#1a2422,#060807 70%);border:1px solid #1a2220}
+canvas.scn{image-rendering:pixelated;width:100%;border:1px solid #1a2220}
+.intents{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.intents .intent{position:static;transform:none;margin:0}
+/* Reaktions-Matrix */
+.mx{border-collapse:collapse;font-size:15px}
+.mxwrap{overflow-x:auto;padding-bottom:6px}
+.mx th{font-weight:normal;padding:4px}
+.mx td{border:1px solid #1f2826;width:92px;height:46px;text-align:center;vertical-align:middle;padding:3px;line-height:1;color:#3a4a44;background:#0b0f0e}
+.mx td.on{color:var(--eld);cursor:help}
+.mx td.same{color:#ffb35a;background:#140f0a;cursor:help}
+.mx td.on:hover,.mx td.same:hover{outline:2px solid var(--parch)}
+.mx td.hl{outline:2px solid var(--parch)}
+.flow{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.flow .tile{padding:9px}
+.flow .d{font-family:var(--fd);font-size:11px;color:var(--parch)}
+.flow .tile.boss{border-color:#6a2a5a}
+.legend{font-size:16px;color:#7a8a84;margin:8px 0 0}
+.hidden{display:none!important}
+.empty{color:#5a6a64;font-size:17px;border:2px dashed #1f2826;padding:14px}
+</style>
+</head>
+<body>
+<canvas id="scene" width="320" height="180" style="display:none"></canvas>
+<div id="ab">
+ <header>
+  <h1>SALTMOOR · ARTBOARD</h1>
+  <p>Alles, was gerade im Spiel steckt, auf einer Seite: Stoffe, Reaktionen, Items, Sets, Startfiguren, Gegner, Boss, Zustände, Ereignisse, Run-Ablauf und Orte. Jede Kachel kommt direkt aus <code>data/*.json</code> und den Zeichnern des Spiels. Wer dort etwas ändert, sieht es hier beim Neuladen.</p>
+  <p>Zum Spiel: <a href="index.html">index.html</a> · Oberflächen-Bausteine: <a href="gallery.html">gallery.html</a> · Sprite-Labor: <a href="lab.html">lab.html</a></p>
+  <div class="stats" id="stats"></div>
+ </header>
+ <nav id="nav"><a href="#stoffe">Stoffe</a><a href="#reaktionen">Reaktionen</a><a href="#items">Items</a><a href="#sets">Sets</a><a href="#figuren">Startfiguren</a><a href="#gegner">Gegner</a><a href="#boss">Boss</a><a href="#zustaende">Zustände</a><a href="#ereignisse">Ereignisse</a><a href="#ablauf">Run-Ablauf</a><a href="#orte">Orte</a><a href="#ideen" style="color:#ffd23f;border-color:#8a6a1a">Ideen</a><input id="q" type="search" placeholder="Suchen: Name, Stoff, Effekt …"></nav>
+
+ <section id="stoffe"><h2>STOFFE <small>data/stoffe.json</small></h2>
+  <p class="lead">Jedes Item trägt null, einen oder zwei Stoffe. Stoffe entscheiden über Reaktionen, Schwachstellen der Gegner und was die Werkbank verschmelzen kann.</p>
+  <div class="grid narrow" id="stoffGrid"></div></section>
+
+ <section id="reaktionen"><h2>REAKTIONEN <small>data/reactions.json</small></h2>
+  <p class="lead">Zwei Karten direkt nacheinander (oder beide Stoffe in einer Karte) lösen eine Paar-Reaktion aus. Gleicher Stoff zweimal = <span style="color:#ffb35a">Verstärkt</span>. Leere Felder reagieren nicht und können auf der Werkbank auch nicht zu einem Doppel-Stoff-Item verschmolzen werden.</p>
+  <div class="mxwrap"><table class="mx" id="mx"></table></div>
+  <h3>PAAR-REAKTIONEN</h3><div class="grid" id="rxGrid"></div>
+  <h3 style="color:#ffd23f">HOCHREAKTIONEN · höchstens einmal pro Zug</h3><div class="grid" id="hochGrid"></div></section>
+
+ <section id="items"><h2>ITEMS <small>data/items.json · js/sprites/items.js</small></h2>
+  <p class="lead">Jedes angelegte Item gibt seine Karten ins Deck. Gold umrandet = selten mit zwei Stoffen (Karten kosten +<span id="dblCost"></span> Energie, Fund ab Tiefe <span id="rareFrom"></span>). Unten an jeder Kachel steht, wo das Item sonst noch vorkommt.</p>
+  <div id="itemBox"></div></section>
+
+ <section id="sets"><h2>ROLLEN-SETS <small>data/roles.json</small></h2>
+  <p class="lead">Alle drei Items angelegt (auch als Teil eines verschmolzenen Items) = Bonus für den Rest des Kampfes.</p>
+  <div class="grid wide" id="setGrid"></div></section>
+
+ <section id="figuren"><h2>STARTFIGUREN <small>data/jobs.json</small></h2>
+  <div class="grid wide" id="jobGrid"></div></section>
+
+ <section id="gegner"><h2>GEGNER <small>data/foes.json · js/sprites/foes.js</small></h2>
+  <p class="lead">Werte auf Tiefe 1. Pro Tiefe +<span id="hpPer"></span> % Leben, alle <span id="atkEvery"></span> Tiefen +1 Angriff. Die Züge laufen der Reihe nach im Kreis.</p>
+  <div class="grid narrow" id="foeGrid"></div></section>
+
+ <section id="boss"><h2>BOSS <small>Tiefe <span id="bossDepth"></span></small></h2>
+  <p class="lead" id="bossLead"></p>
+  <div class="grid wide" id="bossGrid"></div></section>
+
+ <section id="zustaende"><h2>ZUSTÄNDE UND ABSICHTEN <small>js/core/combat.js</small></h2>
+  <p class="lead">Was auf Gegnern und Spieler liegen kann, und woher es kommt.</p>
+  <div class="grid" id="statusGrid"></div></section>
+
+ <section id="ereignisse"><h2>EREIGNISSE <small>data/events.json</small></h2>
+  <p class="lead" id="eventLead"></p>
+  <div class="grid wide" id="eventGrid"></div></section>
+
+ <section id="ablauf"><h2>RUN-ABLAUF <small>data/balance.json</small></h2>
+  <p class="lead">Was auf jeder Tiefe passiert. Nach jedem Sieg: +<span id="healPct"></span> % Leben, Gold und eine Wahl aus <span id="choices"></span> Funden.</p>
+  <div class="flow" id="flow"></div>
+  <p class="legend" id="balLegend"></p></section>
+
+ <section id="orte"><h2>ORTE <small>js/scenes/zones.js</small></h2>
+  <div class="grid wide" id="zoneGrid"></div></section>
+
+ <section id="ideen"><h2>IDEEN · NOCH NICHT IM SPIEL <small>data/ideas.json</small></h2>
+  <p class="lead">Entwürfe für neue Items, Reaktionen, Gegner oder Mechaniken. Sie stehen nur hier, das Spiel liest die Datei nicht. Format: siehe <code>data/README.md</code> → ideas.json.</p>
+  <div class="grid" id="ideaGrid"></div></section>
+</div>
+<div id="vig"></div>
+
+<script src="js/data.js"></script>
+<script src="js/core/bus.js"></script>
+<script src="js/core/state.js"></script>
+<script src="js/core/rules.js"></script>
+<script src="js/scenes/pixel.js"></script>
+<script src="js/sprites/items.js"></script>
+<script src="js/sprites/foes.js"></script>
+<script src="js/scenes/zones.js"></script>
+<script src="js/ui/components.js"></script>
+<script src="js/artboard.js"></script>
+</body>
+</html>

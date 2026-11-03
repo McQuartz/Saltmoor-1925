@@ -88,3 +88,21 @@ Startfiguren: `n`, `d`, Start-Items je Bereich (`w`, `k`, `t`) und im Rucksack (
 ## balance.json
 
 Zahlen für den ganzen Run: Startwerte, Gold, Gegnerskalierung, Begegnungen pro Tiefe, Funde, Werkstatt/Krämer/Ereignis-Rhythmus (`every`, `offset`: erscheint nach Tiefe d, wenn d mod every = offset), Verschmelzen (`forge`), Zonen und Jumpscare-Zeitfenster in Minuten.
+
+## ideas.json
+
+Entwürfe, die noch nicht im Spiel sind. Nur `artboard.html` liest diese Datei (Abschnitt „Ideen“), das Spiel nicht. Eine Liste von Einträgen:
+
+| Feld | Bedeutung |
+|---|---|
+| `n` | Name |
+| `kind` | optional: `item`, `reaktion`, `gegner`, `mechanik` … (wird als Etikett gezeigt) |
+| `d` | Beschreibung, was die Idee tut |
+| `st` | optional: Stoffe wie bei items.json |
+| `a` | optional: Bereich (`waffe`, `kleidung`, `talisman`) |
+| `spr` | optional: vorhandenes Sprite aus `js/sprites/items.js` als Platzhalter |
+| `px` | optional: eigenes 12×12-Raster mit den Buchstaben aus `PAL` (wie in `SPR`), geht vor `spr` |
+| `cards` | optional: Karten im selben Format wie bei items.json |
+| `notes` | optional: offene Fragen, Balance-Gedanken |
+
+Wird eine Idee umgesetzt, wandert sie nach items.json (bzw. reactions.json, foes.json …) und fliegt hier raus.
