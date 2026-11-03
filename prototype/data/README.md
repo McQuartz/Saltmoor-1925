@@ -106,3 +106,14 @@ Entwürfe, die noch nicht im Spiel sind. Nur `artboard.html` liest diese Datei (
 | `notes` | optional: offene Fragen, Balance-Gedanken |
 
 Wird eine Idee umgesetzt, wandert sie nach items.json (bzw. reactions.json, foes.json …) und fliegt hier raus.
+
+## audio.json
+
+Die Klangliste (`klangliste.html`): alle Audiodateien, die wir für Musik und Effekte selbst aufnehmen oder bauen müssen.
+
+| Feld | Bedeutung |
+|---|---|
+| `regeln` | Vorgaben für alle Dateien (Format, Tempo, Länge, Pegel, Namen, keine KI) |
+| `biome` | Musik je Biom: `key` Tonart, `chords` Akkordfolge, `dark` gekippte Folge, `vibe`, `labor` = gibt es schon im Musik-Labor |
+| `proBiom` | Spuren, die jedes Biom braucht (Layer 0–4, Stinger): `takte` oder `sek`, `var` Varianten, `vv` Beschreibung je Variante, `prio`, `probe` = was „Anhören“ in `music.js` abspielt |
+| `assets` | einzelne Instrumente und Effekte: `gruppe` (`rolle`, `gegner`, `instrument`, `sfx`), `fuer`, `art` (`Sampler`, `One-Shot`), `noten` (Sampler-Bereich), `sek`, `anz` Varianten, `prio`, `probe` |

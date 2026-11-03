@@ -1,0 +1,70 @@
+{
+ "info": "Klangliste: alle Audiodateien, die wir selbst aufnehmen oder bauen müssen. Gelesen von klangliste.html. Format in data/README.md.",
+ "regeln": [
+  "WAV, 48 kHz, 24 Bit. Musik in Stereo, Gegnerstimmen und Effekte dürfen Mono sein.",
+  "Alle Musik-Loops: 80 BPM, 4/4-Takt, genau 8 Takte = 24,00 Sekunden. Nahtlos loopbar: den Hall-Ausklang an den Anfang falten, kein Stille-Rand.",
+  "Akkordfolge pro Biom: Takt 1 bis 4 wie angegeben, Takt 5 bis 8 wiederholen. Gekippte Fassung (bei Gefahr) mit der dunklen Folge.",
+  "Das Tempo bleibt bei Aufnahmen fest bei 80. Die Gefahr kommt über die gekippten Varianten. Tempowechsel gibt es nur in der prozeduralen Fassung.",
+  "Pegel: Spitze höchstens −6 dBFS. Alle Layer eines Bioms zusammen dürfen nicht clippen.",
+  "Frequenzbereiche trennen: Grund tief + Rauschen, Puls tief, Rhythmus Mitte, Fläche Mitte bis hoch, Tutti alles. Sonst wird es Brei.",
+  "Sampler-Instrumente: Einzelnoten auf jeder kleinen Terz (C, Es, Fis, A) im angegebenen Bereich. Ton beginnt sofort am Dateianfang, natürlich ausklingen lassen. Die Engine transponiert den Rest, deshalb passen sie in jede Tonart.",
+  "Effekte: Ton beginnt sofort, kein Vorlauf. Varianten leicht unterschiedlich, damit sich nichts wiederholt.",
+  "Dateinamen genau wie in der Liste, klein, ohne Umlaute. Bei Varianten _1, _2 … anhängen.",
+  "Keine KI-generierten Sounds. Fremde Aufnahmen nur CC0, die Quelle beim Eintrag in data/audio.json notieren (Feld \"quelle\")."
+ ],
+ "biome": [
+  {"id": "hafen", "n": "Hafen", "key": "d-Moll", "chords": "Dm – B – Gm – A", "dark": "Dm – Es – Gm – A♭9", "vibe": "Nasse Planken, Nebel, Meer im Dunkeln. Ketten, Taue, ferne Glocke.", "labor": true},
+  {"id": "kapelle", "n": "Kapelle", "key": "e-Moll", "chords": "Em – C – Am – H", "dark": "Em – F – Am – H♭9", "vibe": "Kalter Stein, Zugluft, verstimmte Orgel. Kleine Glocken statt Ketten.", "labor": true},
+  {"id": "moorwald", "n": "Moorwald", "key": "c-Moll (Vorschlag)", "chords": "Cm – As – Fm – G", "dark": "Cm – Des – Fm – G♭9", "vibe": "Sumpf, Insekten, knackendes Holz, gurgelndes Wasser. Rhythmus aus Holz und Knochen.", "labor": false},
+  {"id": "grund", "n": "Grund", "key": "b-Moll (Vorschlag)", "chords": "Bm – Ges – Esm – F", "dark": "Bm – Ces – Esm – F♭9", "vibe": "Das Fremde ganz unten. Tiefer Druck, unnatürliche Stille, Klänge ohne Quelle.", "labor": false}
+ ],
+ "proBiom": [
+  {"id": "l0_grund", "n": "Grund (Layer 0)", "art": "Loop", "takte": 8, "tonal": "Drone auf Grundton und Quinte", "var": ["normal"], "prio": 1,
+   "vibe": "Läuft immer, auch im Menü. Macht den Ort hörbar: Ort-Geräusch plus tiefer, ruhiger Liegeton.", "probe": {"layer": 0}},
+  {"id": "l1_puls", "vv": {"normal": "Herzschlag lub-dub auf 1 und 1+, darunter ein weicher Bass auf dem Akkord-Grundton.", "dicht": "Wie normal, plus ein zweiter Herzschlag auf 3. Läuft bei viel Wucht.", "gekippt": "Wie normal, aber mit der dunklen Akkordfolge."}, "n": "Puls (Layer 1)", "art": "Loop", "takte": 8, "tonal": "Bass auf dem Akkord-Grundton, Takt 1 jeder Akkord", "var": ["normal", "dicht", "gekippt"], "prio": 1,
+   "vibe": "Herzschlag (lub-dub auf 1 und 1+) und ein weicher Bass. Dicht: zusätzlicher Herzschlag auf 3. Gekippt: dunkle Akkordfolge.", "probe": {"layer": 1}},
+  {"id": "l2_rhythmus", "vv": {"ruhig": "Ortsgeräusch (Ketten, Glocken …) auf 2 und 4, Pauke auf 1. Kleiner Fill in Takt 4 und 8.", "treibend": "Durchgehende Achtel, Pauke auf 1, 2+, 3+ und 4+. Fill in Takt 4 und 8."}, "n": "Rhythmus (Layer 2)", "art": "Loop", "takte": 8, "tonal": "Pauke nur auf Grundton und Quinte", "var": ["ruhig", "treibend"], "prio": 1,
+   "vibe": "Ruhig: Ortsgeräusch auf 2 und 4, Pauke auf 1. Treibend: Achtel, mehr Pauke. Takt 4 und 8 mit kleinem Fill.", "probe": {"layer": 2}},
+  {"id": "l3_flaeche", "vv": {"normal": "Langsame, dunkle Fläche aus Orgel oder Streichern, eher gefiltert.", "gekippt": "Dieselbe Fläche mit der dunklen Akkordfolge, dumpfer."}, "n": "Bedrohung (Layer 3)", "art": "Loop", "takte": 8, "tonal": "Akkordfläche, ohne Melodie (Melodie kommt vom Rollen-Instrument)", "var": ["normal", "gekippt"], "prio": 1,
+   "vibe": "Langsame, dunkle Fläche aus Orgel oder Streichern, eher gefiltert. Gekippt: dunkle Folge, dumpfer.", "probe": {"layer": 3}},
+  {"id": "l4_tutti", "vv": {"normal": "Schwerer Schlag auf jeder Eins, Paukenwirbel im letzten Schlag jedes Takts.", "gekippt": "Wie normal, mit der dunklen Akkordfolge."}, "n": "Tutti (Layer 4)", "art": "Loop", "takte": 8, "tonal": "Akzent-Akkord auf jeder Eins", "var": ["normal", "gekippt"], "prio": 2,
+   "vibe": "Nur nach einer Hochreaktion. Schwerer Schlag auf jeder Eins, Paukenwirbel in den letzten Schlag jedes Takts.", "probe": {"layer": 4}},
+  {"id": "st_kampfbeginn", "n": "Kampfbeginn", "art": "Stinger", "sek": 3, "tonal": "Grundakkord", "var": ["normal"], "prio": 2,
+   "vibe": "Ein Schlag mit Akkord, kurz ausklingend. Startet auf der nächsten Zählzeit, wenn ein Kampf beginnt.", "probe": null},
+  {"id": "st_sieg", "n": "Sieg-Kadenz", "art": "Stinger", "takte": 2, "tonal": "Dur-Akkord auf dem Grundton (z. B. D-Dur im Hafen)", "var": ["normal"], "prio": 2,
+   "vibe": "Erlösung. Weiche Fläche plus drei Glockentöne nach oben, dann Ruhe.", "probe": null}
+ ],
+ "assets": [
+  {"id": "mel_spieluhr", "gruppe": "rolle", "fuer": "Friedhofswärter", "n": "Spieluhr", "art": "Sampler", "noten": "C4 bis C6", "sek": 2, "prio": 2, "vibe": "Zerbrechlich, leicht verstimmt, wie aus einer alten Spieldose.", "probe": {"layer": 3, "role": "friedhofswaerter"}},
+  {"id": "mel_ziehharmonika", "gruppe": "rolle", "fuer": "Fischer", "n": "Ziehharmonika", "art": "Sampler", "noten": "C4 bis C6", "sek": 2, "prio": 1, "vibe": "Müdes Shanty-Akkordeon, etwas Luft im Balg, leichtes Vibrato.", "probe": {"layer": 3, "role": "fischer"}},
+  {"id": "mel_orgel", "gruppe": "rolle", "fuer": "Pfarrerin", "n": "Orgel", "art": "Sampler", "noten": "C4 bis C6", "sek": 2, "prio": 2, "vibe": "Kleine Kirchenorgel, Flötenregister, nicht zu sauber.", "probe": {"layer": 3, "role": "pfarrerin"}},
+  {"id": "mel_trompete", "gruppe": "rolle", "fuer": "Detektiv", "n": "Gedämpfte Trompete", "art": "Sampler", "noten": "C4 bis C6", "sek": 2, "prio": 2, "vibe": "Noir, Dämpfer, verrauchte Bar um drei Uhr morgens.", "probe": {"layer": 3, "role": "detektiv"}},
+  {"id": "mel_glasharfe", "gruppe": "rolle", "fuer": "Okkultist", "n": "Glasharfe", "art": "Sampler", "noten": "C4 bis C6", "sek": 3, "prio": 2, "vibe": "Nasser Finger auf Glasrand, langsam einschwingend, unheimlich rein.", "probe": {"layer": 3, "role": "okkultist"}},
+  {"id": "mel_klavier", "gruppe": "rolle", "fuer": "Kneipenschläger", "n": "Verstimmtes Klavier", "art": "Sampler", "noten": "C4 bis C6", "sek": 2, "prio": 2, "vibe": "Honky-Tonk aus der Hafenkneipe, zwei Saiten pro Ton leicht verstimmt.", "probe": {"layer": 3, "role": "kneipenschlaeger"}},
+
+  {"id": "foe_kultist", "gruppe": "gegner", "fuer": "Kultist", "n": "Chor-Murmeln", "art": "Sampler", "noten": "C4 bis A5", "sek": 2, "prio": 1, "vibe": "Gedämpfter Männerchor auf »ah«, wie durch eine Wand.", "probe": {"layer": "voice", "foe": "kultist"}},
+  {"id": "foe_tiefling", "gruppe": "gegner", "fuer": "Tiefling", "n": "Tiefes Blech", "art": "Sampler", "noten": "C2 bis A3", "sek": 2, "prio": 1, "vibe": "Tuba oder Posaune, nass und kehlig, fast ein Röhren.", "probe": {"layer": "voice", "foe": "tiefling"}},
+  {"id": "foe_ertrunkener", "gruppe": "gegner", "fuer": "Ertrunkener", "n": "Gurgelnde Stimme", "art": "Sampler", "noten": "C4 bis A5", "sek": 2, "prio": 2, "vibe": "Gesummter Ton unter Wasser, schnelles Zittern, Blasen.", "probe": {"layer": "voice", "foe": "ertrunkener"}},
+  {"id": "foe_schatten", "gruppe": "gegner", "fuer": "Schatten", "n": "Flüstern", "art": "Sampler", "noten": "C5 bis A6", "sek": 2, "prio": 2, "vibe": "Gehauchtes, fast tonloses Flüstern, das trotzdem eine Tonhöhe hat.", "probe": {"layer": "voice", "foe": "schatten"}},
+  {"id": "foe_ruft", "gruppe": "gegner", "fuer": "Das, was ruft (Boss)", "n": "Nebelhorn", "art": "Sampler", "noten": "C2 bis C3", "sek": 4, "prio": 2, "vibe": "Riesiges, fernes Nebelhorn, langsam an- und abschwellend.", "probe": {"layer": "voice", "foe": "ruft"}},
+
+  {"id": "ins_glocke", "gruppe": "instrument", "fuer": "Reaktions-Antworten, Heilen, Sieg", "n": "Antwortglocke", "art": "Sampler", "noten": "C5 bis C7", "sek": 2, "prio": 1, "vibe": "Kleine helle Glocke oder Celesta, klar und kurz.", "probe": {"sfx": "heal"}},
+  {"id": "ins_zupf", "gruppe": "instrument", "fuer": "Reaktion, Hochreaktion", "n": "Zupfton", "art": "Sampler", "noten": "C5 bis C7", "sek": 1, "prio": 1, "vibe": "Gezupfte Saite mit Glanz (Harfe, Zither), schneller Anschlag.", "probe": {"sfx": "react", "arg": 2}},
+
+  {"id": "sfx_hit_leicht", "gruppe": "sfx", "fuer": "Angriff", "n": "Treffer austeilen, leicht", "art": "One-Shot", "sek": 0.3, "anz": 3, "prio": 1, "vibe": "Kurzer Luftzug, dann trockener Einschlag. Knack, Körper, Klatschen.", "probe": {"sfx": "hit", "arg": 1}},
+  {"id": "sfx_hit_schwer", "gruppe": "sfx", "fuer": "Angriff", "n": "Treffer austeilen, schwer", "art": "One-Shot", "sek": 0.5, "anz": 3, "prio": 1, "vibe": "Wie leicht, aber mit Tiefschlag darunter und mehr Gewicht.", "probe": {"sfx": "hit", "arg": 5}},
+  {"id": "sfx_block", "gruppe": "sfx", "fuer": "Block", "n": "Blocken", "art": "One-Shot", "sek": 0.8, "anz": 2, "prio": 1, "vibe": "Holz-Klopfen, dumpfer Schlag, kurz nachklingendes Metall.", "probe": {"sfx": "block"}},
+  {"id": "sfx_hurt", "gruppe": "sfx", "fuer": "Spieler getroffen", "n": "Getroffen werden", "art": "One-Shot", "sek": 0.6, "anz": 2, "prio": 1, "vibe": "Schwerer Schlag in die Magengrube, Knirschen, dumpfes Nachgrollen.", "probe": {"sfx": "hurt"}},
+  {"id": "sfx_heal_hauch", "gruppe": "sfx", "fuer": "Heilen", "n": "Heil-Hauch", "art": "One-Shot", "sek": 0.7, "anz": 1, "prio": 2, "vibe": "Weicher Atemzug nach oben, untonal. Die Töne kommen aus der Antwortglocke.", "probe": {"sfx": "heal"}},
+  {"id": "sfx_react_funkeln", "gruppe": "sfx", "fuer": "Reaktion", "n": "Reaktions-Funkeln", "art": "One-Shot", "sek": 0.3, "anz": 2, "prio": 2, "vibe": "Helles Zischen und Funkeln, untonal. Die Töne kommen aus dem Zupfton.", "probe": {"sfx": "react", "arg": 0}},
+  {"id": "sfx_hoch_wucht", "gruppe": "sfx", "fuer": "Hochreaktion", "n": "Hochreaktions-Wucht", "art": "One-Shot", "sek": 1.5, "anz": 1, "prio": 1, "vibe": "Tiefschlag und aufreißende Rauschwelle, untonal. Akkord und Glocken kommen aus den Samplern.", "probe": {"sfx": "hoch"}},
+  {"id": "sfx_atemholen", "gruppe": "sfx", "fuer": "Vor der Hochreaktion", "n": "Atemholen-Sog", "art": "One-Shot", "sek": 0.75, "anz": 1, "prio": 2, "vibe": "Ein Schlag lang Sog nach oben, wie rückwärts abgespieltes Becken.", "probe": null},
+  {"id": "sfx_die", "gruppe": "sfx", "fuer": "Gegner stirbt", "n": "Gegner fällt", "art": "One-Shot", "sek": 0.7, "anz": 2, "prio": 2, "vibe": "Zusammensacken, nasses Knirschen, tiefer Abschluss.", "probe": {"sfx": "die"}},
+  {"id": "sfx_card", "gruppe": "sfx", "fuer": "Oberfläche", "n": "Karte ziehen/spielen", "art": "One-Shot", "sek": 0.15, "anz": 3, "prio": 3, "vibe": "Altes, dickes Papier über Holz.", "probe": {"sfx": "card"}},
+  {"id": "sfx_click", "gruppe": "sfx", "fuer": "Oberfläche", "n": "Klick", "art": "One-Shot", "sek": 0.05, "anz": 1, "prio": 3, "vibe": "Kleiner Messingschalter.", "probe": {"sfx": "click"}},
+  {"id": "sfx_pick", "gruppe": "sfx", "fuer": "Oberfläche", "n": "Aufheben", "art": "One-Shot", "sek": 0.15, "anz": 1, "prio": 3, "vibe": "Gegenstand landet im Rucksack, kurzes Klappern.", "probe": {"sfx": "pick"}},
+  {"id": "sfx_bad", "gruppe": "sfx", "fuer": "Oberfläche", "n": "Geht nicht", "art": "One-Shot", "sek": 0.25, "anz": 1, "prio": 3, "vibe": "Dumpfes, kurzes Nein. Kein Piepen.", "probe": {"sfx": "bad"}},
+  {"id": "sfx_forge", "gruppe": "sfx", "fuer": "Werkstatt", "n": "Verschmelzen", "art": "One-Shot", "sek": 0.9, "anz": 1, "prio": 2, "vibe": "Hammer auf Amboss, Zischen im Wasser.", "probe": {"sfx": "forge"}},
+  {"id": "sfx_jumpscare", "gruppe": "sfx", "fuer": "Jumpscare", "n": "Schreck", "art": "One-Shot", "sek": 1.2, "anz": 1, "prio": 2, "vibe": "Kreischender Cluster plus Tiefschlag. Der einzige Sound, der wehtun darf.", "probe": null}
+ ]
+}
