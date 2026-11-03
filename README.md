@@ -21,6 +21,7 @@ prototype/        Browser-Prototyp zum Ausprobieren und Entwerfen
   style.css       Aussehen der Oberfläche
 game/             Godot-4-Projekt (folgt)
 docs/spritegen/   Plan, Recherche und Agenten-Regeln für den prozeduralen Sprite-Generator
+docs/ui/          Kampf-UI: Ausgangslage (Variante A) und alle Gestaltungsideen aus den Entwürfen
 ```
 
 ## Prototyp starten
