@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saltmoor Sprite-Labor</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Sprite-Labor: prozedurale Gegner, Varianten aus Basis-Sprites, Welten aus Schichten */
+body{overflow-y:auto;user-select:text;-webkit-user-select:text}
+#lab{max-width:1180px;margin:0 auto;padding:24px 16px 80px}
+#lab>header h1{font-family:var(--fd);font-size:18px;color:var(--parch);margin:0 0 10px;line-height:1.5}
+#lab p{color:var(--dim);margin:0 0 8px;font-size:19px;line-height:1.1}
+#lab nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+#lab nav a{font-family:var(--fd);font-size:9px;color:var(--eld);text-decoration:none;border:2px solid #2e3a35;padding:7px 9px;background:#0b0f0e}
+#lab section{margin-top:36px}
+#lab h2{font-family:var(--fd);font-size:12px;color:var(--parch);border-bottom:2px solid #2e3a35;padding-bottom:8px;margin:0 0 8px;line-height:1.5}
+#lab code{font-family:monospace;font-size:14px;color:#b9c9bf;background:#111716;padding:1px 4px}
+canvas.px{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
+.stage{background:radial-gradient(ellipse at 50% 85%,#1a2422,#060807 70%);border:2px solid #1f2826}
+.two{display:grid;gap:16px;grid-template-columns:minmax(0,300px) minmax(0,1fr);align-items:start}
+@media (max-width:760px){.two{grid-template-columns:minmax(0,1fr)}}
+.panel{background:#0b0f0e;border:2px solid #1f2826;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.big{width:100%;aspect-ratio:64/80}
+.desc{font-size:18px;color:#b9c3b6;min-height:2.2em;line-height:1.05}
+.ctl{display:grid;gap:8px 12px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.ctl label{display:flex;flex-direction:column;gap:3px;font-size:16px;color:#9aa39a}
+.ctl select,.ctl input[type=number],.ctl input[type=text]{font-family:var(--fb);font-size:18px;background:#111716;color:var(--txt);border:2px solid #2e3a35;padding:3px 5px;min-width:0;width:100%}
+.ctl input[type=range]{width:100%;accent-color:#7affc8}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button.sm{font-size:9px;padding:8px 10px}
+button.hot{border-color:#7affc8;color:#7affc8}
+.thumbs{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+.thumb{position:relative;cursor:pointer;border:2px solid #1f2826;background:radial-gradient(ellipse at 50% 85%,#1a2422,#060807 70%)}
+.thumb canvas{width:100%;aspect-ratio:64/80}
+.thumb.sel{border-color:#7affc8}
+.thumb span{position:absolute;left:4px;top:2px;font-family:monospace;font-size:11px;color:#5a6a64}
+.favs{display:flex;gap:6px;flex-wrap:wrap;min-height:40px;align-items:center}
+.favs .thumb{width:56px}
+.favs .empty{font-size:16px;color:#5a6a64}
+.vrow{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.vrow .panel canvas{width:100%;aspect-ratio:64/80}
+.vrow .n{font-family:var(--fd);font-size:9px;color:var(--parch);line-height:1.5}
+.world{width:100%;aspect-ratio:16/9;border:2px solid #1f2826}
+.wthumbs{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.wthumbs canvas{width:100%;aspect-ratio:16/9;cursor:pointer;border:2px solid #1f2826}
+.note{border-left:3px solid #2e3a35;padding:4px 0 4px 12px;margin:10px 0}
+.tbl{width:100%;border-collapse:collapse;font-size:18px;line-height:1.05}
+.tbl th,.tbl td{border-bottom:1px solid #1f2826;padding:7px 8px 7px 0;text-align:left;vertical-align:top}
+.tbl th{font-family:var(--fd);font-size:8px;color:#6a7a74;font-weight:normal}
+.tbl td:first-child{color:var(--parch)}
+.ok{color:#7affc8}.mid{color:#e8c547}.no{color:#d0453a}
+.tblwrap{overflow-x:auto}
+#drop{border:2px dashed #2e3a35;padding:10px;text-align:center;color:#6a7a74;font-size:17px}
+#drop.on{border-color:#7affc8;color:#7affc8}
+</style>
+</head>
+<body>
+<canvas id="scene" width="320" height="180" style="display:none"></canvas>
+<div id="lab">
+ <header>
+  <h1>SALTMOOR · SPRITE-LABOR</h1>
+  <p>Hier entsteht alles aus Code und Zufall, nicht aus KI-Bildern. Jeder Gegner und jede Welt ist eine Zahl (der Seed) plus ein paar Regeln. Gleiche Zahl, gleiches Ergebnis: einen guten Wurf kann man also festhalten und ins Spiel übernehmen.</p>
+  <p>Zurück: <a href="gallery.html" style="color:var(--eld)">Galerie</a> · <a href="index.html" style="color:var(--eld)">Spiel</a></p>
+  <nav><a href="#gen">Gegner-Generator</a><a href="#var">Varianten aus einem Bild</a><a href="#welt">Welten-Baukasten</a><a href="#wie">Was geht und wie in Godot</a></nav>
+ </header>
+
+ <section id="gen"><h2>1 · GEGNER-GENERATOR</h2>
+  <p>Ein Gegner ist ein „Genom“ aus Bausteinen: Körperbau, Kopf, Augen, Maul, Arme, Tentakel, Stacheln, Extras, Haut, Palette. Jedes Bild wird live neu gemalt, darum ist alles animiert (atmen, wiegen, blinzeln, Tentakel). Auswahlfelder auf „Zufall“ lassen oder festlegen. Ein Klick auf ein Vorschaubild wählt es aus.</p>
+  <div class="two">
+   <div class="panel">
+    <div class="stage"><canvas id="bigC" class="px big" width="64" height="80"></canvas></div>
+    <div class="desc" id="bigD"></div>
+    <div class="btns">
+     <button class="sm" id="bFav">★ Merken</button>
+     <button class="sm" id="bSheet" title="8 Bilder nebeneinander, loopt nahtlos (für Godot: AnimatedSprite2D)">Spritesheet</button>
+     <button class="sm" id="bCode">Code kopieren</button>
+    </div>
+   </div>
+   <div class="panel">
+    <div class="ctl" id="genCtl"></div>
+    <div class="btns">
+     <button class="sm hot" id="bRoll">🎲 12 neue</button>
+     <button class="sm" id="bKids" title="6 leicht veränderte Abkömmlinge des ausgewählten Gegners">Nachkommen</button>
+     <button class="sm" id="bCross" title="Ausgewählter Gegner × zuletzt gemerkter Favorit">Kreuzen mit Favorit</button>
+    </div>
+    <div class="thumbs" id="grid"></div>
+    <div><span style="font-size:16px;color:#9aa39a">Favoriten (bleiben in diesem Browser):</span><div class="favs" id="favs"></div></div>
+    <div class="ctl"><label>Code einfügen<input type="text" id="codeIn" placeholder="eyJ2Ijox…"></label></div>
+   </div>
+  </div>
+ </section>
+
+ <section id="var"><h2>2 · VARIANTEN AUS EINEM BILD</h2>
+  <p>Ein fertiges Sprite als Basis nehmen und Abwandlungen würfeln: Farben tauschen, Augen aufsetzen, Stacheln und Fäden wachsen lassen, Ränder wegfaulen lassen, Elite-Version. Das geht mit den handgezeichneten Gegnern, mit dem Generator-Gegner von oben oder mit einem eigenen Bild (PNG oder JPG, am besten freigestellt). Ein stilles Bild bekommt seine Bewegung durch Wiegen und Atmen.</p>
+  <div class="ctl" id="varCtl"></div>
+  <div class="btns" style="margin:10px 0"><button class="sm hot" id="bVar">🎲 neue Varianten</button><label class="sm" style="display:inline-block"><input type="file" id="file" accept="image/*" hidden><span class="sm" style="font-family:var(--fd);font-size:9px;padding:8px 10px;border:2px solid #39443f;background:#161c1b;display:inline-block;cursor:pointer;box-shadow:3px 3px 0 #000">Bild hochladen</span></label></div>
+  <div id="drop">Oder ein Bild hierher ziehen</div>
+  <div class="vrow" id="vrow" style="margin-top:12px"></div>
+ </section>
+
+ <section id="welt"><h2>3 · WELTEN-BAUKASTEN</h2>
+  <p>Ein Hintergrund aus sechs Schichten: Stimmung, Himmel, Ferne, Boden, Wetter, Requisiten. Jede Schicht hat ihren eigenen Zufall (Sternbild, Häuserzeile, Baumstellung …). <span id="wCount"></span></p>
+  <div class="ctl" id="wCtl"></div>
+  <div class="btns" style="margin:10px 0"><button class="sm hot" id="bWorld">🎲 neue Welt</button><button class="sm" id="bWorlds">4 Vorschläge</button></div>
+  <canvas id="worldC" class="px world" width="320" height="180"></canvas>
+  <div class="wthumbs" id="wthumbs" style="margin-top:10px"></div>
+ </section>
+
+ <section id="wie"><h2>4 · WAS GEHT, WAS NICHT · UND WIE IN GODOT</h2>
+  <div class="tblwrap"><table class="tbl">
+   <tr><th>ANSATZ</th><th>MACHBAR?</th><th>GUT FÜR</th><th>HAKEN</th></tr>
+   <tr><td>Bausteine + Regeln (Teil 1)</td><td class="ok">ja, auch live im Run</td><td>viele normale Gegner, jeder Run anders</td><td>sieht nach „Familie“ aus, Ausreißer muss man aussortieren</td></tr>
+   <tr><td>Varianten aus Basis-Sprite (Teil 2)</td><td class="ok">ja</td><td>Elite-, Fäulnis- und Farbversionen bekannter Gegner</td><td>die Basis muss jemand gemacht haben</td></tr>
+   <tr><td>KI-Bild als Vorlage, dann Varianten</td><td class="mid">technisch ja</td><td>schnelle Platzhalter</td><td>verkleinerte KI-Bilder werden matschig, Stil passt selten, und ihr wollt es nicht</td></tr>
+   <tr><td>Völlig freie Generierung (Pixel-Wachstum, Zellautomaten)</td><td class="mid">ja, aber wild</td><td>Wucherungen, Schleim, „das Unaussprechliche“ in der Tiefe</td><td>lesbare Körper entstehen selten zufällig</td></tr>
+   <tr><td>Welten aus Schichten (Teil 3)</td><td class="ok">ja, einfach</td><td>jeder Run sieht anders aus</td><td>braucht feste Regeln pro Zone, sonst wirkt es beliebig</td></tr>
+   <tr><td>Bosse</td><td class="no">lieber von Hand</td><td>Momente, an die man sich erinnert</td><td>generierte Bosse wirken austauschbar</td></tr>
+  </table></div>
+  <div class="note"><p><b style="color:var(--parch)">Empfehlung:</b> eine Mischung. Bosse und ein paar Schlüsselgegner bleiben von Hand (so wie jetzt in <code>js/sprites/foes.js</code>). Normale Gegner kommen aus dem Generator: entweder ihr kuratiert gute Codes und tragt sie in <code>data/foes.json</code> ein, oder das Spiel würfelt pro Run neue und hält sich dabei an Regeln pro Zone (Hafen = Tiefsee-Palette, Wald = Moor …). Varianten (Teil 2) machen aus einem Gegner Elite- und Tiefen-Versionen.</p></div>
+  <div class="note"><p><b style="color:var(--parch)">Godot 4:</b> Der Generator ist nur Mathe und Rechtecke, das lässt sich fast eins zu eins nach GDScript übersetzen. Dort malt man in ein <code>Image</code> (<code>fill_rect</code>, <code>set_pixel</code>), macht daraus eine <code>ImageTexture</code> und baut beim Run-Start pro Gegner 8 Bilder in ein <code>SpriteFrames</code> für <code>AnimatedSprite2D</code>. Das kostet beim Laden Millisekunden. Farbtausch, Treffer-Blitz, Wiegen und Auflösen macht man in Godot besser als kleine Shader, die gelten dann für alle Sprites, auch handgezeichnete. Die Hintergründe werden zu Ebenen in einem <code>ParallaxBackground</code> plus Partikel (<code>GPUParticles2D</code>) für Regen, Asche und Sporen.</p></div>
+  <div class="note"><p><b style="color:var(--parch)">Wo der Code liegt:</b> <code>js/procgen/creature.js</code> (Gegner), <code>js/procgen/variants.js</code> (Varianten, Bild-Import), <code>js/procgen/backdrop.js</code> (Welten), <code>js/lab.js</code> (diese Seite). Neue Bausteine sind jeweils eine kleine Funktion.</p></div>
+ </section>
+</div>
+
+<script src="js/scenes/pixel.js"></script>
+<script src="js/sprites/foes.js"></script>
+<script src="js/procgen/creature.js"></script>
+<script src="js/procgen/variants.js"></script>
+<script src="js/procgen/backdrop.js"></script>
+<script src="js/lab.js"></script>
+</body>
+</html>

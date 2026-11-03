@@ -8,14 +8,17 @@ Ein Cosmic-Horror-Roguelike im Neuengland des Jahres 1925. Du bist niemand Beson
 prototype/        Browser-Prototyp zum Ausprobieren und Entwerfen
   index.html      das Spiel
   gallery.html    alle Bausteine einzeln: Gegner, Boss-Entwürfe, Items, UI, Szenen
+  lab.html        Sprite-Labor: prozedurale Gegner, Varianten aus einem Bild, Welten aus Schichten
   data/           alle Spielwerte als JSON (Items, Gegner, Reaktionen, Balance ...), siehe data/README.md
   js/core/        Spielregeln ohne Grafik: Zustand, Kampf, Run-Ablauf, Reaktionen
   js/sprites/     Pixel-Sprites der Items und Zeichner der Gegner und Boss-Entwürfe
   js/scenes/      Hintergründe, Bühne, Partikel und Effekte
+  js/procgen/     prozedurale Gegner (creature.js), Varianten (variants.js), Welten (backdrop.js)
   js/ui/          Oberfläche: Bausteine, Bildschirme, Eingabe, Effekt-Zuordnung, Jumpscare
   js/audio/       Soundeffekte (WebAudio, ohne Dateien)
   style.css       Aussehen der Oberfläche
 game/             Godot-4-Projekt (folgt)
+docs/spritegen/   Plan, Recherche und Agenten-Regeln für den prozeduralen Sprite-Generator
 ```
 
 ## Prototyp starten
