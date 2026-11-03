@@ -1,0 +1,340 @@
+<title>Saltmoor Ideenkiste</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+<style>
+/* Layout: ein dunkles Inventar-Brett wie im Spiel. Oben Diagnose, dann Mechaniken als breite Karten, dann Items als Raster mit Filtern, unten Reaktionen und Rollen. Bewusst nur ein (dunkles) Theme, wie das Spiel. */
+:root{
+ color-scheme:dark;
+ --bg:#0b0f0e; --panel:#121817; --slot:#232b29; --line:#2e3a35;
+ --txt:#d9d3bf; --dim:#8a8f86; --parch:#d8c493; --eld:#7affc8; --gold:#e8c547; --red:#d0453a;
+ --fd:'Press Start 2P',ui-monospace,monospace; --fb:'VT323',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:20px;line-height:1.15}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:36px}
+h1,h2,h3{font-family:var(--fd);font-weight:normal;color:var(--parch);text-wrap:balance;margin:0;text-shadow:3px 3px 0 #000}
+h1{font-size:clamp(18px,3.6vw,32px);letter-spacing:.04em;line-height:1.35}
+h2{font-size:clamp(11px,1.6vw,14px);letter-spacing:.06em;line-height:1.6}
+h3{font-size:10px;line-height:1.6;color:#efe6cc}
+p{margin:0;max-width:68ch}
+.lede{display:flex;flex-direction:column;gap:12px}
+.lede .eyebrow{font-family:var(--fd);font-size:9px;color:var(--eld);letter-spacing:.12em}
+.lede p{color:#c8c2ae;font-size:21px}
+.sec{display:flex;flex-direction:column;gap:14px}
+.sec>header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;border-bottom:2px solid var(--line);padding-bottom:8px}
+.sec>header p{color:var(--dim);font-size:18px}
+.diag{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.stat{background:var(--panel);border:2px solid #000;box-shadow:0 0 0 2px var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.stat b{font-family:var(--fd);font-weight:normal;font-size:20px;color:var(--gold);text-shadow:2px 2px 0 #000;font-variant-numeric:tabular-nums}
+.stat span{color:#c8c2ae;font-size:18px}
+/* Karten */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+@media (max-width:420px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:2px solid #000;box-shadow:0 0 0 2px var(--line),4px 4px 0 rgba(0,0,0,.6);padding:12px;display:grid;grid-template-columns:76px 1fr;gap:10px 12px;align-content:start;min-width:0}
+.card.rare{box-shadow:0 0 0 2px #8a7426,4px 4px 0 rgba(0,0,0,.6)}
+.card.curse{box-shadow:0 0 0 2px #5d3f82,0 0 18px rgba(155,114,201,.18),4px 4px 0 rgba(0,0,0,.6)}
+.ico{width:76px;height:76px;background:var(--slot);border:2px solid #000;box-shadow:inset 0 0 0 2px #313b38;display:grid;place-items:center}
+.ico canvas{width:60px;height:60px;image-rendering:pixelated;image-rendering:crisp-edges}
+.hd{display:flex;flex-direction:column;gap:5px;min-width:0}
+.meta{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:16px;color:var(--dim)}
+.st{display:inline-block;font-family:var(--fd);font-size:7px;padding:3px 3px 2px;color:#111;line-height:1;box-shadow:1px 1px 0 #000}
+.pill{font-family:var(--fd);font-size:7px;padding:3px 4px 2px;line-height:1;border:1px solid var(--line);color:var(--dim)}
+.pill.r{border-color:#8a7426;color:var(--gold)}
+.pill.c{border-color:#5d3f82;color:#c9a8f0}
+.body{grid-column:1/-1;display:flex;flex-direction:column;gap:8px;min-width:0}
+.kart{background:#0a0d0c;border:1px dashed #3a4842;padding:6px 8px;font-size:18px;color:#e8e0c8}
+.kart i{font-style:normal;font-family:var(--fd);font-size:8px;color:var(--gold);margin-right:6px}
+.kart em{font-style:normal;color:var(--eld)}
+.why{color:#bdb7a3;font-size:18px}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-family:var(--fd);font-size:7px;padding:4px 5px 3px;background:#0f1514;border:1px solid #2e3a35;color:#9fd8d0;cursor:pointer}
+.tag:hover,.tag:focus-visible{border-color:var(--eld);color:var(--eld);outline:none}
+.vote{display:flex;gap:6px;flex-wrap:wrap}
+.vote button{font-family:var(--fd);font-size:8px;color:var(--dim);background:#161c1b;border:2px solid #313b38;padding:6px 8px;cursor:pointer;box-shadow:2px 2px 0 #000}
+.vote button:hover{color:var(--txt);border-color:var(--parch)}
+.vote button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.vote button[aria-pressed="true"].y{color:#0b0f0e;background:var(--eld);border-color:var(--eld)}
+.vote button[aria-pressed="true"].m{color:#0b0f0e;background:var(--gold);border-color:var(--gold)}
+.vote button[aria-pressed="true"].n{color:#fff;background:#6b2420;border-color:var(--red)}
+/* Mechanik-Karten breiter */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+@media (max-width:420px){.mgrid{grid-template-columns:1fr}}
+.mcard .rule{font-size:18px;color:#e8e0c8;border-left:3px solid var(--eld);padding-left:8px}
+.mcard .uses{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mini{width:32px;height:32px;background:var(--slot);border:2px solid #000;display:grid;place-items:center}
+.mini canvas{width:24px;height:24px;image-rendering:pixelated}
+/* Filter */
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.bar .lbl{font-family:var(--fd);font-size:8px;color:var(--dim);margin-right:2px}
+.bar button{font-family:var(--fd);font-size:8px;color:var(--txt);background:#161c1b;border:2px solid #39443f;padding:7px 9px;cursor:pointer;box-shadow:2px 2px 0 #000}
+.bar button[aria-pressed="true"]{border-color:var(--parch);color:var(--parch);background:#221f17}
+.bar button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar .sp{flex:1}
+.count{font-family:var(--fd);font-size:8px;color:var(--eld)}
+/* Reaktionen */
+.rx{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.rxc{background:var(--panel);border:2px solid #000;box-shadow:0 0 0 2px var(--line);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.rxc.h{box-shadow:0 0 0 2px #8a7426}
+.rxc .k{display:flex;gap:4px;align-items:center;font-family:var(--fd);font-size:8px;color:var(--dim)}
+.rxc h3{color:var(--eld)}
+.rxc.h h3{color:#ffd23f}
+.rxc p{font-size:18px;color:#c8c2ae}
+/* Export */
+.export{background:var(--panel);border:2px solid #000;box-shadow:0 0 0 2px var(--line);padding:14px;display:flex;flex-direction:column;gap:10px}
+.export textarea{width:100%;min-height:140px;background:#0a0d0c;color:var(--txt);border:1px solid var(--line);font-family:var(--fb);font-size:18px;padding:8px;resize:vertical}
+.export .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.export button{font-family:var(--fd);font-size:9px;color:var(--txt);background:#161c1b;border:2px solid #39443f;padding:10px 12px;cursor:pointer;box-shadow:3px 3px 0 #000}
+.export button:hover{border-color:var(--parch);color:#fff}
+.export .ok{font-family:var(--fd);font-size:8px;color:var(--eld)}
+.hidden{display:none!important}
+@media (prefers-reduced-motion:no-preference){.card{transition:transform .12s}.card:hover{transform:translate(-1px,-1px)}}
+</style>
+
+<div class="wrap">
+ <section class="lede">
+  <span class="eyebrow">SALTMOOR 1925 · IDEENKISTE</span>
+  <h1>Neue Funde aus der Tiefe</h1>
+  <p>Vorschläge für neue Items und Mechaniken, damit nicht jeder Run aus denselben Fundstücken besteht. Nichts davon ist eingebaut. Jede Idee hat Ja, Vielleicht und Nein. Unten kannst du deine Auswahl als Text kopieren und mir zurückschicken.</p>
+ </section>
+
+ <section class="sec" aria-labelledby="h-diag">
+  <header><h2 id="h-diag">WARUM ES SICH GLEICH ANFÜHLT</h2><p>Stand: data/items.json</p></header>
+  <div class="diag">
+   <div class="stat"><b>27</b><span>normale Items im Fundpool, alle gleich wahrscheinlich, egal ob Hafen oder Grund.</span></div>
+   <div class="stat"><b>15 von 27</b><span>geben nur eine Karte mit reinem Schaden oder reinem Block. Sie unterscheiden sich nur in den Zahlen.</span></div>
+   <div class="stat"><b>1</b><span>Karte pro Item. Kein Item ändert eine Regel, nur die sechs Rollen-Sets tun das.</span></div>
+   <div class="stat"><b>0</b><span>Items, die an Zone, Gegner oder Ereignis gebunden sind. Der Knochen ist die einzige Ausnahme.</span></div>
+  </div>
+ </section>
+
+ <section class="sec" aria-labelledby="h-mech">
+  <header><h2 id="h-mech">NEUE MECHANIKEN</h2><p>Klick auf ein Etikett filtert die Items darunter.</p></header>
+  <div class="mgrid" id="mech"></div>
+ </section>
+
+ <section class="sec" aria-labelledby="h-items">
+  <header><h2 id="h-items">NEUE ITEMS</h2><p>Karte in Spielnotation: Name · Energie · Wirkung.</p></header>
+  <div class="bar" id="bar" role="toolbar" aria-label="Items filtern"></div>
+  <div class="grid" id="items"></div>
+ </section>
+
+ <section class="sec" aria-labelledby="h-rx">
+  <header><h2 id="h-rx">NEUE REAKTIONEN (STROM)</h2><p>Gehören zur Mechanik »Neuer Stoff: Strom«.</p></header>
+  <div class="rx" id="rx"></div>
+ </section>
+
+ <section class="sec" aria-labelledby="h-roles">
+  <header><h2 id="h-roles">NEUE ROLLEN-SETS</h2><p>Drei neue Items zusammen angelegt geben einen Bonus, wie die bestehenden Rollen.</p></header>
+  <div class="grid" id="roles"></div>
+ </section>
+
+ <section class="sec" aria-labelledby="h-ex">
+  <header><h2 id="h-ex">DEINE AUSWAHL</h2><p>Bleibt nur in diesem Browser gespeichert.</p></header>
+  <div class="export">
+   <textarea id="out" readonly aria-label="Auswahl als Text"></textarea>
+   <div class="row"><button id="copy" type="button">AUSWAHL KOPIEREN</button><button id="reset" type="button">ALLES ZURÜCKSETZEN</button><span class="ok" id="ok"></span></div>
+  </div>
+ </section>
+</div>
+
+<script>
+const PAL={k:'#14110f',g:'#7c7f86',G:'#c4c7cc',b:'#6e4426',B:'#a8723f',y:'#e2bd45',o:'#d9772b',r:'#a8322c',R:'#d9574c',w:'#ece6d6',c:'#5fa8a8',C:'#9fd8d0',n:'#3d7048',N:'#78b066',p:'#5d3f82',P:'#9b72c9',s:'#d6a27a',d:'#2a3956',D:'#4b6390',e:'#7affc8',t:'#8a7f6a',T:'#b7a98a',z:'#8fe3ff',Z:'#e9fbff'};
+const ST={E:['EI','#a6acb4','Eisen'],F:['FE','#e8873a','Feuer'],W:['WA','#6d9be0','Wasser'],S:['SA','#f1ede2','Salz'],B:['BL','#d0453e','Blut'],G:['GL','#e8c547','Glaube'],L:['LI','#fff6b8','Licht'],V:['FÄ','#86c062','Fäulnis'],Z:['ST','#8fe3ff','Strom']};
+const AREA={waffe:'Waffe',kleidung:'Kleidung',talisman:'Talisman',proviant:'Proviant'};
+// Basis-Sprites aus dem Spiel (für Umfärbungen)
+const BASE={
+coat:['............','...bb..bb...','..bbbbbbbb..','.bbbBbbBbbb.','.bb.bbbb.bb.','.bb.bBbb.bb.','.bb.bbbb.bb.','.bb.bBbb.bb.','....bbbb....','....bb.bb...','............','............'],
+bottle:['.....kk.....','.....nn.....','.....nn.....','....nNNn....','...nNnnnn...','...nNnnnn...','...nNnnnn...','...nwwwwn...','...nnnnnn...','...nnnnnn...','............','............']
+};
+const SPR={
+// --- Mechanik-Icons ---
+m_zone:['............','.TTTTTTTTTT.','.TTDDTTTTTT.','.TDDDTTrTrT.','.TTDDTTTrTT.','.TTTDTTrTrT.','.TTttTTTTTT.','.TtTTtTTDDT.','.TTTTTtDDDT.','.TTTTTTTDDT.','.TTTTTTTTTT.','............'],
+m_foe:['.....kk.....','....bkkb....','.....bb.....','....bBBb....','...bBBBBb...','..bBBBBBBb..','..bBByyBBb..','..bBByyBBb..','..bBBBBBBb..','...bBBBBb...','....bbbb....','............'],
+m_proviant:['............','..gggggggg..','.gGGGGGGGGg.','.gggggggggg.','.gDDDDDDDDg.','.gDwwwwwwDg.','.gDwcCCcwDg.','.gDwwwwwwDg.','.gDDDDDDDDg.','.gggggggggg.','..gggggggg..','............'],
+m_wahn:['............','............','....RRRR....','..RRwwwwRR..','.RwwPPPPwwR.','RwwPPkkPPwwR','RwwPPkePPwwR','.RwwPPPPwwR.','..RRwwwwRR..','....RRRR....','............','............'],
+m_fluch:['....gggg....','...g....g...','...g....g...','..pppppppp..','..pPPPPPPp..','..pPPkkPPp..','..pPPkkPPp..','..pPPPkPPp..','..pPPPPPPp..','..pppppppp..','.....e......','....e.e.....'],
+m_gezeit:['......yyy...','.....yy.....','.....y......','.....yy.....','......yyy...','............','.D...D...D..','DcD.DcD.DcD.','cccDcccDcccD','cccccccccccc','dddddddddddd','dddddddddddd'],
+m_strom:['......zz....','.....zz.....','....zz......','...zzZzzz...','......zz....','.....zz.....','....zZ......','...zzzzz....','......zz....','.....z......','....z.......','............'],
+m_muni:['............','..G...G...G.','.GGG.GGG.GGG','.yyy.yyy.yyy','.yyy.yyy.yyy','.yoy.yoy.yoy','.yyy.yyy.yyy','.yyy.yyy.yyy','.ooo.ooo.ooo','............','............','............'],
+m_takt:['..bbbbbbbb..','...wwwwww...','...wyyyyw...','....wyyw....','.....yy.....','.....ww.....','....w..w....','...w.yy.w...','...wyyyyw...','...wwwwww...','..bbbbbbbb..','............'],
+m_passiv:['...yyyy.....','..y....y....','..y....y....','...yyyy.....','....yy......','....yy......','....yyyy....','....yy......','....yyy.....','....yy......','............','............'],
+m_tagebuch:['............','.bbbbbbbbb..','.bBBBBBBBbw.','.bBBBBBBBbw.','.bBBeeBBBbw.','.bBeBBeBBbw.','.bBBeeBBByy.','.bBBBBBBBbw.','.bBBBBBBBbw.','.bbbbbbbbbw.','..wwwwwwww..','............'],
+// --- Items ---
+bootshaken:['.........GG.','........G..G','.........G.G','........gGG.','.......b....','......b.....','.....b......','....b.......','...b........','..b.........','.b..........','............'],
+enterbeil:['............','..gGGg......','.gGGGGg.....','.gGGGGbb....','..gGg.bb....','.......bb...','........bb..','.........bb.','..........b.','............','............','............'],
+dynamit:['.........y..','........o...','.......k....','......k.....','...rrrRr....','...rRRrr....','...rrrrr....','...kkkkk....','...rRRrr....','...rrrrr....','...rrrrr....','............'],
+leuchtpistole:['............','............','.ooooooook..','.oyyyyyyok..','.ooooooook..','.....kook...','....kbbk....','...kbbbk....','...kbbk.....','...kkk......','............','............'],
+ankerkette:['.....gg.....','....g..g....','.....gg.....','.....Gg.....','...GGGggg...','.....Gg.....','.....Gg.....','.g...Gg...g.','.gg..Gg..gg.','..gg.Gg.gg..','..gggggggg..','.....gg.....'],
+mpi:['............','............','gggggggggk..','gGGGGGGGgkkk','gggggggggk..','...kgg.bbk..','..kgggk.bbk.','..kgggk..bbk','..kgggk...bb','...kkk......','............','............'],
+sense:['..GGGGGG....','.G......Gb..','G........b..','.........b..','........b...','........b...','.......b....','.......b....','......bb....','......b.....','.....b......','.....b......'],
+stockdegen:['...yyyy.....','..y...yy....','......yy....','......bb....','......bb....','......GG....','......Gw....','......GG....','......bb....','......bb....','......bb....','......kk....'],
+zitteraal:['....kkkk....','...kggggk...','..kCcccCCk..','..kC..z.Ck..','..kCnnnzCk..','..kCzNnnCk..','..kC..nNCk..','..kCnnn.Ck..','..kC.z..Ck..','..kCCCCCCk..','...kkkkkk...','............'],
+taucherhelm:['....oooo....','..ooyyyyoo..','.oyyyyyyyyo.','.oykkkkkkyo.','oyykcCCckyyo','oyykCddCkyyo','oyykcddckyyo','.oykkkkkkyo.','.oyyyyyyyyo.','..oooooooo..','.gggggggggg.','.gGgGgGgGgg.'],
+gasmaske:['...nnnnnn...','..nnnnnnnn..','.nnCCnnCCnn.','.nCkkCCkkCn.','.nnCCnnCCnn.','..nnnnnnnn..','...nnggnn...','....gGGg....','....gGGg....','....gggg....','.....kk.....','............'],
+kragen:['............','...kkkkkk...','..kwwwwwwk..','.kddkwwkddk.','kdddkwwkdddk','kddddkkddddk','kddddddddddk','kdDddddddDdk','kdDddddddDdk','kddddddddddk','kkkkkkkkkkkk','............'],
+robbenfell:['............','..t......t..','.tTt....tTt.','.tTTttttTTt.','..tTTkTTTt..','..tTTTTkTt..','..tTkTTTTt..','..tTTTTTTt..','.tTTTkTTTTt.','.tTt....tTt.','..t......t..','............'],
+schuerze:['....t..t....','....t..t....','...TTTTTT...','...TTTTTT...','..TTTTTTTT..','tTTTTzTTTTTt','..TTTzzTTT..','..TTTTzTTT..','..TTTTTTTT..','..TTTTTTTT..','..tttttttt..','............'],
+auge:['....kkkk....','...kggggk...','..kCCCCCCk..','..kC....Ck..','..kC.ww.Ck..','..kCwwNwCk..','..kCwNkwCk..','..kCwwwwCk..','..kC.Rw.Ck..','..kCCCCCCk..','...kkkkkk...','............'],
+tarot:['..pppppp....','..pPPPPp....','..pPywwwwww.','..pyywwRRww.','..pPywRwwRw.','..pPPwRwwRw.','..pPPwwRRww.','..pPPwwRRww.','..pPPwRwwRw.','..pppwRwwRw.','.....wwRRww.','.....wwwwww.'],
+kompass:['.....yy.....','...yyyyyy...','..ywwwwwwy..','.ywwwggwwwy.','.ywwwggwwwy.','.ywwwggwwwy.','.ywwwRRwwwy.','.ywwwRRwwwy.','..ywwRRwwy..','...yyRRyy...','.....RR.....','............'],
+hasenpfote:['.....yy.....','....y..y....','.....yy.....','....kkkk....','....TTTT....','...TTTTTT...','...TTwTTT...','...TTTTTT...','..TTTTTTTT..','..TTsTTsTT..','..TT.TT.TT..','............'],
+hexenflasche:['.....kk.....','....kbbk....','.....BB.....','....bBBb....','...bBBBBb...','..bBBgBBBb..','..bBgBgBBb..','..bBBRBBBb..','..bBBBBBBb..','...bBBBBb...','....bbbb....','............'],
+gezeitentafel:['.TTTTTTTTTT.','.TwwwwwwwwT.','.TwwwwyywwT.','.TwwwyywwwT.','.TwwwyywwwT.','.TwwwwyywwT.','.TwwwwwwwwT.','.TDwwDwwDwT.','.TdDDdDDdDT.','.TddddddddT.','.TTTTTTTTTT.','............'],
+goetze:['....nnnn....','...nNNNNn...','..nNeNNeNn..','..nNNNNNNn..','...nNnnNn...','..nNnNNnNn..','.nNn.NN.nNn.','.n..nNNn..n.','....nNNn....','...nnnnnn...','..gggggggg..','..gGGGGGGg..'],
+spieluhr:['..P.....P...','..PP....PP..','.PP....PP...','............','.bbbbbbbbbb.','.bBBBBBBBBb.','.bBByyyyBBbg','.bBBBBBBBBbg','.bBBBBBBBBb.','.bbbbbbbbbb.','..k......k..','............'],
+kultmaske:['...wwwwww...','..wwwwwwww..','.wwRwwwwRww.','.wkkRwwRkkw.','.wkkwwwwkkw.','.wwwwwwwwww.','.wwwwrrwwww.','..wwrwwrww..','..wwwwwwww..','...wrrrrw...','....wwww....','............'],
+schuppe:['............','.....cc.....','....cCCc....','...cCCCCc...','..cCCwCCCc..','..cCwCCCCc..','..cCCCCCCc..','..ccCCCCcc..','...cCCCCc...','....cCCc....','.....cc.....','............'],
+fetzen:['....pppp....','...pPPPPp...','..pPePPePp..','..pPPPPPPp..','..pPPPPPPp..','.pPPPPPPPPp.','.pPpPPpPPp..','pPp.pPp.pPp.','pp..pp..pp..','p...p...p...','............','............'],
+laudanum:['............','.....kk.....','.....kk.....','.....bb.....','....bBBb....','...bBBBBb...','...bwwwwb...','...bwrrwb...','...bwwwwb...','...bBBBBb...','...bbbbbb...','............'],
+riechsalz:['....C..C....','...C..C.....','....C..C....','...C..C.....','...gggggg...','..gGGGGGGg..','..gwwwwwwg..','..gwGwwGwg..','..gwwwwwwg..','..gggggggg..','............','............'],
+gluehbirne:['....wwww....','...wyyyyw...','..wyy..yyw..','..wy.zz.yw..','..wy.zz.yw..','..wyyyyyyw..','...wyyyyw...','....wyyw....','....gGGg....','....gggg....','....gGGg....','.....kk.....']
+};
+const SWAP={offiziersmantel:['coat',{b:'n',B:'y'}],rum:['bottle',{n:'b',N:'B',w:'y'}]};
+
+function draw(name,size){
+ let g=SPR[name],map={};if(!g&&SWAP[name]){g=BASE[SWAP[name][0]];map=SWAP[name][1];}
+ const c=document.createElement('canvas');c.width=12;c.height=12;const x=c.getContext('2d');
+ (g||[]).forEach((row,y)=>[...row].forEach((ch,i)=>{const k=map[ch]||ch;if(PAL[k]){x.fillStyle=PAL[k];x.fillRect(i,y,1,1);}}));
+ c.setAttribute('role','img');return c;}
+
+const MECH=[
+ {id:'zone',spr:'m_zone',n:'Zonen-Beute',rule:'Jede Zone hat einen eigenen Fundpool. Im Hafen findest du Hafenzeug, im Moorwald Moorzeug, in der Kapelle Geweihtes, im Grund das Fremde.',why:'Behebt das Hauptproblem direkt: Ein Run fühlt sich in Tiefe 2 anders an als in Tiefe 10. Bestehende Items werden einfach auf Zonen verteilt, ein kleiner allgemeiner Pool bleibt.'},
+ {id:'foe',spr:'m_foe',n:'Gegner-Beute',rule:'Jeder Gegnertyp lässt mit kleiner Chance ein eigenes Stück fallen. Kultisten ihre Maske, Tieflinge Schuppen, Schatten einen Fetzen von sich selbst.',why:'Gibt Kämpfen einen zweiten Grund und macht Gegner wiedererkennbar. Passt zu »Knochen vom Friedhofswärter«, das gibt es schon als Sonderfall.'},
+ {id:'proviant',spr:'m_proviant',n:'Proviant',rule:'Ein vierter, kleiner Bereich mit 2 Slots. Proviant gibt eine Karte, die nach dem Ausspielen verbraucht ist. Er stapelt sich (z. B. 3× Rum).',why:'Kurzfristige, starke Entscheidungen ohne Deck-Verwässerung. Gutes Ziel für Gold im Krämer und für Ereignisse.'},
+ {id:'wahn',spr:'m_wahn',n:'Wahnsinn',rule:'Neue Leiste von 0 bis 10. Manche starken Items erhöhen sie, Glaube senkt sie. Ab 5 mischen sich unspielbare Trugbild-Karten ins Deck, bei 10 kommt ein Jumpscare und du verlierst 8 Leben, dann fällt sie auf 5.',why:'Gibt dem Horror-Thema eine Mechanik und dem Stoff Glaube eine zweite Aufgabe. Verknüpft den bestehenden Jumpscare mit dem Spiel statt mit der Uhr.'},
+ {id:'fluch',spr:'m_fluch',n:'Verfluchte Items',rule:'Seltene Funde mit einer starken Wirkung und einem dauerhaften Nachteil. Lila umrandet. Man kann sie nicht wegwerfen, nur in der Werkstatt mit einem Glaube-Item verschmelzen, das hebt den Fluch auf.',why:'Echte Risiko-Entscheidungen. Gibt der Werkstatt einen weiteren Zweck.'},
+ {id:'gezeit',spr:'m_gezeit',n:'Gezeiten',rule:'Jeder Kampf hat einen Takt: 2 Züge Ebbe, 2 Züge Flut. Bei Flut wirkt Wasser 50 % stärker, bei Ebbe Feuer. Tieflinge greifen bei Flut härter an. Anzeige oben links neben der Tiefe.',why:'Bringt Timing in den Kampf und macht den Ort spürbar. Kostet wenig Code, ist nur ein Zähler.'},
+ {id:'strom',spr:'m_strom',n:'Neuer Stoff: Strom',rule:'Ein neunter Stoff. 1925 kommt die Elektrizität nach Saltmoor. Strom reagiert mit Wasser, Eisen und Licht (siehe Reaktionen unten) und bringt den neuen Zustand »Betäubt«: Der Gegner setzt einen Zug aus.',why:'Neue Reaktionen sind das, was beim Spielen am meisten Spaß macht. Ein neuer Stoff öffnet gleich mehrere neue Kombinationen und Rollen.'},
+ {id:'muni',spr:'m_muni',n:'Munition',rule:'Feuerwaffen haben Ladungen pro Kampf (z. B. 3). Ist das Magazin leer, wird die Karte zu »Nachladen« (1 Energie, füllt auf).',why:'Macht Schusswaffen anders als Nahkampf, ohne sie einfach stärker zu machen.'},
+ {id:'takt',spr:'m_takt',n:'Karten-Takt',rule:'Neue Schlüsselwörter auf Karten. »Eröffnung«: wirkt stärker als erste Karte im Zug. »Nachhall«: zusätzlicher Effekt, wenn die Karte eine Reaktion auslöst. »Schluss«: stärker als letzte Karte vor Zugende.',why:'Die Reihenfolge der Karten zählt heute nur für Reaktionen. Damit wird jeder Zug ein kleines Rätsel.'},
+ {id:'passiv',spr:'m_passiv',n:'Erbstücke (passiv)',rule:'Talismane ohne Karte, die eine Regel ändern. Sie belegen einen Slot, aber nicht das Deck.',why:'Heute gibt jedes Item genau eine Karte, deshalb fühlen sich alle gleich an. Erbstücke sind die schnellste Art, Abwechslung zu schaffen.'},
+ {id:'tagebuch',spr:'m_tagebuch',n:'Tagebuch und Freischalten',rule:'Der Fundpool startet klein. Neue Items schaltest du über Runs hinweg frei: einen Boss besiegen, eine Hochreaktion entdecken, ein Ereignis auf eine bestimmte Art lösen. Jedes freigeschaltete Item bekommt eine Tagebuchseite.',why:'Neue Spieler sehen nicht alles auf einmal, erfahrene finden immer noch etwas Neues. Das Reaktionsbuch gibt es schon, das Tagebuch wäre die zweite Hälfte.'}
+];
+const MN=Object.fromEntries(MECH.map(m=>[m.id,m.n]));
+
+const ITEMS=[
+ // Hafen
+ {id:'bootshaken',n:'Bootshaken',a:'waffe',st:['W'],c:['Heranziehen',1,'5 Schaden. Der Block des Ziels fällt auf 0.'],m:['zone'],src:'Hafenviertel',d:'Eine Antwort auf Gegner, die sich einmauern. Heute kann das nur die Reaktion »Zersetzen«.'},
+ {id:'enterbeil',n:'Enterbeil',a:'waffe',st:['E'],c:['Entern',1,'7 Schaden. <em>Eröffnung:</em> +5 Schaden.'],m:['zone','takt'],src:'Hafenviertel',d:'Belohnt, den Zug mit dem Angriff zu beginnen statt mit Block.'},
+ {id:'robbenfell',n:'Robbenfell',a:'kleidung',st:['W'],hp:5,c:['Fettschicht',1,'5 Block, +2 für jede Wasser-Karte, die du in diesem Zug schon gespielt hast.'],m:['zone','takt'],src:'Hafenviertel',d:'Viel Leben, gut im Fischer-Deck. Skaliert mit Wasser-Ketten.'},
+ {id:'zitteraal',n:'Zitteraal im Glas',a:'waffe',st:['Z','W'],rare:1,c:['Entladen',1,'6 Schaden, springt auf einen zweiten Gegner über.'],m:['strom','zone'],src:'Hafenviertel, selten',d:'Trägt Strom und Wasser, löst also allein »Kurzschluss« aus. Das erste Strom-Item, das man finden kann.'},
+ // Moorwald
+ {id:'sense',n:'Sense',a:'waffe',st:['V'],c:['Mähen',2,'5 Schaden und Gift 1 an allen Gegnern.'],m:['zone'],src:'Der Moorwald',d:'Fläche plus Gift. Macht Läuterung und Ertrinken gegen Gruppen interessant.'},
+ {id:'tarot',n:'Tarotkarten',a:'talisman',st:['L'],c:['Legen',1,'Zufällig eins von drei: 10 Schaden, 10 Block oder +2 Energie. Vorher siehst du, welches.'],m:['zone'],src:'Der Moorwald (Wahrsagerin)',d:'Die Vorschau macht den Zufall planbar: Die Karte zeigt im Handkartenbereich schon ihr Ergebnis.'},
+ {id:'hasenpfote',n:'Hasenpfote',a:'talisman',st:[],c:null,m:['passiv','zone'],src:'Der Moorwald',d:'<em>Passiv:</em> Einmal pro Belohnung darfst du die drei Funde neu würfeln. Hilft direkt gegen »schon wieder dieselben Items«.'},
+ {id:'auge',n:'Auge im Glas',a:'talisman',st:['V'],curse:1,c:['Hinsehen',0,'Ziehe 3 Karten. +2 Wahnsinn.'],m:['fluch','wahn'],src:'Der Moorwald, selten',d:'<em>Fluch:</em> Zu Beginn jedes Kampfes +1 Wahnsinn. Eine der stärksten Ziehkarten, aber sie frisst den Verstand.'},
+ // Kapelle
+ {id:'kragen',n:'Priesterkragen',a:'kleidung',st:['G'],hp:1,c:['Segnen',1,'4 Block, −1 Wahnsinn.'],m:['zone','passiv','wahn'],src:'Die überflutete Kapelle',d:'<em>Passiv:</em> Die erste Glaube-Karte in jedem Zug kostet 0. Stark mit der Pfarrerin.'},
+ {id:'stockdegen',n:'Stockdegen',a:'waffe',st:['E'],c:['Blankziehen',0,'4 Schaden. <em>Eröffnung:</em> ziehe 1 Karte.'],m:['zone','takt'],src:'Die überflutete Kapelle',d:'Der Spazierstock eines toten Küsters. Billiger Starter für jeden Zug.'},
+ {id:'hexenflasche',n:'Hexenflasche',a:'talisman',st:['S','B'],rare:1,c:['Versiegeln',1,'5 Block.'],m:['passiv','zone'],src:'Die überflutete Kapelle, selten',d:'<em>Passiv:</em> Wer dich trifft, nimmt 2 Schaden. Salz und Blut reagieren heute nicht, das wäre also eine neue Paarung oder eine Ausnahme fürs Verschmelzen.'},
+ {id:'spieluhr',n:'Spieluhr',a:'talisman',st:['L'],c:['Wiegenlied',3,'Alle Gegner setzen ihren nächsten Zug aus. Einmal pro Kampf.'],m:['zone'],src:'Die überflutete Kapelle',d:'Teuer und einmalig, rettet aber einen Bosszug.'},
+ // Grund
+ {id:'ankerkette',n:'Ankerkette',a:'waffe',st:['E','W'],rare:1,c:['Kette schwingen',2,'4 Schaden, 3 Treffer.'],m:['zone'],src:'Der Grund, selten',d:'Mehrfachtreffer mit zwei Stoffen. Jeder Treffer zählt für Schwachstellen.'},
+ {id:'taucherhelm',n:'Taucherhelm',a:'kleidung',st:['W','E'],rare:1,hp:6,c:['Luft anhalten',2,'10 Block jetzt, 5 Block im nächsten Zug.'],m:['zone','gezeit'],src:'Der Grund, selten',d:'<em>Passiv:</em> Bei Flut +1 Energie. Für lange Bosskämpfe.'},
+ {id:'goetze',n:'Glimmender Götze',a:'talisman',st:['V'],curse:1,c:null,m:['fluch','passiv','zone'],src:'Der Grund',d:'<em>Fluch und passiv:</em> Fäulnis-Karten wirken doppelt. Du verlierst 1 Leben zu Beginn jedes Zugs.'},
+ {id:'gezeitentafel',n:'Gezeitentafel',a:'talisman',st:['W'],c:['Vorhersage',0,'Die Gezeit wechselt sofort. Ziehe 1.'],m:['gezeit'],src:'überall',d:'Das Werkzeug, mit dem man Ebbe und Flut selbst steuert.'},
+ // Gegner-Beute
+ {id:'kultmaske',n:'Kultmaske',a:'kleidung',st:['B'],hp:2,c:['Verstellen',1,'8 Block. Kultisten greifen in diesem Zug jemand anderen an.'],m:['foe'],src:'Beute vom Kultisten',d:'Gegner-Beute mit Wirkung gegen genau diesen Gegner.'},
+ {id:'schuppe',n:'Tiefling-Schuppe',a:'talisman',st:['W'],c:['Schuppenhaut',0,'4 Block, bei Flut 8.'],m:['foe','gezeit'],src:'Beute vom Tiefling',d:'Klein, billig, gut in jedem Wasser-Deck.'},
+ {id:'fetzen',n:'Schattenfetzen',a:'kleidung',st:['V'],hp:1,c:['Verblassen',1,'Der nächste Angriff gegen dich verfehlt.'],m:['foe'],src:'Beute vom Schatten',d:'Ein ganz neuer Effekt: ausweichen statt blocken.'},
+ // Krieg / 1925
+ {id:'leuchtpistole',n:'Leuchtpistole',a:'waffe',st:['F','L'],rare:1,c:['Signal',1,'3 Schaden und Brand 1 an allen. Alle geschwächt.'],m:['muni'],src:'Krämer',d:'Aus dem Krieg mitgebracht. Feuer und Licht lösen »Fanal« in sich aus, die Karte zahlt sich also fast selbst.'},
+ {id:'mpi',n:'Maschinenpistole',a:'waffe',st:['E'],c:['Feuerstoß',1,'2 Schaden, 5 Treffer. <em>Munition 3.</em>'],m:['muni'],src:'Krämer',d:'Viele kleine Treffer, stark gegen Brand- und Gift-Ziele ohne Block, schwach gegen Schutz.'},
+ {id:'gasmaske',n:'Gasmaske',a:'kleidung',st:['V'],hp:2,c:['Durchatmen',1,'6 Block, −2 Wahnsinn.'],m:['wahn'],src:'überall',d:'<em>Passiv:</em> Fäulnis-Reaktionen, die du auslöst, wirken 50 % stärker.'},
+ {id:'offiziersmantel',n:'Offiziersmantel',a:'kleidung',st:['E'],hp:4,c:['Kommando',1,'5 Block. Die nächste Karte macht +3 Schaden.'],m:['takt'],src:'überall',d:'Ein Mantel mit Rangabzeichen. Baut den nächsten Zug vor.'},
+ {id:'kompass',n:'Kompass, der nach unten zeigt',a:'talisman',st:[],c:null,m:['passiv'],src:'Ereignis',d:'<em>Passiv:</em> Nach jedem Sieg siehst du zwei mögliche Begegnungen für die nächste Tiefe und wählst eine.'},
+ // Strom
+ {id:'schuerze',n:'Wachstuchschürze',a:'kleidung',st:['Z'],hp:2,c:['Erden',0,'3 Block. Wenn davor eine Strom-Karte lag: +1 Energie.'],m:['strom','takt'],src:'Hafenviertel (Elektrizitätswerk)',d:'Strom-Reaktionen schaden dir nicht mehr. Teil des Elektriker-Sets.'},
+ {id:'gluehbirne',n:'Glühbirne',a:'talisman',st:['Z','L'],c:['Funke',0,'2 Schaden, ziehe 1.'],m:['strom'],src:'überall',d:'Strom und Licht in einer Karte lösen »Glühfaden« aus. Billiger Kettenstarter.'},
+ // Proviant
+ {id:'dynamit',n:'Dynamit',a:'proviant',st:['F'],c:['Lunte',0,'15 Schaden an allen Gegnern, du nimmst 4. Verbraucht.'],m:['proviant'],src:'Krämer, Ereignis',d:'Der Notausgang aus einem schlechten Kampf.'},
+ {id:'rum',n:'Rum',a:'proviant',st:['F'],c:['Schluck',0,'+2 Energie, +1 Wahnsinn. Verbraucht.'],m:['proviant','wahn'],src:'Krämer, Hafenviertel',d:'Mut aus der Flasche.'},
+ {id:'laudanum',n:'Laudanum',a:'proviant',st:[],c:['Tropfen',1,'12 Leben, −3 Wahnsinn. Nächster Zug 1 Karte weniger. Verbraucht.'],m:['proviant','wahn'],src:'Krämer, Kapelle',d:'Heilung im Kampf mit einem kleinen Preis.'},
+ {id:'riechsalz',n:'Riechsalz',a:'proviant',st:['S'],c:['Aufwachen',0,'Ziehe 2. Entfernt Trugbild-Karten aus deiner Hand. Verbraucht.'],m:['proviant','wahn'],src:'überall',d:'Gegenmittel zum Wahnsinn, das gleichzeitig Tempo gibt.'}
+];
+
+const RX=[
+ {k:['Z','W'],n:'Kurzschluss',t:'Alle Gegner sind einen Zug betäubt. Du nimmst 3 Schaden (außer mit Wachstuchschürze).'},
+ {k:['E','Z'],n:'Leiter',t:'Der Schaden dieser Karte trifft zusätzlich alle anderen Gegner zur Hälfte.'},
+ {k:['L','Z'],n:'Glühfaden',t:'Ziehe 2 Karten.'},
+ {k:['B','Z'],n:'Herzschlag',t:'+1 Energie und +3 Leben.'},
+ {k:['E','W','Z'],n:'Gewitter',t:'Hochreaktion: 8 Schaden an allen, alle betäubt.',h:1},
+ {k:['G','L','Z'],n:'Elmsfeuer',t:'Hochreaktion: Wahnsinn auf 0, 10 Block.',h:1}
+];
+const ROLES=[
+ {id:'r_veteran',n:'Kriegsveteran',i:['leuchtpistole','gasmaske','offiziersmantel'],t:'Die erste Karte in jedem Zug wirkt doppelt.'},
+ {id:'r_taucher',n:'Taucher',i:['taucherhelm','ankerkette','bootshaken'],t:'Der Kampf beginnt bei Flut, und Flut hält 3 statt 2 Züge.'},
+ {id:'r_elektriker',n:'Elektriker',i:['zitteraal','schuerze','gluehbirne'],t:'Betäubte Gegner nehmen doppelten Schaden.'},
+ {id:'r_wahrsagerin',n:'Wahrsagerin',i:['tarot','auge','spieluhr'],t:'Jeder Wahnsinn-Punkt gibt +1 Schaden auf alle Karten.'}
+];
+const NAME=Object.fromEntries([...ITEMS,...ROLES].map(x=>[x.id,x.n]));
+
+// --- Stimmen ---
+const KEY='saltmoor-ideen-v1';let V={};
+try{V=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){V={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(V));}catch(e){}renderOut();}
+function voteRow(id){const d=document.createElement('div');d.className='vote';
+ [['y','JA'],['m','VIELLEICHT'],['n','NEIN']].forEach(([k,l])=>{const b=document.createElement('button');b.type='button';b.className=k;b.textContent=l;b.setAttribute('aria-pressed',V[id]===k?'true':'false');
+  b.onclick=()=>{V[id]=V[id]===k?undefined:k;if(!V[id])delete V[id];d.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',V[id]===x.className?'true':'false'));save();};d.appendChild(b);});return d;}
+const chip=s=>`<span class="st" style="background:${ST[s][1]}" title="${ST[s][2]}">${ST[s][0]}</span>`;
+function el(h){const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild;}
+
+// Mechaniken
+const mech=document.getElementById('mech');
+MECH.forEach(m=>{const card=el(`<article class="card mcard"><div class="ico"></div><div class="hd"><h3>${m.n}</h3><div class="tags uses"></div></div><div class="body"><p class="rule">${m.rule}</p><p class="why">${m.why}</p></div></article>`);
+ card.querySelector('.ico').appendChild(draw(m.spr));
+ const uses=card.querySelector('.uses');const its=ITEMS.filter(i=>i.m.includes(m.id));
+ if(its.length){its.slice(0,7).forEach(i=>{const s=el('<span class="mini"></span>');const c=draw(i.id);c.setAttribute('aria-label',i.n);s.title=i.n;s.appendChild(c);uses.appendChild(s);});
+  const b=el(`<button class="tag" type="button">${its.length} ITEMS ZEIGEN</button>`);b.onclick=()=>{setFilter('m',m.id);document.getElementById('h-items').scrollIntoView({behavior:'smooth'});};uses.appendChild(b);}
+ card.querySelector('.body').appendChild(voteRow('m_'+m.id));mech.appendChild(card);});
+
+// Items
+const grid=document.getElementById('items');
+ITEMS.forEach(it=>{
+ const pills=[it.rare?'<span class="pill r">SELTEN</span>':'',it.curse?'<span class="pill c">VERFLUCHT</span>':''].join('');
+ const kart=it.c?`<div class="kart"><i>${it.c[0].toUpperCase()} · ${it.c[1]}⚡</i>${it.c[2]}</div>`:`<div class="kart"><i>KEINE KARTE</i>wirkt passiv</div>`;
+ const card=el(`<article class="card${it.rare?' rare':''}${it.curse?' curse':''}" data-a="${it.a}" data-m="${it.m.join(' ')}"><div class="ico"></div><div class="hd"><h3>${it.n}</h3><div class="meta">${AREA[it.a]}${it.hp?` · +${it.hp} Leben`:''} ${it.st.map(chip).join('')} ${pills}</div><div class="meta">Fund: ${it.src}</div></div><div class="body">${kart}<p class="why">${it.d}</p><div class="tags">${it.m.map(x=>`<button class="tag" type="button" data-f="${x}">${MN[x].toUpperCase()}</button>`).join('')}</div></div></article>`);
+ const c=draw(it.id);c.setAttribute('aria-label',it.n);card.querySelector('.ico').appendChild(c);
+ card.querySelectorAll('.tag').forEach(b=>b.onclick=()=>setFilter('m',b.dataset.f));
+ card.querySelector('.body').appendChild(voteRow(it.id));grid.appendChild(card);});
+
+// Filter
+let F={a:null,m:null};let saved=null;try{saved=JSON.parse(localStorage.getItem(KEY+'-f')||'null');}catch(e){}if(saved)F=saved;
+const bar=document.getElementById('bar');
+function btn(lbl,kind,val){const b=document.createElement('button');b.type='button';b.textContent=lbl;b.dataset.k=kind;b.dataset.v=val??'';b.onclick=()=>setFilter(kind,val);return b;}
+bar.appendChild(el('<span class="lbl">BEREICH</span>'));
+[['ALLE',null],['WAFFE','waffe'],['KLEIDUNG','kleidung'],['TALISMAN','talisman'],['PROVIANT','proviant']].forEach(([l,v])=>bar.appendChild(btn(l,'a',v)));
+const sel=el('<select id="mf" aria-label="Mechanik" style="font-family:var(--fd);font-size:8px;background:#161c1b;color:var(--txt);border:2px solid #39443f;padding:6px;box-shadow:2px 2px 0 #000"></select>');
+sel.appendChild(new Option('ALLE MECHANIKEN',''));MECH.forEach(m=>sel.appendChild(new Option(m.n.toUpperCase(),m.id)));sel.onchange=()=>setFilter('m',sel.value||null);
+bar.appendChild(sel);bar.appendChild(el('<span class="sp"></span>'));const cnt=el('<span class="count"></span>');bar.appendChild(cnt);
+function setFilter(k,v){F[k]=F[k]===v&&k==='m'&&v?v:v;applyF();try{localStorage.setItem(KEY+'-f',JSON.stringify(F));}catch(e){}}
+function applyF(){let n=0;grid.querySelectorAll('.card').forEach(c=>{const ok=(!F.a||c.dataset.a===F.a)&&(!F.m||c.dataset.m.split(' ').includes(F.m));c.classList.toggle('hidden',!ok);if(ok)n++;});
+ bar.querySelectorAll('button[data-k="a"]').forEach(b=>b.setAttribute('aria-pressed',(b.dataset.v||null)===(F.a||null)?'true':'false'));sel.value=F.m||'';cnt.textContent=`${n} VON ${ITEMS.length}`;}
+applyF();
+
+// Reaktionen
+const rx=document.getElementById('rx');
+RX.forEach(r=>rx.appendChild(el(`<article class="rxc${r.h?' h':''}"><div class="k">${r.k.map(chip).join('<span>+</span>')}</div><h3>${r.n}</h3><p>${r.t}</p></article>`)));
+rx.querySelectorAll('.rxc').forEach((c,i)=>c.appendChild(voteRow('rx_'+RX[i].n)));
+
+// Rollen
+const roles=document.getElementById('roles');
+ROLES.forEach(r=>{const card=el(`<article class="card"><div class="ico"></div><div class="hd"><h3>${r.n}</h3><div class="meta">${r.i.map(i=>NAME[i]).join(' · ')}</div></div><div class="body"><div class="kart"><i>SET-BONUS</i>${r.t}</div><div class="tags uses"></div></div></article>`);
+ const ico=card.querySelector('.ico');ico.style.cssText='display:flex;flex-direction:column;gap:2px;padding:2px';
+ r.i.forEach(i=>{const c=draw(i);c.style.cssText='width:22px;height:22px';ico.appendChild(c);});
+ card.querySelector('.body').appendChild(voteRow(r.id));roles.appendChild(card);});
+
+// Export
+const out=document.getElementById('out');
+function lab(id){if(id.startsWith('m_'))return 'Mechanik: '+(MN[id.slice(2)]||id);if(id.startsWith('rx_'))return 'Reaktion: '+id.slice(3);if(id.startsWith('r_'))return 'Rolle: '+NAME[id];return 'Item: '+(NAME[id]||id);}
+function renderOut(){const g={y:[],m:[],n:[]};Object.entries(V).forEach(([id,v])=>{if(g[v])g[v].push(lab(id));});
+ const all=MECH.length+ITEMS.length+RX.length+ROLES.length,done=Object.keys(V).length;
+ out.value=done?`Saltmoor Ideenkiste: ${done} von ${all} bewertet\n\nJA:\n${g.y.map(x=>'- '+x).join('\n')||'-'}\n\nVIELLEICHT:\n${g.m.map(x=>'- '+x).join('\n')||'-'}\n\nNEIN:\n${g.n.map(x=>'- '+x).join('\n')||'-'}`:'Noch nichts bewertet. Klick bei den Ideen auf JA, VIELLEICHT oder NEIN.';}
+renderOut();
+document.getElementById('copy').onclick=()=>{const ok=document.getElementById('ok');
+ navigator.clipboard.writeText(out.value).then(()=>{ok.textContent='KOPIERT';},()=>{out.select();ok.textContent='MARKIERT, JETZT KOPIEREN';});};
+let armed=false;document.getElementById('reset').onclick=e=>{const ok=document.getElementById('ok');if(!armed){armed=true;e.target.textContent='WIRKLICH ZURÜCKSETZEN?';setTimeout(()=>{armed=false;e.target.textContent='ALLES ZURÜCKSETZEN';},3000);return;}
+ V={};save();document.querySelectorAll('.vote button').forEach(b=>b.setAttribute('aria-pressed','false'));armed=false;e.target.textContent='ALLES ZURÜCKSETZEN';ok.textContent='ZURÜCKGESETZT';};
+</script>

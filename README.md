@@ -8,6 +8,7 @@ Ein Cosmic-Horror-Roguelike im Neuengland des Jahres 1925. Du bist niemand Beson
 prototype/        Browser-Prototyp zum Ausprobieren und Entwerfen
   index.html      das Spiel
   artboard.html   der ganze Spielinhalt auf einer Seite: Stoffe, Reaktionen, Items, Sets, Gegner, Ereignisse, Run-Ablauf, Ideen
+  ideen.html      Ideenkiste: vorgeschlagene neue Items und Mechaniken mit Ja/Vielleicht/Nein zum Durchgehen
   gallery.html    alle Bausteine einzeln: Gegner, Boss-Entwürfe, Items, UI, Szenen
   lab.html        Sprite-Labor: prozedurale Gegner, Varianten aus einem Bild, Welten aus Schichten
   data/           alle Spielwerte als JSON (Items, Gegner, Reaktionen, Balance ...), siehe data/README.md

@@ -1,1 +1,1088 @@
-[]
+[
+ {
+  "n": "Zonen-Beute",
+  "kind": "mechanik",
+  "d": "Jede Zone hat einen eigenen Fundpool. Im Hafen findest du Hafenzeug, im Moorwald Moorzeug, in der Kapelle Geweihtes, im Grund das Fremde.",
+  "px": [
+   "............",
+   ".TTTTTTTTTT.",
+   ".TTDDTTTTTT.",
+   ".TDDDTTrTrT.",
+   ".TTDDTTTrTT.",
+   ".TTTDTTrTrT.",
+   ".TTttTTTTTT.",
+   ".TtTTtTTDDT.",
+   ".TTTTTtDDDT.",
+   ".TTTTTTTDDT.",
+   ".TTTTTTTTTT.",
+   "............"
+  ],
+  "notes": "Behebt das Hauptproblem direkt: Ein Run fühlt sich in Tiefe 2 anders an als in Tiefe 10. Bestehende Items werden einfach auf Zonen verteilt, ein kleiner allgemeiner Pool bleibt."
+ },
+ {
+  "n": "Gegner-Beute",
+  "kind": "mechanik",
+  "d": "Jeder Gegnertyp lässt mit kleiner Chance ein eigenes Stück fallen. Kultisten ihre Maske, Tieflinge Schuppen, Schatten einen Fetzen von sich selbst.",
+  "px": [
+   ".....kk.....",
+   "....bkkb....",
+   ".....bb.....",
+   "....bBBb....",
+   "...bBBBBb...",
+   "..bBBBBBBb..",
+   "..bBByyBBb..",
+   "..bBByyBBb..",
+   "..bBBBBBBb..",
+   "...bBBBBb...",
+   "....bbbb....",
+   "............"
+  ],
+  "notes": "Gibt Kämpfen einen zweiten Grund und macht Gegner wiedererkennbar. Passt zu »Knochen vom Friedhofswärter«, das gibt es schon als Sonderfall."
+ },
+ {
+  "n": "Proviant",
+  "kind": "mechanik",
+  "d": "Ein vierter, kleiner Bereich mit 2 Slots. Proviant gibt eine Karte, die nach dem Ausspielen verbraucht ist. Er stapelt sich (z. B. 3× Rum).",
+  "px": [
+   "............",
+   "..gggggggg..",
+   ".gGGGGGGGGg.",
+   ".gggggggggg.",
+   ".gDDDDDDDDg.",
+   ".gDwwwwwwDg.",
+   ".gDwcCCcwDg.",
+   ".gDwwwwwwDg.",
+   ".gDDDDDDDDg.",
+   ".gggggggggg.",
+   "..gggggggg..",
+   "............"
+  ],
+  "notes": "Kurzfristige, starke Entscheidungen ohne Deck-Verwässerung. Gutes Ziel für Gold im Krämer und für Ereignisse."
+ },
+ {
+  "n": "Wahnsinn",
+  "kind": "mechanik",
+  "d": "Neue Leiste von 0 bis 10. Manche starken Items erhöhen sie, Glaube senkt sie. Ab 5 mischen sich unspielbare Trugbild-Karten ins Deck, bei 10 kommt ein Jumpscare und du verlierst 8 Leben, dann fällt sie auf 5.",
+  "px": [
+   "............",
+   "............",
+   "....RRRR....",
+   "..RRwwwwRR..",
+   ".RwwPPPPwwR.",
+   "RwwPPkkPPwwR",
+   "RwwPPkePPwwR",
+   ".RwwPPPPwwR.",
+   "..RRwwwwRR..",
+   "....RRRR....",
+   "............",
+   "............"
+  ],
+  "notes": "Gibt dem Horror-Thema eine Mechanik und dem Stoff Glaube eine zweite Aufgabe. Verknüpft den bestehenden Jumpscare mit dem Spiel statt mit der Uhr."
+ },
+ {
+  "n": "Verfluchte Items",
+  "kind": "mechanik",
+  "d": "Seltene Funde mit einer starken Wirkung und einem dauerhaften Nachteil. Lila umrandet. Man kann sie nicht wegwerfen, nur in der Werkstatt mit einem Glaube-Item verschmelzen, das hebt den Fluch auf.",
+  "px": [
+   "....gggg....",
+   "...g....g...",
+   "...g....g...",
+   "..pppppppp..",
+   "..pPPPPPPp..",
+   "..pPPkkPPp..",
+   "..pPPkkPPp..",
+   "..pPPPkPPp..",
+   "..pPPPPPPp..",
+   "..pppppppp..",
+   ".....e......",
+   "....e.e....."
+  ],
+  "notes": "Echte Risiko-Entscheidungen. Gibt der Werkstatt einen weiteren Zweck."
+ },
+ {
+  "n": "Gezeiten",
+  "kind": "mechanik",
+  "d": "Jeder Kampf hat einen Takt: 2 Züge Ebbe, 2 Züge Flut. Bei Flut wirkt Wasser 50 % stärker, bei Ebbe Feuer. Tieflinge greifen bei Flut härter an. Anzeige oben links neben der Tiefe.",
+  "px": [
+   "......yyy...",
+   ".....yy.....",
+   ".....y......",
+   ".....yy.....",
+   "......yyy...",
+   "............",
+   ".D...D...D..",
+   "DcD.DcD.DcD.",
+   "cccDcccDcccD",
+   "cccccccccccc",
+   "dddddddddddd",
+   "dddddddddddd"
+  ],
+  "notes": "Bringt Timing in den Kampf und macht den Ort spürbar. Kostet wenig Code, ist nur ein Zähler."
+ },
+ {
+  "n": "Neuer Stoff: Strom",
+  "kind": "mechanik",
+  "d": "Ein neunter Stoff. 1925 kommt die Elektrizität nach Saltmoor. Strom reagiert mit Wasser, Eisen und Licht (siehe Reaktionen unten) und bringt den neuen Zustand »Betäubt«: Der Gegner setzt einen Zug aus.",
+  "px": [
+   "......CC....",
+   ".....CC.....",
+   "....CC......",
+   "...CCwCCC...",
+   "......CC....",
+   ".....CC.....",
+   "....Cw......",
+   "...CCCCC....",
+   "......CC....",
+   ".....C......",
+   "....C.......",
+   "............"
+  ],
+  "notes": "Neue Reaktionen sind das, was beim Spielen am meisten Spaß macht. Ein neuer Stoff öffnet gleich mehrere neue Kombinationen und Rollen."
+ },
+ {
+  "n": "Munition",
+  "kind": "mechanik",
+  "d": "Feuerwaffen haben Ladungen pro Kampf (z. B. 3). Ist das Magazin leer, wird die Karte zu »Nachladen« (1 Energie, füllt auf).",
+  "px": [
+   "............",
+   "..G...G...G.",
+   ".GGG.GGG.GGG",
+   ".yyy.yyy.yyy",
+   ".yyy.yyy.yyy",
+   ".yoy.yoy.yoy",
+   ".yyy.yyy.yyy",
+   ".yyy.yyy.yyy",
+   ".ooo.ooo.ooo",
+   "............",
+   "............",
+   "............"
+  ],
+  "notes": "Macht Schusswaffen anders als Nahkampf, ohne sie einfach stärker zu machen."
+ },
+ {
+  "n": "Karten-Takt",
+  "kind": "mechanik",
+  "d": "Neue Schlüsselwörter auf Karten. »Eröffnung«: wirkt stärker als erste Karte im Zug. »Nachhall«: zusätzlicher Effekt, wenn die Karte eine Reaktion auslöst. »Schluss«: stärker als letzte Karte vor Zugende.",
+  "px": [
+   "..bbbbbbbb..",
+   "...wwwwww...",
+   "...wyyyyw...",
+   "....wyyw....",
+   ".....yy.....",
+   ".....ww.....",
+   "....w..w....",
+   "...w.yy.w...",
+   "...wyyyyw...",
+   "...wwwwww...",
+   "..bbbbbbbb..",
+   "............"
+  ],
+  "notes": "Die Reihenfolge der Karten zählt heute nur für Reaktionen. Damit wird jeder Zug ein kleines Rätsel."
+ },
+ {
+  "n": "Erbstücke (passiv)",
+  "kind": "mechanik",
+  "d": "Talismane ohne Karte, die eine Regel ändern. Sie belegen einen Slot, aber nicht das Deck.",
+  "px": [
+   "...yyyy.....",
+   "..y....y....",
+   "..y....y....",
+   "...yyyy.....",
+   "....yy......",
+   "....yy......",
+   "....yyyy....",
+   "....yy......",
+   "....yyy.....",
+   "....yy......",
+   "............",
+   "............"
+  ],
+  "notes": "Heute gibt jedes Item genau eine Karte, deshalb fühlen sich alle gleich an. Erbstücke sind die schnellste Art, Abwechslung zu schaffen."
+ },
+ {
+  "n": "Tagebuch und Freischalten",
+  "kind": "mechanik",
+  "d": "Der Fundpool startet klein. Neue Items schaltest du über Runs hinweg frei: einen Boss besiegen, eine Hochreaktion entdecken, ein Ereignis auf eine bestimmte Art lösen. Jedes freigeschaltete Item bekommt eine Tagebuchseite.",
+  "px": [
+   "............",
+   ".bbbbbbbbb..",
+   ".bBBBBBBBbw.",
+   ".bBBBBBBBbw.",
+   ".bBBeeBBBbw.",
+   ".bBeBBeBBbw.",
+   ".bBBeeBBByy.",
+   ".bBBBBBBBbw.",
+   ".bBBBBBBBbw.",
+   ".bbbbbbbbbw.",
+   "..wwwwwwww..",
+   "............"
+  ],
+  "notes": "Neue Spieler sehen nicht alles auf einmal, erfahrene finden immer noch etwas Neues. Das Reaktionsbuch gibt es schon, das Tagebuch wäre die zweite Hälfte."
+ },
+ {
+  "n": "Bootshaken",
+  "kind": "item",
+  "d": "Karte »Heranziehen« (1 Energie): 5 Schaden. Der Block des Ziels fällt auf 0. Eine Antwort auf Gegner, die sich einmauern. Heute kann das nur die Reaktion »Zersetzen«.",
+  "st": [
+   "W"
+  ],
+  "px": [
+   ".........GG.",
+   "........G..G",
+   ".........G.G",
+   "........gGG.",
+   ".......b....",
+   "......b.....",
+   ".....b......",
+   "....b.......",
+   "...b........",
+   "..b.........",
+   ".b..........",
+   "............"
+  ],
+  "notes": "Fund: Hafenviertel. Mechanik: Zonen-Beute.",
+  "a": "waffe"
+ },
+ {
+  "n": "Enterbeil",
+  "kind": "item",
+  "d": "Karte »Entern« (1 Energie): 7 Schaden. Eröffnung: +5 Schaden. Belohnt, den Zug mit dem Angriff zu beginnen statt mit Block.",
+  "st": [
+   "E"
+  ],
+  "px": [
+   "............",
+   "..gGGg......",
+   ".gGGGGg.....",
+   ".gGGGGbb....",
+   "..gGg.bb....",
+   ".......bb...",
+   "........bb..",
+   ".........bb.",
+   "..........b.",
+   "............",
+   "............",
+   "............"
+  ],
+  "notes": "Fund: Hafenviertel. Mechanik: Zonen-Beute, Karten-Takt.",
+  "a": "waffe"
+ },
+ {
+  "n": "Robbenfell",
+  "kind": "item",
+  "d": "Karte »Fettschicht« (1 Energie): 5 Block, +2 für jede Wasser-Karte, die du in diesem Zug schon gespielt hast. Viel Leben, gut im Fischer-Deck. Skaliert mit Wasser-Ketten.",
+  "st": [
+   "W"
+  ],
+  "px": [
+   "............",
+   "..t......t..",
+   ".tTt....tTt.",
+   ".tTTttttTTt.",
+   "..tTTkTTTt..",
+   "..tTTTTkTt..",
+   "..tTkTTTTt..",
+   "..tTTTTTTt..",
+   ".tTTTkTTTTt.",
+   ".tTt....tTt.",
+   "..t......t..",
+   "............"
+  ],
+  "notes": "Fund: Hafenviertel. Mechanik: Zonen-Beute, Karten-Takt. +5 Leben.",
+  "a": "kleidung"
+ },
+ {
+  "n": "Zitteraal im Glas",
+  "kind": "item · selten",
+  "d": "Karte »Entladen« (1 Energie): 6 Schaden, springt auf einen zweiten Gegner über. Trägt Strom und Wasser, löst also allein »Kurzschluss« aus. Das erste Strom-Item, das man finden kann.",
+  "st": [
+   "W"
+  ],
+  "px": [
+   "....kkkk....",
+   "...kggggk...",
+   "..kCcccCCk..",
+   "..kC..C.Ck..",
+   "..kCnnnCCk..",
+   "..kCCNnnCk..",
+   "..kC..nNCk..",
+   "..kCnnn.Ck..",
+   "..kC.C..Ck..",
+   "..kCCCCCCk..",
+   "...kkkkkk...",
+   "............"
+  ],
+  "notes": "Fund: Hafenviertel, selten. Mechanik: Neuer Stoff: Strom, Zonen-Beute. Trägt zusätzlich den neuen Stoff Strom.",
+  "a": "waffe"
+ },
+ {
+  "n": "Sense",
+  "kind": "item",
+  "d": "Karte »Mähen« (2 Energie): 5 Schaden und Gift 1 an allen Gegnern. Fläche plus Gift. Macht Läuterung und Ertrinken gegen Gruppen interessant.",
+  "st": [
+   "V"
+  ],
+  "px": [
+   "..GGGGGG....",
+   ".G......Gb..",
+   "G........b..",
+   ".........b..",
+   "........b...",
+   "........b...",
+   ".......b....",
+   ".......b....",
+   "......bb....",
+   "......b.....",
+   ".....b......",
+   ".....b......"
+  ],
+  "notes": "Fund: Der Moorwald. Mechanik: Zonen-Beute.",
+  "a": "waffe"
+ },
+ {
+  "n": "Tarotkarten",
+  "kind": "item",
+  "d": "Karte »Legen« (1 Energie): Zufällig eins von drei: 10 Schaden, 10 Block oder +2 Energie. Vorher siehst du, welches. Die Vorschau macht den Zufall planbar: Die Karte zeigt im Handkartenbereich schon ihr Ergebnis.",
+  "st": [
+   "L"
+  ],
+  "px": [
+   "..pppppp....",
+   "..pPPPPp....",
+   "..pPywwwwww.",
+   "..pyywwRRww.",
+   "..pPywRwwRw.",
+   "..pPPwRwwRw.",
+   "..pPPwwRRww.",
+   "..pPPwwRRww.",
+   "..pPPwRwwRw.",
+   "..pppwRwwRw.",
+   ".....wwRRww.",
+   ".....wwwwww."
+  ],
+  "notes": "Fund: Der Moorwald (Wahrsagerin). Mechanik: Zonen-Beute.",
+  "a": "talisman"
+ },
+ {
+  "n": "Hasenpfote",
+  "kind": "item",
+  "d": "Keine Karte, wirkt passiv. Passiv: Einmal pro Belohnung darfst du die drei Funde neu würfeln. Hilft direkt gegen »schon wieder dieselben Items«.",
+  "st": [],
+  "px": [
+   ".....yy.....",
+   "....y..y....",
+   ".....yy.....",
+   "....kkkk....",
+   "....TTTT....",
+   "...TTTTTT...",
+   "...TTwTTT...",
+   "...TTTTTT...",
+   "..TTTTTTTT..",
+   "..TTsTTsTT..",
+   "..TT.TT.TT..",
+   "............"
+  ],
+  "notes": "Fund: Der Moorwald. Mechanik: Erbstücke (passiv), Zonen-Beute.",
+  "a": "talisman"
+ },
+ {
+  "n": "Auge im Glas",
+  "kind": "item · verflucht",
+  "d": "Karte »Hinsehen« (0 Energie): Ziehe 3 Karten. +2 Wahnsinn. Fluch: Zu Beginn jedes Kampfes +1 Wahnsinn. Eine der stärksten Ziehkarten, aber sie frisst den Verstand.",
+  "st": [
+   "V"
+  ],
+  "px": [
+   "....kkkk....",
+   "...kggggk...",
+   "..kCCCCCCk..",
+   "..kC....Ck..",
+   "..kC.ww.Ck..",
+   "..kCwwNwCk..",
+   "..kCwNkwCk..",
+   "..kCwwwwCk..",
+   "..kC.Rw.Ck..",
+   "..kCCCCCCk..",
+   "...kkkkkk...",
+   "............"
+  ],
+  "notes": "Fund: Der Moorwald, selten. Mechanik: Verfluchte Items, Wahnsinn.",
+  "a": "talisman"
+ },
+ {
+  "n": "Priesterkragen",
+  "kind": "item",
+  "d": "Karte »Segnen« (1 Energie): 4 Block, −1 Wahnsinn. Passiv: Die erste Glaube-Karte in jedem Zug kostet 0. Stark mit der Pfarrerin.",
+  "st": [
+   "G"
+  ],
+  "px": [
+   "............",
+   "...kkkkkk...",
+   "..kwwwwwwk..",
+   ".kddkwwkddk.",
+   "kdddkwwkdddk",
+   "kddddkkddddk",
+   "kddddddddddk",
+   "kdDddddddDdk",
+   "kdDddddddDdk",
+   "kddddddddddk",
+   "kkkkkkkkkkkk",
+   "............"
+  ],
+  "notes": "Fund: Die überflutete Kapelle. Mechanik: Zonen-Beute, Erbstücke (passiv), Wahnsinn. +1 Leben.",
+  "a": "kleidung"
+ },
+ {
+  "n": "Stockdegen",
+  "kind": "item",
+  "d": "Karte »Blankziehen« (0 Energie): 4 Schaden. Eröffnung: ziehe 1 Karte. Der Spazierstock eines toten Küsters. Billiger Starter für jeden Zug.",
+  "st": [
+   "E"
+  ],
+  "px": [
+   "...yyyy.....",
+   "..y...yy....",
+   "......yy....",
+   "......bb....",
+   "......bb....",
+   "......GG....",
+   "......Gw....",
+   "......GG....",
+   "......bb....",
+   "......bb....",
+   "......bb....",
+   "......kk...."
+  ],
+  "notes": "Fund: Die überflutete Kapelle. Mechanik: Zonen-Beute, Karten-Takt.",
+  "a": "waffe"
+ },
+ {
+  "n": "Hexenflasche",
+  "kind": "item · selten",
+  "d": "Karte »Versiegeln« (1 Energie): 5 Block. Passiv: Wer dich trifft, nimmt 2 Schaden. Salz und Blut reagieren heute nicht, das wäre also eine neue Paarung oder eine Ausnahme fürs Verschmelzen.",
+  "st": [
+   "S",
+   "B"
+  ],
+  "px": [
+   ".....kk.....",
+   "....kbbk....",
+   ".....BB.....",
+   "....bBBb....",
+   "...bBBBBb...",
+   "..bBBgBBBb..",
+   "..bBgBgBBb..",
+   "..bBBRBBBb..",
+   "..bBBBBBBb..",
+   "...bBBBBb...",
+   "....bbbb....",
+   "............"
+  ],
+  "notes": "Fund: Die überflutete Kapelle, selten. Mechanik: Erbstücke (passiv), Zonen-Beute.",
+  "a": "talisman"
+ },
+ {
+  "n": "Spieluhr",
+  "kind": "item",
+  "d": "Karte »Wiegenlied« (3 Energie): Alle Gegner setzen ihren nächsten Zug aus. Einmal pro Kampf. Teuer und einmalig, rettet aber einen Bosszug.",
+  "st": [
+   "L"
+  ],
+  "px": [
+   "..P.....P...",
+   "..PP....PP..",
+   ".PP....PP...",
+   "............",
+   ".bbbbbbbbbb.",
+   ".bBBBBBBBBb.",
+   ".bBByyyyBBbg",
+   ".bBBBBBBBBbg",
+   ".bBBBBBBBBb.",
+   ".bbbbbbbbbb.",
+   "..k......k..",
+   "............"
+  ],
+  "notes": "Fund: Die überflutete Kapelle. Mechanik: Zonen-Beute.",
+  "a": "talisman"
+ },
+ {
+  "n": "Ankerkette",
+  "kind": "item · selten",
+  "d": "Karte »Kette schwingen« (2 Energie): 4 Schaden, 3 Treffer. Mehrfachtreffer mit zwei Stoffen. Jeder Treffer zählt für Schwachstellen.",
+  "st": [
+   "E",
+   "W"
+  ],
+  "px": [
+   ".....gg.....",
+   "....g..g....",
+   ".....gg.....",
+   ".....Gg.....",
+   "...GGGggg...",
+   ".....Gg.....",
+   ".....Gg.....",
+   ".g...Gg...g.",
+   ".gg..Gg..gg.",
+   "..gg.Gg.gg..",
+   "..gggggggg..",
+   ".....gg....."
+  ],
+  "notes": "Fund: Der Grund, selten. Mechanik: Zonen-Beute.",
+  "a": "waffe"
+ },
+ {
+  "n": "Taucherhelm",
+  "kind": "item · selten",
+  "d": "Karte »Luft anhalten« (2 Energie): 10 Block jetzt, 5 Block im nächsten Zug. Passiv: Bei Flut +1 Energie. Für lange Bosskämpfe.",
+  "st": [
+   "W",
+   "E"
+  ],
+  "px": [
+   "....oooo....",
+   "..ooyyyyoo..",
+   ".oyyyyyyyyo.",
+   ".oykkkkkkyo.",
+   "oyykcCCckyyo",
+   "oyykCddCkyyo",
+   "oyykcddckyyo",
+   ".oykkkkkkyo.",
+   ".oyyyyyyyyo.",
+   "..oooooooo..",
+   ".gggggggggg.",
+   ".gGgGgGgGgg."
+  ],
+  "notes": "Fund: Der Grund, selten. Mechanik: Zonen-Beute, Gezeiten. +6 Leben.",
+  "a": "kleidung"
+ },
+ {
+  "n": "Glimmender Götze",
+  "kind": "item · verflucht",
+  "d": "Keine Karte, wirkt passiv. Fluch und passiv: Fäulnis-Karten wirken doppelt. Du verlierst 1 Leben zu Beginn jedes Zugs.",
+  "st": [
+   "V"
+  ],
+  "px": [
+   "....nnnn....",
+   "...nNNNNn...",
+   "..nNeNNeNn..",
+   "..nNNNNNNn..",
+   "...nNnnNn...",
+   "..nNnNNnNn..",
+   ".nNn.NN.nNn.",
+   ".n..nNNn..n.",
+   "....nNNn....",
+   "...nnnnnn...",
+   "..gggggggg..",
+   "..gGGGGGGg.."
+  ],
+  "notes": "Fund: Der Grund. Mechanik: Verfluchte Items, Erbstücke (passiv), Zonen-Beute.",
+  "a": "talisman"
+ },
+ {
+  "n": "Gezeitentafel",
+  "kind": "item",
+  "d": "Karte »Vorhersage« (0 Energie): Die Gezeit wechselt sofort. Ziehe 1. Das Werkzeug, mit dem man Ebbe und Flut selbst steuert.",
+  "st": [
+   "W"
+  ],
+  "px": [
+   ".TTTTTTTTTT.",
+   ".TwwwwwwwwT.",
+   ".TwwwwyywwT.",
+   ".TwwwyywwwT.",
+   ".TwwwyywwwT.",
+   ".TwwwwyywwT.",
+   ".TwwwwwwwwT.",
+   ".TDwwDwwDwT.",
+   ".TdDDdDDdDT.",
+   ".TddddddddT.",
+   ".TTTTTTTTTT.",
+   "............"
+  ],
+  "notes": "Fund: überall. Mechanik: Gezeiten.",
+  "a": "talisman"
+ },
+ {
+  "n": "Kultmaske",
+  "kind": "item",
+  "d": "Karte »Verstellen« (1 Energie): 8 Block. Kultisten greifen in diesem Zug jemand anderen an. Gegner-Beute mit Wirkung gegen genau diesen Gegner.",
+  "st": [
+   "B"
+  ],
+  "px": [
+   "...wwwwww...",
+   "..wwwwwwww..",
+   ".wwRwwwwRww.",
+   ".wkkRwwRkkw.",
+   ".wkkwwwwkkw.",
+   ".wwwwwwwwww.",
+   ".wwwwrrwwww.",
+   "..wwrwwrww..",
+   "..wwwwwwww..",
+   "...wrrrrw...",
+   "....wwww....",
+   "............"
+  ],
+  "notes": "Fund: Beute vom Kultisten. Mechanik: Gegner-Beute. +2 Leben.",
+  "a": "kleidung"
+ },
+ {
+  "n": "Tiefling-Schuppe",
+  "kind": "item",
+  "d": "Karte »Schuppenhaut« (0 Energie): 4 Block, bei Flut 8. Klein, billig, gut in jedem Wasser-Deck.",
+  "st": [
+   "W"
+  ],
+  "px": [
+   "............",
+   ".....cc.....",
+   "....cCCc....",
+   "...cCCCCc...",
+   "..cCCwCCCc..",
+   "..cCwCCCCc..",
+   "..cCCCCCCc..",
+   "..ccCCCCcc..",
+   "...cCCCCc...",
+   "....cCCc....",
+   ".....cc.....",
+   "............"
+  ],
+  "notes": "Fund: Beute vom Tiefling. Mechanik: Gegner-Beute, Gezeiten.",
+  "a": "talisman"
+ },
+ {
+  "n": "Schattenfetzen",
+  "kind": "item",
+  "d": "Karte »Verblassen« (1 Energie): Der nächste Angriff gegen dich verfehlt. Ein ganz neuer Effekt: ausweichen statt blocken.",
+  "st": [
+   "V"
+  ],
+  "px": [
+   "....pppp....",
+   "...pPPPPp...",
+   "..pPePPePp..",
+   "..pPPPPPPp..",
+   "..pPPPPPPp..",
+   ".pPPPPPPPPp.",
+   ".pPpPPpPPp..",
+   "pPp.pPp.pPp.",
+   "pp..pp..pp..",
+   "p...p...p...",
+   "............",
+   "............"
+  ],
+  "notes": "Fund: Beute vom Schatten. Mechanik: Gegner-Beute. +1 Leben.",
+  "a": "kleidung"
+ },
+ {
+  "n": "Leuchtpistole",
+  "kind": "item · selten",
+  "d": "Karte »Signal« (1 Energie): 3 Schaden und Brand 1 an allen. Alle geschwächt. Aus dem Krieg mitgebracht. Feuer und Licht lösen »Fanal« in sich aus, die Karte zahlt sich also fast selbst.",
+  "st": [
+   "F",
+   "L"
+  ],
+  "px": [
+   "............",
+   "............",
+   ".ooooooook..",
+   ".oyyyyyyok..",
+   ".ooooooook..",
+   ".....kook...",
+   "....kbbk....",
+   "...kbbbk....",
+   "...kbbk.....",
+   "...kkk......",
+   "............",
+   "............"
+  ],
+  "notes": "Fund: Krämer. Mechanik: Munition.",
+  "a": "waffe"
+ },
+ {
+  "n": "Maschinenpistole",
+  "kind": "item",
+  "d": "Karte »Feuerstoß« (1 Energie): 2 Schaden, 5 Treffer. Munition 3. Viele kleine Treffer, stark gegen Brand- und Gift-Ziele ohne Block, schwach gegen Schutz.",
+  "st": [
+   "E"
+  ],
+  "px": [
+   "............",
+   "............",
+   "gggggggggk..",
+   "gGGGGGGGgkkk",
+   "gggggggggk..",
+   "...kgg.bbk..",
+   "..kgggk.bbk.",
+   "..kgggk..bbk",
+   "..kgggk...bb",
+   "...kkk......",
+   "............",
+   "............"
+  ],
+  "notes": "Fund: Krämer. Mechanik: Munition.",
+  "a": "waffe"
+ },
+ {
+  "n": "Gasmaske",
+  "kind": "item",
+  "d": "Karte »Durchatmen« (1 Energie): 6 Block, −2 Wahnsinn. Passiv: Fäulnis-Reaktionen, die du auslöst, wirken 50 % stärker.",
+  "st": [
+   "V"
+  ],
+  "px": [
+   "...nnnnnn...",
+   "..nnnnnnnn..",
+   ".nnCCnnCCnn.",
+   ".nCkkCCkkCn.",
+   ".nnCCnnCCnn.",
+   "..nnnnnnnn..",
+   "...nnggnn...",
+   "....gGGg....",
+   "....gGGg....",
+   "....gggg....",
+   ".....kk.....",
+   "............"
+  ],
+  "notes": "Fund: überall. Mechanik: Wahnsinn. +2 Leben.",
+  "a": "kleidung"
+ },
+ {
+  "n": "Offiziersmantel",
+  "kind": "item",
+  "d": "Karte »Kommando« (1 Energie): 5 Block. Die nächste Karte macht +3 Schaden. Ein Mantel mit Rangabzeichen. Baut den nächsten Zug vor.",
+  "st": [
+   "E"
+  ],
+  "px": [
+   "............",
+   "...nn..nn...",
+   "..nnnnnnnn..",
+   ".nnnynnynnn.",
+   ".nn.nnnn.nn.",
+   ".nn.nynn.nn.",
+   ".nn.nnnn.nn.",
+   ".nn.nynn.nn.",
+   "....nnnn....",
+   "....nn.nn...",
+   "............",
+   "............"
+  ],
+  "notes": "Fund: überall. Mechanik: Karten-Takt. +4 Leben.",
+  "a": "kleidung"
+ },
+ {
+  "n": "Kompass, der nach unten zeigt",
+  "kind": "item",
+  "d": "Keine Karte, wirkt passiv. Passiv: Nach jedem Sieg siehst du zwei mögliche Begegnungen für die nächste Tiefe und wählst eine.",
+  "st": [],
+  "px": [
+   ".....yy.....",
+   "...yyyyyy...",
+   "..ywwwwwwy..",
+   ".ywwwggwwwy.",
+   ".ywwwggwwwy.",
+   ".ywwwggwwwy.",
+   ".ywwwRRwwwy.",
+   ".ywwwRRwwwy.",
+   "..ywwRRwwy..",
+   "...yyRRyy...",
+   ".....RR.....",
+   "............"
+  ],
+  "notes": "Fund: Ereignis. Mechanik: Erbstücke (passiv).",
+  "a": "talisman"
+ },
+ {
+  "n": "Wachstuchschürze",
+  "kind": "item",
+  "d": "Karte »Erden« (0 Energie): 3 Block. Wenn davor eine Strom-Karte lag: +1 Energie. Strom-Reaktionen schaden dir nicht mehr. Teil des Elektriker-Sets.",
+  "st": [],
+  "px": [
+   "....t..t....",
+   "....t..t....",
+   "...TTTTTT...",
+   "...TTTTTT...",
+   "..TTTTTTTT..",
+   "tTTTTCTTTTTt",
+   "..TTTCCTTT..",
+   "..TTTTCTTT..",
+   "..TTTTTTTT..",
+   "..TTTTTTTT..",
+   "..tttttttt..",
+   "............"
+  ],
+  "notes": "Fund: Hafenviertel (Elektrizitätswerk). Mechanik: Neuer Stoff: Strom, Karten-Takt. Trägt zusätzlich den neuen Stoff Strom. +2 Leben.",
+  "a": "kleidung"
+ },
+ {
+  "n": "Glühbirne",
+  "kind": "item",
+  "d": "Karte »Funke« (0 Energie): 2 Schaden, ziehe 1. Strom und Licht in einer Karte lösen »Glühfaden« aus. Billiger Kettenstarter.",
+  "st": [
+   "L"
+  ],
+  "px": [
+   "....wwww....",
+   "...wyyyyw...",
+   "..wyy..yyw..",
+   "..wy.CC.yw..",
+   "..wy.CC.yw..",
+   "..wyyyyyyw..",
+   "...wyyyyw...",
+   "....wyyw....",
+   "....gGGg....",
+   "....gggg....",
+   "....gGGg....",
+   ".....kk....."
+  ],
+  "notes": "Fund: überall. Mechanik: Neuer Stoff: Strom. Trägt zusätzlich den neuen Stoff Strom.",
+  "a": "talisman"
+ },
+ {
+  "n": "Dynamit",
+  "kind": "proviant",
+  "d": "Karte »Lunte« (0 Energie): 15 Schaden an allen Gegnern, du nimmst 4. Verbraucht. Der Notausgang aus einem schlechten Kampf.",
+  "st": [
+   "F"
+  ],
+  "px": [
+   ".........y..",
+   "........o...",
+   ".......k....",
+   "......k.....",
+   "...rrrRr....",
+   "...rRRrr....",
+   "...rrrrr....",
+   "...kkkkk....",
+   "...rRRrr....",
+   "...rrrrr....",
+   "...rrrrr....",
+   "............"
+  ],
+  "notes": "Fund: Krämer, Ereignis. Mechanik: Proviant."
+ },
+ {
+  "n": "Rum",
+  "kind": "proviant",
+  "d": "Karte »Schluck« (0 Energie): +2 Energie, +1 Wahnsinn. Verbraucht. Mut aus der Flasche.",
+  "st": [
+   "F"
+  ],
+  "px": [
+   ".....kk.....",
+   ".....bb.....",
+   ".....bb.....",
+   "....bBBb....",
+   "...bBbbbb...",
+   "...bBbbbb...",
+   "...bBbbbb...",
+   "...byyyyb...",
+   "...bbbbbb...",
+   "...bbbbbb...",
+   "............",
+   "............"
+  ],
+  "notes": "Fund: Krämer, Hafenviertel. Mechanik: Proviant, Wahnsinn."
+ },
+ {
+  "n": "Laudanum",
+  "kind": "proviant",
+  "d": "Karte »Tropfen« (1 Energie): 12 Leben, −3 Wahnsinn. Nächster Zug 1 Karte weniger. Verbraucht. Heilung im Kampf mit einem kleinen Preis.",
+  "st": [],
+  "px": [
+   "............",
+   ".....kk.....",
+   ".....kk.....",
+   ".....bb.....",
+   "....bBBb....",
+   "...bBBBBb...",
+   "...bwwwwb...",
+   "...bwrrwb...",
+   "...bwwwwb...",
+   "...bBBBBb...",
+   "...bbbbbb...",
+   "............"
+  ],
+  "notes": "Fund: Krämer, Kapelle. Mechanik: Proviant, Wahnsinn."
+ },
+ {
+  "n": "Riechsalz",
+  "kind": "proviant",
+  "d": "Karte »Aufwachen« (0 Energie): Ziehe 2. Entfernt Trugbild-Karten aus deiner Hand. Verbraucht. Gegenmittel zum Wahnsinn, das gleichzeitig Tempo gibt.",
+  "st": [
+   "S"
+  ],
+  "px": [
+   "....C..C....",
+   "...C..C.....",
+   "....C..C....",
+   "...C..C.....",
+   "...gggggg...",
+   "..gGGGGGGg..",
+   "..gwwwwwwg..",
+   "..gwGwwGwg..",
+   "..gwwwwwwg..",
+   "..gggggggg..",
+   "............",
+   "............"
+  ],
+  "notes": "Fund: überall. Mechanik: Proviant, Wahnsinn."
+ },
+ {
+  "n": "Kurzschluss",
+  "kind": "reaktion",
+  "d": "Strom + Wasser: Alle Gegner sind einen Zug betäubt. Du nimmst 3 Schaden (außer mit Wachstuchschürze).",
+  "st": [
+   "W"
+  ],
+  "px": [
+   "......CC....",
+   ".....CC.....",
+   "....CC......",
+   "...CCwCCC...",
+   "......CC....",
+   ".....CC.....",
+   "....Cw......",
+   "...CCCCC....",
+   "......CC....",
+   ".....C......",
+   "....C.......",
+   "............"
+  ]
+ },
+ {
+  "n": "Leiter",
+  "kind": "reaktion",
+  "d": "Eisen + Strom: Der Schaden dieser Karte trifft zusätzlich alle anderen Gegner zur Hälfte.",
+  "st": [
+   "E"
+  ],
+  "px": [
+   "......CC....",
+   ".....CC.....",
+   "....CC......",
+   "...CCwCCC...",
+   "......CC....",
+   ".....CC.....",
+   "....Cw......",
+   "...CCCCC....",
+   "......CC....",
+   ".....C......",
+   "....C.......",
+   "............"
+  ]
+ },
+ {
+  "n": "Glühfaden",
+  "kind": "reaktion",
+  "d": "Licht + Strom: Ziehe 2 Karten.",
+  "st": [
+   "L"
+  ],
+  "px": [
+   "......CC....",
+   ".....CC.....",
+   "....CC......",
+   "...CCwCCC...",
+   "......CC....",
+   ".....CC.....",
+   "....Cw......",
+   "...CCCCC....",
+   "......CC....",
+   ".....C......",
+   "....C.......",
+   "............"
+  ]
+ },
+ {
+  "n": "Herzschlag",
+  "kind": "reaktion",
+  "d": "Blut + Strom: +1 Energie und +3 Leben.",
+  "st": [
+   "B"
+  ],
+  "px": [
+   "......CC....",
+   ".....CC.....",
+   "....CC......",
+   "...CCwCCC...",
+   "......CC....",
+   ".....CC.....",
+   "....Cw......",
+   "...CCCCC....",
+   "......CC....",
+   ".....C......",
+   "....C.......",
+   "............"
+  ]
+ },
+ {
+  "n": "Gewitter",
+  "kind": "reaktion",
+  "d": "Eisen + Wasser + Strom: Hochreaktion: 8 Schaden an allen, alle betäubt.",
+  "st": [
+   "E",
+   "W"
+  ],
+  "px": [
+   "......CC....",
+   ".....CC.....",
+   "....CC......",
+   "...CCwCCC...",
+   "......CC....",
+   ".....CC.....",
+   "....Cw......",
+   "...CCCCC....",
+   "......CC....",
+   ".....C......",
+   "....C.......",
+   "............"
+  ]
+ },
+ {
+  "n": "Elmsfeuer",
+  "kind": "reaktion",
+  "d": "Glaube + Licht + Strom: Hochreaktion: Wahnsinn auf 0, 10 Block.",
+  "st": [
+   "G",
+   "L"
+  ],
+  "px": [
+   "......CC....",
+   ".....CC.....",
+   "....CC......",
+   "...CCwCCC...",
+   "......CC....",
+   ".....CC.....",
+   "....Cw......",
+   "...CCCCC....",
+   "......CC....",
+   ".....C......",
+   "....C.......",
+   "............"
+  ]
+ },
+ {
+  "n": "Rolle: Kriegsveteran",
+  "kind": "rolle",
+  "d": "Leuchtpistole, Gasmaske, Offiziersmantel. Bonus: Die erste Karte in jedem Zug wirkt doppelt."
+ },
+ {
+  "n": "Rolle: Taucher",
+  "kind": "rolle",
+  "d": "Taucherhelm, Ankerkette, Bootshaken. Bonus: Der Kampf beginnt bei Flut, und Flut hält 3 statt 2 Züge."
+ },
+ {
+  "n": "Rolle: Elektriker",
+  "kind": "rolle",
+  "d": "Zitteraal im Glas, Wachstuchschürze, Glühbirne. Bonus: Betäubte Gegner nehmen doppelten Schaden."
+ },
+ {
+  "n": "Rolle: Wahrsagerin",
+  "kind": "rolle",
+  "d": "Tarotkarten, Auge im Glas, Spieluhr. Bonus: Jeder Wahnsinn-Punkt gibt +1 Schaden auf alle Karten."
+ }
+]
