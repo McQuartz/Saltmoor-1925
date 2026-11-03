@@ -15,6 +15,7 @@ Budget: rund **150 € Claude-Guthaben** für das ganze Vorhaben. Aufteilung in 
 | [02-steam-ki.md](02-steam-ki.md) | Steam-KI-Kennzeichnung: was zählt, was nicht |
 | [03-architektur.md](03-architektur.md) | Generator-Kette, Datenformate, Ordner in Godot, Editor, Tests |
 | [04-fahrplan.md](04-fahrplan.md) | Etappen mit Budget und Abnahmekriterien |
+| [zielbild.md](zielbild.md) | **Ziel-Look** der Gegner mit sechs Beispielbildern, Paletten und Regeln (abgestimmt 2026-11-03) |
 | [entscheidungen.md](entscheidungen.md) | getroffene Entscheidungen mit Begründung |
 | [budget-log.md](budget-log.md) | was jede Sitzung gekostet und geschafft hat |
 | [prompts/](prompts/) | fertige Start-Prompts pro Etappe zum Kopieren |
