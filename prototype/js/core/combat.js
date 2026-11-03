@@ -6,7 +6,8 @@ function buildDeck(){const d=[];for(const it of allActive()){if(it.x)continue;co
 
 // Gegner aus foes.json erzeugen, skaliert nach Tiefe
 function mkEnemy(id,i){const f=FOES[id];if(!f)throw new Error('Unbekannter Gegner '+id);const d=S.depth;
- const sc=1+BAL.enemy_scaling.hp_per_depth*(d-1),as=Math.floor((d-1)/BAL.enemy_scaling.atk_every_n_depths);const hp=Math.round(f.hp*sc);
+ const st=S.stufe||0,ST2=RUN.stufen||{hp_je_stufe:0,atk_alle_n_stufen:99};
+ const sc=(1+BAL.enemy_scaling.hp_per_depth*(d-1))*(1+ST2.hp_je_stufe*st),as=Math.floor((d-1)/BAL.enemy_scaling.atk_every_n_depths)+(st>=2?Math.floor(st/ST2.atk_alle_n_stufen):0);const hp=Math.round(f.hp*sc);
  const r=rs('kampf');
  return{uid:++uidc,id,n:f.n,spr:f.spr||f.sprite||id,variant:f.variant,sprite:f.varianten?r.pick(f.varianten):(f.sprite||null),rang:f.rang||'normal',weak:f.weak,hp,max:hp,block:0,str:0,burn:0,poison:0,weak2:0,
   pi:f.rang==='boss'||f.rang==='waechter'?0:Math.floor(r.next()*f.pat.length),as,pat:f.pat.map(p=>({...p,v:p.t==='atk'?p.v+as:p.v})),besonders:f.besonders||null,phase:0,turns:0};}

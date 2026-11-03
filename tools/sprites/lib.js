@@ -97,7 +97,7 @@ function saum(x0, x1, y, zacken, tiefe, seed = 1, phase = 0) {
 // Gruppe: { p:[Formen], k: Glättung (0 = hart), pf, hz, dunkel }
 const STIL = { light: [-0.6, -0.7, 0.6], rimDir: [0.9, -0.5], rimOuter: 3 };
 function render(W, H, gruppen, pal, opt = {}) {
-  const N = W * H, gid = new Int16Array(N).fill(-1), mat = new Array(N), z = new Float32Array(N), tone = new Float32Array(N), noRim = new Uint8Array(N);
+  const N = W * H, ax = new Int16Array(N), ay = new Int16Array(N), gid = new Int16Array(N).fill(-1), mat = new Array(N), z = new Float32Array(N), tone = new Float32Array(N), noRim = new Uint8Array(N);
   gruppen.forEach((g, gi) => {
     if (!g || !g.p || !g.p.length) return;
     const k = g.k ?? 3, pr = g.p.flat ? g.p.flat(3) : g.p;
@@ -109,6 +109,7 @@ function render(W, H, gruppen, pal, opt = {}) {
       xs.forEach(v => { x0 = Math.min(x0, v - r - k); x1 = Math.max(x1, v + r + k); });
       ys.forEach(v => { y0 = Math.min(y0, v - r - k); y1 = Math.max(y1, v + r + k); });
     });
+    const gx0 = g.anker ? Math.round(g.anker[0]) : 0, gy0 = g.anker ? Math.round(g.anker[1]) : 0; // Dither-Anker: optional, wandert mit ganzzahlig bewegten Teilen
     x0 = Math.max(0, Math.floor(x0)); y0 = Math.max(0, Math.floor(y0)); x1 = Math.min(W - 1, Math.ceil(x1)); y1 = Math.min(H - 1, Math.ceil(y1));
     for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
       let D = 1e9, R = 1, M = null, best = 1e9, PF = null, TN = 0, NR = 0;
@@ -118,7 +119,7 @@ function render(W, H, gruppen, pal, opt = {}) {
         if (D === 1e9) D = d; else if (k <= 0) D = Math.min(D, d); else { const h = Math.max(k - Math.abs(D - d), 0) / k; D = Math.min(D, d) - h * h * k / 4; }
       }
       if (D < 0) {
-        const i = y * W + x; gid[i] = gi; mat[i] = M; tone[i] = TN; noRim[i] = NR; const u = -D;
+        const i = y * W + x; gid[i] = gi; ax[i] = gx0; ay[i] = gy0; mat[i] = M; tone[i] = TN; noRim[i] = NR; const u = -D;
         z[i] = (PF === 'flat' ? Math.min(u, 1) : PF === 'bevel' ? Math.min(u, R) * 0.9 : (u >= R ? R : Math.sqrt(2 * R * u - u * u))) * (g.hz ?? 1);
       }
     }
@@ -152,7 +153,7 @@ function render(W, H, gruppen, pal, opt = {}) {
       let v = 0.02 + df * 0.75 + tone[i] + (m === 'haut' ? 0.25 : 0) - (m === 'dunkel' ? 0.25 : 0);
       if (front) v = 0;
       const t = clamp(v, 0, 0.9999) * 3, kk = Math.floor(t), f = t - kk;
-      c = BODY[Math.min(3, f > bay(x, y) ? kk + 1 : kk)];
+      c = BODY[Math.min(3, f > bay(x - ax[i], y - ay[i]) ? kk + 1 : kk)];
     }
     buf[i] = c;
   }

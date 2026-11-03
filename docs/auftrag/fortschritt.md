@@ -11,7 +11,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt. Eine neue 
 | M2 Kampf-UI Variante A | fertig | 480 × 270, Karten, Stoffzeichen, Balken, Vorschau, Stummfilm nur bei Anlässen; Galerie der Bausteine fehlt noch (M10) |
 | M3 Dev-Modus und Autospieler | fertig | sechs Reiter, Einblendungen, Bot in Node und Browser |
 | M4 Musik im Spiel | offen | |
-| M5 Meta und Progression | offen | |
+| M5 Meta und Progression | fertig | Konzept B, 21 Fragmente, Figuren, Startvarianten, Stufen, Tagebuch, Ankunft, Strand |
 | M6 Sprite-Pipeline (KI-Sprites) | offen | |
 | M7 Gegner-Besetzung | offen | |
 | M8 Hintergründe | offen | |
@@ -103,6 +103,43 @@ Dazu: Schadens-Vorschau (schraffiert, „−8“), Hochreaktions-Zwischentitel (
 
 **Einschätzung:** Sehr nützlich, vor allem die Vorschau je Handkarte und die Weg-Vorschau. Schwach: Der Reiter Musik zeigt erst nach M4 alles. Bilder: `bilder/M3/`.
 
+### M5 Meta und Progression (fertig)
+
+- Konzept `docs/auftrag/progression.md`: drei Varianten verglichen (nur Fragmente / Fragmente + Schwellen + Stufen / Währung), **gewählt B**, weil es die Lücke „Run ohne Wandbild bringt nichts“ schließt und fast kein neues System braucht.
+- `data/fragmente.json`: 21 Fragmente (drei je Biom), auch als `docs/auftrag/fragmente.md` zum Gegenlesen. 12 nehmen ein Item in den Fundpool auf. Geschrieben von einem Inhalts-Subagenten, von mir eingebaut.
+- `js/core/meta.js` (`saltmoor.meta.v1`): Fragmente, Items, tiefster Akt, Startvarianten, Stufen, Runs, Siege, Enden, beste Tiefe, erreichte Biome, Verlauf.
+- Figurwahl am Strand mit Ausrede, Set (vorhandene Teile in Gold), Deckgröße, Vorliebe; gesperrte Figuren mit Bedingung. Startvarianten und Stufen erscheinen, sobald frei.
+- Wandbild mit Relief und Zettel, Tagebuch im Titel, Ankunft mit Wahrheit der Figur und Bleiben/Umkehren, Ende mit Schlusstext, Strand mit Zusammenfassung und allem Neuen.
+
+**Abnahme:** 20 Runs hintereinander mit gemeinsamem Meta-Speicher (`node tools/test-meta.js 20 1`), Autospieler ohne Sieg:
+
+| Run | Figur | Ergebnis | Tiefe | Fragmente gesamt | neu |
+|---|---|---|---|---|---|
+| 1 | fischer | Strand | 7 | 0 | Startvariante „Ersparnisse“ |
+| 2 | friedhofswaerter | Strand | 10 | 1 | Fragment „Der Kerbstein“, Sense, Startvariante „Ein Erbstück“ |
+| 3 | pfarrerin | Strand | 7 | 3 | Fragment „Die zwei Kreise“, Hexenflasche, Fragment „Das Taufbecken“, Priesterkragen, Detektiv |
+| 4 | detektiv | Strand | 12 | 5 | Fragment „Der Glockenguss“, Spieluhr, Fragment „Das Reliefband: Die Küste“, Tarotkarten |
+| 5 | fischer | Strand | 7 | 5 | – |
+| 6 | friedhofswaerter | Strand | 12 | 6 | Fragment „Die letzte Predigt“, Okkultist |
+| 7 | friedhofswaerter | Strand | 7 | 6 | – |
+| 8 | pfarrerin | Strand | 18 | 6 | Startvariante „Zähe Natur“ |
+| 9 | detektiv | Strand | 8 | 7 | Fragment „Die Stufen unter der Kaimauer“, Bootshaken |
+| 10 | okkultist | Strand | 4 | 8 | Fragment „Der Hirte“ |
+| 11 | fischer | Strand | 7 | 8 | – |
+| 12 | friedhofswaerter | Strand | 8 | 9 | Fragment „Kerben im Kutterbalken“, Ankerkette, Kneipenschläger |
+| 13 | fischer | Strand | 12 | 9 | – |
+| 14 | friedhofswaerter | Strand | 10 | 9 | – |
+| 15 | pfarrerin | Strand | 12 | 10 | Fragment „Das Reliefband: Der Auszug“ |
+| 16 | detektiv | Strand | 9 | 10 | – |
+| 17 | okkultist | Strand | 16 | 11 | Fragment „Die gefrorene Welle“, Leuchtpistole |
+| 18 | kneipenschlaeger | Strand | 8 | 11 | – |
+| 19 | fischer | Strand | 7 | 11 | – |
+| 20 | friedhofswaerter | Strand | 15 | 13 | Fragment „Die Liste im Leuchtturm“, Fragment „Das Zeichen der Legion“, Grubenlampe |
+
+In 12 von 20 Runs wird etwas Neues frei (Fragment, Item, Figur oder Startvariante). Detektiv nach Run 3, Okkultist nach Run 6, Kneipenschläger nach Run 12. Die Runs ohne Neues sind die, in denen der Autospieler kein Wandbild nimmt oder früh stirbt. Meta bleibt nach Neuladen (localStorage), Dev-Reset leert alles (geprüft). Enden und Strand zeigen Ausrede/Wahrheit der gewählten Figur.
+
+**Einschätzung:** Die Freischaltungen kommen in einem guten Takt, und die Fragmente erzählen tatsächlich etwas. Schwach: Die Schwierigkeitsstufen sind ungetestet, weil der Autospieler noch nicht gewinnt (Balance kommt in M9). Das Tagebuch ist schlicht. Bilder: `bilder/M5/`.
+
 ## Entscheidungen unterwegs
 
 | Datum | Meilenstein | Entscheidung | Warum |
@@ -113,6 +150,7 @@ Dazu: Schadens-Vorschau (schraffiert, „−8“), Hochreaktions-Zwischentitel (
 | 2026-11-03 | M1 | „Karte entfernen“ heißt hier „Karte streichen“: Das Item bleibt angelegt (Leben, Set), gibt aber keine Karte mehr. | Karten entstehen aus Items. Ein ganzes Item entfernen kann man schon durch Ablegen, das wäre kein Preis. |
 | 2026-11-03 | M1 | Neue Knotenart Fundstelle (Ebene 2): Item oder Gold, manchmal mit Haken (−5 Leben). | Briefing Abschnitt 7 schlägt sie vor, sie braucht kein neues System. |
 | 2026-11-03 | M1 | Bis M7 vorläufige Wächter (`vorlaeufig: true` in foes.json) mit alten Grafiken. | Damit jeder Akt schon einen Wächter hat. |
+| 2026-11-03 | M5 | Progression Variante B (Fragmente + Startvarianten bei Akt II/III/IV + Schwierigkeitsstufen nach dem ersten Sieg). | Siehe progression.md: wenig neues System, jeder Run kann etwas bringen. |
 | 2026-11-03 | M0 | Kein Bild-Generator verfügbar, M6 nimmt den Ersatzweg (Sprites per Skript selbst gezeichnet). | In der Sitzung gibt es kein Werkzeug zur Bilderzeugung. |
 
 ## Autospieler-Ergebnisse

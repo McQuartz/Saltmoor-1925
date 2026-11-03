@@ -4,7 +4,7 @@
 'use strict';
 const B = World.B, W = B.W, H = B.H, M = B.M;
 const pal = { koerper: ['#05070a', '#0b1016', '#141c26', '#22303e'], rand: ['#4a6a8a', '#cfe6ff'], augen: '#ffe9a0', nebel: ['#0e1628', '#2a3a52'] };
-const WARM = '#ffd27a', WARMK = '#fff0c0', WARMG = '#4a3210';
+const WARM = '#ffd27a', WARMK = '#fff0c0', WARMG = '#6a4416';
 const HIMMEL = ['#04060b', '#070b14', '#0b1220', '#111b2e', '#19273d', '#22344c', '#2e4460', '#3c5674'];
 const WASSER = ['#04070b', '#080e16', '#0d1622', '#142134', '#1d2e46', '#2a405c'];
 const STEIN = ['#06080b', '#0b1016', '#121a24', '#1a2532', '#243243', '#2e4058'];
@@ -75,12 +75,12 @@ function fassade(K, eb, P, o) {
   pts.push(P.q(X, Hh, o.Zb), P.q(X, -.2, o.Zb));
   m.poly(pts);
   const ziegel = (x, y) => (B.hash(x >> 1, y, 5) - .5) * .35 + ((y % 3 === 0) ? -.12 : 0);
-  K.form(eb, m, o.tiefe, { ton: o.seite > 0 ? 1.15 : .7, verlauf: .7, fase: 1, muster: ziegel, schatten: o.schatten || 0 });
+  K.form(eb, m, o.tiefe, { ton: o.seite > 0 ? .85 : .5, verlauf: .55, fase: 1, muster: ziegel, schatten: o.schatten || 0 });
   // Stirnwand (wenn das Haus vorspringt)
   if (o.stirn) { const s = B.maske(); s.poly([P.q(o.stirn, -.2, o.Za), P.q(o.stirn, Hh, o.Za), P.q(X, Hh, o.Za), P.q(X, -.2, o.Za)]); K.form(eb, s, o.tiefe, { ton: .55, verlauf: .4, fase: 1, muster: ziegel }); }
   // Fenster: alle zugemauert bis auf eines
   const fl = o.geschosse || Math.floor((Hh - 1) / 1.7), sp = o.achsen || 3;
-  const fH = .9, fB = (sa - sb) / (sp + 1) * .32;
+  const fH = 1.05, fB = (sa - sb) / (sp + 1) * .36;
   for (let f = 0; f < fl; f++) for (let a = 0; a < sp; a++) {
     const Y0 = 1.1 + f * 1.7, sMid = sa + (sb - sa) * (a + 1) / (sp + 1);
     const luke = o.luke !== undefined && a === o.luke;
@@ -97,7 +97,7 @@ function fassade(K, eb, P, o) {
       K.licht(cx, cy, WARM, 26, .8); o.lichtPos = [cx, cy];
     } else {
       const mu = (x, y) => ((y & 1) ? -.5 : 0) + ((((x + (y >> 1) * 2) & 3) === 0) ? -.4 : 0) + (B.hash(x, y, 3) - .5) * .2;
-      K.form(eb, fm, o.tiefe, { ton: o.seite > 0 ? 2.1 : 1.6, rand: 0, fase: 0, muster: fm.x1 - fm.x0 > 4 ? mu : null });
+      K.form(eb, fm, o.tiefe, { ton: o.seite > 0 ? 2.5 : 2.1, rand: 0, fase: 0, muster: fm.x1 - fm.x0 > 4 ? mu : null });
       // Laibung: Schattenkante oben und auf der lichtfernen Seite
       const e = K.e[eb], k0 = B.pk(B.mix(pal.koerper[0], K.fern, o.tiefe));
       for (let y = fm.y0; y <= fm.y1; y++) for (let x = fm.x0; x <= fm.x1; x++) if (fm.has(x, y) && (!fm.has(x, y - 1) || (o.seite > 0 ? !fm.has(x - 1, y) : !fm.has(x + 1, y)))) e.set(x, y, k0);
@@ -115,12 +115,14 @@ function fassade(K, eb, P, o) {
 
 // ---------- Kai-Pflaster und Wasser (Ebene 4) ----------
 function boden(K, P, istKai, o) {
-  o = o || {}; const e = K.e[4], s = K.o.seed;
-  B.feld(e, -M, P.vy + 1, W + M, H + M, STEIN.concat([K.fern]), (x, y) => {
+  o = o || {}; const s = K.o.seed;
+  K.boden(P.vy + 1, H + M, STEIN.concat([K.fern]), (x, y) => {
     const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; if (!istKai(X, Z)) return -1;
     const k = P.k(Z), cz = .2, cx = .28, row = Math.floor(Z / cz), off = (row & 1) * .5, col = Math.floor(X / cx + off);
     const fx = X / cx + off - col, fz = Z / cz - row, pxw = k * cx, pzh = k * cz * k / P.h;
-    let t = .3 + .14 * B.hash(col, row, s) + Math.pow(1 - (y - P.vy) / P.h, 6) * .55;
+    const fern = 1 - (y - P.vy) / P.h;
+    let t = .2 + .12 * B.hash(col, row, s) + Math.pow(fern, 5) * .6 - (1 - fern) * .1;
+    const nass = B.fbm(X * 1.1, Z * 1.6, s + 3, 2); if (nass > .66 && !o.trocken) return .42 + fern * .35 + (Math.sin(y * 2.1 + X * 3) > .6 ? .12 : 0);
     if (pxw > 3) { if (fx * pxw < .9 || fz * Math.max(1, pzh) < .7) t -= .2; else if ((1 - fz) * Math.max(1, pzh) < 1.2 && fx > .4) t += .13; }
     if (o.schiene) for (const sx of o.schiene) if (Math.abs(X - sx) * k < .55 + k * .004) t = .62 + Math.pow(1 - (y - P.vy) / P.h, 3) * .3;
     if (o.rinne && Math.abs(X - o.rinne) * k < 1.2 + k * .02) t = .14;
@@ -129,8 +131,8 @@ function boden(K, P, istKai, o) {
   });
 }
 function wasser(K, eb, y0, y1, istWasser, o) {
-  o = o || {}; const e = K.e[eb], s = K.o.seed;
-  B.feld(e, -M, y0, W + M, y1, WASSER, (x, y) => {
+  o = o || {}; const s = K.o.seed, feld = eb === 4 ? (a, b, c, d, cols, f) => K.boden(b, d, cols, f) : (a, b, c, d, cols, f) => B.feld(K.e[eb], a, b, c, d, cols, f);
+  feld(-M, y0, W + M, y1, WASSER, (x, y) => {
     if (istWasser && !istWasser(x, y)) return -1;
     const q = (y - y0) / Math.max(1, y1 - y0), wel = Math.sin(y * 1.7 + B.rausch2(x * .03, y * .25, s) * 6);
     return .22 + Math.pow(1 - q, 5) * .55 + (wel > .75 ? .2 : 0) + (o.glanz ? o.glanz(x, y) : 0);
@@ -138,8 +140,9 @@ function wasser(K, eb, y0, y1, istWasser, o) {
 }
 // Spiegelung einer Lichtquelle als senkrechte, unterbrochene Spur
 function spiegel(K, eb, x, y0, y1, col, breite, istWasser) {
-  const e = K.e[eb], p = B.pk(col);
+  const p = B.pk(col);
   for (let y = Math.floor(y0); y < y1; y++) {
+    const e = K.e[eb === 4 ? K.eb(y) : eb];
     const q = (y - y0) / (y1 - y0), w = breite * (1 + q * 1.6), v = (1 - q) * .8;
     for (let px = Math.floor(x - w); px <= x + w; px++) { if (istWasser && !istWasser(px, y)) continue; if (Math.sin(y * 2.3 + px * .2) > .1 && B.hash(px, y, 2) < v * (1 - Math.abs(px - x) / (w + 1))) e.set(px, y, p); }
   }
@@ -156,7 +159,7 @@ function laterne(K, eb, x, yb, hoch, an) {
   const gy = yb - hoch + 4 * k;
   if (an) {
     B.dith(K.e[eb], x - 2.5 * k, yb - hoch + 1, x + 2.5 * k, yb - hoch + 8 * k - 1, WARM, () => .9);
-    for (const L of [K.e[2], K.e[3], K.e[4]]) B.gluehen(L, x, gy, 58 * k, WARMG, .95);
+    K.glut(x, gy, 62 * k, WARMG, 1, [2, 3, 4]); K.glut(x, yb, 40 * k, '#3a2408', .9, [2, 3, 4]);
     B.flamme(K, Math.round(x), Math.round(gy + 2), { p: B.PAR[eb], kern: WARMK, mitte: WARM, aussen: '#a06a20', glut: '#2a1a06' });
   } else B.dith(K.e[eb], x - 2.5 * k, yb - hoch + 1, x + 2.5 * k, yb - hoch + 8 * k - 1, B.mix(pal.rand[0], pal.koerper[2], .5), () => .5);
 }
@@ -199,10 +202,11 @@ function kran(K, eb, x, yb, s, tiefe, spitze) {
 }
 // Fußspuren zum Wasser (ab fremdheit 0,3)
 function spuren(K, P, von, nach, n) {
-  const e = K.e[4], c = B.pk(STEIN[0]), c2 = B.pk(STEIN[3]);
+  const c = B.pk(STEIN[0]), c2 = B.pk(STEIN[3]);
   for (let i = 0; i < n; i++) {
     const q = i / n, X = B.lerp(von[0], nach[0], q) + Math.sin(q * 5) * .3 + (i & 1 ? .12 : -.12), Z = B.lerp(von[1], nach[1], q);
     const [x, y] = P.q(X, 0, Z), k = P.k(Z) * .07;
+    const e = K.e[K.eb(y)];
     for (let j = -1; j <= 1; j++) { e.set(x + j * Math.max(1, k) * .7, y, c); if (k > 1.5) e.set(x + j, y - 1, c2); }
   }
 }
@@ -210,7 +214,7 @@ function spuren(K, P, von, nach, n) {
 // =====================================================================
 // Variante 0: Am Kai
 function kai(K, o) {
-  o = o || {}; const r = K.r, fr = K.fr, P = B.persp(372, 134);
+  o = o || {}; const r = K.r, fr = K.fr, P = B.persp(372, 134); K.split = [146, 158];
   himmel(K, 136, 430);
   // See fern (Ebene 1)
   wasser(K, 1, 134, 180, null);
@@ -222,6 +226,10 @@ function kai(K, o) {
     lamp = leuchtturm(K, 1, 441, 139, 96, 15, .48, { lit: 2 });
     const fm = B.maske(); fm.poly([[422, 140], [430, 134], [452, 133], [466, 139]]); K.form(1, fm, .5, { ton: 1, fase: 1 });
   } else kirchmauer(K, 1, 430, 140, .5);
+  const kante = 3.05, ende = 14;
+  const istKai = (X, Z) => X > -15.2 && ((Z < ende && X < kante) || X < -8);
+  wasser(K, 4, 134, H + M, null, { glanz: (x, y) => 0 });
+  boden(K, P, istKai, { schiene: [-5.3, -6.7], kante: (X, Z) => Z < ende ? Math.abs(X - kante) : (X > -8.5 && X < -8 ? 0 : 9) });
   // Speicherflucht links: jedes Haus anders hoch, eines springt vor (Stirnwand sichtbar)
   const H1 = [
     { X: -15, Za: 4.6, Zb: 8.2, H: 9.6 + r.j(.3), giebel: 2.6, treppe: true, eb: 3, tiefe: .06, achsen: 3, luke: 1 },
@@ -238,28 +246,24 @@ function kai(K, o) {
   // Nebel hinter den Figuren (deckt Ebenen 0–2)
   B.nebel(K.e[2], { y0: 92, y1: 168, col: B.mix(pal.nebel[1], K.fern, .4), dichte: .34, xs: [20, 470, 70], seed: 4 });
   // Boden: Kai mit Kranschiene, rechts das Hafenbecken
-  const kante = 3.05, ende = 14;
-  const istKai = (X, Z) => X > -15.2 && ((Z < ende && X < kante) || X < -8);
-  wasser(K, 4, 134, H + M, null, { glanz: (x, y) => 0 });
-  boden(K, P, istKai, { schiene: [-5.3, -6.7], kante: (X, Z) => Z < ende ? Math.abs(X - kante) : (X > -8.5 && X < -8 ? 0 : 9) });
   // Bodennebel, schmal
-  B.nebel(K.e[4], { y0: 136, y1: 156, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .3, seed: 8 });
+  B.nebel(K.e[2], { y0: 134, y1: 150, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .3, seed: 8 });
   // Spiegelungen auf dem Wasser
   const iw = (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; return !istKai(X, Z); };
   if (lamp) spiegel(K, 4, lamp[0], 140, 200, '#8a7a4a', 1.5, iw);
   // Spiegelung des Fensters im nassen Pflaster
-  if (lit) B.dith(K.e[4], lit[0] - 6, 150, lit[0] + 8, 200, '#3a2c14', (x, y) => .22 * Math.exp(-(((x - lit[0] - 2) / 4) ** 2)) * (Math.sin(y * 1.9) > 0 ? 1 : 0));
+  if (lit) K.bodenDith(lit[0] - 6, 150, lit[0] + 8, 200, '#3a2c14', (x, y) => .22 * Math.exp(-(((x - lit[0] - 2) / 4) ** 2)) * (Math.sin(y * 1.9) > 0 ? 1 : 0));
   // Poller an der Kante, Taue ins Wasser
-  for (const Z of [5.3, 9.6]) { const [x, y] = P.q(2.75, 0, Z); poller(K, 3, x, y, P.k(Z) / 26, 0); const t = B.maske(); t.pfad([[x + 1, y - 3], [x + 14, y + 2], [x + 30, y + 10]], .7, .6); K.form(3, t, 0, { ton: 1.5, fase: 0, rand: 1 }); }
+  for (const Z of [5.3, 9.6]) { const [x, y] = P.q(2.75, 0, Z); poller(K, K.eb(y), x, y, P.k(Z) / 26, 0); const t = B.maske(); t.pfad([[x + 1, y - 3], [x + 14, y + 2], [x + 30, y + 10]], .7, .6); K.form(K.eb(y), t, 0, { ton: 1.5, fase: 0, rand: 1 }); }
   // Laterne an der Ecke des ersten Speichers, Kisten an der Ladetür
   const [lx, ly] = P.q(-13.2, 0, 6.4);
-  laterne(K, 3, lx, ly, 56, fr < .65);
+  laterne(K, K.eb(ly), lx, ly, 56, fr < .65);
   const [kx, ky] = P.q(-14.3, 0, 7.4);
-  kiste(K, 3, kx + 4, ky + 1, 16, 13, 0); kiste(K, 3, kx + 18, ky + 2, 13, 11, 0); kiste(K, 3, kx + 8, ky - 12, 12, 10, 0);
+  const ke = K.eb(ky + 2); kiste(K, ke, kx + 4, ky + 1, 16, 13, 0); kiste(K, ke, kx + 18, ky + 2, 13, 11, 0); kiste(K, ke, kx + 8, ky - 12, 12, 10, 0);
   // Netzgestell rechts vorn: hier wird geflickt
   const a = P.q(2.15, 0, 3.15), a2 = P.q(2.15, 1.75, 3.15), b = P.q(2.15, 0, 4.6), b2 = P.q(2.15, 1.7, 4.6);
-  netzGestell(K, 3, [b[0], b[1], b2[1]], [a[0], a[1], a2[1]], 26, 0);
-  const st = P.q(1.35, 0, 3.4); schemelKorb(K, 3, st[0], st[1], 1.1);
+  netzGestell(K, K.eb(b[1]), [b[0], b[1], b2[1]], [a[0], a[1], a2[1]], 26, 0);
+  const st = P.q(1.35, 0, 3.4); schemelKorb(K, K.eb(st[1]), st[0], st[1], 1.1);
   if (fr > .3) spuren(K, P, [-1.5, 1.9], [kante, 3.9], Math.round(10 + fr * 8));
   // Vordergrund: Dalben rechts mit Tau, Seil oben, Kistenkante unten links
   const v = B.maske();
@@ -278,7 +282,7 @@ function kai(K, o) {
 
 // Variante 1: Lagerhaus-Gasse
 function gasse(K) {
-  const r = K.r, fr = K.fr, P = B.persp(268, 122);
+  const r = K.r, fr = K.fr, P = B.persp(268, 122); K.split = [140, 156];
   himmel(K, 124, 270, { baender: 1.4 });
   wasser(K, 1, 122, 150, null);
   const lamp = leuchtturm(K, 1, 272, 123, 40, 6, .56, { lit: 1, fenster: 3 });
@@ -296,12 +300,12 @@ function gasse(K) {
   B.nebel(K.e[2], { y0: 84, y1: 150, col: B.mix(pal.nebel[1], K.fern, .4), dichte: .3, xs: [150, 400, 50], seed: 5 });
   boden(K, P, (X, Z) => Math.abs(X + .2) < 2.6, { rinne: 0 });
   // Pfützen spiegeln das warme Fenster
-  if (lit) { for (const [Z, w] of [[2.2, 1.4], [3.4, 1]]) { const [x, y] = P.q(.4, 0, Z), k = P.k(Z); B.dith(K.e[4], x - w * k * .5, y - 3, x + w * k * .5, y + 4, '#22324a', (px, py) => ((px - x) / (w * k * .5)) ** 2 + ((py - y - .5) / 3.5) ** 2 < 1 ? .9 : 0); B.dith(K.e[4], x + (lit[0] - 268) * .2 - 2, y - 3, x + (lit[0] - 268) * .2 + 3, y + 4, WARM, (px, py) => ((px - x) / (w * k * .5)) ** 2 + ((py - y - .5) / 3.5) ** 2 < 1 && (py & 1) ? .7 : 0); } }
+  if (lit) { for (const [Z, w] of [[2.2, 1.4], [3.4, 1]]) { const [x, y] = P.q(.4, 0, Z), k = P.k(Z); K.bodenDith(x - w * k * .5, y - 3, x + w * k * .5, y + 4, '#22324a', (px, py) => ((px - x) / (w * k * .5)) ** 2 + ((py - y - .5) / 3.5) ** 2 < 1 ? .9 : 0); K.bodenDith(x + (lit[0] - 268) * .2 - 2, y - 3, x + (lit[0] - 268) * .2 + 3, y + 4, WARM, (px, py) => ((px - x) / (w * k * .5)) ** 2 + ((py - y - .5) / 3.5) ** 2 < 1 && (py & 1) ? .7 : 0); } }
   // Fass unter dem Fallrohr
   const [fx, fy] = P.q(2.0, 0, 2.6), fk = P.k(2.6) / 40;
   const f = B.maske(); f.poly([[fx - 9 * fk, fy], [fx - 10 * fk, fy - 12 * fk], [fx - 9 * fk, fy - 24 * fk], [fx + 9 * fk, fy - 24 * fk], [fx + 10 * fk, fy - 12 * fk], [fx + 9 * fk, fy]]); f.kap(fx + 4 * fk, fy - 24 * fk, fx + 7 * fk, -M, 1.6 * fk, 1.6 * fk);
-  K.form(3, f, 0, { ton: 1.3, schatten: 2, muster: (x, y) => (Math.abs(y - (fy - 6 * fk)) < 1 || Math.abs(y - (fy - 18 * fk)) < 1) ? .8 : 0 });
-  if (fr < .65) { const [lx, ly] = P.q(-2.5, 0, 3.2); laterne(K, 3, lx + 6, ly, 54, true); }
+  K.form(K.eb(fy), f, 0, { ton: 1.3, schatten: 2, muster: (x, y) => (Math.abs(y - (fy - 6 * fk)) < 1 || Math.abs(y - (fy - 18 * fk)) < 1) ? .8 : 0 });
+  if (fr < .65) { const [lx, ly] = P.q(-2.5, 0, 3.2); laterne(K, K.eb(ly), lx + 6, ly, 54, true); }
   if (fr > .3) spuren(K, P, [-.6, 1.6], [.4, 9], 14);
   const v = B.maske(); v.poly([[-M, -M], [30, -M], [26, 90], [34, 120], [28, H + M], [-M, H + M]]); v.kap(30, 60, 60, 66, 2, 1.5); v.pfad([[480 + M, 30], [440, 46], [400, 40], [372, 24]], 1, .8);
   K.form(5, v, 0, { ton: .5, fase: 1.5, k: ['#020305', '#05070a', '#0b1016', '#141c26'] });
@@ -327,7 +331,7 @@ function netzGestellQuer(K, eb, a, b, durch, tiefe) {
 
 // Variante 2: Bootssteg
 function steg(K) {
-  const r = K.r, fr = K.fr, P = B.persp(206, 154);
+  const r = K.r, fr = K.fr, P = B.persp(206, 154); K.split = [160, 166];
   himmel(K, 156, 330, { baender: 2.6 });
   wasser(K, 1, 154, H + M, null);
   // Ufer rechts mit kleinem Viertel, ein Fenster warm
@@ -348,11 +352,13 @@ function steg(K) {
   // Steg: breiter Anleger, Planken als Fluchtlinien
   const istSteg = (X, Z) => X > -2.5 && X < 4.1 && Z < 30;
   B.nebel(K.e[2], { y0: 110, y1: 166, col: B.mix(pal.nebel[1], K.fern, .4), dichte: .3, xs: [40, 460, 60], seed: 6 });
-  const e4 = K.e[4], HOLZ = ['#06070a', '#0c0f14', '#151a22', '#1f2632', '#2c3646', K.fern];
-  B.feld(e4, -M, 155, W + M, H + M, HOLZ, (x, y) => {
+  const HOLZ = ['#06070a', '#0c0f14', '#151a22', '#1f2632', '#2c3646', K.fern];
+  const iw = (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; return !istSteg(X, Z); };
+  wasser(K, 4, 155, H + M, iw);
+  K.boden(155, H + M, HOLZ, (x, y) => {
     const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; if (!istSteg(X, Z)) return -1;
     const k = P.k(Z), pw = .32, i = Math.floor(X / pw), f = X / pw - i;
-    let t = .34 + .1 * B.hash(i, 0, 3) + .08 * B.rausch2(i * 3, Z * .4, 2) + Math.pow(1 - (y - 154) / 116, 6) * .5;
+    let t = .24 + .1 * B.hash(i, 0, 3) + .08 * B.rausch2(i * 3, Z * .4, 2) + Math.pow(1 - (y - 154) / 116, 6) * .5;
     if (f * pw * k < .9) t = .1; else if ((1 - f) * pw * k < 1.1) t += .14;
     const naht = Z * 1.0 + B.hash(i, 1, 4) * 3; if ((naht % 3.2) * k / Z < .8 && k > 6) t = .12;
     if (Math.abs(X - 4.1) * k < 1.2 || Math.abs(X + 2.5) * k < 1.2) t = .66;
@@ -362,20 +368,18 @@ function steg(K) {
   for (const [X, Z, hh] of [[-2.6, 2.2, 1.4], [-2.6, 4.1, 1.2], [-2.6, 7.6, 1.5], [4.2, 2.6, 1.6], [4.2, 5.4, 1.1], [4.2, 9.8, 1.5], [-2.6, 13, 1.2], [4.2, 18, 1.4]]) {
     const [x, y] = P.q(X, 0, Z), k = P.k(Z), m = B.maske();
     m.kap(x, y + k * .5, x + (X > 0 ? 1 : -1) * k * .02, y - k * hh, k * .1 + .4, k * .09 + .3);
-    K.form(Z < 6 ? 3 : 2, m, Z < 6 ? 0 : .2, { ton: 1.3, fase: 1 });
+    K.form(K.eb(y), m, Z < 6 ? 0 : .2, { ton: 1.3, fase: 1 });
   }
   // Boote links festgemacht
   for (const [X, Z, l] of [[-4.3, 3.4, 2.6], [-5.6, 7, 2.2]]) {
     const [x, y] = P.q(X, -.3, Z), k = P.k(Z), m = B.maske(), L2 = l * k * .5;
     m.poly([[x - L2, y - k * .32], [x - L2 * .8, y], [x + L2 * .9, y], [x + L2 * 1.1, y - k * .4], [x + L2 * .2, y - k * .3]]);
     m.kap(x - L2 * .3, y - k * .32, x - L2 * .3, y - k * 1.6, .6, .5);
-    K.form(Z < 5 ? 3 : 2, m, Z < 5 ? .02 : .2, { ton: 1.3, fase: 1.5, schatten: 1 });
-    const t = B.maske(); t.pfad([[x + L2 * .9, y - k * .3], [x + L2 * 1.5, y - k * .1], P.q(-2.5, .2, Z + .5)], .5, .5); K.form(3, t, 0, { ton: 1.6, fase: 0, rand: 1 });
+    K.form(K.eb(y), m, Z < 5 ? .02 : .2, { ton: 1.3, fase: 1.5, schatten: 1 });
+    const t = B.maske(); t.pfad([[x + L2 * .9, y - k * .3], [x + L2 * 1.5, y - k * .1], P.q(-2.5, .2, Z + .5)], .5, .5); K.form(K.eb(y), t, 0, { ton: 1.6, fase: 0, rand: 1 });
   }
   // Laterne am Stegende
-  if (fr < .65) { const [lx, ly] = P.q(3.9, 0, 6.5); laterne(K, 3, lx, ly, 34, true); }
-  const iw = (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; return !istSteg(X, Z); };
-  wasser(K, 4, 155, H + M, iw);
+  if (fr < .65) { const [lx, ly] = P.q(3.9, 0, 6.5); laterne(K, K.eb(ly), lx, ly, 34, true); }
   if (lit) spiegel(K, 4, lit[0], 158, 186, '#6a5028', 1, iw);
   spiegel(K, 4, lamp[0], 158, 230, '#8a7a4a', 1.5, iw);
   const v = B.maske(); v.poly([[480 + M, 180], [452, 196], [440, 270 + M], [480 + M, 270 + M]]); v.kap(-M, 220, 40, 240, 4, 4); v.kap(20, 160, 26, 270 + M, 5, 6);
@@ -389,17 +393,16 @@ function steg(K) {
 
 // Wächter: am Fuß des Leuchtturms
 function waechter(K) {
-  const fr = K.fr;
+  const fr = K.fr; K.split = [198, 204];
   himmel(K, 200, 470, { baender: 1.6 });
   wasser(K, 1, 196, H + M, null);
   // ferne Küste links mit der Stadt
   const k = B.maske(); k.poly([[-M, 198], [-M, 186], [40, 184], [90, 188], [150, 192], [200, 198]]); K.form(1, k, .6, { ton: 1, fase: 1 });
-  const lamp = leuchtturm(K, 2, 356, 214, 236, 70, .08, { lit: 2, fenster: 5, fels: false });
+  const lamp = leuchtturm(K, 2, 356, 214, 196, 64, .08, { lit: 2, fenster: 5, fels: false });
   // Felsen am Fuß, Plattform aus Steinplatten
   const f = B.maske(); f.poly([[180, 214], [220, 196], [280, 192], [330, 200], [420, 196], [470, 186], [480 + M, 190], [480 + M, 230], [180, 230]]);
   K.form(3, f, 0, { ton: 1.1, fase: 2, verlauf: .5, muster: (x, y) => (B.rausch2(x * .12, y * .2, 4) - .5) * .8 });
-  const e4 = K.e[4];
-  B.feld(e4, -M, 204, W + M, H + M, STEIN, (x, y) => { const q = (y - 204) / 66; const plat = Math.floor((x + Math.floor(y / 14) * 23) / 52); return (B.rausch2(x * .05, y * .1, 7) - .5) * .3 + .32 + .12 * B.hash(plat, Math.floor(y / 14), 3) - q * .2 + (((y % 14) === 0 || ((x + Math.floor(y / 14) * 23) % 52) === 0) ? -.2 : 0); });
+  K.boden(204, H + M, STEIN, (x, y) => { const q = (y - 204) / 66; const plat = Math.floor((x + Math.floor(y / 14) * 23) / 52); return (B.rausch2(x * .05, y * .1, 7) - .5) * .3 + .22 + .12 * B.hash(plat, Math.floor(y / 14), 3) - q * .2 + (((y % 14) === 0 || ((x + Math.floor(y / 14) * 23) % 52) === 0) ? -.2 : 0); });
   B.nebel(K.e[2], { y0: 120, y1: 206, col: B.mix(pal.nebel[1], K.fern, .4), dichte: .26, xs: [20, 300, 60], seed: 3 });
   kegel(K, lamp[0], lamp[1], Math.PI + .3, .34, 470, { p: .15 });
   B.wasserGlanz(K, { x0: -M, x1: 200, y0: 198, y1: 240, n: 50, farben: ['#2a405c', '#4a6a8a'], p: .05 });

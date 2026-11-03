@@ -21,7 +21,9 @@ function newRun(jobId,seed,opt={}){
   stats:{kaempfe:0,fragmente:[],gold:0},metaItems:(typeof Meta!=='undefined'?Meta.items():[]),startT:Date.now(),
   draw:[],hand:[],discard:[],exhaust:[],last:[],played:0,hochUsed:new Set(),target:0,chainLog:[]};
  job.w.forEach((id,i)=>S.areas.waffe[i]=mk(id));job.k.forEach((id,i)=>S.areas.kleidung[i]=mk(id));job.t.forEach((id,i)=>S.areas.talisman[i]=mk(id));(job.bag||[]).forEach((id,i)=>S.bag[i]=mk(id));
+ S.stufe=opt.stufe||0;S.start=opt.start||null;
  S.hp=maxHp();
+ const sv=(RUN.startvarianten||[]).find(v=>v.id===S.start);if(sv)runFx(sv.fx,{why:'Startvariante '+sv.n});
  const sr=Rng.of(seed,'schreck');const J=BAL.jumpscare;S.scareAt=(J.fenster_min[0]+sr.next()*(J.fenster_min[1]-J.fenster_min[0]))*60000;S.scares=0;
  log(job.ausrede);
  Bus.emit('run_start',{seed,job:job.id,route,why:`Seed ${seed}, Weg ${route.map(b=>BIOMES[b].kurz).join(' → ')}. ${why.join('; ')}`});

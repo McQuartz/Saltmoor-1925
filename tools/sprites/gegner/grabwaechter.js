@@ -30,13 +30,13 @@ module.exports = {
     const schild = Pg([[cx - 20, 52 + T], [cx - 20 + S, 50 + T], [cx - 18 + S, 88 + T / 2], [cx - 22, 90 + T / 2]], null, { rd: 2, pf: 'bevel' });
     const gruppen = [
       { p: beine, k: 1 },
-      { p: [rock], k: 1 },
-      { p: [rumpf, ...schultern], k: 2 },
+      { p: [rock], k: 1, anker: [0, T] },
+      { p: [rumpf, ...schultern], k: 2, anker: [0, T] },
       { p: sp, k: 0 }, { p: spitze, k: 0 },
-      { p: armR, k: 1 },
-      { p: [helm, ...kamm], k: 1 },
-      { p: [wangen], k: 0 },
-      { p: [schild], k: 0 },
+      { p: armR, k: 1, anker: [0, T] },
+      { p: [helm, ...kamm], k: 1, anker: [0, T] },
+      { p: [wangen], k: 0, anker: [0, T] },
+      { p: [schild], k: 0, anker: [0, T] },
     ];
     const augen = [];
     const details = P => {

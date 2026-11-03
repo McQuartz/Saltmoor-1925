@@ -45,6 +45,7 @@ document.addEventListener('click',e=>{
  const ev=e.target.closest('[data-ev]');if(ev&&!ev.disabled){chooseEvent(+ev.dataset.ev);return;}
  const st=e.target.closest('[data-strike]');if(st){const uid=+st.dataset.strike;if(S.phase==='kraemer_streichen')kraemerStrike(uid);else strikeItem(uid);return;}
  const j=e.target.closest('[data-job]');if(j){starteRun(j.dataset.job);return;}
+ const sv=e.target.closest('[data-start]');if(sv){S.wahlStart=sv.dataset.start||null;render();return;}
  const sf=e.target.closest('[data-stufe]');if(sf){S.wahlStufe=+sf.dataset.stufe;render();return;}
  const en2=e.target.closest('[data-ende]');if(en2){chooseEnde(en2.dataset.ende);return;}});
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.einst;if(!k)return;const v=e.target.type==='checkbox'?e.target.checked:e.target.tagName==='SELECT'?+e.target.value:+e.target.value;Einst.set(k,v);});
@@ -56,9 +57,7 @@ function aktion(k,el){switch(k){
  case'buch':zeigeOverlay(buchHtml());break;case'tagebuch':zeigeOverlay(tagebuchHtml());break;case'einst':zeigeOverlay(einstHtml());break;case'zu':closeOv();break;
  case'devToggle':if(typeof Dev!=='undefined')Dev.toggle();break;}}
 function starteRun(job){const st=S.wahlStufe||0;const q=new URLSearchParams(location.search);const seed=q.get('seed')!=null&&!S.seedUsed?+q.get('seed'):neuerSeed();
- newRun(job,seed,{dev:typeof Dev!=='undefined'&&Dev.cheat});S.stufe=st;Meta.get().stufe=st;Meta.save();applyStufe();render();}
-// Schwierigkeitsstufen nach dem ersten Sieg (progression.md): mehr Gegnerleben und -schaden
-function applyStufe(){S.stufeHp=1+.12*(S.stufe||0);}
+ const start=S.wahlStart||null;newRun(job,seed,{dev:typeof Dev!=='undefined'&&Dev.cheat,stufe:st,start});Meta.get().stufe=st;Meta.save();render();}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
  if(e.key==='Escape'){S.sel=null;closeOv();render();}
  if(e.key==='d'||e.key==='D'){if(typeof Dev!=='undefined')Dev.toggle();}

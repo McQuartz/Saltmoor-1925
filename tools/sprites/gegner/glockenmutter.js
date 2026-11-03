@@ -11,11 +11,11 @@ module.exports = {
     // Glocke schwingt beim Läuten
     const schw = p.angriff ? [0, -3, 3, -1][f] : p.treffer ? [3, 1][f] : p.idle ? [0, 0, 1, 0][f] : r(p.q * 6);
     const cx = 64;
-    const beine = [...glied([[58, 112], [54, 134], [57, 154]], 2.6, 1.6, null), ...glied([[70, 112], [76, 134], [72, 154]], 2.6, 1.6, null)];
+    const beine = [...glied([[58, 112], [52, 132], [57, 154]], 3, 1.8, null), ...glied([[70, 112], [78, 130], [72, 154]], 3, 1.8, null)];
     const kleid = Pg([[cx - 9 + lean, 58 + T], [cx + 9 + lean, 58 + T], [cx + 12 + lean / 2, 90 + T / 2], [cx + 16, 116], ...saum(cx + 16, cx - 16, 121, 5, 3, 41, p.idle ? [0, 1, 1, 0][f] : 0), [cx - 16, 116], [cx - 12 + lean / 2, 90 + T / 2]], null, { rd: 2 });
     const schultern = E(cx + lean, 60 + T, 12, 4, null);
     // Glocke: schmaler Kopf oben, weit ausgestellter Rand unten, Krone (Henkel) obenauf
-    const gx = cx + lean + schw, gy = 30 + T;
+    const gx = cx + lean + schw, gy = 38 + T;
     const glocke = Pg([[gx - 7, gy - 16], [gx + 7, gy - 16], [gx + 10, gy - 6], [gx + 13, gy + 10], [gx + 18, gy + 20], [gx - 18, gy + 20], [gx - 13, gy + 10], [gx - 10, gy - 6]], null, { rd: 2 });
     const krone = [E(gx, gy - 20, 4, 4, null), C(gx - 8, gy + 20, gx + 8, gy + 20, 2, 2, 'dunkel')];
     const zug = p.angriff ? [0, -10, -18, -6][f] : 0;

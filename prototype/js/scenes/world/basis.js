@@ -307,6 +307,23 @@ B.kontext = function (pal, o) {
   K.form = (ebene, m, tiefe, x) => B.form(K.e[ebene], m, K.mat(tiefe, x));
   K.licht = (x, y, farbe, rad, staerke) => K.lichter.push({ x, y, farbe: typeof farbe === 'string' ? farbe : '#' + B.col(farbe).map(v => v.toString(16).padStart(2, '0')).join(''), r: rad, staerke });
   K.reihen = [{ y: 166, skala: .9, nebel: .35 }, { y: 190, skala: 1, nebel: .15 }, { y: 213, skala: 1, nebel: 0 }];
+  // Boden über drei Ebenen verteilt (fern -> 2, mitte -> 3, nah -> 4), damit Dinge, die auf dem
+  // fernen Boden stehen, nicht vom nahen Boden übermalt werden. K.split = [y1, y2].
+  K.split = [150, 160];
+  K.eb = y => y < K.split[0] ? 2 : y < K.split[1] ? 3 : 4;
+  K.boden = function (y0, y1, cols, tf) {
+    const a = K.split[0], b = K.split[1];
+    if (y0 < a) B.feld(K.e[2], -M, y0, W + M, Math.min(y1, a), cols, tf);
+    if (y1 > a && y0 < b) B.feld(K.e[3], -M, Math.max(y0, a), W + M, Math.min(y1, b), cols, tf);
+    if (y1 > b) B.feld(K.e[4], -M, Math.max(y0, b), W + M, y1, cols, tf);
+  };
+  K.bodenDith = function (x0, y0, x1, y1, c, af) {
+    const a = K.split[0], b = K.split[1];
+    if (y0 < a) B.dith(K.e[2], x0, y0, x1, Math.min(y1, a), c, af);
+    if (y1 > a && y0 < b) B.dith(K.e[3], x0, Math.max(y0, a), x1, Math.min(y1, b), c, af);
+    if (y1 > b) B.dith(K.e[4], x0, Math.max(y0, b), x1, y1, c, af);
+  };
+  K.glut = function (x, y, r, c, a, ebenen) { for (const i of (ebenen || [1, 2, 3, 4])) B.gluehen(K.e[i], x, y, r, c, a); };
   K.fertig = () => B.szene(K);
   return K;
 };

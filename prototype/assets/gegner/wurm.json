@@ -1,0 +1,53 @@
+{
+ "id": "wurm",
+ "rang": "waechter",
+ "w": 128,
+ "h": 160,
+ "zone": "salz",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  70,
+  155
+ ],
+ "kopf": [
+  52,
+  30
+ ],
+ "augen": [
+  [
+   33,
+   73
+  ],
+  [
+   39,
+   69
+  ],
+  [
+   47,
+   71
+  ]
+ ],
+ "augenfarbe": "#ff9a5a"
+}
