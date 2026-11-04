@@ -225,3 +225,13 @@ Die Klangliste (`klangliste.html`): alle Audiodateien, die wir für Musik und Ef
 | `biome` | Musik je Biom: `key` Tonart, `chords` Akkordfolge, `dark` gekippte Folge, `vibe`, `labor` = gibt es schon im Musik-Labor |
 | `proBiom` | Spuren, die jedes Biom braucht (Layer 0–4, Stinger): `takte` oder `sek`, `var` Varianten, `vv` Beschreibung je Variante, `prio`, `probe` = was „Anhören“ in `music.js` abspielt |
 | `assets` | einzelne Instrumente und Effekte: `gruppe` (`rolle`, `gegner`, `instrument`, `sfx`), `fuer`, `art` (`Sampler`, `One-Shot`), `noten` (Sampler-Bereich), `sek`, `anz` Varianten, `prio`, `probe` |
+
+## Fremdcode: pixelfx
+
+Pixel-Effekte (Treffer, Block-Splitter, Grundlage für Tod/Zerfall) kommen teilweise aus **pixelfx**, als kopierter Code ohne npm und ohne Build-Schritt (Briefing Abschnitt 9).
+
+- Quelle: https://github.com/patch-gg/pixelfx, Stand Commit `a84159688af3ca37a4be05a0d422b94451b2e24e` (31.10.2026), Version 0.3.0. Übernommen am 04.11.2026.
+- Lizenz: MIT, Copyright (c) 2026 Patch und Copyright (c) 2026 Hugo Duprez; Teile nach Sprite Fusion (Hugo Duprez, MIT) und Hollow Crown (rehan-remade, MIT). `LICENSE` und `NOTICE.md` liegen unverändert in `js/vendor/pixelfx/`.
+- Kopiert nach `prototype/js/vendor/pixelfx/` (gleiche Struktur wie im Repo, unverändert): `src/core/*.js` (ganzer Kern), `src/fx/impacts/_lib.js`, `src/fx/impacts/hit-spark.js` (`treffer`), `src/fx/impacts/blunt-hit.js` (`treffer_gross`), `src/fx/impacts/shield-block.js` (`block_splitter`), `src/fx/spawn/_lib.js` und `src/fx/status/_lib.js` (Hilfsfunktionen für die eigenen Effekte).
+- **Nicht** übernommen: die Schrift aus `gallery/fonts` (nicht MIT), alle übrigen Effekte, Werkzeuge, Galerie.
+- Eigene Effekte im pixelfx-Format liegen in `js/fx/eigene.js` (brand, gift, geschwaecht, block_auf, heilen, reaktion, hochreaktion, uebergang) und `js/fx/zerfall.js` (`tod`, angepasst aus pixelfx `spawn/disintegrate`, MIT-Hinweis im Kopf der Datei). `js/fx/bruecke.js` lädt alles als ES-Modul und setzt `window.PixelFX`; `js/fx/effekte.js` ist die Schnittstelle `PFX` fürs Spiel. Test und Kontaktbogen: `effekte.html`, `node tools/effekte-kontakt.js`.
