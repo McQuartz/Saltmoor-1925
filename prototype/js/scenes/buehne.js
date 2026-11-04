@@ -44,7 +44,11 @@ const FX={
  flash(col,a){BU.flashCol=col;BU.flashA=a;},
  shake(n){if(Einst.get('wackeln'))BU.shake=Math.max(BU.shake,n);},
  lunge(e){const v=visOf(e);v.lunge=.38;v.anim='angriff';v.at=0;},
- die(e){const v=visOf(e);if(v.dying)return;v.dying=.001;v.anim='tod';v.at=0;const p=enemyBox(e);burst(p.x,p.y-p.h*.5,ST&&BIOMES[biomId()]?BIOMES[biomId()].augen:'#7affc8',18,1.6);BU.shake=Math.max(BU.shake,4);}
+ die(e){const v=visOf(e);if(v.dying)return;const p=enemyBox(e);
+  // pixelfx: der Gegner zerfällt in seine eigenen Pixel (zeichnet ihn selbst weiter)
+  const sp=e.sprite&&SPRITES[e.sprite];if(typeof PFX!=='undefined'&&PFX.bereit&&sp&&sp.ok){const m=sp.meta,an=m.anim[v.anim]||m.anim.idle;const fr=an.loop?Math.floor(v.at*an.fps)%an.n:0;const c=document.createElement('canvas');c.width=m.w;c.height=m.h;c.getContext('2d').drawImage(sp.img,fr*m.w,an.zeile*m.h,m.w,m.h,0,0,m.w,m.h);
+   const r=PFX.spiel('tod',{bild:c,bx:p.x-Math.round(m.fuss[0]*p.sk),by:p.y-Math.round(m.fuss[1]*p.sk),skala:p.sk,palette:biomId(),seed:e.uid});if(r){v.dying=1;v.gone=true;BU.shake=Math.max(BU.shake,3);return;}}
+  v.dying=.001;v.anim='tod';v.at=0;burst(p.x,p.y-p.h*.5,ST&&BIOMES[biomId()]?BIOMES[biomId()].augen:'#7affc8',18,1.6);BU.shake=Math.max(BU.shake,4);}
 };
 // Stummfilm-Rauschen: nur bei besonderen Anlässen (Wächter, Boss, markiertes Ereignis), höchstens einmal pro Kampf, frühestens alle 3 Minuten
 function stummfilm(grund){const SF=BAL.stummfilm;const now=performance.now();if(!Einst.get('stummfilm'))return false;
@@ -62,6 +66,7 @@ function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.fr
  sz.ebenen.forEach(L=>{g.drawImage(L.canvas,Math.round(-cam.x*L.parallax),Math.round(-cam.y*L.parallax));});
  try{sz.zeichneAnimiert&&sz.zeichneAnimiert(g,t,cam);}catch(e){}
  if(S.enemies&&['fight','reward'].includes(S.phase)){const list=[...S.enemies].sort((a,b)=>(a.reihe-b.reihe)||(a.x-b.x));list.forEach(e=>zeichneGegner(g,e,dt,t,cam));}
+ if(typeof PFX!=='undefined')try{PFX.zeichne(g,dt);}catch(e){}
  try{sz.zeichneVordergrund&&sz.zeichneVordergrund(g,t,cam);}catch(e){}
  for(let i=FXL.length-1;i>=0;i--){const f=FXL[i];f.t+=dt||.016;const p=f.t/f.dur;if(p>=1){FXL.splice(i,1);continue;}
   if(f.k==='slash'){const s=f.s,dir=f.flip?-1:1;const a=Math.min(1,p*2.2),b=Math.max(0,p*2.2-1.1);g.fillStyle=stc(f.col);for(let k=Math.floor(b*24);k<a*24;k++){const q=k/24;g.fillRect(Math.round(f.x+(q-.5)*s*2*dir),Math.round(f.y+(q-.5)*s*1.3),2,1);}}

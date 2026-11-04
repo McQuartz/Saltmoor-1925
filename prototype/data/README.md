@@ -217,6 +217,9 @@ Wird eine Idee umgesetzt, wandert sie nach items.json (bzw. reactions.json, foes
 
 ## audio.json
 
+Zusatz (M4): `waechterStimmen` listet die Wächter-Stimmen. Sie haben keine eigene Aufnahme, sondern spielen die Stimme ihres Bioms eine Oktave tiefer und gedoppelt.
+
+
 Die Klangliste (`klangliste.html`): alle Audiodateien, die wir für Musik und Effekte selbst aufnehmen oder bauen müssen.
 
 | Feld | Bedeutung |

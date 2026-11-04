@@ -17,6 +17,7 @@
 // (alle tonalen Töne aus Akkord bzw. Tonleiter), Tempo nur 80 bis 88 BPM und höchstens 1 BPM pro Takt,
 // kein harter Komplett-Schnitt vor der Hochreaktion.
 
+let VOL=1;
 const Music=(()=>{
 // ---------- Daten: Biome ----------
 // Akkorde als Halbtöne über dem Grundton; deg = Stufe in der Tonleiter (für Motive, damit alles in der Tonart bleibt).
@@ -155,7 +156,7 @@ function build(){
  ctx=getCtx();
  NBUF=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);{const d=NBUF.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}
  // Kette: Layer -> dropG -> dropF -> duckG -> shaper -> toneF -> pkF -> hsF -> (dry + hall) -> comp -> master -> Ausgang
- master=ctx.createGain();master.gain.value=.75;
+ master=ctx.createGain();master.gain.value=.75*VOL;
  comp=ctx.createDynamicsCompressor();comp.threshold.value=-16;comp.ratio.value=4;comp.attack.value=.01;comp.release.value=.25;
  dropG=ctx.createGain();duckG=ctx.createGain();
  dropF=ctx.createBiquadFilter();dropF.type='lowpass';dropF.frequency.value=18000;dropF.Q.value=.9; // Atemholen vor der Hochreaktion, Niederlage
@@ -583,7 +584,9 @@ const nextBeat=()=>Math.ceil((step+1)/4)*4;
 // ---------- Schnittstelle fürs Spiel ----------
 return {
  BIOME,FOES,ROLES,STOFFE,
- start(){if(!ctx)build();if(ctx.state==='suspended')ctx.resume();if(running)return;running=true;master.gain.setTargetAtTime(.75,ctx.currentTime,.3);nextT=ctx.currentTime+.08;lastUpd=ctx.currentTime;timer=setInterval(tick,25);},
+ // Lautstärke aus den Einstellungen (0..1, Standard 0,55 → etwas leiser als die Effekte)
+ volume(v){VOL=Math.max(0,Math.min(1,v))/.55;if(ctx&&running)master.gain.setTargetAtTime(.75*VOL,ctx.currentTime,.15);},
+ start(){if(!ctx)build();if(ctx.state==='suspended')ctx.resume();if(running)return;running=true;master.gain.setTargetAtTime(.75*VOL,ctx.currentTime,.3);nextT=ctx.currentTime+.08;lastUpd=ctx.currentTime;timer=setInterval(tick,25);},
  // Stop blendet nur aus: der AudioContext wird mit sfx.js geteilt und bleibt an
  stop(){if(!running)return;running=false;clearInterval(timer);master.gain.setTargetAtTime(0,ctx.currentTime,.3);},
  get running(){return running;},

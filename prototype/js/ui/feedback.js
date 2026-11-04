@@ -8,10 +8,10 @@ function toast(a,b,hoch){if(FAST)return;const t=$('toast');if(!t)return;const d=
 // Zwischentitel (nur Hochreaktionen, 0,6 s, Art déco)
 function zwischentitel(txt){if(FAST)return;const z=$('zwt');z.innerHTML=`<div><span>${txt}</span></div>`;z.classList.remove('an');void z.offsetWidth;z.classList.add('an');setTimeout(()=>z.classList.remove('an'),650);}
 function vig(){const v=$('vig');if(!v)return;v.classList.remove('an');void v.offsetWidth;v.classList.add('an');}
-let audioOn=false;function startAudio(){au();if(AC&&AC.state==='suspended')AC.resume();if(!audioOn&&typeof Music!=='undefined'){audioOn=true;try{Music.start();musikSzene();}catch(e){console.warn(e);}}}
+let audioOn=false;function startAudio(){au();if(AC&&AC.state==='suspended')AC.resume();if(!audioOn&&typeof Music!=='undefined'){audioOn=true;try{Music.volume(Einst.get('musik'));Music.start();musikSzene();}catch(e){console.warn(e);}}}
 function musikSzene(){if(typeof Music==='undefined'||!audioOn)return;const ph=S.phase;
  try{if(S.route)Music.biome(BIOMES[biomId()].musik);if(Music.akt)Music.akt(S.akt||0);
-  if(ph==='fight')Music.scene(S.kampfArt==='finale'?'boss':S.kampfArt==='waechter'?(Music.BIOME&&'waechter' in {}?'waechter':'boss'):'kampf');
+  if(ph==='fight')Music.scene(S.kampfArt==='finale'?'boss':S.kampfArt==='waechter'?'waechter':'kampf');
   else if(['titel','figur','strand','ende'].includes(ph))Music.scene('menu');else Music.scene('karte');
   if(S.route){Music.hp(S.hp,maxHp());const j=JOBS.find(x=>x.id===S.job);if(j)Music.role(j.musik);Music.stoff(dominanterStoff());}}catch(e){}}
 function dominanterStoff(){const c={};allActive().forEach(it=>def(it).st.forEach(k=>c[k]=(c[k]||0)+1));let b='keiner',n=0;for(const k in c)if(c[k]>n){n=c[k];b=k;}return b;}
@@ -31,23 +31,26 @@ Bus.on('fight_start',p=>{BU.vis.clear();(S.enemies||[]).forEach(e=>{if(e.sprite)
  if(typeof Music!=='undefined'&&audioOn){try{musikSzene();S.enemies.forEach(e=>Music.foeSpawn(musFoe(e.id)));}catch(e){}}
  if(p.art==='waechter'||p.art==='finale')setTimeout(()=>stummfilm(p.art==='finale'?'Der Finale-Boss erscheint':'Ein Wächter erscheint'),250);});
 Bus.on('event',p=>{if(p.ev.stummfilm)setTimeout(()=>stummfilm(`Besonderes Ereignis „${p.ev.t}“`),300);});
-Bus.on('enemy_hit',({e,d,col})=>{if(FAST)return;FX.hit(e,d,stc(col));floatScene(e,d>0?'−'+d:'BLOCK',d>0?(d>=12?FLOAT_COL.big:FLOAT_COL.dmg):FLOAT_COL.block,Math.min(12,d));});
+const pfx=(n,o)=>{if(FAST||typeof PFX==='undefined')return null;try{return PFX.spiel(n,o);}catch(x){return null;}};
+Bus.on('enemy_hit',({e,d,col})=>{if(FAST)return;FX.hit(e,d,stc(col));if(d>0){const b=enemyBox(e);pfx(d>=12?'treffer_gross':'treffer',{x:b.x,y:b.y-Math.round(b.h*.55),palette:col||'asche',seed:e.uid+d,richtung:Math.random()<.5?1:-1});}floatScene(e,d>0?'−'+d:'BLOCK',d>0?(d>=12?FLOAT_COL.big:FLOAT_COL.dmg):FLOAT_COL.block,Math.min(12,d));});
 Bus.on('enemy_die',({e})=>{if(FAST)return;sfx.die();FX.die(e);if(typeof Music!=='undefined'&&audioOn)try{Music.foeDie(musFoe(e.id));}catch(x){}});
 Bus.on('enemy_spawn',({e})=>{ladeSprite(e.sprite);if(typeof Music!=='undefined'&&audioOn)try{Music.foeSpawn(musFoe(e.id));}catch(x){}});
 Bus.on('slash',({e,col})=>{if(!FAST)FX.slash(e,col||'#c8483a');});
 Bus.on('weakspot',({e})=>{if(!FAST)floatScene(e,'SCHWACHSTELLE',FLOAT_COL.big,2);});
 Bus.on('attack',({k})=>{sfx.hit(k);if(typeof Music!=='undefined'&&audioOn)try{Music.strike();}catch(x){}});
-Bus.on('enemy_status',({e,status})=>{if(FAST)return;const p=enemyBox(e);if(status==='poison')burst(p.x,p.y-p.h*.5,'#86c062',12,1.1,.4);else if(status==='burn')burst(p.x,p.y-p.h*.4,'#e8873a',14,1.1,.7);else burst(p.x,p.y-p.h*.5,'#c9b8e8',8,1);});
+Bus.on('enemy_status',({e,status})=>{if(FAST)return;const p=enemyBox(e);const m={burn:'brand',poison:'gift',weak:'geschwaecht',block_weg:'block_splitter'}[status];if(m){pfx(m,{x:p.x,y:p.y,groesse:Math.round(p.h*.8),palette:status==='burn'?'F':status==='poison'?'V':biomId(),seed:e.uid});return;}if(status==='poison')burst(p.x,p.y-p.h*.5,'#86c062',12,1.1,.4);else if(status==='burn')burst(p.x,p.y-p.h*.4,'#e8873a',14,1.1,.7);else burst(p.x,p.y-p.h*.5,'#c9b8e8',8,1);});
 Bus.on('player_heal',({v})=>{sfx.heal();if(v)floatAt(hudEl('.bar'),'+'+v,FLOAT_COL.heal);});
 Bus.on('player_block',({v})=>{sfx.block();floatAt(hudEl('.bar'),'+'+v+' BLOCK',FLOAT_COL.block);if(typeof Music!=='undefined'&&audioOn)try{Music.block();}catch(x){}});
 Bus.on('self_damage',({v})=>floatAt(hudEl('.bar'),'−'+v,FLOAT_COL.hurt));
 Bus.on('player_hurt',({v})=>{sfx.hurt();FX.shake(4+Math.min(6,v/2));vig();floatAt(hudEl('.bar'),'−'+v,FLOAT_COL.hurt,Math.min(10,v));if(typeof Music!=='undefined'&&audioOn)try{Music.hit(v);}catch(x){}});
 Bus.on('player_blocked',()=>{sfx.block();FX.shake(2);floatAt(hudEl('.bar'),'GEBLOCKT',FLOAT_COL.block);});
 Bus.on('enemy_lunge',({e})=>{if(!FAST)FX.lunge(e);});
-Bus.on('enemy_block',({e})=>{sfx.block();if(FAST)return;const p=enemyBox(e);burst(p.x,p.y-p.h*.5,'#9cc3ff',10,1.2);});
+Bus.on('enemy_block',({e})=>{sfx.block();if(FAST)return;const p=enemyBox(e);pfx('block_auf',{x:p.x,y:p.y,groesse:Math.round(p.h*.8),palette:biomId(),seed:e.uid});burst(p.x,p.y-p.h*.5,'#9cc3ff',10,1.2);});
 Bus.on('enemy_buff',({e})=>{sfx.react(0);if(FAST)return;const p=enemyBox(e);burst(p.x,p.y-p.h*.6,'#c86a4a',12,1,.6);});
 Bus.on('reaction',({r,k,isNew,keys,live,hoch})=>{if(FAST)return;
- FX.ring(keys[0],hoch?null:live);if(keys[1])setTimeout(()=>FX.ring(keys[1],hoch?null:live),90);
+ const lp=live&&live.hp!==undefined?enemyBox(live):{x:240,y:180,h:0};
+ if(hoch)pfx('hochreaktion',{x:240,y:150,palette:keys[0],seed:k});else if(!pfx('reaktion',{x:lp.x,y:lp.y-Math.round(lp.h*.5),palette:keys[0],seed:k})){FX.ring(keys[0],live);if(keys[1])setTimeout(()=>FX.ring(keys[1],live),90);}
+ if(keys[1]&&!hoch)setTimeout(()=>pfx('reaktion',{x:lp.x,y:lp.y-Math.round(lp.h*.5),palette:keys[1],seed:k+7}),120);
  if(hoch){FX.flash(ST[keys[0]].c,.35);FX.shake(8);sfx.hoch();zwischentitel(r.n.toUpperCase()+'!');}else sfx.react(k);
  toast((hoch?'HOCHREAKTION · ':'')+r.n.toUpperCase()+(isNew?' · NEU':''),keys.map(k2=>gi(k2,16)).join(' + ')+' '+esc(r.t),hoch);
  if(isNew)setTimeout(sfx.disc,150);if(typeof Music!=='undefined'&&audioOn)try{Music.reaction(hoch);}catch(x){}});
@@ -55,9 +58,9 @@ Bus.on('boss_phase',({e})=>{FX.flash('#ff6ad8',.3);FX.shake(10);toast('DAS, WAS 
 Bus.on('victory',()=>{sfx.win();if(typeof Music!=='undefined'&&audioOn)try{Music.victory();}catch(x){}});
 Bus.on('forged',({name})=>{sfx.forge();toast('VERBESSERT',name);});
 Bus.on('game_over',()=>{sfx.die();if(typeof Music!=='undefined'&&audioOn)try{Music.niederlage?Music.niederlage():Music.scene('menu');}catch(x){}});
-Bus.on('act_start',()=>{if(typeof Music!=='undefined'&&audioOn)try{Music.uebergang&&Music.uebergang();}catch(x){}});
+Bus.on('act_start',()=>{if(S.akt>0)pfx('uebergang',{palette:biomId(),seed:S.akt});if(typeof Music!=='undefined'&&audioOn)try{Music.uebergang&&Music.uebergang();}catch(x){}});
 Bus.on('ende',({art})=>{if(typeof Music!=='undefined'&&audioOn)try{Music.ende&&Music.ende(art);}catch(x){}});
 Bus.on('unlock',({neu})=>toast('FREIGESCHALTET',neu.map(x=>esc(x.n)).join(', ')));
-Bus.on('einst',({k,v})=>{if(k==='musik'&&typeof Music!=='undefined'&&Music.volume)Music.volume(v);if(k==='effekte'&&typeof SFXB!=='undefined'&&SFXB)SFXB.gain.value=.9*v;});
+Bus.on('einst',({k,v})=>{if(k==='musik'&&typeof Music!=='undefined'&&Music.volume)Music.volume(v);if(k==='effekte'&&typeof SFXB!=='undefined'&&SFXB)SFXB.gain.value=.72*v/.8;});
 // Jumpscare: höchstens einmal pro Run, nicht in den ersten 5 Minuten, abschaltbar
 setInterval(()=>{if(!S.route||S.scares||document.hidden||!Einst.get('jumpscare')||S.phase!=='fight')return;if(Date.now()-S.startT>Math.max(S.scareAt,BAL.jumpscare.nicht_vor_min*60000)){S.scares=1;if(typeof jumpscare==='function')jumpscare();Bus.emit('jumpscare',{why:'Einmal pro Abstieg, nach '+Math.round((Date.now()-S.startT)/60000)+' Minuten'});}},1000);

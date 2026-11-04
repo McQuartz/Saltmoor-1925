@@ -10,7 +10,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt. Eine neue 
 | M1 Run-Gerüst | fertig | Seed, fünf Akte, Gabelungen, Weg-Wahl, alle Knoten, Strand, Ankunft, Speichern |
 | M2 Kampf-UI Variante A | fertig | 480 × 270, Karten, Stoffzeichen, Balken, Vorschau, Stummfilm nur bei Anlässen; Galerie der Bausteine fehlt noch (M10) |
 | M3 Dev-Modus und Autospieler | fertig | sechs Reiter, Einblendungen, Bot in Node und Browser |
-| M4 Musik im Spiel | offen | |
+| M4 Musik im Spiel | fertig | sieben Biom-Fassungen, alle Gegnerstimmen, Rollen, Stoffe, Enden; gemessen, nicht angehört |
 | M5 Meta und Progression | fertig | Konzept B, 21 Fragmente, Figuren, Startvarianten, Stufen, Tagebuch, Ankunft, Strand |
 | M6 Sprite-Pipeline (KI-Sprites) | fertig | Ersatzweg: per Skript gezeichnet, 41 Sheets, Prüfung 0 Verstöße, Idle/Angriff/Treffer/Tod |
 | M7 Gegner-Besetzung | fertig | 16 Typen mit je zwei Varianten, 6 Wächter, Boss mit 3 Phasen; drei Typen im Mindeststand |
@@ -102,6 +102,17 @@ Dazu: Schadens-Vorschau (schraffiert, „−8“), Hochreaktions-Zwischentitel (
 **Abnahme:** 20 Seeds im Browser: alle Runs enden, 0 Fehler, keine Konsolenfehler (Tabelle unten). Stichprobe der Warum-Sätze: 120 Reaktionen in 3 Runs, jede mit Auslöser und Paar (z. B. „Zersetzen ausgelöst: Eisen von der Karte davor trifft Salz (Paar ES aus reactions.json)“). Offene Kombos = tatsächliches Ergebnis, weil beide dieselbe Rechnung nutzen (Vorschau-Test oben). Ohne Dev ist nur der kleine Knopf zu sehen.
 
 **Einschätzung:** Sehr nützlich, vor allem die Vorschau je Handkarte und die Weg-Vorschau. Schwach: Der Reiter Musik zeigt erst nach M4 alles. Bilder: `bilder/M3/`.
+
+### M4 Musik im Spiel (fertig, nicht angehört)
+
+Erweitert von einem Musik-Subagenten (`js/audio/music.js`, `musik.html`, `data/audio.json`, `tools/musik-pruefen.js`), eingehängt von mir über `js/ui/feedback.js`: Szene (Menü, Karte, Kampf, Wächter, Finale), Biom und Akt (Grundgefahr +0,03 je Akt), Gegnerstimmen bei Kampfbeginn/Tod/Ruf, Leben und angekündigter Schaden, eigene Angriffe und Block, Reaktionen und Hochreaktion, Treffer, Sieg, Niederlage, Übergang (Glockenschlag), Ende (Bleiben löst sich in den Grundton auf, Umkehren endet gekippt), Rollen-Instrument nach Figur, Stoff-Färbung nach dem dominanten Stoff im Loadout. Lautstärke Musik/Effekte in den Einstellungen; Musik startet erst nach dem ersten Klick. Effekte etwas leiser gemischt (Limiter-Last).
+
+- **Sieben Biom-Fassungen**: Hafen d-Moll, Moorwald c-Moll (Holz und Knochen), Kapelle e-Moll, Salzstollen f-Moll (Hacke auf Stein, Tropfen), Namenlose Stadt b-Moll (Trommel ohne Spieler), Schwarzes Eis fis-Moll (Knacken, Dröhnen, ferne Stimme aus Formanten), Pforte es-Moll dauerhaft halb gekippt. Im Dev-Modus (Reiter Musik) und im Labor umschaltbar.
+- **Gegnerstimmen** für alle Gegner aus 04, Abschnitt 9; Wächter = Biom-Stimme eine Oktave tiefer, gedoppelt.
+
+**Abnahme** (`node tools/musik-pruefen.js`): Spitze am Ausgang höchstens −0,64 dBFS (Härtetest mit Boss, 4 Leben, 3 Hochreaktionen), im normalen Kampf −1,0 bis −1,1 dBFS → kein Clipping. Tempo über 137 Takte 80–88 BPM, größter Sprung 1 BPM pro Takt. Tonal: alle Stimmen und tonalen Effekte nehmen Töne aus `Music.harmony()` bzw. der aktuellen Tonleiter (Code-Prüfung); bewusst leicht verstimmt sind nur Netzflickerin (±15 Cent), Kneipenklavier, Kapellen-Orgel. Reaktion auf Kampfbeginn, Tod eines Typs (Abgesang), letzten Gegner (Duell), Hochreaktion, Sieg: im Log `Music.onEvent` sichtbar, Dev-Reiter Musik zeigt sie.
+
+**Einschätzung:** Gemessen ist alles sauber, **angehört hat es niemand** (die Sitzung hat keinen Ton). Ob die neuen Biome und Stimmen gut klingen, muss Ace prüfen. Vor dem Limiter kommen viele Effekte auf einmal auf +4 dBFS; der Limiter fängt das, aber Ace sollte auf Pumpen achten.
 
 ### M5 Meta und Progression (fertig)
 
