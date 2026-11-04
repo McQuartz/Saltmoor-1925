@@ -15,7 +15,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt. Eine neue 
 | M6 Sprite-Pipeline (KI-Sprites) | fertig | Ersatzweg: per Skript gezeichnet, 41 Sheets, Prüfung 0 Verstöße, Idle/Angriff/Treffer/Tod |
 | M7 Gegner-Besetzung | fertig | 16 Typen mit je zwei Varianten, 6 Wächter, Boss mit 3 Phasen; drei Typen im Mindeststand |
 | M8 Hintergründe | fertig | sieben Orte mit eigener Komposition, je 3 Varianten + Wächter-Szene, alle Knoten-Szenen, Labor; 60 fps |
-| M9 Inhalte und Balance | offen | |
+| M9 Inhalte und Balance | fertig (Abweichung) | 23 Items, 25 Ereignisse, Krämer je Biom, Fundpools, Gegner-Beute; Gewinnrate 22–32 %, Pforte knapp über 40 % der Niederlagen |
 | M10 Politur | offen | |
 | M11 Abschluss | offen | |
 
@@ -187,6 +187,36 @@ Gebaut von einem Hintergrund-Subagenten, eingebunden von mir. Kompositionen zuer
 
 **Einschätzung:** Die Orte sind jetzt klar unterscheidbar und haben echte Tiefe; am stärksten Kapelle (grünes Rundfenster von unten, schräges Wasser, Kerzen unter Wasser) und Salzstollen (hell, gewachsene Säulen, Fossilien, die nach unten blicken). Hafen gut (Kegel sucht landeinwärts, zugemauerte Fenster), Eis gut (gefrorene Brecher, Umriss unter dem Eis immer an derselben Stelle). Schwach: Moor-Variante Torfstich zu dunkel, die fremden Sterne im Wasser lesen sich wie Glühwürmchen; in der Stadt wirken die Relieffiguren wie Strichmännchen; die Pforte wirkt eher nach Science-Fiction als nach Lovecraft (vereinfacht, wie erlaubt). Variante 0 ist je Ort am gründlichsten. Im hellen Salzstollen braucht die Schrift eine dunkle Unterlage (eingebaut).
 
+### M9 Inhalte und Balance (fertig, eine begründete Abweichung)
+
+- **Items:** 23 neue aus der Ideenkiste in `data/items.json`, jedes mit 12×12-Sprite in `js/sprites/items.js` (Inhalts-Subagent). Neu im Kern: „Eröffnung“ (Bonus als erste Karte im Zug), „verbraucht“ (einmal pro Kampf), Geschwächt und Block-Weg auf Karten, passive Talismane (Hasenpfote: ein Fund mehr; Kompass: erste Karte im Kampf kostet 0). Keine Sog-Wirkungen, keine verfluchten Items. Übernommene und gestrichene Ideen sind in `ideas.json` per `status` markiert.
+- **Fundpools** je Biom (Zonen-Beute), Items aus Fragmenten kommen nach dem Lesen dazu; **Gegner-Beute** (`beute` in foes.json, 20 % Chance in der Auswahl). Jedes neue Item liegt in mindestens einem Pool (direkt oder über ein Fragment), geprüft per Skript.
+- **Ereignisse:** 25 (4 allgemeine + 3–4 je Biom), mit Preis und Folge (Leben, Gold, Items, Streichen, Verwandeln, Kampf, Reaktion entdecken). Nur drei mit `stummfilm: true` (Glocke in der Kapelle, Wind in der Stadt, der Name im Eis).
+- **Krämer** je Biom mit Figur, Ort und Zeile (Witwe Haskins, Torfmann, Küster, letzter Hauer, Vermesserin, Schlittenführer), Sortiment aus dem Fundpool, Laudanum, Karte streichen. Werkstatt und Rast haben je Biom einen eigenen Ausschnitt (M8).
+- **Fundstelle** als zusätzliche einfache Knotenart.
+
+**Balance-Änderungen (nur Daten):**
+
+| Datei | Änderung | Grund |
+|---|---|---|
+| balance.json | `start_hp` 40 → 50, `victory_heal_pct` 0,15 → 0,28 | Runs endeten im Schnitt auf Tiefe 8 |
+| balance.json | `enemy_scaling`: Leben +7 % → +4 % je Tiefe, Angriff +1 alle 3 → alle 4 Tiefen | späte Akte zu hart |
+| run.json | Gegnerzahl je Akt/Ebene `[[1,1,2],[1,2,2],[2,2,2],[1,2,2],[2,2,2]]`, Rast heilt 40 % | Kapelle und Eis zu dicht |
+| foes.json | Stärke-Züge mit 3 → 2, Wächter-Leben ×0,85, Boss ruft 1 statt 2 Augen, Phasen-Spitzen 16→12 und 20→15, 6×3→5×3 | lange Kämpfe eskalierten, Finale fast unschaffbar |
+| combat.js (Regel, keine Zahl) | Wächter und Boss skalieren nicht mehr mit der Tiefe | siehe Entscheidungen |
+| jobs.json | Startausrüstung der drei Zusatzfiguren mehrfach angepasst | Veteran gewann 83 %, Wahrsagerin 0–17 % |
+
+**Abnahme (Autospieler, gierig):**
+
+| Lauf | Gewinnrate | Ø Tiefe | Ø Züge je Kampf | Niederlagen je Biom | Fehler |
+|---|---|---|---|---|---|
+| Seeds 1–50, sechs Grundfiguren | 32 % | 16,6 | 4,7 | Pforte 44 %, Eis 41 %, Stadt 6 %, Salz 6 %, Kapelle 3 % | 0 |
+| Seeds 101–154, alle neun Figuren | 22 % | 16,2 | 4,4 | Pforte 48 %, Eis 31 %, Stadt 14 %, Salz 7 % | 0 |
+
+Gewinnrate im Ziel (25–50 %) bzw. knapp darunter, Kampfdauer im Ziel (4–8 Züge). **Abweichung:** Die Pforte hat 44–48 % der Niederlagen statt höchstens 40 %. Begründung: Wer bis zum Finale kommt, verliert dort oder gewinnt den Run; je höher die Gewinnrate, desto mehr ballen sich die übrigen Niederlagen am Ende. Ein weicheres Finale würde die Gewinnrate über das Ziel heben. Kriegsveteran (54 % allein) ist stärker als die Grundfiguren; er wird erst nach 18 Fragmenten frei.
+
+**Einschätzung:** Inhaltlich deutlich reicher: Jedes Biom hat eigene Funde, einen Krämer mit Gesicht und Ereignisse im Ton des Ortes. Schwach: Der gierige Autospieler ist ein grober Maßstab (er nutzt Werkstatt und Gold schlecht), Menschen werden vermutlich besser abschneiden. Artboard folgt in M10.
+
 ## Entscheidungen unterwegs
 
 | Datum | Meilenstein | Entscheidung | Warum |
@@ -206,6 +236,8 @@ Gebaut von einem Hintergrund-Subagenten, eingebunden von mir. Kompositionen zuer
 | Datum | Stand | Seeds | Gewinnrate | Ø Tiefe | häufigste Niederlage | Fehler |
 |---|---|---|---|---|---|---|
 | 2026-11-03 | M3, Browser (`tools/bot-browser.js 20 1`) | 1–20 | 0 % | 10,3 | Kapelle (7 von 20) | 0 |
+| 2026-11-04 | M9, Node (`tools/balance.js 50 1`, Grundfiguren) | 1–50 | 32 % | 16,6 | Pforte (15 von 34) | 0 |
+| 2026-11-04 | M9, Node, alle neun Figuren | 101–154 | 22 % | 16,2 | Pforte (20 von 42) | 0 |
 
 ## Probleme und Ersatzwege
 

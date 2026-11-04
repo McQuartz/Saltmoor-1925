@@ -96,7 +96,7 @@ table.tab td.z{text-align:center;font-family:var(--fk);font-weight:700;color:#ef
 .animknoepfe button{font-family:var(--fk);font-size:11px;letter-spacing:.08em;background:#000;border:1px solid #4a3a20;color:#a89c80;padding:3px 8px;cursor:pointer}
 .animknoepfe button.an{border-color:var(--gold);color:var(--gold)}
 .sheets{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:flex-end}
-.sheets figure{margin:0;text-align:center}
+.sheets figure{margin:0;text-align:center;width:min-content}
 .sheets figcaption{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6a604c;margin-top:3px}
 .biomblock{margin:18px 0 34px}
 .biomblock .szenen{display:grid;grid-template-columns:repeat(2,max-content);gap:12px 14px;margin-top:10px}
