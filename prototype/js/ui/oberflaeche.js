@@ -48,16 +48,18 @@ function leisteKampf(){const n=S.hand.length;
  return `<div id="rad">${radSvg()}</div><div id="hand">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
  <div id="rechts"><div class="en-l">ENERGIE</div><div class="rauten">${[...Array(Math.max(BAL.energy_per_turn,S.energy))].map((_,i)=>`<i class="${i<S.energy?'voll':''}"></i>`).join('')}</div>
  <button id="endBtn" class="deco" data-act="end" ${busy?'disabled':''}>ZUG<br>BEENDEN</button><div class="stapel">Stapel ${S.draw.length} · Ablage ${S.discard.length}</div>${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
-function cardText(c){const p=[];if(c.atk)p.push(`${c.atk}${c.h?'×'+c.h:''} Schaden${c.all?' an allen':''}`);if(c.blk)p.push(`${c.blk} Block`);if(c.heal)p.push(`+${c.heal} Leben`);if(c.poison)p.push(`Gift ${c.poison}`);if(c.burn)p.push(`Brand ${c.burn}`);if(c.weak)p.push('Geschwächt');if(c.strip)p.push('Block weg');if(c.draw)p.push(`Ziehe ${c.draw}`);if(c.en)p.push(`+${c.en} Energie`);if(c.self)p.push(`−${c.self} Leben`);
- let s=p.join(', ')||'–';if(c.eroeffnung)s+=`. Eröffnung: ${Object.entries(c.eroeffnung).map(([k,v])=>k==='atk'?`+${v} Schaden`:k==='blk'?`+${v} Block`:k==='draw'?`ziehe ${v}`:k==='heal'?`+${v} Leben`:k==='en'?`+${v} Energie`:k==='burn'?`Brand ${v}`:k==='poison'?`Gift ${v}`:`${k} ${v}`).join(', ')}`;if(c.verbraucht)s+='. Verbraucht';return s;}
+function cardText(c){if(c.unspielbar)return 'Unspielbar.';const p=[];const kw=[];if(c.funke)kw.push('Funke');if(c.behalten)kw.push('Behalten');if(c.x)kw.push('X');if(c.kette)kw.push(`Kette ${c.kette}`);if(c.opfer)kw.push(`Opfer ${c.opfer}`);
+ if(c.atk)p.push(`${c.atk}${c.x?'×X':c.h?'×'+c.h:''} Schaden${c.all?' an allen':''}`);if(c.blk)p.push(`${c.blk} Block`);if(c.heal)p.push(`+${c.heal} Leben`);if(c.poison)p.push(`Gift ${c.poison}`);if(c.burn)p.push(`Brand ${c.burn}`);if(c.weak)p.push('Geschwächt');if(c.vuln)p.push(`Verwundbar ${c.vuln}`);if(c.str)p.push(`Stärke ${c.str}`);if(c.strip)p.push('Block weg');if(c.draw)p.push(`Ziehe ${c.draw}`);if(c.en)p.push(`+${c.en} Energie`);if(c.self)p.push(`−${c.self} Leben`);
+ if(c.sonder&&c.sonder.t)p.push(c.sonder.t);
+ let s=(kw.length?kw.join(', ')+'. ':'')+(p.join(', ')||(c.t&&!c.atk&&!c.blk?'':'–'));if(c.eroeffnung)s+=`. Eröffnung: ${Object.entries(c.eroeffnung).map(([k,v])=>k==='atk'?`+${v} Schaden`:k==='blk'?`+${v} Block`:k==='draw'?`ziehe ${v}`:k==='heal'?`+${v} Leben`:k==='en'?`+${v} Energie`:k==='burn'?`Brand ${v}`:k==='poison'?`Gift ${v}`:`${k} ${v}`).join(', ')}`;if(c.verbraucht)s+='. Verbraucht';return s;}
 function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.st);const self=c.st.length>1?rx.filter(r=>r.k&&[...r.k].every(k=>c.st.includes(k))):[];const vor=rx.filter(r=>!self.includes(r));
  const known=r=>S.disc.has(r.n);let rxl='';
  if(vor.length)rxl=vor.every(known)?`<div class="rx">${vor.map(r=>r.n.toUpperCase()).join(' + ')}</div>`:`<div class="rx un">? ? ?</div>`;
  if(self.length)rxl+=`<div class="rx in">IN SICH: ${self.map(r=>known(r)?r.n.toUpperCase():'???').join(' + ')}</div>`;
  const rot=((i*37)%5-2)*1.3+(i-(n-1)/2)*.6,dy=((i*53)%3)*1.2;
- return `<div class="karte ${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''}" data-card="${i}" style="--r:${rot.toFixed(1)}deg;--dy:${dy}px;${dealAnim?`animation-delay:${i*60}ms`:'animation:none'}">
+ return `<div class="karte ${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar?'unspielbar':''} ${c.frost?'frost':''} ${c.hg?'handgriff':''}" data-card="${i}" style="--r:${rot.toFixed(1)}deg;--dy:${dy}px;${dealAnim?`animation-delay:${i*60}ms`:'animation:none'}">
   <div class="kost${c.mod?(c.mod>0?' hoch':' tief'):''}"><span>${cost}</span></div><div class="kst">${c.st.map(k=>gi(k,KZ())).join('')}</div>
-  <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen"><img src="${spr(c.spr)}" alt=""></div>
+  <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen"><img src="${spr(c.spr)}" alt="">${c.hg?'<span class="hgm" title="Handgriff">✋</span>':''}${c.schliff?'<span class="schl" title="geschliffen">◇</span>':''}</div>
   <div class="kt">${esc(cardText(c))}</div>${rxl}</div>`;}
 // Stoffrad: in der Mitte der zuletzt gespielte Stoff, Linien nur zu Stoffen, die jetzt reagieren
 function radSvg(){const K=Object.keys(ST);const s=60*U()/2,cx=s,cy=s,R=s*.72,nr=s*.15;const last=S.last||[];let lines='',nodes='';
@@ -70,19 +72,19 @@ function radSvg(){const K=Object.keys(ST);const s=60*U()/2,cx=s,cy=s,R=s*.72,nr=
 
 // ---------- Ausrüstung unter der Szene ----------
 function slotHtml(loc,locked){const it=locked?null:getAt(loc);const d=it?def(it):null;
- return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${spr(d.spr)}" alt="">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}`:''}</div>`;}
+ return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${spr(d.spr)}" alt="">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}<span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;}
 function gearHtml(){const M=BAL.max_slots;const rs=roleState().filter(x=>x.have.length);
  return `<div class="areas">${AREAS.map(a=>`<div class="area"><h4>${AREA_N[a]} <em>${S.slots[a]}/${M}</em></h4><div class="slots">${[...Array(M).keys()].map(i=>slotHtml(a+':'+i,i>=S.slots[a])).join('')}</div></div>`).join('')}
  <div class="area"><h4>RUCKSACK</h4><div class="slots">${S.bag.map((_,i)=>slotHtml('bag:'+i)).join('')}<div class="slot trash" data-loc="trash">✕</div></div></div></div>
  <div class="rollen">${rs.map(x=>`<span class="${x.on?'an':''}">${x.r.n} ${x.have.length}/${x.r.i.length}${x.on?': '+esc(x.r.t):''}</span>`).join(' · ')||'<span class="hint">Trag drei passende Teile, um ein Set zu bilden.</span>'}
- <span class="hint"> · Ziehen oder anklicken zum Tauschen.</span></div>`;}
+ <span class="hint"> · Ziehen oder anklicken zum Tauschen.</span> <button class="deco klein" data-act="rucksack">RUCKSACK (R)</button></div>`;}
 
 // ---------- Bildschirme (Panel über der Szene) ----------
 function panelHtml(ph){switch(ph){
  case'titel':return titelHtml();case'biomwahl':return biomwahlHtml();case'figur':return figurHtml();case'uebergang':return uebergangHtml();case'weg':return wegHtml();case'knoten':return'';
  case'fight':return'';case'reward':return rewardHtml();case'event':case'event_folge':return eventHtml();case'streichen':return streichenHtml('Welche Karte streichst du?','skipstrike');
  case'kraemer':return kraemerHtml();case'kraemer_streichen':return streichenHtml(`Für ${BAL.shop.streichen_preis} Gold streicht ${esc(biom().kraemer.n)} eine Karte aus deinem Deck. Das Item bleibt angelegt.`,'kstrike0');
- case'werkstatt':return werkstattHtml();case'rast':return rastHtml();case'wandbild':return wandbildHtml();case'fund':return fundHtml();
+ case'werkstatt':return werkstattHtml();case'wahl':return wahlHtml();case'event_hg':case'kraemer_hg':return ritzenHtml('Wohin ritzt du den Handgriff?');case'rast':return rastHtml();case'wandbild':return wandbildHtml();case'fund':return fundHtml();
  case'strand':return strandHtml();case'ankunft':return ankunftHtml();case'ende':return endeHtml();}return'';}
 const box=(cls,inner)=>`<div class="box ${cls}"><div class="innen">${inner}</div></div>`;
 function titelHtml(){const M=Meta.get();return `<div class="titel"><h1>SALTMOOR</h1><div class="jahr">NEUENGLAND · 1925</div>
@@ -91,7 +93,7 @@ function titelHtml(){const M=Meta.get();return `<div class="titel"><h1>SALTMOOR<
  <div class="fuss">${M.runs?`${M.runs} Abstiege · ${M.fragmente.length} von ${FRAGS.length} Fragmenten`:'Etwas unter der Stadt ruft.'}</div></div>`;}
 function figurHtml(){const M=Meta.get();const st=M.maxStufe;
  return box('figur',`<h2>WER STEIGT HINAB?</h2><p class="lead">Du wachst am Strand von Saltmoor auf. Salz in der Lunge. Unter dir ruft etwas.</p>
- <div class="figuren">${JOBS.map(j=>{const frei=Meta.figurFrei(j)||(typeof Dev!=='undefined'&&Dev.an);const items=[...j.w,...j.k,...j.t];const deck=deckGroesse(items);const set=ROLES.find(r=>r.n===j.set);
+ <div class="figuren">${JOBS.map(j=>{const frei=Meta.figurFrei(j)||(typeof Dev!=='undefined'&&Dev.an);const items=[...j.w,...j.k,...j.t];const deck=deckGroesse(items,j);const set=ROLES.find(r=>r.n===j.set);
   return `<div class="fig ${frei?'':'zu'}" ${frei?`data-job="${j.id}"`:''}><div class="fn">${esc(j.n).toUpperCase()}</div>
    ${frei?`<div class="aus">„${esc(j.ausrede)}“</div><div class="its">${items.map(id=>`<img src="${spr(ITEMS[id].spr)}" title="${esc(ITEMS[id].n)}">`).join('')}</div>
    <div class="fd">${esc(j.d)}</div>${j.faehigkeit_t?`<div class="set">Fähigkeit: <span class="hat">${esc(j.faehigkeit_t)}</span></div>`:''}<div class="set">${set?'Set: ':''}${set?set.i.map(id=>`<span class="${items.includes(id)?'hat':''}">${esc(ITEMS[id].n)}</span>`).join(', '):''}<br><span class="hint">${set?esc(set.t):''}</span></div><div class="deck">${deck} Karten · zieht ${BIOMES[j.vorliebe].kurz} vor</div>`
@@ -112,9 +114,32 @@ function itemPick(id,attr,extra=''){const d=ITEMS[id];const ex=d.st.length>1?BAL
  return `<div class="pick ${d.rare?'selten':''}" ${attr}><img src="${spr(d.spr)}"><div class="pn">${esc(d.n)}</div><div class="pst">${d.st.map(k=>gi(k,KZ())).join('')}</div>
  <div class="ps">${AREA_N[d.a]}${d.hp?` · +${d.hp} Leben`:''}${d.passiv?' · passiv':''}<br>${d.cards.map(c=>`${esc(c.n)} (${c.c+ex}): ${esc(cardText(c))}`).join('<br>')}${d.passiv?esc(passivText(d.passiv)):''}</div>${extra}</div>`;}
 function passivText(p){return{gold_bonus:`+${p.v} Gold nach jedem Sieg`,start_block:`${p.v} Block zu Kampfbeginn`,heil_nach_sieg:`+${p.v} Leben nach jedem Sieg`,erste_karte_billiger:'Die erste Karte im Kampf kostet 0',glueck:'Ein Fund mehr zur Auswahl'}[p.typ]||p.typ;}
-function rewardHtml(){return box('reward',`<h2>${S.kampfArt==='waechter'?'DER WÄCHTER FÄLLT':'STILLE'}</h2><p class="lead">${S.goldGain?`+${S.goldGain} Gold. `:''}${esc(S.beuteSatz||'Unter dem, was übrig ist, liegt etwas.')}</p>
- ${S.picked?'<p class="hint">Eingesteckt. Leg es unten an oder lass es im Rucksack.</p>':`<div class="picks">${S.reward.map(id=>itemPick(id,`data-take="${id}"`)).join('')}</div><p><button class="deco klein" data-take="">NICHTS NEHMEN</button></p>`}
+function hgKarteHtml(id,attr,extra=''){const H=HANDGRIFFE[id];if(!H)return'';return `<div class="pick hgpick ${H.rar==='selten'?'selten':''}" ${attr}><div class="hgk">${H.c>0||!H.opfer?`<span class="hgc">${H.x?'X':H.c}</span>`:''}<b>${esc(H.n).toUpperCase()}</b></div><div class="ps">${esc(cardText(H))}</div>${H.t?`<div class="hgt">${esc(H.t)}</div>`:''}<div class="hgb">${esc(BUILD_N[H.build]||'')}</div>${extra}</div>`;}
+const BUILD_N={glutnest:'Glutnest',brackwasser:'Brackwasser',bollwerk:'Bollwerk',aderlass:'Aderlass',kettenwerk:'Kettenwerk',hagel:'Hagel',neutral:''};
+function rewardHtml(){if(S.hgPending&&!S.hgPicked)return ritzenHtml('Wohin ritzt du ihn?');
+ const wa=S.kampfArt==='waechter';
+ return box('reward',`<h2>${wa?'DER WÄCHTER FÄLLT':'STILLE'}</h2><p class="lead">${S.goldGain?`+${S.goldGain} Gold. `:''}${esc(S.beuteSatz||'Unter dem, was übrig ist, liegt etwas.')}</p>
+ ${S.hgPicked?'':`<h3>EIN HANDGRIFF</h3><div class="picks">${S.rewardHg.map(id=>hgKarteHtml(id,`data-hg="${id}"`)).join('')}</div><p><button class="deco klein" data-act="hgSkip">ÜBERSPRINGEN (+${(BAL.belohnung&&BAL.belohnung.ueberspringen_gold)||10} GOLD)</button></p>`}
+ ${S.reward.length&&!S.picked?`<h3>${wa?'EINE RELIQUIE':'EIN FUND'}</h3><div class="picks">${S.reward.map(id=>itemPick(id,`data-take="${id}"`)).join('')}</div><p><button class="deco klein" data-take="">NICHTS NEHMEN</button></p>`:''}
  <button class="deco" data-act="weiterReward">WEITER ›</button>`);}
+// Ritzen: Handgriff in ein Item. Zeigt je Item den Stoff, den er annimmt, und welche Reaktionen er dann auslösen kann.
+function ritzenHtml(frage){const id=S.hgPending;const H=HANDGRIFFE[id];if(!H)return'';const deckSt=new Set(allActive().flatMap(it=>def(it).st));
+ const reih=st=>{const o=[];REACT.forEach(r=>{const[a,b]=[...r.k];if((st.includes(a)&&deckSt.has(b))||(st.includes(b)&&deckSt.has(a)))o.push(S.disc.has(r.n)?r.n:'???');});return[...new Set(o)];};
+ return box('ritzen',`<h2>${esc(H.n).toUpperCase()}</h2><p class="lead">${esc(cardText(H))}${H.t?` · <i>${esc(H.t)}</i>`:''}</p><p>${frage} Er nimmt den Stoff des Items an.</p>
+ <div class="ritzliste">${besitz().map(({it,an})=>{const D=def(it);const hg=hgVon(it),cap=kerbenVon(it);const rx=reih(D.st);
+  return `<div class="ritz ${an?'':'rucksack'}"><img src="${spr(D.spr)}"><div class="rn"><b>${esc(D.n)}</b> ${D.st.map(k=>gi(k,KZ())).join('')||'<span class="hint">stofflos</span>'}${an?'':' <span class="hint">(Rucksack)</span>'}<br><span class="hint">${rx.length?'reagiert mit: '+rx.join(', '):'keine Reaktion mit deinem Deck'}</span></div>
+  <div class="kerben">${[...Array(cap)].map((_,k)=>hg[k]?`<button class="kerbe voll" data-ritz="${it.uid}" data-k="${k}" title="überschreiben">${esc(HANDGRIFFE[hg[k]]?HANDGRIFFE[hg[k]].n:hg[k])}</button>`:`<button class="kerbe leer" data-ritz="${it.uid}">frei</button>`).join('')}</div></div>`;}).join('')}</div>
+ ${S.ueberschreiben?`<p class="err">„${esc(HANDGRIFFE[S.ueberschreiben.alt].n)}“ wirklich überschreiben? <button class="deco klein" data-act="ueberJa">JA</button> <button class="deco klein" data-act="ueberNein">NEIN</button></p>`:''}
+ <button class="deco klein" data-act="hgVerwerfen">VERWERFEN</button>`);}
+// Wahl: Schleifen, Kerbe dazu, Umritzen
+function wahlHtml(){const w=S.wahl;if(!w)return'';
+ if(w.art==='kerbe')return box('ritzen',`<h2>EINE KERBE MEHR</h2><p class="lead">Welches Item bekommt eine weitere Kerbe (höchstens 3)?</p><div class="ritzliste">${besitz().map(({it})=>{const D=def(it);return `<div class="ritz"><img src="${spr(D.spr)}"><div class="rn"><b>${esc(D.n)}</b> ${kerbenVon(it)} Kerben</div><button class="deco klein" data-kerbe="${it.uid}" ${kerbenVon(it)>=3?'disabled':''}>KERBE</button></div>`;}).join('')}</div><button class="deco klein" data-act="wahlAbbruch">LIEBER NICHT</button>`);
+ if(w.art==='schleifen')return box('ritzen',`<h2>SCHLEIFEN</h2><p class="lead">Eine Karte kostet dauerhaft 1 weniger. Jede Karte nur einmal.</p><div class="ritzliste">${besitz().filter(b=>b.an).map(({it})=>{const D=def(it);
+  const ks=[...D.cards.map((c,ci)=>({key:'s'+ci,c,n:c.n})),...hgVon(it).map((id,k)=>({key:'h'+k,c:HANDGRIFFE[id],n:HANDGRIFFE[id]&&HANDGRIFFE[id].n}))].filter(x=>x.c);
+  return `<div class="ritz"><img src="${spr(D.spr)}"><div class="rn"><b>${esc(D.n)}</b></div><div class="kerben">${ks.map(x=>{const g=it.schliff&&it.schliff[x.key];return `<button class="kerbe ${g?'voll':'leer'}" data-schleif="${it.uid}" data-key="${x.key}" ${g||(x.c.c||0)<1?'disabled':''}>${esc(x.n)} (${x.c.c||0}${g?' ◇':''})</button>`;}).join('')}</div></div>`;}).join('')}</div><button class="deco klein" data-act="wahlAbbruch">LIEBER NICHT</button>`);
+ if(w.art==='umritzen'){const q=S.umritzQuelle;return box('ritzen',`<h2>UMRITZEN</h2><p class="lead">${q?'Wohin damit?':'Welchen Handgriff willst du in ein anderes Item ritzen?'}</p><div class="ritzliste">${besitz().map(({it,an})=>{const D=def(it);const hg=hgVon(it);
+  return `<div class="ritz ${an?'':'rucksack'}"><img src="${spr(D.spr)}"><div class="rn"><b>${esc(D.n)}</b> ${D.st.map(k=>gi(k,KZ())).join('')}</div><div class="kerben">${q?(q.uid!==it.uid&&hg.length<kerbenVon(it)?`<button class="kerbe leer" data-umziel="${it.uid}">hierher</button>`:''):hg.map((id,k)=>`<button class="kerbe voll" data-umquelle="${it.uid}" data-k="${k}">${esc(HANDGRIFFE[id]?HANDGRIFFE[id].n:id)}</button>`).join('')}</div></div>`;}).join('')}</div><button class="deco klein" data-act="wahlAbbruch">LIEBER NICHT</button>`);}
+ return'';}
 function eventHtml(){const ev=curEvent();if(!ev)return'';const done=S.phase==='event_folge';
  return box('ereignis zettel',`<h2>${esc(ev.t).toUpperCase()}</h2><p class="evd">${esc(ev.d)}</p>${ev.o.map((o,i)=>`<button class="opt ${S.eventChoice===i&&done?'gew':''}" data-ev="${i}" ${condOk(o.if)&&!done?'':'disabled'}>› ${esc(o.l)}</button>`).join('')}`);}
 function streichenHtml(t,skip){const list=strikeTargets();return box('streichen',`<h2>KARTE STREICHEN</h2><p class="lead">${t}</p><div class="picks">${list.map(it=>{const d=def(it);return `<div class="pick" data-strike="${it.uid}"><img src="${spr(d.spr)}"><div class="pn">${esc(d.n)}</div><div class="ps">${d.cards.map(c=>esc(c.n)+': '+esc(cardText(c))).join('<br>')}</div></div>`;}).join('')}</div><button class="deco klein" data-act="${skip}">LIEBER NICHT</button>`);}
@@ -122,15 +147,19 @@ function kraemerHtml(){const b=biom();const k=b.kraemer;const H=BAL.shop.heal;co
  return box('kraemer',`<h2>${esc(k.n).toUpperCase()}</h2><p class="lead">${esc(k.ort)}. ${esc(k.zeile)}</p><p class="gold">${gi('gold',KZ())} ${S.gold} Gold</p>
  <div class="picks">${sh.items.map((o,i)=>itemPick(o.id,`data-buy="${i}"`,`<div class="preis">${o.sold?'VERKAUFT':o.price+' GOLD'}</div>`).replace('class="pick ',`class="pick ${o.sold?'weg ':''}`)).join('')}
  <div class="pick ${sh.heal?'weg':''}" data-buy="heal"><div class="pn">Laudanum</div><div class="ps">+${H.v} Leben</div><div class="preis">${sh.heal?'VERKAUFT':H.price+' GOLD'}</div></div>
- <div class="pick ${sh.strike?'weg':''}" data-buy="strike"><div class="pn">Karte streichen</div><div class="ps">Eine Karte verschwindet aus deinem Deck.</div><div class="preis">${sh.strike?'ERLEDIGT':BAL.shop.streichen_preis+' GOLD'}</div></div></div>
+ </div>
+ ${(sh.hg||[]).length?`<h3>HANDGRIFFE</h3><div class="picks">${sh.hg.map((o,i)=>hgKarteHtml(o.id,`data-buyhg="${i}"`,`<div class="preis">${o.sold?'VERKAUFT':o.price+' GOLD'}</div>`).replace('class="pick ',`class="pick ${o.sold?'weg ':''}`)).join('')}</div>`:''}
+ <h3>VERKAUFEN UND ENTFERNEN</h3><p class="hint">Klick unten ein Item an, dann verkaufst du es hier für 40 % (${S.sel&&getAt(S.sel)?`<button class="deco klein" data-act="verkaufen">${esc(def(getAt(S.sel)).n).toUpperCase()} FÜR ${Math.floor(preisVon(def(getAt(S.sel)))*.4)} GOLD</button>`:'nichts gewählt'}). Handgriff entfernen: ${(BAL.shop.hg_entfernen||25)} Gold.</p>
+ <div class="entf">${besitz().filter(b=>hgVon(b.it).length).map(({it})=>hgVon(it).map((id,k)=>(def(it).fest_hg||[]).includes(id)?'':`<button class="kerbe voll" data-entf="${it.uid}" data-k="${k}">✕ ${esc(HANDGRIFFE[id]?HANDGRIFFE[id].n:id)} <span class="hint">(${esc(def(it).n)})</span></button>`).join('')).join('')}</div>
  <button class="deco" data-act="leave">WEITER ›</button>`);}
 function werkstattHtml(){const p=forgePreview();const F=BAL.forge;
  return box('werkstatt',`<h2>WERKSTATT</h2><p class="lead">Eine Werkbank, die noch funktioniert. Einmal verschmelzen: gleicher Stoff gibt eine Stufe, zwei Stoffe, die reagieren, ein Doppel-Item.</p>
  <div class="bench">${slotHtml('bench:0')}<span class="plus">+</span>${slotHtml('bench:1')}<div class="preview">${S.forged?'<b>Fertig.</b> Zieh das neue Item in deine Ausrüstung.':p?(p.err?`<span class="err">${esc(p.err)}</span>`:`<b>${esc(p.n)}</b> ${p.st.map(k=>gi(k,KZ())).join('')}<br>${p.same?`Stufe: ${p.cards.length} Karten, je +${F.bump}`:`Doppel-Item: ${p.cards.length} Karten, je +${F.bump}, jede kostet ${F.double_cost_extra} mehr`}${p.rx.length?'<br>In sich: '+p.rx.map(r=>S.disc.has(r.n)?r.n:'???').join(', '):''}`):'<span class="hint">Zieh zwei Items aus der Ausrüstung oder dem Rucksack auf die Werkbank.</span>'}</div>
- <button class="deco klein" data-act="forge" ${!p||p.err||S.forged?'disabled':''}>VERSCHMELZEN</button></div><button class="deco" data-act="leave">WEITER ›</button>`);}
+ <button class="deco klein" data-act="forge" ${!p||p.err||S.forged?'disabled':''}>VERSCHMELZEN</button></div>
+ ${S.forged?'':`<p class="hint">Oder statt zu verschmelzen:</p><p><button class="deco klein" data-act="wsKerbe">EINE KERBE MEHR</button> <button class="deco klein" data-act="wsSchleifen">EINE KARTE SCHLEIFEN</button></p>`}<button class="deco" data-act="leave">WEITER ›</button>`);}
 function rastHtml(){const v=Math.round(maxHp()*RUN.rast.heil_anteil);
  return box('rast',`<h2>RAST</h2><p class="lead">${esc((biom().weg_hinweise.rast||[''])[0])} Für einen Moment ruft nichts.</p>
- ${S.rastDone?'<p class="hint">Du hast gerastet.</p>':`<div class="wahl"><button class="deco" data-act="rastHeil">SCHLAFEN<br><small>+${v} Leben</small></button><div class="oder">oder ein Item verbessern (alle Werte +${BAL.forge.bump}): klick es unten an</div></div>`}
+ ${S.rastDone?'<p class="hint">Du hast gerastet.</p>':`<div class="wahl"><button class="deco" data-act="rastHeil">SCHLAFEN<br><small>+${v} Leben</small></button><button class="deco" data-act="rastSchleifen">SCHLEIFEN<br><small>eine Karte −1 Kosten</small></button><button class="deco" data-act="rastUmritzen">UMRITZEN<br><small>Handgriff verlegen</small></button></div>`}
  <button class="deco" data-act="leave">WEITER ›</button>`);}
 function wandbildHtml(){const fr=FRAGS.find(f=>f.id===S.frag);const neu=S.fragNeu||[];
  return `<div class="wandbild"><canvas id="relief" width="160" height="100"></canvas><div class="zettel"><h3>${fr?esc(fr.titel):'Eine leere Wand'}</h3><p>${fr?esc(fr.text):'Jemand hat hier etwas weggekratzt.'}</p>
@@ -182,3 +211,33 @@ function reliefMalen(){const c=$('relief');if(!c)return;const x=c.getContext('2d
  const B=biom();const r=new Rng(hashStr(S.frag||'leer'));x.fillStyle=B.koerper[2];x.fillRect(0,0,160,100);
  for(let i=0;i<9;i++){const cx=14+i*16+r.int(-3,3),cy=50+r.int(-6,6),h=r.int(18,34);x.fillStyle=B.koerper[0];x.fillRect(cx,cy-h/2,2,h);x.fillRect(cx-4,cy-h/2+4,10,2);x.fillStyle=B.rand[0];x.fillRect(cx+2,cy-h/2,1,h);}
  x.fillStyle=B.rand[1];x.fillRect(78,12,4,4);}
+
+// ---------- Rucksackmodus (07-ui-und-gefuehl.md Abschnitt 2): Entwurf ändern, Deck-Änderung grün/rot, erst „Übernehmen“ macht es fest ----------
+let RS=null;
+function rucksackAuf(){if(!S.route||!canEquip())return;RS={areas:Object.fromEntries(AREAS.map(a=>[a,[...S.areas[a]]])),bag:[...S.bag],sel:null};zeigeRucksack();}
+function rsAktiv(){return AREAS.flatMap(a=>RS.areas[a].slice(0,S.slots[a]).filter(Boolean));}
+function rsGet(loc){const[k,i]=loc.split(':');return k==='bag'?RS.bag[+i]:RS.areas[k][+i];}
+function rsSet(loc,v){const[k,i]=loc.split(':');if(k==='bag')RS.bag[+i]=v;else RS.areas[k][+i]=v;}
+function rsKlick(loc){if(!RS.sel){if(rsGet(loc))RS.sel=loc;zeigeRucksack();return;}const a=rsGet(RS.sel),b=rsGet(loc);const[k]=loc.split(':'),[k0]=RS.sel.split(':');
+ const passt=(it,l)=>{if(!it)return true;const[kk,ii]=l.split(':');return kk==='bag'||(def(it).a===kk&&+ii<S.slots[kk]);};
+ if(RS.sel!==loc&&passt(a,loc)&&passt(b,RS.sel)){rsSet(loc,a);rsSet(RS.sel,b);}else if(RS.sel!==loc)Bus.emit('bad',{a:'PASST NICHT',b:a?'Gehört zu '+AREA_N[def(a).a]:''});RS.sel=null;zeigeRucksack();}
+function rucksackHtml(){const alt=allActive(),neu=rsAktiv();const altD=deckListe(alt),neuD=deckListe(neu);
+ const slot=(loc,locked)=>{const it=locked?null:rsGet(loc);const D=it&&def(it);return `<div class="slot ${locked?'zu':''} ${RS.sel===loc?'sel':''} ${D&&rarOf(D)!=='gewoehnlich'?'selten':''}" ${locked?'':`data-rs="${loc}"`}>${D?`<img src="${spr(D.spr)}"><span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;};
+ const gruppen=[...new Set([...alt,...neu])].map(it=>{const st=neu.includes(it)&&alt.includes(it)?'bleibt':neu.includes(it)?'neu':'raus';const D=def(it);
+  return `<div class="dg ${st}"><b>${esc(D.n)}</b> ${D.st.map(k=>gi(k,KZ())).join('')}<span class="hint"> ${st==='neu'?'kommt rein':st==='raus'?'geht raus':''}</span><div>${kartenVon(it).map(c=>`<span class="dc">${c.hg?'✋ ':''}${esc(c.n)} (${cardCost(c)})</span>`).join('')}</div></div>`;}).join('');
+ return box('rucksack',`<h2>RUCKSACK</h2><p class="lead">Klick ein Item, dann den Platz, an den es soll. Rechts siehst du, was das mit deinem Deck macht.</p>
+ <div class="rs3"><div class="rsl">${AREAS.map(a=>`<h4>${AREA_N[a]}</h4><div class="slots">${[...Array(BAL.max_slots).keys()].map(i=>slot(a+':'+i,i>=S.slots[a])).join('')}</div>`).join('')}<h4>RUCKSACK</h4><div class="slots">${RS.bag.map((_,i)=>slot('bag:'+i)).join('')}</div>
+ ${RS.sel&&rsGet(RS.sel)?`<div class="rsinfo"><b>${esc(def(rsGet(RS.sel)).n)}</b><br><span class="hint">${esc(def(rsGet(RS.sel)).flavor||'')}</span><br>Kerben: ${hgVon(rsGet(RS.sel)).map(id=>HANDGRIFFE[id]?esc(HANDGRIFFE[id].n):id).join(', ')||'leer'}${S.phase==='kraemer'?`<br><button class="deco klein" data-act="rsVerkaufen">VERKAUFEN FÜR ${Math.floor(preisVon(def(rsGet(RS.sel)))*.4)} GOLD</button>`:''}</div>`:''}</div>
+ <div class="rsr"><h4>DECK: ${altD.length} → <span class="${neuD.length>altD.length?'gr':neuD.length<altD.length?'rt':''}">${neuD.length}</span> KARTEN</h4>${gruppen}</div></div>
+ <p><button class="deco" data-act="rsUebernehmen">ÜBERNEHMEN</button> <button class="deco klein" data-act="rsZu">VERWERFEN</button></p>`);}
+function zeigeRucksack(){zeigeOverlay(rucksackHtml());}
+function rucksackUebernehmen(){if(!RS)return;AREAS.forEach(a=>{S.areas[a]=RS.areas[a];});S.bag=RS.bag;RS=null;closeOv();Bus.emit('pick');after();}
+// ---------- Hover-Vorschau am Cursor: welche Karten ins Deck kämen, welche Reaktionen dadurch möglich würden ----------
+function vorschauKarten(karten,titel){const deckSt=new Set(allActive().flatMap(it=>def(it).st));const st=new Set(karten.flatMap(c=>c.st));const rx=[];
+ REACT.forEach(r=>{const[a,b]=[...r.k];if((st.has(a)&&deckSt.has(b))||(st.has(b)&&deckSt.has(a)))rx.push(S.disc.has(r.n)?r.n:'???');});
+ const einm=[];const seen=new Set();karten.forEach(c=>{const k=c.n+c.hg;if(!seen.has(k)){seen.add(k);einm.push({...c,anz:karten.filter(x=>x.n===c.n&&x.hg===c.hg).length});}});
+ return `<div class="tn">${titel}</div><div class="vkr">${einm.map(c=>`<div class="vk"><div class="vkc">${c.x?'X':c.opfer?'♥'+c.opfer:c.c}</div><b>${esc(c.n)}${c.anz>1?' ×'+c.anz:''}</b><div>${c.st.map(k=>gi(k,9)).join('')||'<span class="hint">Stoff des Items</span>'}</div><div class="vkt">${esc(cardText(c))}</div></div>`).join('')}</div>${rx.length?`<div class="hint">Reagiert mit deinem Deck: ${[...new Set(rx)].join(', ')}</div>`:''}`;}
+function hoverVorschau(el){const tk=el.closest('[data-take],[data-buy],[data-hg],[data-buyhg]');if(!tk)return null;
+ if(tk.dataset.hg||tk.dataset.buyhg!=null){const id=tk.dataset.hg||(S.shop&&S.shop.hg[+tk.dataset.buyhg]||{}).id;const H=HANDGRIFFE[id];if(!H)return null;return vorschauKarten([{...H,st:[]}],'Kommt als 1 Karte ins Deck, mit dem Stoff des Items, in das du ihn ritzt');}
+ const id=tk.dataset.take||(tk.dataset.buy!=null&&S.shop&&S.shop.items[+tk.dataset.buy]&&S.shop.items[+tk.dataset.buy].id);if(!id||!ITEMS[id])return null;
+ const tmp={uid:-1,id};return vorschauKarten(kartenVon(tmp),'Angelegt kommen ins Deck:');}

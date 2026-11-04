@@ -19,7 +19,7 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   if(this.an&&!FAST)this.renderBald();},
  kurz(p){if(!p)return'';const o={};for(const k in p){if(k==='why')continue;const v=p[k];if(v&&typeof v==='object'){if(v.n)o[k]=v.n;else if(Array.isArray(v))o[k]=v.length>6?v.length+' Einträge':v.map(x=>x&&x.n||x).join(',');}else o[k]=v;}return JSON.stringify(o).slice(0,140);},
  _t:0,renderBald(){if(this._t)return;this._t=setTimeout(()=>{this._t=0;this.render();},120);},
- render(){if(!this.an||!this.el)return;const tabs=['jetzt','kampf','run','musik','log','cheats'];
+ render(){if(!this.an||!this.el)return;const tabs=['jetzt','kampf','deck','run','musik','log','cheats'];
   this.el.innerHTML=`<div class="dt">${tabs.map(t=>`<button data-dtab="${t}" class="${this.tab===t?'an':''}">${t.toUpperCase()}</button>`).join('')}</div><div class="db">${this['t_'+this.tab]()}</div>`;},
  // ----- Reiter Jetzt -----
  t_jetzt(){let h='';const f=S.phase==='fight';
@@ -36,6 +36,12 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   h+=`<h5>Schadensrechnung (letzte 10)</h5>${this.treffer.map(t=>`<div class="le">${esc(t.why)}</div>`).join('')||'–'}`;
   h+=`<h5>Sets</h5>${roleState().filter(x=>x.have.length).map(x=>`<div>${x.r.n} ${x.have.length}/3 ${x.on?'<b>aktiv</b>':'fehlt: '+x.r.i.filter(i=>!x.have.includes(i)).map(i=>ITEMS[i].n).join(', ')}</div>`).join('')||'–'}`;
   if(S.phase==='fight')h+=`<h5>Stapel ${S.draw.length} · Hand ${S.hand.length} · Ablage ${S.discard.length} · verbraucht ${S.exhaust.length}</h5><div class="dim">Stapel: ${S.draw.map(c=>c.n).join(', ')}</div><div class="dim">Ablage: ${S.discard.map(c=>c.n).join(', ')}</div>`;return h;},
+ // ----- Reiter Deck (Auftrag 2): Items, Kerben, Handgriffe, Stoffe, Kostenkurve -----
+ t_deck(){if(!S.route)return'<div class="dim">Kein Run.</div>';const deck=deckListe();const kurve={};deck.forEach(c=>{const k=c.x?'X':c.opfer?'Opfer':Math.min(3,c.c);kurve[k]=(kurve[k]||0)+1;});
+  const b=buildArchetyp();let h=`<div>${deck.length} Karten · Build: <b class="next">${b.n}</b> <span class="dim">${Object.entries(b.werte).map(([k,v])=>k+' '+v.toFixed(1)).join(' · ')}</span></div>
+  <div>Kosten: ${['0','1','2','3','X','Opfer'].map(k=>`${k}: ${kurve[k]||0}`).join(' · ')}</div>`;
+  h+=besitz().map(({it,an})=>{const D=def(it);return `<div class="ge"><b>${esc(D.n)}</b> <span class="dim">${it.id} · ${rarOf(D)} · ${an?'angelegt':'Rucksack'} · Kerben ${hgVon(it).length}/${kerbenVon(it)}</span> ${D.st.map(k=>gi(k,12)).join('')}${D.eigen?`<br><span class="un">Eigenschaft ${esc(JSON.stringify(D.eigen))}</span>`:''}<br>${kartenVon(it).map(c=>`${c.hg?'✋':''}${esc(c.n)}(${c.c}${c.schliff?'◇':''})`).join(', ')}</div>`;}).join('');
+  return h;},
  // ----- Reiter Run -----
  t_run(){if(!S.route)return'<div class="dim">Kein Run.</div>';const M=Meta.get();let h=`<div>Seed <b class="sel">${S.seed}</b> <button data-cheat="seedcopy">kopieren</button>${S.dev?' <b class="un">Dev-Run</b>':''}</div>
   <div>Figur ${esc(S.jobN)} · ${RUN.akte[S.akt]?.n||''} · ${esc(biom().n)} · Ebene ${S.ebene+1} · Tiefe ${S.depth} · Gold ${S.gold} · Stufe ${S.stufe||0}</div>

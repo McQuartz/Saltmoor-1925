@@ -37,7 +37,13 @@
    "price": 15,
    "v": 15
   },
-  "streichen_preis": 30
+  "streichen_preis": 30,
+  "verkauf_anteil": 0.4,
+  "hg_preis": 38,
+  "hg_preis_selten": 60,
+  "hg_entfernen": 25,
+  "reliquie_chance": 0.15,
+  "reliquie_preis": 140
  },
  "forge": {
   "bump": 3,
@@ -54,24 +60,6 @@
   ]
  },
  "card_copies": 2,
- "grundkarten": {
-  "copies": 1,
-  "waffe": {
-   "n": "Stoßen",
-   "c": 1,
-   "atk": 5
-  },
-  "kleidung": {
-   "n": "Ausweichen",
-   "c": 1,
-   "blk": 5
-  },
-  "talisman": {
-   "n": "Zaudern",
-   "c": 1,
-   "blk": 4
-  }
- },
  "waechter_belohnung": {
   "gold": [
    34,
@@ -110,5 +98,10 @@
   "dauer_s": 4,
   "wichtig_s": 6,
   "verlauf": 20
+ },
+ "belohnung": {
+  "_doc": "Belohnung nach Kämpfen (04-deckbau.md Abschnitt 6)",
+  "item_chance": 0.25,
+  "ueberspringen_gold": 10
  }
 }

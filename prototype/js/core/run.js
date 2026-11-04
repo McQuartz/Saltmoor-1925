@@ -19,6 +19,8 @@ function newRun(jobId,seed,opt={}){
   stats:{kaempfe:0,fragmente:[],gold:0},metaItems:(typeof Meta!=='undefined'?Meta.items():[]),startT:Date.now(),
   draw:[],hand:[],discard:[],exhaust:[],last:[],played:0,hochUsed:new Set(),target:0,chainLog:[]};
  job.w.forEach((id,i)=>S.areas.waffe[i]=mk(id));job.k.forEach((id,i)=>S.areas.kleidung[i]=mk(id));job.t.forEach((id,i)=>S.areas.talisman[i]=mk(id));(job.bag||[]).forEach((id,i)=>S.bag[i]=mk(id));
+ // Start-Handgriffe stecken schon in den Kerben der Startitems (04-deckbau.md Abschnitt 2)
+ for(const it of [...AREAS.flatMap(a=>S.areas[a]),...S.bag].filter(Boolean)){const l=(job.hg||{})[it.id];if(l)hgVon(it).push(...l.filter(id=>HANDGRIFFE[id]).slice(0,kerbenVon(it)-hgVon(it).length));}
  S.stufe=opt.stufe||0;S.start=opt.start||null;
  S.hp=maxHp();
  const sv=(RUN.startvarianten||[]).find(v=>v.id===S.start);if(sv)runFx(sv.fx,{why:'Startvariante '+sv.n});
@@ -69,7 +71,10 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
    const alle=EVENTS.filter(e=>e.biom==='alle'&&!seen.includes(e.id));const ev=r.pick(fresh.length?fresh:alle.length?alle:EVENTS);
    S.stats.events=[...seen,ev.id];S.event=ev.id;S.phase='event';Bus.emit('event',{ev,why:`Ereignis „${ev.t}“ aus ${fresh.length?b.kurz:'allgemein'} per Seed`});break;}
   case'kraemer':{const SH=BAL.shop;const o2=[...r.sample(dropPool(),SH.normal_items),...r.sample(rarePool(),SH.rare_items)];
-   S.shop={items:o2.map(id=>({id,price:ITEMS[id].rare?SH.rare_price:r.int(SH.normal_price[0],SH.normal_price[1]),sold:false})),heal:false,strike:false};S.phase='kraemer';
+   const hgA=handgriffAngebot(r,'mix',2).map(id=>({id,price:(HANDGRIFFE[id].rar==='selten'?SH.hg_preis_selten:SH.hg_preis)||40,sold:false}));
+   const rel=r.chance(SH.reliquie_chance||.15)?reliquienPool():[];
+   S.shop={items:o2.map(id=>({id,price:ITEMS[id].rare?SH.rare_price:r.int(SH.normal_price[0],SH.normal_price[1]),sold:false})),hg:hgA,heal:false,strike:false};
+   if(rel.length)S.shop.items.push({id:r.pick(rel),price:SH.reliquie_preis||140,sold:false});S.phase='kraemer';
    Bus.emit('kraemer',{why:`Krämer ${b.kraemer.n}: Sortiment aus dem Fundpool von ${b.kurz}`});break;}
   case'werkstatt':S.forged=false;S.phase='werkstatt';break;
   case'rast':S.rastDone=false;S.phase='rast';break;
@@ -95,14 +100,18 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  const r=R(`beute:${S.depth}`);const G=BAL.gold_per_victory;
  let gd=art==='waechter'?r.int(BAL.waechter_belohnung.gold[0],BAL.waechter_belohnung.gold[1]):r.int(G.min,G.max)+S.enemies.length*G.per_enemy;
  gd+=passive('gold_bonus').reduce((s,p)=>s+p.v,0);S.gold+=gd;S.stats.gold+=gd;S.goldGain=gd;
- const R2=BAL.rewards;const n=R2.choices+(passive('glueck').length?1:0);const pick=r.sample(dropPool(),n);
- const rare=art==='waechter'||art==='schwer'||(S.depth>=R2.rare_from_depth&&r.chance(R2.rare_chance));
- if(rare){const rp=rarePool();if(rp.length)pick[pick.length-1]=r.pick(rp);}
- // Gegner-Beute: kleine Chance auf das eigene Stück eines Gegners
- const beute=S.enemies.map(e=>FOES[e.id].beute).filter(id=>id&&ITEMS[id]);if(beute.length&&r.chance(.2)){pick[0]=r.pick(beute);S.beuteFrom=true;}
- const saetze=[...(biom().beute_saetze||[]),...S.enemies.map(e=>FOES[e.id]&&FOES[e.id].beute_satz).filter(Boolean)];const fs=saetze.filter(x=>x!==S.beuteSatz);S.beuteSatz=fs.length?r.pick(fs):'Unter dem, was übrig ist, liegt etwas.';
- S.reward=pick;S.picked=false;S.phase='reward';S.hand=[];
- Bus.emit('reward',{gold:gd,items:pick,why:`Belohnung: ${gd} Gold, Auswahl aus Fundpool ${biom().kurz}${rare?', ein seltenes Item':''}`});Bus.emit('changed');}
+ // Handgriff 1 aus 3 (zwei passend zum Deck, einer frei), Item je nach Knoten, Wächter: Reliquie 1 aus 3
+ const RW=BAL.belohnung||{};const glueck=passive('glueck').length?1:0;
+ const hg=handgriffAngebot(r,art==='waechter'?'selten':art==='schwer'?'mix':'gewoehnlich',3);
+ let items=[];
+ if(art==='waechter'){items=r.sample(reliquienPool(),3+glueck);}
+ else if(art==='schwer'){items=r.sample(dropPool(),2+glueck);const rp=rarePool();if(rp.length)items.push(r.pick(rp));}
+ else if(r.chance(RW.item_chance??.25)){items=r.sample(dropPool(),2+glueck);}
+ // Gegner-Beute: kleine Chance auf das eigene Stück eines Gegners (Kniff „nachlass: item“ sicher)
+ const beute=S.enemies.map(e=>FOES[e.id].beute).filter(id=>id&&ITEMS[id]);if(S.sicheresBeute&&ITEMS[S.sicheresBeute]){items[0]=S.sicheresBeute;S.sicheresBeute=null;}else if(beute.length&&r.chance(.15)){items[0]=r.pick(beute);}
+ const rare=art==='waechter'||art==='schwer';const pick=items;
+ S.reward=pick;S.picked=!pick.length;S.rewardHg=hg;S.hgPicked=!hg.length;S.hgPending=null;S.phase='reward';S.hand=[];
+ Bus.emit('reward',{gold:gd,items:pick,hg,why:`Belohnung: ${gd} Gold, Handgriffe ${hg.map(id=>HANDGRIFFE[id].n).join('/')}${pick.length?', Items '+pick.map(id=>ITEMS[id].n).join('/'):''}${art==='waechter'?' (Reliquien)':''}`});Bus.emit('changed');}
 function takeReward(id){if(S.picked)return;if(id){if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}giveItem(id,'Fund nach dem Kampf');Bus.emit('pick');}S.picked=true;Bus.emit('changed');}
 function leaveReward(){if(!S.picked)S.picked=true;finishNode();}
 function runLost(){S.phase='strand';busy=false;S.stats.endeT=Date.now();const res={sieg:false,tiefe:S.depth,akt:S.akt,biom:biomId(),gegner:S.enemies.filter(e=>e.hp>0).map(e=>e.id),job:S.job};
@@ -118,6 +127,8 @@ function chooseEvent(i){const ev=curEvent();if(!ev)return;const o=ev.o[i];if(!o|
  S.phase='event_folge';afterEventFx();}
 function afterEventFx(){const p=S.pending||[];if(!p.length){finishNode();return;}
  const nx=p[0];if(nx==='strike'){S.phase='streichen';Bus.emit('changed');return;}
+ if(nx.hg){S.hgPending=nx.hg;S.phase='event_hg';Bus.emit('changed');return;}
+ if(nx.wahl){S.wahl={art:nx.wahl,quelle:'event',phase:'event_folge'};S.phase='wahl';Bus.emit('changed');return;}
  if(nx.fight!==undefined){p.shift();const b=biom();const r=R(`ereigniskampf:${S.depth}`);const ids=(nx.fight||[]).filter(id=>FOES[id]);const foes=ids.length?ids:[r.pick(b.gegner.filter(id=>FOES[id])),r.pick(b.gegner.filter(id=>FOES[id]))];
   S.node={art:'kampf'};startFight(foes,'kampf');Bus.emit('changed');return;}
  p.shift();afterEventFx();}
@@ -175,7 +186,7 @@ function giveItem(id,why=''){if(!ITEMS[id])return false;const it=mk(id);const i=
 function getAt(loc){const[k,i]=loc.split(':');if(k==='bag')return S.bag[+i];if(k==='bench')return S.bench[+i];return S.areas[k][+i];}
 function setAt(loc,v){const[k,i]=loc.split(':');if(k==='bag')S.bag[+i]=v;else if(k==='bench')S.bench[+i]=v;else S.areas[k][+i]=v;}
 function canPlace(it,loc){if(!it)return true;const[k,i]=loc.split(':');if(k==='bag'||k==='bench')return true;return def(it).a===k&&+i<S.slots[k];}
-function canEquip(){return!['fight','titel','figur','strand','ende','ankunft'].includes(S.phase);}
+function canEquip(){return!['fight','titel','figur','strand','ende','ankunft','biomwahl'].includes(S.phase);}
 function move(from,to){
  if(busy||from===to||!canEquip()){if(S.phase==='fight')Bus.emit('bad',{a:'IM KAMPF',b:'Umrüsten geht nur zwischen den Kämpfen.'});return;}
  if(to==='trash'){const it=getAt(from);if(!it)return;setAt(from,null);log(`Weggeworfen: ${def(it).n}`);Bus.emit('click');return after();}
@@ -204,3 +215,50 @@ function buildArchetyp(){const z={glutnest:0,brackwasser:0,bollwerk:0,aderlass:0
    if(c.blk&&(s.includes('G')||s.includes('S')))z.bollwerk+=1+c.blk/6;if(c.self||c.opfer||s.includes('B'))z.aderlass+=1.2;if(c.funke||c.kette)z.kettenwerk+=1.5;if((c.h||1)>1||c.str||c.vuln||s.includes('E'))z.hagel+=1+((c.h||1)-1)*.6;}}
  z.kettenwerk+=Math.max(0,st.size-3)*1.5;const best=Object.entries(z).sort((a,b)=>b[1]-a[1])[0];
  const N={glutnest:'Glutnest',brackwasser:'Brackwasser',bollwerk:'Bollwerk',aderlass:'Aderlass',kettenwerk:'Kettenwerk',hagel:'Hagel'};return{id:best[0],n:N[best[0]],werte:z};}
+
+// ---------- Handgriffe und Kerben (04-deckbau.md Abschnitt 2, 6, 8) ----------
+function handgriffPool(rar){return Object.keys(HANDGRIFFE).filter(id=>{const H=HANDGRIFFE[id];return !H.unspielbar&&!H.start&&(!rar||rar==='mix'||(H.rar||'gewoehnlich')===rar);});}
+// Angebot: zwei Handgriffe passend zu Stoffen/Build im Deck (gewichtet), einer frei
+function handgriffAngebot(r,rar,n){let pool=handgriffPool(rar);if(pool.length<n)pool=handgriffPool(null);if(!pool.length)return[];
+ const b=buildArchetyp().id;const st=new Set(allActive().flatMap(it=>def(it).st));
+ const passt=pool.filter(id=>{const H=HANDGRIFFE[id];return H.build===b||(H.stoffe||[]).some(k=>st.has(k));});
+ const o=[];const a=r.sample(passt.length>=2?passt:pool,Math.min(2,n));o.push(...a);const rest=pool.filter(id=>!o.includes(id));o.push(...r.sample(rest,n-o.length));
+ if(rar==='mix'){const sel=handgriffPool('selten').filter(id=>!o.includes(id));if(sel.length)o[o.length-1]=r.pick(sel);}return o.slice(0,n);}
+function reliquienPool(){const p=Object.keys(ITEMS).filter(k=>rarOf(ITEMS[k])==='reliquie'&&!ITEMS[k].nodrop&&!ITEMS[k].bases);return p.length?p:rarePool();}
+// Alle Items im Besitz (angelegt und Rucksack) mit Ort
+function besitz(){const o=[];AREAS.forEach(a=>S.areas[a].forEach((it,i)=>{if(it)o.push({it,loc:a+':'+i,an:i<S.slots[a]});}));S.bag.forEach((it,i)=>{if(it)o.push({it,loc:'bag:'+i,an:false});});return o;}
+function itemByUid(uid){const b=besitz().find(x=>x.it.uid===uid);return b?b.it:null;}
+// Handgriff wählen (Belohnung, Krämer, Ereignis): danach ins Item ritzen
+function takeHandgriff(id){if(!HANDGRIFFE[id])return;if(id===null){S.hgPicked=true;Bus.emit('changed');return;}S.hgPending=id;Bus.emit('changed');}
+function skipHandgriff(){S.hgPicked=true;S.hgPending=null;const g=(BAL.belohnung&&BAL.belohnung.ueberspringen_gold)||10;S.gold+=g;S.stats.gold+=g;Bus.emit('gold',{v:g,why:'Handgriff übersprungen'});Bus.emit('changed');}
+// Ritzen: in Item uid, optional Kerbe k überschreiben (wenn voll). Gibt true zurück, wenn es geklappt hat.
+function placeHandgriff(uid,k){const id=S.hgPending;const it=itemByUid(uid);if(!id||!it)return false;const hg=hgVon(it);const cap=kerbenVon(it);
+ if(k==null){if(hg.length>=cap){Bus.emit('bad',{a:'KERBE VOLL',b:'Wähle einen Handgriff zum Überschreiben oder ein anderes Item.'});return false;}hg.push(id);}
+ else{if((def(it).fest_hg||[]).includes(hg[k])){Bus.emit('bad',{a:'FEST EINGERITZT',b:'Dieser Handgriff lässt sich nicht lösen.'});return false;}const alt=hg[k];hg[k]=id;if(it.schliff)delete it.schliff['h'+k];log(`${HANDGRIFFE[alt]?HANDGRIFFE[alt].n:alt} überschrieben`);}
+ S.hgPending=null;S.hgPicked=true;S.stats.handgriffe=(S.stats.handgriffe||0)+1;
+ Bus.emit('handgriff',{id,it,why:`${HANDGRIFFE[id].n} in ${def(it).n} geritzt: wird ${def(it).st.map(x=>ST[x].n).join(' + ')||'stofflos'}`});
+ if(S.pending&&S.pending[0]&&S.pending[0].hg){S.pending.shift();afterEventFx();return true;}
+ if(S.phase==='kraemer_hg')S.phase='kraemer';Bus.emit('changed');return true;}
+function hgVerwerfen(){if(S.phase==='event_hg'){S.hgPending=null;S.pending.shift();afterEventFx();return;}if(S.phase==='kraemer_hg'){S.hgPending=null;S.phase='kraemer';Bus.emit('changed');return;}skipHandgriff();}
+// Werkstatt/Ereignis: Kerbe dazu (höchstens 3)
+function kerbeDazu(uid){const it=itemByUid(uid);if(!it)return false;if(kerbenVon(it)>=3){Bus.emit('bad',{a:'HÖCHSTENS 3 KERBEN',b:''});return false;}it.kerbenPlus=(it.kerbenPlus||0)+1;Bus.emit('kerbe',{it,why:`${def(it).n} bekommt eine Kerbe (jetzt ${kerbenVon(it)})`});wahlFertig();return true;}
+// Schleifen: eine Karte kostet dauerhaft 1 weniger (je Karte einmal). key = 's<ci>' (Stammkarte) oder 'h<k>' (Handgriff)
+function schleifen(uid,key){const it=itemByUid(uid);if(!it)return false;it.schliff=it.schliff||{};if(it.schliff[key]){Bus.emit('bad',{a:'SCHON GESCHLIFFEN',b:''});return false;}it.schliff[key]=true;Bus.emit('schliff',{it,key,why:`${def(it).n}: Karte geschliffen, kostet dauerhaft 1 weniger`});wahlFertig();return true;}
+// Umritzen: Handgriff k aus Item a in Item b
+function umritzen(uidA,k,uidB){const a=itemByUid(uidA),b=itemByUid(uidB);if(!a||!b||a===b)return false;const id=hgVon(a)[k];if(!id)return false;if((def(a).fest_hg||[]).includes(id)){Bus.emit('bad',{a:'FEST EINGERITZT',b:''});return false;}
+ if(hgVon(b).length>=kerbenVon(b)){Bus.emit('bad',{a:'KERBE VOLL',b:''});return false;}hgVon(a).splice(k,1);hgVon(b).push(id);if(a.schliff)delete a.schliff['h'+k];
+ Bus.emit('umritzen',{why:`${HANDGRIFFE[id].n} von ${def(a).n} nach ${def(b).n} umgeritzt`});wahlFertig();return true;}
+// Wahl-Modus (Schleifen, Kerbe, Umritzen) aus Rast, Werkstatt oder Ereignis
+function wahlStart(art,quelle){S.wahl={art,quelle,phase:S.phase};S.phase='wahl';Bus.emit('changed');}
+function wahlFertig(){const w=S.wahl;if(!w){Bus.emit('changed');return;}S.wahl=null;S.phase=w.phase;
+ if(w.quelle==='rast')S.rastDone=true;if(w.quelle==='werkstatt')S.forged=true;
+ if(w.quelle==='event'){S.pending.shift();afterEventFx();return;}Bus.emit('changed');}
+function wahlAbbrechen(){const w=S.wahl;if(!w)return;S.wahl=null;S.phase=w.phase;if(w.quelle==='event'){S.pending.shift();afterEventFx();return;}Bus.emit('changed');}
+// Krämer: Item verkaufen (40 % des Preises), Handgriff kaufen, Handgriff entfernen
+function preisVon(D){return D.preis||({gewoehnlich:30,selten:55,reliquie:130})[rarOf(D)];}
+function verkaufen(loc){if(!S.shop)return;const it=getAt(loc);if(!it)return;const v=Math.floor(preisVon(def(it))*((BAL.shop&&BAL.shop.verkauf_anteil)||.4));setAt(loc,null);S.gold+=v;S.stats.gold+=v;
+ Bus.emit('gold',{v,why:`${def(it).n} verkauft für ${v} Gold (40 %)`});Bus.emit('toast',{a:'VERKAUFT',b:`${def(it).n} · +${v} Gold`});after();}
+function kaufeHandgriff(i){const o=S.shop&&S.shop.hg&&S.shop.hg[i];if(!o||o.sold)return;if(S.gold<o.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:`Du brauchst ${o.price}.`});return;}
+ S.gold-=o.price;S.stats.goldAus=(S.stats.goldAus||0)+o.price;o.sold=true;S.hgPending=o.id;S.phase='kraemer_hg';Bus.emit('changed');}
+function entferneHandgriff(uid,k){const it=itemByUid(uid);const p=(BAL.shop&&BAL.shop.hg_entfernen)||25;if(!it||!hgVon(it)[k])return;if((def(it).fest_hg||[]).includes(hgVon(it)[k])){Bus.emit('bad',{a:'FEST EINGERITZT',b:''});return;}
+ if(S.gold<p){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.gold-=p;S.stats.goldAus=(S.stats.goldAus||0)+p;const id=hgVon(it).splice(k,1)[0];Bus.emit('toast',{a:'ENTFERNT',b:HANDGRIFFE[id].n});after();}
