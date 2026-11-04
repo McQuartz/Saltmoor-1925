@@ -121,11 +121,20 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Der Kühlhausgast | Fabrik | 4 | [M6](bilder/M6/fabrik/kontakt.png) |
 | Die Schicht (Wächter) | Fabrik | 4 (knapp: Masse innen dicht, Lampenschnur unsichtbar) | [M6](bilder/M6/fabrik/im-spiel-waechter.png) |
 | Hintergrund Fabrik (3 Varianten, Wächter-Szene) | Fabrik | 4 (Kesselhaus hinter Gegnern unruhig) | [M6](bilder/M6/fabrik/varianten.png) |
+| Die Wachshände | Grotte | 4 | [M6](bilder/M6/grotte/kontakt.png) |
+| Der Geheilte | Grotte | 4 (starke Silhouette) | [M6](bilder/M6/grotte/kontakt.png) |
+| Der Quellwärter | Grotte | 4 (knapp, Körper klein in der Schale) | [M6](bilder/M6/grotte/kontakt.png) |
+| Der Bittsteller | Grotte | 4 (Körper eher Masse) | [M6](bilder/M6/grotte/kontakt.png) |
+| Die Erhörte (Wächter) | Grotte | 4 | [M6](bilder/M6/grotte/im-spiel-waechter.png) |
+| Hintergrund Grotte (3 Varianten, Wächter-Szene) | Grotte | 4 (Madonna flächig, V2 unten leer) | [M6](bilder/M6/grotte/varianten.png) |
 
 ## Entscheidungen unterwegs
 
 | Datum | Meilenstein | Entscheidung | Grund |
 |---|---|---|---|
+| 2026-11-04 | M6 | Kniff `heiler` heilt nur Verbündete, nie sich selbst | Ein Heiler, der sich selbst heilt, hielt den Autospieler in einem endlosen Kampf (Grotte, Pfarrerin, Seed 9); laut Paket-Format heilt er Verbündete |
+| 2026-11-04 | M6 | Akt-I/II-Wächter der Pakete bleiben 128 × 160, obwohl 160 × 180 erlaubt ist | Die Agenten sahen noch die alte Grenze; die Figuren sind fertig und lesbar, Vergrößern bringt wenig |
+| 2026-11-04 | M6 | Uhrmacher ohne „Karten teurer“ und „Absichten in falscher Reihenfolge“, Kerzenfrau ohne Tausch-Krämer | Brauchen neue Kernbausteine; als Kandidaten für die Zugabe notiert, der Tausch läuft vorerst als Ereignis `grotte_tausch` |
 
 ## Probleme
 

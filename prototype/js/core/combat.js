@@ -175,7 +175,7 @@ function stoerKarte(en){return{n:en.kniff&&en.kniff.karte||'Abschrift',c:0,unspi
 function kniffGegnerzug(en){const k=en.kniff;if(!k)return;const why=k.why?` (${k.why})`:'';
  if(k.art==='waechst'){en.str+=k.v||2;Bus.emit('enemy_buff',{e:en,why:`${en.n} wächst: Stärke +${k.v||2}${why}`});}
  if(k.art==='schuetzer'){alive().filter(o=>o!==en).forEach(o=>{o.block+=k.v||4;Bus.emit('enemy_block',{e:o,why:`${en.n} schützt ${o.n}: +${k.v||4} Block`});});}
- if(k.art==='heiler'){const o=alive().filter(x=>x.hp<x.max).sort((a,b)=>a.hp/a.max-b.hp/b.max)[0];if(o){o.hp=Math.min(o.max,o.hp+(k.v||4));Bus.emit('enemy_heal',{e:o,why:`${en.n} heilt ${o.n} um ${k.v||4}`});}}
+ if(k.art==='heiler'){const o=alive().filter(x=>x!==en&&x.hp<x.max).sort((a,b)=>a.hp/a.max-b.hp/b.max)[0];if(o){o.hp=Math.min(o.max,o.hp+(k.v||4));Bus.emit('enemy_heal',{e:o,why:`${en.n} heilt ${o.n} um ${k.v||4}`});}}
  if(k.art==='loeschen'){alive().forEach(o=>{if(o.burn){o.burn=0;Bus.emit('enemy_status',{e:o,status:'geloescht',why:`${en.n} löscht den Brand${why}`});}});}
  if(k.art==='abschrift'){for(let n=0;n<(k.n||1);n++)S.discard.push(stoerKarte(en));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n||1} Abschrift(en) in deinen Ablagestapel`});}
  if(k.art==='ruf'&&FOES[k.gegner]&&en.turns%(k.alle||3)===2&&alive().length<4){const a=mkEnemy(k.gegner);a.x=rs('aufstellung').pick([.16,.84,.3,.7]);a.reihe=rs('aufstellung').pick([0,1]);S.enemies.push(a);Bus.emit('enemy_spawn',{e:a,why:`${en.n} ruft ${a.n}`});}
