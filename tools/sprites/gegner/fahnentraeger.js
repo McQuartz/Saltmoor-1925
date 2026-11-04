@@ -4,6 +4,14 @@
 // ist leer, nur Reif am Pelzrand. Das Gesicht ist in der Fahne, durch den Stoff gedrückt wie von
 // hinten, und es ruft.
 'use strict';
+// Inneres Randlicht an Kapseln (Arme, Stange): die Kante, die zum Gegenlicht (oben rechts) zeigt, aufhellen
+function kapselLicht(P, caps, c = 'r1', nurKoerper = true) {
+  for (const k of caps) {
+    if (k.t !== 'c') continue; const dx = k.x2 - k.x1, dy = k.y2 - k.y1, l = Math.hypot(dx, dy) || 1; let nx = -dy / l, ny = dx / l;
+    if (nx * 0.9 - ny * 0.5 < 0) { nx = -nx; ny = -ny; } if (nx * 0.9 - ny * 0.5 < 0.15) continue;
+    for (let i = 0; i <= Math.ceil(l); i++) { const q = i / Math.ceil(l), rr = k.r1 + (k.r2 - k.r1) * q - 0.6; const x = Math.round(k.x1 + dx * q + nx * rr - 0.5), y = Math.round(k.y1 + dy * q + ny * rr - 0.5); const cur = P.get(x, y); if (cur && (!nurKoerper || cur <= 4)) P.set(x, y, c); }
+  }
+}
 module.exports = {
   id: 'fahnentraeger', biom: 'eis', zone: 'eis', w: 96, h: 120, fuss: [42, 115], kopf: [40, 12], rimBis: 113,
   varianten: {
@@ -85,6 +93,8 @@ module.exports = {
       P.line(bx + 6, by + 10, bx + 10, 84, 'k0', true); P.line(bx + 7, by + 10, bx + 11, 84, 'k3', true);
       P.line(bx + 1, by + 20, bx + 9, by + 20, 'k3', true); P.line(bx + 1, by + 21, bx + 9, by + 21, 'k0', true);
       for (let x = r(bx + ox); x < bx + 12; x += 3) P.auf(x, r(by - 2 + (x - bx) * 0.25), 'r1');
+      // Arme und Stange: Lichtkante oben rechts, auch dort, wo sie vor dem Parka liegen
+      kapselLicht(P, armV, 'r1'); kapselLicht(P, armH, 'k3'); kapselLicht(P, stange.slice(0, 1), 'r1');
       // Fäustlinge: Daumen, Reif
       P.auf(r(g2[0]) - 2, r(g2[1]) - 1, 'k3'); P.auf(r(g1[0]) + 1, r(g1[1]) - 2, 'r1');
       // Fahne: Stoff mit Verlauf (oben im Gegenlicht heller), gefrorene Falten, Reif an der Kante

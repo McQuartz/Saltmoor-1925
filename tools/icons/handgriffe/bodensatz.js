@@ -1,12 +1,16 @@
-// Bodensatz: eine Hand schwenkt ein Glas, der Satz steigt auf und darin dreht sich etwas um (ein heller Fleck).
+// Bodensatz: eine Hand schwenkt ein bauchiges Glas; der Satz steigt in einer Spirale auf, und darin dreht sich
+// etwas um (ein heller Punkt, der zurückschaut).
 'use strict';
 module.exports = {
   w: 48, h: 32,
   form(A) {
-    const { hand, Pg, armGruppen } = A;
-    const glas = [Pg([[18, 4], [34, 4], [33, 29], [19, 29]], null, { b: 1.6, rd: 1 })];
-    const h = hand({ x: 7, y: 22, a: -0.15, s: 1.3, seite: 1, curl: [0.8, 0.85, 0.85, 0.9], spreiz: 0.03, daumen: 0.5, daumenWinkel: 0.6, arm: 10 });
-    return { gruppen: [{ p: glas, mat: 'glas', k: 0 }, ...armGruppen(h), { p: h.alle(), mat: 'haut', k: 1 }],
-      details(P) { for (let y = 10; y < 28; y++) for (let x = 19; x < 33; x++) { const i = P.info(x, y); if (i && i.mat === 'glas' && i.stufe < 4) { const v = Math.sin((x - 26) * 0.5 + y * 0.35); P.set(x, y, v > 0.5 ? 'torf2' : v > -0.2 ? 'akzent1' : 'akzent0'); } } P.set(26, 16, 'a3'); P.set(27, 16, 'a2'); P.set(26, 17, 'a2'); } };
+    const { faust, E, C, armGruppen } = A;
+    const f = faust({ x: 8, y: 18, a: -0.25, s: 1.25, seite: -1, arm: 8 });
+    const glas = [E(29, 19, 10, 11, null, { pf: 'bevel', hz: 0.3 }), C(29, 8, 29, 4, 3.4, 3.4)];
+    return { gruppen: [...armGruppen(f), { p: [...f.alle(), ...f.daumen], mat: 'haut', k: 1 }, { p: glas, mat: 'glas', k: 1 }],
+      details(P) {
+        for (let y = 9; y < 31; y++) for (let x = 19; x < 40; x++) { const i = P.info(x, y); if (!i || i.mat !== 'glas' || i.stufe >= 4 || !P.get(x - 1, y) || !P.get(x, y + 1)) continue; if (y < 13) continue; const a = Math.atan2(y - 21, x - 29), r = Math.hypot(x - 29, y - 21); const v = Math.sin(a * 2 + r * 0.7); P.set(x, y, v > 0.4 ? 'torf2' : v > -0.3 ? 'akzent1' : 'akzent0'); }
+        P.set(30, 20, 'a3'); P.set(31, 20, 'aG'); P.set(36, 12, 'glas3'); P.set(37, 13, 'glas3');
+      } };
   },
 };

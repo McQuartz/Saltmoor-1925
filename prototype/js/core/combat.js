@@ -25,7 +25,7 @@ function vorgaengerDef(f){const r=rs('kampf');let v=typeof Meta!=='undefined'&&!
  if(ids.length)S.sicheresBeute=r.pick(ids);
  return{...f,n:`${f.n} (${job?job.n:'?'})`,pat,weak,vorgaengerJob:v.job};}
 // Kniff „ansage“: lädt n Züge (Absicht „lädt“), dann ein großer Schlag
-function kniffMuster(f,as){const k=f.kniff;if(!k||k.art!=='ansage')return{};const p=[];for(let i=0;i<(k.zuege||2);i++)p.push({t:'laedt',v:0});p.push({t:'atk',v:(k.v||20)+as});return{pat:p,pi:0};}
+function kniffMuster(f,as){const k=f.kniff;if(!k||k.art!=='ansage')return{};const p=[];for(let i=0;i<(k.zuege||2);i++)p.push({t:'laedt',v:0});p.push({t:'atk',v:Math.round((k.v||20)*(BAL.enemy_scaling.atk_faktor||1))+as});return{pat:p,pi:0};}
 // Aufstellung: drei Tiefenreihen (0 hinten, 1 mitte, 2 vorne), per Seed mit etwas Zufall, Wächter/Boss vorne mittig
 function aufstellen(list){const r=rs('aufstellung');const n=list.length;
  const xs=n===1?[.5]:n===2?[.36,.64]:n===3?[.22,.5,.78]:[.14,.38,.62,.86];

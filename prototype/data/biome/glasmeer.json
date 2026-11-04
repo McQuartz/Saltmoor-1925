@@ -1,0 +1,290 @@
+{
+ "id": "glasmeer",
+ "akt": 3,
+ "biom": {
+  "n": "Das Glasmeer",
+  "kurz": "Glasmeer",
+  "zeit": "vor dem Leben, unter dem Eis",
+  "anreise": "Unter dem Eis liegt eine Ebene aus schwarzem Glas, glatt bis an den Rand. Wenn du gehst, geht dein Spiegelbild schon.",
+  "koerper": ["#020305", "#070b0f", "#0f181d", "#1b2a2e"],
+  "rand": ["#2c6a4c", "#aef2bc"],
+  "augen": "#6dff9e",
+  "nebel": ["#06100e", "#1c3a30"],
+  "musik": "glasmeer",
+  "gegner": ["glasschwimmer", "splitterchor", "vorhergehende", "leithund"],
+  "waechter": "voraus",
+  "fundpool": ["glasscherbe", "polarlicht", "spiegelscherbe", "schneebrille", "lantern", "minerlamp", "compass", "sealskin", "woolcoat", "harpoon", "tarot", "divinghelm", "salt", "knife"],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Dein Spiegelbild",
+   "ort": "im Glas zu deinen Füßen, auf einer ausgebreiteten Decke, die es auf deiner Seite nicht gibt",
+   "zeile": "Es legt dieselben Dinge aus wie der letzte Händler, nur verkehrt herum. Es nennt den Preis, bevor du fragst.",
+   "art": "spiegel"
+  },
+  "uebergang": "Unter der Gestalt im Glas ist die Fläche dünn. Du trittst darauf, und sie trägt dich nicht mehr, nur noch dein Spiegelbild. Ihr fallt zusammen, und unten steht das Wasser als Wand.",
+  "weg_hinweise": {
+   "kampf": [
+    "Jemand krault durch das Glas, ohne Geräusch.",
+    "Ein Gesang wie ein nasser Finger auf einem Weinglas.",
+    "Spuren einer Eisstange, die vor deinen eigenen liegen.",
+    "Pfotenspuren, und eine straffe Leine, die in den Boden führt."
+   ],
+   "ereignis": [
+    "Dein Spiegelbild bleibt stehen. Du noch nicht.",
+    "Ein Zelt, halb im Glas versunken.",
+    "Unter dir liegt etwas Großes. Man sieht es nur, wenn man nicht hinsieht."
+   ],
+   "wandbild": [
+    "Ins Glas geritzt, von unten, eine Reihe kleiner Figuren."
+   ],
+   "kraemer": [
+    "Im Glas breitet jemand eine Decke aus. Er sieht aus wie du."
+   ],
+   "werkstatt": [
+    "Ein Schlitten mit Werkzeug, die Kufen ins Glas gewachsen."
+   ],
+   "rast": [
+    "Ein Spirituskocher brennt noch, mit grüner Flamme."
+   ],
+   "fundstelle": [
+    "Ein Plattenkasten, aufgesprungen. Die Scherben liegen alle mit dem Gesicht nach oben."
+   ]
+  },
+  "beute_saetze": [
+   "Im Glas liegt er noch einmal, und dort steht er schon wieder auf.",
+   "Das grüne Licht unter dir zieht sich zurück wie Wasser von einem Strand.",
+   "Dein Spiegelbild wischt sich die Hände ab. Deine sind noch nicht sauber.",
+   "Irgendwo unter dem Eis singt eine Scherbe weiter, einen Ton zu tief.",
+   "Die Fläche ist wieder glatt. Nur an einer Stelle zeigt sie zwei von dir.",
+   "Der Wind hier weht nicht. Trotzdem liegt dein Schatten schief.",
+   "Unter dem Glas hat sich die große Gestalt um eine Handbreit gedreht, zu dir.",
+   "Du hörst deine Schritte erst, als du schon stehst."
+  ]
+ },
+ "musik": {
+  "n": "Glasmeer",
+  "root": 56,
+  "key": "gis-Moll",
+  "names": ["G♯m", "E", "C♯m", "D♯"],
+  "darkNames": ["G♯m", "A", "C♯m", "D♯♭9"],
+  "amb": {"eisgrund": 0.05, "schimmer": 0.045},
+  "rhy": "glocken",
+  "detail": "eis",
+  "ort": "Glas singt unter dem Eis, ein tiefes Dröhnen, jeder Schritt hallt einen Augenblick zu früh",
+  "rhyN": "Glöckchen aus Glas, Pauke"
+ },
+ "foes": {
+  "glasschwimmer": {
+   "n": "Der Glasschwimmer",
+   "biom": "glasmeer",
+   "rang": "normal",
+   "hp": 28,
+   "weak": "W",
+   "pat": [{"t": "atk", "v": 9}, {"t": "atk", "v": 4, "h": 2}, {"t": "blk", "v": 8}],
+   "sprite": "glasschwimmer_a",
+   "varianten": ["glasschwimmer_a", "glasschwimmer_b"],
+   "konzept": "Ein Langstreckenschwimmer von 1925 in gestreiftem Wollbadeanzug. Er krault durch das schwarze Glas, als wäre es Wasser, und die Spritzer hängen als Glasperlen in der Luft.",
+   "stimme": "ertrunkener",
+   "kniff": {"art": "ansage", "zuege": 2, "v": 22, "why": "Er taucht ab, zwei Züge lang siehst du nur seine Bahn im Glas. Dann holt er Luft, direkt vor dir."},
+   "beute": "glasscherbe",
+   "beute_satz": "Er taucht nicht wieder auf. Die Bugwelle vor seinem Kopf bleibt stehen, wo sie war.",
+   "quelle": "skript"
+  },
+  "splitterchor": {
+   "n": "Der Splitterchor",
+   "biom": "glasmeer",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "L",
+   "pat": [{"t": "atk", "v": 4, "h": 3}, {"t": "blk", "v": 9}, {"t": "atk", "v": 10}],
+   "sprite": "splitterchor_a",
+   "varianten": ["splitterchor_a", "splitterchor_b"],
+   "konzept": "Die Glasplatten-Negative der Expedition, zerbrochen im Kasten. In jeder Scherbe ein Gesicht der Mannschaft, im Negativ, und jedes singt mit seiner Stimme.",
+   "stimme": "chorknabe",
+   "kniff": {"art": "nachlass", "was": "teilt", "gegner": "splitterchor", "why": "Bricht eine Platte, hat jede Hälfte das ganze Gesicht. Jetzt singen zwei."},
+   "beute": "spiegelscherbe",
+   "beute_satz": "Die letzte Scherbe hört mitten im Ton auf. Auf ihr ist jetzt ein Gesicht mehr.",
+   "quelle": "skript"
+  },
+  "vorhergehende": {
+   "n": "Der Vorhergehende",
+   "biom": "glasmeer",
+   "rang": "normal",
+   "hp": 30,
+   "weak": "V",
+   "pat": [{"t": "atk", "v": 10}, {"t": "atk", "v": 5, "h": 2}, {"t": "blk", "v": 9}, {"t": "buff", "v": 2}],
+   "sprite": "vorhergehende_a",
+   "varianten": ["vorhergehende_a", "vorhergehende_b"],
+   "konzept": "Der Kundschafter der Expedition, der mit der Eisstange vorausging. Unter ihm im Glas steht sein Spiegelbild und holt schon aus, während er noch steht.",
+   "stimme": "nachgeher",
+   "kniff": {"art": "verborgen", "why": "Was er tut, hat sein Spiegelbild schon getan. Du siehst nur die Hälfte davon."},
+   "beute": "schneebrille",
+   "beute_satz": "Er fällt. Sein Spiegelbild liegt schon eine Weile.",
+   "quelle": "skript"
+  },
+  "leithund": {
+   "n": "Der Leithund",
+   "biom": "glasmeer",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "F",
+   "pat": [{"t": "atk", "v": 4, "h": 3}, {"t": "atk", "v": 9}, {"t": "blk", "v": 7}],
+   "sprite": "leithund_a",
+   "varianten": ["leithund_a", "leithund_b"],
+   "konzept": "Der Leithund des Gespanns, noch im Geschirr, auf zu langen Beinen. Sein Fell ist Glas geworden und wächst zum Kopf hin; er sieht immer nach unten, auf das, was unter ihm läuft.",
+   "stimme": "nest",
+   "kniff": {"art": "dornen", "v": 3, "why": "Sein Fell ist Glas und steht gegen den Strich. Wer oft zuschlägt, schneidet sich oft."},
+   "beute": "polarlicht",
+   "beute_satz": "Die Leine hinter ihm wird schlaff. Im Glas zieht etwas sie langsam ein.",
+   "quelle": "skript"
+  },
+  "voraus": {
+   "n": "Der Voraus",
+   "biom": "glasmeer",
+   "rang": "waechter",
+   "hp": 70,
+   "weak": "L",
+   "pat": [{"t": "atk", "v": 10}, {"t": "blk", "v": 12}, {"t": "atk", "v": 4, "h": 3}, {"t": "buff", "v": 2}, {"t": "atk", "v": 14}],
+   "sprite": "voraus",
+   "varianten": ["voraus"],
+   "konzept": "Dein Spiegelbild als Reisender von 1925, ganz aus schwarzem Glas, grünes Licht in den Bruchkanten. Er hält deine nächsten Karten schon in der Hand. Hinter ihm steht sein Nachbild, dort, wo er eigentlich noch sein müsste.",
+   "stimme": "rufer",
+   "kniff": {"art": "voraus", "why": "Er spielt deine nächste Karte, bevor du sie ziehst. Nur was du selten tust, sieht er nicht kommen."},
+   "beute": "taschenspiegel",
+   "beute_satz": "Er zerspringt, und in jeder Scherbe stehst du, einen Schritt hinter ihm. Dann holst du auf.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "glasmeer_schritt",
+   "t": "Ein Schritt",
+   "d": "Du bleibst stehen. Dein Spiegelbild im Glas macht noch einen Schritt, dann bleibt es auch stehen und dreht sich halb zu dir um, als wartete es.",
+   "bild": "Eine Gestalt auf schwarzem, spiegelglattem Glas, darunter ihr Spiegelbild, das einen Schritt weiter vorn steht und sich umsieht.",
+   "o": [
+    {"l": "Dorthin treten, wo es steht: eine Karte kostet dauerhaft 1 weniger, −5 max. Leben", "fx": [{"op": "schleifen"}, {"op": "max_hp", "v": -5}]},
+    {"l": "Warten, bis es dir zeigt, was es gerade tut: einen Handgriff lernen, −4 Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "lose_hp", "v": 4}]},
+    {"l": "Die Augen schließen und weitergehen: +6 Leben", "fx": [{"op": "heal", "v": 6}]}
+   ]
+  },
+  {
+   "id": "glasmeer_gestalt",
+   "t": "Die Gestalt unter dem Glas",
+   "d": "Neben dir im Spiegelbild steht jemand, so groß, dass sein Kopf aus dem Bild ragt. Neben dir steht niemand. Unter dem Glas, an derselben Stelle, liegt etwas Langes auf dem Rücken, mit offenen Augen.",
+   "bild": "Spiegelglattes Glas, darin das Spiegelbild einer riesigen Gestalt neben einem kleinen Menschen; unter der Oberfläche schwach ein langer, liegender Umriss.",
+   "o": [
+    {"l": "Die Hand flach auf das Glas legen: eine Reliquie, −10 Leben, −4 max. Leben", "fx": [{"op": "reliquie"}, {"op": "lose_hp", "v": 10}, {"op": "max_hp", "v": -4}]},
+    {"l": "Mit der Sturmlaterne hineinleuchten: +1 Kerbe an einem Item, +20 Gold", "fx": [{"op": "kerbe"}, {"op": "gold", "v": 20}], "if": {"item": "lantern"}},
+    {"l": "Nach oben sehen, auf das Eis: +1 Kerbe an einem Item, −5 Leben", "fx": [{"op": "kerbe"}, {"op": "lose_hp", "v": 5}]}
+   ]
+  },
+  {
+   "id": "glasmeer_lager",
+   "t": "Das Lager der Expedition",
+   "d": "Ein Zelt, halb im Glas versunken, als wäre es in Wasser gesunken und dann gefroren. Drinnen ein Tagebuch. Die letzte Seite ist in deiner Handschrift: »Wir gehen voraus. Er holt uns ein.«",
+   "bild": "Ein schräges Segeltuchzelt, bis zur Mitte in schwarzem Glas, davor ein Schlitten mit gerissener Plane und ein aufgeschlagenes Buch.",
+   "o": [
+    {"l": "Die Schneebrille vom Zeltpfosten nehmen", "fx": [{"op": "give_item", "item": "schneebrille"}]},
+    {"l": "Weiterlesen, auch die Seiten danach: einen Handgriff lernen, −3 Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "lose_hp", "v": 3}]},
+    {"l": "Den Proviant essen. Er ist noch warm: +12 Leben", "fx": [{"op": "heal", "v": 12}]}
+   ]
+  },
+  {
+   "id": "glasmeer_platte",
+   "t": "Die belichtete Platte",
+   "d": "Auf einem Dreibein steht eine Plattenkamera, das Tuch zurückgeschlagen. Die Kassette ist belichtet. Wer sie entwickelt, sieht im Negativ ein Gesicht, hell, wo es dunkel sein müsste. Es ist deines, und es singt.",
+   "bild": "Eine Plattenkamera auf einem Dreibein auf schwarzem Glas, das schwarze Tuch weht nicht, daneben eine Kiste mit zerbrochenen Glasplatten.",
+   "stummfilm": true,
+   "o": [
+    {"l": "Die Platte zerbrechen: Kampf gegen den Splitterchor, danach ein seltenes Item", "fx": [{"op": "fight", "foes": ["splitterchor"]}, {"op": "give_rare"}]},
+    {"l": "Die Platte behalten: Spiegelscherbe, −6 max. Leben", "fx": [{"op": "give_item", "item": "spiegelscherbe"}, {"op": "max_hp", "v": -6}]},
+    {"l": "Das Tuch über die Kamera legen und gehen: +15 Gold aus der Kiste", "fx": [{"op": "gold", "v": 15}]}
+   ]
+  },
+  {
+   "id": "glasmeer_leine",
+   "t": "Die Leine",
+   "d": "Eine Zugleine liegt auf dem Glas, straff, und verschwindet schräg darin, als wäre das Glas Wasser. Am anderen Ende, tief unten, zieht etwas. Es zieht in die Richtung, aus der du kommst.",
+   "bild": "Eine straffe Hundeleine aus Leder, die schräg in eine glatte schwarze Fläche taucht; darunter grünes Licht.",
+   "o": [
+    {"l": "Daran ziehen: Kampf gegen den Leithund, danach Polarlicht im Glas", "fx": [{"op": "fight", "foes": ["leithund"]}, {"op": "give_item", "item": "polarlicht"}]},
+    {"l": "Mit der Glasscherbe durchschneiden: einen Handgriff in ein anderes Item umritzen, +25 Gold", "fx": [{"op": "umritzen"}, {"op": "gold", "v": 25}], "if": {"item": "glasscherbe"}},
+    {"l": "Die Leine um dein Handgelenk legen und mitgehen lassen: ein Item tauschen, −6 Leben", "fx": [{"op": "item_tausch"}, {"op": "lose_hp", "v": 6}]}
+   ]
+  },
+  {
+   "id": "glasmeer_wartet",
+   "t": "Es wartet",
+   "d": "Dein Spiegelbild steht still, diesmal vor dir. Es hat dir etwas aufgehoben und hält es hin, mit der falschen Hand. Es lächelt einen Augenblick, bevor du es tust.",
+   "bild": "Ein Spiegelbild im schwarzen Glas, das einen Gegenstand nach oben reicht, die Hand dicht unter der Oberfläche.",
+   "o": [
+    {"l": "Nehmen, was es dir aufgehoben hat: eine Reliquie, −8 max. Leben", "fx": [{"op": "reliquie"}, {"op": "max_hp", "v": -8}], "if": {"event_gesehen": "glasmeer_schritt"}},
+    {"l": "Ihm im Tausch etwas geben: ein Item tauschen", "fx": [{"op": "item_tausch"}]},
+    {"l": "Dich wegdrehen, bevor es das tut: +5 Leben, +10 Gold", "fx": [{"op": "heal", "v": 5}, {"op": "gold", "v": 10}]}
+   ]
+  }
+ ],
+ "items": {
+  "glasscherbe": {
+   "n": "Glasscherbe",
+   "a": "waffe",
+   "st": ["B"],
+   "spr": "knife",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 20,
+   "flavor": "Schwarz, schärfer als jedes Messer. In der Bruchkante sieht man seine Hand einen Augenblick, bevor man schneidet.",
+   "cards": [{"n": "Scherbenschnitt", "c": 1, "atk": 3, "h": 2}]
+  },
+  "polarlicht": {
+   "n": "Polarlicht im Glas",
+   "a": "talisman",
+   "st": ["L"],
+   "spr": "lantern",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {"typ": "verwundbar_start", "v": 1},
+   "flavor": "Eine Kugel aus schwarzem Glas, darin ein grüner Vorhang, der sich bewegt. Wohin er weht, ist die Welt dünn.",
+   "cards": [{"n": "Grünes Licht", "c": 1, "atk": 3, "vuln": 2, "draw": 1}]
+  },
+  "spiegelscherbe": {
+   "n": "Spiegelscherbe",
+   "a": "talisman",
+   "st": ["G"],
+   "spr": "tarot",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {"typ": "reaktion_schaden", "v": 1},
+   "flavor": "Ein Stück einer belichteten Glasplatte. Wer hineinsieht, sieht ein Gesicht, das ihm erst morgen gehört.",
+   "cards": [{"n": "Zurückwerfen", "c": 1, "blk": 6, "kette": 1}]
+  },
+  "schneebrille": {
+   "n": "Schneebrille",
+   "a": "kleidung",
+   "st": ["S"],
+   "spr": "cap",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 22,
+   "flavor": "Holz mit zwei Schlitzen, mit Ruß geschwärzt. Sie schützt vor dem Licht, das von unten kommt, aber nicht vor dem, was man darin sieht.",
+   "cards": [{"n": "Durch den Schlitz", "c": 1, "blk": 5, "draw": 1}]
+  },
+  "taschenspiegel": {
+   "n": "Taschenspiegel des Reisenden",
+   "a": "talisman",
+   "st": ["L"],
+   "spr": "watch",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 120,
+   "nodrop": true,
+   "eigen": {"typ": "kette_start", "v": 1},
+   "flavor": "Klappt man ihn auf, sieht man sich, wie man gleich aussehen wird. Man gewöhnt sich daran, sich selbst hinterherzugehen.",
+   "cards": [{"n": "Vorausspielen", "c": 1, "atk": 3, "kette": 2, "behalten": true}]
+  }
+ },
+ "handgriffe": {},
+ "skripte": ["js/scenes/world/glasmeer.js"]
+}

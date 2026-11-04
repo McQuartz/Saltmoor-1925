@@ -26,7 +26,7 @@ function zahnrad(K, eb, cx, cy, R, o) {
     const a = Math.atan2(v, u) + rot;
     if (rr > R) { const f = ((a / TAU * n) % 1 + 1) % 1; const z = f < 0.1 ? f / 0.1 : f < 0.45 ? 1 : f < 0.55 ? 1 - (f - 0.45) / 0.1 : 0; return rr < R + th * z; }
     if (rr > R - kr || rr < nb) return true;
-    if (o.voll) return true;
+    if (o.voll) return true; // Scheibe: Speichen nur als Rillen (muster)
     const s = ((a / TAU * sp) % 1 + 1) % 1, d = Math.min(s, 1 - s) * TAU / sp * rr; return d < (o.speiche || R * 0.045) + (R - rr) * 0.03;
   };
   const bb = [cx - R - th - 10, cy - (R + th) * sy - 10, cx + R + th + 10, cy + (R + th) * sy + 10];
@@ -35,13 +35,15 @@ function zahnrad(K, eb, cx, cy, R, o) {
   K.form(eb, hinten, (o.tiefe || 0) + 0.04, { k: BRONZE.slice(0, 5), ton: 1.2, fase: 0, rand: 2, verlauf: 0.3 });
   const vorn = B.maske(); vorn.fn(bb[0], bb[1], bb[2], bb[3], (x, y) => innen(x, y, 0, 0));
   K.form(eb, vorn, o.tiefe || 0, { k: BRONZE.slice(1, 8), ton: o.ton || 2.2, fase: Math.max(1.5, R * 0.012), rand: 2, schatten: 2, verlauf: 0.6,
-    muster: (x, y) => { const u = x - cx, v = (y - cy) / sy, rr = Math.hypot(u, v); return (Math.abs(rr - (R - kr)) < 1.2 || Math.abs(rr - nb) < 1.2 ? -1.2 : 0) + (B.fbm(x * 0.05, y * 0.05, 7, 2) - 0.5) * 0.9; } });
+    muster: (x, y) => { const u = x - cx, v = (y - cy) / sy, rr = Math.hypot(u, v); let t = (Math.abs(rr - (R - kr)) < 1.2 || Math.abs(rr - nb) < 1.2 ? -1.2 : 0) + (B.fbm(x * 0.05, y * 0.05, 7, 2) - 0.5) * 0.9;
+      if (o.voll && rr < R - kr && rr > nb) { const a = Math.atan2(v, u) + rot, s2 = ((a / TAU * sp) % 1 + 1) % 1, d2 = Math.min(s2, 1 - s2) * TAU / sp * rr; t += d2 < 1.3 ? -1.6 : d2 < 3 ? 0.6 : -0.9 - (1 - rr / R) * 0.8; }
+      return t; } });
   return { innen, R, th, cx, cy, n, rot, sy };
 }
 // Handabdruck mit sieben Fingern, auf eine Fläche gedrückt; die Kuppen leuchten schwach (Phosphoröl)
 function abdruck(K, eb, x, y, s, winkel, hell) {
   // Blank gegriffen: wo die Hand lag, ist der Grünspan weg und die Bronze glänzt
-  const e = K.e[eb], f1 = B.pk(BLANK[1]), f2 = B.pk(BLANK[2]), f3 = B.pk(BLANK[3]), ph = B.pk(PHOS), pg = B.pk(PHOS_G);
+  const e = K.e[eb], f0 = B.pk(BLANK[0]), f1 = B.pk(BLANK[1]), f2 = B.pk(BLANK[2]), ph = B.pk(PHOS), pg = B.pk(PHOS_G);
   const ca = Math.cos(winkel || 0), sa = Math.sin(winkel || 0), T = (u, v) => [x + u * ca - v * sa, y + u * sa + v * ca];
   const m = B.maske();
   for (let v = -3 * s; v <= 3 * s; v += 0.4) for (let u = -4 * s; u <= 4 * s; u += 0.4) if ((u / (4 * s)) ** 2 + (v / (3 * s)) ** 2 <= 1) { const [px, py] = T(u, v); m.put(Math.floor(px), Math.floor(py), 1); m._grow(Math.floor(px), Math.floor(py), Math.floor(px), Math.floor(py)); }
@@ -53,7 +55,7 @@ function abdruck(K, eb, x, y, s, winkel, hell) {
   }
   for (let py = m.y0; py <= m.y1; py++) for (let px = m.x0; px <= m.x1; px++) if (m.has(px, py)) {
     const rand = !m.has(px + 1, py - 1) || !m.has(px + 1, py); const innen = !m.has(px - 1, py + 1);
-    e.set(px, py, rand ? f3 : innen ? f1 : (B.bay(px, py) > 0.55 ? f2 : f1));
+    e.set(px, py, rand ? f2 : innen ? f0 : (B.bay(px, py) > 0.7 ? f2 : f1));
   }
   kuppen.forEach(([tx, ty], i) => { if (hell && i % 2 === 0) { e.set(tx, ty, ph); B.gluehen(e, tx, ty, 3 + s, PHOS_G, 0.6); } else if (hell) e.set(tx, ty, pg); });
 }
@@ -130,9 +132,9 @@ function hauptrad(K, cfg) {
   if (!nah) { zahnrad(K, 1, 70, 40, 70, { n: 22, th: 7, sp: 5, tiefe: 0.7, rot: 0.2 }); zahnrad(K, 1, 150, 96, 38, { n: 14, th: 5, sp: 5, tiefe: 0.75 }); }
   // Ebene 2: das Hauptrad, Mitte unter dem Boden
   const R = nah ? 300 : 250, cx = nah ? 230 : 250, cy = nah ? 330 : 300;
-  const rad = zahnrad(K, 2, cx, cy, R, { n: 48, th: 26, sp: 7, kranz: 34, nabe: 46, tiefe: 0.18, rot: 0.03, speiche: 10, dicke: [9, -7] });
+  const rad = zahnrad(K, 2, cx, cy, R, { n: 48, th: 26, sp: 7, kranz: 34, nabe: 46, tiefe: 0.18, rot: 0.03, speiche: 10, dicke: [9, -7], voll: true });
   // Abdrücke im Grünspan des Kranzes: Hände mit sieben Fingern, so groß wie Menschen? Nein: so groß wie Hände.
-  for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 - 0.62 + i * 0.27 + B.hash(i, 3, sd) * 0.05, rr = R - 15; abdruck(K, 2, cx + Math.cos(a) * rr, cy + Math.sin(a) * rr + 2, 1.7, a + Math.PI / 2, i % 2 === 1); }
+  for (let i = 0; i < 4; i++) { const a = -Math.PI / 2 - 0.5 + i * 0.33 + B.hash(i, 3, sd) * 0.05, rr = R - 15; abdruck(K, 2, cx + Math.cos(a) * rr, cy + Math.sin(a) * rr + 2, 1.7, a + Math.PI / 2, i % 2 === 1); }
   // Zeiger oben: ein Arm aus Bronze, der auf die nächste Lücke zeigt; an der Spitze ein Phosphorpunkt
   const zx = cx + 40, zy = cy - R - 34, zm = B.maske(); zm.kap(zx + 110, -M, zx + 60, zy - 30, 6, 5); zm.kap(zx + 60, zy - 30, zx + 4, zy + 8, 5, 2); zm.ell(zx + 60, zy - 30, 8, 8);
   K.form(2, zm, 0.12, { k: BRONZE.slice(1), r: pal.rand, ton: 2, fase: 1.5, rand: 2, schatten: 2 });
@@ -192,7 +194,7 @@ function schleusen(K) {
   B.nebel(K.e[2], { y0: yW - 26, y1: yW + 10, col: B.mix(pal.nebel[1], K.fern, 0.35), dichte: 0.3, xs: [-20, 500, 60], seed: 6 });
   B.partikel(K, { n: 24, farben: [PHOS_G, HIMMEL[6]], vx: 0, vy: -3, wob: 2, wf: 0.3, x0: 0, x1: 480, y0: 40, y1: 200, p: 0.8, blink: 0.7 });
   K.reihen = [{ y: 172, skala: 0.9, nebel: 0.3 }, { y: 193, skala: 1, nebel: 0.12 }, { y: 214, skala: 1, nebel: 0 }];
-  return { mitte: [240, 206], P };
+  return { mitte: [318, 206], P };
 }
 
 // Variante 2: Im Eingriff. Zwei Räder links und rechts, ihre Zähne greifen über uns ineinander. Wir stehen
@@ -201,11 +203,12 @@ function eingriff(K) {
   const fr = K.fr, sd = K.o.seed, P = B.persp(250, 150); K.split = [168, 178];
   B.feld(K.e[0], -M, -M, W + M, H + M, HIMMEL, (x, y) => 0.14 + 0.4 * Math.pow((x + M) / (W + 2 * M), 2) * (1 - y / 190) + (B.fbm(x * 0.02, y * 0.03, sd + 2, 3) - 0.5) * 0.2);
   zulauf(K, 300, -M, 120, 10);
-  zahnrad(K, 1, 260, 260, 150, { n: 36, th: 12, sp: 7, kranz: 18, nabe: 24, tiefe: 0.72, speiche: 6 });
+  zahnrad(K, 1, 330, 250, 120, { n: 30, th: 10, sp: 7, kranz: 14, nabe: 20, tiefe: 0.75, speiche: 5, voll: false });
   // die beiden großen Räder, Zähne greifen bei x ~ 250 ineinander
-  zahnrad(K, 2, 430, 18, 210, { n: 40, th: 20, sp: 7, kranz: 26, nabe: 34, tiefe: 0.22, rot: 0.11, speiche: 8, dicke: [7, -5] });
-  zahnrad(K, 3, 38, 40, 160, { n: 30, th: 20, sp: 7, kranz: 24, nabe: 30, tiefe: 0.08, rot: 0.05, speiche: 7, dicke: [7, -5] });
-  for (let i = 0; i < 4; i++) { const a = -0.25 + i * 0.3, rr = 146; abdruck(K, 3, 38 + Math.cos(a) * rr, 40 + Math.sin(a) * rr, 1.6, a + Math.PI / 2, i === 1 || i === 3); }
+  // zwei Räder greifen oben bei (196, 34) ineinander; das rechte steht weiter hinten
+  zahnrad(K, 2, 400, 0, 190, { n: 38, th: 18, sp: 7, kranz: 24, nabe: 32, tiefe: 0.2, rot: 0.05, speiche: 8, dicke: [7, -5], voll: true });
+  zahnrad(K, 3, 40, 60, 140, { n: 28, th: 18, sp: 7, kranz: 22, nabe: 26, tiefe: 0.04, rot: 0.02, speiche: 7, dicke: [7, -5] });
+  for (let i = 0; i < 4; i++) { const a = -0.55 + i * 0.32, rr = 128; abdruck(K, 3, 40 + Math.cos(a) * rr, 60 + Math.sin(a) * rr, 1.6, a + Math.PI / 2, i === 1 || i === 3); }
   // Steg: schmal, Gitter, Geländer; darunter Kanal
   const yS = P.q(0, 0, 10)[1];
   B.feld(K.e[2], -M, yS - 4, W + M, yS + 6, WASSER, (x, y) => 0.4 + (B.fbm(x * 0.05, y * 0.3, sd, 2) - 0.5) * 0.4);

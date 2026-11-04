@@ -1,13 +1,14 @@
-// Abrollen: ein Arm schützt den Kopf, der Körper rollt über die Schulter ab; Staub stiebt vom Boden.
+// Abrollen: der Rücken rundet sich zur Rolle über die Schulter, die flache Hand schlägt seitlich auf den Boden ab,
+// links und rechts stiebt Staub. Wie man es nur einmal beigebracht bekommt.
 'use strict';
 module.exports = {
   w: 48, h: 32,
   form(A) {
-    const { E, faust, Pg, armGruppen } = A;
+    const { hand, Pg, kurve, armGruppen } = A;
     const boden = [Pg([[0, 29], [48, 29], [48, 32], [0, 32]], null, { b: 0.6 })];
-    const ruecken = [E(22, 18, 12, 10, null, { pf: 'bevel', hz: 0.4 })];
-    const f = faust({ x: 12, y: 6, a: 0.4, s: 1.2, seite: 1, arm: 10 });
-    return { gruppen: [{ p: boden, mat: 'stein', k: 0, tone: -0.15 }, { p: ruecken, mat: 'stoff', k: 0 }, ...armGruppen(f, 'stoff'), { p: f.alle(), mat: 'haut', k: 1 }],
-      details(P) { P.rauch(38, 26, 5, 'stein2', 0.45); P.rauch(44, 23, 3, 'stein1', 0.35); P.ritz(14, 12, 26, 26, -1); for (let a = 3.6; a < 5.2; a += 0.15) P.set(22 + Math.cos(a) * 15, 18 + Math.sin(a) * 13, 'a1'); } };
+    const ruecken = kurve([[22, 27], [20, 10], [34, 4], [44, 14], [40, 26]], 5, 4, null, { cr: true }, 20);
+    const h = hand({ x: 18, y: 22, a: Math.PI - 0.35, s: 1.4, seite: -1, curl: [0, 0, 0.03, 0.06], spreiz: 0.12, daumen: 0.2, arm: 10 });
+    return { gruppen: [{ p: boden, mat: 'stein', k: 0, tone: -0.15 }, { p: ruecken, mat: 'stoff', k: 2 }, ...armGruppen(h, 'stoff'), { p: h.alle(), mat: 'haut', k: 1 }],
+      details(P) { P.rauch(2, 25, 3.5, 'stein2', 0.5); P.rauch(13, 24, 3, 'stein1', 0.4); P.rauch(46, 25, 3, 'stein2', 0.4); P.ritz(26, 12, 38, 9, -1); } };
   },
 };

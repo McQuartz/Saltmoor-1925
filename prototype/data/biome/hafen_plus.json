@@ -1,17 +1,46 @@
 {
  "id": "hafen_plus",
  "ergaenzt": "hafen",
- "gegner_dazu": ["taucher"],
+ "gegner_dazu": [
+  "taucher"
+ ],
  "gegner_weg": [],
- "fundpool_dazu": ["sichtglas"],
+ "fundpool_dazu": [
+  "sichtglas"
+ ],
  "foes": {
   "taucher": {
-   "n": "Der Helmtaucher", "biom": "hafen", "rang": "normal", "hp": 27, "weak": "E",
-   "pat": [{"t": "atk", "v": 7}, {"t": "blk", "v": 6}, {"t": "atk", "v": 3, "h": 2}],
-   "sprite": "taucher_a", "varianten": ["taucher_a", "taucher_b"],
+   "n": "Der Helmtaucher",
+   "biom": "hafen",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 2
+    }
+   ],
+   "sprite": "taucher_a",
+   "varianten": [
+    "taucher_a",
+    "taucher_b"
+   ],
    "konzept": "Der Hafentaucher, dem man 1919 oben den Luftschlauch gekappt hat, als er an der Leine ruckte. Sechs Jahre später steigt er die Kaileiter herauf; im Sichtglas steht Wasser, und aus dem Ventil steigen trotzdem Blasen.",
    "stimme": "ertrunkener",
-   "kniff": {"art": "brecher", "why": "Bleischuhe und zwanzig Pfund auf der Brust: Wo er hinschlägt, gibt jeder Schutz nach."},
+   "kniff": {
+    "art": "brecher",
+    "why": "Bleischuhe und zwanzig Pfund auf der Brust: Wo er hinschlägt, gibt jeder Schutz nach."
+   },
    "beute": "sichtglas",
    "beute_satz": "Der Helm rollt bis an die Kaikante und bleibt liegen. Innen steht das Wasser still, und es ist warm.",
    "quelle": "skript"
@@ -24,9 +53,42 @@
    "d": "An der Kaimauer führt eine eiserne Leiter ins schwarze Wasser. Oben an der letzten Sprosse ist eine Signalleine festgeknotet, und sie ruckt. Zweimal. Von unten kommt ein Geräusch herauf, Blei auf Eisen, Sprosse um Sprosse.",
    "bild": "Eine Leiter an der nassen Kaimauer, eine straffe Leine über der Kante, im Wasser darunter ein runder Glanz wie von einem Helm.",
    "o": [
-    {"l": "Zweimal zurückrucken, das Zeichen für ‚alles gut‘: +1 Kerbe an einem Item, −5 Leben", "fx": [{"op": "kerbe"}, {"op": "lose_hp", "v": 5}]},
-    {"l": "Die Leine kappen, wie man es 1919 tat: Sichtglas des Helmtauchers, Kampf gegen den Helmtaucher", "fx": [{"op": "give_item", "item": "sichtglas"}, {"op": "fight", "foes": ["taucher"]}]},
-    {"l": "Hinunterrufen, wie spät es ist: +14 Gold. Von unten antwortet jemand mit einem Datum aus dem Jahr 1919.", "fx": [{"op": "gold", "v": 14}]}
+    {
+     "l": "Zweimal zurückrucken, das Zeichen für ‚alles gut‘: +1 Kerbe an einem Item, −5 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Die Leine kappen, wie man es 1919 tat: Sichtglas des Helmtauchers, Kampf gegen den Helmtaucher",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "sichtglas"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "taucher"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Hinunterrufen, wie spät es ist: +14 Gold. Von unten antwortet jemand mit einem Datum aus dem Jahr 1919.",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 14
+      }
+     ]
+    }
    ]
   },
   {
@@ -35,19 +97,65 @@
    "d": "Im Bootshaus hängt ein Logbuch an einem Nagel, aufgeschlagen. Der letzte Eintrag endet mitten im Wort. Darunter ist Platz gelassen, genau eine Zeile, und der Bleistift liegt bereit, frisch gespitzt.",
    "bild": "Ein aufgeschlagenes, gewelltes Logbuch an einem Nagel über der Werkbank, ein Bleistift auf dem Sims, durchs Fenster der Kai bei Nacht.",
    "o": [
-    {"l": "Du kennst diesen Kutter. Den Satz zu Ende schreiben: einen Handgriff lernen", "fx": [{"op": "handgriff", "zufall": true}], "if": {"event_gesehen": "hafen_kutter"}},
-    {"l": "Die leere Zeile herausreißen: eine Karte kostet dauerhaft 1 weniger, −6 max. Leben", "fx": [{"op": "schleifen"}, {"op": "max_hp", "v": -6}]},
-    {"l": "Das Buch zuklappen und ins Wasser werfen: +6 Leben", "fx": [{"op": "heal", "v": 6}]}
+    {
+     "l": "Du kennst diesen Kutter. Den Satz zu Ende schreiben: einen Handgriff lernen",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      }
+     ],
+     "if": {
+      "event_gesehen": "hafen_kutter"
+     }
+    },
+    {
+     "l": "Die leere Zeile herausreißen: eine Karte kostet dauerhaft 1 weniger, −6 max. Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ]
+    },
+    {
+     "l": "Das Buch zuklappen und ins Wasser werfen: +6 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ]
+    }
    ]
   }
  ],
  "items": {
   "sichtglas": {
-   "n": "Sichtglas des Helmtauchers", "a": "talisman", "st": ["W"], "spr": "divinghelm",
-   "rar": "selten", "kerben": 2, "preis": 42,
-   "eigen": {"typ": "block_haelt_halb"},
+   "n": "Sichtglas des Helmtauchers",
+   "a": "talisman",
+   "st": [
+    "W"
+   ],
+   "spr": "divinghelm",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "block_haelt_halb"
+   },
    "flavor": "Innen beschlagen, außen trocken. Wer hindurchsieht, sieht den Kai von unten, und jemand sieht zurück.",
-   "cards": [{"n": "Durchs Glas", "c": 1, "blk": 6, "draw": 1}]
+   "cards": [
+    {
+     "n": "Durchs Glas",
+     "c": 1,
+     "blk": 6,
+     "draw": 1
+    }
+   ]
   }
  }
 }

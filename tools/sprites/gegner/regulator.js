@@ -72,12 +72,12 @@ module.exports = {
       { p: wirbel, k: 0.8, kante: true },
       { p: spitze, k: 0 },
       { p: linse, k: 0, kante: true },
-      { p: ruecken, k: 1.5, kante: true },
+      { p: ruecken, k: 1.5, kante: true, tone: 0.22 },
       { p: wirbelR, k: 0, noRim: true, tone: 0.1 },
-      { p: knie, k: 1.2, kante: true },
+      { p: knie, k: 1.2, kante: true, tone: 0.18 },
       { p: kopf, k: 0, kante: true },
       { p: schaedelnaht, k: 0, noRim: true },
-      { p: arm, k: 0.6, kante: true },
+      { p: arm, k: 0.6, kante: true, tone: 0.15 },
       { p: finger, k: 0, kante: true },
     ];
     const LINSE = 7, KOERPER0 = 8;
