@@ -9,6 +9,8 @@ const HIMMEL = ['#040308', '#07060d', '#0c0a16', '#120e20', '#1a142c', '#231c3a'
 const TORF = ['#040306', '#08060c', '#0e0b14', '#15111c', '#1e1828', '#2a2238', '#3a3050'];
 const MWASSER = ['#020304', '#05080b', '#0a1014', '#121a22', '#1c2434', '#2a3048', '#3c4060'];
 const HOLZ = ['#050408', '#0b0910', '#141019', '#1e1824', '#2a2232', '#3a3046'];
+// Torfstich (Variante 1): eigene, hellere Rampe, damit Figuren vor Stichwand und Grabenboden lesbar bleiben (Mo: zu dunkel)
+const TORF_STICH = ['#07060a', '#0d0b13', '#15111d', '#1e1929', '#292236', '#362e46', '#463c5a', '#5a4e72'];
 const STERNE = ['#3a3058', '#6a5a9a', '#b0a0d8', '#f0e8ff'];
 const FREMD = ['#2a6a5a', '#5ac0a0', '#9affe0', '#e0fff4'];
 
@@ -65,10 +67,10 @@ function irrlichter(K, liste) {
     K.anim.push({ p: .15, f(ctx, t, ox, oy) { const v = Math.sin(t * .6 + ph); if (v < -.2) return; const dx = Math.sin(t * .23 + ph) * 6, dy = Math.sin(t * .41 + ph * 2) * 2; ctx.globalCompositeOperation = 'lighter'; ctx.drawImage(g, Math.round(x + dx) - g.R + ox, Math.round(y + dy) - g.R + oy); ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = v > .5 ? '#9affe0' : '#5ac0a0'; ctx.fillRect(Math.round(x + dx) + ox, Math.round(y + dy) + oy, 1, 1); } });
   }
 }
-function torfstapel(K, eb, x, yb, s, tiefe) {
+function torfstapel(K, eb, x, yb, s, tiefe, mat) {
   const m = B.maske(); let h = 0;
   for (let reihe = 0; reihe < 4; reihe++) { const n = 4 - reihe; for (let i = 0; i < n; i++) m.rect(x - n * 3 * s + i * 6 * s + reihe * .5, yb - (reihe + 1) * 3.2 * s, 5.4 * s, 3 * s); h += 3.2 * s; }
-  K.form(eb, m, tiefe, { ton: 1.3, fase: 0, schatten: 2, muster: (px, py) => (B.hash(px >> 1, py >> 1, 4) - .5) * .5 });
+  K.form(eb, m, tiefe, Object.assign({ ton: 1.3, fase: 0, schatten: 2, muster: (px, py) => (B.hash(px >> 1, py >> 1, 4) - .5) * .5 }, mat || {}));
 }
 function laternePfahl(K, eb, x, yb, h) {
   const m = B.maske(); m.kap(x, yb, x + 1, yb - h, 1.2, .9); m.kap(x + 1, yb - h, x + 7, yb - h + 1, .8, .8); m.kap(x + 7, yb - h + 1, x + 7, yb - h + 5, .4, .4); m.rect(x + 5, yb - h + 5, 5, 6);
@@ -147,11 +149,19 @@ function torfstich(K) {
     const { X, Y } = wand[i], Yu = i ? wand[i - 1].Y : -.05, m = B.maske();
     m.poly([P.q(X, Yu, .8), P.q(X, Y, .8), P.q(X, Y, 80), P.q(X, Yu, 80)]);
     // Stichfläche (zeigt zur Grabenmitte) mit waagerechten Spatenspuren
-    const mus = (x, y) => { const Z = (x - P.vx) > 1 ? X * P.h / (x - P.vx) : 80, Yw = 1 - (y - P.vy) * Z / P.h; return ((Math.floor(Yw * 6) & 1) ? .25 : 0) + (B.hash(x >> 1, y, 2) - .5) * .3 + (Math.floor(Z * 2.2) % 3 === 0 ? -.2 : 0); };
-    K.form(i ? 2 : 3, m, .04 + i * .06, { ton: 1.6 + i * .3, fase: 2, verlauf: .5, muster: mus, k: TORF.slice(0, 6), schatten: 0 });
+    // Spatenspuren als hellere Bänder, Stichkanten (alle paar Spatenbreiten) als dunkle Fuge mit Licht darüber
+    const mus = (x, y) => { const Z = (x - P.vx) > 1 ? X * P.h / (x - P.vx) : 80, Yw = 1 - (y - P.vy) * Z / P.h, band = Yw * 6 - Math.floor(Yw * 6); return (band < .5 ? .55 : 0) + (band > .9 ? -.6 : 0) + (B.hash(x >> 1, y, 2) - .5) * .35 + (Math.floor(Z * 2.2) % 3 === 0 ? -.35 : 0) + ((Z * 2.2) % 1 < .12 ? .5 : 0); };
+    K.form(i ? 2 : 3, m, .04 + i * .06, { ton: 2.5 + i * .35, fase: 3, verlauf: .9, muster: mus, k: TORF_STICH, schatten: 2, rand: 2, rimF: .15 });
+    // Oberkante jeder Stufe: Gegenlicht vom Himmel als Randlicht, nach hinten in Nebelfarbe
+    const kan = B.maske(); kan.poly([P.q(X - .02, Y, .8), P.q(X + .02, Y + .04, .8), P.q(X + .02, Y + .04, 80), P.q(X - .02, Y, 80)]);
+    const e = K.e[i ? 2 : 3], rc = [B.pk(pal.rand[0]), B.pk(B.mix(pal.rand[0], pal.rand[1], .45))];
+    for (let Z = .9; Z < 40; Z *= 1.012) { const [x, y] = P.q(X, Y, Z), kk = P.k(Z); e.set(Math.round(x), Math.round(y), rc[Z < 6 ? 1 : 0]); if (kk > 30) e.set(Math.round(x), Math.round(y) + 1, rc[0]); }
+    void kan;
   }
+  // nasse Glanzpunkte auf den Stichflächen (der Himmel spiegelt sich im feuchten Torf)
+  { const r2 = B.rng(K.o.seed + 91), e = K.e[3]; for (let n = 0; n < 90; n++) { const Z = r2.f(1, 9), Yw = r2.f(.1, 1.15), [x0, y0] = P.q(2.6, Yw, Z), x = Math.round(x0), y = Math.round(y0); if (!(e.get(x, y) >>> 24)) continue; e.set(x, y, B.pk(n % 3 ? '#4e426c' : '#6a5a9a')); } }
   // Torfringel auf den Stufen (zum Trocknen), dort wo gestochen wurde
-  for (const [X, Y, Z] of [[3.0, 1.2, 6.4], [3.6, 2.1, 5.0], [3.7, 2.1, 11], [4.4, 3.0, 4.2], [4.4, 3.0, 8.5], [4.3, 3.0, 20]]) { const [x, y] = P.q(X, Y, Z); torfstapel(K, 2, x, y, P.k(Z) / 30, .1); }
+  for (const [X, Y, Z] of [[3.0, 1.2, 6.4], [3.6, 2.1, 5.0], [3.7, 2.1, 11], [4.4, 3.0, 4.2], [4.4, 3.0, 8.5], [4.3, 3.0, 20]]) { const [x, y] = P.q(X, Y, Z); torfstapel(K, 2, x, y, P.k(Z) / 30, .1, { ton: 2.4, k: TORF_STICH }); }
   // Spaten steckt in der frischen Stichkante
   const [sx, sy] = P.q(2.6, .6, 2.6), sk = P.k(2.6) / 50; const sp = B.maske(); sp.kap(sx - 2, sy, sx - 12 * sk, sy - 46 * sk, 1.2, 1); sp.kap(sx - 15 * sk, sy - 46 * sk, sx - 9 * sk, sy - 46 * sk, 1.2, 1.2); sp.poly([[sx - 5, sy - 2], [sx + 4, sy - 2], [sx + 3, sy + 10 * sk], [sx - 4, sy + 10 * sk]]);
   K.form(3, sp, 0, { ton: 1.8, fase: 0 });
@@ -159,8 +169,9 @@ function torfstich(K) {
   const sd = K.o.seed, welt = (x, y) => { const Z = P.z(y + .5); return [(x + .5 - P.vx) * Z / P.h, Z]; };
   const istW = (X, Z) => B.fbm(X * .7, Z * 1.1, sd + 3, 2) > .6 && X < 2.3;
   K.bodenStoffe(125, H + M, [
-    { cols: TORF, tf: (x, y) => { const [X, Z] = welt(x, y), f = 1 - (y - 124) / 146; return .2 + Math.pow(f, 5) * .5 + (B.fbm(X * 2, Z * 3, sd, 2) - .5) * .25 + ((Z * 3) % 1 < .08 ? -.1 : 0); } },
-    { cols: MWASSER, tf: (x, y) => { const f = 1 - (y - 124) / 146; return .2 + Math.pow(f, 3) * .6; } }
+    // Grabenboden: heller als vorher; eine nasse Mittelbahn spiegelt das Gegenlicht und führt zum Fluchtpunkt
+    { cols: TORF_STICH, tf: (x, y) => { const [X, Z] = welt(x, y), f = 1 - (y - 124) / 146; const bahn = Math.max(0, 1 - Math.abs(X + .2) / 1.4) * .14; return .26 + Math.pow(f, 4) * .42 + bahn + (B.fbm(X * 2, Z * 3, sd, 2) - .5) * .25 + ((Z * 3) % 1 < .08 ? -.1 : 0) + (B.hash(x, y, 5) > .96 ? .12 : 0); } },
+    { cols: MWASSER, tf: (x, y) => { const f = 1 - (y - 124) / 146; return .36 + Math.pow(f, 3) * .5 + (Math.sin(y * 1.7 + x * .04) > .88 ? .14 : 0); } }
   ], (x, y) => { const [X, Z] = welt(x, y); if (X > 2.62) return -1; return istW(X, Z) ? 1 : 0; });
   const iw = (x, y) => { const [X, Z] = welt(x, y); return y > 125 && X < 1.6 && istW(X, Z); };
   wasserSterne(K, iw, -M, 128, 330, H, 140, [120, 200, 18]);
@@ -168,7 +179,9 @@ function torfstich(K) {
   const [bx, by] = P.q(-1.5, 0, 3.6), bk = P.k(3.6) / 40; const sk2 = B.maske();
   sk2.poly([[bx - 14 * bk, by - 12 * bk], [bx + 10 * bk, by - 14 * bk], [bx + 8 * bk, by - 4 * bk], [bx - 10 * bk, by - 3 * bk]]); sk2.ell(bx + 12 * bk, by - 3 * bk, 4 * bk, 4 * bk); sk2.kap(bx - 14 * bk, by - 10 * bk, bx - 26 * bk, by - 4 * bk, 1, 1); sk2.kap(bx - 8 * bk, by - 4 * bk, bx - 10 * bk, by, 1, 1);
   K.form(K.eb(by), sk2, 0, { ton: 1.4, schatten: 2 });
-  B.nebel(K.e[2], { y0: 104, y1: 150, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .28, xs: [-20, 360, 60], seed: 6 });
+  B.nebel(K.e[2], { y0: 104, y1: 156, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .36, xs: [-20, 360, 60], seed: 6 });
+  // Gegenlicht am Ende des Grabens: dahinter hellt es auf, damit die Figuren davor stehen
+  K.glut(236, 126, 120, '#1c1630', .8, [1, 2]);
   if (fr < .6) laternePfahl(K, 3, 120, 152, 40);
   const v = B.maske(); v.poly([[480 + M, -M], [440, -M], [452, 80], [446, 170], [458, H + M], [480 + M, H + M]]); binsen(K, 5, 20, H + 6, 2.6, 0);
   K.form(5, v, 0, { ton: .6, fase: 2, k: TORF.slice(0, 4), muster: (x, y) => ((y >> 2) & 1) * .3 });

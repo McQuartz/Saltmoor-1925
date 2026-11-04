@@ -17,8 +17,9 @@ const W = 240, H = 220, BODEN = 214;
 const bogen = (cx, cy, rx, ry, a0, a1, n) => Array.from({ length: n + 1 }, (_, i) => { const a = a0 + (a1 - a0) * i / n; return [cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]; });
 // Verlauf: hellt Körperpixel gedithert um eine Stufe auf, wo amt(x,y) über der Bayer-Schwelle liegt
 // (Licht, das von oben auf Stoff fällt; macht große dunkle Flächen lesbar, ohne Verlauf im Bild)
-function verlauf(P, bay, x0, y0, x1, y1, amt) {
-  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const c = P.get(x, y); if (c < 1 || c > 3) continue; const a = amt(x, y); if (a > bay(x, y)) P.set(x, y, c + 1); }
+function verlauf(P, bay, x0, y0, x1, y1, amt, an = [0, 0]) {
+  const ax = Math.round(an[0]), ay = Math.round(an[1]);
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const c = P.get(x, y); if (c < 1 || c > 3) continue; const a = amt(x, y); if (a > bay(x - ax, y - ay)) P.set(x, y, c + 1); }
 }
 // Spitze (Dreieck mit leichter Biegung) von (x,y) in Richtung ang, Länge l, Basisbreite b
 function spitze(Pg, x, y, ang, l, b, knick = 0, m = null) {
@@ -127,10 +128,10 @@ function koenig(p, v, A) {
   const details = P => {
     // Binnenlicht: Falten- und Lagenkanten fangen das Gegenlicht oben rechts
     // Licht fällt von oben auf den Stoff: oben heller, zum Saum hin dunkel; rechts (Lichtseite) mehr
-    verlauf(P, A.bay, 0, 0, W - 1, BODEN, (x, y) => 0.75 - (y - top) / 150 + (x - cx) / 260);
-    verlauf(P, A.bay, 0, 0, W - 1, top + 40, (x, y) => 0.35 - (y - top) / 90);
+    verlauf(P, A.bay, 0, 0, W - 1, BODEN, (x, y) => 0.75 - (y - top) / 150 + (x - cx) / 260, [lean, T]);
+    verlauf(P, A.bay, 0, 0, W - 1, top + 40, (x, y) => 0.35 - (y - top) / 90, [lean, T]);
     bahnen.forEach(b => K.licht(P, [b], { c: 'k3', c2: null }));
-    bahnen.forEach(b => K.licht(P, [b], { c: 'r1', c2: null, nur: (x, y) => y < 190 && y % 4 === 0 }));
+    bahnen.forEach(b => K.licht(P, [b], { c: 'r1', c2: null, nur: (x, y) => y < 190 && (y - Math.round(T)) % 4 === 0 }));
     K.licht(P, [pel], { c: 'r1', c2: 'k3', nur: (x, y) => y < top + 44 });
     K.schatten(P, [pel], { d: [0, 2] });
     if (kragen.length) {
@@ -142,7 +143,7 @@ function koenig(p, v, A) {
     K.licht(P, [kopf], { c: 'r1', c2: 'k3' }); K.schatten(P, [kopf], { d: [-1, 1] });
     K.licht(P, [...armL], { c: 'r1', c2: null });
     // zweites Gegenlicht von links oben (aus dem Spalt hinter ihm): dünn, gestrichelt
-    K.licht(P, [mantel, pel, ...kragen, kopf], { d: [-1, -1], c: 'r1', c2: null, nur: (x, y) => y < 200 && (x + y) % 3 !== 0 });
+    K.licht(P, [mantel, pel, ...kragen, kopf], { d: [-1, -1], c: 'r1', c2: null, nur: (x, y) => y < 200 && (x - Math.round(lean) + y - Math.round(T) + 300) % 3 !== 0 });
     // Saum: dunkle Kante, wo der Mantel den Boden berührt
     for (let x = cx - 66; x <= cx + 70; x++) P.auf(x, BODEN - 1, 'k0');
     if (!P0.aus) {
@@ -177,7 +178,7 @@ function schlund(p, v, A) {
   const cx = 120, hem = p.idle ? [0, 1, 1, 0][f] : 0;
   // auf: wie weit die Flügel nach außen klappen; mw: halbe Breite des Schlunds
   let auf = 1, mw = 19 + (p.idle ? [0, 0, 1, 1][f] : 0);
-  if (p.angriff) { auf = [0.82, 0.7, 1.12, 0.96][f]; mw = [15, 12, 30, 23][f]; lean = [2, 3, -10, -4][f]; }
+  if (p.angriff) { auf = [0.8, 0.66, 1.2, 1.0][f]; mw = [14, 10, 34, 24][f]; lean = [3, 4, -14, -5][f]; }
   if (p.treffer) { auf = 0.9; mw = 11; }
   if (p.tod) { auf = 1 - p.q * 0.3; mw = Math.max(3, 15 - p.q * 14); }
   if (v.fluegelZu) auf = 0.45;
@@ -188,12 +189,18 @@ function schlund(p, v, A) {
     const g = s > 0 ? 1.08 : 1, o = x => cx + lean * 0.5 + s * (x * auf * g);
     const innen = []; for (let y = y0; y <= y1; y += 12) innen.push([kante(y, s), y]);
     const top = q => 78 + T - (q - 16) * 1.15 * (0.6 + 0.4 * auf);
-    const aussen = [[o(16), top(16)], [o(34), top(34) + 5], [o(50), top(50) + 3], [o(64), top(64)], [o(72), top(64) + 12], [o(70), 92], [o(62), 128], [o(66), 166], [o(62), 204]];
+    const aussen = [[o(16), top(16)], [o(26), top(26) + 4], [o(34), top(34) + 3], [o(42), top(42) + 6], [o(50), top(50) + 2], [o(58), top(58) + 3], [o(64), top(64)], [o(72), top(64) + 12], [o(70), 92], [o(62), 128], [o(66), 166], [o(62), 204]];
     const sm = saum(o(62), kante(y1, s), y1 + 2, 5, 6, s > 0 ? 7 : 4, hem); if (s < 0) sm.reverse();
     const pts = s < 0 ? [...innen, ...sm.reverse(), ...aussen.slice().reverse()] : [...innen, ...sm, ...aussen.slice().reverse()];
     return Pg(pts, null, { rd: 2 });
   };
   const fl = [fluegel(-1), fluegel(1)];
+  // Fetzen: an den Außenkanten hängen Streifen herab, die sich im Takt bewegen
+  const fetzen = [];
+  for (const s of [-1, 1]) for (const [q, y, l] of [[71, 96, 30], [64, 132, 26], [68, 168, 22]]) {
+    const g = s > 0 ? 1.08 : 1, x = cx + lean * 0.5 + s * q * auf * g, sw = (p.idle ? [0, 1, 1, 0][f] : p.angriff ? [1, 2, -2, 0][f] : 0) * s;
+    fetzen.push(...glied([[x - s * 2, y], [x + s * 5 + sw, y + l * 0.5], [x + s * 4 + sw * 2, y + l]], 3.2, 0.8, null));
+  }
   // Falten im Flügel: Bahnen, die sich zur Mitte oben verjüngen (wie ein Fächer, der aufgeht)
   const bahnen = [];
   for (const s of [-1, 1]) for (const [a, b, w] of [[28, 30, 6], [44, 44, 7], [58, 54, 5]]) {
@@ -223,6 +230,7 @@ function schlund(p, v, A) {
   const arme = [...arm(-1), ...arm(1)];
   const gruppen = [
     { p: arme, k: 1.5, anker: [lean, T] },
+    { p: fetzen, k: 1, anker: [lean, T] },
     { p: rachen, k: 3, anker: [lean, T], tone: -0.3 },
     { p: [fl[0]], k: 2, anker: [lean, T], tone: 0.1 },
     { p: [fl[1]], k: 2, anker: [lean, T], tone: 0.14 },
@@ -232,18 +240,18 @@ function schlund(p, v, A) {
   ];
   const augen = [];
   const details = P => {
-    verlauf(P, A.bay, 0, 0, W - 1, BODEN, (x, y) => 0.7 - (y - y0) / 160 + Math.abs(x - cx) / 300);
+    verlauf(P, A.bay, 0, 0, W - 1, BODEN, (x, y) => 0.7 - (y - y0) / 160 + Math.abs(x - cx) / 300, [lean, T]);
     bahnen.forEach(b => K.licht(P, [b], { c: 'k3', c2: null }));
-    bahnen.forEach(b => K.licht(P, [b], { c: 'r1', c2: null, nur: (x, y) => y < 192 && y % 4 === 0 }));
-    K.licht(P, fl, { d: [-1, 0], c: 'r1', c2: 'k3', nur: (x, y) => Math.abs(x - cx) < mw + 16 }); // Innenkante zum Schlund
+    bahnen.forEach(b => K.licht(P, [b], { c: 'r1', c2: null, nur: (x, y) => y < 192 && (y - Math.round(T)) % 4 === 0 }));
+    K.licht(P, [fl[1]], { d: [-1, 0], c: 'r1', c2: 'k3', nur: (x, y) => Math.abs(x - cx) < mw + 16 }); K.licht(P, [fl[0]], { d: [1, 0], c: 'k3', c2: null, nur: (x, y) => Math.abs(x - cx) < mw + 16 }); // Innenkanten zum Schlund
     K.licht(P, zaehne, { d: [0, -1], c: 'r1', c2: null }); K.schatten(P, zaehne, { d: [0, 1] });
     K.licht(P, krone, { c: 'r2', c2: 'r1' });
     K.licht(P, arme, { d: [-1, -1], c: 'r1', c2: null });
-    K.licht(P, [...fl], { d: [-1, -1], c: 'r1', c2: null, nur: (x, y) => y < 200 && (x + y) % 3 !== 0 });
+    K.licht(P, [...fl], { d: [-1, -1], c: 'r1', c2: null, nur: (x, y) => y < 200 && (x - Math.round(lean) + y - Math.round(T) + 300) % 3 !== 0 });
     // Schlund innen: Tiefe, gedithert, nach innen dunkel; ganz innen ein magenta Schein
     for (let y = y0 + 2; y < y1 - 2; y++) {
       const a = Math.round(kante(y, -1)) + 1, b = Math.round(kante(y, 1)) - 1, m = (a + b) / 2;
-      for (let x = a; x <= b; x++) { const c = P.get(x, y); if (!c || c > 4) continue; const q = 1 - Math.abs(x - m) / Math.max(1, (b - a) / 2); P.set(x, y, q > 0.55 + A.bay(x, y) * 0.3 ? 'k0' : 'k1'); }
+      for (let x = a; x <= b; x++) { const c = P.get(x, y); if (!c || c > 4 || K.drin(zaehne, x, y)) continue; const q = 1 - Math.abs(x - m) / Math.max(1, (b - a) / 2); P.set(x, y, q > 0.55 + A.bay(x, y) * 0.3 ? 'k0' : 'k1'); }
     }
     const sy = r(124 + T), sx = r((kante(124 + T, -1) + kante(124 + T, 1)) / 2);
     if (!P0.aus) {
@@ -322,10 +330,10 @@ function auge(p, v, A) {
   ];
   const augen = [];
   const details = P => {
-    verlauf(P, A.bay, 0, 0, W - 1, BODEN, (x, y) => 0.55 - Math.abs(y - cy) / 90);
+    verlauf(P, A.bay, 0, 0, W - 1, BODEN, (x, y) => 0.55 - Math.abs(y - cy) / 90, [0, T]);
     K.licht(P, [oben], { c: 'r1', c2: 'k3' }); K.licht(P, [unten], { d: [1, -1], c: 'k3', c2: null });
     K.licht(P, zacken, { c: 'r2', c2: 'r1' }); K.licht(P, zacken, { d: [-1, -1], c: 'r1', c2: null });
-    K.licht(P, [oben, unten, ...zacken], { d: [-1, -1], c: 'r1', c2: null, nur: (x, y) => (x + y) % 3 !== 0 });
+    K.licht(P, [oben, unten, ...zacken], { d: [-1, -1], c: 'r1', c2: null, nur: (x, y) => (x + y - Math.round(T) + 300) % 3 !== 0 });
     K.schatten(P, [oben], { d: [0, 1] }); K.licht(P, kroneB, { c: 'r2', c2: 'r1' });
     // Glieder: kleines Loch in jedem liegenden Glied
     glieder.forEach(g => { if (g.rx > g.ry) P.auf(r(g.x), r(g.y), 'k0'); });

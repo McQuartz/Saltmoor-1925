@@ -109,6 +109,11 @@ module.exports = {
       // Nieten und Fugen am Trog
       for (let x = tx0 + 4; x < tx1; x += 9) { P.auf(x, ty + 5, 'r1'); P.auf(x, 110, 'k0'); }
       for (let y = ty + 3; y < 114; y++) P.auf(tx0 + 33, y, 'k0');
+      // Muskelsegmente: flache Winkel quer über den Leib (Tal dunkel, darüber ein Grat), nur auf dem Körper
+      for (let i = 3; i < pts.length - 6; i += 3) {
+        const q = i / (pts.length - 1), rad = (v.r0 + (v.r1 - v.r0) * q) * 0.8, dx = pts[i + 1][0] - pts[i][0], dy = pts[i + 1][1] - pts[i][1], l = Math.hypot(dx, dy) || 1, tx = dx / l, ty = dy / l, nx = -ty, ny = tx;
+        for (let k = -1; k <= 1; k += 0.25) { const x = pts[i][0] + nx * rad * k + tx * Math.abs(k) * 2, y = pts[i][1] + ny * rad * k + ty * Math.abs(k) * 2; const c = P.get(Math.round(x), Math.round(y)); if (c >= 1 && c <= 4) { P.set(x, y, 'k0'); const c2 = P.get(Math.round(x - tx), Math.round(y - ty)); if (c2 >= 1 && c2 <= 3) P.set(x - tx, y - ty, 'k3'); } }
+      }
       // Knöchel: blank, eine Stufe heller
       for (const [x, y] of knoechel) P.auf(x, y, 'k3');
       // Fingerabdruck auf der Lippe: sieben blanke Punkte

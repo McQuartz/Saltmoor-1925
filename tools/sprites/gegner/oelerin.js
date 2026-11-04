@@ -85,6 +85,8 @@ module.exports = {
     const augen = [];
     const details = P => {
       innenKanten(P, gid, gruppen, W, H, 'r1');
+      // Ölglanz: nasse Streifen laufen an den Graten herab (gestrichelt, eine Stufe heller), Saum dunkel getränkt
+      for (const [a0, b0, c0, d0] of [[60, top + 8, 57, 100], [68, top + 14, 69, 102], [52, top + 14, 47, 100]]) for (let t = 0.1; t < 1; t += 0.035) { if (((t * 30) | 0) % 3 === 2) continue; const x = a0 + lean + (c0 - a0) * t + 1, y = b0 + (d0 - b0) * t; const c = P.get(Math.round(x), Math.round(y)); if (c >= 1 && c <= 4) P.set(x, y, t > 0.7 && ((t * 30) | 0) % 5 === 0 ? 'r1' : 'k3'); }
       // Schnalle am Riemen
       P.auf(62 + lean, top + 16, 'bronze'); P.auf(63 + lean, top + 17, 'bronze');
       // Kanne: Nieten am Band, Fingerabdrücke (sieben) auf dem Bauch der Kanne

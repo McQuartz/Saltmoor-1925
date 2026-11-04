@@ -9,7 +9,7 @@ function render(){
  const ph=S.phase||'titel';document.body.dataset.phase=ph;
  $('kopf').innerHTML=S.route&&!['titel','figur','strand','ende','ankunft','uebergang','biomwahl'].includes(ph)?kopfHtml():'';
  $('gegner').innerHTML=ph==='fight'||ph==='reward'?gegnerHtml(ph==='fight'):'';
- $('spieler').innerHTML=ph==='fight'?spielerHtml():'';
+ if($('spieler'))$('spieler').innerHTML=ph==='fight'?spielerHtml():'';
  $('panel').innerHTML=panelHtml(ph);$('panel').className=ph==='fight'?'':'an p-'+ph;
  $('leiste').innerHTML=ph==='fight'?leisteKampf():S.route&&canEquip()?gearHtml():'';
  $('leiste').className=ph==='fight'?'kampf':S.route&&canEquip()?'gear':'';

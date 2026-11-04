@@ -41,7 +41,7 @@ function decke(K, yUnten, o) {
 function stamm(K, eb, x, yT, yB, wT, wB, tiefe, o) {
   o = o || {}; const m = B.maske(), n = 30, L = [], R = [], ph = (o.ph || x * 0.013), C = {}, Wd = {};
   for (let i = 0; i <= n; i++) {
-    const t = i / n, y = B.lerp(yT, yB, t), fl = Math.pow(1 - Math.min(1, t / 0.18), 2) * wT * 0.5; // Ansatz
+    const t = i / n, y = B.lerp(yT, yB, t), fl = Math.pow(1 - Math.min(1, t / 0.3), 2) * wT * 1.1; // Wurzelanlauf an der Decke
     const w = B.lerp(wT, wB, Math.pow(t, 0.7)) + fl, c = x + Math.sin(t * 2.6 + ph) * wB * 0.12;
     L.push([c - w / 2, y]); R.push([c + w / 2, y]); C[Math.round(y)] = c; Wd[Math.round(y)] = w;
   }
@@ -64,27 +64,36 @@ function stamm(K, eb, x, yT, yB, wT, wB, tiefe, o) {
 // 'boden': liegt auf dem Boden auf und breitet sich flach aus.
 function blattwerk(K, eb, x, y, rx, ry, tiefe, o) {
   o = o || {}; const r = B.rng(Math.round(x * 13 + y * 7 + rx)), m = B.maske(), cl = [], bY = o.boden || 999;
-  const n = Math.round(10 + rx * 0.35);
+  const n = Math.round(5 + rx * 0.3);
   for (let i = 0; i < n; i++) { const a = r.f(0, Math.PI), q = Math.sqrt(r()), cx = x + Math.cos(a) * rx * q * 0.9, cy = y + Math.sin(a) * ry * q * 0.85 + (o.flach ? 0 : ry * 0.05), cr = r.f(0.18, 0.32) * Math.max(rx, ry) * (1.1 - q * 0.4); cl.push([cx, cy, cr]); m.ell(cx, cy, cr * 1.1, cr * 0.9); }
   // obere Kante zum Stamm hin: der Ansatz
   m.ell(x, y, rx * 0.45, ry * 0.25);
   if (bY < 999) for (let yy = Math.max(m.y0, Math.floor(bY) + 1); yy <= m.y1; yy++) for (let xx = m.x0; xx <= m.x1; xx++) if (m.has(xx, yy)) m.put(xx, yy, 0);
   const mus = (px, py) => { let best = 1e9, c = null; for (const k of cl) { const d = Math.hypot(px - k[0], py - k[1]) / k[2]; if (d < best) { best = d; c = k; } } if (!c) return 0;
-    const dx = (px - c[0]) / c[2], dy = (py - c[1]) / c[2]; return (dx * 0.6 - dy * 0.55) * 0.8 - best * 0.35 + (B.hash(px >> 1, py, 5) - 0.5) * 0.35 + ((px + py * 3) % 5 === 0 ? -0.3 : 0); };
-  K.form(eb, m, tiefe, { k: STEIN.slice(0, 8), r: tiefe > 0.45 ? RAND_K : RAND, ton: 1.2, fase: 1, rand: tiefe > 0.45 ? 1 : 2, schatten: 2, muster: mus });
+    const dx = (px - c[0]) / c[2], dy = (py - c[1]) / c[2]; return (dx * 0.6 - dy * 0.55) * 1.6 - best * 0.7 + (B.hash(px >> 1, py, 5) - 0.5) * 0.35 + ((px + py * 3) % 5 === 0 ? -0.3 : 0); };
+  K.form(eb, m, tiefe, { k: STEIN.slice(0, 10), r: tiefe > 0.45 ? RAND_K : RAND, ton: 2.2, fase: 1, rand: tiefe > 0.45 ? 1 : 2, schatten: 2, muster: mus });
   // Bernsteinkrümel im Laub (wenige, glimmend)
   const e = K.e[eb]; for (let i = 0; i < Math.round(rx / 10); i++) { const k = cl[r.i(0, cl.length - 1)]; const px = k[0] + r.j(k[2] * 0.5), py = k[1] + r.j(k[2] * 0.5); if (m.has(px, py)) { e.set(px, py, B.pk(B.mix(HARZ[5], K.fern, tiefe))); B.gluehen(e, px, py, 4, B.mix(GLUT, '#000', tiefe), 0.6); } }
   return m;
 }
 function krone(K, eb, x, y, w, tiefe, o) {
+  // Wie ein Baum, nur gespiegelt: der Stamm teilt sich in vier, fünf Hauptäste, die nach unten auseinanderlaufen,
+  // an ihren Enden sitzen Laubballen aus Stein. Zwischen den Ballen sieht man die Äste (sonst liest es sich als Wolke).
   const r = B.rng(Math.round(x * 17 + y * 3)), lauf = o.krone === 'boden', bY = o.boden || 999, s = o.kroneS || 1;
-  const rx = w * (lauf ? 2.1 : 1.6) * s, ry = w * (lauf ? 0.7 : 1.15) * s;
-  // Hauptäste unter dem Laub (sichtbar am Ansatz) und hängende Zweige darunter
-  const am = B.maske();
-  for (let i = 0; i < 5; i++) { const q = i / 4 * 2 - 1; am.pfad([[x + q * w * 0.25, y - 2], [x + q * rx * 0.45, y + ry * 0.35], [x + q * rx * 0.75, y + ry * 0.55]], Math.max(1.2, w * 0.12), Math.max(0.7, w * 0.05)); }
-  if (!lauf) for (let i = 0; i < (o.haenge || 6); i++) { const px = x + r.j(rx * 0.75); B.baum(am, r, px, y + ry * 0.6, r.f(10, 26) * s, Math.PI / 2 + r.j(0.15), r.f(0.6, 1.1), 1, { krumm: 0.2, spreiz: 0.3, zug: Math.PI / 2, zugStaerke: 0.8 }); }
-  K.form(eb, am, tiefe, { k: RINDE, r: tiefe > 0.45 ? RAND_K : RAND_K, ton: 1, fase: 1, rand: 1, schatten: 1 });
-  blattwerk(K, eb, x, y + (lauf ? ry * 0.15 : ry * 0.2), rx, ry, tiefe, { boden: bY, flach: lauf });
+  const L = w * (lauf ? 1.5 : 2.1) * s, n = lauf ? 5 : 5, am = B.maske(), ballen = [];
+  for (let i = 0; i < n; i++) {
+    const q = i / (n - 1) * 2 - 1, a = Math.PI / 2 - q * (lauf ? 1.15 : 0.82) + r.j(0.08), len = L * (1 - Math.abs(q) * 0.18) * r.f(0.85, 1.05);
+    const mx = x + Math.cos(a) * len * 0.5 + q * w * 0.1, my = y + Math.sin(a) * len * 0.45, ex = x + Math.cos(a) * len, ey = Math.min(bY - 2, y + Math.sin(a) * len);
+    am.pfad([[x + q * w * 0.22, y - 3], [mx, my], [ex, ey]], Math.max(1.4, w * 0.16), Math.max(0.8, w * 0.07));
+    // Seitenäste
+    const sa = a + (q < 0 ? 0.6 : -0.6) * (i % 2 ? 1 : -0.4);
+    am.pfad([[mx, my], [mx + Math.cos(sa) * len * 0.35, Math.min(bY - 2, my + Math.sin(sa) * len * 0.35)]], Math.max(0.9, w * 0.07), 0.6);
+    ballen.push([ex, ey, len * 0.42], [mx + Math.cos(sa) * len * 0.35, Math.min(bY - 2, my + Math.sin(sa) * len * 0.35), len * 0.3]);
+    if (!lauf && i % 2 === 0) B.baum(am, r, ex, ey + len * 0.2, r.f(10, 22) * s, Math.PI / 2 + r.j(0.1), 0.7, 1, { krumm: 0.15, spreiz: 0.25, zug: Math.PI / 2, zugStaerke: 0.9 });
+  }
+  if (bY < 999) for (let yy = Math.max(am.y0, Math.floor(bY) + 1); yy <= am.y1; yy++) for (let xx = am.x0; xx <= am.x1; xx++) if (am.has(xx, yy)) am.put(xx, yy, 0);
+  K.form(eb, am, tiefe, { k: RINDE, r: RAND_K, ton: 1.2, fase: 1, rand: 1, schatten: 1 });
+  for (const [bx, by, br] of ballen) blattwerk(K, eb, bx, by - br * 0.2, br * 1.1, br * (lauf ? 0.55 : 0.8), tiefe, { boden: bY, flach: lauf });
 }
 // Schnittfläche von unten (ein von der Legion gekappter Stamm): Ellipse mit Ringen, Zahlen am Rand
 function schnittUnten(K, eb, x, y, rx, tiefe, o) {
@@ -164,7 +173,7 @@ function strasse(P, sd, breite, o) {
 }
 // Boden des Waldes: Steinlaub, Asche, Bernsteinkrümel
 function waldboden(P, sd) {
-  return (x, y) => { const Z = P.z(y + 0.5), X = (x + 0.5 - P.vx) * Z / P.h; return 0.18 + Math.min(0.3, Z / 50) + (B.fbm(X * 2.2, Z * 1.6, sd + 4, 3) - 0.5) * 0.45 + (B.hash(Math.floor(X * 9), Math.floor(Z * 9), sd) > 0.93 ? 0.25 : 0); };
+  return (x, y) => { const Z = P.z(y + 0.5), X = (x + 0.5 - P.vx) * Z / P.h; return 0.26 + Math.min(0.3, Z / 50) + (B.fbm(X * 2.2, Z * 1.6, sd + 4, 3) - 0.5) * 0.5 + (B.hash(Math.floor(X * 14), Math.floor(Z * 20), sd) > 0.97 ? 0.2 : 0); };
 }
 // Römischer Bogen (Durchgang): Laibung aus Keilsteinen um eine Öffnung in einer Fläche
 function bogen(K, eb, x, yB, w, h, tiefe, o) {
@@ -189,6 +198,9 @@ function meilenstein(K, eb, x, yB, s, tiefe) {
   zahl(e, x - 3 * s, yB - 18 * s, 'XII', dk, hl); for (let i = -3; i < 4; i++) e.set(x + i * s, yB - 16 * s, dk); zahl(e, x - 2 * s, yB - 11 * s, 'XI', dk, hl);
   if (K.fr < 0.7) { B.flamme(K, Math.round(x + 7 * s), Math.round(yB - 2), { p: B.PAR[eb], kern: '#fff4d0', mitte: '#ffb040', aussen: '#a04a10', glut: '#3a2208' }); const l = B.maske(); l.ell(x + 7 * s, yB - 1, 3, 1.4); K.form(eb, l, 0, { k: HARZ.slice(0, 4), ton: 1.5, fase: 0, rand: 1 }); K.glut(x + 7 * s, yB - 4, 30, GLUT, 0.8, [eb]); }
 }
+
+// Warmes Band hinter den Gegnern: der Harzschein in der Luft, damit die dunklen Figuren stehen (unter einem Drittel)
+function band(K, y0, y1, d) { B.nebel(K.e[2], { y0, y1, col: '#4a3c28', dichte: d || 0.4, xs: [-20, 500, 60], seed: 12 }); B.nebel(K.e[2], { y0: y0 + 8, y1: y1 - 4, col: '#6a5232', dichte: (d || 0.4) * 0.45, xs: [40, 440, 80], seed: 13 }); }
 
 // =====================================================================
 // Variante 0: Die Legionsstraße. Die Straße läuft auf den großen Stamm zu, durch dessen Fuß ein Bogen führt.
@@ -217,7 +229,8 @@ function strassenzug(K, cfg) {
   traene(K, 1, 420, 18, 4.2, { staerke: 1.2, fall: 1.4 });
   traene(K, 2, 236, 30, 1.6, { staerke: 0.5 }); traene(K, 3, 120, 46, 2, { staerke: 0.6 });
   for (const L of [K.e[1], K.e[2], K.e[3]]) B.kegel(L, 420, 30, Math.PI * 0.72, 0.18, 300, '#2a1c0c', 0.45);
-  meilenstein(K, 3, vx - 62, 176, 1.2, 0);
+  band(K, 112, 168, 0.42);
+  meilenstein(K, 3, vx - 58, 178, 1.9, 0);
   // Vordergrund: ein Wurzelstrang links oben angeschnitten, Kronenzweige unten rechts
   const v = B.maske(); v.pfad([[-M, 24], [30, 34], [52, 60], [58, 96]], 9, 3); v.pfad([[30, 34], [14, 70], [18, 104]], 3, 1.2);
   const r2 = B.rng(sd + 77); for (let i = 0; i < 4; i++) B.baum(v, r2, 474 + i * 3, 272, 50 + i * 8, -Math.PI / 2 - 0.4 - i * 0.18, 2.4, 3, { krumm: 0.25, spreiz: 0.5 });
@@ -248,6 +261,7 @@ function gefaellt(K) {
   // Kerben der Legion im Stamm (Keile), ein Keil steckt noch, eine Dolabra lehnt daran
   for (let i = 0; i < 4; i++) { const x = 170 + i * 58, t = (x - x0) / (x1 - x0), yc = B.lerp(y0, y1, t) - B.lerp(R0, R1, t) * 0.7; const k = B.maske(); k.poly([[x - 6, yc - 3], [x + 5, yc - 4], [x, yc + 8]]); B.form(e3, k, K.mat(0, { k: ['#050403', '#0c0a07', '#3a2a14', '#7e5a22'], ton: 0.6, fase: 1, rand: 0 })); e3.set(x, yc + 6, B.pk(HARZ[5])); }
   const dol = B.maske(); dol.kap(312, 182, 296, 124, 1, 1); dol.poly([[290, 122], [304, 118], [306, 122], [292, 126]]); dol.kap(298, 121, 288, 128, 1.4, 0.6); K.form(4, dol, 0, { k: RINDE, r: RAND, ton: 1.4, fase: 0, rand: 1 });
+  band(K, 120, 176, 0.4);
   // Schnittfläche vorne links: die Ringe mit den Zahlen der Vermesser
   schnittFront(K, 3, x0, y0, R0 - 1, 0, { sx: 0.62, ringe: 10, zahlen: 9, zahlWinkel: 0.1 });
   // Boden: Kronenschutt, eine Spur von Legionärssandalen (Nägel) entlang des Stamms
@@ -279,10 +293,10 @@ function abgrund(K) {
   for (let i = 0; i < 8; i++) { const t = i / 7, x = 30 + t * 420 + r.j(8), d = 0.62 - t * 0.12, w = 16 - t * 6; stamm(K, 1, x, -M, 70 + r.f(0, 40) - t * 10, w * 1.5, w, d, { krone: 'luft', harz: 2, kroneS: 0.9, haenge: 4 }); }
   for (let i = 0; i < 3; i++) { const x = 90 + i * 140 + r.j(20), w = 26 + r.f(0, 8); stamm(K, 2, x, -M, 96 + r.f(0, 24), w * 1.5, w, 0.32, { krone: 'luft', harz: 3, haenge: 7 }); }
   // Hängebrücke: zwei Seile im Durchhang, Bretter dazwischen, von links vorn zum Durchgangsbaum rechts
-  const br = B.maske(), x0 = -M, x1 = 392, ya = 150, yb = 134, sag = 18;
+  const br = B.maske(), x0 = -M, x1 = 392, ya = 178, yb = 140, sag = 14;
   const yS = t => B.lerp(ya, yb, t) + Math.sin(t * Math.PI) * sag;
-  for (let t = 0; t <= 1; t += 0.004) { const x = B.lerp(x0, x1, t), y = yS(t); br.rect(x, y - 9 - Math.sin(t * Math.PI) * 2, 1, 1); br.rect(x, y, 1, 2); }
-  for (let t = 0.01; t < 1; t += 0.022) { const x = B.lerp(x0, x1, t), y = yS(t); br.rect(x, y - 9 - Math.sin(t * Math.PI) * 2, 1, 9); }
+  for (let t = 0; t <= 1; t += 0.003) { const x = B.lerp(x0, x1, t), y = yS(t), hh = B.lerp(12, 5, t); br.rect(x, y - hh, 1, 1); br.rect(x, y, 1, t < 0.5 ? 3 : 2); }
+  for (let t = 0.01; t < 1; t += 0.035) { const x = B.lerp(x0, x1, t), y = yS(t), hh = B.lerp(12, 5, t); br.rect(x, y - hh, 1, hh); }
   for (let i = 0; i < 6; i++) { const t = 0.12 + i * 0.15, x = B.lerp(x0, x1, t), y = yS(t) - 9; br.kap(x, y, x + 6, -M, 0.6, 0.6); } // Halteseile zu den Wurzeln
   K.form(2, br, 0.28, { k: RINDE, r: RAND_K, ton: 1.5, fase: 0, rand: 1 });
   // Durchgangsbaum drüben rechts: die Brücke endet in seinem Bogen
@@ -291,6 +305,10 @@ function abgrund(K) {
   const fm = B.maske(); fm.fn(-M, 140, W + M, H + M, (x, y) => y > kante(x));
   K.form(3, fm, 0, { k: STEIN.slice(0, 8), r: RAND, ton: 0.8, fase: 2, rand: 2, muster: (x, y) => { const s2 = Math.sin(x * 0.12 + Math.sin(y * 0.2) * 2 + y * 0.05); return (s2 > 0.7 ? 0.45 : s2 < -0.75 ? -0.5 : 0) + (B.fbm(x * 0.05, y * 0.08, sd + 2, 2) - 0.5) * 0.5 - (y - 160) / 200; } });
   for (let i = 0; i < 7; i++) { const x = 30 + i * 70 + r.j(10); blattwerk(K, 3, x, kante(x) - 1, r.f(12, 22), r.f(5, 8), 0, { flach: true }); }
+  // die Straße der Legion auf dem Absatz: kommt von vorn rechts und biegt zum Brückenkopf links
+  const P2 = B.persp(60, 150), sb2 = strasse(P2, sd, 0.7, { kurve: Z => -2.4 + Math.min(2.4, Z * 0.0) + (Z < 4 ? (4 - Z) * 1.1 : 0) });
+  K.bodenStoffe(166, H + M, [{ cols: BASALT, tf: sb2 }], (x, y) => (y > kante(x) + 4 && sb2(x, y) >= 0 ? 0 : -1));
+  band(K, 128, 178, 0.32);
   // Gekappter Stamm über der Kante: Schnittfläche von unten mit Ringen
   stamm(K, 3, 250, -M, 50, 62, 42, 0.08, { krone: 'schnitt', flach: 0.32, ringe: 8, harzKern: true });
   traene(K, 1, 410, 10, 4, { staerke: 1.2, fall: 2 }); traene(K, 2, 150, 32, 1.8, { staerke: 0.5, fall: 2 });
@@ -333,7 +351,7 @@ function gewoelbe(K, cfg) {
     const rd = B.maske(); rd.ell(lx, ly, rx + 5, ry + 3); rd.ell(lx, ly, rx, ry, 0); K.form(4, rd, 0, { k: STEIN.slice(1, 8), r: RAND, ton: 1.6, fase: 1, rand: 2 });
     B.gluehen(e, lx, ly + 20, 60, GLUT, 0.6);
   }
-  B.nebel(K.e[2], { y0: vy - 34, y1: vy + 8, col: B.mix(pal.nebel[1], K.fern, 0.4), dichte: 0.25, xs: [20, 460, 80], seed: 9 });
+  band(K, vy - 50, vy + 6, 0.4);
   const v = B.maske(); v.pfad([[-M, 130], [10, 160], [6, 220], [-M, 250]], 10, 6); v.pfad([[W + M, 120], [470, 170], [476, 240]], 9, 5);
   K.form(5, v, 0, { k: RINDE, r: RAND, ton: 0.8, fase: 2 });
   B.partikel(K, { n: 40, farben: ['#5a4a32', '#8e6a36', '#ca7c24'], vy: 7, wob: 2, wf: 0.4, x0: 40, x1: 440, y0: 30, y1: vy, p: 0.6, hellSelten: 2 });

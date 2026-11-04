@@ -28,7 +28,7 @@ module.exports = {
     const f = p.f;
     let lean = 0, atem = 0, fall = 0, blick = 1, auf = v.krone, wipp = 0, peitsch = 0;
     // auf: wie weit die Krone offen ist (0 geschlossen, 1 offen, >1 weit gespreizt); peitsch: Arme schlagen nach vorn
-    if (p.idle) { atem = [0, 0, 1, 1][f]; wipp = [0, 1, 1, 0][f]; auf = v.krone + [0, 0.05, 0.1, 0.05][f]; blick = [1, 1, 0.8, 1][f]; }
+    if (p.idle) { wipp = [0, 1, 2, 1][f]; blick = [1, 1, 0.8, 1][f]; }
     if (p.angriff) { lean = [3, 5, -10, -5][f]; auf = [1.15, 1.35, 0.5, 0.8][f]; peitsch = [0, 0, 1, 0.6][f]; blick = [1.1, 1.4, 1.6, 1.2][f]; }
     if (p.treffer) { lean = [4, 2][f]; auf = v.krone * 0.7; blick = 0.5; }
     if (p.tod) { fall = r(p.q * 30); lean = r(p.q * 8); auf = v.krone * (1 - p.q * 0.8); blick = 0; }
@@ -42,7 +42,7 @@ module.exports = {
     const stielPkt = [];
     for (let i = 0; i <= 14; i++) {
       const q = i / 14; const y = basis[1] - 2 + (ky + 10 - basis[1] + 2) * q;
-      const x = basis[0] + (kx + 2 - basis[0]) * q * q + Math.sin(q * Math.PI * 1.6) * 6 * v.schwung + (wipp && q > 0.6 ? 1 : 0);
+      const x = basis[0] + (kx + 2 - basis[0]) * q * q + Math.sin(q * Math.PI * 1.6) * 6 * v.schwung;
       stielPkt.push([x, y]);
     }
     const stiel = glied(stielPkt, 4.2, 2.6, null);
@@ -58,7 +58,7 @@ module.exports = {
       const pts = [[x0, y0]]; let x = x0, y = y0;
       const n = 6, len = 4.2 + (1 - Math.abs(q - 0.5)) * 1.4;
       for (let k = 0; k < n; k++) {
-        a += kr * (0.6 + k * 0.25);
+        a += kr * (0.6 + k * 0.25) + (k >= 4 && i % 2 === 0 ? wipp * 0.07 * (q < 0.5 ? -1 : 1) : 0);
         if (peitsch) a += (-Math.PI - 0.45 - a) * 0.2 * peitsch * (k + 1) / n * (q < 0.6 ? 1.7 : 0.5);
         x += Math.cos(a) * len; y += Math.sin(a) * len; pts.push([x, y]);
       }
@@ -99,7 +99,7 @@ module.exports = {
       // Augenhöhlen, Nase, offener Mund; Haar klebt am Kelchrand
       P.el(gx - 1.5, gy + 0.5, 1.6, 1.3, 'k1', true); P.el(gx + 3.5, gy + 0.5, 1.6, 1.3, 'k1', true);
       P.auf(gx + 1, gy + 2, 'k2'); P.auf(gx + 1, gy + 3, 'k1');
-      P.el(gx + 1.5, gy + 5.5, 1.6, p.angriff ? 1.6 : 1, 'k0', true);
+      P.el(gx + 1.5, gy + 5.5, 1.6, p.angriff ? 1.6 : p.idle && wipp === 2 ? 1.4 : 1, 'k0', true);
       for (let x = gx - 4; x <= gx + 5; x += 2) P.auf(x, gy - 4, 'k1');
       if (blick > 0) {
         P.glow(gx + 1, gy, 5 * blick, 0.6);

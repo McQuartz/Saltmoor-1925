@@ -29,11 +29,11 @@ module.exports = {
     const f = p.f;
     let lean = 0, atem = 0, fall = 0, ruf = 1, da = 0, stoss = 0, hem = 0;
     // da: zusätzlicher Winkel der Stange (+ nach hinten), stoss: Stange wird nach vorn gestoßen
-    if (p.idle) { atem = [0, 0, 1, 1][f]; ruf = [1, 0.9, 1.1, 0.8][f]; hem = [0, 1, 1, 0][f]; da = [0, 0, 0.02, 0.02][f]; }
+    if (p.idle) { atem = [0, 0, 1, 1][f]; ruf = [1, 0.9, 1.1, 0.8][f]; hem = [0, 0, 1, 1][f]; }
     if (p.angriff) { lean = [3, 4, -6, -3][f]; da = [0.2, 0.38, -0.98, -0.62][f]; stoss = [0, 0, 6, 3][f]; ruf = [1.1, 1.3, 1.7, 1.2][f]; hem = [0, 1, 2, 1][f]; }
     if (p.treffer) { lean = [3, 2][f]; ruf = 0.5; da = 0.1; }
     if (p.tod) { fall = r(p.q * 20); lean = r(p.q * 6); ruf = Math.max(0, 1 - p.q * 3); da = p.q * 0.8; }
-    const T = atem + fall, bx = 40 + lean, by = 50 + T; // Schulter Mitte
+    const T = fall, bx = 40 + lean, by = 50 + T; // Schulter Mitte (atem bewegt nur Kapuze, Arme und Stange)
     const bg = v.beug;
     // Beine und Stiefel (Mukluks)
     const beinV = glied([[bx - 4, 86 + fall * 0.4], [bx - 8, 100], [bx - 9, 110]], 4, 3.4, null);
@@ -44,7 +44,7 @@ module.exports = {
     const parka = Pg([[bx - 8 + ox, by - 2], [bx + 8 + ox, by - 4], [bx + 14, by + 10], [bx + 17, by + 34], [bx + 19, 90], ...saum(bx + 19, bx - 17, 93, 7, 3, 5, hem), [bx - 16, 88], [bx - 13, by + 24], [bx - 12 + ox, by + 6]], null, { rd: 1.5 });
     const pelzsaum = Pg([[bx - 17, 86], [bx + 19, 86], [bx + 20, 92], [bx - 18, 92]], 'haut', { rd: 1 });
     // Kapuze mit großem Pelzrand, das Innere leer
-    const kx = bx - 6 + ox - (p.angriff ? [0, 1, -2, -1][f] : 0), ky = by - 12 + (p.idle && f === 2 ? 1 : 0);
+    const kx = bx - 6 + ox - (p.angriff ? [0, 1, -2, -1][f] : 0), ky = by - 12 + atem;
     const kapuze = E(kx + 3, ky, 10, 11, null, { pf: 'bevel' });
     const ruff = E(kx - 1, ky + 1, 8.5 + (v.ruff || 0), 9.5 + (v.ruff || 0), 'haut', { pf: 'bevel' });
     // Stange: Griff zwischen den Fäusten, Winkel von der Senkrechten (positiv = Spitze nach rechts)
@@ -104,7 +104,7 @@ module.exports = {
         if (w < 0 || w > fl + 3 || u < 0 || u > fh + 3) continue;
         const falte = Math.sin(w / fl * Math.PI * v.wellen) * 0.22;
         const t = 0.6 - u / fh * 0.35 + falte; const q = Math.max(0, Math.min(0.999, t)) * 3, k = Math.floor(q);
-        P.set(x, y, ['k0', 'k1', 'k2', 'k3'][Math.min(3, (q - k) > bay(x, y) ? k + 1 : k)]);
+        P.set(x, y, ['k0', 'k1', 'k2', 'k3'][Math.min(3, (q - k) > bay(x - lean, y - T) ? k + 1 : k)]);
       }
       // Gesicht im Stoff: Stirn und Wangen als helle Wölbung, Augenhöhlen, offener Mund
       const gm = L(fh * 0.5, fl * 0.5);

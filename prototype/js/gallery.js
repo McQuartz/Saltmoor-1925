@@ -186,7 +186,8 @@ function bauAlt(){const g=$('altGegner');
 // ---------- Start ----------
 (async()=>{
  try{await loadData();}catch(err){document.body.insertAdjacentHTML('afterbegin',`<div style="padding:20px;color:#ff8a7a;font:16px monospace">Daten konnten nicht geladen werden (${esc(err.message)}).<br>Bitte über einen lokalen Server öffnen (start.command / start.bat oder: python3 -m http.server im Ordner prototype).</div>`);return;}
- BIOM_IDS=Object.keys(BIOMES).filter(k=>!k.startsWith('_'));
+ for(const p of (typeof PAKETE!=='undefined'?PAKETE:[]))for(const src of p.skripte||[])await new Promise(res=>{const sc=document.createElement('script');sc.src=src;sc.onload=res;sc.onerror=res;document.head.appendChild(sc);});
+ const reihe=RUN.akte.flatMap(a=>a.biome);BIOM_IDS=Object.keys(BIOMES).filter(k=>!k.startsWith('_')).sort((x,y)=>((BIOMES[x].akt??9)-(BIOMES[y].akt??9))||((reihe.indexOf(x)+99)%99-(reihe.indexOf(y)+99)%99));
  spritesVorladen();
  for(const f of [bauKarten,bauBalken,bauAbsichten,bauZustaende,bauKnoepfe,bauGear,bauPicks,bauPanels,bauZeichen,bauGegner,bauBiome,bauAlt]){try{f();}catch(e){console.warn('Galerie:',f.name,e);}}
  S=probeS({phase:'titel'});

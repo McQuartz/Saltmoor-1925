@@ -38,14 +38,19 @@ function deckeBauen(K, P, o) {
       if (ys <= yTop) continue;
       const u = frac(phase(X, Z)), dZ = (w(X, Z + .02) - w(X, Z - .02)) / .04;
       const fern = B.clamp(1 - 5 / Z, 0, 1), licht = Math.exp(-(((x - (o.lichtX || 380)) / 150) ** 2));
-      let t = .16 + .42 * fern + .18 * licht * fern + (dZ < 0 ? Math.min(.28, -dZ * .12) : -Math.min(.16, dZ * .05));
-      if (u > .07 && u < .2) t += .22 * (1 - Math.abs(u - .14) / .07) * B.clamp(amp(X, Z), 0, 1); // durchscheinende Lippe
-      t += (B.fbm(X * .9, Z * .6, sd + 11, 2) - .5) * .12;
-      const schaum = u > .125 && u < .17 && ww > .22 && Z < 30;
+      const A0 = B.clamp(amp(X, Z) * 1.3, 0, 1);
+      let t = .2 + .4 * fern + .18 * licht * fern;
+      // steile Front (dir zugewandt): das Licht scheint durch, je dünner zur Lippe hin, desto heller
+      if (u < .14) t += (-.08 + .42 * Math.pow(u / .14, 1.6)) * A0;
+      // flacher Rücken: zum Licht hin, matt; tiefer im Tal dunkler
+      else t += (.12 - .3 * Math.pow((u - .14) / .86, .7)) * A0 + Math.min(.15, Math.max(0, -dZ) * .05);
+      t += (B.fbm(X * .9, Z * .6, sd + 11, 2) - .5) * .14;
+      const fl = B.fbm(X * 1.3 + 4, Z * .9, sd + 21, 2);
+      const schaum = u > .12 && u < .16 + (fl - .5) * .06 && ww > .25 && Z < 30 && fl > .42;
       const y0 = Math.max(-M, Math.ceil(yTop)), y1 = Math.min(P.vy, Math.floor(ys));
       for (let y = y0; y <= y1; y++) {
         let c;
-        if (schaum) { const d = B.clamp((ww - .2) * 1.6, 0, 1) * (y > y1 - 2 ? 1 : .55); c = d > B.bay(x, y) ? PS[d > .8 + B.bay(x, y) * .2 ? 1 : 0] : PW[Math.min(n, 6)]; if (d > .5 && y === y1) schaumPx.push(x, y); }
+        if (schaum) { const d = B.clamp((ww - .2) * 1.4, 0, 1) * B.clamp((fl - .42) * 5, 0, 1) * (y > y1 - 2 ? 1 : .5); c = d > B.bay(x, y) ? PS[d > .8 + B.bay(x, y) * .2 ? 1 : 0] : PW[Math.min(n, 6)]; if (d > .5 && y === y1) schaumPx.push(x, y); }
         else { const tt = B.clamp(t + (y1 - y) * -.004, 0, .9999) * n, k = Math.floor(tt); c = PW[Math.min(n, (tt - k) > B.bay(x, y) ? k + 1 : k)]; }
         e.set(x, y, c);
       }
@@ -69,10 +74,7 @@ function deckeBauen(K, P, o) {
 // Gischt fällt: von den tief hängenden Lippen regnet Schaum auf den Sand (statisch als feine Fäden, dazu Partikel)
 function gischt(K, P, xs, yBis, o) {
   o = o || {};
-  for (const [x, yA, dichte] of xs) {
-    const eb = K.eb(yBis - 1);
-    for (let y = Math.round(yA); y < yBis; y++) { const q = (y - yA) / Math.max(1, yBis - yA), a = dichte * (1 - q * .6); if (a * .5 > B.bay(x, y * 3)) K.e[y < P.vy ? 1 : eb].set(x + (y % 7 === 0 ? 1 : 0), y, B.pk(q < .3 ? SCHAUM[0] : WASSER[8])); }
-  }
+  for (const [x, , dichte] of xs) { const eb = K.eb(yBis); for (let i = -6; i <= 6; i++) for (let j = -1; j <= 1; j++) if (dichte * (1 - Math.abs(i) / 7) > B.bay(x + i, yBis + j) + .15) K.e[eb].set(x + i, yBis + j, B.pk(j < 0 ? SAND[2] : SAND[6])); }
   if (o.ruhig) return;
   const P2 = xs.map(([x, yA]) => ({ x, yA }));
   const cs = [B.css(SCHAUM[1]), B.css(SCHAUM[0]), B.css(WASSER[8])];
@@ -131,16 +133,16 @@ function spuren(K, P, pfad, o) {
     const [X, Z] = gesamt[i], [X2, Z2] = gesamt[i + 1], dx = X2 - X, dz = Z2 - Z, dl = Math.hypot(dx, dz) || 1, seite = n % 2 ? 1 : -1;
     const fx = X - dz / dl * .07 * seite, fz = Z + dx / dl * .07 * seite;
     if (fz < 1.05) continue;
-    const [sx, sy] = P.q(fx, 0, fz), k = P.k(fz), rx = Math.max(.6, k * .045), ry = Math.max(.5, k * .13 / fz), eb = K.eb(sy), e = K.e[eb];
+    const [sx, sy] = P.q(fx, 0, fz), k = P.k(fz), rx = Math.max(.7, k * .05), ry = Math.max(.6, k * .17 / fz), eb = K.eb(sy), e = K.e[eb];
     const nassQ = i / L > (o.nassAb || .8);
-    const m = B.maske(); m.ell(sx, sy, rx, ry);
+    // Fuß: Ballen (fern) und Ferse (nah), dazwischen schmal
+    const m = B.maske(); m.ell(sx + dx / dl * rx * .3, sy - ry * .35, rx, ry * .62); m.ell(sx, sy + ry * .45, rx * .78, ry * .48);
+    if (ry > 2) m.ell(sx + dx / dl * rx * .15 + (seite > 0 ? -1 : 1) * rx * .25, sy, rx * .55, ry * .4);
     for (let y = Math.floor(sy - ry - 1); y <= sy + ry + 1; y++) for (let x = Math.floor(sx - rx - 1); x <= sx + rx + 1; x++) {
       if (!m.has(x, y)) continue; const unten = !m.has(x, y + 1), oben = !m.has(x, y - 1);
-      e.set(x, y, B.pk(unten ? SAND[6] : oben ? SAND[0] : nassQ ? WASSER[3] : SAND[1]));
+      e.set(x, y, B.pk(unten ? SAND[6] : oben ? SAND[1] : nassQ ? WASSER[3 + ((x + y) & 1)] : SAND[(x + y) & 1 ? 2 : 3]));
     }
-    // Ballen und Ferse: der Abdruck ist vorne tiefer
-    if (ry > 2.5) e.set(sx, sy - ry * .4, B.pk(SAND[0]));
-    if (nassQ && rx > 1) e.set(Math.round(sx), Math.round(sy), B.pk(SEE));
+    if (nassQ && rx > 1) e.set(Math.round(sx), Math.round(sy - ry * .3), B.pk(SEE));
   }
 }
 function fels(K, eb, pts, tiefe, o) { const m = B.maske(); m.poly(pts); K.form(eb, m, tiefe, Object.assign({ k: FELS, ton: 1.4, fase: 2, rand: 2, schatten: 2, muster: (x, y) => (B.fbm(x * .08, y * .08, 7, 2) - .5) * 1.2 + (B.rausch2(x * .3, y * .9, 3) > .78 ? -.6 : 0) }, o || {})); return m; }
@@ -225,14 +227,12 @@ function strandkorbSzene(K, o) {
   deckeBauen(K, P, { Yc, lichtX: 330, ruhig: o.ruhig, trichter: (X, Z) => 1.2 * Math.exp(-(((X - Xs) / 1.2) ** 2) - (((Z - Zs) / 1.5) ** 2)) });
   sandBoden(K, P, { nass: [[Xs, Zs, 1]], lichtX: 330 });
   // Felswand rechts in Flucht: Schichten, nass, oben vom Wasser abgeschnitten
-  const XW = 2.7, wand = [];
-  for (let Z = 1; Z <= 30; Z *= 1.08) wand.push(P.q(XW + Math.sin(Z * 1.7) * .12, 0, Z));
-  const oben = []; for (let Z = 30; Z >= 1; Z /= 1.08) oben.push(P.q(XW + Math.sin(Z * 1.7) * .12, Yc - .6 - Math.sin(Z * 2.3) * .3, Z));
-  const wm = B.maske(); wm.poly([...wand, [W + M, P.vy + 2], [W + M, -M], ...oben.map(([x, y]) => [x, Math.min(y, P.vy)]).reverse().reverse()]);
-  wm.poly([[P.q(XW, 0, 1)[0], H + M], [W + M, H + M], [W + M, P.vy], ...wand.slice().reverse()]);
+  const XW = 2.7, unten = [], oben = [];
+  for (let Z = 1; Z <= 40; Z *= 1.06) { const xo = XW + Math.sin(Z * 1.7) * .12; unten.push(P.q(xo, 0, Z)); oben.push(P.q(xo, Yc - .5 - Math.sin(Z * 2.3) * .35, Z)); }
+  const wm = B.maske(); wm.poly([...unten, ...oben.reverse(), [W + M + 400, -M - 400], [W + M + 400, H + M]]);
   K.form(2, wm, .05, { k: FELS, ton: 1.5, fase: 2, rand: 2, schatten: 2, verlauf: -.6, muster: (x, y) => { const Z = (XW * P.h) / Math.max(1, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h; return (frac(Y * 3 + B.fbm(Z * .3, 0, 4, 2)) < .12 ? -.7 : 0) + (B.fbm(Z * .8, Y * 2, 5, 2) - .5) * .7; } });
   saeule(K, P, Xs, Zs, .12, Yc, { ruhig: o.ruhig, tiefe: .1 });
-  const korb = strandkorb(K, P, -.5, 3.3);
+  const korb = strandkorb(K, P, -.7, 2.7);
   spuren(K, P, [[.9, 1.1], [.3, 2.2], [-.2, 3.0], [-.9, 4.4], [-1.5, 6.0], [Xs, Zs - .1]], { nassAb: .85 });
   // ein Handtuch über der Armlehne des Korbs, nass
   const ht = B.maske(); ht.poly([[korb.x + korb.w / 2 - 2, korb.y - korb.hh * .55], [korb.x + korb.w / 2 + 4, korb.y - korb.hh * .52], [korb.x + korb.w / 2 + 3, korb.y - korb.hh * .3], [korb.x + korb.w / 2 - 1, korb.y - korb.hh * .32]]);
