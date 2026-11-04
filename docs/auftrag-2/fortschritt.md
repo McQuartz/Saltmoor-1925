@@ -103,6 +103,12 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Der Kurgast mit Taucherbrille | Kurhaus | 4 (knapp, eher Mensch als fremd) | [M6](bilder/M6/kurhaus/kontakt-neben-favoriten.png) |
 | Die Oberschwester (Wächter) | Kurhaus | 4 | [M6](bilder/M6/kurhaus/im-spiel-waechter.png) |
 | Hintergrund Kurhaus (3 Varianten, Wächter-Szene) | Kurhaus | 4 | [M6](bilder/M6/kurhaus/hintergrund-varianten.png) |
+| Novize | Kloster | 4 (knapp, wenig Binnenform) | [M6](bilder/M6/kloster/kontaktbogen.png) |
+| Tintenfrau | Kloster | 4 (knapp) | [M6](bilder/M6/kloster/kontaktbogen.png) |
+| Kreuzgangwächter | Kloster | 4 | [M6](bilder/M6/kloster/kontaktbogen.png) |
+| Der Leser | Kloster | 4 | [M6](bilder/M6/kloster/kontaktbogen.png) |
+| Der Abschreiber (Wächter) | Kloster | 4 | [M6](bilder/M6/kloster/im-spiel-waechter.png) |
+| Hintergrund Kloster (3 Varianten, Wächter-Szene) | Kloster | 4 | [M6](bilder/M6/kloster/hintergrund-varianten.png) |
 
 ## Entscheidungen unterwegs
 

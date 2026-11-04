@@ -214,9 +214,9 @@ function kesselhaus(K, cfg) {
   const R = Math.round(kw * .68), yc = P.q(0, 1.25, Zw)[1];
   xs.forEach((x, i) => {
     const offen = i === 3;
-    const ring = B.maske(); ring.ell(x, yc, R + 4, R + 4); K.form(1, ring, .1, { k: ROST, ton: 1.5, fase: 2, rand: 2, schatten: 2 });
-    if (offen) { const sp = B.maske(); sp.ell(x, yc, R, R); B.form(K.e[1], sp, K.mat(0, { k: ['#1a1a10', '#3a3418', '#6a5a20', '#a08a30'], ton: 2.2, rand: 0, fase: 0, verlaufX: 1 })); K.glut(x + R * .4, yc, R * 2.2, NAT_G, .9, [1, 2]); K.licht(x, yc, '#c8b060', R * 2, .7); }
-    const tuer = B.maske(); tuer.ell(offen ? x - R * .45 : x, yc, offen ? R * .55 : R, R); K.form(1, tuer, .08, Object.assign({ ton: 1.4, fase: 2, rand: 2, schatten: offen ? 3 : 0, muster: (px, py) => (Math.hypot(px - x, py - yc) > R - 3 && Math.hypot(px - x, py - yc) < R - 2 ? -.6 : 0) }, MET));
+    const ring = B.maske(); ring.ell(x, yc, R + 4, R + 4); K.form(1, ring, .25, { k: ROST, ton: 1.2, fase: 2, rand: 1, schatten: 2 });
+    if (offen) { const sp = B.maske(); sp.ell(x, yc, R, R); B.form(K.e[1], sp, K.mat(0, { k: ['#14140c', '#2a2612', '#4a4018', '#6a5a22'], ton: 1.8, rand: 0, fase: 0, verlaufX: 1 })); K.glut(x + R * .4, yc, R * 2.2, NAT_G, .9, [1, 2]); K.licht(x, yc, '#c8b060', R * 2, .7); }
+    const tuer = B.maske(); tuer.ell(offen ? x - R * .45 : x, yc, offen ? R * .55 : R, R); K.form(1, tuer, .22, Object.assign({ ton: 1.2, fase: 2, rand: 1, schatten: offen ? 3 : 0, muster: (px, py) => (Math.hypot(px - x, py - yc) > R - 3 && Math.hypot(px - x, py - yc) < R - 2 ? -.6 : 0) }, MET));
     if (!offen) { const rad = B.maske(); rad.ell(x, yc, R * .35, R * .35); rad.ell(x, yc, R * .35 - 1.5, R * .35 - 1.5, 0); for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + .3; rad.kap(x, yc, x + Math.cos(a) * R * .35, yc + Math.sin(a) * R * .35, .6, .6); } K.form(1, rad, 0, { k: ROST, ton: 2.4, fase: 0, rand: 1 }); }
     for (let k = 0; k < 10; k++) { const a = k / 10 * 6.283; K.e[1].set(Math.round(x + Math.cos(a) * (R + 2)), Math.round(yc + Math.sin(a) * (R + 2)), B.pk(ROST[5])); }
     // Manometer darüber, der Zeiger steht über dem Strich
@@ -238,7 +238,7 @@ function kesselhaus(K, cfg) {
   const sch = B.maske(); sch.kap(404, 170, 420, 222, 1.2, 1.2); sch.poly([[414, 220], [426, 216], [432, 232], [418, 236]]); K.form(4, sch, 0, Object.assign({ ton: 1.4, fase: 0 }, MET));
   // Käfiglampen an der Wand
   for (const [x, y, an] of [[96, 70, fr < .7], [310, 66, fr < .9]]) { const m = B.maske(); m.rect(x - 1, y - 8, 3, 6); m.ell(x, y, 4, 5); m.ell(x, y, 2.6, 3.6, 0); K.form(1, m, 0, Object.assign({ ton: 1.4, fase: 0, rand: 1 }, MET)); if (an) { K.e[1].set(x, y, B.pk(NAT_K)); K.e[1].set(x, y + 1, B.pk(NAT)); K.glut(x, y, 46, NAT_G, 1, [0, 1]); K.licht(x, y, NAT, 46, .8); } }
-  B.nebel(K.e[3], { y0: yw - 70, y1: yw + 10, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .22, xs: [20, 400, 60], seed: 4 });
+  B.nebel(K.e[2], { y0: yw - 95, y1: yw + 6, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .42, xs: [20, 410, 70], seed: 4 });
   // Vordergrund: Rohr senkrecht links, Geländer unten
   const v = B.maske(); v.kap(14, -M, 14, H + M, 7, 7); for (let y = 20; y < H; y += 46) v.rect(4, y, 21, 4);
   v.rect(-M, 240, W + 2 * M, 3); for (let x = 40; x < W; x += 60) v.rect(x, 240, 3, 40);
