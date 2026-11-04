@@ -20,7 +20,7 @@ module.exports = {
     const halbR = E(hx + sp / 2 + R * 0.6, hy - 3, R * 0.9, R * 1.05, 'haut', { pf: 'bevel' });
     const tent = [];
     for (let i = 0; i < v.tentakel; i++) {
-      const x0 = hx - sp / 2 - 2 + (i * (sp + 4)) / Math.max(1, v.tentakel - 1), ph = i * 1.3 + (p.idle ? (f >> 1) * 0.3 : f * 0.9);
+      const x0 = hx - sp / 2 - 2 + (i * (sp + 4)) / Math.max(1, v.tentakel - 1), ph = i * 1.3 + (p.idle ? 0 : f * 0.9);
       const len = 8 + (i % 3) * 1.5 + (p.angriff ? f * 1.5 : 0);
       tent.push(...chain(x0, hy + 4, Math.PI / 2 + (i - v.tentakel / 2) * 0.09 + (p.angriff ? -0.25 * f : 0), 8, len * (1 - P0.fall / 40), 1.6, 0.6, null, (q, k) => Math.sin(ph + k) * 0.12));
     }

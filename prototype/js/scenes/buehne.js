@@ -6,9 +6,11 @@ const PT=[],FXL=[];
 // --- Sprite-Sheets (M6): prototype/assets/gegner/<name>.png + .json ---
 const SPRITES={};
 function ladeSprite(name){if(!name||SPRITES[name])return SPRITES[name];const o=SPRITES[name]={ok:false,img:new Image(),meta:null};
- fetch('assets/gegner/'+name+'.json').then(r=>r.ok?r.json():null).then(m=>{if(!m){o.fehlt=true;return;}o.meta=m;o.img.onload=()=>{o.ok=true;};o.img.src='assets/gegner/'+name+'.png';}).catch(()=>{o.fehlt=true;});return o;}
+ fetch('assets/gegner/'+name+'.json').then(r=>r.ok?r.json():null).then(m=>{if(!m){o.fehlt=true;return;}o.meta=m;o.img.onload=()=>{o.ok=true;if(S.phase==='fight'&&typeof render==='function')render();};o.img.src='assets/gegner/'+name+'.png';}).catch(()=>{o.fehlt=true;});return o;}
 
-function buehneInit(){BU.cv=document.getElementById('scene');BU.cv.width=SW;BU.cv.height=SH;BU.g=BU.cv.getContext('2d');BU.g.imageSmoothingEnabled=false;
+// Alle Gegner-Sheets aus foes.json vorladen (klein), damit Positionen von Anfang an stimmen
+function spritesVorladen(){for(const id in FOES){const f=FOES[id];[f.sprite,...(f.varianten||[]),...((f.besonders&&f.besonders.sprites)||[])].filter(Boolean).forEach(ladeSprite);}}
+function buehneInit(){spritesVorladen();BU.cv=document.getElementById('scene');BU.cv.width=SW;BU.cv.height=SH;BU.g=BU.cv.getContext('2d');BU.g.imageSmoothingEnabled=false;
  BU.cv.addEventListener('pointermove',e=>{const r=BU.cv.getBoundingClientRect();BU.maus={x:(e.clientX-r.left)/r.width*SW,y:(e.clientY-r.top)/r.height*SH};});}
 
 // Welche Szene gehört zum aktuellen Bildschirm?
@@ -81,7 +83,7 @@ function zeichneGegner(g,e,dt,t,cam){const v=visOf(e);if(v.gone)return;const p=e
  const ox=Math.round(p.x-cam.x*.5+(Math.random()-.5)*v.kx*.5),fy=Math.round(p.y-cam.y*.5+L*6);
  // Kontaktschatten
  g.fillStyle='rgba(0,0,0,.5)';const rw=Math.round(p.w*.32);for(let j=-1;j<=1;j++){const w2=Math.round(rw*(1-Math.abs(j)*.4));g.fillRect(ox-w2,fy+j,w2*2,1);}
- if(sp&&sp.ok){const m=sp.meta;let an=m.anim[v.anim]||m.anim.idle;let n=Math.floor(v.at*an.fps);
+ if(sp&&sp.ok){v.sheet=true;const m=sp.meta;let an=m.anim[v.anim]||m.anim.idle;let n=Math.floor(v.at*an.fps);
   if(!an.loop&&n>=an.n){if(v.anim==='tod'){v.gone=true;return;}v.anim='idle';v.at=0;an=m.anim.idle;n=0;}
   const fr=an.loop?n%an.n:Math.min(n,an.n-1);
   const tc=tmpCanvas(m.w,m.h);tc.x.clearRect(0,0,m.w,m.h);tc.x.drawImage(sp.img,fr*m.w,an.zeile*m.h,m.w,m.h,0,0,m.w,m.h);
@@ -101,10 +103,10 @@ function zeichneGegner(g,e,dt,t,cam){const v=visOf(e);if(v.gone)return;const p=e
 // Trefferblitz, Zielmarkierung, Nebel der hinteren Reihe, Auflösen beim Tod (alles gedithert, keine Weichzeichnung)
 const _tmp={};function tmpCanvas(w,h){const k=w+'x'+h;if(!_tmp[k]){const c=document.createElement('canvas');c.width=w;c.height=h;_tmp[k]={c,x:c.getContext('2d',{willReadFrequently:true})};}return _tmp[k];}
 function nachbearbeiten(tc,e,v,p){const w=tc.c.width,h=tc.c.height;const neb=p.nebel||0;const tod=v.dying?Math.min(1,v.dying/.9):0;const ziel=typeof AIM!=='undefined'&&AIM.ei===S.enemies.indexOf(e);
- if(!v.hit&&!neb&&!tod&&!ziel)return;const id=tc.x.getImageData(0,0,w,h),d=id.data;const nc=hx(BIOMES[biomId()].nebel[1]);
+ if(!(v.hit&&!v.sheet)&&!neb&&!tod&&!ziel)return;const id=tc.x.getImageData(0,0,w,h),d=id.data;const nc=hx(BIOMES[biomId()].nebel[1]);
  for(let y=0;y<h;y++)for(let i=0;i<w;i++){const o=(y*w+i)*4;if(!d[o+3])continue;
   if(tod&&(tod*1.15>bay(i,y)*.6+(1-y/h)*.5)){d[o+3]=0;continue;}
-  if(v.hit>0){d[o]=Math.min(255,d[o]+150);d[o+1]=Math.min(255,d[o+1]+130);d[o+2]=Math.min(255,d[o+2]+110);continue;}
+  if(v.hit>0&&!v.sheet&&((i+y)&1)){d[o]=Math.min(255,d[o]+50);d[o+1]=Math.min(255,d[o+1]+45);d[o+2]=Math.min(255,d[o+2]+40);continue;} // dezent; Sheets haben eine eigene Treffer-Animation
   if(neb&&neb>bay(i,y)+.35){d[o]=(d[o]+nc[0])>>1;d[o+1]=(d[o+1]+nc[1])>>1;d[o+2]=(d[o+2]+nc[2])>>1;}
   if(ziel&&((i+y)&7)===0){d[o]=Math.min(255,d[o]+60);}}
  tc.x.putImageData(id,0,0);}

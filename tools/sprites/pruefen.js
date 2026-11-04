@@ -48,11 +48,11 @@ for (const name of namen) {
       if (LICHT.has(c) && c !== 7) licht++; if (c === 6) r2++;
       if (lumIdx[c] > maxL) { maxL = lumIdx[c]; maxI = c; }
       if (leer(x - 1, y) || leer(x + 1, y) || leer(x, y - 1) || leer(x, y + 1)) { rand++; if (c === 1) randSchwarz++; }
-      if (leer(x + 1, y - 1) && leer(x, y - 1) && y < H - 8) { obenRechts++; if (c === 5 || c === 6 || LICHT.has(c)) obenRechtsRim++; }
+      if ((leer(x + 1, y) || leer(x + 2, y - 1)) && leer(x, y - 1) && y < H - 8) { obenRechts++; if (c === 5 || c === 6 || LICHT.has(c)) obenRechtsRim++; }
     }
     return { n, rand, randSchwarz, licht, r2, obenRechts, obenRechtsRim, maxI, b };
   };
-  // Idle, Angriff, Treffer: volle Regeln
+  // Idle, Angriff, Treffer: volle Regeln. „Oben rechts“ = Außenkante, die zur Lichtrichtung rimDir (0.9, -0.5) zeigt und nach oben frei ist.
   let idlePrev = null, flacker = 0;
   for (const a of ['idle', 'angriff', 'treffer']) for (let c = 0; c < meta.anim[a].n; c++) {
     const s = pruefBild(meta.anim[a].zeile, c, a + c);

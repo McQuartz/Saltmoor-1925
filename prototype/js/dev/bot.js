@@ -28,7 +28,7 @@ const Bot={
   case'reward':if(!S.picked){takeReward(S.bag.includes(null)?S.reward[0]:'');}this.ausruesten();leaveReward();break;
   case'event':{const ev=curEvent();let k=ev.o.findIndex(o=>condOk(o.if)&&!(o.fx||[]).some(f=>f.op==='lose_hp'&&S.hp<f.v+10||f.op==='fight'&&S.hp<maxHp()*.5));if(k<0)k=ev.o.findIndex(o=>condOk(o.if));chooseEvent(Math.max(0,k));break;}
   case'streichen':{const t=strikeTargets();const w=t.find(it=>def(it).cards.every(c=>!c.atk&&!c.blk));if(w)strikeItem(w.uid);else skipStrike();break;}
-  case'kraemer':{if(S.hp<maxHp()*.6&&!S.shop.heal&&S.gold>=BAL.shop.heal.price)buy('heal');S.shop.items.forEach((o,i)=>{if(!o.sold&&S.gold>=o.price+10&&S.bag.includes(null))buy(i);});this.ausruesten();leaveNode();break;}
+  case'kraemer':{if(S.hp<maxHp()*.75&&!S.shop.heal&&S.gold>=BAL.shop.heal.price)buy('heal');S.shop.items.map((o,i)=>[o,i]).sort((a,b)=>(ITEMS[b[0].id].rare?1:0)-(ITEMS[a[0].id].rare?1:0)).forEach(([o,i])=>{if(!o.sold&&S.gold>=o.price&&S.bag.includes(null))buy(i);});this.ausruesten();leaveNode();break;}
   case'kraemer_streichen':kraemerStrike(null);break;
   case'werkstatt':{const cand=[...S.bag.map((it,i)=>it?'bag:'+i:null),...AREAS.flatMap(a=>S.areas[a].map((it,i)=>it?a+':'+i:null))].filter(Boolean);let done=false;
    for(let i=0;i<cand.length&&!done;i++)for(let j=0;j<cand.length&&!done;j++){if(i===j)continue;const A=getAt(cand[i]),B=getAt(cand[j]);if(!A||!B||def(A).a!==def(B).a)continue;

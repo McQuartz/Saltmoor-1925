@@ -12,8 +12,8 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt. Eine neue 
 | M3 Dev-Modus und Autospieler | fertig | sechs Reiter, Einblendungen, Bot in Node und Browser |
 | M4 Musik im Spiel | offen | |
 | M5 Meta und Progression | fertig | Konzept B, 21 Fragmente, Figuren, Startvarianten, Stufen, Tagebuch, Ankunft, Strand |
-| M6 Sprite-Pipeline (KI-Sprites) | offen | |
-| M7 Gegner-Besetzung | offen | |
+| M6 Sprite-Pipeline (KI-Sprites) | fertig | Ersatzweg: per Skript gezeichnet, 41 Sheets, Prüfung 0 Verstöße, Idle/Angriff/Treffer/Tod |
+| M7 Gegner-Besetzung | fertig | 16 Typen mit je zwei Varianten, 6 Wächter, Boss mit 3 Phasen; drei Typen im Mindeststand |
 | M8 Hintergründe | offen | |
 | M9 Inhalte und Balance | offen | |
 | M10 Politur | offen | |
@@ -140,6 +140,34 @@ In 12 von 20 Runs wird etwas Neues frei (Fragment, Item, Figur oder Startvariant
 
 **Einschätzung:** Die Freischaltungen kommen in einem guten Takt, und die Fragmente erzählen tatsächlich etwas. Schwach: Die Schwierigkeitsstufen sind ungetestet, weil der Autospieler noch nicht gewinnt (Balance kommt in M9). Das Tagebuch ist schlicht. Bilder: `bilder/M5/`.
 
+### M6 Sprite-Pipeline (fertig, Ersatzweg)
+
+Kein Bild-Generator in der Sitzung → Ersatzweg: Jedes Sprite ist als Formen in einem Skript gezeichnet (`tools/sprites/gegner/<id>.js`) und läuft durch die Licht-/Randlicht-/Dither-Kette aus `zielbild/referenz/render.js` (`tools/sprites/lib.js`). `bauen.js` schreibt PNG-Sheets + JSON nach `prototype/assets/gegner/`, `pruefen.js` prüft die harten Regeln (Größe, nur Zonenpalette + Augen, Alpha nur 0/255, kein schwarzer Umriss, Randlicht oben rechts, hellste Pixel nur in Augen/Lichtern, kein Flackern). Weg dokumentiert in `docs/auftrag/sprites.md`. Gebaut von einem Subagenten, Lader und Einbau im Spiel von mir (`js/scenes/buehne.js`: Sheets vorladen, Idle-Schleife, Angriff beim Gegnerzug, Treffer, Tod, gedithertes Augenglühen, hintere Reihe 90 % und im Nebel). Das alte Teile-Labor (`foes.js`) ist aus dem Spiel raus und bleibt nur für die Galerie.
+
+**Abnahme:** `node tools/sprites/pruefen.js` → 41 Sprites geprüft, 0 Verstöße. Kontaktbögen: `bilder/M6/favoriten-vergleich.png` (neben den Referenzbildern), `favoriten-animation.png`, `silhouetten.png` (schwarz gefüllt, alle erkennbar), `serie-kampf.png` (Idle, Treffer, Angriff, Auflösen im Spiel).
+
+**Einschätzung je Favorit:** Hirte am nächsten am Zielbild (hoher, zerfetzter Mantel, Sternbild-Gesicht, Geweih mit Knoten), Finger etwas dünn. Chorknabe trifft die Richtung (drei Köpfe, die nacheinander singen, Kerzenkranz), der Kerzenschein ist schwächer als im Zielbild. Netzflickerin ist die schwächste der drei: Haltung und abknickende Arme stimmen, der Rücken wirkt aber wie ein glatter Block statt spinnenhaft. Generell: Treffer und Tod sind bei allen gleich gebaut (heller + Rückstoß, Zerfall von oben), ruhig, aber wenig eigen.
+
+### M7 Gegner-Besetzung (fertig, drei Typen im Mindeststand)
+
+Konzepte zuerst in `docs/auftrag/gegner.md` (Motiv, wer er war, was falsch ist, Silhouette, Kampfverhalten mit Schwachstelle und Grund, Stimme). Gestrichen, weil das Konzept dadurch stärker wird: Kultist (geht im Ertrunkenen auf), Schatten (in der Windgestalt), Eisgesicht (im Chor).
+
+| Biom | Gegner | Wächter / Boss |
+|---|---|---|
+| Hafen | Netzflickerin, Tiefling, Schmuggler | Lotse (ruft Tiefling alle 3 Züge) |
+| Moorwald | Hirte, Torfstecherin, Nest | Der Opfernde (ruft Nest alle 4 Züge) |
+| Kapelle | Chorknabe, Ertrunkener | Glockenmutter (ruft Chorknabe alle 3 Züge) |
+| Salzstollen | Schlundträger, Salzläufer, Grabwächter | Wurm im Salz (wechselt die Schwachstelle W/F/V) |
+| Namenlose Stadt | Bote, Erbauer-Mumie | Der Wind, der Gestalt hat (wechselt L/W/S) |
+| Schwarzes Eis | Rufer, Nachgeher | Chor im Eis (ruft Rufer alle 3 Züge) |
+| Pforte | Augen im Rand | Das, was ruft (3 Phasen mit eigenem Sprite, ruft Augen) |
+
+Je normalem Typ zwei Varianten, Wächter 128 × 160, Boss 160 × 160. Alle acht Stoffe kommen als Schwachstelle vor. `data/foes.json` vollständig mit `biom`, `rang`, `sprite`, `varianten`, `konzept`, `stimme`, `beute`, `besonders`.
+
+**Abnahme:** Jedes Biom hat 2–3 Typen und einen Wächter, die Pforte den Boss. Gegner-Regel nach Tiefe sichtbar (Hafen/Moor menschlich, Kapelle verwandelt, Salz/Stadt fremd, Eis Nachahmer, Pforte formlos). Autospieler 50 Seeds ohne Fehler. Kontaktbögen je Biom in `bilder/M7/<biom>.png` (alle Typen und Varianten), im Spiel `bilder/M7/im-spiel-*.png`.
+
+**Einschätzung:** Die Favoriten und die Wächter (Lotse, Glockenmutter, Wurm) tragen den Look. Schwach und im Mindeststand: Erbauer-Mumie (liest sich als Raupe), Nachgeher (wie ein Tisch mit hängendem Kopf), Ertrunkener (Silhouette ein Klumpen). Der Tiefling sieht eher nach Leuchtbrille als nach Fisch aus, das Nest eher nach Spinne als nach Hügel. Galerie mit Konzepten folgt in M10.
+
 ## Entscheidungen unterwegs
 
 | Datum | Meilenstein | Entscheidung | Warum |
@@ -151,6 +179,7 @@ In 12 von 20 Runs wird etwas Neues frei (Fragment, Item, Figur oder Startvariant
 | 2026-11-03 | M1 | Neue Knotenart Fundstelle (Ebene 2): Item oder Gold, manchmal mit Haken (−5 Leben). | Briefing Abschnitt 7 schlägt sie vor, sie braucht kein neues System. |
 | 2026-11-03 | M1 | Bis M7 vorläufige Wächter (`vorlaeufig: true` in foes.json) mit alten Grafiken. | Damit jeder Akt schon einen Wächter hat. |
 | 2026-11-03 | M5 | Progression Variante B (Fragmente + Startvarianten bei Akt II/III/IV + Schwierigkeitsstufen nach dem ersten Sieg). | Siehe progression.md: wenig neues System, jeder Run kann etwas bringen. |
+| 2026-11-03 | M7 | Wächter und Boss skalieren nicht mehr mit der Tiefe, nur normale Gegner. | Sie sind je Akt eigens ausgelegt; mit Skalierung hatte der Boss auf Tiefe 18 302 statt 180 Leben. |
 | 2026-11-03 | M0 | Kein Bild-Generator verfügbar, M6 nimmt den Ersatzweg (Sprites per Skript selbst gezeichnet). | In der Sitzung gibt es kein Werkzeug zur Bilderzeugung. |
 
 ## Autospieler-Ergebnisse

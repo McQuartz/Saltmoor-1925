@@ -22,8 +22,9 @@
   "musik": "hafen",
   "szene_alt": "hafen",
   "gegner": [
-   "fishman",
-   "cultist"
+   "netzflickerin",
+   "tiefling",
+   "schmuggler"
   ],
   "waechter": "lotse",
   "fundpool": [
@@ -92,8 +93,9 @@
   "musik": "moor",
   "szene_alt": "wald",
   "gegner": [
-   "shade",
-   "cultist"
+   "hirte",
+   "torfstecherin",
+   "nest"
   ],
   "waechter": "opfernde",
   "fundpool": [
@@ -161,8 +163,8 @@
   "musik": "kapelle",
   "szene_alt": "kapelle",
   "gegner": [
-   "cultist",
-   "drowned"
+   "chorknabe",
+   "ertrunkener"
   ],
   "waechter": "glockenmutter",
   "fundpool": [
@@ -231,8 +233,9 @@
   "musik": "salz",
   "szene_alt": "grund",
   "gegner": [
-   "drowned",
-   "shade"
+   "schlundtraeger",
+   "salzlaeufer",
+   "grabwaechter"
   ],
   "waechter": "wurm",
   "fundpool": [
@@ -301,8 +304,8 @@
   "musik": "stadt",
   "szene_alt": "grund",
   "gegner": [
-   "shade",
-   "fishman"
+   "bote",
+   "mumie"
   ],
   "waechter": "windgestalt",
   "fundpool": [
@@ -369,9 +372,8 @@
   "musik": "eis",
   "szene_alt": "grund",
   "gegner": [
-   "drowned",
-   "shade",
-   "fishman"
+   "rufer",
+   "nachgeher"
   ],
   "waechter": "chor",
   "fundpool": [
@@ -438,9 +440,9 @@
   "musik": "pforte",
   "szene_alt": "grund",
   "gegner": [
-   "shade"
+   "augen"
   ],
-  "waechter": "boss",
+  "waechter": "ruft",
   "fundpool": [],
   "ereignisse": [],
   "kraemer": {

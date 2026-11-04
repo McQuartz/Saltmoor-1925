@@ -48,9 +48,13 @@ input[type=range]{width:100%;accent-color:#d0453a}
 .hint{font-size:16px!important;color:#6a6f66!important}
 .fgrp{font-size:15px;color:#6a6f66;width:100%;margin-top:4px}
 .fgrp.cur{color:var(--parch)}
-#log{font-size:16px;color:#9aa39a;display:flex;flex-direction:column-reverse;gap:2px;max-height:260px;overflow-y:auto;min-height:60px}
-#log b{color:var(--txt);font-weight:normal}
-#log small{color:#6a6f66;font-size:14px}
+#mlog{font-size:17px;color:#9aa39a;max-height:260px;overflow-y:auto;min-height:60px;line-height:1.15}
+#mlog div{display:block;white-space:normal}
+#mlog small{display:inline-block;width:120px}
+#mlog b{display:inline-block;min-width:120px}
+.wide{grid-column:1/-1}
+#mlog b{color:var(--txt);font-weight:normal}
+#mlog small{color:#6a6f66;font-size:14px}
 </style>
 </head>
 <body>
@@ -109,10 +113,10 @@ input[type=range]{width:100%;accent-color:#d0453a}
    </div>
   </section>
 
-  <section class="panel">
+  <section class="panel wide">
    <h2>ENTSCHEIDUNGEN DES DIRIGENTEN</h2>
    <p class="hint">Die letzten 20 Entscheidungen mit Grund (wie im Dev-Modus über <code>Music.onEvent</code>).</p>
-   <div id="log"></div>
+   <div id="mlog"></div>
    <div class="btns"><button class="sm" id="bPeak">SPITZE ZURÜCKSETZEN</button></div>
   </section>
  </div>
@@ -162,7 +166,7 @@ $('bNieder').onclick=()=>{ensure();Music.niederlage();};
 $('bPeak').onclick=()=>Music.resetPeak();
 // Entscheidungen mitlesen
 const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-function drawLog(){$('log').innerHTML=Music.state().log.map(e=>`<span><small>T${e.bar} · ${e.t.toFixed(1)} s</small> <b>${esc(e.was)}</b> ${esc(e.why)}</span>`).join('');}
+function drawLog(){$('mlog').innerHTML=Music.state().log.slice().reverse().map(e=>`<div><small>Takt ${e.bar} · ${e.t.toFixed(1)} s</small><b>${esc(e.was)}</b> ${esc(e.why)}</div>`).join('');}
 Music.onEvent(drawLog);
 $('sRole').onchange=e=>Music.role(e.target.value);$('sStoff').onchange=e=>{ensure();Music.stoff(e.target.value);};
 

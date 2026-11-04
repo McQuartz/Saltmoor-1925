@@ -1,6 +1,6 @@
 // Prüft die prozedurale Musik im Musik-Labor (prototype/musik.html) mit Playwright und Chromium.
 // Aufruf (Server muss laufen: cd prototype && python3 -m http.server 8000):
-//   node tools/musik-pruefen.js            alles (dauert gut 4 Minuten, Audio läuft in Echtzeit)
+//   node tools/musik-pruefen.js            alles (dauert gut 6 Minuten, Audio läuft in Echtzeit)
 //   node tools/musik-pruefen.js --schnell  ohne Einzelmessung der Stimmen und Rollen
 // Misst den Spitzenpegel hinter dem Limiter (echter Ausgang, über einen Abgriff vor dem Lautsprecher)
 // und am gemeinsamen Ausgang vor dem Limiter (Music.state().peak), den BPM-Verlauf je Takt und Konsolenfehler.
@@ -112,6 +112,14 @@ const dB = v => (v <= -120 ? '  -∞' : v.toFixed(1).padStart(6));
   const hart = await ev(() => ({ m: window.__mess(), peakIntern: Music.state().peak }));
   await ev(() => { Music.victory(); Music.stoff('keiner'); Music.akt(0); Music.hp(40, 40); });
 
+  // Nur Musik (ohne SFX): Kapelle, Wächter, wenig Leben, Hochreaktion. Zeigt den Spielraum vor dem Limiter.
+  await ev(() => { Music.biome('kapelle'); Music.scene('waechter'); Music.foeSpawn('glockenmutter'); Music.foeSpawn('chorknabe'); Music.hp(8, 40); Music.telegraph(); });
+  await bisBiom('kapelle');
+  await ev(() => { Music.resetPeak(); window.__reset(); });
+  await warte(3000); await ev(() => Music.reaction(true)); await warte(5000);
+  const nurMusik = await ev(() => ({ m: window.__mess(), peakIntern: Music.state().peak }));
+  await ev(() => { Music.victory(); Music.hp(40, 40); });
+
   // Stoffe der Reihe nach (Färbung), Enden, Niederlage, Übergang
   await ev(() => { Music.resetPeak(); window.__reset(); Music.biome('hafen'); Music.scene('kampf'); Music.foeSpawn('tiefling'); });
   for (const st of ['E', 'F', 'W', 'S', 'B', 'G', 'L', 'V', 'keiner']) { await ev(st => Music.stoff(st), st); await warte(700); }
@@ -162,6 +170,7 @@ const dB = v => (v <= -120 ? '  -∞' : v.toFixed(1).padStart(6));
   console.log('Biom      Stimmen                                  Ausgang  vor Limiter  RMS');
   zeilen.forEach(z => console.log(`${z.biom.padEnd(9)} ${z.stimmen.padEnd(40)} ${dB(z.m.peak)}   ${dB(z.peakIntern)}     ${dB(z.m.rms)}`));
   console.log(`Härtetest (Boss, 4 Leben, Feuer, 3× Hochreaktion + SFX): Ausgang ${dB(hart.m.peak)} dBFS, vor Limiter ${dB(hart.peakIntern)} dBFS`);
+  console.log(`Nur Musik (Wächter Kapelle, Hochreaktion, ohne SFX):   Ausgang ${dB(nurMusik.m.peak)} dBFS, vor Limiter ${dB(nurMusik.peakIntern)} dBFS, RMS ${dB(nurMusik.m.rms)}`);
   console.log(`Stoffe, Übergang, Enden, Niederlage:                     Ausgang ${dB(rest.m.peak)} dBFS, vor Limiter ${dB(rest.peakIntern)} dBFS`);
   console.log(`Ende »bleiben« nach 9 s, Layer-Pegel: ${JSON.stringify(nachBleiben)}`);
   console.log(`Ende »umkehren« nach 7 s: ${JSON.stringify(nachUmkehren)}`);
@@ -176,7 +185,7 @@ const dB = v => (v <= -120 ? '  -∞' : v.toFixed(1).padStart(6));
   const arten = {}; evs.forEach(e => arten[e.was] = (arten[e.was] || 0) + 1);
   console.log('\nENTSCHEIDUNGEN (onEvent): ' + Object.entries(arten).map(([k, v]) => `${k} ${v}`).join(', '));
   console.log('Beispiele: ' + evs.slice(0, 6).map(e => `${e.was} (${e.why})`).join(' | '));
-  const alle = [...zeilen.map(z => z.m.peak), hart.m.peak, rest.m.peak, ...stimmen.map(s => s.peak), ...rollen.map(s => s.peak)];
+  const alle = [...zeilen.map(z => z.m.peak), hart.m.peak, nurMusik.m.peak, rest.m.peak, ...stimmen.map(s => s.peak), ...rollen.map(s => s.peak)];
   const spitze = Math.max(...alle);
   console.log(`\nGRÖSSTE SPITZE AM AUSGANG: ${spitze.toFixed(2)} dBFS ${spitze < 0 ? '(kein Clipping)' : '(CLIPPING!)'}`);
   console.log(fehler.length ? 'KONSOLENFEHLER:\n' + fehler.join('\n') : 'Keine Konsolenfehler.');

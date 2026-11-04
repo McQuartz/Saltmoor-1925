@@ -1,31 +1,38 @@
 {
- "cultist": {
-  "n": "Kultist",
-  "hp": 18,
-  "weak": "G",
-  "spr": "cultist",
+ "netzflickerin": {
+  "n": "Netzflickerin",
+  "hp": 20,
+  "weak": "E",
   "pat": [
    {
     "t": "atk",
-    "v": 6
+    "v": 3,
+    "h": 2
    },
    {
     "t": "blk",
-    "v": 6
+    "v": 5
    },
    {
     "t": "atk",
-    "v": 9
+    "v": 8
    }
   ],
+  "biom": "hafen",
   "rang": "normal",
-  "beute": "cultmask"
+  "sprite": "netzflickerin_a",
+  "varianten": [
+   "netzflickerin_a",
+   "netzflickerin_b"
+  ],
+  "konzept": "Fischersfrau, die seit Generationen dasselbe Netz flickt; Glieder zu lang, der Kopf hängt unter den Schultern.",
+  "stimme": "netzflickerin",
+  "beute": "knife"
  },
- "fishman": {
+ "tiefling": {
   "n": "Tiefling",
   "hp": 22,
-  "weak": "S",
-  "spr": "fishman",
+  "weak": "L",
   "pat": [
    {
     "t": "atk",
@@ -33,18 +40,101 @@
     "h": 2
    },
    {
+    "t": "buff",
+    "v": 2
+   },
+   {
     "t": "atk",
     "v": 7
    }
   ],
+  "biom": "hafen",
   "rang": "normal",
-  "beute": "deepscale"
+  "sprite": "tiefling_a",
+  "varianten": [
+   "tiefling_a",
+   "tiefling_b"
+  ],
+  "konzept": "Junger Fischer mit dem Erbe des Großvaters: zu große Augen, Kiemenfalten am Hals.",
+  "stimme": "tiefling",
+  "beute": "harpoon"
  },
- "drowned": {
-  "n": "Ertrunkener",
-  "hp": 28,
-  "weak": "F",
-  "spr": "drowned",
+ "schmuggler": {
+  "n": "Schmuggler",
+  "hp": 18,
+  "weak": "B",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 6
+   },
+   {
+    "t": "atk",
+    "v": 3,
+    "h": 3
+   },
+   {
+    "t": "blk",
+    "v": 6
+   }
+  ],
+  "biom": "hafen",
+  "rang": "normal",
+  "sprite": "schmuggler_a",
+  "varianten": [
+   "schmuggler_a",
+   "schmuggler_b"
+  ],
+  "konzept": "Bringt nachts Kisten in die zugemauerten Lagerhäuser; unter dem Mantel ein Arm zu viel.",
+  "stimme": "schmuggler",
+  "beute": "revolver"
+ },
+ "lotse": {
+  "n": "Der Lotse",
+  "hp": 51,
+  "weak": "W",
+  "pat": [
+   {
+    "t": "blk",
+    "v": 10
+   },
+   {
+    "t": "atk",
+    "v": 9
+   },
+   {
+    "t": "atk",
+    "v": 4,
+    "h": 3
+   },
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 14
+   }
+  ],
+  "biom": "hafen",
+  "rang": "waechter",
+  "sprite": "lotse",
+  "varianten": [
+   "lotse"
+  ],
+  "konzept": "Der Hafenlotse holt jetzt etwas heraus: viel zu hoch, statt Kopf ein Laternengehäuse, in dem etwas atmet.",
+  "stimme": "lotse",
+  "beute": "oilcoat",
+  "besonders": {
+   "art": "ruft",
+   "gegner": "tiefling",
+   "alle": 3
+  }
+ },
+ "hirte": {
+  "n": "Hirte",
+  "hp": 24,
+  "weak": "L",
   "pat": [
    {
     "t": "buff",
@@ -52,21 +142,63 @@
    },
    {
     "t": "atk",
-    "v": 5
+    "v": 5,
+    "h": 2
    },
    {
     "t": "atk",
-    "v": 6
+    "v": 9
    }
   ],
-  "rang": "normal"
+  "biom": "moor",
+  "rang": "normal",
+  "sprite": "hirte_a",
+  "varianten": [
+   "hirte_a",
+   "hirte_b"
+  ],
+  "konzept": "Schäfer, der zu lange in den Himmel sah: Gesicht aus Sternen, die es nicht gibt, Geweih mit leuchtenden Knoten.",
+  "stimme": "hirte",
+  "beute": "woolcoat"
  },
- "shade": {
-  "n": "Schatten",
-  "hp": 13,
-  "weak": "L",
-  "spr": "shade",
+ "torfstecherin": {
+  "n": "Torfstecherin",
+  "hp": 26,
+  "weak": "V",
   "pat": [
+   {
+    "t": "atk",
+    "v": 7
+   },
+   {
+    "t": "blk",
+    "v": 8
+   },
+   {
+    "t": "atk",
+    "v": 10
+   }
+  ],
+  "biom": "moor",
+  "rang": "normal",
+  "sprite": "torfstecherin_a",
+  "varianten": [
+   "torfstecherin_a",
+   "torfstecherin_b"
+  ],
+  "konzept": "Gräbt im Torf, bis sie sich selbst findet; wo sie den Boden berührt hat, ist die Haut Rinde.",
+  "stimme": "torfstecherin",
+  "beute": "shovel"
+ },
+ "nest": {
+  "n": "Das Nest",
+  "hp": 16,
+  "weak": "F",
+  "pat": [
+   {
+    "t": "blk",
+    "v": 6
+   },
    {
     "t": "atk",
     "v": 3,
@@ -77,17 +209,506 @@
     "v": 8
    }
   ],
-  "rang": "normal"
+  "biom": "moor",
+  "rang": "normal",
+  "sprite": "nest_a",
+  "varianten": [
+   "nest_a",
+   "nest_b"
+  ],
+  "konzept": "Ein Erdhügel am Bohlenweg, bis er auf acht Insektenbeinen aufsteht und menschliche Zähne zeigt.",
+  "stimme": "nest",
+  "beute": "bone"
  },
- "boss": {
-  "n": "Das, was ruft",
-  "hp": 140,
-  "weak": "S",
-  "spr": "boss",
+ "opfernde": {
+  "n": "Der Opfernde",
+  "hp": 60,
+  "weak": "B",
+  "pat": [
+   {
+    "t": "blk",
+    "v": 12
+   },
+   {
+    "t": "atk",
+    "v": 6,
+    "h": 2
+   },
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 15
+   }
+  ],
+  "biom": "moor",
+  "rang": "waechter",
+  "sprite": "opfernde",
+  "varianten": [
+   "opfernde"
+  ],
+  "konzept": "Opferstein aus dem Steinkreis, dem man so lange gab, dass ihm ein langer menschlicher Arm wuchs.",
+  "stimme": "opfernde",
+  "beute": "dagger",
+  "besonders": {
+   "art": "ruft",
+   "gegner": "nest",
+   "alle": 4
+  }
+ },
+ "chorknabe": {
+  "n": "Chorknabe",
+  "hp": 18,
+  "weak": "G",
   "pat": [
    {
     "t": "buff",
-    "v": 3
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 4,
+    "h": 2
+   },
+   {
+    "t": "atk",
+    "v": 8
+   }
+  ],
+  "biom": "kapelle",
+  "rang": "normal",
+  "sprite": "chorknabe_a",
+  "varianten": [
+   "chorknabe_a",
+   "chorknabe_b"
+  ],
+  "konzept": "Drei Chorknaben, ein Hals, eine Robe; sie singen nacheinander ein Lied mit falschem Text.",
+  "stimme": "chorknabe",
+  "beute": "candle"
+ },
+ "ertrunkener": {
+  "n": "Ertrunkener",
+  "hp": 28,
+  "weak": "S",
+  "pat": [
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 5
+   },
+   {
+    "t": "blk",
+    "v": 6
+   },
+   {
+    "t": "atk",
+    "v": 7
+   }
+  ],
+  "biom": "kapelle",
+  "rang": "normal",
+  "sprite": "ertrunkener_a",
+  "varianten": [
+   "ertrunkener_a",
+   "ertrunkener_b"
+  ],
+  "konzept": "Stieg in der Kutte ins Wasser und lernte um; still, mit Kiemen, aus dem Mund läuft mehr Wasser, als in ihn passt.",
+  "stimme": "ertrunkener",
+  "beute": "shell"
+ },
+ "glockenmutter": {
+  "n": "Die Glockenmutter",
+  "hp": 55,
+  "weak": "E",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 8
+   },
+   {
+    "t": "blk",
+    "v": 10
+   },
+   {
+    "t": "atk",
+    "v": 3,
+    "h": 4
+   },
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 13
+   }
+  ],
+  "biom": "kapelle",
+  "rang": "waechter",
+  "sprite": "glockenmutter",
+  "varianten": [
+   "glockenmutter"
+  ],
+  "konzept": "Die Küsterin, die von der Glocke geläutet wurde: Glocke statt Kopf, die läutet, ohne dass ein Klöppel zu sehen ist.",
+  "stimme": "glockenmutter",
+  "beute": "rosary",
+  "besonders": {
+   "art": "ruft",
+   "gegner": "chorknabe",
+   "alle": 3
+  }
+ },
+ "schlundtraeger": {
+  "n": "Schlundträger",
+  "hp": 26,
+  "weak": "B",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 6
+   },
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 4,
+    "h": 3
+   }
+  ],
+  "biom": "salz",
+  "rang": "normal",
+  "sprite": "schlundtraeger_a",
+  "varianten": [
+   "schlundtraeger_a",
+   "schlundtraeger_b"
+  ],
+  "konzept": "Bergmann mit senkrecht aufgeplatztem Kopf; aus dem Spalt hängen Tentakel, an den Rändern Zahnreihen.",
+  "stimme": "schlundtraeger",
+  "beute": null
+ },
+ "salzlaeufer": {
+  "n": "Salzläufer",
+  "hp": 14,
+  "weak": "W",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 3,
+    "h": 2
+   },
+   {
+    "t": "blk",
+    "v": 5
+   },
+   {
+    "t": "atk",
+    "v": 3,
+    "h": 3
+   }
+  ],
+  "biom": "salz",
+  "rang": "normal",
+  "sprite": "salzlaeufer_a",
+  "varianten": [
+   "salzlaeufer_a",
+   "salzlaeufer_b"
+  ],
+  "konzept": "Blindes Tier aus der Tiefe, weiß verkrustet, tastet mit zu vielen Fühlern; die Kruste hat die Form eines Gesichts.",
+  "stimme": "salzlaeufer",
+  "beute": "salt"
+ },
+ "grabwaechter": {
+  "n": "Grabwächter",
+  "hp": 30,
+  "weak": "E",
+  "pat": [
+   {
+    "t": "blk",
+    "v": 10
+   },
+   {
+    "t": "atk",
+    "v": 9
+   },
+   {
+    "t": "atk",
+    "v": 6
+   }
+  ],
+  "biom": "salz",
+  "rang": "normal",
+  "sprite": "grabwaechter_a",
+  "varianten": [
+   "grabwaechter_a",
+   "grabwaechter_b"
+  ],
+  "konzept": "Römischer Legionär, im Salz begraben, um Wache zu halten; der Helm ist mit dem Schädel verwachsen.",
+  "stimme": "grabwaechter",
+  "beute": "pick"
+ },
+ "wurm": {
+  "n": "Der Wurm im Salz",
+  "hp": 64,
+  "weak": "W",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 10
+   },
+   {
+    "t": "blk",
+    "v": 12
+   },
+   {
+    "t": "atk",
+    "v": 5,
+    "h": 3
+   },
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 16
+   }
+  ],
+  "biom": "salz",
+  "rang": "waechter",
+  "sprite": "wurm",
+  "varianten": [
+   "wurm"
+  ],
+  "konzept": "Er hat die Stollen gegraben, bevor jemand Salz brauchte; man sieht nie beide Enden.",
+  "stimme": "wurm",
+  "beute": "silverknife",
+  "besonders": {
+   "art": "schwach_wechsel",
+   "stoffe": [
+    "W",
+    "F",
+    "V"
+   ]
+  }
+ },
+ "bote": {
+  "n": "Bote",
+  "hp": 22,
+  "weak": "F",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 7
+   },
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 4,
+    "h": 3
+   }
+  ],
+  "biom": "stadt",
+  "rang": "normal",
+  "sprite": "bote_a",
+  "varianten": [
+   "bote_a",
+   "bote_b"
+  ],
+  "konzept": "Ein Postbote, dem man unten geantwortet hat: ein senkrechter Mund quer durch die Brust, Augen statt Hals.",
+  "stimme": "bote",
+  "beute": "watch"
+ },
+ "mumie": {
+  "n": "Erbauer-Mumie",
+  "hp": 24,
+  "weak": "V",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 3,
+    "h": 3
+   },
+   {
+    "t": "blk",
+    "v": 7
+   },
+   {
+    "t": "atk",
+    "v": 10
+   }
+  ],
+  "biom": "stadt",
+  "rang": "normal",
+  "sprite": "mumie_a",
+  "varianten": [
+   "mumie_a",
+   "mumie_b"
+  ],
+  "konzept": "Einer der Erbauer, die nicht aufrecht gingen; kriecht auf zu vielen Gelenken, das Gesicht ein Relief, das dich zeigt.",
+  "stimme": "mumie",
+  "beute": "veil"
+ },
+ "windgestalt": {
+  "n": "Der Wind, der Gestalt hat",
+  "hp": 47,
+  "weak": "L",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 4,
+    "h": 3
+   },
+   {
+    "t": "blk",
+    "v": 10
+   },
+   {
+    "t": "atk",
+    "v": 11
+   },
+   {
+    "t": "buff",
+    "v": 2
+   }
+  ],
+  "biom": "stadt",
+  "rang": "waechter",
+  "sprite": "windgestalt",
+  "varianten": [
+   "windgestalt"
+  ],
+  "konzept": "Eine Säule aus Sand und Fetzen, gedreht vom Atem aus dem Abgrund; ein Augenpaar wandert durch sie.",
+  "stimme": "windgestalt",
+  "beute": "cross",
+  "besonders": {
+   "art": "schwach_wechsel",
+   "stoffe": [
+    "L",
+    "W",
+    "S"
+   ]
+  }
+ },
+ "rufer": {
+  "n": "Rufer",
+  "hp": 20,
+  "weak": "F",
+  "pat": [
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 6
+   },
+   {
+    "t": "atk",
+    "v": 9
+   }
+  ],
+  "biom": "eis",
+  "rang": "normal",
+  "sprite": "rufer_a",
+  "varianten": [
+   "rufer_a",
+   "rufer_b"
+  ],
+  "konzept": "Ahmt Menschen nach, die hier erfroren sind: Hals zu lang, Kopf zu klein, der Mund immer offen.",
+  "stimme": "rufer",
+  "beute": "bottle"
+ },
+ "nachgeher": {
+  "n": "Nachgeher",
+  "hp": 18,
+  "weak": "G",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 5,
+    "h": 2
+   },
+   {
+    "t": "blk",
+    "v": 6
+   },
+   {
+    "t": "atk",
+    "v": 8
+   }
+  ],
+  "biom": "eis",
+  "rang": "normal",
+  "sprite": "nachgeher_a",
+  "varianten": [
+   "nachgeher_a",
+   "nachgeher_b"
+  ],
+  "konzept": "Geht dir nach in menschlichen Posen, aber auf allen vieren, rückwärts gebogen, der Kopf verdreht.",
+  "stimme": "nachgeher",
+  "beute": "gloves"
+ },
+ "chor": {
+  "n": "Der Chor im Eis",
+  "hp": 68,
+  "weak": "S",
+  "pat": [
+   {
+    "t": "buff",
+    "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 7,
+    "h": 2
+   },
+   {
+    "t": "blk",
+    "v": 14
+   },
+   {
+    "t": "atk",
+    "v": 6,
+    "h": 3
+   },
+   {
+    "t": "atk",
+    "v": 18
+   }
+  ],
+  "biom": "eis",
+  "rang": "waechter",
+  "sprite": "chor",
+  "varianten": [
+   "chor"
+  ],
+  "konzept": "Viele Köpfe, eingefroren in einem Klumpen Eis, die gemeinsam atmen; sie haben die Antwort gehört.",
+  "stimme": "chor",
+  "beute": "holywater",
+  "besonders": {
+   "art": "ruft",
+   "gegner": "rufer",
+   "alle": 3
+  }
+ },
+ "ruft": {
+  "n": "Das, was ruft",
+  "hp": 180,
+  "weak": "S",
+  "pat": [
+   {
+    "t": "buff",
+    "v": 2
    },
    {
     "t": "atk",
@@ -101,14 +722,19 @@
    {
     "t": "blk",
     "v": 15
-   },
-   {
-    "t": "atk",
-    "v": 16
    }
   ],
-  "variant": "eye",
+  "biom": "pforte",
   "rang": "boss",
+  "sprite": "ruft_p1",
+  "varianten": [
+   "ruft_p1",
+   "ruft_p2",
+   "ruft_p3"
+  ],
+  "konzept": "Eine Öffnung, die Formen annimmt, um verstanden zu werden: erst König, dann Schlund, zuletzt nur ein Auge.",
+  "stimme": "ruft",
+  "beute": null,
   "besonders": {
    "art": "phasen",
    "bei": [
@@ -119,27 +745,8 @@
     [
      {
       "t": "atk",
-      "v": 10,
+      "v": 8,
       "h": 2
-     },
-     {
-      "t": "buff",
-      "v": 3
-     },
-     {
-      "t": "atk",
-      "v": 18
-     }
-    ],
-    [
-     {
-      "t": "atk",
-      "v": 6,
-      "h": 3
-     },
-     {
-      "t": "atk",
-      "v": 14
      },
      {
       "t": "blk",
@@ -147,172 +754,73 @@
      },
      {
       "t": "atk",
-      "v": 20
+      "v": 12
+     },
+     {
+      "t": "buff",
+      "v": 3
+     }
+    ],
+    [
+     {
+      "t": "atk",
+      "v": 5,
+      "h": 3
+     },
+     {
+      "t": "atk",
+      "v": 15
+     },
+     {
+      "t": "buff",
+      "v": 4
+     },
+     {
+      "t": "atk",
+      "v": 10,
+      "h": 2
      }
     ]
-   ]
+   ],
+   "sprites": [
+    "ruft_p2",
+    "ruft_p3"
+   ],
+   "schwach": [
+    "G",
+    "V"
+   ],
+   "ruft": {
+    "gegner": "augen",
+    "alle": 3,
+    "anzahl": 1
+   }
   }
  },
- "lotse": {
-  "n": "Der Lotse",
-  "hp": 52,
+ "augen": {
+  "n": "Augen im Rand",
+  "hp": 8,
   "weak": "L",
-  "spr": "fishman",
-  "rang": "waechter",
   "pat": [
    {
     "t": "atk",
-    "v": 8
-   },
-   {
-    "t": "blk",
-    "v": 10
-   },
-   {
-    "t": "atk",
-    "v": 5,
-    "h": 2
-   },
-   {
-    "t": "buff",
-    "v": 2
-   }
-  ],
-  "vorlaeufig": true
- },
- "opfernde": {
-  "n": "Der Opfernde",
-  "hp": 56,
-  "weak": "F",
-  "spr": "cultist",
-  "rang": "waechter",
-  "pat": [
-   {
-    "t": "buff",
-    "v": 2
-   },
-   {
-    "t": "atk",
-    "v": 9
-   },
-   {
-    "t": "atk",
-    "v": 4,
-    "h": 3
-   },
-   {
-    "t": "blk",
-    "v": 8
-   }
-  ],
-  "vorlaeufig": true
- },
- "glockenmutter": {
-  "n": "Die Glockenmutter",
-  "hp": 64,
-  "weak": "E",
-  "spr": "drowned",
-  "rang": "waechter",
-  "pat": [
-   {
-    "t": "atk",
-    "v": 10
-   },
-   {
-    "t": "buff",
     "v": 3
    },
    {
     "t": "atk",
-    "v": 6,
+    "v": 2,
     "h": 2
-   },
-   {
-    "t": "blk",
-    "v": 12
    }
   ],
-  "vorlaeufig": true
- },
- "wurm": {
-  "n": "Der Wurm im Salz",
-  "hp": 72,
-  "weak": "F",
-  "spr": "drowned",
-  "rang": "waechter",
-  "pat": [
-   {
-    "t": "blk",
-    "v": 14
-   },
-   {
-    "t": "atk",
-    "v": 13
-   },
-   {
-    "t": "atk",
-    "v": 5,
-    "h": 3
-   },
-   {
-    "t": "buff",
-    "v": 2
-   }
+  "biom": "pforte",
+  "rang": "normal",
+  "sprite": "augen_a",
+  "varianten": [
+   "augen_a",
+   "augen_b"
   ],
-  "vorlaeufig": true
- },
- "windgestalt": {
-  "n": "Der Wind, der Gestalt hat",
-  "hp": 66,
-  "weak": "W",
-  "spr": "shade",
-  "rang": "waechter",
-  "pat": [
-   {
-    "t": "atk",
-    "v": 4,
-    "h": 4
-   },
-   {
-    "t": "blk",
-    "v": 10
-   },
-   {
-    "t": "atk",
-    "v": 14
-   },
-   {
-    "t": "buff",
-    "v": 2
-   }
-  ],
-  "vorlaeufig": true
- },
- "chor": {
-  "n": "Der Chor im Eis",
-  "hp": 78,
-  "weak": "G",
-  "spr": "drowned",
-  "rang": "waechter",
-  "pat": [
-   {
-    "t": "atk",
-    "v": 7,
-    "h": 2
-   },
-   {
-    "t": "buff",
-    "v": 3
-   },
-   {
-    "t": "atk",
-    "v": 16
-   },
-   {
-    "t": "blk",
-    "v": 14
-   }
-  ],
-  "vorlaeufig": true
+  "konzept": "Augen ohne Körper mit einem Lid aus Randlicht; der Boss ruft sie herbei.",
+  "stimme": "augen",
+  "beute": null
  }
 }

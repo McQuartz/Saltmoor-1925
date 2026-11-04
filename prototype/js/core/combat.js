@@ -7,9 +7,10 @@ function buildDeck(){const d=[];for(const it of allActive()){if(it.x)continue;co
 // Gegner aus foes.json erzeugen, skaliert nach Tiefe
 function mkEnemy(id,i){const f=FOES[id];if(!f)throw new Error('Unbekannter Gegner '+id);const d=S.depth;
  const st=S.stufe||0,ST2=RUN.stufen||{hp_je_stufe:0,atk_alle_n_stufen:99};
- const sc=(1+BAL.enemy_scaling.hp_per_depth*(d-1))*(1+ST2.hp_je_stufe*st),as=Math.floor((d-1)/BAL.enemy_scaling.atk_every_n_depths)+(st>=2?Math.floor(st/ST2.atk_alle_n_stufen):0);const hp=Math.round(f.hp*sc);
+ // Wächter und Boss sind je Akt eigens ausgelegt und skalieren nicht mit der Tiefe, nur mit der Schwierigkeitsstufe
+ const tief=(f.rang||'normal')==='normal';const sc=(tief?1+BAL.enemy_scaling.hp_per_depth*(d-1):1)*(1+ST2.hp_je_stufe*st),as=(tief?Math.floor((d-1)/BAL.enemy_scaling.atk_every_n_depths):0)+(st>=2?Math.floor(st/ST2.atk_alle_n_stufen):0);const hp=Math.round(f.hp*sc);
  const r=rs('kampf');
- return{uid:++uidc,id,n:f.n,spr:f.spr||f.sprite||id,variant:f.variant,sprite:f.varianten?r.pick(f.varianten):(f.sprite||null),rang:f.rang||'normal',weak:f.weak,hp,max:hp,block:0,str:0,burn:0,poison:0,weak2:0,
+ return{uid:++uidc,id,n:f.n,spr:f.spr||f.sprite||id,variant:f.variant,sprite:f.rang==='boss'?(f.sprite||null):f.varianten?r.pick(f.varianten):(f.sprite||null),rang:f.rang||'normal',weak:f.weak,hp,max:hp,block:0,str:0,burn:0,poison:0,weak2:0,
   pi:f.rang==='boss'||f.rang==='waechter'?0:Math.floor(r.next()*f.pat.length),as,pat:f.pat.map(p=>({...p,v:p.t==='atk'?p.v+as:p.v})),besonders:f.besonders||null,phase:0,turns:0};}
 // Aufstellung: drei Tiefenreihen (0 hinten, 1 mitte, 2 vorne), per Seed mit etwas Zufall, Wächter/Boss vorne mittig
 function aufstellen(list){const r=rs('aufstellung');const n=list.length;
@@ -44,7 +45,7 @@ function hit(e,dmg,k=1,col,why=''){if(!e||e.hp<=0)return 0;let d=Math.max(0,Math
  else checkPhase(e);return d;}
 // Boss-Phasen (foes.json → besonders.art = phasen)
 function checkPhase(e){const b=e.besonders;if(!b||b.art!=='phasen')return;const q=e.hp/e.max;const want=b.bei.filter(x=>q<=x).length;if(want>e.phase){e.phase=want;const m=b.muster&&b.muster[want-1];if(m){e.pat=m.map(p=>({...p,v:p.t==='atk'?p.v+e.as:p.v}));e.pi=0;}
- if(b.sprites&&b.sprites[want])e.sprite=b.sprites[want];if(b.weak&&b.weak[want])e.weak=b.weak[want];
+ const sp=b.sprites&&b.sprites[want-1],sw=(b.schwach||b.weak)&&(b.schwach||b.weak)[want-1];if(sp)e.sprite=sp;if(sw)e.weak=sw;
  Bus.emit('boss_phase',{e,phase:want,why:`${e.n} fällt unter ${Math.round(b.bei[want-1]*100)} % Leben: Phase ${want+1}`});}}
 function checkVictory(delay=900){if(DRY)return;if(!alive().length&&!busy&&S.phase==='fight'){busy=true;wait(delay,()=>{busy=false;fightWon();});}}
 
@@ -133,4 +134,4 @@ function endTurn(){
 function specials(){for(const en of alive()){const b=en.besonders;if(!b)continue;
  if(b.art==='ruft'&&FOES[b.gegner]&&en.turns%(b.alle||3)===0&&alive().length<4){const add=mkEnemy(b.gegner);add.x=rs('aufstellung').pick([.16,.84,.3,.7]);add.reihe=rs('aufstellung').pick([0,1]);S.enemies.push(add);Bus.emit('enemy_spawn',{e:add,why:`${en.n} ruft ${add.n} (alle ${b.alle||3} Züge)`});}
  if(b.art==='schwach_wechsel'&&b.stoffe){en.weak=b.stoffe[en.turns%b.stoffe.length];Bus.emit('enemy_status',{e:en,status:'schwach',why:`${en.n} wechselt die Schwachstelle: jetzt ${ST[en.weak].n}`});}
- if(b.art==='phasen'&&b.ruft&&FOES[b.ruft]&&en.phase>=1&&en.turns%3===0&&alive().length<4){const add=mkEnemy(b.ruft);add.x=rs('aufstellung').pick([.16,.84]);add.reihe=0;S.enemies.push(add);Bus.emit('enemy_spawn',{e:add,why:`${en.n} ruft ${add.n}`});}}}
+ if(b.art==='phasen'&&b.ruft){const R2=typeof b.ruft==='string'?{gegner:b.ruft,alle:3,anzahl:1}:b.ruft;if(FOES[R2.gegner]&&en.phase>=1&&en.turns%(R2.alle||3)===0){for(let k=0;k<(R2.anzahl||1)&&alive().length<4;k++){const add=mkEnemy(R2.gegner);add.x=rs('aufstellung').pick([.14,.86,.28,.72]);add.reihe=0;S.enemies.push(add);Bus.emit('enemy_spawn',{e:add,why:`${en.n} ruft ${add.n} (Phase ${en.phase+1}, alle ${R2.alle||3} Züge)`});}}}}}

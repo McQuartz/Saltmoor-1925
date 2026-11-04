@@ -128,6 +128,10 @@ let ctx=null,NBUF=null,timer=null,running=false,step=0,nextT=0,lastUpd=0;
 let dropF,drones=[],dissO,flirrO=[],tuned=[],master,duckG,dropG,shaper,driveG,toneF,pkF,hsF,dryG,wetG,hall,comp,L=[],voiceBus,flirrG,dissG,droneG;
 let beds={},farIn,echoIn,echoD,peakA,peakBuf;
 const listeners=[];
+// Layer-Pegel selbst mitrechnen: Chrome rechnet die Automation stummer Knoten nicht weiter, gain.value bleibt dann stehen
+const LV={0:{v0:1,tgt:1,t0:0,tc:1},1:{v0:0,tgt:0,t0:0,tc:1},2:{v0:0,tgt:0,t0:0,tc:1},3:{v0:0,tgt:0,t0:0,tc:1},4:{v0:0,tgt:0,t0:0,tc:1},v:{v0:0,tgt:0,t0:0,tc:1}};
+function lvAt(k,t){const e=LV[k];return t<=e.t0?e.v0:e.tgt+(e.v0-e.tgt)*Math.exp(-(t-e.t0)/e.tc);}
+function lv(k,tgt,t,tc){LV[k]={v0:lvAt(k,t),tgt,t0:t,tc};(k==='v'?voiceBus:L[k]).gain.setTargetAtTime(tgt,t,tc);}
 const mtof=m=>440*Math.pow(2,(m-69)/12);
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const spb=()=>60/S.bpm/4; // Sekunden pro 16tel
@@ -328,7 +332,7 @@ function foeNote(type,t,m,dur,v){
   case 'schatten':noise(d,t,dur,{f,q:28,v:.9*v,a:dur*.4});noise(d,t,dur,{f:f*1.06,q:28,v:.5*v,a:dur*.6});break;
   case 'ruft':tone(d,t,f,dur,{type:'sawtooth',v:.09*v,a:.25,pad:true,r:.5,lp:340,q:1.5});tone(d,t,f/2,dur,{v:.1*v,a:.25,pad:true,r:.5});break;
   case 'netzflickerin': // zwei Saiten, gegeneinander verstimmt, die zweite einen Hauch später
-   ksPluck(d,t,m,.16*v,-16);ksPluck(d,t+.012,m,.11*v,14);break;
+   ksPluck(d,t,m,.2*v,-16);ksPluck(d,t+.012,m,.14*v,14);break;
   case 'schmuggler': // Pfiff: Sinus mit Ansatz von unten, Vibrato, etwas Luft
    tone(d,t,f,dur,{v:.05*v,a:.03,pad:true,r:.08,from:.94,fromT:.06,vib:[5.5,.007]});noise(d,t,dur,{f,q:30,v:.18*v,a:.03});break;
   case 'hirte': // hohle Holzflöte: Dreieck gefiltert, Anblas-Chiff, Atem
@@ -347,19 +351,19 @@ function foeNote(type,t,m,dur,v){
    const hs=[4,6,8,6,4,3];bp.frequency.setValueAtTime(f*hs[0],t);hs.forEach((h,i)=>bp.frequency.linearRampToValueAtTime(f*h,t+dur*(i+1)/hs.length));
    const bg=ctx.createGain();bg.gain.value=4;o.connect(lp).connect(g);o.connect(bp).connect(bg).connect(g);o.start(t);o.stop(t+dur+.05);break;}
   case 'salzlaeufer': // Klicken auf Tonhöhe: drei sehr kurze Anschläge
-   for(let k=0;k<3;k++){tone(d,t+k*.032,f,.03,{type:'triangle',v:.13*v*(1-k*.2),a:.001});noise(d,t+k*.032,.006,{f:f*3,q:4,v:.12*v});}break;
+   for(let k=0;k<3;k++){tone(d,t+k*.032,f,.04,{type:'triangle',v:.2*v*(1-k*.2),a:.001});noise(d,t+k*.032,.006,{f:f*3,q:4,v:.16*v});}break;
   case 'grabwaechter': // Horn aus Knochen: Lippen-Ansatz von unten, Filter öffnet, hohl und luftig
    tone(d,t,f,dur,{type:'sawtooth',v:.07*v,a:.12,pad:true,r:.3,lp:f*1.5,lpEnd:f*4,q:1.5,from:.96,fromT:.1});noise(d,t,dur,{f:f*3,q:6,v:.08*v,a:.15});break;
   case 'bote':{ // Röhren mit Echo: rauer, schwankender Ruf, läuft ins Echo
    const e=ctx.createGain();e.connect(d);e.connect(echoIn);
    tone(e,t,f,dur,{type:'sawtooth',v:.09*v,a:.08,pad:true,r:.25,lp:f*3,q:4,from:.88,fromT:.15,vib:[6.5,.018]});noise(e,t,dur,{f:f*2,q:3,v:.12*v,a:.1});break;}
   case 'mumie': // tiefe Rahmentrommel auf Tonhöhe
-   tone(d,t,f*1.03,.45,{glide:.94,v:.32*v});tone(d,t,f*2,.12,{type:'triangle',v:.06*v});noise(d,t,.04,{f:900,type:'lowpass',q:.7,v:.18*v});break;
+   tone(d,t,f*1.03,.45,{glide:.94,v:.23*v});tone(d,t,f*2,.12,{type:'triangle',v:.05*v});noise(d,t,.04,{f:900,type:'lowpass',q:.7,v:.13*v});break;
   case 'rufer':formant(d,t,f,dur,'a',{v:.45*v,a:.08,r:.3,breath:.3,vib:[5,.01],glide:.97});break;
-  case 'eisgesicht':formant(d,t,f,dur,'u',{v:.5*v,a:.2,r:.4,breath:.55,vib:[4,.006],lp:1400});break;
-  case 'nachgeher':formant(d,t,f,dur,'o',{v:.45*v,a:.06,r:.2,breath:.35,vib:[3.3,.012]});break;
+  case 'eisgesicht':formant(d,t,f,dur,'u',{v:.62*v,a:.2,r:.4,breath:.55,vib:[4,.006],lp:1400});break;
+  case 'nachgeher':formant(d,t,f,dur,'o',{v:.62*v,a:.06,r:.2,breath:.35,vib:[3.3,.012]});break;
   case 'augen': // kleine Glasklänge: Grundton, Oktave, Duodezime
-   tone(d,t,f,.7,{v:.05*v,a:.002});tone(d,t,f*2,.35,{v:.018*v,a:.002});tone(d,t,f*3,.18,{v:.008*v,a:.002});break;
+   tone(d,t,f,.9,{v:.07*v,a:.002});tone(d,t,f*2,.4,{v:.025*v,a:.002});tone(d,t,f*3,.2,{v:.01*v,a:.002});break;
  }
 }
 function tutti(t,chord){
@@ -376,16 +380,16 @@ function bigBell(t){const r=BIOME[S.biome].root,b=ctx.createGain();b.gain.value=
 
 // Ortsklang-Ereignisse (Layer 0): selten, zufällig (reine Kosmetik), tonale Klänge aus dem aktuellen Akkord
 function ambEvent(t,s,bar,ch){
- const b=BIOME[S.biome],r=b.root,k=L[0].gain.value;if(k<.05)return;const R=Math.random,dry=L[0];
+ const b=BIOME[S.biome],r=b.root,k=lvAt(0,t);if(k<.05)return;const R=Math.random,dry=L[0];
  const ct=()=>ch.c[Math.floor(R()*3)];
  switch(S.biome){
   case 'hafen':if(bar%4===2&&s===8&&R()<.8){tone(farIn,t,mtof(r+12),3,{v:.07,rot:false});tone(farIn,t,mtof(r+12)*2.378,1.2,{v:.012,rot:false});}break; // ferne Glocke (Teilton 2,378 = kleine Dezime, in der Tonart)
   case 'moor':
    if(s%4===0&&R()<.14){const n=2+Math.floor(R()*3);for(let i=0;i<n;i++)noise(dry,t+i*(.015+R()*.03),.005,{f:2600,type:'highpass',q:.8,v:.08});} // Holz knackt
-   if(s%4===2&&R()<.08){for(let i=0;i<3+Math.floor(R()*3);i++)tone(dry,t+i*.07,300+R()*400,.05,{glide:1.6,v:.02,lp:1400});} // Wasser gurgelt
+   if(s%4===2&&R()<.08){for(let i=0;i<3+Math.floor(R()*3);i++)tone(dry,t+i*.07,mtof(r+24+ct()),.05,{glide:1.6,v:.02,lp:1400});} // Wasser gurgelt
    break;
   case 'kapelle':
-   if(bar%8===4&&s===0)ch.c.forEach(iv=>tone(farIn,t,mtof(r+12+iv),spb()*28,{type:'square',v:.012,a:.6,pad:true,r:1.5,det:(R()*44-22),lp:1100,rot:false})); // verstimmte Orgel
+   if(bar%8===4&&s===0)ch.c.forEach(iv=>tone(farIn,t,mtof(r+12+iv),spb()*28,{type:'square',v:.012,a:.6,pad:true,r:1.5,det:(R()*24-12),lp:1100,rot:false})); // verstimmte Orgel
    if(s%4===0&&R()<.08)tone(farIn,t,mtof(r+36+ct()),.9,{v:.025,rot:false});break;
   case 'salz':
    if(s%4===0&&R()<.28){const m=r+36+ct();tone(dry,t,mtof(m),.09,{glide:1.25,v:.03,rot:false});tone(farIn,t,mtof(m),.09,{glide:1.25,v:.03,rot:false});} // Tropfen
@@ -460,7 +464,7 @@ function barStart(t,bar){
  S.nextBiome=null;
  bedLevels(t);
  S.spike=Math.max(0,S.spike-.25);
- if(S.fin){S.slot=null;S.duel=false;return;}
+ if(S.fin){S.chord=S.fin==='umkehren'?1:0;S.slot=null;S.duel=false;return;} // Schlussakkord bleibt stehen (auch für tonale SFX)
  // Layer schalten (mit Hysterese), nur auf Taktgrenzen
  if(S.solo){soloGates(t);}else{
  for(let i=1;i<4;i++){const on=S.gate[i]?S.wucht>=TH[i]-HYST:S.wucht>=TH[i];setGate(i,on,t,`Wucht ${z(S.wucht)} ${on?'≥':'<'} ${z(on?TH[i]:TH[i]-HYST)}`);}
@@ -468,8 +472,8 @@ function barStart(t,bar){
  setGate(4,S.spike>0||(S.scene==='boss'&&S.wucht>=TH[4]),t,S.spike>0?'Hochreaktion klingt nach':(S.scene==='boss'&&S.wucht>=TH[4]?`Boss, Wucht ${z(S.wucht)} ≥ 0,88`:'Spitze abgeklungen'));
  const dr=S.drive;S.drive=S.drive?S.wucht>=TH_DRIVE-HYST:S.wucht>=TH_DRIVE;
  if(dr!==S.drive)note(S.drive?'treibend':'ruhig',`Rhythmus: Wucht ${z(S.wucht)}`);
- voiceBus.gain.setTargetAtTime(combat()&&S.foes.length?1:0,t,combat()?.2:.8);
- L[0].gain.setTargetAtTime(S.scene==='menu'?.7:1,t,1);}
+ lv('v',combat()&&S.foes.length?1:0,t,combat()?.2:.8);
+ lv(0,S.scene==='menu'?.7:1,t,1);}
  // Stimmen-Plätze: Typen in Auftrittsreihenfolge, höchstens 2, im Wechsel
  const types=[...new Set(S.foes.map(f=>f.type))].slice(0,2);
  const duel=combat()&&S.foes.length===1&&!S.solo;
@@ -483,9 +487,9 @@ function retune(t,now){const r=BIOME[S.biome].root,tc=now?.01:.8,set=(o,m)=>o.fr
 // Vorhören einzelner Spuren (Klangliste): nur ein Layer oder nur die Gegnerstimme, festes Tempo
 function soloGates(t){const o=S.solo;S.drive=!!o.drive;
  for(let i=1;i<5;i++)setGate(i,o.layer===i,t);
- L[0].gain.setTargetAtTime(o.layer===0?1:0,t,.2);voiceBus.gain.setTargetAtTime(o.layer==='voice'?1:0,t,.2);}
-function setGate(i,on,t,why){if(S.gate[i]===on)return;S.gate[i]=on;L[i].gain.setTargetAtTime(on?1:0,t,on?.15:.9);
- if(!S.solo)note(i===4?(on?'tutti':'tutti aus'):`layer ${i} ${on?'an':'aus'}`,why||'');}
+ lv(0,o.layer===0?1:0,t,.2);lv('v',o.layer==='voice'?1:0,t,.2);}
+function setGate(i,on,t,why,still){if(S.gate[i]===on)return;S.gate[i]=on;lv(i,on?1:0,t,on?.15:.9);
+ if(!S.solo&&!still)note(i===4?(on?'tutti':'tutti aus'):`layer ${i} ${on?'an':'aus'}`,why||'');}
 function chordNow(){const b=BIOME[S.biome],dark=S.dark;return {c:(dark?b.dark:b.prog)[S.chord],bass:(dark?b.darkBass:b.bass)[S.chord],deg:(dark?b.darkDeg:b.deg)[S.chord],name:(dark?b.darkNames:b.names)[S.chord],scale:dark||b.phryg?PHRYG:MINOR};}
 // Tonleiterstufe d über dem Akkord -> Halbtöne über dem Grundton. Auf der V wird die kleine Septime zum Leitton
 // (harmonisch Moll) und die Quinte der V bleibt rein, auch in der phrygischen Leiter.
@@ -494,19 +498,19 @@ function degSemi(ch,d){const a=ch.deg+d,i=((a%7)+7)%7;let st=ch.scale[i]+12*Math
 // Ende des Runs: Bleiben (löst sich in den Grundton auf, dann still), Umkehren (endet auf dem gekippten Akkord), Niederlage
 function finish(t,art){
  const r=BIOME[S.biome].root,long=spb()*16*4;
- for(let i=1;i<5;i++){S.gate[i]=false;L[i].gain.setTargetAtTime(0,t,1.2);}
- voiceBus.gain.setTargetAtTime(0,t,.8);flirrG.gain.setTargetAtTime(0,t,1);
+ for(let i=1;i<5;i++){S.gate[i]=false;lv(i,0,t,1.2);}
+ lv('v',0,t,.8);flirrG.gain.setTargetAtTime(0,t,1);
  if(art==='bleiben'){
   [-24,-12,0,12].forEach((iv,i)=>tone(dropG,t,mtof(r+iv),long,{type:i<2?'sine':'triangle',v:[.12,.07,.03,.015][i],a:1.2,pad:true,r:long*.6,rot:false}));
   [-8,8].forEach(det=>tone(dropG,t,mtof(r+7),long*.7,{type:'sawtooth',v:.012,a:1,pad:true,r:long*.5,det,lp:900,rot:false}));
   bell(t+spb()*4,r+24,.05);
-  dissG.gain.setTargetAtTime(0,t,1);droneG.gain.setTargetAtTime(0,t+2,2.5);L[0].gain.setTargetAtTime(0,t+long*.4,2.2);
+  dissG.gain.setTargetAtTime(0,t,1);droneG.gain.setTargetAtTime(0,t+2,2.5);lv(0,0,t+long*.4,2.2);
  }else if(art==='umkehren'){
   const c=BIOME[S.biome].dark[1];// ♭II
   c.forEach(iv=>[-9,9].forEach(det=>tone(dropG,t,mtof(r+iv),long,{type:'sawtooth',v:.026,a:.8,pad:true,r:long*.55,det,lp:1100,lpEnd:500,rot:false})));
   tone(dropG,t,mtof(r+c[0]-12),long,{v:.1,a:.6,pad:true,r:long*.55,rot:false});
   // Aber du hörst es noch: Dissonanz und Flirren bleiben ganz leise
-  dissG.gain.setTargetAtTime(.02,t,1.5);flirrG.gain.setTargetAtTime(.004,t+long*.5,2);L[0].gain.setTargetAtTime(.35,t+long*.4,2.5);
+  dissG.gain.setTargetAtTime(.02,t,1.5);flirrG.gain.setTargetAtTime(.004,t+long*.5,2);lv(0,.35,t+long*.4,2.5);
  }else{ // Niederlage: dunkel ausblenden, Wasser-Rauschen bleibt
   dropF.frequency.cancelScheduledValues(t);dropF.frequency.setValueAtTime(dropF.frequency.value,t);dropF.frequency.exponentialRampToValueAtTime(260,t+3.5);
   dissG.gain.setTargetAtTime(0,t,1);droneG.gain.setTargetAtTime(0,t,2);tone(dropG,t,mtof(r-24),5,{v:.12,a:.05,glide:.8,rot:false});
@@ -514,7 +518,7 @@ function finish(t,art){
 }
 function clearFin(){if(!S.fin&&!S.finPending)return;const n=ctx?ctx.currentTime:0;S.fin=null;S.finPending=null;
  if(!ctx)return;dropF.frequency.cancelScheduledValues(n);dropF.frequency.setTargetAtTime(18000,n,.4);dropG.gain.cancelScheduledValues(n);dropG.gain.setTargetAtTime(1,n,.3);
- droneG.gain.cancelScheduledValues(n);droneG.gain.setTargetAtTime(.05,n,1);L[0].gain.cancelScheduledValues(n);L[0].gain.setTargetAtTime(1,n,1);flirrG.gain.cancelScheduledValues(n);bedLevels(n);}
+ droneG.gain.cancelScheduledValues(n);droneG.gain.setTargetAtTime(.05,n,1);L[0].gain.cancelScheduledValues(n);lv(0,1,n,1);flirrG.gain.cancelScheduledValues(n);bedLevels(n);}
 
 function schedule(st,t){
  const s=st%16,bar=Math.floor(st/16),root=BIOME[S.biome].root;
@@ -527,7 +531,7 @@ function schedule(st,t){
  if(st===S.dropStep){dropG.gain.cancelScheduledValues(t);dropG.gain.setTargetAtTime(.45,t,.07);dropF.frequency.cancelScheduledValues(t);dropF.frequency.setValueAtTime(18000,t);dropF.frequency.exponentialRampToValueAtTime(420,t+beat*.9);
   noise(duckG,t,beat,{f:300,fEnd:4000,q:1.8,v:.09,a:beat*.95});note('atemholen','Hochreaktion: ein Schlag halb leise und dumpf');}
  if(st===S.hitStep){dropG.gain.cancelScheduledValues(t);dropG.gain.setValueAtTime(.45,t);dropG.gain.linearRampToValueAtTime(1,t+.05);dropF.frequency.cancelScheduledValues(t);dropF.frequency.setValueAtTime(420,t);dropF.frequency.exponentialRampToValueAtTime(18000,t+.2);
-  S.spike=1;S.wucht=1;for(let i=1;i<5;i++){S.gate[i]=false;setGate(i,true,t,'Hochreaktion');}S.drive=true;tutti(t,ch.c);}
+  S.spike=1;S.wucht=1;for(let i=1;i<5;i++){const vor=S.gate[i];S.gate[i]=false;setGate(i,true,t,'Hochreaktion',vor);}S.drive=true;tutti(t,ch.c);}
  // Layer 0: Ortsklang-Ereignisse
  if(!S.solo||S.solo.layer===0)ambEvent(t,s,bar,ch);
  // Layer 1: Herzschlag (lub-dub), bei Wucht doppelt; Bass auf der Eins
@@ -633,7 +637,7 @@ return {
   return {scene:S.scene,wucht:S.wucht,gefahr:S.gefahr,bpm:S.bpm,gate:[...S.gate],drive:S.drive,
   chord:c.name,biome:S.biome,dark:S.dark,slot:S.slot,duel:S.duel,foes:S.foes.map(f=>f.type),hp:S.hp,hpMax:S.hpMax,chain:S.chain,telegraph:S.telegraph,momentum:S.momentum,
   bar:Math.floor(cur/16),beat:Math.floor((cur%16)/4)+1,akt:S.akt,role:S.role,stoff:S.stoff,abgesang:S.lastAbgesang,ende:S.fin,
-  layerLevels:ctx?L.map(g=>+clamp(g.gain.value).toFixed(3)):[1,0,0,0,0],voiceLevel:ctx?+clamp(voiceBus.gain.value).toFixed(3):0,
+  layerLevels:[0,1,2,3,4].map(i=>+clamp(lvAt(i,ctx?ctx.currentTime:0)).toFixed(3)),voiceLevel:+clamp(lvAt('v',ctx?ctx.currentTime:0)).toFixed(3),
   peak:S.peak>0?+(20*Math.log10(S.peak)).toFixed(2):-120,log:S.log.slice()};}
 };
 })();

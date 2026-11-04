@@ -1,0 +1,45 @@
+{
+ "id": "ruft",
+ "rang": "boss",
+ "w": 160,
+ "h": 160,
+ "zone": "pforte",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 3,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 8
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 10
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 6
+  }
+ },
+ "fuss": [
+  80,
+  150
+ ],
+ "kopf": [
+  80,
+  4
+ ],
+ "augen": [
+  [
+   80,
+   78
+  ]
+ ],
+ "augenfarbe": "#ff6ad8"
+}

@@ -55,7 +55,19 @@ Talismane ohne Karte: `"cards": []` und `"passiv": {"typ": …}`. Sie belegen ei
 
 ## foes.json
 
-Schlüssel = Gegner-ID. `n` Name, `hp` Leben auf Tiefe 1, `weak` Schwachstelle (Stoff, 1,5-facher Schaden), `spr` Zeichner in `js/sprites/foes.js`, `pat` Muster der Züge der Reihe nach: `{t:"atk", v, h}` Angriff, `{t:"blk", v}` Schutz, `{t:"buff", v}` Stärke. Beim Boss legt `variant` fest, welcher Entwurf gezeichnet wird (`eye`, `maw`, `king`).
+Schlüssel = Gegner-ID (auch Schlüssel der Gegnerstimme in music.js). Konzepte: `docs/auftrag/gegner.md`.
+
+| Feld | Bedeutung |
+|---|---|
+| `n`, `hp`, `weak` | Name, Leben auf Tiefe 1 (normale Gegner skalieren mit der Tiefe, Wächter und Boss nicht), Schwachstelle (Stoff, 1,5-facher Schaden) |
+| `pat` | Muster der Züge der Reihe nach: `{t:"atk", v, h}` Angriff, `{t:"blk", v}` Schutz, `{t:"buff", v}` Stärke |
+| `biom`, `rang` | Biom; `normal`, `waechter` oder `boss` |
+| `sprite`, `varianten` | Sheet-Namen in `assets/gegner/` (Format siehe `docs/auftrag/sprites.md`); pro Kampf wird eine Variante per Seed gewählt |
+| `konzept`, `stimme` | Kurzfassung des Konzepts; Stimme in music.js |
+| `beute` | Item-ID, die nach dem Sieg mit kleiner Chance in der Auswahl liegt |
+| `besonders` | Wächter/Boss: `{art:"ruft", gegner, alle}` (ruft alle n Züge Verstärkung), `{art:"schwach_wechsel", stoffe}` (wechselt die Schwachstelle jeden Zug), `{art:"phasen", bei:[0.66,0.33], muster:[…], sprites:[…], schwach:[…], ruft:{gegner, alle, anzahl}}` (Boss) |
+
+Sprites erzeugen und prüfen: `node tools/sprites/bauen.js`, `node tools/sprites/pruefen.js`.
 
 ## reactions.json
 
@@ -145,11 +157,44 @@ Rollen-Sets: `n` Name, `i` die drei Item-IDs, `t` Text, `bonus` Wirkung, wenn al
 
 ## jobs.json
 
-Startfiguren: `n`, `d`, Start-Items je Bereich (`w`, `k`, `t`) und im Rucksack (`bag`).
+Die sechs Startfiguren. `id` (Schlüssel, auch für die Musik), `n` Name, `d` Kurztext, `set` Name des Sets in roles.json, `ausrede` (Startzeile), `wahrheit` (Schlusszeile bei der Ankunft), `vorliebe` (`hafen` oder `moor`: Einstieg mit 70 %), `instrument`, `musik` (Rollen-Schlüssel in music.js), `frei_ab` (Zahl gelesener Fragmente, ab der die Figur wählbar ist), Start-Items je Bereich (`w`, `k`, `t`) und im Rucksack (`bag`).
+
+## run.json
+
+Aufbau eines Runs (`js/core/run.js`).
+
+| Feld | Bedeutung |
+|---|---|
+| `akte` | Die fünf festen Akte. `n`, `titel`, `biome` (eins oder zwei zur Wahl), `wahl` (`figur`: Vorliebe der Figur mit Wahrscheinlichkeit `vorliebe`; `seed`: 50/50), `ebenen` (Schlüssel in `ebenen`) |
+| `ebenen.<k>` | Regel für die Weg-Wahl einer Ebene: `pool` (Knotenarten, aus denen gezogen wird), `wege` [min, max], `mindestens` {art: n}, `verschiedene` (Mindestzahl verschiedener Arten), `einer_von` (mindestens eine dieser Arten), `fest` (genau dieser Knoten), `fest_wahl` (genau diese Wege) |
+| `kaempfe.zahl` | Gegnerzahl je Akt (Zeile) und Ebene (Spalte); `schwer_extra` Gegner mehr beim schweren Kampf |
+| `knoten.<art>` | Anzeigename `n` und Pixelzeichen `zeichen` je Knotenart: `kampf`, `kampf_schwer`, `ereignis`, `wandbild`, `kraemer`, `werkstatt`, `rast`, `fundstelle`, `waechter`, `finale` |
+| `rast.heil_anteil` | Heilung beim Schlafen (Anteil vom maximalen Leben) |
+| `fundstelle` | `gold` [min, max], `haken_chance`, `haken_schaden` |
+| `strand`, `ankunft` | Texte nach Niederlage und nach dem Finale (Bleiben/Umkehren) |
+| `startvarianten` | Runübergreifend freischaltbar (`ab_akt`: beim ersten Erreichen dieses Akts, 0 = Akt I), `fx` wie bei Ereignissen |
+| `stufen` | Schwierigkeitsstufen nach dem ersten Sieg: `hp_je_stufe`, `atk_alle_n_stufen`, `max` |
+
+## biomes.json
+
+Die sieben Biome (Schlüssel `hafen`, `moor`, `kapelle`, `salz`, `stadt`, `eis`, `pforte`).
+
+| Feld | Bedeutung |
+|---|---|
+| `n`, `kurz`, `zeit` | Name, Kurzname, Zeitschicht |
+| `koerper`, `rand`, `augen`, `nebel` | Palette: 4 dunkle Körperstufen, 2 Randlicht-Stufen, Augenfarbe, Nebel fern/nah |
+| `musik` | Biom-Schlüssel in music.js |
+| `szene_alt` | alte Zone aus `js/scenes/zones.js` (nur noch Galerie) |
+| `gegner`, `waechter` | IDs aus foes.json |
+| `fundpool` | Item-IDs, aus denen Funde, Krämer und Ereignisse ziehen (Items aus Fragmenten kommen nach dem Lesen dazu) |
+| `ereignisse` | ungenutzt, Ereignisse hängen über `biom` in events.json am Biom |
+| `kraemer` | `n` Name, `ort`, `zeile` (Charakter) |
+| `uebergang` | Satz beim Abstieg aus diesem Biom in den nächsten Akt |
+| `weg_hinweise.<art>` | Hinweistexte auf der Weg-Wahl je Knotenart |
 
 ## balance.json
 
-Zahlen für den ganzen Run: Startwerte, Gold, Gegnerskalierung, Begegnungen pro Tiefe, Funde, Werkstatt/Krämer/Ereignis-Rhythmus (`every`, `offset`: erscheint nach Tiefe d, wenn d mod every = offset), Verschmelzen (`forge`), Zonen und Jumpscare-Zeitfenster in Minuten.
+Zahlen für den ganzen Run: `start_hp`, `energy_per_turn`, `hand_size`, `start_slots`, `max_slots`, `bag_size`, `victory_heal_pct`, Gold (`gold_per_victory`, `waechter_belohnung`), Gegnerskalierung (`enemy_scaling`: nur normale Gegner, Wächter und Boss sind je Akt ausgelegt), Funde (`rewards`), Krämer (`shop`, inklusive `streichen_preis`), Verschmelzen (`forge`), `card_copies` (wie oft jede Karte eines Items ins Deck kommt), `stummfilm` (Dauer, Mindestabstand, Stärke der Viragierung, Körnung, Kratzer, Flackern) und `jumpscare` (höchstens einmal pro Run, nicht vor Minute n, Zeitfenster).
 
 ## ideas.json
 

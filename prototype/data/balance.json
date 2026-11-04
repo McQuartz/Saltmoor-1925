@@ -1,11 +1,11 @@
 {
- "start_hp": 40,
+ "start_hp": 50,
  "energy_per_turn": 3,
  "hand_size": 5,
  "start_slots": 2,
  "max_slots": 4,
  "bag_size": 5,
- "victory_heal_pct": 0.15,
+ "victory_heal_pct": 0.28,
  "gold_per_victory": {
   "min": 12,
   "max": 20,
@@ -14,8 +14,8 @@
   "boss": 0
  },
  "enemy_scaling": {
-  "hp_per_depth": 0.07,
-  "atk_every_n_depths": 3
+  "hp_per_depth": 0.04,
+  "atk_every_n_depths": 4
  },
  "encounters": {
   "_doc": "Ersetzt durch run.json (Gegnerzahl) und biomes.json (Gegner je Biom)."

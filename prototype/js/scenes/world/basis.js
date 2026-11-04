@@ -244,6 +244,25 @@ B.form = function (e, m, mat) {
   }
 };
 
+// ---------- Baum aus Ästen per Regel ----------
+// zug: Winkel, zu dem sich der ganze Baum neigt (z. B. zum Steinkreis), staerke 0..1
+B.baum = function (m, r, x, y, len, ang, dicke, tiefe, o) {
+  o = o || {}; const zug = o.zug, st = o.zugStaerke || 0;
+  if (zug !== undefined) { let d = zug - ang; d = Math.atan2(Math.sin(d), Math.cos(d)); ang += d * st; }
+  const krumm = o.krumm || .12, n = 4, pts = [[x, y]]; let a = ang, px = x, py = y;
+  for (let i = 0; i < n; i++) { a += r.j(krumm); px += Math.cos(a) * len / n; py += Math.sin(a) * len / n; pts.push([px, py]); }
+  m.pfad(pts, dicke, Math.max(.45, dicke * (o.verj || .62)));
+  if (tiefe <= 0 || len < (o.minLen || 3)) return;
+  const k = r() < (o.drei || .3) ? 3 : 2, spread = o.spreiz || .55;
+  for (let i = 0; i < k; i++) {
+    const s = (i - (k - 1) / 2) * spread * 2 / Math.max(1, k - 1) + r.j(.25);
+    const t = .55 + r() * .3; // Abzweig entlang des Asts
+    const bi = Math.floor(t * n), bx = pts[bi][0] + (pts[bi + 1][0] - pts[bi][0]) * (t * n - bi), by = pts[bi][1] + (pts[bi + 1][1] - pts[bi][1]) * (t * n - bi);
+    const useEnd = i === 0 && k === 2 ? 0 : 1;
+    B.baum(m, r, useEnd ? px : bx, useEnd ? py : by, len * (o.kuerz || .7) * (.85 + r() * .3), a + s, Math.max(.45, dicke * (o.verj || .62)), tiefe - 1, Object.assign({}, o, { zugStaerke: st * .6 }));
+  }
+};
+
 // ---------- Perspektive: Boden mit Fluchtpunkt ----------
 // s = 1/Tiefe (1 = Unterkante y0u, 0 = Horizont). X in Einheiten der Augenhöhe.
 B.persp = function (vx, vy, yu) {
@@ -322,6 +341,18 @@ B.kontext = function (pal, o) {
     if (y0 < a) B.dith(K.e[2], x0, y0, x1, Math.min(y1, a), c, af);
     if (y1 > a && y0 < b) B.dith(K.e[3], x0, Math.max(y0, a), x1, Math.min(y1, b), c, af);
     if (y1 > b) B.dith(K.e[4], x0, Math.max(y0, b), x1, y1, c, af);
+  };
+  // Boden mit mehreren Stoffen: klasse(x,y) -> Index in mats (oder -1), mats[i] = {cols, tf(x,y)}
+  K.bodenStoffe = function (y0, y1, mats, klasse) {
+    const P = mats.map(m => m.cols.map(B.pk));
+    for (let y = Math.max(Math.floor(y0), -M); y < Math.min(Math.ceil(y1), H + M); y++) {
+      const e = K.e[K.eb(y)];
+      for (let x = -M; x < W + M; x++) {
+        const c = klasse(x, y); if (c < 0) continue; const m = mats[c], p = P[c], n = p.length - 1;
+        let t = m.tf(x, y); if (t !== t || t < -.5) continue; t = clamp(t, 0, .9999) * n; const k = Math.floor(t);
+        e.d[(y + M) * EW + x + M] = p[Math.min(n, (t - k) > bay(x, y) ? k + 1 : k)];
+      }
+    }
   };
   K.glut = function (x, y, r, c, a, ebenen) { for (const i of (ebenen || [1, 2, 3, 4])) B.gluehen(K.e[i], x, y, r, c, a); };
   K.fertig = () => B.szene(K);
