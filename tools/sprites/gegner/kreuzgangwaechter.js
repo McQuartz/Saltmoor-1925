@@ -66,10 +66,15 @@ module.exports = {
       // Gesicht unter der Kapuze, gemeißelt in die Stirnseite des Kapitells
       const [fx, fy] = R([46, top + 6]);
       const X = r(fx), Y = r(fy);
-      for (let k = -6; k <= 6; k++) { const yy = Y - 3 + Math.round((k * k) / 8); P.auf(X + k, yy - 1, 'k0'); if (Math.abs(k) < 5) P.auf(X + k, yy - 2, 'k3'); }
-      P.auf(X - 6, Y - 1, 'k0'); P.auf(X + 6, Y - 1, 'k0'); P.auf(X - 6, Y, 'k0'); P.auf(X + 6, Y, 'k0');
+      // Nische in Kapuzenform: vertieft (dunkel), die untere linke Innenkante fängt Licht, oben ein heller Kapuzengrat
+      for (let y = Y - 7; y <= Y + 6; y++) for (let x = X - 6; x <= X + 6; x++) {
+        const q = ((x - X) / 5.5) ** 2 + ((y - Y + (y < Y ? 0 : 0)) / (y < Y ? 7 : 6)) ** 2; if (q > 1) continue;
+        const qi = ((x - X) / 4.2) ** 2 + ((y - Y - 1) / 5) ** 2;
+        P.auf(x, y, qi < 1 ? 'k1' : (x < X && y > Y - 2) ? 'r1' : (y < Y - 3 ? 'k3' : 'k0'));
+      }
+      P.auf(X, Y - 7, 'r2'); P.auf(X + 1, Y - 7, 'r1'); P.auf(X, Y + 1, 'k3'); P.auf(X, Y + 2, 'k2');
       if (augenAn) {
-        P.auge(X - 3, Y, 1); P.auge(X + 2, Y, 1); P.set(X - 2, Y, 'glut'); P.set(X + 3, Y, 'glutDim');
+        P.glow(X, Y + 2, 12, 0.85); P.auge(X - 3, Y, 1); P.auge(X + 2, Y, 1); P.set(X - 2, Y, 'glut'); P.set(X + 3, Y, 'glutDim');
         augen.push([X - 3, Y], [X + 2, Y]);
       } else { P.set(X - 3, Y, 'k0'); P.set(X + 2, Y, 'k0'); }
       // Mund: ein waagerechter Schlitz, atmet (offen in Bild 2/3)

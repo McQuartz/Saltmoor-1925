@@ -9,8 +9,8 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M0 Einrichten und Bild-Pipeline | offen | |
 | M1 Gefühl und UI | fertig | Lebensbalken unten mittig, Meldungszeile, Wucht, Mehrfachtreffer einzeln, Übergang zum Wegklicken, Beute-Sätze, Endbildschirm, Musik-Aufbau |
 | M2 Längere Akte | offen | |
-| M3 Deckbau-Kern | offen | |
-| M4 Items, Handgriffe, Builds | offen | |
+| M3 Deckbau-Kern | fertig | Kerben, Handgriffe, 7 Schlagworte, Belohnung, Ritzen, Schleifen, Umritzen, Verkaufen, Rucksackmodus, Hover-Vorschau, Dev-Reiter Deck |
+| M4 Items, Handgriffe, Builds | fertig | 70 Handgriffe, 74 Items (18 Reliquien), 6 Builds mit Beispieldeck und Build-Bot; Builds 30–40 % (Feinabstimmung M8) |
 | M5 Pipeline und alte Schwächen | läuft | Neubauten fertig (Mumie, Nachgeher, Ertrunkener, Netzflickerin-Rücken, Tiefling, Nest, alle Note 4); Icons in Arbeit |
 | M6 Biome Akt I und II | offen | |
 | M7 Biome Akt III bis V | offen | |
@@ -32,6 +32,44 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 Neu gebaut (Subagent, Weg A, gleiche IDs): Erbauer-Mumie (hockender Echsenleib in Binden, Menschenmaske vor der Schnauze), Nachgeher (Mensch im Rückwärtsbogen, Kopf hängt kopfüber), Ertrunkener (schwebt an Land, als wäre er noch unter Wasser), Netzflickerin (nur Rücken: knotiger Wirbelgrat, Spinnenknie), Tiefling (flacher Fischkopf ohne Hals, Flossenkamm), Nest (Grashügel mit Warnpflock, steht erst im Angriff auf). Jeder bekommt einen Kniff (Mumie explodiert beim Tod, Nachgeher mischt Abschriften, Ertrunkener löscht Brand, Netzflickerin friert eine Karte ein, Tiefling ruft einen Vetter, Nest verbirgt die Absicht). Bögen: `bilder/M5/vorher-nachher.png`, `silhouetten.png`, `animationen.png`, `im-spiel-*.png`. Konzepte und Noten: `neubauten.md`.
 
 **Meine Prüfung der Bögen:** Mumie, Nachgeher und Ertrunkener sind klar besser lesbar als vorher, das Nest liest sich jetzt als Hügel. Der Tiefling wirkt eher froschartig als fischig, für mich eine knappe 4. Keiner erreicht die Feinheit der Favoriten.
+
+### M2 Längere Akte (fertig)
+
+`run.json`: Akte I–IV mit 6 Ebenen plus Wächter (e1 Kampf/Ereignis, e2 gemischt, e3 Rast/Werkstatt/Krämer, e4 Kampf/schwerer Kampf/Ereignis, e5 gemischt, e6 Rast/Krämer/Werkstatt), Akt V Vorraum, Rast, Finale. Am Anfang jedes Akts wählt man zwischen zwei Biomen (Akt I: Vorliebe der Figur plus eins per Seed); der Code nimmt beliebig viele Biome je Akt und überspringt fehlende. Neue Biome als Pakete (`paket-format.md`). Dev-Reiter „Run“ zeigt Weg und Angebote, Cheats erzwingen jedes Biom. Skalierung auf die längere Strecke und den stärkeren Deckbau angepasst (`balance.json → enemy_scaling`).
+
+**Abnahme:** `node tools/test-run.js`: alle Biome werden angeboten, Vorliebe in Akt I immer dabei, gleicher Seed = gleiches Angebot, 3100 Ebenen nach Regel, 10 volle Runs mit je 31 Knoten (Ziel ≥ 26), jeder endet.
+
+### M3 Deckbau-Kern (fertig)
+
+- **Kerben und Handgriffe:** Items tragen 1–3 Kerben (gewöhnlich 1, selten/Reliquie 2, Werkstatt +1 bis 3). Handgriffe (`data/handgriffe.json`) nehmen die Stoffe ihres Items an; Stammkarten liegen doppelt im Deck, Handgriffe einfach. Grundkarten aus `more-cards` sind durch die Start-Handgriffe Stoßen, Ausweichen, Abwarten, Durchatmen ersetzt; jede Figur startet mit drei angelegten Items (≈ 10 Karten).
+- **Schlagworte:** Stärke, Verwundbar, Funke, Kette, Behalten, Opfer, X (dazu Unspielbar für Abschriften und Zittern), 12 Sonderwirkungen, 19 Item-Eigenschaften, 15 Gegner-Kniffe. Alles meldet sich mit Grund im Dev-Modus.
+- **Belohnung:** jeder Kampf Gold + Handgriff 1 aus 3 (zwei passend zum Deck, einer frei; Überspringen +10 Gold) + 25 % Item 1 aus 2; schwerer Kampf mehr und selten; Wächter Reliquie 1 aus 3. Ritzen mit Vorschau je Item (Stoff, mögliche Reaktionen), volle Kerbe mit Rückfrage zum Überschreiben. Rahmen nach Seltenheit, Aufdecken nacheinander, Glocke bei Reliquien.
+- **Werkstatt:** verschmelzen oder Kerbe dazu oder Schleifen. **Rast:** schlafen oder Schleifen oder Umritzen. **Krämer:** Items kaufen und verkaufen (40 %), 2 Handgriffe, Handgriff entfernen, manchmal eine Reliquie zum Wucherpreis. **Ereignisse:** neue Folgen Handgriff, Schleifen, Kerbe, Umritzen, Item tauschen, Reliquie, Energie auf Dauer; Bedingungen Item/Figur/früheres Ereignis.
+- **Rucksackmodus** (Taste R): Ausrüstung, Rucksack, Deck als Liste nach Item, Änderungen grün/rot mit Deckgröße vorher/nachher, erst „Übernehmen“ macht es fest, Verkaufen beim Krämer. **Hover-Vorschau** am Cursor bei Belohnung, Krämer, Fund.
+- **Autospieler** versteht Handgriffe (Wert inkl. Gift/Brand über die Züge, ritzt ins Item mit den meisten Reaktionen), **Dev-Reiter „Deck“** (Items, Kerben, Handgriffe, Eigenschaften, Kostenkurve, erkannter Build).
+
+**Abnahme:** `node tools/test-deckbau.js` 13/13 (Start-Handgriffe, Kerben-Grenze, Stoffübernahme, Überschreiben, Kerbe dazu, Schleifen, Funke, Kette, Opfer, X, Stärke, Verwundbar, Behalten). Autospieler-Decks am Ende 19–24 Karten (Ziel ≥ 20 im Schnitt erreicht bei vier von sechs Builds, Rest 19,0–19,6). Bilder `bilder/M3/`: Handgriff-Wahl, Hover am Handgriff, Ritzen, Hover am Item, Rucksackmodus mit Grün/Rot. Vorschau weiter exakt (240 Karten, 0 Abweichungen).
+
+**Einschätzung:** Das Deck wächst jetzt spürbar mit jedem Kampf, und dieselben Handgriffe ergeben je nach Item andere Reaktionen; das trägt den Item-Ansatz. Schwach: Die Ritzen-Liste ist textlastig; das Überschreiben braucht zwei Klicks.
+
+### M4 Items, Handgriffe, Reliquien, Builds (fertig)
+
+Inhalts-Subagent: 70 Handgriffe (je Build 9–10, neutral 12; Kostenkurve 30 % 0, 51 % 1, 13 % 2, 6 % 3/X), 74 Items (44 gewöhnlich, 12 selten, 18 Reliquien), jedes mit Seltenheit, Kerben, Flavor, Preis, Eigenschaft wo es passt; zwei „gut und schlecht“-Items (Kultmaske, Laudanum mit fest eingeritztem Zittern). `docs/auftrag-2/builds.md`: sechs Builds mit Beispieldeck und typischem Zug, Profile in `data/builds.json`. Build-Bots: `node tools/build-bots.js 20 1`.
+
+**Abnahme (Build-Bots, je 20 Seeds, nach Ausreißer-Korrektur):**
+
+| Build | Siege | Ø Tiefe | Ø Deck | Reaktionen/Zug | Niederlagen je Akt I/II/III/IV/V |
+|---|---|---|---|---|---|
+| Glutnest | 35 % | 23,1 | 21,1 | 2,54 | 1/1/7/2/2 |
+| Brackwasser | 30 % | 19,1 | 19,6 | 1,91 | 3/4/6/0/1 |
+| Bollwerk | 40 % | 22,0 | 21,4 | 2,06 | 3/1/4/4/0 |
+| Aderlass | 40 % | 23,1 | 21,4 | 2,11 | 1/2/6/1/2 |
+| Kettenwerk | 30 % | 19,1 | 19,0 | 2,22 | 4/2/6/2/0 |
+| Hagel | 35 % | 23,4 | 21,6 | 2,04 | 1/1/5/6/0 |
+
+Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 0 % → 30 % (der Autospieler bewertete Gift und Brand nicht über die Züge; Vorschau liefert jetzt Gift/Brand/Verwundbar, Bewertung rechnet den erwarteten Schaden); Funke-Karten mit Kosten 0 auf 1 (sonst wirkt Funke nicht); Build-Bots bevorzugten ihre Karten zu stark (Bonus halbiert); Gegnerleben ×1,25 (Wächter ×1,35), weil der neue Deckbau alle Builds auf 65–95 % hob.
+
+**Einschätzung:** Alle sechs Builds sind spielbar und keiner fällt heraus. Unter dem Ziel 40–60 % liegen sie noch, weil Akt III (Stadt mit der neuen Windgestalt) zu viele Runs beendet; das stimme ich in M8 ab. Die Build-Erkennung ist grob (nur Hagel wird zuverlässig erkannt).
 
 ### M1 Gefühl und UI (fertig)
 

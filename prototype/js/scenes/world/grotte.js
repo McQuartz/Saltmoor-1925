@@ -166,10 +166,6 @@ function kerzenwand(K, cfg) {
   cfg = cfg || {}; const fr = K.fr, sd = K.o.seed, P = B.persp(262, 150); K.split = [152, 162];
   // Ebene 0: Höhlenwand, warm vom Kerzenfeld, kalt oben rechts am Spalt
   B.feld(K.e[0], -M, -M, W + M, H + M, WAND, (x, y) => .25 + Math.max(0, 1 - Math.hypot((x - 250) * .6, (y - 130) * 1.1) / 200) * .45 - (Math.abs(x - 352) < 36 && y < 90 ? .15 : 0) - Math.max(0, (60 - y) / 200) + schiefer(sd, .25, 6)(x, y) * .25);
-  const spalt = B.maske(); spalt.poly([[392, -M], [446, -M], [440, 6], [428, 22], [420, 34], [414, 24], [404, 10]]);
-  B.form(K.e[0], spalt, { k: ['#1c2632', '#2c3a4a', '#40546a', '#5a7088'].map(B.pk), r: [], ton: 1.6, fase: 0, rand: 0, verlauf: 1.2 });
-  for (const L of [K.e[0], K.e[1]]) B.kegel(L, 420, 10, 2.15, .16, 200, '#1a2430', .55);
-  K.licht(420, 12, '#a8bccc', 60, .5);
   // Madonna oben auf dem Felsen, mit dem Gesicht zur Wand rechts
   const fels = B.maske(); fels.poly([[250, 154], [262, 120], [290, 100], [318, 86], [340, 82], [370, 86], [384, 98], [392, 124], [400, 154]]);
   B.form(K.e[1], fels, mat(K, .2, SCH.slice(1, 8), { ton: 1.9, fase: 2, muster: schiefer(sd, .3, 4), schatten: 2 }));
@@ -177,6 +173,11 @@ function kerzenwand(K, cfg) {
   // Wand, auf die sie blickt: glatt gerieben, als hätte man sie berührt
   const wr = B.maske(); wr.poly([[392, -M], [W + M, -M], [W + M, 170], [440, 160], [404, 126], [390, 96], [396, 50]]);
   B.form(K.e[2], wr, mat(K, .05, SCH.slice(0, 8), { ton: 2.2, fase: 3, muster: (x, y) => schiefer(sd + 2, .4, 5)(x, y) + (Math.hypot(x - 404, y - 70) < 16 ? .6 : 0), schatten: 2 }));
+  // Spalt in der Wand oben rechts: kaltes Nachtlicht von der Küste, daher das Gegenlicht
+  const spalt = B.maske(); spalt.poly([[432, -M], [462, -M], [458, 8], [448, 30], [444, 48], [438, 30], [436, 10]]);
+  B.form(K.e[2], spalt, { k: ['#1c2632', '#2c3a4a', '#40546a', '#5a7088'].map(B.pk), r: [], ton: 1.4, fase: 0, rand: 0, verlauf: 1.4 });
+  for (const L of [K.e[0], K.e[1]]) B.kegel(L, 446, 20, 2.3, .14, 240, '#1a2430', .5);
+  K.licht(446, 20, '#a8bccc', 60, .5);
   // Kerzenfeld: Felsstufen, auf jeder eine Reihe Kerzen, Wachs läuft die Stufen hinab
   const stufen = [[180, 300, 142, -.02], [196, 330, 130, -.04], [214, 340, 118, -.05], [240, 350, 107, -.06], [270, 366, 97, -.04], [300, 380, 90, -.03]];
   const st = B.maske();
@@ -213,6 +214,7 @@ function kerzenwand(K, cfg) {
   wh.slice(0, 3 + Math.round(fr * 2)).forEach(([x, y, s], i) => wachshaufen(K, K.eb(y), x, y, s, i + sd));
   // Vordergrund: Tropfsteine oben, Stalagmiten unten links und rechts, Kerzenstümpfe
   tropfsteine(K, 5, -M, 200, -2, 34, 0, sd + 11, .55);
+  tropfsteine(K, 1, 150, 400, -4, 26, .25, sd + 17, .6);
   const vg = B.maske(); vg.poly([[-M, 230], [16, 208], [30, 214], [40, 236], [60, 250], [64, H + M], [-M, H + M]]); vg.poly([[W + M, 218], [460, 214], [446, 236], [430, 250], [424, H + M], [W + M, H + M]]);
   vg.poly([[W + M, 150], [470, 160], [462, 200], [458, 222], [W + M, 230]]); vg.poly([[-M, 190], [12, 196], [20, 214], [-M, 232]]);
   B.form(K.e[5], vg, mat(K, 0, SCH.slice(0, 6), { ton: 1.6, fase: 2, muster: schiefer(sd + 13, .3, 5) }));
@@ -258,7 +260,7 @@ function gang(K) {
     }
   });
   // Boden mit zwei Kerzenreihen an den Wänden: das sind die Fluchtlinien
-  bodenSchiefer(K, P, sd + 1, { warm: [150, 280], pfuetzen: .66 });
+  bodenSchiefer(K, P, sd + 1, { warm: [170, 300], pfuetzen: .66, licht: (x, y) => { const Z = P.z(y + .5), X = Math.abs((x + .5 - P.vx) * Z / P.h); return Math.max(0, 1 - Math.abs(X - (sw - .3)) / 1.1) * .9 + Math.max(0, 1 - Z / 9) * .2; } });
   const reihe = sd2 => { const L = []; for (let Z = 1.15; Z < 12; Z *= 1.045) { const [x, y] = P.q(sd2 * (sw - .3), 0, Z), k = P.k(Z); L.push([Math.round(x), Math.round(y), Math.max(1, Math.min(6, Math.round(k * .1 * (1 + B.hash(Math.round(Z * 30), sd2, sd))))), B.hash(Math.round(Z * 30), 3, sd) < .3 ? 1 : 0, B.hash(Math.round(Z * 30), 4, sd) < (fr < .6 ? .8 : .5)]); } return L; };
   const rl = reihe(-1), rr = reihe(1);
   kerzen(K, 4, rl.filter(c => c[1] >= 158)); kerzen(K, 3, rl.filter(c => c[1] < 158 && c[1] >= 148)); kerzen(K, 2, rl.filter(c => c[1] < 148));
@@ -393,7 +395,7 @@ function bauen(o) {
   else if (art === 'uebergang') info = nah(K, { spalt: true });
   else info = [kerzenwand, gang, mund][v](K);
   const x = info.mitte[0], y = info.mitte[1];
-  if (art === 'rast') { for (let i = 0; i < 4; i++) B.dith(K.e[i], -M, -M, W + M, H + M, pal.koerper[0], (px) => .1 + .04 * i - Math.abs(px - x) / 2400); kerzenkreis(K, x, y + 10); }
+  if (art === 'rast') kerzenkreis(K, x, y + 10);
   else if (art === 'kraemer') kerzenfrau(K, x + 30, y - 2);
   else if (art === 'werkstatt') B.werkbank(K, x, y + 4);
   else if (art === 'fund' || art === 'ereignis') wachshaufen(K, 4, x, y + 4, 1.6, 21);

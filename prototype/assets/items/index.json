@@ -2,8 +2,16 @@
  "_doc": "Item-Icons 48×48 (tools/icons/bauen.js). Datei: assets/items/<id>.png. Liste aller vorhandenen IDs.",
  "items": [
   "bible",
+  "bottle",
+  "dagger",
   "harpoon",
+  "knife",
   "lantern",
-  "revolver"
+  "pan",
+  "pick",
+  "poker",
+  "revolver",
+  "shovel",
+  "torch"
  ]
 }

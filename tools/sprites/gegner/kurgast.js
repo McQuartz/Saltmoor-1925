@@ -1,6 +1,6 @@
 // Der Kurgast mit Taucherbrille (Kurhaus). Ein Herr im gestreiften Badeanzug von 1900, der am
-// Beckenrand steht und springen will, seit fünfundzwanzig Jahren. Auf Zehenspitzen, die Arme über
-// dem Kopf zur Spitze gefaltet, alles an ihm ein Glied zu lang. Die Brille ist voll Wasser, und
+// Beckenrand steht und springen will, seit fünfundzwanzig Jahren. Auf Zehenspitzen, die Arme gestreckt
+// schräg nach vorn oben, zur Spitze gefaltet, alles an ihm ein Glied zu lang. Die Brille ist voll Wasser, und
 // die Augen schwimmen darin, jedes für sich. Angriff: endlich der Kopfsprung, auf dich.
 'use strict';
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
   bild(p, v, A) {
     const { E, C, Pg, r, glied } = A;
     const f = p.f, G = v.gross;
-    let tilt = 0, duck = 0, hub = 0, schweb = [[0, 0], [0, 0]], fall = 0, armA = v.zoegern ? 0.45 : 0, zitter = 0, auge = 1;
+    let tilt = -0.07, duck = 0, hub = 0, schweb = [[0, 0], [0, 0]], fall = 0, armA = v.zoegern ? 0.45 : 0, zitter = 0, auge = 1;
     if (p.idle) { schweb = [[[0, 0], [1, 0]], [[1, 1], [0, 1]], [[1, 0], [0, -1]], [[0, -1], [1, 0]]][f]; zitter = [0, 1, 0, 1][f]; hub = [0, 0, 1, 1][f]; }
     if (p.angriff) { duck = [10, 3, 0, 2][f]; tilt = [0.06, -0.3, -0.68, -0.25][f]; hub = [0, 5, 12, 2][f]; fall = [0, 3, 10, 2][f]; armA = [0, 0, 0, 0][f]; auge = [1, 1.2, 1.4, 1][f]; schweb = [[0, 1], [0, 0], [-1, 0], [0, 0]].map(q => [q, q])[f]; }
     if (p.treffer) { tilt = [0.18, 0.08][f]; duck = 2; schweb = [[1, -1], [-1, 1]]; }
@@ -40,9 +40,10 @@ module.exports = {
     const kopf = E(kc[0], kc[1], 5.4, 6, 'haut', { pf: 'bevel' });
     const kappe = Pg([T(-6, sh - 14), T(-3, sh - 18), T(3, sh - 18), T(5, sh - 13), T(4, sh - 9), T(-2, sh - 12)], 'dunkel', { rd: 1 });
     // Arme: über dem Kopf zur Spitze gefaltet (Zögern: halb gehoben)
-    const spitze = T(0 - armA * 10, sh - 34 * G + armA * 26);
-    const armV = glied([T(-8, sh + 2), T(-12 - armA * 8, sh - 12 + armA * 14), T(-2 - armA * 8, sh - 28 * G + armA * 24), spitze], 2.6, 1.4, 'haut');
-    const armH = glied([T(8, sh + 2), T(11 - armA * 4, sh - 13 + armA * 12), T(2 - armA * 6, sh - 28 * G + armA * 24), spitze], 2.4, 1.3, 'haut');
+    // Startpose: Arme gestreckt schräg nach vorn oben, Handflächen aneinander (Zögern: tiefer, angewinkelt)
+    const spitze = T(-36 * G + armA * 14, sh - 15 * G + armA * 14);
+    const armV = glied([T(-6, sh + 2), T(-15 + armA * 4, sh - 3 + armA * 6), T(-26 * G + armA * 10, sh - 9 * G + armA * 10), spitze], 2.6, 1.4, 'haut');
+    const armH = glied([T(6, sh + 1), T(-5 + armA * 4, sh - 15 + armA * 8), T(-22 * G + armA * 10, sh - 17 * G + armA * 10), spitze], 2.4, 1.3, 'haut');
     const gruppen = [
       { p: armH, k: 0.5, anker: an },
       { p: beinH, k: 0.8, anker: an, noRim: true },

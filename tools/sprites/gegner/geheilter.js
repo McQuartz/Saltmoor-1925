@@ -52,8 +52,8 @@ module.exports = {
     const kopf = Pg([[kx + 6, ky + 3], [kx + 3, ky - 4], [kx - 3, ky - 8 + ka * 2], [kx - 9, ky - 7 + ka * 3], [kx - 8, ky - 2], [kx - 3, ky + 3], [kx + 2, ky + 6]], 'haut', { rd: 1.2 });
     const kiefer = Pg([[kx - 2, ky + 2], [kx - 8 - mund * 0.5, ky + 1 + mund * 1.6], [kx - 4, ky + 6 + mund], [kx + 1, ky + 6]], 'haut', { rd: 0.6 });
     // Wachsbein an einer Schnur
-    const vbx = ax - 3 + r(sx * 0.1), vby = ay + 14;
-    const votiv = p.tod && f > 2 ? [] : [C(vbx, vby, vbx + 1, vby + 7, 1.6, 1.3, 'haut'), C(vbx + 1, vby + 7, vbx - 2, vby + 8, 1.1, 1, 'haut')];
+    const vbx = ax + 7 + r(sx * 0.1), vby = ay + 13;
+    const votiv = p.tod && f > 2 ? [] : [C(vbx, vby, vbx + 1, vby + 9, 2.2, 1.6, 'haut'), C(vbx + 1, vby + 9, vbx - 3, vby + 10, 1.4, 1.2, 'haut')];
     const kruecke = v.krueckenRest ? [C(hx + 10, hy - 18, hx + 4, hy + 6, 0.9, 0.9, 'dunkel', { pf: 'flat' }), C(hx + 6, hy - 18, hx + 14, hy - 18, 1.1, 1.1, 'dunkel', { pf: 'flat' })] : [];
     const gruppen = [
       { p: beinH, k: 1 },
@@ -69,9 +69,9 @@ module.exports = {
     const augen = [];
     const details = P => {
       // Schnur
-      P.line(ax - 2, ay + 2, vbx, vby - 1, 'r1');
+      P.line(ax - 2, ay + 2, vbx, vby - 1, 'k3');
       // Das Wachsbein ist warm
-      if (votiv.length) { P.glow(vbx + 0.5, vby + 4, 7, 0.9, 'glutDim', 'k3'); P.set(vbx, vby + 2, 'wachs'); P.set(vbx + 1, vby + 5, 'wachs'); }
+      if (votiv.length) { P.glow(vbx + 0.5, vby + 5, 9, 1, 'glutDim', 'k3'); for (const [a, b] of [[0, 1], [1, 2], [0, 3], [1, 5], [1, 7], [-1, 10], [-2, 10]]) P.set(vbx + a, vby + b, 'wachs'); }
       // offener Mund, dunkel
       for (let k = 0; k < mund + 1; k++) { P.auf(kx - 5 - k * 0.3, ky + 2 + k, 'k0'); P.auf(kx - 4, ky + 2 + k, 'k0'); }
       // Augen: zwei schmale, nach oben gedrehte Schlitze

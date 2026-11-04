@@ -106,10 +106,10 @@ function pult(K, eb, x, y, s, an, o) {
   if (o.kerze !== false) kerze(K, eb, Math.round(x - w * .45), Math.round(y - h + 1), Math.max(2, Math.round(4 * s)), an);
   // beschriebener Streifen, der vom Pult hängt und über den Boden läuft (jede Abschrift ein Wort länger)
   if (o.streifen) {
-    const sm = B.maske(), sx = x - w * .5 + 1, sy = y - h + 3 * s, bw = Math.max(1.2, 2.4 * s), L = o.streifen * s;
-    const pts = [[sx, sy], [sx - 2 * s, sy + h * .35], [sx - 1 * s, y - 2 * s], [sx - 4 * s, y + 1 * s], [sx - L * .5, y + 3 * s], [sx - L, y + 2 * s + L * .06]];
+    const sm = B.maske(), sx = x - w * .5 + 1, sy = y - h + 3 * s, bw = Math.max(1.4, 3 * s), L = o.streifen * s;
+    const d = o.rechts ? -1 : 1, pts = [[sx, sy], [sx - 2 * s, sy + h * .35], [sx - 1 * s, y - 2 * s], [sx - 4 * s, y + 1 * s], [sx - 4 * s + d * L * .35, y + 4 * s + L * .05], [sx - 4 * s + d * L * .6, y + 6 * s + L * .14], [sx - 4 * s + d * L * .7, y + 8 * s + L * .3]];
     sm.pfad(pts, bw, bw);
-    K.form(eb, sm, o.tief || 0, { k: PERG.slice(2, 8), r: [PERG[8]], ton: 3.6, fase: 0, rand: 1, muster: (px, py) => ((px + py * 2) % 4 === 0 ? -1.6 : 0) });
+    K.form(eb, sm, o.tief || 0, { k: PERG.slice(2, 8), r: [PERG[8]], ton: 3.6, fase: 0, rand: 1, muster: (px, py) => ((py % 2 === 0 && B.hash(px >> 1, py, 7) > .35) ? -2.2 : 0) });
   }
 }
 
@@ -185,16 +185,18 @@ function skriptorium(K, cfg) {
   for (const Z of [1.5, 2.4, 3.6, 5.2]) { const m = B.maske(), [a, b] = P.q(XL, YD, Z), [c, d] = P.q(XR, YD, Z), k = P.k(Z); m.poly([[a, b - k * .14], [c, d - k * .14], [c, d + k * .1], [a, b + k * .1]]); K.form(2, m, Math.min(.3, Z / 30), { k: HOLZ, r: pal.rand, ton: 1.6, fase: 1 }); }
   // Dielenboden zum Fenster hin
   K.boden(P.vy + 1, H + M, BODEN, (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h, k = P.k(Z), f = X / .45 - Math.floor(X / .45); if (Z > ZE) return -1; let t = .4 + Math.min(.3, Z / 18) + B.hash(Math.floor(X / .45), 3, sd) * .15; if (f * .45 * k < 1) t -= .25; return t; });
+  // Lichtbahn des Fensters auf den Dielen: ein helles, gedithertes Trapez zu uns hin
+  K.bodenDith(-M, P.vy + 2, W + M, H + M, B.mix(BODEN[6], PERG[3], .5), (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; if (Z > ZE) return 0; const c = .7 - (ZE - Z) * .22, w = .55 + (ZE - Z) * .12; return Math.max(0, 1 - Math.abs(X - c) / w) * (.25 + (ZE - Z) * .05) * (1 - fr * .4); });
   // Tintenflecken auf den Dielen
   for (let i = 0; i < 9; i++) { const X = -1.8 + B.hash(i, 1, sd) * 3.6, Z = 1.6 + B.hash(i, 2, sd) * 6, [x, y] = P.q(X, 0, Z), r = Math.max(1, P.k(Z) * .06 * (.5 + B.hash(i, 3, sd))); const m = B.maske(); m.ell(x, y, r * 1.8, r * .6); const e = K.e[K.eb(y)]; for (let yy = m.y0; yy <= m.y1; yy++) for (let xx = m.x0; xx <= m.x1; xx++) if (m.has(xx, yy)) e.set(xx, yy, B.pk(TINTE)); }
   // Falsches Detail: die Abschriften auf dem Bord an der linken Wand, jede dicker als die davor (nach vorn hin)
   // eine niedrige Bank an der Wand, darauf die Abschriften stehend: oben die hellen Schnitte, vorn die Rücken
   let Z = ZE - .2, n = 0; const bordY = .12, D = .5, XS = XL + D;
-  const bm = B.maske(), q1 = P.q(XS + .04, bordY, ZE), q2 = P.q(XS + .04, bordY, 1.25), q3 = P.q(XS + .04, 0, 1.25), q4 = P.q(XS + .04, 0, ZE); bm.poly([q1, q2, q3, q4]); K.form(3, bm, .02, { k: HOLZ, r: pal.rand, ton: 1.6, fase: 1 });
+  const bm = B.maske(), q1 = P.q(XS + .04, bordY, ZE), q2 = P.q(XS + .04, bordY, 2.4), q3 = P.q(XS + .04, 0, 2.4), q4 = P.q(XS + .04, 0, ZE); bm.poly([q1, q2, q3, q4]); K.form(3, bm, .02, { k: HOLZ, r: pal.rand, ton: 1.6, fase: 1 });
   const buecher = [];
-  while (Z > 1.35 && n < 40) {
+  while (Z > 2.5 && n < 40) {
     const dick = Math.min(.42, .05 + n * n * .0032), hoch = Math.min(.78, .36 + (n % 3) * .04 + n * .02);
-    const za = Z, zb = Z - dick; if (zb < 1.3) break;
+    const za = Z, zb = Z - dick; if (zb < 2.45) break;
     buecher.push({ za, zb, hoch, n }); Z = zb - .02 - Math.min(.03, n * .002); n++;
   }
   for (const bu of buecher) {
@@ -209,7 +211,7 @@ function skriptorium(K, cfg) {
   { const m = B.maske(), a = P.q(XL + .3, .55, 1.6), b2 = P.q(XL + 1.2, .55, 1.6), c = P.q(XL + 1.2, 0, 1.6), d = P.q(XL + .3, 0, 1.6), e2 = P.q(XL + .3, .55, 2.4); m.poly([e2, a, b2, c, d]); K.form(4, m, 0, { k: STEIN.slice(0, 6), r: [PERG[4], PERG[8]], ton: 1.8, fase: 2, muster: (x, y) => ((y % 3 === 0 && x > d[0] + 3) ? .9 : 0) }); }
   // Pultreihen links und rechts des Gangs, Kerzen nur an einigen
   const Zp = [1.9, 2.8, 3.8, 4.9];
-  for (const X of [-1.5, 1.6]) Zp.slice().reverse().forEach((Zz, i) => { const [x, y] = P.q(X, 0, Zz); pult(K, K.eb(y), x, y, P.k(Zz) / 72, (i + (X > 0 ? 1 : 0)) % 2 === 0 && fr < .85, { tief: Math.min(.4, Zz / 18), streifen: 10 + (Zp.length - 1 - i) * 12 + (X > 0 ? 6 : 0) + fr * 20 }); });
+  for (const X of [-1.5, 1.6]) Zp.slice().reverse().forEach((Zz, i) => { const [x, y] = P.q(X, 0, Zz); pult(K, K.eb(y), x, y, P.k(Zz) / 72, (i + (X > 0 ? 1 : 0)) % 2 === 0 && fr < .85, { tief: Math.min(.4, Zz / 18), streifen: 16 + (Zp.length - 1 - i) * 20 + (X > 0 ? 8 : 0) + fr * 30, rechts: X > 0 }); });
   // Leine mit Pergamentbögen zum Trocknen (Licht scheint durch)
   { const [l0x, l0y] = P.q(XL, 2.6, 3.4), [l1x, l1y] = P.q(XR, 2.6, 3.4), e = K.e[2]; B.linie(e, l0x, l0y, l1x, l1y, B.pk(HOLZ[3])); const k = P.k(3.4) * .7; for (let i = 0; i < 5; i++) { const t = .12 + i * .17, x = B.lerp(l0x, l1x, t), y = B.lerp(l0y, l1y, t) + Math.sin(t * Math.PI) * 3; B.feld(e, x, y, x + k * .32, y + k * .42, PERG.slice(1, 6), (xx, yy) => .45 + (xx - x) / (k * .32) * .3 + (B.hash(xx, yy, i) - .5) * .2 - ((yy - y) % 3 === 0 ? .35 : 0)); } }
   B.nebel(K.e[2], { y0: 96, y1: 150, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .2, xs: [150, 440, 60], seed: 5 });

@@ -21,11 +21,11 @@ module.exports = {
     const Bk = v.buckel || 0, T = 0;
     const ry = 70 - auf + T + r(fallK * 10) - Bk, rx = 58 + lean;
     // Unterschenkel liegen auf dem Boden, Sohlen nach hinten
-    const unten = Pg([[30, 108], [64, 106], [76, 109], [78, 114], [28, 114]], null, { rd: 2 });
-    const sohlen = [E(76, 111, 4, 3, 'dunkel'), E(70, 112, 3.5, 2.5, 'dunkel')];
+    const unten = Pg([[30, 107], [60, 104], [72, 106], [80, 110], [80, 114], [28, 114]], null, { rd: 1.5 });
+    const sohlen = [E(79, 110, 3, 4, 'haut'), E(74, 111, 2.5, 3, null)];
     // Mantel: kniend, vorgebeugt, Kapuze vorn unten
     // Mantel: Oberschenkel schräg vom Knie (vorn unten) zur Hüfte, Rücken gekrümmt nach vorn zum Kopf
-    const mantel = Pg([[30, 110], [28, 103], [rx - 26, ry + 22], [rx - 18, ry + 7], [rx - 6, ry + 1], [rx + 6, ry + 5], [rx + 11, ry + 16], [68, 92], [72, 102], [74, 108], ...saum(74, 30, 112, 6, 3, 9, hem)], null, { rd: 2 });
+    const mantel = Pg([[30, 110], [28, 103], [rx - 26, ry + 22], [rx - 18, ry + 7], [rx - 6, ry + 1], [rx + 6, ry + 5], [rx + 11, ry + 16], [68, 90], [70, 98], ...saum(70, 30, 102, 6, 3, 9, hem).map(([x, y]) => [x, y + (70 - x) * 0.2])], null, { rd: 2 });
     const knie = E(32, 106, 7, 6, null);
     const riemen = [C(rx - 13, ry + 5, rx + 4, ry + 22, 1.1, 1.1, 'dunkel', { noRim: true }), C(rx - 16, ry + 13, rx + 2, ry + 9, 1, 1, 'dunkel', { noRim: true })];
     const kx = rx - 25 + r(lean * 0.3), ky = ry + 16 + nick;
@@ -71,12 +71,15 @@ module.exports = {
       // Wachsherz: warm, die zweithellste Stelle
       if (herz > 0.05) {
         const x = r(hh[0]), y = r(hh[1]) - 2;
-        P.glow(x + 0.5, y + 1, 7 * herz + 2, 0.95, 'glutDim', 'k3');
+        P.glow(x + 0.5, y + 1, 9 * herz + 3, 1, 'glutDim', 'k3');
         for (const [a, b2] of [[-2, -2], [-1, -2], [1, -2], [2, -2], [-2, -1], [-1, -1], [0, -1], [1, -1], [2, -1], [-1, 0], [0, 0], [1, 0], [0, 1]]) P.set(x + a, y + b2, 'wachs'); P.set(x - 1, y - 2, 'k3'); P.set(x + 2, y - 1, 'r1');
         if (herz > 0.9) P.set(x, y, 'glut');
       }
       // Gesicht in der Kapuze: zwei Augen, tief, nach unten
       if (!P0.aus) { P.auge(kx - 2, ky + 3, 2); P.set(kx + 2, ky + 3, 'glut'); augen.push([r(kx - 2), r(ky + 3)], [r(kx + 2), r(ky + 3)]); }
+      // Strick um die Hüfte, Kapuzenrand, das Gesicht als Höhle
+      P.line(rx - 20, ry + 20, rx + 8, ry + 14, 'k3', true); P.line(rx - 19, ry + 21, rx + 7, ry + 15, 'k0', true); P.auf(rx - 14, ry + 22, 'r1'); P.auf(rx - 14, ry + 24, 'r1');
+      for (let k = -5; k <= 6; k++) P.auf(kx + k, ky - 7 + Math.abs(k) * 0.35 + (k < -3 ? (-3 - k) * 1.5 : 0), 'k3');
       // Falten im Mantel
       P.line(rx - 4, ry + 4, rx - 10, 104, 'k1', true); P.line(rx + 4, ry + 8, rx + 2, 104, 'k1', true);
     };

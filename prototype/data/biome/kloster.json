@@ -6,14 +6,42 @@
   "kurz": "Kloster",
   "zeit": "Mönche, die nie aufgehört haben zu schreiben",
   "anreise": "Bei Ebbe führt eine Reihe Pricken übers Watt zu einem Kloster, in dem um diese Stunde noch geschrieben wird.",
-  "koerper": ["#08070a", "#110e14", "#1d1822", "#2c2532"],
-  "rand": ["#867c68", "#e6dcc2"],
+  "koerper": [
+   "#08070a",
+   "#110e14",
+   "#1d1822",
+   "#2c2532"
+  ],
+  "rand": [
+   "#867c68",
+   "#e6dcc2"
+  ],
   "augen": "#e6aa4a",
-  "nebel": ["#2e2a32", "#7a7468"],
+  "nebel": [
+   "#2e2a32",
+   "#7a7468"
+  ],
   "musik": "kloster",
-  "gegner": ["novize", "tintenfrau", "kreuzgangwaechter", "leser"],
+  "gegner": [
+   "novize",
+   "tintenfrau",
+   "kreuzgangwaechter",
+   "leser"
+  ],
   "waechter": "abschreiber",
-  "fundpool": ["federkiel", "tintenhorn", "bussriemen", "lesestein", "bible", "rosary", "candle", "veil", "lantern", "cross", "watch"],
+  "fundpool": [
+   "federkiel",
+   "tintenhorn",
+   "bussriemen",
+   "lesestein",
+   "bible",
+   "rosary",
+   "candle",
+   "veil",
+   "lantern",
+   "cross",
+   "watch"
+  ],
   "kraemer": {
    "n": "Der Bibliothekar",
    "ort": "hinter dem Lesepult der Bibliothek, an der Kette",
@@ -62,9 +90,22 @@
   "n": "Kloster der Abschrift",
   "root": 55,
   "key": "g-Moll",
-  "names": ["Gm", "E♭", "Cm", "D"],
-  "darkNames": ["Gm", "A♭", "Cm", "D♭9"],
-  "amb": {"meer": 0.05, "wind": 0.035},
+  "names": [
+   "Gm",
+   "E♭",
+   "Cm",
+   "D"
+  ],
+  "darkNames": [
+   "Gm",
+   "A♭",
+   "Cm",
+   "D♭9"
+  ],
+  "amb": {
+   "meer": 0.05,
+   "wind": 0.035
+  },
   "rhy": "holz",
   "detail": "hafen",
   "ort": "Watt bei Ebbe, eine ferne Klosterglocke, Federn kratzen",
@@ -72,57 +113,208 @@
  },
  "foes": {
   "novize": {
-   "n": "Der Novize", "biom": "kloster", "rang": "normal", "hp": 16, "weak": "L",
-   "pat": [{"t": "atk", "v": 3, "h": 2}, {"t": "blk", "v": 6}, {"t": "atk", "v": 9}],
-   "sprite": "novize_a", "varianten": ["novize_a", "novize_b"],
+   "n": "Der Novize",
+   "biom": "kloster",
+   "rang": "normal",
+   "hp": 16,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 8
+    }
+   ],
+   "sprite": "novize_a",
+   "varianten": [
+    "novize_a",
+    "novize_b"
+   ],
    "konzept": "Ein Junge vom Deich mit zugenähten Augen trägt die Abschriften zum Abt; jedes Buch im Turm ist dicker als das darunter.",
    "stimme": "chorknabe",
-   "kniff": {"art": "verborgen", "why": "Er sieht nicht, wohin er schlägt, und du auch nicht."},
+   "kniff": {
+    "art": "verborgen",
+    "why": "Er sieht nicht, wohin er schlägt, und du auch nicht."
+   },
    "beute": "federkiel",
    "beute_satz": "Aus dem Bücherturm ist ein Band gefallen. Er ist dicker, als er beim Fallen war.",
    "quelle": "skript"
   },
   "tintenfrau": {
-   "n": "Die Tintenfrau", "biom": "kloster", "rang": "normal", "hp": 22, "weak": "W",
-   "pat": [{"t": "atk", "v": 5}, {"t": "blk", "v": 5}, {"t": "atk", "v": 3, "h": 2}, {"t": "atk", "v": 7}],
-   "sprite": "tintenfrau_a", "varianten": ["tintenfrau_a", "tintenfrau_b"],
+   "n": "Die Tintenfrau",
+   "biom": "kloster",
+   "rang": "normal",
+   "hp": 21,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 4
+    },
+    {
+     "t": "blk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 7
+    }
+   ],
+   "sprite": "tintenfrau_a",
+   "varianten": [
+    "tintenfrau_a",
+    "tintenfrau_b"
+   ],
    "konzept": "Sie kocht dem Kloster die Tinte und trägt sie am Joch übers Watt; unter der Haube ist kein Gesicht, nur Tinte, in der sich zwei Kerzen spiegeln.",
    "stimme": "ertrunkener",
-   "kniff": {"art": "verstopfen", "n": 1, "why": "Sie schleudert Kleckse: eine unspielbare Karte auf die Hand."},
+   "kniff": {
+    "art": "verstopfen",
+    "n": 1,
+    "why": "Sie schleudert Kleckse: eine unspielbare Karte auf die Hand."
+   },
    "beute": "tintenhorn",
    "beute_satz": "Im Eimer liegt etwas auf dem Grund. Die Tinte darüber hat sich nicht bewegt.",
    "quelle": "skript"
   },
   "kreuzgangwaechter": {
-   "n": "Der Kreuzgangwächter", "biom": "kloster", "rang": "normal", "hp": 28, "weak": "S",
-   "pat": [{"t": "blk", "v": 9}, {"t": "atk", "v": 8}, {"t": "blk", "v": 6}, {"t": "atk", "v": 12}],
-   "sprite": "kreuzgangwaechter_a", "varianten": ["kreuzgangwaechter_a", "kreuzgangwaechter_b"],
+   "n": "Der Kreuzgangwächter",
+   "biom": "kloster",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 11
+    }
+   ],
+   "sprite": "kreuzgangwaechter_a",
+   "varianten": [
+    "kreuzgangwaechter_a",
+    "kreuzgangwaechter_b"
+   ],
    "konzept": "Ein Mönch, der zur Buße im Kreuzgang stehen blieb, bis man um ihn herum baute: Säule mit Kapitellgesicht auf zwei nackten Füßen.",
    "stimme": "mumie",
-   "kniff": {"art": "schuetzer", "v": 5, "why": "Er gibt Verbündeten Block, wie der Kreuzgang Schatten gibt."},
+   "kniff": {
+    "art": "schuetzer",
+    "v": 5,
+    "why": "Er gibt Verbündeten Block, wie der Kreuzgang Schatten gibt."
+   },
    "beute": "bussriemen",
    "beute_satz": "Zwischen seinen Zehen liegt etwas, glattgetreten wie er.",
    "quelle": "skript"
   },
   "leser": {
-   "n": "Der Leser", "biom": "kloster", "rang": "normal", "hp": 20, "weak": "G",
-   "pat": [{"t": "buff", "v": 2}, {"t": "atk", "v": 7}, {"t": "blk", "v": 5}, {"t": "atk", "v": 3, "h": 3}],
-   "sprite": "leser_a", "varianten": ["leser_a", "leser_b"],
+   "n": "Der Leser",
+   "biom": "kloster",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "buff",
+     "v": 1
+    },
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 3
+    }
+   ],
+   "sprite": "leser_a",
+   "varianten": [
+    "leser_a",
+    "leser_b"
+   ],
    "konzept": "Der Vorleser des Refektoriums, dessen Hals so lang wurde wie ein Arm, damit er über jede Schulter lesen kann; statt Augen zwei Lesesteine.",
    "stimme": "schatten",
-   "kniff": {"art": "einfrieren", "why": "Er liest eine deiner Karten mit; solange er liest, kannst du sie nicht spielen."},
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Er liest eine deiner Karten mit; solange er liest, kannst du sie nicht spielen."
+   },
    "beute": "lesestein",
    "beute_satz": "Er hatte ein Buch in der Hand. Darin ist eine Seite für dich gefaltet.",
    "quelle": "skript"
   },
   "abschreiber": {
-   "n": "Der Abschreiber", "biom": "kloster", "rang": "waechter", "hp": 62, "weak": "F",
-   "pat": [{"t": "atk", "v": 4, "h": 2}, {"t": "atk", "v": 12}, {"t": "buff", "v": 2}, {"t": "blk", "v": 10}, {"t": "atk", "v": 2, "h": 5}],
-   "sprite": "abschreiber", "varianten": ["abschreiber"],
+   "n": "Der Abschreiber",
+   "biom": "kloster",
+   "rang": "waechter",
+   "hp": 62,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 5
+    }
+   ],
+   "sprite": "abschreiber",
+   "varianten": [
+    "abschreiber"
+   ],
    "konzept": "Der Armarius des Klosters schreibt das Buch ab, seit es das Buch gibt; die Hand hat ein Gelenk zu viel und hört nie auf, der Streifen wird mit jedem Bild länger.",
    "stimme": "chor",
-   "kniff": {"art": "abschrift", "n": 2, "why": "Er mischt Abschriften deiner Karten ins Deck, ein Wort länger und darum unspielbar."},
-   "besonders": {"art": "ruft", "gegner": "novize", "alle": 3},
+   "kniff": {
+    "art": "abschrift",
+    "n": 2,
+    "why": "Er mischt Abschriften deiner Karten ins Deck, ein Wort länger und darum unspielbar."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "novize",
+    "alle": 3
+   },
    "beute": "abtssiegel",
    "beute_satz": "Am Ende des Streifens, ganz unten, liegt etwas. Die Zeile darüber ist ein Wort länger als vorhin.",
    "quelle": "skript"
@@ -135,9 +327,44 @@
    "d": "Bei Ebbe steckt eine Reihe Pricken im Watt, Reisig auf Stangen, vom Kloster zum Festland. Du zählst sie zweimal und kommst nicht auf dieselbe Zahl. Die letzte steht schon im Wasser, und an ihr hängt ein Stück Kutte.",
    "bild": "Eine Reihe Reisigstangen im nassen Schlick, die in den Nebel führt; an der letzten flattert ein dunkler Stofffetzen.",
    "o": [
-    {"l": "Der Reihe ins offene Watt folgen: ein seltenes Item, −8 Leben", "fx": [{"op": "give_rare"}, {"op": "lose_hp", "v": 8}], "if": {"hp_min": 9}},
-    {"l": "Die Kutte losbinden: ein zufälliges Item, Kampf gegen die Tintenfrau", "fx": [{"op": "give_random"}, {"op": "fight", "foes": ["tintenfrau"]}]},
-    {"l": "Auf dem Damm warten, bis das Wasser kommt: +10 Leben", "fx": [{"op": "heal", "v": 10}]}
+    {
+     "l": "Der Reihe ins offene Watt folgen: ein seltenes Item, −8 Leben",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ],
+     "if": {
+      "hp_min": 9
+     }
+    },
+    {
+     "l": "Die Kutte losbinden: ein zufälliges Item, Kampf gegen die Tintenfrau",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "tintenfrau"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Auf dem Damm warten, bis das Wasser kommt: +10 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ]
+    }
    ]
   },
   {
@@ -146,9 +373,49 @@
    "d": "Im Skriptorium ist ein Pult frei. Die Feder ist nass, das Blatt angefangen, und die erste Zeile ist in deiner Handschrift. An den anderen Pulten wird weitergeschrieben, niemand sieht auf. Einer zählt leise Wörter.",
    "bild": "Eine Reihe Schreibpulte mit Kerzen, eines leer, darauf ein Blatt mit einer einzelnen Zeile.",
    "o": [
-    {"l": "Die Zeile zu Ende schreiben: einen Handgriff lernen, −5 Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "lose_hp", "v": 5}], "if": {"hp_min": 6}},
-    {"l": "Ein Wort streichen: eine Karte kostet dauerhaft 1 weniger, −4 max. Leben", "fx": [{"op": "schleifen"}, {"op": "max_hp", "v": -4}]},
-    {"l": "Das Blatt einstecken: Federkiel, Kampf gegen den Novizen", "fx": [{"op": "give_item", "item": "federkiel"}, {"op": "fight", "foes": ["novize"]}]}
+    {
+     "l": "Die Zeile zu Ende schreiben: einen Handgriff lernen, −5 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ],
+     "if": {
+      "hp_min": 6
+     }
+    },
+    {
+     "l": "Ein Wort streichen: eine Karte kostet dauerhaft 1 weniger, −4 max. Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Das Blatt einstecken: Federkiel, Kampf gegen den Novizen",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "federkiel"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "novize"
+       ]
+      }
+     ]
+    }
    ]
   },
   {
@@ -157,9 +424,42 @@
    "d": "An der Wand stehen die Abschriften, Band neben Band, jeder dicker als der davor. Den ersten hältst du in einer Hand. Im letzten steht dein Name, und dahinter noch ein Wort, das du nicht lesen willst.",
    "bild": "Eine lange Bank mit Büchern, die von links nach rechts immer dicker werden, der letzte so groß wie eine Truhe.",
    "o": [
-    {"l": "Das letzte Wort lesen: eine Reaktion entdecken, −6 max. Leben", "fx": [{"op": "discover"}, {"op": "max_hp", "v": -6}]},
-    {"l": "Den ersten Band mitnehmen: +1 Kerbe an einem Item, −10 Gold", "fx": [{"op": "kerbe"}, {"op": "gold", "v": -10}], "if": {"gold_min": 10}},
-    {"l": "Die Reihe nicht anrühren: +8 Leben", "fx": [{"op": "heal", "v": 8}]}
+    {
+     "l": "Das letzte Wort lesen: eine Reaktion entdecken, −6 max. Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ]
+    },
+    {
+     "l": "Den ersten Band mitnehmen: +1 Kerbe an einem Item, −10 Gold",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "gold",
+       "v": -10
+      }
+     ],
+     "if": {
+      "gold_min": 10
+     }
+    },
+    {
+     "l": "Die Reihe nicht anrühren: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
    ]
   },
   {
@@ -168,9 +468,44 @@
    "d": "Im Refektorium essen die Mönche schweigend. Von der Kanzel liest einer vor, aus einem Buch, das er nicht ansieht; sein Hals reicht bis über die Tische. Er liest vor, was du heute getan hast. Er ist schon bei morgen.",
    "bild": "Ein langer Speisesaal mit Mönchen an Tischen, über ihnen ein Kopf mit zwei glimmenden Gläsern, der an einem viel zu langen Hals hängt.",
    "o": [
-    {"l": "Mitessen: +6 max. Leben, ein angelegtes Item verwandelt sich", "fx": [{"op": "max_hp", "v": 6}, {"op": "transform"}]},
-    {"l": "Zuhören bis zum Ende: eine Reaktion entdecken, −8 Leben", "fx": [{"op": "discover"}, {"op": "lose_hp", "v": 8}], "if": {"hp_min": 9}},
-    {"l": "Ihm das Buch aus der Hand nehmen: Kampf gegen den Leser", "fx": [{"op": "fight", "foes": ["leser"]}]}
+    {
+     "l": "Mitessen: +6 max. Leben, ein angelegtes Item verwandelt sich",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 6
+      },
+      {
+       "op": "transform"
+      }
+     ]
+    },
+    {
+     "l": "Zuhören bis zum Ende: eine Reaktion entdecken, −8 Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ],
+     "if": {
+      "hp_min": 9
+     }
+    },
+    {
+     "l": "Ihm das Buch aus der Hand nehmen: Kampf gegen den Leser",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "leser"
+       ]
+      }
+     ]
+    }
    ]
   },
   {
@@ -180,9 +515,50 @@
    "bild": "Ein überfluteter Kreuzgang, Mönche an Pulten bis zum Hals im Wasser, darüber schwarze Schriftzeilen, die aus dem Wasser steigen.",
    "stummfilm": true,
    "o": [
-    {"l": "Lesen, was aufsteigt: einen Handgriff lernen, −10 Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "lose_hp", "v": 10}], "if": {"hp_min": 11}},
-    {"l": "Auf das Buch klettern: +1 Talisman-Slot, −6 max. Leben", "fx": [{"op": "add_slot", "area": "talisman"}, {"op": "max_hp", "v": -6}], "if": {"slot_below_max": "talisman"}},
-    {"l": "Ins Skriptorium hinauf: eine Karte streichen, −3 Leben", "fx": [{"op": "strike"}, {"op": "lose_hp", "v": 3}]}
+    {
+     "l": "Lesen, was aufsteigt: einen Handgriff lernen, −10 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 10
+      }
+     ],
+     "if": {
+      "hp_min": 11
+     }
+    },
+    {
+     "l": "Auf das Buch klettern: +1 Talisman-Slot, −6 max. Leben",
+     "fx": [
+      {
+       "op": "add_slot",
+       "area": "talisman"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ],
+     "if": {
+      "slot_below_max": "talisman"
+     }
+    },
+    {
+     "l": "Ins Skriptorium hinauf: eine Karte streichen, −3 Leben",
+     "fx": [
+      {
+       "op": "strike"
+      },
+      {
+       "op": "lose_hp",
+       "v": 3
+      }
+     ]
+    }
    ]
   },
   {
@@ -191,48 +567,180 @@
    "d": "Der Bibliothekar schlägt die Chronik des Klosters für dich auf. Der Eintrag von heute ist schon geschrieben. Er beschreibt deinen Weg hierher, genauer, als du ihn kennst, und er ist ein Wort länger, als er sein müsste.",
    "bild": "Ein aufgeschlagenes Buch auf einem Kettenpult, eine Hand mit Tintenfingern zeigt auf eine Zeile.",
    "o": [
-    {"l": "Die Seite über den Leuchtturm lesen: +1 Kerbe an einem Item, +6 Leben", "fx": [{"op": "kerbe"}, {"op": "heal", "v": 6}], "if": {"event_gesehen": "hafen_lichtkegel"}},
-    {"l": "Die Seite über die fremden Sterne lesen: eine Karte kostet dauerhaft 1 weniger", "fx": [{"op": "schleifen"}], "if": {"event_gesehen": "moor_wasserloch"}},
-    {"l": "Deine Familienbibel danebenlegen: Sie ist ein Wort kürzer. Ein seltenes Item, −15 Gold", "fx": [{"op": "give_rare"}, {"op": "gold", "v": -15}], "if": {"item": "bible"}},
-    {"l": "Den Eintrag herausreißen: +20 Gold, Kampf gegen den Kreuzgangwächter", "fx": [{"op": "gold", "v": 20}, {"op": "fight", "foes": ["kreuzgangwaechter"]}]}
+    {
+     "l": "Die Seite über den Leuchtturm lesen: +1 Kerbe an einem Item, +6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ],
+     "if": {
+      "event_gesehen": "hafen_lichtkegel"
+     }
+    },
+    {
+     "l": "Die Seite über die fremden Sterne lesen: eine Karte kostet dauerhaft 1 weniger",
+     "fx": [
+      {
+       "op": "schleifen"
+      }
+     ],
+     "if": {
+      "event_gesehen": "moor_wasserloch"
+     }
+    },
+    {
+     "l": "Deine Familienbibel danebenlegen: Sie ist ein Wort kürzer. Ein seltenes Item, −15 Gold",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "gold",
+       "v": -15
+      }
+     ],
+     "if": {
+      "item": "bible"
+     }
+    },
+    {
+     "l": "Den Eintrag herausreißen: +20 Gold, Kampf gegen den Kreuzgangwächter",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 20
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "kreuzgangwaechter"
+       ]
+      }
+     ]
+    }
    ]
   }
  ],
  "items": {
   "federkiel": {
-   "n": "Federkiel", "a": "waffe", "st": ["G"], "spr": "knife",
-   "rar": "gewoehnlich", "kerben": 1, "preis": 26,
+   "n": "Federkiel",
+   "a": "waffe",
+   "st": [
+    "G"
+   ],
+   "spr": "knife",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 26,
    "flavor": "Gänsefeder, schräg geschnitten. Sie schreibt weiter, wenn man sie hinlegt.",
-   "cards": [{"n": "Zeile ziehen", "c": 1, "atk": 3, "h": 2}]
+   "cards": [
+    {
+     "n": "Zeile ziehen",
+     "c": 1,
+     "atk": 3,
+     "h": 2
+    }
+   ]
   },
   "tintenhorn": {
-   "n": "Tintenhorn", "a": "talisman", "st": ["V"], "spr": "bottle",
-   "rar": "gewoehnlich", "kerben": 1, "preis": 24,
+   "n": "Tintenhorn",
+   "a": "talisman",
+   "st": [
+    "V"
+   ],
+   "spr": "bottle",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 24,
    "flavor": "Ein Kuhhorn voll Eisengallustinte. Was damit geschrieben ist, frisst sich durchs Blatt und steht dann auf dem nächsten.",
-   "cards": [{"n": "Eisengalle", "c": 1, "poison": 4}]
+   "cards": [
+    {
+     "n": "Eisengalle",
+     "c": 1,
+     "poison": 4
+    }
+   ]
   },
   "bussriemen": {
-   "n": "Bußriemen", "a": "kleidung", "st": ["B"], "spr": "collar",
-   "rar": "selten", "kerben": 2, "preis": 42,
-   "eigen": {"typ": "opfer_staerke"},
+   "n": "Bußriemen",
+   "a": "kleidung",
+   "st": [
+    "B"
+   ],
+   "spr": "collar",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "opfer_staerke"
+   },
    "flavor": "Ein Lederriemen mit neun Knoten. Wer ihn trägt, zählt sie, und es sind jeden Abend zehn.",
-   "cards": [{"n": "Knoten zählen", "c": 0, "self": 3, "en": 1, "draw": 1}]
+   "cards": [
+    {
+     "n": "Knoten zählen",
+     "c": 0,
+     "self": 3,
+     "en": 1,
+     "draw": 1
+    }
+   ]
   },
   "lesestein": {
-   "n": "Lesestein", "a": "talisman", "st": ["L"], "spr": "shell",
-   "rar": "selten", "kerben": 2, "preis": 45,
-   "eigen": {"typ": "erste_karte_billiger"},
+   "n": "Lesestein",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "shell",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 45,
+   "eigen": {
+    "typ": "erste_karte_billiger"
+   },
    "flavor": "Ein geschliffener Beryll, halb wie ein Ei. Legt man ihn auf eine Zeile, wird sie größer. Legt man ihn auf die Hand, auch.",
-   "cards": [{"n": "Durchsehen", "c": 1, "draw": 2, "funke": true}]
+   "cards": [
+    {
+     "n": "Durchsehen",
+     "c": 1,
+     "draw": 2,
+     "funke": true
+    }
+   ]
   },
   "abtssiegel": {
-   "n": "Siegel des Abts", "a": "talisman", "st": ["G"], "spr": "cross",
-   "rar": "reliquie", "kerben": 2, "preis": 90, "nodrop": true,
-   "eigen": {"typ": "reaktion_block", "v": 1},
+   "n": "Siegel des Abts",
+   "a": "talisman",
+   "st": [
+    "G"
+   ],
+   "spr": "cross",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 90,
+   "nodrop": true,
+   "eigen": {
+    "typ": "reaktion_block",
+    "v": 1
+   },
    "flavor": "Ein Bleisiegel mit dem Bild eines aufgeschlagenen Buchs. Was es verschließt, ist ein Wort länger, wenn man es öffnet.",
-   "cards": [{"n": "Siegeln", "c": 1, "blk": 7, "behalten": true}]
+   "cards": [
+    {
+     "n": "Siegeln",
+     "c": 1,
+     "blk": 7,
+     "behalten": true
+    }
+   ]
   }
  },
  "handgriffe": {},
- "skripte": ["js/scenes/world/kloster.js"]
+ "skripte": [
+  "js/scenes/world/kloster.js"
+ ]
 }

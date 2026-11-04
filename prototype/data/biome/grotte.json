@@ -73,7 +73,7 @@
    "sprite": "quellwaerter_a", "varianten": ["quellwaerter_a", "quellwaerter_b"],
    "konzept": "Schöpfte den Pilgern mit der Kelle aus der Quelle. Steht jetzt bis zur Hüfte in einer Schale, die eine Handbreit tief ist.",
    "stimme": "ertrunkener",
-   "kniff": {"art": "heiler", "v": 5, "why": "Er schöpft für die anderen. Für sich selbst nie."},
+   "kniff": {"art": "schuetzer", "v": 4, "why": "Er gießt den anderen Quellwasser über. Was nass ist, hält. Für sich selbst schöpft er nie."},
    "beute": "quellwasser", "beute_satz": "Die Kelle liegt neben dem Gold. Sie ist voll, und nichts läuft heraus.",
    "quelle": "skript"
   },

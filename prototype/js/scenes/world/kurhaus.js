@@ -240,7 +240,7 @@ function badekarren(K, eb, x, y, s, tiefe, tuerAuf) {
   m.rect(x - w, yb - h, 2 * w, h); m.poly([[x - w - 3 * s, yb - h], [x - w + 2 * s, yb - h - 9 * s], [x + w - 2 * s, yb - h - 9 * s], [x + w + 3 * s, yb - h]]);
   for (const dx of [-w * 0.55, w * 0.55]) { m.fn(x + dx - 11 * s, y - 12 * s, x + dx + 11 * s, y, (px, py) => { const d = Math.hypot(px - x - dx, py - y); return d < 10.5 * s && d > 8.6 * s && py < y; }); m.kap(x + dx, y, x + dx, y - 10 * s, 0.7 * s, 0.7 * s); m.kap(x + dx - 7 * s, y - 7 * s, x + dx + 7 * s, y - 7 * s, 0.6 * s, 0.6 * s); }
   m.kap(x - w * 0.55, yb, x + w * 0.55, yb, 0.9 * s, 0.9 * s);
-  K.form(eb, m, tiefe, { k: HOLZ, r: pal.rand, ton: 1.8, fase: 1, rand: 2, schatten: 2, muster: (px, py) => (py < yb - h ? (((Math.round(px - x) >> 1) & 1) ? 0.9 : -0.3) : ((Math.round(px - x) % Math.max(2, Math.round(4 * s))) === 0 ? -0.5 : 0)) });
+  K.form(eb, m, tiefe, { k: HOLZ, r: pal.rand, ton: 1.8, fase: 1, rand: 2, schatten: 2, muster: (px, py) => (py < yb - h ? (((Math.round(px - x) >> 1) & 1) ? 0.9 : -0.3) : py < yb ? ((Math.floor((px - x) / Math.max(2, 3 * s)) & 1) ? 0.55 : -0.25) : 0) });
   const t = B.maske(); t.rect(x - 5 * s, yb - h + 3 * s, 10 * s, h - 3 * s); B.form(K.e[eb], t, K.mat(tiefe, { k: tuerAuf ? ['#010303', '#030606'] : HOLZ.slice(1, 4), ton: tuerAuf ? 0.3 : 1.2, fase: 0, rand: 0 }));
   if (tuerAuf) { const l = B.maske(); l.kap(x - 4 * s, yb, x - 6 * s, y + 2, 0.5 * s + 0.3, 0.5 * s + 0.3); l.kap(x + 4 * s, yb, x + 2 * s, y + 2, 0.5 * s + 0.3, 0.5 * s + 0.3); for (let k = 1; k < 3; k++) l.kap(x - 4.6 * s - k * 0.6 * s, yb + k * 2.4 * s, x + 3.4 * s - k * 0.6 * s, yb + k * 2.4 * s, 0.35 * s + 0.3, 0.35 * s + 0.3); K.form(eb, l, tiefe, { k: HOLZ, r: pal.rand, ton: 1.6, fase: 0, rand: 1 }); }
 }
@@ -271,6 +271,15 @@ function strand(K) {
   K.boden(184, H + M, SAND, (x, y) => { const Z = P.z(y + 0.5), X = (x + 0.5 - P.vx) * Z / P.h; return 0.35 + Math.min(0.3, Z / 30) + (B.fbm(X * 0.6, Z * 1.5, sd, 2) - 0.5) * 0.3 + (Math.sin(Z * 6 + X * 0.3) > 0.92 ? 0.15 : 0); });
   for (let x = -M; x < 330; x++) { const y = Math.round(185 + Math.sin(x * 0.05) * 1.5); K.e[K.eb(y)].set(x, y, B.pk(GLAS[3])); if (B.bay(x, 0) > 0.5) K.e[K.eb(y + 1)].set(x, y + 1, B.pk(SAND[5])); }
   const fp = B.pk(SAND[0]); for (let i = 0; i < 9; i++) { const y = 188 + i * 8 + i * i * 0.6, x = 128 + i * 6 + (i % 2) * 7, k = 0.6 + i * 0.12; const m = B.maske(); m.ell(x, y, 2 * k, 1 * k); m.ell(x - 2.2 * k, y, 1 * k, 0.7 * k); for (let yy = m.y0; yy <= m.y1; yy++) for (let xx = m.x0; xx <= m.x1; xx++) if (m.has(xx, yy)) K.e[K.eb(yy)].set(xx, yy, fp); }
+  // Strandkörbe: mit dem Rücken zu uns, alle zum Meer gedreht, in einer Reihe wie zur Kur bestellt
+  for (const [x, y, sc] of [[214, 196, 0.62], [266, 192, 0.5], [96, 204, 0.8]]) {
+    // Seitenansicht: hinten hoch und gerundet, die Haube kragt nach vorn (links, zum Meer) über, darunter die Sitzöffnung
+    const m = B.maske(), d = 16 * sc, h = 30 * sc;
+    m.poly([[x + d * 0.5, y], [x + d * 0.5, y - h * 0.8], [x + d * 0.2, y - h], [x - d * 0.7, y - h * 0.98], [x - d * 1.15, y - h * 0.82], [x - d * 1.05, y - h * 0.62], [x - d * 0.55, y - h * 0.68], [x - d * 0.5, y - h * 0.35], [x - d * 1.0, y - h * 0.3], [x - d * 1.0, y]]);
+    m.rect(x - d * 1.6, y - h * 0.18, d * 0.5, h * 0.18);
+    K.form(K.eb(y), m, 0.05, { k: HOLZ, r: pal.rand, ton: 1.7, fase: 1, rand: 2, schatten: 2, muster: (px, py) => (((Math.round(py - y) >> 1) & 1) ? -0.3 : 0.15) });
+    const o = B.maske(); o.poly([[x - d * 0.95, y - h * 0.6], [x - d * 0.5, y - h * 0.64], [x - d * 0.46, y - h * 0.37], [x - d * 0.95, y - h * 0.33]]); B.form(K.e[K.eb(y)], o, K.mat(0, { k: ['#010303', '#040808'], ton: 0.4, fase: 0, rand: 0 }));
+  }
   // Leine von den Karren zum Strand, Pfahl
   const le = B.maske(); le.kap(56, 150, 32, 190, 0.6, 0.6); le.kap(30, 178, 34, 200, 1.6, 1.8); K.form(3, le, 0, { k: HOLZ, r: pal.rand, ton: 1.4, fase: 0, rand: 1 });
   B.nebel(K.e[1], { y0: 132, y1: 160, col: B.mix(pal.nebel[1], K.fern, 0.5), dichte: 0.3, xs: [-20, 320, 60], seed: 8 });

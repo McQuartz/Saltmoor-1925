@@ -42,12 +42,12 @@ function kurve(u, v, fr) {
 // boden: 'laeufer' | 'diele', lampen: [{X,Y,Z}], ende: 'lok' | 'loknah' | 'wasser' | 'fenster'
 function wagen(K, c) {
   const P = c.P, fr = K.fr, sd = K.o.seed;
-  const lampen = (c.lampen || []).filter((l, i) => !(fr > .4 && l.Z > 8 - fr * 6 && i % 2)); // hinten gehen Lampen aus
+  const lampen = (c.lampen || []).filter((l, i) => !(fr > .4 && l.Z > 8 - fr * 6 && (i % 2 || fr > .8))); // hinten gehen Lampen aus
   const lokStark = c.ende === 'lok' || c.ende === 'loknah' ? .8 + fr * .5 : 0;
   // Licht an einem Punkt: warm von den Lampen, kalt vom Ende (Lok)
   const licht = (X, Y, Z) => {
     let w = 0; for (const l of lampen) { const d2 = (X - l.X) ** 2 + (Y - l.Y) ** 2 * 1.4 + (Z - l.Z) ** 2; w += 1.1 / (1 + d2 * 1.6); }
-    let k = 0; if (lokStark) { const dz = c.ZE - Z; k = lokStark * Math.max(0, 1 - Math.hypot(X - (c.lokX || 0), Y - .7) * .45) * (1 / (1 + Math.max(0, dz) * .09)); }
+    let k = 0; if (lokStark) { const dz = c.ZE - Z; k = lokStark * Math.max(0, 1 - Math.hypot(X - (c.lokX || 0), Y - .7) * .45) * (1 / (1 + Math.max(0, dz) * .09)); if (Y < .05) k = Math.max(k, lokStark * .55 * Math.max(0, 1 - Math.abs(X - (c.lokX || 0)) / (.25 + dz * .03)) * (1 / (1 + Math.max(0, dz) * .05))); }
     return [Math.min(1.2, w), k];
   };
   const fensterZ = (Z, per, off, w) => { const q = (Z - off) / per, f = q - Math.floor(q); return f * per < w ? (f * per) / w : -1; };
@@ -121,7 +121,7 @@ function wagen(K, c) {
       const per = c.tPer || 2.1, off = c.tOff || .5, tw = .78, q = (Z - off) / per, f = (q - Math.floor(q)) * per, nr = Math.floor(q);
       const inTuer = f < tw, gl = inTuer && f > .07 && f < tw - .07 && Y > .9 && Y < 1.4;
       if (gl) { // Abteilfenster: warmes Licht hinter dem Vorhang (Falten), eines ist dunkel
-        const dunkel = (nr + sd) % 4 === 2 || (fr > .5 && nr % 2);
+        const dunkel = (nr + sd) % 4 === 2 || (fr > .5 && nr % 2) || (fr > .85 && nr > 0);
         const falte = Math.sin((f - .07) * 70) * .5 + .5, offen = (f - .07) / (tw - .14) > .62;
         if (dunkel) setz(eb, x, y, HOLZ, .08 + falte * .08);
         else setz(eb, x, y, ['#3a2410', '#5a3816', '#7a5020', '#a06a2a', '#c8903c', '#f0c070'], offen ? .55 + (Y - .9) * .5 : .25 + falte * .35 - (1.4 - Y) * .1);
@@ -147,6 +147,7 @@ function wagen(K, c) {
   return P;
 }
 
+function inPoly(x, y, v) { let c = false; for (let i = 0, j = v.length - 1; i < v.length; j = i++) if ((v[i][1] > y) !== (v[j][1] > y) && x < (v[j][0] - v[i][0]) * (y - v[i][1]) / (v[j][1] - v[i][1]) + v[i][0]) c = !c; return c; }
 // Quad auf einer Wand: X fest, Y0..Y1, Z0..Z1
 const quadR = (P, X, Y0, Y1, Z0, Z1) => [P.q(X, Y0, Z0), P.q(X, Y1, Z0), P.q(X, Y1, Z1), P.q(X, Y0, Z1)];
 // Rahmen (außen minus innen) als Maske
@@ -213,7 +214,7 @@ function durchblick(K, P, c) {
   const tx = c.tuerX || 0, tb = c.tuerB || .42, th = c.tuerH || 1.5, fr = K.fr;
   const e = K.e[1];
   if (c.ende === 'lok' || c.ende === 'loknah') {
-    const n = c.ende === 'lok' ? 3 : 0;
+    const n = c.ende === 'lok' ? 2 : 0;
     // Durchblick: Wagen um Wagen, Türen im Wechsel hell und dunkel
     let Z = c.ZE;
     for (let i = 0; i < n; i++) {
@@ -225,7 +226,7 @@ function durchblick(K, P, c) {
       Z = Zn;
     }
     const [lx0, ly0] = P.q(tx - tb, th, Z), [lx1, ly1] = P.q(tx + tb, 0, Z);
-    const cx = (lx0 + lx1) / 2 + (c.lokDx || 0), cy = B.lerp(ly0, ly1, c.ende === 'loknah' ? .42 : .45), R = Math.max(4, (lx1 - lx0) * (c.ende === 'loknah' ? .3 : .46));
+    const cx = (lx0 + lx1) / 2 + (c.lokDx || 0), cy = B.lerp(ly0, ly1, c.ende === 'loknah' ? .42 : .45), R = Math.max(5, (lx1 - lx0) * (c.ende === 'loknah' ? .3 : .5));
     // Stirn der Lok (Rauchkammertür, Nieten), dann die Lampe
     if (c.ende === 'loknah') {
       const lw = lx1 - lx0, my = cy + R * 1.9;
@@ -237,11 +238,11 @@ function durchblick(K, P, c) {
     B.feld(e, cx - R * 1.3, cy - R * 1.3, cx + R * 1.3, cy + R * 1.3, MESSING, (x, y) => { const q = Math.hypot(x + .5 - cx, y + .5 - cy) / R; if (q > 1.25) return -1; return q > 1 ? .55 + (x > cx ? .3 : 0) : -1; });
     B.feld(e, cx - R, cy - R, cx + R, cy + R, ['#a07a3a', '#e0c070', '#fff0b0', '#fff4dc', '#ffffff'], (x, y) => { const q = Math.hypot(x + .5 - cx, y + .5 - cy) / R; if (q > 1) return -1; return 1 - q * .8; });
     // Strahlen: die Lampe leuchtet in den Zug hinein
-    const st = .45 + fr * .4;
+    const st = .7 + fr * .6;
     for (const L of [K.e[1], K.e[2], K.e[3], K.e[4]]) for (const [win, br, a] of [[Math.PI / 2, .9, .32 * st], [Math.PI / 2 + .55, .12, .3 * st], [Math.PI / 2 - .5, .1, .3 * st], [Math.PI, .08, .22 * st], [0, .08, .22 * st]]) B.kegel(L, cx, cy, win, br, 300, '#5a4a30', a);
     K.licht(cx, cy, LOK, R * 6, 1);
     K.lok = [cx, cy, R];
-    const g1 = B.glanzSprite(Math.max(R * 3, 22), '#3a3020', .8), g2 = B.glanzSprite(Math.max(R * 3.3, 25), '#3a3020', .85), g0 = B.glanzSprite(Math.max(R * 1.6, 10), '#6a5a40', .8);
+    const g1 = B.glanzSprite(Math.max(R * 3, 26), '#4a3e28', .85), g2 = B.glanzSprite(Math.max(R * 3.3, 29), '#4a3e28', .9), g0 = B.glanzSprite(Math.max(R * 1.6, 10), '#6a5a40', .8);
     K.anim.push({ p: B.PAR[1], f(ctx, t, ox, oy) { const g = Math.sin(t * .9) + Math.sin(t * 2.3) * .3 > 0 ? g2 : g1; ctx.globalCompositeOperation = 'lighter'; ctx.drawImage(g, Math.round(cx - g.R + ox), Math.round(cy - g.R + oy)); ctx.drawImage(g0, Math.round(cx - g0.R + ox), Math.round(cy - g0.R + oy)); ctx.globalCompositeOperation = 'source-over'; } });
   } else if (c.ende === 'wasser') {
     // Übergang: Die Tür steht offen. Draußen Stufen ins schwarze Wasser, eine Kirchenmauer, ein grünes Rundfenster.
@@ -265,12 +266,12 @@ function gang(K, o) {
   o = o || {};
   const P = B.persp(o.vx || 268, o.vy || 104), fr = K.fr; K.split = [168, 178];
   B.feld(K.e[0], -M, -M, W + M, H + M, ['#000000', '#040202'], () => .3);
-  const c = { P, XL: 2.3, XR: 2.0, YC: 1.6, ZE: o.ZE || 12.5, tuerB: o.ZE ? .6 : .42, links: 'tueren', rechts: 'fenster', boden: 'laeufer', laeuferX: -.1, laeuferB: .66, ende: o.ende || 'lok', fOff: .3, tOff: .2, zFern: 6,
+  const c = { P, XL: 2.3, XR: 2.0, YC: 1.6, ZE: o.ZE || 12.5, tuerB: o.ZE ? .6 : .42, links: 'tueren', rechts: 'fenster', boden: 'laeufer', laeuferX: -.1, laeuferB: .66, ende: o.ende || 'lok', fOff: .3, tOff: .2, zFern: 6, fW: 1.05, fPer: 1.6, fY0: .84,
     lampen: [1.6, 4.0, 6.4, 8.8, 11.2].map(Z => ({ X: 0, Y: 1.45, Z, YC: 1.6 })) };
   wagen(K, c);
   durchblick(K, P, c);
   fensterRahmen(K, P, c, 'R'); tuerRahmen(K, P, c); haltestange(K, P, c);
-  c.lampen.forEach((l, i) => haengelampe(K, P, l, !(fr > .4 && l.Z > 8 - fr * 6 && i % 2)));
+  c.lampen.forEach((l, i) => haengelampe(K, P, l, !(fr > .4 && l.Z > 8 - fr * 6 && (i % 2 || fr > .8))));
   // Licht aus den Abteilen fällt schräg auf den Gangboden
   for (let Z0 = c.tOff; Z0 < c.ZE; Z0 += 2.1) { const nr = Math.floor((Z0 - c.tOff) / 2.1 + 1e-6); if ((nr + K.o.seed) % 4 === 2 || (fr > .5 && nr % 2)) continue; const [gx, gy] = P.q(-c.XL + .55, 0, Z0 + .4); K.glut(gx, gy, P.k(Z0 + .4) * .7, '#3a2008', .9, [2, 3, 4]); }
   // Schatten hinter einem Abteilvorhang: jemand sitzt aufrecht und rührt sich nicht
@@ -367,9 +368,9 @@ function gepaeckwagen(K, o) {
   const rm = B.maske(); rahmenMaske(rm, [[dx0 - 4, dy0 - 5], [dx1 + 4, dy0 - 5], [dx1 + 4, dy1], [dx0 - 4, dy1]], [[dx0, dy0], [dx1, dy0], [dx1, dy1], [dx0, dy1]]);
   K.form(1, rm, 0, { k: HOLZ.slice(1, 7).map(B.col), ton: 1.7, fase: 1, rand: 2, r: RIM.r });
   const sch = B.maske(); sch.rect(dx1 + 6, dy0 - 3, (dx1 - dx0) * .95, dy1 - dy0 + 3); sch.rect(dx0 - 10, dy0 - 9, (dx1 - dx0) * 2.1, 3);
-  K.form(1, sch, 0, { k: HOLZ.slice(1, 7).map(B.col), ton: 1.35, fase: 2, rand: 2, r: RIM.r, muster: (x, y) => ((x - dx1) % 7 === 0 ? -.4 : 0) + (Math.abs(y - (dy0 + dy1) / 2) < 1 ? .4 : 0), schatten: 2 });
+  K.form(1, sch, 0, { k: HOLZ.slice(0, 6).map(B.col), ton: .9, fase: 2, rand: 2, r: RIM.r, muster: (x, y) => ((x - dx1) % 7 === 0 ? -.4 : 0) + (Math.abs(y - (dy0 + dy1) / 2) < 1 ? .4 : 0), schatten: 2 });
   // Draußen: völlig schwarz. Nur ganz unten ein Streifen kalter Luft, der hereinweht (Partikel)
-  B.partikel(K, { n: 22, farben: ['#1a2e4e', '#3c5f88'], vx: -6, vy: 0, wob: 2, wf: .7, x0: dx0, x1: dx1 + 40, y0: dy0, y1: dy1, p: B.PAR[2] });
+  for (let y = Math.floor(dy0); y < dy1; y++) for (let x = Math.floor(dx0); x < dx1; x++) for (const e of [K.e[1], K.e[2], K.e[3]]) e.set(x, y, e === K.e[1] ? 0xff000000 : 0);
   // Stirntür links (Richtung Lok): Licht durch die Ritzen
   const zt0 = .7, zt1 = 1.6, e = K.e[3];
   for (const [Y0, Y1, Z] of [[0, 1.5, zt0], [0, 1.5, zt1], [1.5, 1.5, -1]]) {
@@ -386,15 +387,23 @@ function gepaeckwagen(K, o) {
   K.form(3, lm, 0, { k: HOLZ.slice(0, 5).map(B.col), ton: 1.2, fase: 0, rand: 1, r: RIM_W.r });
   if (fr < .85) { B.flamme(K, Math.round(lx), Math.round(ly + lk * .06), { p: B.PAR[3], kern: '#fff4dc', mitte: LAMPE, aussen: '#b06a20', glut: '#3a2008', gross: 2 }); K.glut(lx, ly, lk * 1.8, LAMPG, 1, [1, 2, 3, 4]); K.licht(lx, ly, LAMPE, lk * 1.8, 1); }
   // Gepäck: Kisten und Koffer (Quader), Postsäcke, Milchkannen
-  const quader = (X, Z, b, h, t, ton, eb) => { const m = B.maske(), q = (dx, Y, dz) => P.q(X + dx, Y, Z + dz); m.poly([q(-b, 0, 0), q(b, 0, 0), q(b, h, 0), q(-b, h, 0)]); m.poly([q(-b, h, 0), q(b, h, 0), q(b, h, t), q(-b, h, t)]); if (X + b < 0) m.poly([q(b, 0, 0), q(b, 0, t), q(b, h, t), q(b, h, 0)]); else m.poly([q(-b, 0, 0), q(-b, 0, t), q(-b, h, t), q(-b, h, 0)]);
-    K.form(eb || 3, m, 0, { k: HOLZ.slice(0, 8).map(B.col), ton: (ton || 1.5) + K.licht3(X, h, Z)[0], fase: 1, rand: 2, r: RIM.r, schatten: 2, muster: (x, y) => (B.hash(x >> 2, y >> 1, Z * 9 | 0) > .85 ? .35 : 0) });
-    const [bx, by] = q(-b * .5, h * .6, 0); K.e[eb || 3].set(bx, by, B.pk(MESSING[5])); const [ex, ey] = q(b * .5, h * .6, 0); K.e[eb || 3].set(ex, ey, B.pk(MESSING[4])); };
+  const quader = (X, Z, b, h, t, ton, eb) => { const q = (dx, Y, dz) => P.q(X + dx, Y, Z + dz), E2 = eb || 3, li = K.licht3(X, h, Z)[0];
+    const vorn = [q(-b, 0, 0), q(b, 0, 0), q(b, h, 0), q(-b, h, 0)], oben = [q(-b, h, 0), q(b, h, 0), q(b, h, t), q(-b, h, t)], seite = X + b < 0 ? [q(b, 0, 0), q(b, 0, t), q(b, h, t), q(b, h, 0)] : [q(-b, 0, 0), q(-b, 0, t), q(-b, h, t), q(-b, h, 0)];
+    const m = B.maske(); m.poly(vorn); m.poly(oben); m.poly(seite);
+    K.form(E2, m, 0, { k: ['#060303', '#0e0706', '#180c09', '#24120d', '#331a12', '#462418', '#5c3020', '#743c28'].map(B.col), ton: 1.6 + (ton || 1.5) * .3 + li * 1.6, fase: 1, rand: 2, r: RIM.r, schatten: 2, muster: (x, y) => (inPoly(x + .5, y + .5, oben) ? 2.2 : inPoly(x + .5, y + .5, seite) ? .9 : 0) + (B.hash(x >> 2, y >> 1, Z * 9 | 0) > .85 ? .35 : 0) });
+    const [bx, by] = q(-b * .5, h * .6, 0); K.e[E2].set(bx, by, B.pk(MESSING[5])); const [ex, ey] = q(b * .5, h * .6, 0); K.e[E2].set(ex, ey, B.pk(MESSING[4]));
+    const [r0x, r0y] = q(-b, h * .5, 0), [r1x, r1y] = q(b, h * .5, 0); B.linie(K.e[E2], r0x + 1, r0y, r1x - 1, r1y, B.pk('#060303')); };
   quader(-2.3, 1.55, .4, .55, .5, 1.3, 2); quader(-2.25, 1.6, .32, .38, .42, 1.8, 2); quader(-2.35, 1.65, .18, .26, .3, 2.1, 2); quader(-1.55, 1.7, .26, .3, .38, 1.6, 2); quader(-2.2, 1.05, .28, .42, .4, 1.2, 3);
   quader(1.7, 1.6, .42, .62, .45, 1.3, 2); quader(1.75, 1.65, .26, .3, .36, 1.9, 2); quader(2.5, 1.5, .22, .85, .5, 1.4, 2);
-  for (const [X, Z, s] of [[-1.0, 1.85, 1], [-1.3, 1.65, .8], [-.75, 1.95, .7]]) { const m = B.maske(), [x, y] = P.q(X, 0, Z), k = P.k(Z) * s; m.ell(x, y - k * .16, k * .22, k * .17); m.ell(x - k * .05, y - k * .33, k * .07, k * .08); K.form(2, m, 0, { k: TUCH.slice(0, 6).map(B.col), ton: 1.3 + K.licht3(X, .2, Z)[0], fase: 2, rand: 2, r: RIM.r, schatten: 2, muster: (px) => (px % 5 === 0 ? -.3 : 0) }); }
+  for (const [X, Z, s] of [[-1.0, 1.85, 1], [-1.3, 1.65, .8], [-.75, 1.95, .7]]) { const m = B.maske(), [x, y] = P.q(X, 0, Z), k = P.k(Z) * s; m.ell(x, y - k * .16, k * .22, k * .17); m.ell(x - k * .05, y - k * .33, k * .07, k * .08); K.form(2, m, 0, { k: TUCH.slice(0, 6).map(B.col), ton: 2.2 + K.licht3(X, .2, Z)[0] * 1.5, fase: 2, rand: 2, r: RIM.r, schatten: 2, muster: (px) => (px % 5 === 0 ? -.3 : 0) }); }
   for (const [X, Z] of [[1.05, 1.45], [1.3, 1.6], [1.45, 1.3]]) { const m = B.maske(), [x, y] = P.q(X, 0, Z), k = P.k(Z); m.rect(x - k * .11, y - k * .48, k * .22, k * .48); m.ell(x, y - k * .48, k * .08, k * .03); m.rect(x - k * .055, y - k * .6, k * .11, k * .12); m.ell(x, y - k * .61, k * .075, k * .025); K.form(Z > 1.5 ? 2 : 3, m, 0, { k: ['#0a0c0e', '#14181c', '#20262c', '#2e363e', '#3e4852', '#56626e'].map(B.col), ton: 1.7, fase: 2, rand: 2, r: RIM.r, schatten: 2, muster: (px, py) => (Math.abs(py - (y - k * .36)) < 1 ? -.6 : 0) }); }
   const fm = B.maske(), [fx, fy] = P.q(2.6, .7, 2.05), fk = P.k(2.05); fm.ell(fx - fk * .3, fy, fk * .2, fk * .2); fm.ell(fx - fk * .3, fy, fk * .17, fk * .17, 0); fm.ell(fx + fk * .3, fy, fk * .2, fk * .2); fm.ell(fx + fk * .3, fy, fk * .17, fk * .17, 0); fm.pfad([[fx - fk * .3, fy], [fx, fy - fk * .25], [fx + fk * .3, fy], [fx + fk * .05, fy], [fx - fk * .3, fy]], .7, .7);
   K.form(1, fm, 0, { k: HOLZ.slice(0, 5).map(B.col), ton: 1.2, fase: 0, rand: 1, r: RIM.r });
+  // Vordergrund: Postsäcke links unten, Kante eines Überseekoffers rechts unten; Lichtfleck der Laterne am Boden
+  const v1 = B.maske(); v1.ell(18, 262, 40, 22); v1.ell(52, 268, 26, 16); v1.ell(8, 236, 18, 14); K.form(5, v1, 0, { k: TUCH.slice(0, 5).map(B.col), ton: 1.4, fase: 2, rand: 2, r: RIM.r, muster: (px) => (px % 6 === 0 ? -.4 : 0) });
+  const v2 = B.maske(); v2.poly([[418, 236], [W + M, 228], [W + M, H + M], [424, H + M]]); v2.poly([[410, 236], [418, 230], [W + M, 222], [W + M, 230]]); K.form(5, v2, 0, { k: HOLZ.slice(0, 6).map(B.col), ton: 1.5, fase: 2, rand: 2, r: RIM.r, muster: (px, py) => (py === 250 || py === 251 ? -.8 : 0) });
+  for (const [x, y] of [[422, 238], [474, 232], [424, 268]]) K.e[5].set(x, y, B.pk(MESSING[5]));
+  const [bfx, bfy] = P.q(-.6, 0, 1.5); B.dith(K.e[4], bfx - 90, bfy - 14, bfx + 90, bfy + 30, "#3a2412", (x, y) => .55 * Math.max(0, 1 - Math.hypot((x - bfx) / 90, (y - bfy - 6) / 26)));
   luft(K, P);
   K.reihen = [{ y: 180, skala: .9, nebel: .3 }, { y: 198, skala: 1, nebel: .12 }, { y: 216, skala: 1, nebel: 0 }];
   return { mitte: [250, 210] };

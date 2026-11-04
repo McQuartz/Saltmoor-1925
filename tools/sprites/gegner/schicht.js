@@ -12,7 +12,7 @@ module.exports = {
     // Takt: Hände gehen gemeinsam auf und ab; Akkord: weit ausholen, dann alle zugleich aufs Band
     let hand = 0, vor = 0, nick = 0, lean = 0, dosen = 0, sink = [0, 0, 0, 0];
     if (p.idle) { hand = [0, 1, 2, 1][f]; dosen = f * 2; }
-    if (p.angriff) { hand = [-8, -14, 3, 0][f]; vor = [0, -2, 12, 4][f]; nick = [-1, -2, 1, 0][f]; lean = [1, 2, -3, -1][f]; dosen = [0, 0, 6, 9][f]; }
+    if (p.angriff) { hand = [-8, -14, 3, 0][f]; vor = [0, -2, 12, 4][f]; nick = [-1, -2, 1, 0][f]; lean = [2, 4, -7, -2][f]; dosen = [0, 0, 6, 9][f]; }
     if (p.treffer) { lean = [2, 1][f]; nick = [-1, 0][f]; hand = [-3, -1][f]; }
     if (p.tod) { sink = [3, 2, 1, 0].map(k => r(p.q * (10 + k * 9))); hand = r(p.q * 6); }
     const cx = 64, n = v.lagen.length, augen = [];

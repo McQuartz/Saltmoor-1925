@@ -3,7 +3,9 @@
 // Läuft schnell (FAST, synchron) im Browser (?bot=50&seed=1) und in Node (tools/bot.js).
 const Bot={
  // Bewertung einer Karte aus der Vorschau
- wert(p,inc){if(!p)return-1;let v=0;p.foes.forEach(f=>{v+=f.d+f.ab*.4+(f.kill?12:0);});const offen=Math.max(0,inc-S.block);v+=Math.min(p.block,offen)*1.3+p.block*.1;v+=Math.max(0,p.hp)*.8;if(p.hp<0)v+=p.hp*(S.hp<15?2:.6);v+=p.energy*3;return v;},
+ // Wert einer Karte aus der Vorschau: sofortiger Schaden plus erwarteter Schaden von Gift/Brand (über die Züge), Verwundbar, Schwächung, Stärke, Block nach Bedarf
+ wert(p,inc){if(!p)return-1;let v=0;p.foes.forEach(f=>{if(f.hp<=0&&!f.kill)return;v+=f.d+f.ab*.4+(f.kill?12:0);const g=Math.max(0,f.gift),b=Math.max(0,f.brand);v+=Math.min(f.hp,g*(g+1)/2)*.7+Math.min(f.hp,b*1.8)*.7+(f.vuln>0?f.vuln*3:0)+(f.weak?4:0);});
+  v+=(p.str||0)*4;const offen=Math.max(0,inc-S.block);v+=Math.min(p.block,offen)*1.3+p.block*.1;v+=Math.max(0,p.hp)*.8;if(p.hp<0)v+=p.hp*(S.hp<15?2:.6);v+=p.energy*3;return v;},
  // beste Karte jetzt (für den geklickten Run in tools/selbst-spielen.js): {i,t} oder null
  besteKarte(){const inc=incoming();let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
  kampfZug(){let guard=0;while(S.phase==='fight'&&!busy&&guard++<30){const inc=incoming();let best=null;
@@ -27,7 +29,7 @@ const Bot={
   let bi=0,bs=-1;o.forEach((x,i)=>{const s=score(x);if(s>bs){bs=s;bi=i;}});chooseWeg(bi);},
  // Wert eines Handgriffs (grob, für Wahl und Kauf)
  profil:null, // Build-Bot: {build, items:[], handgriffe:[], stoffe:[]} aus data/builds.json
- hgWert(id){const c=HANDGRIFFE[id];if(!c||c.unspielbar)return -9;const P=this.profil;const bonus=P?((P.handgriffe||[]).includes(id)?8:0)+(c.build===P.build?4:0):0;return bonus+this.hgWertRoh(c);},
+ hgWert(id){const c=HANDGRIFFE[id];if(!c||c.unspielbar)return -9;const P=this.profil;const bonus=P?((P.handgriffe||[]).includes(id)?5:0)+(c.build===P.build?2:0):0;return bonus+this.hgWertRoh(c);},
  hgWertRoh(c){const atk=(c.atk||0)*(c.x?3:(c.h||1))*(c.all?1.6:1);return atk+(c.blk||0)*.9+(c.heal||0)+(c.poison||0)*1.6+(c.burn||0)*1.6+(c.draw||0)*3+(c.en||0)*4+(c.str||0)*4+(c.vuln||0)*2.5+(c.weak?3:0)+(c.funke?2:0)+(c.kette||0)*2+(c.behalten?1:0)+(c.sonder?4:0)-(c.opfer?c.opfer*.6:(c.c||0)*2.5);},
  // Bestes Item zum Ritzen: angelegt, freie Kerbe, Stoffe mit möglichst vielen Reaktionen im Deck; sonst schwächsten Handgriff überschreiben
  ritzen(){const id=S.hgPending;if(!id)return false;const st=allActive().flatMap(it=>def(it).st);

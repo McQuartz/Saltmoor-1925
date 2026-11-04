@@ -5,7 +5,7 @@ module.exports = {
   form(A) {
     const { achse, apg, acap, kurve } = A;
     const ax = achse(6, 42, -Math.PI / 4);
-    const schaft = [acap(ax, 0, 0, 33, 0, 1.7, 1.5)];
+    const schaft = [acap(ax, 0, 0, 33, 0, 2.0, 1.7)];
     const spitze = [apg(ax, [[31, -2.2], [37, -2.4], [48, 0], [37, 2.4], [31, 2.2]], null, { b: 1.2 }),
       apg(ax, [[38, 1.5], [41, 1.6], [35, 6.2], [36.5, 2.2]], null, { b: 0.8 })];
     const tuelle = [acap(ax, 29, 0, 32.5, 0, 2.4, 2.4)];

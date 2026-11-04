@@ -81,10 +81,12 @@ module.exports = {
       }
       // Gesicht aus Tinte: dunkle Fläche, eine Glanzlinie, darin zwei gespiegelte Kerzenflammen als Augen
       const gx = r(hx - 2), gy = r(hy + 1);
-      for (let y = gy - 4; y <= gy + 4; y++) for (let x = gx - 3; x <= gx + 3; x++) if (((x - gx) / 3.6) ** 2 + ((y - gy) / 4.6) ** 2 <= 1) P.auf(x, y, 'k0');
-      P.auf(gx - 2, gy - 3, 'tinte'); P.auf(gx - 1, gy - 4, 'tinte'); P.auf(gx + 2, gy + 3, 'tinte');
+      for (let y = gy - 5; y <= gy + 5; y++) for (let x = gx - 4; x <= gx + 4; x++) if (((x - gx) / 4.2) ** 2 + ((y - gy) / 5.2) ** 2 <= 1) P.auf(x, y, 'k0');
+      // Glanz auf der Tintenfläche: ein Bogen oben rechts (spiegelt das Gegenlicht), blauer Schimmer am Rand
+      for (const [dx, dy, c] of [[2, -4, 'r2'], [3, -3, 'r2'], [3, -2, 'r1'], [1, -4, 'r1'], [-3, -2, 'tinte'], [-3, 2, 'tinte'], [-2, 4, 'tinte'], [2, 4, 'tinte'], [3, 2, 'tinte']]) P.auf(gx + dx, gy + dy, c);
       if (augenAn) {
-        for (const ax of [gx - 2, gx + 1]) { P.glow(ax + 0.5, gy, 4, 0.8, 'glutDim', 'k1'); P.set(ax, gy - 1, 'glut'); P.set(ax, gy, 'kern'); P.set(ax, gy + 1, 'flamme'); }
+        for (const ax of [gx - 2, gx + 1]) { P.glow(ax + 0.5, gy, 4, 0.8, 'glutDim', 'k1');
+        P.glow(ax + 0.5, gy + 5, 7, 0.5, 'glutDim', 'k3'); P.set(ax, gy - 1, 'glut'); P.set(ax, gy, 'kern'); P.set(ax, gy + 1, 'flamme'); }
         augen.push([gx - 2, gy], [gx + 1, gy]);
       }
       // Tinte läuft die Arme hinauf: einzelne glänzende Tropfen auf dem Arm

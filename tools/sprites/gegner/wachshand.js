@@ -68,7 +68,7 @@ module.exports = {
     const augen = [];
     const details = P => {
       // Wärme im Wachs: von innen, gedithert
-      P.glow(47, hy + 14, 30, 0.95, 'glutDim', 'k3'); P.glow(36, hy + 10, 12, 0.7, 'glutDim', 'k3');
+      P.glow(47, hy + 16, 30, 0.6, 'glutDim', 'k3'); v.haende.forEach(([bx, by]) => P.glow(bx + 0.5, by + 3, 6, 0.55, 'glutDim', 'k3'));
       // Wachstropfen, die am Hügel herunterlaufen (hell gegen den Schiefer)
       for (const [x, y, l] of [[24, hy + 10, 4], [40, hy + 4, 3], [67, hy + 6, 5], [80, 106, 3]]) for (let k = 0; k < l; k++) P.auf(x, y + k, k === l - 1 ? 'wachs' : 'k3');
       (v.kerzen || []).forEach(([x, y], i) => {

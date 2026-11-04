@@ -70,7 +70,7 @@ module.exports = {
       // Kapuze: dunkle Öffnung, darin zwei Augen, die dich ansehen (nicht das Blatt)
       const ox = r(hx - 6), oy = r(hy + 4);
       for (let y = oy - 6; y <= oy + 7; y++) for (let x = ox - 4; x <= ox + 4; x++) if (((x - ox) / 4.6) ** 2 + ((y - oy) / 7.5) ** 2 <= 1) P.auf(x, y, 'k0');
-      if (augenAn) { P.auge(ox - 2, oy, 2); P.auge(ox + 2, oy + 1, 1); augen.push([ox - 2, oy], [ox + 2, oy + 1]); }
+      if (augenAn) { P.glow(ox, oy + 2, 10, 0.8); P.auge(ox - 2, oy, 2); P.auge(ox + 2, oy + 1, 1); augen.push([ox - 2, oy], [ox + 2, oy + 1]); }
       // Kerze: Flamme, Schein auf Pult, Hand und Streifen
       if (kerzeAn) {
         const fl = p.idle ? [3, 4, 3, 4][f] : p.angriff ? [3, 2, 4, 3][f] : 3;

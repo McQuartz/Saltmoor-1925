@@ -38,12 +38,15 @@ function haengelampe(K, eb, x, y, s, an, tiefe, kabelBis) {
   m.poly([[x - s * .3, y - s * .8], [x + s * .3, y - s * .8], [x + s, y], [x - s, y]]);
   K.form(eb, m, tiefe, Object.assign({ ton: 1.4, fase: 0, rand: 1 }, MET));
   if (!an) return;
-  const e = K.e[eb]; e.set(x, y, B.pk(NAT_K)); if (s > 3) { e.set(x - 1, y, B.pk(NAT)); e.set(x + 1, y, B.pk(NAT)); }
+  const e = K.e[eb]; e.set(x, y, B.pk(NAT_K)); e.set(x - 1, y, B.pk(NAT)); e.set(x + 1, y, B.pk(NAT)); if (s > 4) { e.set(x - 2, y, B.pk(NAT)); e.set(x + 2, y, B.pk(NAT)); e.set(x, y + 1, B.pk(NAT)); }
   K.licht(x, y, NAT, s * 8, .8);
+  // Lichthof unter dem Schirm, brummt ruhig (sehr selten ein Aussetzer)
+  const g = B.glanzSprite(Math.max(4, s * 2.2), NAT_G2, .8), ph = x * .37;
+  K.anim.push({ p: B.PAR[eb], f(ctx, t, ox, oy) { if (Math.sin(t * .23 + ph) > .985) return; ctx.globalCompositeOperation = 'lighter'; ctx.drawImage(g, x - g.R + ox, y + 1 - g.R + oy); ctx.globalCompositeOperation = 'source-over'; } });
 }
 // Lichtkegel einer Hängelampe nach unten und Fleck auf Boden/Band
 function lampenLicht(K, x, y, s, yBoden, ebenen) {
-  for (const i of ebenen) B.kegel(K.e[i], x, y + 1, Math.PI / 2, .42, (yBoden - y) * 1.1, NAT_G2, .55);
+  for (const i of ebenen) B.kegel(K.e[i], x, y + 1, Math.PI / 2, .42, (yBoden - y) * 1.15, '#7a5414', .8);
   K.glut(x, yBoden, s * 5, NAT_G, .9, ebenen);
 }
 // Schornstein: Ziegelsäule, Mündung oben, Rauch fällt außen herab (statisch gedithert; Bewegung über rauchAnim)
@@ -151,6 +154,8 @@ function packhalle(K, cfg) {
   // Boden mit Rinne in der Mitte und Lichtflecken unter den Lampen
   const lampen = []; for (let Z = 2.2; Z < Zb - 1; Z += 1.9) for (const X of [-2.5, 2.4]) lampen.push([X, Z]);
   fliesen(K, P, P.vy, lampen.map(([X, Z]) => [X, Z, .9]), -.2);
+  // Mit der Fremdheit leuchtet die Rinne von unten, grün wie das, was unter der Fabrik liegt
+  if (fr > .4) for (let Z = 1.4; Z < Zb; Z += .5) { const [x, y] = P.q(-.2, 0, Z); K.glut(x, y, P.k(Z) * .5, '#0c3a20', (fr - .4) * 1.6, [K.eb(y)]); if (fr > .7) K.e[K.eb(y)].set(Math.round(x), Math.round(y), B.pk('#6ae0a0')); }
   // Bänder: links und rechts entlang der Tiefe, Höhe 0,45, Beine im Takt; Dosen in gleichen Abständen
   const baender = [[-3.0, -2.0], [1.9, 2.9]], YB = .62;
   for (let Z = Zb - 1; Z >= 1.2; Z -= .8) {
@@ -309,13 +314,13 @@ function hof(K) {
 function hauptband(K) {
   const fr = K.fr, P = B.persp(240, 152), Zw = 5.5; K.split = [168, 180];
   const yw = P.q(0, 0, Zw)[1];
-  const fen = [[52, 150], [196, 300], [348, 432]], fy0 = 8, fy1 = 118;
+  const fen = [[40, 112], [150, 222], [300, 448]], fy0 = 8, fy1 = 122;
   const inF = (x, y) => fen.some(([a, b]) => x > a && x < b && y > fy0 + Math.max(0, 1 - ((x - a) / (b - a) - .5) ** 2 * 4) * -0 && y < fy1 && (y > fy0 + 14 || Math.hypot((x - (a + b) / 2) / ((b - a) / 2), (y - fy0 - 14) / 14) < 1));
-  hofDraussen(K, 250, 40, 140, 30, inF);
+  hofDraussen(K, 380, 34, 150, 34, inF);
   // Wand mit den Fensteröffnungen (Rundbogen oben), Kacheln unten
   const wm = B.maske(); wm.rect(-M, -M, W + 2 * M, yw + M + 1); wm.fn(-M, -M, W + M, yw, inF, 0);
   K.form(1, wm, .08, { k: KALK, ton: 1.4, fase: 2, verlauf: -.4, schatten: 2, muster: (x, y) => (y > fy1 + 10 ? (((x + 2) % 10 === 0 || (y - fy1) % 7 === 0) ? -.4 : .2) : B.fbm(x * .05, y * .04, 3, 2) * .4 - .2) });
-  fen.forEach(([a, b]) => { sprossen(K, 1, a + 2, fy0 + 16, b - 2, fy1 - 2, 4, 5, .05); const lb = B.maske(); lb.rect(a - 4, fy1, b - a + 8, 5); K.form(1, lb, 0, { k: KALK, ton: 2.6, fase: 1, rand: 2 }); for (const i of [2, 3]) B.kegel(K.e[i], (a + b) / 2, fy1 - 20, Math.PI / 2 + .45, .35, 170, NAT_G2, .4); });
+  fen.forEach(([a, b]) => { sprossen(K, 1, a + 2, fy0 + 16, b - 2, fy1 - 2, Math.round((b - a) / 26), 5, .05); const lb = B.maske(); lb.rect(a - 4, fy1, b - a + 8, 5); K.form(1, lb, 0, { k: KALK, ton: 2.6, fase: 1, rand: 2 }); for (const i of [2, 3]) B.kegel(K.e[i], (a + b) / 2, fy1 - 20, Math.PI / 2 + .45, .35, 170, NAT_G2, .4); });
   // Boden: Fliesen frontal, nass
   fliesen(K, P, yw - 1, [[-2, 2.6, 1], [0, 2.6, 1], [2, 2.6, 1]]);
   // Langes Band quer hinter dem Wächter, mit Dosen in gleichen Abständen

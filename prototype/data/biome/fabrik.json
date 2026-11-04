@@ -121,21 +121,21 @@
    "n": "Die Ausnehmerin",
    "biom": "fabrik",
    "rang": "normal",
-   "hp": 24,
+   "hp": 21,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 4,
+     "v": 3,
      "h": 2
     },
     {
      "t": "atk",
-     "v": 7
+     "v": 5
     },
     {
      "t": "blk",
-     "v": 5
+     "v": 4
     }
    ],
    "sprite": "ausnehmerin_a",
@@ -158,16 +158,16 @@
    "n": "Das Dosenkind",
    "biom": "fabrik",
    "rang": "normal",
-   "hp": 15,
+   "hp": 13,
    "weak": "E",
    "pat": [
     {
      "t": "atk",
-     "v": 5
+     "v": 4
     },
     {
      "t": "atk",
-     "v": 3,
+     "v": 2,
      "h": 2
     },
     {
@@ -185,7 +185,7 @@
    "kniff": {
     "art": "nachlass",
     "was": "explodiert",
-    "v": 6,
+    "v": 5,
     "why": "Wenn die Dose platzt, spritzt die Lake. Wer zuletzt zuschlägt, steht im Weg."
    },
    "beute": "lakeeimer",
@@ -196,20 +196,20 @@
    "n": "Der Kesselmann",
    "biom": "fabrik",
    "rang": "normal",
-   "hp": 30,
+   "hp": 27,
    "weak": "W",
    "pat": [
     {
      "t": "blk",
-     "v": 8
+     "v": 7
     },
     {
      "t": "atk",
-     "v": 9
+     "v": 7
     },
     {
      "t": "atk",
-     "v": 4,
+     "v": 3,
      "h": 2
     }
    ],
@@ -233,20 +233,20 @@
    "n": "Der Kühlhausgast",
    "biom": "fabrik",
    "rang": "normal",
-   "hp": 27,
+   "hp": 24,
    "weak": "F",
    "pat": [
     {
      "t": "blk",
-     "v": 7
+     "v": 6
     },
     {
      "t": "atk",
-     "v": 10
+     "v": 8
     },
     {
      "t": "atk",
-     "v": 4,
+     "v": 3,
      "h": 2
     }
    ],
@@ -269,7 +269,7 @@
    "n": "Die Schicht",
    "biom": "fabrik",
    "rang": "waechter",
-   "hp": 78,
+   "hp": 72,
    "weak": "F",
    "pat": [
     {
@@ -278,7 +278,7 @@
     },
     {
      "t": "blk",
-     "v": 12
+     "v": 10
     },
     {
      "t": "atk",
@@ -287,7 +287,7 @@
     },
     {
      "t": "buff",
-     "v": 3
+     "v": 2
     },
     {
      "t": "atk",
@@ -308,11 +308,16 @@
    "besonders": {
     "art": "ruft",
     "gegner": "dosenkind",
-    "alle": 3
+    "alle": 4
    },
    "beute": "ofen",
    "beute_satz": "Die Lagen sinken in sich zusammen. Das Band läuft weiter, und am Platz ganz oben ist jetzt einer frei.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Der Takt zieht an. Jede Runde ein wenig schneller, so wie jede Nacht."
+   }
   }
  },
  "events": [

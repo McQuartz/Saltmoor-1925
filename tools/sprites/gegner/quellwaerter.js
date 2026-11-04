@@ -81,7 +81,6 @@ module.exports = {
       }
       P.auf(hx - 4, hy - 2, 'k0'); P.auf(hx - 3, hy - 2, 'k0'); P.auf(hx - 2, hy - 2, 'k0');
       for (let k = 0; k < 2; k++) P.auf(hx - 2 + k, hy + 5, 'k0');
-      for (let k = 0; k < 4; k++) P.set(hx - 2, hy + 9 + k * 2 + (p.idle ? f % 2 : 0), 'r1');
     };
     return { gruppen, details, augen };
   },

@@ -5,7 +5,7 @@
  "start_slots": 2,
  "max_slots": 4,
  "bag_size": 5,
- "victory_heal_pct": 0.28,
+ "victory_heal_pct": 0.15,
  "gold_per_victory": {
   "min": 12,
   "max": 20,
@@ -14,8 +14,11 @@
   "boss": 0
  },
  "enemy_scaling": {
-  "hp_per_depth": 0.025,
-  "atk_every_n_depths": 6
+  "_doc": "Nur normale Gegner skalieren mit der Tiefe; hp_faktor/waechter_faktor gleichen den stärkeren Deckbau aus Auftrag 2 aus.",
+  "hp_per_depth": 0.05,
+  "atk_every_n_depths": 3,
+  "hp_faktor": 1.25,
+  "waechter_faktor": 1.35
  },
  "encounters": {
   "_doc": "Ersetzt durch run.json (Gegnerzahl) und biomes.json (Gegner je Biom)."

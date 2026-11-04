@@ -78,7 +78,7 @@ module.exports = {
       // zugenähte Augen: Naht aus Licht, Stiche davor
       const ex = r(kx - 3), ey = r(ky);
       if (augenAn) {
-        P.glow(ex + 1.5, ey + 0.5, 6, 0.85);
+        P.glow(ex + 1.5, ey + 0.5, 11, 0.95);
         for (let k = -1; k <= 4; k++) P.set(ex + k - 1, ey, k === 1 || k === 2 ? 'kern' : 'glut');
         for (const k of [-1, 1, 3]) { P.set(ex + k - 1, ey - 1, 'k0'); P.set(ex + k, ey + 1, 'k0'); P.set(ex + k - 0, ey, 'k0'); }
         augen.push([ex + 1, ey]);

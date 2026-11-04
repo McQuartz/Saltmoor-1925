@@ -156,10 +156,56 @@ function faust(o) {
 }
 
 // ---------------------------------------------------------------------------
+// Bausteine, die mehrere Icons teilen (jedes Icon setzt sie anders zusammen)
+// Perlenschnur entlang einer Bezier-Kurve: n Perlen mit Radius r
+function perlen(pts, n, r, m, o = {}) {
+  const k = kurve(pts, 0.4, 0.4, m, o, 40); const out = [];
+  for (let i = 0; i < n; i++) { const [x, y] = k.B(i / (n - 1)); out.push(E(x, y, r, r, m, { pf: 'bevel', ...o })); }
+  out.B = k.B; return out;
+}
+// Kettenglieder entlang einer Kurve, abwechselnd flach (Ring) und hochkant (Stab)
+function kettenglieder(pts, n, gr, m) {
+  const k = kurve(pts, 0.4, 0.4, m, {}, 40); const flach = [], kant = [];
+  for (let i = 0; i < n; i++) {
+    const q = i / (n - 1), [x2, y2] = k.B(Math.min(1, q + 0.02)), [x1, y1] = k.B(Math.max(0, q - 0.02)); const [x, y] = k.B(q);
+    const ax = achse(x, y, Math.atan2(y2 - y1, x2 - x1));
+    if (i % 2) kant.push(acap(ax, -gr * 1.1, 0, gr * 1.1, 0, gr * 0.42));
+    else { const N = 10; for (let j = 0; j < N; j++) { const a0 = j / N * Math.PI * 2, a1 = (j + 1) / N * Math.PI * 2; flach.push(C(...ax.P(Math.cos(a0) * gr * 1.25, Math.sin(a0) * gr * 0.75), ...ax.P(Math.cos(a1) * gr * 1.25, Math.sin(a1) * gr * 0.75), gr * 0.33, gr * 0.33)); } }
+  }
+  return { flach, kant, B: k.B };
+}
+// Zahnrad: Scheibe mit n Zähnen
+function zahnrad(cx, cy, R, n, zh = 2.2, m, o = {}) {
+  const pts = []; for (let i = 0; i < n; i++) {
+    const a = i / n * Math.PI * 2, w = Math.PI / n;
+    pts.push([cx + Math.cos(a - w * 0.62) * R, cy + Math.sin(a - w * 0.62) * R], [cx + Math.cos(a - w * 0.32) * (R + zh), cy + Math.sin(a - w * 0.32) * (R + zh)], [cx + Math.cos(a + w * 0.32) * (R + zh), cy + Math.sin(a + w * 0.32) * (R + zh)], [cx + Math.cos(a + w * 0.62) * R, cy + Math.sin(a + w * 0.62) * R]);
+  }
+  return Pg(pts, m, { b: 1.4, ...o });
+}
+// Mantel/Jacke von vorn: o = {cx, y0 (Schulter), y1 (Saum), sb (halbe Schulterbreite), sb2 (halbe Saumbreite), aerm, aw,
+// kragen: 'revers'|'steh'|'kapuze'|'hoch', zacken (zerfetzter Saum), schraeg}
+function mantel(o) {
+  const { cx, y0, y1, sb, sb2 } = o; const aerm = o.aerm ?? (y1 - y0) * 0.6, aw = o.aw ?? 3.6, sch = o.schraeg ?? 0;
+  const saumPts = o.zacken ? saum(cx + sb2 + sch, cx - sb2 + sch, y1, o.zacken, 3, o.seed || 3) : [[cx + sb2 + sch, y1], [cx - sb2 + sch, y1]];
+  const koerper = Pg([[cx - sb + 2, y0 - 1], [cx + sb - 2, y0 - 1], [cx + sb + 1, y0 + 3], [cx + sb2 * 0.92 + sch, y1 - 6], ...saumPts, [cx - sb2 * 0.92 + sch, y1 - 6], [cx - sb - 1, y0 + 3]], null, { b: 2.2, rd: 0.8 });
+  const ae = o.aermSpreiz ?? 3;
+  const aermelL = [C(cx - sb, y0 + 2, cx - sb - ae + sch * 0.5, y0 + aerm, aw, aw * 0.85)], aermelR = [C(cx + sb, y0 + 2, cx + sb + ae + sch * 0.5, y0 + aerm, aw, aw * 0.85)];
+  const stulpe = [C(cx - sb - ae + sch * 0.5, y0 + aerm - 2, cx - sb - ae + sch * 0.5, y0 + aerm + 0.5, aw * 0.95, aw * 0.95), C(cx + sb + ae + sch * 0.5, y0 + aerm - 2, cx + sb + ae + sch * 0.5, y0 + aerm + 0.5, aw * 0.95, aw * 0.95)];
+  let kragen = [];
+  if (o.kragen === 'revers') kragen = [Pg([[cx - 5, y0 - 2], [cx - 1, y0 + 9], [cx - 2, y0 + 13], [cx - 7, y0 + 3]], null, { b: 1 }), Pg([[cx + 5, y0 - 2], [cx + 1, y0 + 9], [cx + 2, y0 + 13], [cx + 7, y0 + 3]], null, { b: 1 })];
+  if (o.kragen === 'steh') kragen = [Pg([[cx - 6, y0 - 4], [cx + 6, y0 - 4], [cx + 6, y0 + 1], [cx - 6, y0 + 1]], null, { b: 1, rd: 0.6 })];
+  if (o.kragen === 'hoch') kragen = [Pg([[cx - 7, y0 - 6], [cx + 7, y0 - 6], [cx + 8, y0 + 2], [cx, y0 + 5], [cx - 8, y0 + 2]], null, { b: 1.2, rd: 0.6 })];
+  if (o.kragen === 'kapuze') kragen = [Pg([[cx - 8, y0 + 2], [cx - 7, y0 - 8], [cx - 1, y0 - 14], [cx + 4, y0 - 12], [cx + 8, y0 - 5], [cx + 8, y0 + 2], [cx, y0 + 6]], null, { b: 1.6, rd: 1 })];
+  return { koerper: [koerper], aermelL, aermelR, stulpe, kragen };
+}
+
+// ---------------------------------------------------------------------------
+const TON_FLACH = 0.235;
 // Rendern: gruppen (hinten -> vorne), jede mit mat. Rückgabe Index-Puffer in die Bild-Palette.
 function rendern(W, H, gruppen, pal) {
   const gs = gruppen.filter(g => g && g.p && (g.p.flat ? g.p.flat(3) : g.p).length);
-  const { buf, gid } = S.render(W, H, gs.map(g => ({ ...g, p: g.p.flat ? g.p.flat(3) : g.p })), null, { rimBis: H + 10 });
+  // Grundton: flache Flächen landen ohne Dither auf Stufe k2 (TON_FLACH), nur Fasen bekommen Übergänge
+  const { buf, gid } = S.render(W, H, gs.map(g => ({ ...g, tone: (g.tone ?? 0) + TON_FLACH, p: g.p.flat ? g.p.flat(3) : g.p })), null, { rimBis: H + 10 });
   const out = new Uint8Array(W * H);
   for (let i = 0; i < out.length; i++) {
     if (!buf[i]) continue; const g = gs[gid[i]]; const m = g.mat || 'eisen';
@@ -241,7 +287,7 @@ function bauen(def, o = {}) {
   const W = def.w || 48, H = def.h || 48;
   const st = o.st ?? def.st ?? [], rar = o.rar ?? def.rar ?? 'gewoehnlich';
   const pal = palette(st, rar);
-  const A = { E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
+  const A = { E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
   const res = def.form(A, { st, rar });
   const { buf } = rendern(W, H, res.gruppen, pal);
   const P = pinsel(buf, W, H, pal);
@@ -250,4 +296,4 @@ function bauen(def, o = {}) {
   return { buf, W, H, pal, rgba: S.zuRGBA(buf, pal) };
 }
 
-module.exports = { S, MAT, LICHT, STOFFE, stoffFarbe, palette, rendern, pinsel, bauen, achse, apg, acap, ring, kurve, hand, faust, rad, WURZEL };
+module.exports = { perlen, kettenglieder, zahnrad, mantel, S, MAT, LICHT, STOFFE, stoffFarbe, palette, rendern, pinsel, bauen, achse, apg, acap, ring, kurve, hand, faust, rad, WURZEL };

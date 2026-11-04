@@ -42,8 +42,7 @@ module.exports = {
     const kerzen = kz.map(([x, y, h]) => C(x, y, x, y - h * (1 - S), 1.4, 1.3, null, { pf: 'flat' }));
     const gruppen = [
       { p: [schleier], k: 1, anker: [lean, T] },
-      { p: [rock, ...zungen], k: 4 },
-      { p: [leib], k: 3, anker: [lean, T] },
+      { p: [rock, ...zungen, leib], k: 4, tone: 0.12 },
       { p: [kopf], k: 0 },
       { p: kerzen, k: 0 },
       { p: [...armR, ...zapfen.slice(3)], k: 1 },
@@ -53,12 +52,13 @@ module.exports = {
     const augen = [];
     const details = P => {
       // Wärme: das Wachs glimmt von innen, am stärksten um das Herz
-      P.glow(cx, ty + 12, 30, 0.9, 'glutDim', 'k3');
-      P.glow(64, 132, 34, 0.7, 'glutDim', 'k3');
+      P.glow(cx, ty + 14, 34, 0.75, 'k3', 'k2');
+      P.glow(64, 132, 40, 0.7, 'k3', 'k2');
+      P.glow(cx - 4, ty + 9, 8, 0.8, 'glutDim', 'k3');
       // Wachsherz an der Brust
       const hzx = cx - 4, hzy = ty + 9;
       for (const [a, b] of [[-2, -1], [-1, -2], [1, -2], [2, -1], [-2, 0], [-1, -1], [0, -1], [1, -1], [2, 0], [-1, 0], [0, 0], [1, 0], [-1, 1], [0, 1], [1, 1], [0, 2]]) P.auf(hzx + a, hzy + b, 'wachs');
-      if (!P0.aus) P.set(hzx, hzy, 'glut');
+      if (!P0.aus) { P.set(hzx, hzy, 'glut'); P.set(hzx - 1, hzy - 1, 'kern'); }
       // Tropfspuren: laufen von Armen und Schultern herab (wandern im Leerlauf)
       for (const [x0, y0, l] of [[cx - 14, ty + 2, 8], [cx + 15, ty + 3, 10], [sx(50, 100), sy(100), 12], [sx(78, 102), sy(102), 9], [sx(88, 124), sy(124), 7]]) {
         for (let k = 0; k < l; k++) P.auf(x0, y0 + k, k === (l - 1 + tropf) % l ? 'wachs' : 'k3');

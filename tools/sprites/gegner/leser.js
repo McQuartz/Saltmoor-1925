@@ -62,7 +62,7 @@ module.exports = {
         // Glasring
         for (let t = 0; t < 12; t++) { const a2 = t / 12 * 6.283; P.set(r(X + Math.cos(a2) * 2.3), r(Y + Math.sin(a2) * 2.3), Math.sin(a2) < -0.3 && Math.cos(a2) > -0.3 ? 'r2' : Math.sin(a2) > 0.4 ? 'k1' : 'r1'); }
         if (augenAn) {
-          P.glow(X + 0.5, Y + 0.5, 5, 0.9);
+          P.glow(X + 0.5, Y + 0.5, 8, 0.95);
           P.set(X, Y, 'kern'); P.set(X + 1, Y, 'glut'); P.set(X - 1, Y, 'glut'); P.set(X, Y + 1, 'glut'); P.set(X, Y - 1, 'glutDim'); P.set(X + 1, Y + 1, 'glutDim');
           augen.push([X, Y]);
         } else { P.set(X, Y, 'k0'); P.set(X + 1, Y, 'k1'); }
