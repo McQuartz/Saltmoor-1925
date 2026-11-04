@@ -16,8 +16,8 @@ Abgestimmt mit Philip am 2026-11-04 (wörtlich in [00-philip.md](00-philip.md)).
 | Akte | bleiben fünf, jeder Akt bekommt mehrere Biome, Wahl zwischen zweien |
 | Neue Biome | 10 (Fabrik, Kurhaus, Nachtzug, Kloster, Grotte, Wald, Gezeitenwerk, Walkathedrale, Glasmeer, Ufer), Pforte neu |
 | Mengen | etwa 50 neue Gegner, 12 neue Bosse, etwa 90 Ereignisse insgesamt |
-| Sprites | per KI-Bild-Generator, gepixelt nach Zielbild, Qualität mindestens wie bisher, keine Abkürzungen ([06-ki-bilder.md](06-ki-bilder.md)) |
-| Steam-Regel | für diesen Auftrag zurückgestellt, KI-Bilder werden markiert |
+| Sprites | der Agent zeichnet wie in Auftrag 1 selbst per Skript, mehr Aufwand je Figur, Qualität mindestens wie bisher, keine Abkürzungen ([06-ki-bilder.md](06-ki-bilder.md)) |
+| Steam-Regel | für diesen Auftrag zurückgestellt |
 | Klang | weiter ohne KI |
 | Windgestalt | wird überarbeitet, darf ersetzt werden, wenn das Konzept stärker ist |
 | Pforte | neu entworfen (kein Science-Fiction), leichter (höchstens 35 % der Niederlagen) |

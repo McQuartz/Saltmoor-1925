@@ -47,3 +47,9 @@ Claude hat acht Vorschläge gemacht: (1) Items geben mehrere Karten und Kämpfe 
 „Das, was du danach meintest“ = alle klaren UI- und Gefühl-Punkte, jetzt in [07-ui-und-gefuehl.md](07-ui-und-gefuehl.md).
 
 Wie das umgesetzt wird: Die Antwort auf „wie behält man den USP“ steht in [04-deckbau.md](04-deckbau.md) Abschnitt 2 (Kerben und Handgriffe).
+
+## Nachtrag 2026-11-04, 22:08
+
+> die pixelart bisher wurde ja auch einfach von ai gemacht, einfach so wie da weitermaachen
+
+Gemeint: Der Agent zeichnet wie in Auftrag 1 selbst per Skript. Es braucht keinen externen Bild-Dienst ([06-ki-bilder.md](06-ki-bilder.md)).

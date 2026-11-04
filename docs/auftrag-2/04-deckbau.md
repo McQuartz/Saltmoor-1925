@@ -15,6 +15,8 @@ Philip will, dass das Deck wächst, **ohne** dass der Item-Ansatz (das Besondere
 
 > **Dein Deck ist deine Ausrüstung.** Items tragen Karten. Neue Karten lernst du als **Handgriffe** und ritzt sie in eine **Kerbe** eines Items. Ein Handgriff nimmt die **Stoffe des Items** an, in dem er steckt.
 
+**Kurz gesagt:** Jeder gewonnene Kampf gibt dir eine **neue Karte** (einen Handgriff), die **zusätzlich** ins Deck kommt. Damit sie weiß, welchen Stoff sie hat, hängst du sie an eines deiner Items. Die Kerbe ist nur der Platz am Item dafür. Beispiel: Startdeck 10 Karten. Nach Kampf 1 wählst du „Schüren“ und hängst es an die Fackel, jetzt hast du 11 Karten, und „Schüren“ ist eine Feuer-Karte. Nach Kampf 2 hängst du „Abwarten“ an den Salzbeutel, 12 Karten, „Abwarten“ ist Salz. Und so weiter bis 20 bis 28.
+
 - **Stammkarte:** Jedes Item hat wie bisher eine eigene Karte (2 Kopien im Deck, `card_copies`).
 - **Kerben:** Jedes Item hat 1 bis 3 Kerben (gewöhnlich 1, selten 2, Reliquie 2, nach Werkstatt höchstens 3).
 - **Handgriffe:** Karten ohne eigenen Stoff (Wirkung, Kosten, Name). In einer Kerbe liegt **ein** Handgriff, im Deck **eine** Kopie. Er trägt die Stoffe seines Items. Derselbe Handgriff „Nachsetzen“ in der Fackel ist Feuer, im Weihwasser Salz + Glaube. Damit löst er andere Reaktionen aus. Hier entsteht der Build.

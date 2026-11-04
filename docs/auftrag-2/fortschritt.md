@@ -6,7 +6,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 
 | Meilenstein | Status | Notiz |
 |---|---|---|
-| M0 Einrichten und Bild-Zugang | offen | |
+| M0 Einrichten und Bild-Pipeline | offen | |
 | M1 Gefühl und UI | offen | |
 | M2 Längere Akte | offen | |
 | M3 Deckbau-Kern | offen | |
@@ -17,10 +17,6 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M8 Ereignisse und Balance | offen | |
 | M9 Abschluss | offen | |
 | Zugabe | offen | |
-
-## Bild-Weg und Verbrauch
-
-(Welcher Weg aus 06-ki-bilder.md, welcher Dienst, Bilder erzeugt / Budget)
 
 ## Noten
 

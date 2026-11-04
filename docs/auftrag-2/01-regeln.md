@@ -21,7 +21,7 @@ Wenn auch das nichts sagt: die Lösung, die den Run **reicher und lesbarer** mac
 
 ## 3. Was sich bei den Verboten ändert
 
-- **KI-Bilder sind erwünscht** für Gegner, Bosse, Item-Icons, Handgriff-Bilder, Ereignisbilder und Requisiten der Hintergründe, nach [06-ki-bilder.md](06-ki-bilder.md). Jedes KI-Bild wird markiert (`quelle`), damit es später ersetzt werden kann. Die Steam-Frage ist zurückgestellt, nicht vergessen.
+- **Bilder zeichnest du selbst als Pixel-Art per Skript**, wie in Auftrag 1, für Gegner, Bosse, Item-Icons, Handgriff-Bilder, Ereignisbilder und Requisiten, nach [06-ki-bilder.md](06-ki-bilder.md). Ein externer Bild-Dienst ist nicht nötig. Die Steam-Frage ist zurückgestellt.
 - **Weiter verboten:** KI-Klänge und KI-Musik, fremde Assets (außer pixelfx), neue Abhängigkeiten im Spiel, Weichzeichner und geglättete Skalierung, globaler Zufall für Inhalte, Tests aufweichen.
 - **Neu verboten:** die Abkürzungen aus [06-ki-bilder.md](06-ki-bilder.md) Abschnitt 6. Menge durch Umfärben oder Wiederverwenden vortäuschen. Noten schönen.
 
@@ -30,7 +30,7 @@ Wenn auch das nichts sagt: die Lösung, die den Run **reicher und lesbarer** mac
 Wie in Auftrag 1, Abschnitt 4. Dazu:
 
 - Neue Daten: `data/handgriffe.json`, neue Felder in `items.json` (`rar`, `kerben`, `eigen`, `preis`, `flavor`), `foes.json` (`kniff`, `beute_satz`), `biomes.json` (`beute_saetze`, `akt`), `balance.json` (`wucht`, Belohnungen, Schleifen). Alles in `prototype/data/README.md` erklären.
-- Werkzeuge für Bilder unter `tools/ki-bild/`. API-Schlüssel nur aus Umgebungsvariablen, nie ins Repo oder in Logs.
+- Werkzeuge für Bilder bauen auf `tools/sprites/` auf.
 - Der Autospieler und die Bots müssen nach jedem Meilenstein laufen.
 
 ## 5. Git
@@ -60,5 +60,4 @@ Wie in Auftrag 1, Abschnitt 9, dazu:
 
 - Liste aller neuen Gegner, Bosse, Biome mit Note und Bild-Link.
 - Siegrate je Build und Niederlagen je Akt.
-- Welcher Bild-Weg benutzt wurde, wie viele Bilder erzeugt wurden.
 - Die fünf Dinge, die Philip beim nächsten Spielen zuerst ausprobieren sollte.

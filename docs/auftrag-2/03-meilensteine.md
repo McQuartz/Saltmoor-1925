@@ -6,12 +6,11 @@ Der Reihe nach. Ein Meilenstein ist fertig, wenn seine Abnahme erfüllt und gepr
 
 ---
 
-## M0 Einrichten und Bild-Zugang
+## M0 Einrichten und Bild-Pipeline
 
 - Branch vom aktuellen `main` (siehe [01-regeln.md](01-regeln.md)), Draft-Pull-Request.
 - Lesen: alles in `docs/auftrag-2/`, dann `docs/auftrag/fortschritt.md` (Stand von Auftrag 1).
-- Bild-Zugang prüfen nach [06-ki-bilder.md](06-ki-bilder.md) Abschnitt 1. Ergebnis und Weg in `fortschritt.md`, beim Ersatzweg ganz oben in den PR.
-- Die Pipeline einmal ganz durchziehen mit **einem** Testgegner (Vorschlag: die neue Windgestalt): Prompt, 4 Kandidaten, Pixeln, Animation, Prüfung, im Kampf sichtbar.
+- Die Bild-Pipeline aus [06-ki-bilder.md](06-ki-bilder.md) Abschnitt 3 einmal ganz durchziehen mit **einem** Testgegner (Vorschlag: die neue Windgestalt): Entwurf, Silhouetten, Formen und Licht, Animation, Prüfung, im Kampf sichtbar.
 
 **Abnahme:** Draft-PR offen. Ein Gegner aus der Pipeline läuft im Spiel, Kontaktbogen neben den Favoriten liegt in `docs/auftrag-2/bilder/M0/`, Note ehrlich vergeben.
 
@@ -65,7 +64,7 @@ Nach [04-deckbau.md](04-deckbau.md) Abschnitte 2, 4, 5, 6 und 8:
 - Pipeline aus M0 robust machen (Stapel-Lauf für ein ganzes Biom, Kontaktbogen automatisch).
 - Neu: Erbauer-Mumie, Nachgeher, Ertrunkener, Netzflickerin-Rückseite, Windgestalt (falls in M0 nur Test), Torfstich heller.
 - Item-Icons für alle Items und Bilder für die Handgriffe.
-- Alte Gegner vergleichen: Ist ein KI-Neubau deutlich besser, wird ersetzt (außer den drei Favoriten).
+- Alte Gegner vergleichen: Ist ein Neubau deutlich besser, wird ersetzt (außer den drei Favoriten).
 
 **Abnahme:** Kontaktbogen aller Gegner von Auftrag 1 neben ihren Neubauten, Note je Gegner. Icon-Bogen aller Items. **Mindestens:** die fünf schwachen Gegner und alle Icons.
 
