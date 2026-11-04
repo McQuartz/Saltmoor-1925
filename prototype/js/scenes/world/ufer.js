@@ -262,10 +262,10 @@ function strandkorbSzene(K, o) {
   const XW = 3.6, unten = [], oben = [];
   for (let Z = 1; Z <= 40; Z *= 1.06) { const xo = XW + Math.sin(Z * 1.7) * .12; unten.push(P.q(xo, 0, Z)); oben.push(P.q(xo, Yc - .5 - Math.sin(Z * 2.3) * .35, Z)); }
   const wm = B.maske(); wm.poly([...unten, ...oben.reverse(), [W + M + 400, -M - 400], [W + M + 400, H + M]]);
-  K.form(2, wm, .12, { k: FELS, ton: 2.2, fase: 2, rand: 2, schatten: 2, muster: (x, y) => { const Z = (XW * P.h) / Math.max(1, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h, sY = Y * 2.6 + B.fbm(Z * .25, 0, 4, 2) * .8, lage = Math.floor(sY), q = frac(sY);
-    return (B.hash(lage, 0, 9) - .5) * 1.4 + (q > .9 ? 1.4 : q < .1 ? -1 : 0) + (B.fbm(Z * .9, Y * 3, 5, 2) - .5) * .6 - Math.max(0, 1.5 - Z) * .4; } });
+  K.form(2, wm, .12, { k: FELS, ton: 2.2, fase: 2, rand: 2, schatten: 2, muster: (x, y) => { const Z = (XW * P.h) / Math.max(1, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h, sY = Y * 2.1 + Math.sin(Z * .7 + Y) * .3 + B.fbm(Z * .35, Y * .5, 4, 3) * 1.6, lage = Math.floor(sY), q = frac(sY);
+    return (B.hash(lage, 0, 9) - .5) * 1.2 + (q > .88 ? 1.3 : q < .12 ? -1 : 0) + (B.rausch2(Z * 3, Y * 6, 8) > .8 ? -1.2 : 0) + (B.fbm(Z * .9, Y * 3, 5, 2) - .5) * .6 - Math.max(0, 1.5 - Z) * .4; } });
   // Wasser sickert aus den Fugen der Wand und läuft nach unten
-  for (let i = 0; i < 9; i++) { const Z = 1.6 + i * .9, [x0, y0] = P.q(XW, 1.2 + (i % 3) * .5, Z), [, y1] = P.q(XW, 0, Z); for (let y = Math.round(y0); y < y1; y++) if (B.bay(x0, y) < .7) K.e[2].set(Math.round(x0) + (y % 5 === 0 ? 1 : 0), y, B.pk(WASSER[7])); }
+  for (let i = 0; i < 5; i++) { const Z = 1.7 + i * 1.37 + B.hash(i, 0, 4), [x0, y0] = P.q(XW, 1.1 + B.hash(i, 1, 4) * 1.4, Z), [, y1] = P.q(XW, 0, Z); for (let y = Math.round(y0); y < y1; y++) if (B.bay(x0, y) < .7) K.e[2].set(Math.round(x0) + (y % 5 === 0 ? 1 : 0), y, B.pk(WASSER[7])); }
   saeule(K, P, Xs, Zs, .14, Yc, { ruhig: o.ruhig, tiefe: .1, tief: 1.2 });
   const korb = strandkorb(K, P, -.7, 2.7);
   spuren(K, P, [[.9, 1.1], [.3, 2.2], [-.2, 3.0], [-.9, 4.4], [-1.5, 6.0], [Xs, Zs - .1]], { nassAb: .85 });
