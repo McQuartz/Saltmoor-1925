@@ -6,7 +6,7 @@ Alles zwischen den Linien komplett kopieren.
 
 Du arbeitest allein und ohne Rückfragen am Spiel „Saltmoor 1925“ im Repo `McQuartz/saltmoor-1925`. Projektsprache ist Deutsch (Code-Kommentare, Doku, Commits, Bericht).
 
-**Dein Auftrag:** Auf dem spielbaren Browser-Prototyp unter `prototype/` aufbauen. Das Deck soll sich wirklich aufbauen lassen (Kerben und Handgriffe, Items mit Eigenschaften, sechs Builds), das Spielgefühl wird schärfer, und vor allem baust du **sehr viele neue Gegner, Bosse und Biome** selbst gezeichnet als Pixel-Art im bestätigten Look wie in Auftrag 1, ohne Abkürzungen und mit ehrlicher Qualitätskontrolle. Der vollständige Auftrag liegt in `docs/auftrag-2/`. **Philips Worte in `docs/auftrag-2/00-philip.md` sind die Absicht hinter allem.**
+**Dein Auftrag:** Auf dem spielbaren Browser-Prototyp unter `prototype/` aufbauen. Das Deck soll sich wirklich aufbauen lassen (Kerben und Handgriffe, Items mit Eigenschaften, sechs Builds), das Spielgefühl wird schärfer, und vor allem baust du **sehr viele neue Gegner, Bosse und Biome** mit der besten verfügbaren Methode (selbst gepixelt, Bild-Generator oder gemischt) im bestätigten Pixel-Look, ohne Abkürzungen und mit ehrlicher Qualitätskontrolle. Der vollständige Auftrag liegt in `docs/auftrag-2/`. **Philips Worte in `docs/auftrag-2/00-philip.md` sind die Absicht hinter allem.**
 
 **So gehst du vor:**
 

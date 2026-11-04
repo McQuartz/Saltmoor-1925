@@ -4,15 +4,21 @@ Philip, 2026-11-04: „scheiß erstmal auf die Steamregel, das soll erstmal von 
 
 Für diesen Auftrag gilt also: Die Steam-Frage ist zurückgestellt. **Klänge und Musik bleiben ohne KI.**
 
-## 1. Wie die Bilder entstehen: weiter wie in Auftrag 1
+## 1. Wie die Bilder entstehen: die beste Methode, ohne Einschränkung
 
-Philip, 2026-11-04: „die pixelart bisher wurde ja auch einfach von ai gemacht, einfach so wie da weitermachen“.
+Philip, 2026-11-04: „Der Agent soll auf jeden Fall beste Möglichkeit nutzen, da nicht einschränken, um irgendwie Steam-konforme Grafiken zu generieren. Das ist jetzt gerade egal. Soll beste Methoden nutzen, um die geilsten Sprites generieren zu können.“
 
-Also: **Der Agent zeichnet die Pixel-Art selbst, genau wie in Auftrag 1** (Formen und Pixel in Skripten unter `tools/sprites/`, mit der Zielbild-Lichtkette, die PNG-Sheets schreiben). Kein externer Bild-Dienst, kein API-Schlüssel. Das ist der Hauptweg, kein Notbehelf.
+Zur Einordnung: Die bisherigen Figuren (auch die Favoriten Chorknabe, Hirte, Netzflickerin) hat Claude per Skript gezeichnet, also Formen und Pixel im Code, mit der Zielbild-Lichtkette. Das ist der Weg, der nachweislich funktioniert.
 
-Hat die Sitzung zusätzlich ein Bild-Werkzeug, darf der Agent es für Entwürfe und Ideen nutzen. Das Ergebnis muss trotzdem durch dieselbe Pipeline und Prüfung.
+**Regel: Der Agent nimmt, was die besten Sprites ergibt.** Es gibt keine Einschränkung aus Steam-Gründen.
 
-Was neu ist gegenüber Auftrag 1: **mehr Aufwand pro Figur und strengere Kontrolle** (Bewertungsbogen, Kontaktbogen neben den Favoriten, alles unter Note 4 neu). Die Schwächen aus Mos Bericht (Mumie, Nachgeher, Ertrunkener) zeigen, wo es bisher nicht gereicht hat.
+- **Weg A, selbst pixeln per Skript** wie in Auftrag 1 (`tools/sprites/`). Er ist immer verfügbar.
+- **Weg B, Bild-Generator:** wenn die Sitzung ein Bild-Werkzeug hat oder Mo einen API-Schlüssel als Umgebungsvariable hinterlegt hat (z. B. `OPENAI_API_KEY`, `GEMINI_API_KEY`, `REPLICATE_API_TOKEN`, `PIXELLAB_API_KEY`). Das Ergebnis wird danach gepixelt (auf 96 × 120, Palette des Bioms, Bayer-Dither, kein Umriss, Randlicht mit der Lichtkette nachziehen) und von Hand im Skript nachgearbeitet. Schlüssel nie ins Repo oder in Logs.
+- **Mischformen** sind erlaubt und oft am besten, z. B. ein Generator-Entwurf als Vorlage für Silhouette und Idee, sauber selbst gepixelt.
+
+In M0 probiert der Agent mit dem Testgegner jeden verfügbaren Weg, legt die Ergebnisse nebeneinander neben die Favoriten und nimmt den besseren. Danach entscheidet er je Figur neu, was das beste Ergebnis bringt, und schreibt den Weg ins JSON (`"quelle": "skript"`, `"ki:<dienst>"` oder `"mix"`).
+
+Was gleich bleibt, egal welcher Weg: **mehr Aufwand pro Figur und strenge Kontrolle** (Bewertungsbogen, Kontaktbogen neben den Favoriten, alles unter Note 4 neu). Die Schwächen aus Mos Bericht (Mumie, Nachgeher, Ertrunkener) zeigen, wo es bisher nicht gereicht hat.
 
 ## 2. Der Stil bleibt der bestätigte
 
@@ -23,6 +29,8 @@ Lovecraft als Quelle für Motive, keine Namen aus dem Mythos, keine Klischees (L
 ## 3. Die Pipeline für Gegner und Bosse
 
 Aufbauend auf `tools/sprites/` aus Auftrag 1 (bauen.js, lib.js, pruefen.js, kontakt.js). Jeder Schritt einzeln lauffähig.
+
+Beschrieben für Weg A. Bei Weg B ersetzt der Generator die Schritte 2 und 3 als Vorlage, die Prüfung bleibt gleich.
 
 1. **Entwurf in Worten:** Konzept aus `gegner-2.md`, dazu Silhouette in einem Satz und eine grobe Skizze der Hauptformen (Körper, Kopf, Glieder, das falsche Detail, Lage der Augen).
 2. **Silhouette zuerst:** die Figur nur als schwarze Fläche bauen und als Bild ansehen. Erst wenn sie gefüllt sofort lesbar ist und sich von allen anderen Gegnern unterscheidet, geht es weiter. Mindestens zwei Silhouetten-Varianten probieren, die bessere nehmen.

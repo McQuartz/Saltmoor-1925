@@ -53,3 +53,7 @@ Wie das umgesetzt wird: Die Antwort auf „wie behält man den USP“ steht in [
 > die pixelart bisher wurde ja auch einfach von ai gemacht, einfach so wie da weitermaachen
 
 Gemeint: Der Agent zeichnet wie in Auftrag 1 selbst per Skript. Es braucht keinen externen Bild-Dienst ([06-ki-bilder.md](06-ki-bilder.md)).
+
+> Also Mo, ich weiß nicht, ob Mo sein Agent das mit Skript gemacht hat, da bin ich mir nicht sicher. […] Der Agent soll auf jeden Fall beste Ding beste Möglichkeit nutzen. da nicht einschränken, um irgendwie Steamkonformen Grafiken zu generieren. Das ist jetzt gerade egal. Soll beste Methoden nutzen, um die geilsten Sprites und so generieren zu können.
+
+Das gilt und ersetzt den Nachtrag oben: Der Agent nimmt jede Methode, die die besten Sprites ergibt ([06-ki-bilder.md](06-ki-bilder.md) Abschnitt 1).

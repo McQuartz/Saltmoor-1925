@@ -21,7 +21,7 @@ Wenn auch das nichts sagt: die Lösung, die den Run **reicher und lesbarer** mac
 
 ## 3. Was sich bei den Verboten ändert
 
-- **Bilder zeichnest du selbst als Pixel-Art per Skript**, wie in Auftrag 1, für Gegner, Bosse, Item-Icons, Handgriff-Bilder, Ereignisbilder und Requisiten, nach [06-ki-bilder.md](06-ki-bilder.md). Ein externer Bild-Dienst ist nicht nötig. Die Steam-Frage ist zurückgestellt.
+- **Bilder mit der besten verfügbaren Methode**: selbst per Skript pixeln, ein Bild-Generator oder beides gemischt, je nachdem, was die besseren Sprites ergibt ([06-ki-bilder.md](06-ki-bilder.md)). Es gibt keine Einschränkung aus Steam-Gründen.
 - **Weiter verboten:** KI-Klänge und KI-Musik, fremde Assets (außer pixelfx), neue Abhängigkeiten im Spiel, Weichzeichner und geglättete Skalierung, globaler Zufall für Inhalte, Tests aufweichen.
 - **Neu verboten:** die Abkürzungen aus [06-ki-bilder.md](06-ki-bilder.md) Abschnitt 6. Menge durch Umfärben oder Wiederverwenden vortäuschen. Noten schönen.
 

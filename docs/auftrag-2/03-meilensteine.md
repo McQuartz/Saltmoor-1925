@@ -10,7 +10,7 @@ Der Reihe nach. Ein Meilenstein ist fertig, wenn seine Abnahme erfüllt und gepr
 
 - Branch vom aktuellen `main` (siehe [01-regeln.md](01-regeln.md)), Draft-Pull-Request.
 - Lesen: alles in `docs/auftrag-2/`, dann `docs/auftrag/fortschritt.md` (Stand von Auftrag 1).
-- Die Bild-Pipeline aus [06-ki-bilder.md](06-ki-bilder.md) Abschnitt 3 einmal ganz durchziehen mit **einem** Testgegner (Vorschlag: die neue Windgestalt): Entwurf, Silhouetten, Formen und Licht, Animation, Prüfung, im Kampf sichtbar.
+- Die Bild-Pipeline aus [06-ki-bilder.md](06-ki-bilder.md) Abschnitt 3 einmal ganz durchziehen mit **einem** Testgegner (Vorschlag: die neue Windgestalt), mit jedem verfügbaren Weg (Skript, Bild-Generator, gemischt). Die Ergebnisse kommen nebeneinander neben die Favoriten, der bessere Weg wird mit Begründung in `fortschritt.md` notiert.
 
 **Abnahme:** Draft-PR offen. Ein Gegner aus der Pipeline läuft im Spiel, Kontaktbogen neben den Favoriten liegt in `docs/auftrag-2/bilder/M0/`, Note ehrlich vergeben.
 
