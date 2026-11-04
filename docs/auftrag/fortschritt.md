@@ -17,7 +17,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt. Eine neue 
 | M8 Hintergründe | fertig | sieben Orte mit eigener Komposition, je 3 Varianten + Wächter-Szene, alle Knoten-Szenen, Labor; 60 fps |
 | M9 Inhalte und Balance | fertig (Abweichung) | 23 Items, 25 Ereignisse, Krämer je Biom, Fundpools, Gegner-Beute; Gewinnrate 22–32 %, Pforte knapp über 40 % der Niederlagen |
 | M10 Politur | fertig | Übergänge als Szenen, pixelfx-Effekte, Einstellungen, drei Zusatzfiguren, Galerie, Artboard, READMEs |
-| M11 Abschluss | offen | |
+| M11 Abschluss | fertig | 50-Seed-Lauf, geklickter Run mit Fotos, Konsolenprüfung, Bericht |
 
 Stand-Werte: `offen`, `läuft`, `fertig`, `Mindeststand`, `fehlt`.
 
@@ -254,9 +254,74 @@ Gewinnrate im Ziel (25–50 %) bzw. knapp darunter, Kampfdauer im Ziel (4–8 Z�
 | 2026-11-03 | M3, Browser (`tools/bot-browser.js 20 1`) | 1–20 | 0 % | 10,3 | Kapelle (7 von 20) | 0 |
 | 2026-11-04 | M9, Node (`tools/balance.js 50 1`, Grundfiguren) | 1–50 | 32 % | 16,6 | Pforte (15 von 34) | 0 |
 | 2026-11-04 | M9, Node, alle neun Figuren | 101–154 | 22 % | 16,2 | Pforte (20 von 42) | 0 |
+| 2026-11-04 | M11, Browser (`tools/bot-browser.js 50 1`, alle neun Figuren) | 1–50 | 40 % | 16,9 | Pforte (17 von 30) | 0 |
 
 ## Probleme und Ersatzwege
 
 ## Bericht
 
-(Am Ende, nach 01-regeln.md Abschnitt 9.)
+Sitzung 2026-11-03/04, eine einzige Sitzung. Hauptagent plus sechs Subagenten für abgegrenzte Teile: Inhalte (Fragmente, Ereignisse, Items), Musik, Gegner und Sprites, Hintergründe, pixelfx-Effekte, Artboard und Galerie. Alles von mir eingebaut, geprüft und committet.
+
+### 1. Was gebaut wurde
+
+| Meilenstein | Status | Kurz |
+|---|---|---|
+| M0 Einlesen | fertig | Bestandsaufnahme, Plan, Draft-PR; kein Bild-Generator verfügbar (notiert) |
+| M1 Run-Gerüst | fertig | Seed (`rng.js`), fünf feste Akte mit zwei Gabelungen, Weg-Wahl nach Ebenen-Regeln, zehn Knotenarten, Strand, Ankunft mit zwei Enden, Speichern/Fortsetzen |
+| M2 Kampf-UI Variante A | fertig | 480 × 270 ganzzahlig, alle Punkte der Ausgangstabelle, Schadens-Vorschau (0 Abweichungen), Zwischentitel, Stummfilm nur bei Anlässen, alle Bildschirme im selben Stil |
+| M3 Dev-Modus, Autospieler | fertig | sechs Reiter mit Warum-Sätzen, Einblendungen, Cheats; Autospieler in Node und Browser |
+| M4 Musik | fertig (nicht angehört) | sieben Biom-Fassungen, alle Gegnerstimmen, Rollen, Stoffe, Enden, Regler; kein Clipping, 80–88 BPM |
+| M5 Meta, Progression | fertig | Konzept B, 21 Fragmente, Figuren 3/6/9 (+12/15/18), Startvarianten, Stufen, Tagebuch |
+| M6 Sprite-Pipeline | fertig (Ersatzweg) | Sprites per Skript gezeichnet mit der Zielbild-Lichtkette, 41 Sheets, Prüfskript 0 Verstöße, Animationen im Spiel |
+| M7 Gegner | fertig, drei Typen Mindeststand | 16 Typen mit Konzept und je zwei Varianten, 6 Wächter mit Besonderheit, Boss in 3 Phasen |
+| M8 Hintergründe | fertig, Pforte vereinfacht | sieben Orte mit eigener Komposition, je 3 Varianten + Wächter-Szene + alle Knoten-Szenen, Labor, 60 fps |
+| M9 Inhalte, Balance | fertig, eine Abweichung | 23 Items, 25 Ereignisse, Krämer je Biom, Fundpools, Beute; Gewinnrate 22–40 %, Pforte über 40 % der Niederlagen |
+| M10 Politur | fertig | Übergangsszenen, pixelfx-Effekte, Einstellungen, drei Zusatzfiguren, Galerie, Artboard, READMEs |
+| M11 Abschluss | fertig | 50 Seeds im Browser ohne Fehler, geklickter Run mit 29 Fotos, Bericht |
+
+Details je Meilenstein: Abschnitt „Einträge je Meilenstein“ oben.
+
+### 2. So spielt man es
+
+```bash
+cd prototype && python3 -m http.server 8000
+```
+
+Dann http://localhost:8000 (frisch nach dieser Anleitung gestartet und geprüft). Karten ziehen oder anklicken (1–9), Gegner anklicken = Ziel, Leertaste/E = Zug beenden, D = Dev-Modus. Testhilfen: `?seed=N`, `?dev=1`, `?job=fischer&springe=waechter&akt=2`, `?bot=50&seed=1`. Prüfskripte: `node tools/test-run.js`, `node tools/test-vorschau.js`, `node tools/balance.js 50 1`, `node tools/bot-browser.js 50 1`, `node tools/test-meta.js`, `node tools/sprites/pruefen.js`, `node tools/selbst-spielen.js <ordner>`.
+
+### 3. Bildschirmfotos
+
+- Ein ganzer Run, Station für Station: `bilder/M11/` (Titel, Figurwahl, fünf Übergänge, Weg-Wahl je Biom, Kampf je Biom, alle Wächter, Finale, Belohnung, Wandbilder, Krämer, Fundstelle, Ankunft, Ende).
+- Kampf-UI: `bilder/M2/`, Dev-Modus: `bilder/M3/`, Meta: `bilder/M5/`, Sprites: `bilder/M6/`, Gegner je Biom: `bilder/M7/`, Hintergründe: `bilder/M8/` (Übersicht, Varianten, im Spiel), Effekte, Galerie, Artboard: `bilder/M10/`.
+
+### 4. Ehrliche Einschätzung
+
+- **Look gegen Zielbild:** Hirte und Chorknabe treffen das Zielbild, die Netzflickerin ist schwächer (Rücken zu blockig). Die Wächter (Lotse, Glockenmutter, Wurm) sind stark. Mumie, Nachgeher und Ertrunkener sind im Mindeststand und lesen sich schlecht. Treffer- und Tod-Animationen sind bei allen gleich gebaut; im Spiel übernimmt der pixelfx-Zerfall den Tod, das wirkt gut.
+- **UI gegen Variante A:** Alle Punkte der Ausgangstabelle sind umgesetzt, und der Kampf sieht wie der Entwurf aus. Schwach: Bei vier Gegnern können sich die Infos berühren; auf dem hellen Salz braucht die Schrift eine dunkle Unterlage (eingebaut).
+- **Musik:** Messwerte sauber, aber **niemand hat sie gehört**. Das ist die größte offene Prüfung.
+- **Hintergründe:** großer Sprung gegenüber vorher. Die Orte sind unterscheidbar und haben Tiefe, Kapelle und Salz sind am stärksten. Schwach: Pforte (wirkt nach Science-Fiction), Moor-Torfstich zu dunkel, Relief-Figuren in der Stadt wie Strichmännchen.
+- **Spielgefühl:** Weg-Wahl mit Hinweisen, Ereignisse als Zettel und Krämer mit Gesicht geben dem Abstieg Ort und Zug. Die Reaktionen bleiben das Herz des Kampfs. Schwach: Das Deck wächst wenig (Slots wachsen nur über Ereignisse), späte Runs fühlen sich darum ähnlich an. Das Finale ist eine harte letzte Hürde.
+
+### 5. Autospieler-Ergebnis
+
+Browser, 50 Seeds (1–50), alle neun Figuren im Wechsel: **40 % Siege**, Ø Tiefe 16,9, Niederlagen Pforte 17, Eis 8, Stadt 3, Salz 2, **0 Fehler, keine Konsolenfehler**. Node, Seeds 1–50, sechs Grundfiguren: 32 %; Seeds 101–154, alle neun: 22 %. Ø 4,4–4,7 Züge je Kampf. Geklickter Run (Fischer, Seed 3): Ankunft auf Tiefe 18, keine Konsolenfehler.
+
+### 6. Entscheidungen unterwegs (Kurzfassung)
+
+Branch `claude/jolly-mendel-ia28ci` statt `auftrag/prototyp-run` (Vorgabe der Umgebung). Kein Bild-Generator → Sprites per Skript. Jede Karte zweimal im Deck (Startdeck 8–10). Tiefe 1–18 (Vorraum 17, Finale 18). „Karte streichen“ statt „entfernen“ (Item bleibt). Fundstelle als neue Knotenart. Progression Variante B. Wächter/Boss ohne Tiefen-Skalierung. Kultist, Schatten, Eisgesicht gestrichen bzw. aufgegangen. Veteran ×1,5 statt doppelt. Zusatzfiguren ab 12/15/18 Fragmenten. Volle Liste: Abschnitt „Entscheidungen unterwegs“.
+
+### 7. Offene Fragen an Ace und Mo
+
+1. Klingt die Musik in den fünf neuen Biomen so, wie ihr sie euch vorstellt? Vor allem die ferne Stimme im Eis und die Trommel ohne Spieler in der Stadt.
+2. Soll das Finale so hart bleiben (die Hälfte aller Niederlagen) oder lieber weicher werden, mit insgesamt höherer Gewinnrate?
+3. Passt die Wahl, Kultist, Schatten und Eisgesicht zu streichen, oder fehlen euch die drei?
+4. Soll das Deck stärker wachsen, zum Beispiel mit einem Slot nach jedem Wächter?
+5. Pforte und Ankunft: Wollt ihr dort einen eigenen Entwurf, bevor der Agent nachbessert?
+
+### Vorschlag für die nächste Sitzung
+
+1. Musik anhören und nach Aces Ohr nachstimmen.
+2. Die drei Gegner im Mindeststand neu zeichnen (Mumie, Nachgeher, Ertrunkener), dazu Netzflickerin-Rücken und eigene Tod-/Treffer-Animationen je Gegner.
+3. Pforte und Ankunft neu komponieren, Moor-Torfstich aufhellen.
+4. Deckwachstum überdenken (Slot nach Wächtern), dann Balance neu laufen lassen, möglichst mit einem besseren Autospieler (Werkstatt, Gold).
+5. Menschen spielen lassen und die Gewinnrate gegen den Autospieler vergleichen.
