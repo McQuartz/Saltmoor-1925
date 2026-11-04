@@ -121,21 +121,21 @@
    "n": "Die Ausnehmerin",
    "biom": "fabrik",
    "rang": "normal",
-   "hp": 21,
+   "hp": 23,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 3,
+     "v": 4,
      "h": 2
     },
     {
      "t": "atk",
-     "v": 5
+     "v": 6
     },
     {
      "t": "blk",
-     "v": 4
+     "v": 5
     }
    ],
    "sprite": "ausnehmerin_a",
@@ -158,16 +158,16 @@
    "n": "Das Dosenkind",
    "biom": "fabrik",
    "rang": "normal",
-   "hp": 13,
+   "hp": 14,
    "weak": "E",
    "pat": [
     {
      "t": "atk",
-     "v": 4
+     "v": 5
     },
     {
      "t": "atk",
-     "v": 2,
+     "v": 3,
      "h": 2
     },
     {
@@ -196,20 +196,20 @@
    "n": "Der Kesselmann",
    "biom": "fabrik",
    "rang": "normal",
-   "hp": 27,
+   "hp": 29,
    "weak": "W",
    "pat": [
     {
      "t": "blk",
-     "v": 7
+     "v": 8
     },
     {
      "t": "atk",
-     "v": 7
+     "v": 8
     },
     {
      "t": "atk",
-     "v": 3,
+     "v": 4,
      "h": 2
     }
    ],
@@ -233,20 +233,20 @@
    "n": "Der Kühlhausgast",
    "biom": "fabrik",
    "rang": "normal",
-   "hp": 24,
+   "hp": 26,
    "weak": "F",
    "pat": [
     {
      "t": "blk",
-     "v": 6
+     "v": 7
     },
     {
      "t": "atk",
-     "v": 8
+     "v": 9
     },
     {
      "t": "atk",
-     "v": 3,
+     "v": 4,
      "h": 2
     }
    ],
@@ -269,33 +269,33 @@
    "n": "Die Schicht",
    "biom": "fabrik",
    "rang": "waechter",
-   "hp": 72,
+   "hp": 76,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 9
+     "v": 11
     },
     {
      "t": "blk",
-     "v": 10
+     "v": 12
     },
     {
      "t": "atk",
-     "v": 5,
+     "v": 6,
      "h": 3
     },
     {
      "t": "buff",
-     "v": 2
+     "v": 3
     },
     {
      "t": "atk",
-     "v": 10
+     "v": 12
     },
     {
      "t": "atk",
-     "v": 4,
+     "v": 5,
      "h": 4
     }
    ],
@@ -308,14 +308,14 @@
    "besonders": {
     "art": "ruft",
     "gegner": "dosenkind",
-    "alle": 4
+    "alle": 3
    },
    "beute": "ofen",
    "beute_satz": "Die Lagen sinken in sich zusammen. Das Band läuft weiter, und am Platz ganz oben ist jetzt einer frei.",
    "quelle": "skript",
    "kniff": {
     "art": "waechst",
-    "v": 1,
+    "v": 2,
     "why": "Der Takt zieht an. Jede Runde ein wenig schneller, so wie jede Nacht."
    }
   }

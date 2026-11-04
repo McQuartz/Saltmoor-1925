@@ -109,6 +109,12 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Der Leser | Kloster | 4 | [M6](bilder/M6/kloster/kontaktbogen.png) |
 | Der Abschreiber (Wächter) | Kloster | 4 | [M6](bilder/M6/kloster/im-spiel-waechter.png) |
 | Hintergrund Kloster (3 Varianten, Wächter-Szene) | Kloster | 4 | [M6](bilder/M6/kloster/hintergrund-varianten.png) |
+| Der Mitreisende | Nachtzug | 4 | [M6](bilder/M6/nachtzug/kontaktbogen.png) |
+| Das Gepäckstück | Nachtzug | 4 | [M6](bilder/M6/nachtzug/kontaktbogen.png) |
+| Die Kontrolleurin | Nachtzug | 4 (knapp, Mantelsäule nah am Schmuggler) | [M6](bilder/M6/nachtzug/kontaktbogen.png) |
+| Das Schlafwagenkind | Nachtzug | 4 | [M6](bilder/M6/nachtzug/kontaktbogen.png) |
+| Der Uhrmacher im Speisewagen (Wächter) | Nachtzug | 4 | [M6](bilder/M6/nachtzug/im-spiel-waechter.png) |
+| Hintergrund Nachtzug (3 Varianten, Wächter-Szene) | Nachtzug | 4 (Decken ruhig, Gepäckwagen leer) | [M6](bilder/M6/nachtzug/hintergrund-varianten.png) |
 
 ## Entscheidungen unterwegs
 

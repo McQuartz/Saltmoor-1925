@@ -243,7 +243,7 @@ function gang(K) {
     const k = P.k(Z), cx = P.vx + B.rausch1(Z * .7, sd) * 6, yb = P.q(0, 0, Z)[1], yt = P.q(0, hY, Z)[1], ym = (yb + yt) / 2 + (yb - yt) * .12;
     const a = Math.atan2(y - ym, x - cx), n = 1 + (B.rausch1(a * 2.2 + Z * 3, sd + Math.round(Z * 10)) - .5) * .32 + (B.hash(Math.round(a * 14), Math.round(Z * 10), sd) - .5) * .05;
     const rx = sw * k * n, ry = (yb - yt) * .62 * n;
-    if (y > ym) return Math.abs(x - cx) < rx * (1 - Math.pow(Math.max(0, (y - ym) / (yb - ym + 1)), 6) * .1) && y < yb + 2;
+    if (y > ym) return Math.abs(x - cx) < rx * (1 - Math.pow(Math.max(0, (y - ym) / (yb - ym + 1)), 6) * .1) && (y < yb + 2 || Z < 1.5);
     return ((x - cx) / rx) ** 2 + ((y - ym) / ry) ** 2 < 1;
   };
   ringe.forEach((Z, i) => {
