@@ -44,3 +44,8 @@ function runFx(list,ctx={}){for(const f of list||[]){const tg=ctx.tg&&ctx.tg.hp>
   case'fight':S.pending=S.pending||[];S.pending.push({fight:f.foes||null});break;
   default:console.warn('Unbekannter Effekt',f);}}}
 function condOk(c){if(!c)return true;if(c.slot_below_max&&!(S.slots[c.slot_below_max]<BAL.max_slots))return false;if(c.gold_min&&S.gold<c.gold_min)return false;if(c.hp_min&&S.hp<c.hp_min)return false;return true;}
+
+// Grundkarte: je Item mit Karten eine schwache Karte nach Bereich (BAL.grundkarten), ohne Stoff. Macht das Deck größer und dünner.
+function grundKarte(D){const G=BAL.grundkarten;return G&&D.cards.length&&G[D.a]?G[D.a]:null;}
+// Deckgröße für eine Liste von Item-IDs (Figurwahl, Artboard), gleiche Rechnung wie buildDeck.
+function deckGroesse(ids){return ids.reduce((s,id)=>{const D=ITEMS[id];return D?s+D.cards.length*(BAL.card_copies||1)+(grundKarte(D)?(BAL.grundkarten.copies||1):0):s;},0);}
