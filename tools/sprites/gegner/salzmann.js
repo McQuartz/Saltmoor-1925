@@ -26,13 +26,13 @@ module.exports = {
   id: 'salzmann', biom: 'salz', zone: 'salz', w: 96, h: 120, fuss: [46, 115], kopf: [42, 10], rimBis: 112,
   varianten: {
     // a: großer Würfelkopf, leicht gekippt, Kristalle am Tragsack
-    salzmann_a: { kopfS: 13, kipp: 0.14, sackK: [[66, 39, 5, 0.25], [74, 35, 6.5, -0.12], [80, 46, 3.5, 0.4], [70, 29, 3.5, 0.5]], hals: 3 },
+    salzmann_a: { kopfS: 13, kipp: 0.14, sackK: [[62, 37, 4, 0.35], [71, 33, 7.5, 0.1]], hals: 3 },
     // b: Würfel stärker gekippt, Hals länger, die Kristalle wachsen auch auf der Schulter
-    salzmann_b: { kopfS: 12, kipp: -0.24, sackK: [[64, 37, 4, 0.4], [73, 33, 7, -0.25], [82, 40, 4.5, 0.1]], hals: 6, schulterK: 1 },
+    salzmann_b: { kopfS: 12, kipp: -0.24, sackK: [[81, 43, 4, 0.2], [72, 33, 8, -0.2]], hals: 6, schulterK: 1 },
   },
   skizzen: {
-    sil_wuerfelkopf: { kopfS: 13, kipp: 0.14, sackK: [[66, 39, 5, 0.25], [74, 35, 6.5, -0.12], [80, 46, 3.5, 0.4], [70, 29, 3.5, 0.5]], hals: 3 },
-    sil_langhals: { kopfS: 12, kipp: -0.24, sackK: [[64, 37, 4, 0.4], [73, 33, 7, -0.25], [82, 40, 4.5, 0.1]], hals: 6, schulterK: 1 },
+    sil_wuerfelkopf: { kopfS: 13, kipp: 0.14, sackK: [[62, 37, 4, 0.35], [71, 33, 7.5, 0.1]], hals: 3 },
+    sil_langhals: { kopfS: 12, kipp: -0.24, sackK: [[81, 43, 4, 0.2], [72, 33, 8, -0.2]], hals: 6, schulterK: 1 },
   },
   bild(p, v, A) {
     const { E, C, Pg, glied, r, bay } = A;

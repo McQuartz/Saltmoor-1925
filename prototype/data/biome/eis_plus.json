@@ -14,20 +14,20 @@
    "n": "Der Fahnenträger",
    "biom": "eis",
    "rang": "normal",
-   "hp": 24,
+   "hp": 20,
    "weak": "B",
    "pat": [
     {
-     "t": "atk",
-     "v": 6
-    },
-    {
      "t": "blk",
-     "v": 6
+     "v": 7
     },
     {
      "t": "atk",
-     "v": 9
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 7
     }
    ],
    "sprite": "fahnentraeger_a",
@@ -38,10 +38,9 @@
    "konzept": "Ein Mann der Expedition von 1903 im Parka, die Fahnenstange in beiden Fäusten, die Fahne steif gefroren; seine Kapuze ist leer, und sein Gesicht ist von hinten durch den Fahnenstoff gedrückt und ruft.",
    "stimme": "rufer",
    "kniff": {
-    "art": "ruf",
-    "gegner": "rufer",
-    "alle": 3,
-    "why": "Wo eine Fahne steht, kommen die anderen nach. Das Gesicht im Tuch ruft sie mit deiner Stimme."
+    "art": "schuetzer",
+    "v": 4,
+    "why": "Wo eine Fahne steht, ist Lager. Das Gesicht im Tuch ruft die anderen Erfrorenen darunter, und das steife Tuch deckt sie."
    },
    "beute": "fahnentuch",
    "beute_satz": "Die Fahne ist umgefallen. Auf dem Tuch ist kein Gesicht mehr, nur eine Delle, wo eins war.",
@@ -51,13 +50,13 @@
    "n": "Die Seelilie",
    "biom": "eis",
    "rang": "normal",
-   "hp": 22,
+   "hp": 18,
    "weak": "L",
    "pat": [
     {
      "t": "atk",
-     "v": 2,
-     "h": 4
+     "v": 1,
+     "h": 3
     },
     {
      "t": "blk",
@@ -65,8 +64,8 @@
     },
     {
      "t": "atk",
-     "v": 3,
-     "h": 3
+     "v": 2,
+     "h": 2
     }
    ],
    "sprite": "seelilie_a",

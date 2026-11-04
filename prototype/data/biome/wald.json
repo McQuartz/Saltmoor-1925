@@ -1,0 +1,777 @@
+{
+ "id": "wald",
+ "akt": 2,
+ "biom": {
+  "n": "Der Wald, der nach unten wächst",
+  "kurz": "Wald",
+  "zeit": "Rom und davor",
+  "anreise": "Unter den Stollen öffnet sich eine Höhle, in der ein Wald hängt. Die Wurzeln sind oben. Eine Straße der Legion führt hinein.",
+  "koerper": [
+   "#070706",
+   "#100f0c",
+   "#1c1a16",
+   "#2c2923"
+  ],
+  "rand": [
+   "#8e6a36",
+   "#e6c48a"
+  ],
+  "augen": "#ffb436",
+  "nebel": [
+   "#1c1913",
+   "#4a4232"
+  ],
+  "musik": "wald",
+  "gegner": [
+   "holzfaeller",
+   "steinhirsch",
+   "harzfang",
+   "bernsteinlarve"
+  ],
+  "waechter": "wurzelstock",
+  "fundpool": [
+   "harzklumpen",
+   "legionsaxt",
+   "bernstein_fliege",
+   "koehlerhandschuh",
+   "pick",
+   "torch",
+   "minerlamp",
+   "shovel",
+   "candle",
+   "boardaxe"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Köhler",
+   "ort": "an einem Meiler aus versteinertem Holz, der seit Jahrhunderten nicht brennen will",
+   "zeile": "Er schichtet den Meiler jeden Tag neu und deckt ihn mit Erde ab. Er sagt, morgen fängt er Feuer. Er sagt es auf Latein, und dann noch einmal in einer Sprache, die älter klingt."
+  },
+  "uebergang": "Im Bogen des großen Stamms führt eine Treppe hinab, in sein hohles Inneres. Die Stufen sind numeriert, und die Zahlen werden kleiner.",
+  "weg_hinweise": {
+   "kampf": [
+    "Zwischen den Kronen bewegt sich etwas, das kein Wind ist.",
+    "Frische Späne auf der Straße. Hier fällt jemand Holz, das Stein ist.",
+    "Ein Licht hängt im Geäst, und es ist näher als vorhin."
+   ],
+   "ereignis": [
+    "Ein Meilenstein am Straßenrand, die Zahl frisch geändert.",
+    "Eine Schnittfläche, so hoch wie ein Haus, voller Zahlen."
+   ],
+   "wandbild": [
+    "In die Rinde eines Stamms hat die Legion etwas geritzt. Darunter ist etwas Älteres."
+   ],
+   "kraemer": [
+    "Rauch steigt auf. Er steigt nach unten."
+   ],
+   "werkstatt": [
+    "Ein Lager der Legion: Sägeböcke, Keile, ein Schleifstein, alles verlassen."
+   ],
+   "rast": [
+    "Eine Krone liegt so dicht am Boden, dass man darunter liegen kann wie unter einem Dach."
+   ],
+   "fundstelle": [
+    "Im Harz an einem Stamm steckt etwas, das jemand dort gelassen hat."
+   ]
+  },
+  "beute_saetze": [
+   "Das Harz an deinen Händen wird nicht trocken.",
+   "Irgendwo über dir knackt eine Wurzel, als hätte sie zugehört.",
+   "Die Späne auf dem Boden sind Stein. Sie sind noch warm.",
+   "Ein Tropfen löst sich von den Wurzeln und fällt lange.",
+   "Am nächsten Stamm hat jemand einen Ring weniger gezählt.",
+   "Die Straße unter deinen Füßen ist neu gepflastert. Gestern war sie es nicht.",
+   "Das Licht in den Tropfen ist ein wenig heller geworden.",
+   "Von weit unten kommt das Geräusch einer Axt, im Takt deines Herzens."
+  ]
+ },
+ "musik": {
+  "n": "Wald, der nach unten wächst",
+  "root": 51,
+  "key": "es-Moll",
+  "names": [
+   "E♭m",
+   "C♭",
+   "A♭m",
+   "B♭"
+  ],
+  "darkNames": [
+   "E♭m",
+   "F♭",
+   "A♭m",
+   "B♭♭9"
+  ],
+  "amb": {
+   "stollen": 0.05,
+   "wind": 0.02,
+   "schimmer": 0.03
+  },
+  "rhy": "holz",
+  "detail": "salz",
+  "ort": "Tropfendes Harz, eine ferne Axt, Holz, das knackt, obwohl es Stein ist",
+  "rhyN": "Holz, Axtschlag"
+ },
+ "foes": {
+  "holzfaeller": {
+   "n": "Der Holzfäller der Legion",
+   "biom": "wald",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "laedt",
+     "v": 0
+    },
+    {
+     "t": "laedt",
+     "v": 0
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "sprite": "holzfaeller_a",
+   "varianten": [
+    "holzfaeller_a",
+    "holzfaeller_b"
+   ],
+   "konzept": "Ein Legionär mit Helmbusch und Dolabra, der seit neunzehnhundert Jahren denselben Baum fällt. Der Baum ist sein linker Arm: ein Stammstück voller Kerben. Unter dem Helm ist eine Schnittfläche mit Jahresringen.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 14,
+    "why": "Er holt aus, wie er seit neunzehnhundert Jahren ausholt. Zwei Züge lang hebt sich die Dolabra, dann fällt sie."
+   },
+   "beute": "legionsaxt",
+   "beute_satz": "Der Helm liegt auf der Straße. Darunter ist nur noch ein Stammstück, und es hat eine frische Kerbe.",
+   "quelle": "skript"
+  },
+  "steinhirsch": {
+   "n": "Der Steinhirsch",
+   "biom": "wald",
+   "rang": "normal",
+   "hp": 18,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 2
+    }
+   ],
+   "sprite": "steinhirsch_a",
+   "varianten": [
+    "steinhirsch_a",
+    "steinhirsch_b"
+   ],
+   "konzept": "Der Hirsch des Hains, dem man vor Rom Geweihe brachte, jetzt aus Stein. Sein Geweih wächst nach unten wie der ganze Wald: Aus jeder Sprosse hängt ein Strang bis auf den Boden.",
+   "stimme": "hirte",
+   "kniff": {
+    "art": "dornen",
+    "v": 2,
+    "why": "Sein Geweih hängt wie ein Vorhang vor ihm. Wer zuschlägt, greift hinein."
+   },
+   "beute": null,
+   "beute_satz": "Die Stränge seines Geweihs liegen noch auf dem Boden. Sie haben angefangen, Wurzeln zu schlagen.",
+   "quelle": "skript"
+  },
+  "harzfang": {
+   "n": "Der Harzfang",
+   "biom": "wald",
+   "rang": "normal",
+   "hp": 14,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 4
+    },
+    {
+     "t": "atk",
+     "v": 4
+    },
+    {
+     "t": "atk",
+     "v": 1,
+     "h": 2
+    }
+   ],
+   "sprite": "harzfang_a",
+   "varianten": [
+    "harzfang_a",
+    "harzfang_b"
+   ],
+   "konzept": "Das einzige Licht im Wald hängt in Harztropfen. Dieser Tropfen ist keiner: Er hängt an einem Faden, legt sechs Beine um sich wie die Streben einer Laterne, und in seinem Bernstein schwimmt ein Gesicht.",
+   "stimme": "nest",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Was er berührt, klebt. Eine Karte bleibt dir an den Fingern hängen und lässt sich nicht ausspielen."
+   },
+   "beute": "harzklumpen",
+   "beute_satz": "Der Faden hängt noch von den Wurzeln. Das Gesicht im Bernstein sieht jetzt in eine andere Richtung.",
+   "quelle": "skript"
+  },
+  "bernsteinlarve": {
+   "n": "Die Bernsteinlarve",
+   "biom": "wald",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 2
+    }
+   ],
+   "sprite": "bernsteinlarve_a",
+   "varianten": [
+    "bernsteinlarve_a",
+    "bernsteinlarve_b"
+   ],
+   "konzept": "Eine Larve wie die der Köcherfliege, so groß wie ein Mann, mit einem Leib aus Bernstein. Ihren Köcher hat sie aus dem gebaut, was von einer Kohorte übrig war: Helmschalen, Schildbuckel, Münzen, mit Harz verklebt.",
+   "stimme": "salzlaeufer",
+   "kniff": {
+    "art": "rein",
+    "why": "Was fault, frisst sie. Gift macht sie satt, nicht krank."
+   },
+   "beute": "bernstein_fliege",
+   "beute_satz": "Im leeren Köcher klappern Münzen. Auf jeder ist derselbe Kaiser, und er wird von Münze zu Münze jünger.",
+   "quelle": "skript"
+  },
+  "wurzelstock": {
+   "n": "Der Wurzelstock",
+   "biom": "wald",
+   "rang": "waechter",
+   "hp": 70,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    }
+   ],
+   "sprite": "wurzelstock",
+   "varianten": [
+    "wurzelstock"
+   ],
+   "konzept": "Oben im Wurzelgewölbe hängt ein Stock, älter als der Wald, mit einem Gesicht in der Rinde. Das Holz fließt in Ringen um seine Augen. Er lässt Arme aus Ästen herunter, und mit jedem Zug ist es einer mehr.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Mit jedem Zug lässt er einen Arm mehr herunter."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.66,
+     0.33
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 4,
+       "h": 3
+      },
+      {
+       "t": "blk",
+       "v": 12
+      },
+      {
+       "t": "atk",
+       "v": 13
+      },
+      {
+       "t": "buff",
+       "v": 1
+      }
+     ],
+     [
+      {
+       "t": "atk",
+       "v": 5,
+       "h": 3
+      },
+      {
+       "t": "atk",
+       "v": 14
+      },
+      {
+       "t": "buff",
+       "v": 2
+      },
+      {
+       "t": "blk",
+       "v": 10
+      }
+     ]
+    ],
+    "sprites": [
+     "wurzelstock_p2",
+     "wurzelstock_p3"
+    ]
+   },
+   "beute": "harzkern",
+   "beute_satz": "Die Arme hängen still bis auf den Boden. Im Mund des Gesichts ist eine Mulde, wo etwas gelegen hat.",
+   "quelle": "skript"
+  }
+ },
+ "items": {
+  "harzklumpen": {
+   "n": "Harzklumpen",
+   "a": "talisman",
+   "st": [
+    "F"
+   ],
+   "spr": "candle",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 25,
+   "flavor": "Er ist warm, als hätte ihn eben jemand in der Hand gehabt. In der Mitte ist ein Tropfen, der noch fließt.",
+   "cards": [
+    {
+     "n": "Harz werfen",
+     "c": 1,
+     "burn": 3,
+     "weak": 1
+    }
+   ]
+  },
+  "legionsaxt": {
+   "n": "Dolabra der Legion",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "pick",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 45,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1
+   },
+   "flavor": "Auf dem Stiel steht der Name eines Legionärs, elfmal, jedesmal in einer anderen Hand.",
+   "cards": [
+    {
+     "n": "Fällen",
+     "c": 2,
+     "atk": 9,
+     "strip": true,
+     "vuln": 2
+    }
+   ]
+  },
+  "bernstein_fliege": {
+   "n": "Bernstein mit Fliege",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "tarot",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 40,
+   "eigen": {
+    "typ": "energie_bleibt",
+    "v": 1
+   },
+   "flavor": "Die Fliege darin putzt sich die Flügel. Nur, wenn du nicht hinsiehst.",
+   "cards": [
+    {
+     "n": "Einschließen",
+     "c": 1,
+     "blk": 5,
+     "behalten": true
+    }
+   ]
+  },
+  "koehlerhandschuh": {
+   "n": "Köhlerhandschuh",
+   "a": "kleidung",
+   "st": [
+    "F"
+   ],
+   "spr": "gloves",
+   "hp": 2,
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 28,
+   "flavor": "Innen ist er kalt wie ein Keller. Der Köhler sagt, das sei die Hitze, die noch kommt.",
+   "cards": [
+    {
+     "n": "In die Glut greifen",
+     "c": 1,
+     "blk": 5,
+     "burn": 2
+    }
+   ]
+  },
+  "harzkern": {
+   "n": "Der Harzkern",
+   "a": "talisman",
+   "st": [
+    "F"
+   ],
+   "spr": "holywater",
+   "rare": 1,
+   "nodrop": true,
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 90,
+   "eigen": {
+    "typ": "reaktion_heil",
+    "v": 2
+   },
+   "flavor": "Er lag ihm auf der Zunge, all die Jahre. Er schmeckt nach einem Wald, der noch nicht gewachsen ist.",
+   "cards": [
+    {
+     "n": "Harz schlucken",
+     "c": 1,
+     "heal": 4,
+     "blk": 4
+    }
+   ]
+  }
+ },
+ "events": [
+  {
+   "id": "wald_meilenstein",
+   "t": "Der Meilenstein",
+   "d": "Am Rand der Straße steht ein Meilenstein der Legion. Die Zahl darauf ist durchgestrichen, darunter steht eine kleinere, darunter noch eine. Die letzte ist mit einem Fingernagel geritzt, und der Staub darin ist frisch.",
+   "bild": "Eine Steinsäule am Straßenrand, eine Öllampe davor, Zahlen untereinander, jede kleiner als die darüber.",
+   "o": [
+    {
+     "l": "Die nächste Zahl einritzen: +1 Kerbe an einem Item, −6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 9
+     }
+    },
+    {
+     "l": "Unter dem Stein graben: ein zufälliges Item, dann Kampf gegen den Holzfäller der Legion",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "holzfaeller"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Die Lampe nachfüllen und weitergehen: +6 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wald_ringe",
+   "t": "Die Ringe",
+   "stummfilm": true,
+   "d": "Ein gefällter Stamm liegt quer über der Straße, die Schnittfläche so hoch wie ein Haus. Die Vermesser der Legion haben die Ringe gezählt und Zahlen hineingemeißelt. Innen steht die höchste. Nach außen werden sie kleiner. Der äußerste Ring hat noch keine Zahl, und das Holz dort ist feucht.",
+   "bild": "Eine riesige Schnittfläche mit Ringen, eine Reihe römischer Zahlen vom Mark zur Rinde, die letzte Lücke vor der Rinde.",
+   "o": [
+    {
+     "l": "Die fehlende Zahl einschlagen: einen Handgriff lernen, −8 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ],
+     "if": {
+      "hp_min": 11
+     }
+    },
+    {
+     "l": "Das feuchte Holz berühren: +5 max. Leben, eine Karte streichen",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 5
+      },
+      {
+       "op": "strike"
+      }
+     ]
+    },
+    {
+     "l": "Nachzählen, wie viele noch fehlen: eine Reaktion entdecken",
+     "fx": [
+      {
+       "op": "discover"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wald_traene",
+   "t": "Die Harzträne",
+   "d": "Von den Wurzeln hängt ein Tropfen Harz, so groß wie ein Kopf, und leuchtet. Darin schwimmt eine Hand, offen, als wolle sie dir etwas geben. Unter dem Tropfen liegen die Knochen eines Arms, ordentlich, wie hingelegt.",
+   "bild": "Ein leuchtender Bernsteintropfen an einem Wurzelstrang, darin eine offene Hand, darunter am Boden Knochen in einer Reihe.",
+   "o": [
+    {
+     "l": "Hineingreifen und nehmen, was sie hält: Bernstein mit Fliege, −7 Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "bernstein_fliege"
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ],
+     "if": {
+      "hp_min": 10
+     }
+    },
+    {
+     "l": "Den Faden darüber abschneiden: Kampf gegen den Harzfang, danach ein seltenes Item",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "harzfang"
+       ]
+      },
+      {
+       "op": "give_rare"
+      }
+     ]
+    },
+    {
+     "l": "Im Licht des Tropfens rasten: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wald_meiler",
+   "t": "Der kalte Meiler",
+   "d": "Ein Meiler aus Steinholz, sauber geschichtet, mit Erde abgedeckt. Er raucht nicht. Daneben hängt ein Schleifstein der Legion an einem Gestell, und der Stein ist nass, obwohl hier nichts nass ist.",
+   "bild": "Ein runder Erdhügel mit Luftlöchern, kein Rauch, daneben ein Schleifstein auf einem Holzgestell, eine Pfütze darunter.",
+   "o": [
+    {
+     "l": "Eine Karte am nassen Stein schleifen: sie kostet dauerhaft 1 weniger, −8 Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ],
+     "if": {
+      "hp_min": 11
+     }
+    },
+    {
+     "l": "Die Handschuhe vom Gestell nehmen: Köhlerhandschuh, −10 Gold",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "koehlerhandschuh"
+      },
+      {
+       "op": "gold",
+       "v": -10
+      }
+     ],
+     "if": {
+      "gold_min": 10
+     }
+    },
+    {
+     "l": "Den Meiler anzünden: er brennt nicht. +1 max. Leben für den Versuch",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wald_bruecke",
+   "t": "Die Brücke der Legion",
+   "d": "Die Hängebrücke über die Tiefe ist aus Holz, das nicht versteinert ist. Es riecht nach Sägemehl. Unter dir hängen Kronen, darunter noch mehr Kronen, und ganz unten schimmert es, wie es oben schimmert.",
+   "bild": "Eine schmale Hängebrücke aus frischen Brettern über einem Abgrund, darunter Baumkronen, die nach unten hängen, in Lagen übereinander.",
+   "o": [
+    {
+     "l": "Schnell hinüber: +18 Gold, −5 Leben",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 18
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Ein Brett herausnehmen und mitnehmen: ein Item tauschen",
+     "fx": [
+      {
+       "op": "item_tausch"
+      }
+     ]
+    },
+    {
+     "l": "Lange hinabsehen: einen Handgriff lernen, −3 max. Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "max_hp",
+       "v": -3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wald_brief",
+   "t": "Der Brief",
+   "d": "Im Bogen durch den großen Stamm sitzt ein Legionär an der Wand. Er ist nicht versteinert. Er schreibt mit Kohle auf ein Brett, und als du kommst, hält er es dir hin, damit du es mitnimmst. Er sagt eine Adresse, die es nicht mehr gibt.",
+   "bild": "Ein Soldat mit Helm im Halbdunkel eines Tunnels aus Holz, ein beschriebenes Brett in der ausgestreckten Hand, hinter ihm die Straße.",
+   "o": [
+    {
+     "l": "„Am Meilenstein steht schon eine kleinere Zahl.“ Er schreibt sie ab: eine Reaktion entdecken, +6 Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ],
+     "if": {
+      "event_gesehen": "wald_meilenstein"
+     }
+    },
+    {
+     "l": "„Das habe ich schon gelesen, im Kloster, ein Wort länger.“ Er streicht ein Wort: +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "event_gesehen": "kloster_abschriften"
+     }
+    },
+    {
+     "l": "Ihm seine Axt zurückgeben: er nimmt sie nicht, aber er segnet sie. +1 Kerbe, +12 Gold",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "gold",
+       "v": 12
+      }
+     ],
+     "if": {
+      "item": "legionsaxt"
+     }
+    },
+    {
+     "l": "Das Brett nehmen: einen Handgriff lernen",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      }
+     ]
+    },
+    {
+     "l": "Weitergehen: +5 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 5
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/wald.js"
+ ]
+}

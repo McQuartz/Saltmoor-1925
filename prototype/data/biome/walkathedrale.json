@@ -1,0 +1,713 @@
+{
+ "id": "walkathedrale",
+ "akt": 3,
+ "biom": {
+  "n": "Die Walkathedrale",
+  "kurz": "Walkathedrale",
+  "zeit": "vor dem Leben, im Eis",
+  "anreise": "Unter dem schwarzen Eis liegt ein Wal, so groß wie ein Berg. Man geht zwischen seinen Rippen wie durch ein Kirchenschiff, und am Ende schlägt etwas.",
+  "koerper": [
+   "#04050a",
+   "#090b13",
+   "#12151f",
+   "#1e2230"
+  ],
+  "rand": [
+   "#958a74",
+   "#f2e8ce"
+  ],
+  "augen": "#ff8c70",
+  "nebel": [
+   "#080a12",
+   "#2a2e3c"
+  ],
+  "musik": "walkathedrale",
+  "szene_alt": "eis",
+  "gegner": [
+   "rippenkriecher",
+   "echo",
+   "markfresser",
+   "seepockenmann"
+  ],
+  "waechter": "herz",
+  "fundpool": [
+   "fischbeinkorsett",
+   "tranlampe",
+   "walzahnmesser",
+   "echoharpune",
+   "harpoon",
+   "lantern",
+   "sealskin",
+   "boathook",
+   "anchorchain",
+   "rum",
+   "laudanum",
+   "minerlamp",
+   "trench"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Walfänger",
+   "ort": "zwischen zwei Tranfässern unter der vierzehnten Rippe, eine Lampe auf dem Fass",
+   "zeile": "Er hat den Wal gefunden, 1903, mit der Mannschaft. Die Mannschaft ist noch da, sagt er, nur weiter innen. Er nimmt Gold, aber er fragt, ob du es nicht lieber dem Herzen geben willst."
+  },
+  "uebergang": "Unter dem Herzen ist der Boden kein Eis mehr. Eine Öffnung, rund wie ein Gefäß, und darunter steht Wasser, das nicht fällt. Das Herz schlägt einmal, als du hinabsteigst. Dann nicht mehr.",
+  "weg_hinweise": {
+   "kampf": [
+    "Zwischen den Rippen kriecht etwas, das einen Rücken aus Bögen trägt.",
+    "Eine Leine ist gespannt. Am anderen Ende holt jemand aus.",
+    "Ein Licht in Ringen, auf dem Boden, und es kaut.",
+    "Ein Mann lehnt am Kiefer. Er ist auf einer Seite zu Stein geworden."
+   ],
+   "ereignis": [
+    "Ein Wirbel ist ausgehöhlt wie eine Kanzel.",
+    "Aus dem Eis wächst eine Rippe, die gestern nicht da war.",
+    "Tranfässer der Expedition, sauber gestapelt."
+   ],
+   "wandbild": [
+    "In einen Rippenbogen ist etwas geritzt, mit einem Walzahn, sehr sorgfältig."
+   ],
+   "kraemer": [
+    "Eine Tranlampe unter der vierzehnten Rippe. Jemand zählt Münzen."
+   ],
+   "werkstatt": [
+    "Das Flensdeck der Expedition, Messer noch im Holz."
+   ],
+   "rast": [
+    "Ein Feuer aus Knochen und Tran. Es brennt ruhig und riecht nach Meer."
+   ],
+   "fundstelle": [
+    "Eine Seekiste, im Eis festgefroren, der Deckel offen."
+   ]
+  },
+  "beute_saetze": [
+   "Irgendwo weiter innen schlägt es einmal. Danach ist es sehr lange still.",
+   "Die Rippe neben dir ist einen Fingerbreit näher gekommen.",
+   "Das Mark in den Knochen glimmt kurz auf, wie ein Atemzug.",
+   "Auf dem Eis bleibt ein Abdruck, der zu groß ist für das, was hier lag.",
+   "Eine Tranlampe flackert, obwohl kein Wind geht.",
+   "Was übrig ist, sinkt ins Eis, und das Eis schließt sich darüber wie Wasser.",
+   "Von oben, durch den Riss, fällt ein wenig Licht. Es ist nicht Tag.",
+   "Der Wal ist nicht tot. Er ist nur noch nicht fertig."
+  ]
+ },
+ "musik": {
+  "n": "Walkathedrale",
+  "root": 45,
+  "key": "a-Moll",
+  "names": [
+   "Am",
+   "F",
+   "Dm",
+   "E"
+  ],
+  "darkNames": [
+   "Am",
+   "B",
+   "Dm",
+   "E♭9"
+  ],
+  "amb": {
+   "eisgrund": 0.07,
+   "stollen": 0.035
+  },
+  "rhy": "trommel",
+  "detail": "kapelle",
+  "ort": "Eis dröhnt tief, Tropfen auf Knochen, eine verstimmte Orgel in sehr weiter Ferne",
+  "rhyN": "ein langsamer Doppelschlag ohne Spieler, Pauke"
+ },
+ "foes": {
+  "rippenkriecher": {
+   "n": "Der Rippenkriecher",
+   "biom": "walkathedrale",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 7
+    }
+   ],
+   "sprite": "rippenkriecher_a",
+   "varianten": [
+    "rippenkriecher_a",
+    "rippenkriecher_b"
+   ],
+   "konzept": "Ein Flenser der Expedition, der im Brustkorb des Wals schlief. Seine Rippen sind ihm aus dem Rücken gewachsen, ein Gewölbe aus Sicheln, und er kriecht darunter auf den Händen. Die Spitzen biegen sich schon wieder nach innen, zu ihm.",
+   "stimme": "nachgeher",
+   "kniff": {
+    "art": "brecher",
+    "why": "Die Rippen schließen sich um dich. Was du dazwischen hältst, bricht."
+   },
+   "beute": "walzahnmesser",
+   "beute_satz": "Das Gewölbe fällt in sich zusammen, Bogen auf Bogen. Darunter ist nur noch der Abdruck von Händen.",
+   "quelle": "skript"
+  },
+  "echo": {
+   "n": "Das Walfänger-Echo",
+   "biom": "walkathedrale",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    }
+   ],
+   "sprite": "echo_a",
+   "varianten": [
+    "echo_a",
+    "echo_b"
+   ],
+   "konzept": "Der Harpunier, der den Wal als Erster sah. Er hat geworfen, und die Leine ist nie zurückgekommen: Sie läuft von der Harpune in seine eigene Brust. Er steht in der Wurfhaltung, immer wieder, wie ein Echo.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 16,
+    "why": "Er zielt, wie er damals gezielt hat. Zwei Atemzüge lang. Dann wirft er."
+   },
+   "beute": "echoharpune",
+   "beute_satz": "Die Leine erschlafft. Am anderen Ende, weit drinnen im Wal, zieht niemand mehr.",
+   "quelle": "skript"
+  },
+  "markfresser": {
+   "n": "Der Markfresser",
+   "biom": "walkathedrale",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "markfresser_a",
+   "varianten": [
+    "markfresser_a",
+    "markfresser_b"
+   ],
+   "konzept": "Der Schiffsjunge, der als Erster vom Wal gegessen hat. Vorn ist er noch ein Junge mit einem gespaltenen Knochen am Mund, hinten eine Made so lang wie ein Boot, durch deren Glieder das Mark leuchtet. Die hintersten Glieder sind schon wieder Knochen.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Er frisst, während ihr kämpft. Jeder Bissen macht ihn größer."
+   },
+   "beute": "tranlampe",
+   "beute_satz": "Die Ringe erlöschen einer nach dem anderen, von hinten nach vorn. Zuletzt der Knochen in seiner Hand.",
+   "quelle": "skript"
+  },
+  "seepockenmann": {
+   "n": "Der Seepockenmann",
+   "biom": "walkathedrale",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "seepockenmann_a",
+   "varianten": [
+    "seepockenmann_a",
+    "seepockenmann_b"
+   ],
+   "konzept": "Ein Matrose, der sich zum Schlafen an den Kiefer des Wals lehnte. Auf der Seite zum Wal sind ihm Seepocken gewachsen, so schwer, dass er schief steht; sein rechter Arm ist eine Keule aus Kalk. Alle Seepocken öffnen sich in dieselbe Richtung, zum Herzen, und in jeder brennt ein kleines Licht.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "dornen",
+    "v": 2,
+    "why": "Wer zuschlägt, schlägt in Kalk mit scharfen Rändern."
+   },
+   "beute": "fischbeinkorsett",
+   "beute_satz": "Die Lichter in den Seepocken gehen aus, alle zugleich. Sie zeigen weiter zum Herzen.",
+   "quelle": "skript"
+  },
+  "herz": {
+   "n": "Das Herz",
+   "biom": "walkathedrale",
+   "rang": "waechter",
+   "hp": 80,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 16
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 4
+    }
+   ],
+   "sprite": "herz",
+   "varianten": [
+    "herz"
+   ],
+   "konzept": "Das Herz des Wals, so groß wie eine Kapelle, in einer Wiege aus Knochen, die von allen Seiten nach innen wächst. Die großen Adern stehen oben heraus wie Orgelpfeifen. In der Wand ist eine Tür aus Schiffsplanken, angelehnt, und dahinter brennt Licht.",
+   "stimme": "wurm",
+   "kniff": {
+    "art": "takt",
+    "v": 8,
+    "why": "Es schlägt sehr langsam. Jeder Schlag hüllt die anderen ein. Zwischen zwei Schlägen ist die Kammer offen."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "rippenkriecher",
+    "alle": 3
+   },
+   "beute": "herztuer",
+   "beute_satz": "Das Herz schlägt noch einmal, ganz leise, als hätte es sich verzählt. Dann steht die Tür offen, und drinnen ist es warm.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "walkathedrale_kanzel",
+   "t": "Die Kanzel",
+   "d": "Ein Wirbel, groß wie ein Haus, ist ausgehöhlt wie eine Kanzel. Auf der Brüstung liegt das Logbuch der Expedition. Jeden Tag derselbe Eintrag: die Zahl der Rippen. 41. 41. 42. 44. Die letzte Zahl ist mit deiner Schrift geschrieben.",
+   "bild": "Ein riesiger, ausgehöhlter Wirbel mit einer Treppe aus Knochenplatten; auf der Brüstung ein aufgeschlagenes Buch unter einer Tranlampe.",
+   "o": [
+    {
+     "l": "Von der Kanzel laut vorlesen: einen Handgriff lernen, −5 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Die Rippen nachzählen und die Zahl berichtigen: +1 Kerbe an einem Item, −4 max. Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Das Logbuch einstecken: +30 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 30
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "walkathedrale_rippe",
+   "t": "Die neue Rippe",
+   "d": "Aus dem Eis wächst eine Rippe, dünn wie ein Arm, noch weich an der Spitze. Sie war gestern nicht da. Sie ist warm, und sie krümmt sich zum Herzen hin, ganz langsam, während du zusiehst.",
+   "bild": "Eine junge, glatte Rippe ragt aus dem Eis und biegt sich zur Mitte des Ganges; dahinter die großen, alten Bögen.",
+   "o": [
+    {
+     "l": "Sie abbrechen, solange sie weich ist: Fischbein-Korsett, −6 Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "fischbeinkorsett"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ]
+    },
+    {
+     "l": "Eine Klinge an ihr schleifen: eine Karte kostet dauerhaft 1 weniger, −4 max. Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Weitergehen. Hinter dir knackt es: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "walkathedrale_tran",
+   "t": "Das Tranlager",
+   "d": "Fässer der Expedition, sauber gestapelt, gebrandmarkt mit dem Zeichen eines Schiffs aus Saltmoor. Sie sind voll. Der Tran darin ist warm und riecht frisch, als wäre gestern gekocht worden.",
+   "bild": "Eine Pyramide aus Tranfässern zwischen zwei Rippen, ein Fass offen, daneben eine Kelle und eine erloschene Lampe.",
+   "o": [
+    {
+     "l": "Eine Lampe damit füllen: Tranlampe",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "tranlampe"
+      }
+     ]
+    },
+    {
+     "l": "Trinken, wie die Männer es taten: +6 max. Leben, aber etwas kommt, um auch zu trinken",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 6
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "markfresser"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Deine Tranlampe nachfüllen, bis der Docht singt: +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "item": "tranlampe"
+     }
+    }
+   ]
+  },
+  {
+   "id": "walkathedrale_horchen",
+   "t": "Am Knochen horchen",
+   "stummfilm": true,
+   "d": "Du legst das Ohr an eine Rippe. Lange nichts. Dann ein Schlag, tief, durch den ganzen Wal. Zwischen den Schlägen zählt jemand, leise, mit einer Stimme, die du kennst. Er zählt nicht die Sekunden.",
+   "bild": "Eine Gestalt, klein, mit dem Kopf an einen riesigen Knochenbogen gelehnt; ganz hinten ein schwaches rotes Glimmen.",
+   "o": [
+    {
+     "l": "Mitzählen bis zum nächsten Schlag: einen seltenen Handgriff lernen, −6 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true,
+       "rar": "selten"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ]
+    },
+    {
+     "l": "Das Ohr wegnehmen, bevor er fertig ist: +10 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "walkathedrale_harpune",
+   "t": "Die Harpune im Wirbel",
+   "d": "In einem Wirbel steckt eine Harpune, das Eisen tief im Knochen. Die Leine läuft straff in die Dunkelheit, zum Herzen hin. In langen Abständen zieht etwas daran, einmal, und lässt wieder nach.",
+   "bild": "Eine alte Handharpune schräg in einem Wirbelkörper, die Leine gespannt, sie verschwindet zwischen den Rippen im Dunkel.",
+   "o": [
+    {
+     "l": "Herausziehen: Harpune des Echos, Kampf gegen das Walfänger-Echo",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "echoharpune"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "echo"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "An der Leine ziehen, im selben Takt: einen Handgriff lernen, −7 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ]
+    },
+    {
+     "l": "Mit deinem Fischmesser die Leine kappen: +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "item": "knife"
+     }
+    }
+   ]
+  },
+  {
+   "id": "walkathedrale_mannschaft",
+   "t": "Die Mannschaft",
+   "d": "Weiter innen sitzen sie, wie der Walfänger gesagt hat: elf Männer in Ölzeug, im Kreis, die Hände auf den Knien. Sie sind nicht erfroren. Der Platz für den zwölften ist frei, und vor ihm liegt ein Logbuch mit einem leeren Blatt.",
+   "bild": "Elf sitzende Gestalten im Kreis zwischen den Rippen, eine Tranlampe in der Mitte; eine Lücke im Kreis.",
+   "o": [
+    {
+     "l": "Die letzte Zahl aus der Kanzel eintragen: eine zufällige Reliquie, −10 max. Leben",
+     "fx": [
+      {
+       "op": "reliquie"
+      },
+      {
+       "op": "max_hp",
+       "v": -10
+      }
+     ],
+     "if": {
+      "event_gesehen": "walkathedrale_kanzel"
+     }
+    },
+    {
+     "l": "Dich auf den freien Platz setzen, nur kurz: alle Leben, aber −5 max. Leben",
+     "fx": [
+      {
+       "op": "full_heal"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Ihnen zeigen, wie dein Vater die Leine aufschoss: +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "job": "fischer"
+     }
+    },
+    {
+     "l": "Leise vorbeigehen: +15 Gold aus der Kasse in der Mitte",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 15
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "fischbeinkorsett": {
+   "n": "Fischbein-Korsett",
+   "a": "kleidung",
+   "st": [
+    "S"
+   ],
+   "spr": "sealskin",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "start_block",
+    "v": 6
+   },
+   "flavor": "Die Stäbe sind aus einer Rippe geschnitten, die noch wächst. Es sitzt jeden Tag ein wenig enger.",
+   "cards": [
+    {
+     "n": "Schnüren",
+     "c": 1,
+     "blk": 7,
+     "behalten": true
+    }
+   ]
+  },
+  "tranlampe": {
+   "n": "Tranlampe",
+   "a": "talisman",
+   "st": [
+    "F"
+   ],
+   "spr": "lantern",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 20,
+   "flavor": "Sie brennt ruhig und riecht nach Meer. Wenn du sie ausbläst, brennt sie noch einen Atemzug lang weiter.",
+   "cards": [
+    {
+     "n": "Tran nachgießen",
+     "c": 1,
+     "atk": 3,
+     "burn": 3
+    }
+   ]
+  },
+  "walzahnmesser": {
+   "n": "Walzahn-Messer",
+   "a": "waffe",
+   "st": [
+    "B"
+   ],
+   "spr": "knife",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 24,
+   "flavor": "Ein Zahn, geschliffen und geritzt. Die Ritzung zeigt ein Schiff, und jedes Mal, wenn du hinsiehst, ist es kleiner.",
+   "cards": [
+    {
+     "n": "Ritzen",
+     "c": 1,
+     "atk": 5,
+     "vuln": 1
+    }
+   ]
+  },
+  "echoharpune": {
+   "n": "Harpune des Echos",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "harpoon",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 48,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1
+   },
+   "flavor": "An ihr hängt noch ein Stück Leine. Es ist straff, obwohl nichts daran hängt.",
+   "cards": [
+    {
+     "n": "Harpunieren",
+     "c": 2,
+     "atk": 12,
+     "vuln": 2
+    }
+   ]
+  },
+  "herztuer": {
+   "n": "Die Tür im Herzen",
+   "a": "talisman",
+   "st": [
+    "B"
+   ],
+   "spr": "bone",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 130,
+   "nodrop": true,
+   "eigen": {
+    "typ": "kampfstart_fx",
+    "fx": [
+     {
+      "op": "status",
+      "to": "all",
+      "status": "vuln",
+      "v": 2
+     },
+     {
+      "op": "ward",
+      "v": 5
+     }
+    ]
+   },
+   "flavor": "Eine Planke aus der Tür, warm, mit einem Riegel auf der falschen Seite. Wenn ein Kampf beginnt, schlägt sie einmal.",
+   "cards": [
+    {
+     "n": "Herzschlag",
+     "c": 0,
+     "opfer": 3,
+     "atk": 5,
+     "h": 2
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/walkathedrale.js"
+ ]
+}

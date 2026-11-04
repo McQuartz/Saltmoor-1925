@@ -184,18 +184,21 @@ function hoehlenRand(K, links, rechts) {
 function treibholz(K, x, y, s) { const th = B.maske(); th.pfad([[x, y], [x + 30 * s, y - 4 * s], [x + 56 * s, y - 1 * s]], 3 * s, 2 * s); th.kap(x + 20 * s, y - 3 * s, x + 14 * s, y - 12 * s, 1.2 * s, .8 * s); K.form(4, th, 0, { k: SAND.slice(0, 4), r: [SAND[6], MORGEN], ton: 2, schatten: 2 }); }
 // Strandkorb (1925, Ostsee- und Nordseebad), von hinten: Korbgeflecht, die Haube, er schaut aufs Wasser
 function strandkorb(K, P, X, Z, o) {
-  o = o || {}; const k = P.k(Z), [x, y] = P.q(X, 0, Z), w = .6 * k, hh = 1.15 * k, eb = K.eb(y - 1), yS = y - hh * .5;
+  o = o || {}; const k = P.k(Z), [x, y] = P.q(X, 0, Z), w = .8 * k, hh = 1.05 * k, eb = K.eb(y - 1), yS = y - hh * .52, yT = y - hh;
+  const rr = (px, py, x0, y0, x1, y1, r) => { const cx = Math.min(Math.max(px, x0 + r), x1 - r), cy = Math.min(Math.max(py, y0 + r), y1 - r); return Math.hypot(px - cx, py - cy) <= r; };
+  // Seite rechts (der Korb steht leicht schräg, die Öffnung schaut aufs Wasser): dort sieht man den gestreiften Stoff innen
+  const [x2, y2] = P.q(X + .42, 0, Z + .55), sx = x2 - (x + w / 2), sy = y2 - y, side = B.maske();
+  side.poly([[x + w / 2 - 1, y - k * .04], [x + w / 2 + sx, y - k * .04 + sy], [x + w / 2 + sx, yT + hh * .2 + sy * 1.3], [x + w / 2 - 1, yT + hh * .12]]);
+  K.form(eb, side, (o.tiefe || 0) + .05, { k: KORB, r: [SAND[5], MORGEN], ton: 2.3, fase: 1, rand: 2, muster: (px, py) => ((Math.floor(py / 2) & 1) ? .3 : -.2) });
   const m = B.maske();
-  // Korb: unten schmaler Kasten auf zwei Kufen, oben die Haube, die über die Seiten steht und sich nach vorn wölbt
-  m.poly([[x - w * .46, y - k * .05], [x - w * .5, yS], [x + w * .5, yS], [x + w * .46, y - k * .05]]);
-  m.fn(x - w * .62, y - hh, x + w * .62, yS + 2, (px, py) => { const u = (px - x) / (w * .6), v = (py - (yS + 1)) / (hh * .5); return u * u * (1 + Math.max(0, -v) * .1) + v * v <= 1 && py <= yS + 2; });
-  m.rect(x - w * .66, yS - k * .02, w * 1.32, k * .05); // Armlehnen stehen seitlich heraus
-  m.rect(x - w * .44, y - k * .05, k * .06, k * .05); m.rect(x + w * .44 - k * .06, y - k * .05, k * .06, k * .05);
+  m.fn(x - w / 2, yT, x + w / 2, y - k * .04, (px, py) => py > yS ? Math.abs(px - x) < w * .47 : rr(px, py, x - w / 2, yT, x + w / 2, yS + k * .3, w * .28));
+  m.rect(x - w * .6, yS - k * .02, w * 1.2, k * .05); // Armlehnen
+  m.rect(x - w * .42, y - k * .05, k * .07, k * .05); m.rect(x + w * .42 - k * .07, y - k * .05, k * .07, k * .05);
   K.form(eb, m, o.tiefe || 0, { k: KORB, r: [SAND[5], MORGEN], ton: 1.7, fase: 1.5, rand: 2, schatten: 2,
-    muster: (px, py) => { const reihe = Math.floor((py - y) / Math.max(2, k * .045)); return ((Math.floor(px * .7 + (reihe & 1) * 1.5) & 1) ? .35 : -.25) + (Math.abs(py - yS) < 1.2 ? -.9 : 0) + ((py - y) % Math.max(4, Math.round(k * .18)) === 0 ? -.5 : 0); } });
-  // die Haube ist innen mit gestreiftem Stoff bespannt: am Rand sieht man die Streifen, ausgeblichen
+    muster: (px, py) => { const reihe = Math.floor((py - y) / Math.max(2, k * .04)); return ((Math.floor(px * .7 + (reihe & 1) * 1.5) & 1) ? .35 : -.25) + (Math.abs(py - yS) < 1.2 ? -.9 : 0) + (Math.abs(px - x) > w * .44 && py > yS ? -.4 : 0); } });
+  // gestreifter Stoff an der Innenkante der Seite, ausgeblichen blau-weiß
   const e = K.e[eb];
-  for (let a = -2.6; a <= -.54; a += .02) { const px = Math.round(x + Math.cos(a) * w * .6), py = Math.round(yS + 1 + Math.sin(a) * hh * .5); if (a < -1.4) continue; e.set(px + 1, py, B.pk((Math.floor(a * 9) & 1) ? '#6a6a5c' : '#2a3e4a')); }
+  for (let py = Math.round(yT + hh * .2 + sy * 1.3); py < y + sy - k * .1; py++) { const px = Math.round(x + w / 2 + sx); for (let j = 0; j < Math.max(1, Math.round(k * .03)); j++) e.set(px - j, py, B.pk((Math.floor(py / Math.max(2, k * .05)) & 1) ? '#8a8a78' : '#2e4656')); }
   return { x, y, w, hh };
 }
 // =====================================================================
@@ -260,7 +263,7 @@ function strandkorbSzene(K, o) {
   flutlinie2(K, P, 4.2); steine(K, P, 10, { s: 3, frei: [250, 70, 175] });
   // Felswand rechts in Flucht: Schichten, nass, oben vom Wasser abgeschnitten
   const XW = 3.6, unten = [], oben = [];
-  for (let Z = 1; Z <= 40; Z *= 1.06) { const xo = XW + Math.sin(Z * 1.7) * .12; unten.push(P.q(xo, 0, Z)); oben.push(P.q(xo, Yc - .5 - Math.sin(Z * 2.3) * .35, Z)); }
+  for (let Z = 1; Z <= 40; Z *= 1.02) { const xo = XW + Math.sin(Z * .6) * .15; unten.push(P.q(xo, 0, Z)); oben.push(P.q(xo, Yc - .5 - Math.sin(Z * .45) * .35 - B.fbm(Z * .3, 0, 6, 2) * .5, Z)); }
   const wm = B.maske(); wm.poly([...unten, ...oben.reverse(), [W + M + 400, -M - 400], [W + M + 400, H + M]]);
   K.form(2, wm, .12, { k: FELS, ton: 2.2, fase: 2, rand: 2, schatten: 2, muster: (x, y) => { const Z = (XW * P.h) / Math.max(1, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h, sY = Y * 2.1 + Math.sin(Z * .7 + Y) * .3 + B.fbm(Z * .35, Y * .5, 4, 3) * 1.6, lage = Math.floor(sY), q = frac(sY);
     return (B.hash(lage, 0, 9) - .5) * 1.2 + (q > .88 ? 1.3 : q < .12 ? -1 : 0) + (B.rausch2(Z * 3, Y * 6, 8) > .8 ? -1.2 : 0) + (B.fbm(Z * .9, Y * 3, 5, 2) - .5) * .6 - Math.max(0, 1.5 - Z) * .4; } });

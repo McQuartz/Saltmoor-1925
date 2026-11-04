@@ -5,7 +5,7 @@
 'use strict';
 const K = require('./hilfe/kanten');
 module.exports = {
-  id: 'gepruefte', biom: 'kapelle', zone: 'kapelle', w: 96, h: 120, fuss: [50, 114], kopf: [50, 18], rimBis: 113,
+  id: 'gepruefte', biom: 'kapelle', zone: 'kapelle', w: 96, h: 120, fuss: [50, 114], kopf: [48, 4], rimBis: 113,
   varianten: {
     gepruefte_a: { haar: 6, haarLang: 52, seil: true, schwebe: -4 },
     gepruefte_b: { haar: 7, haarLang: 62, seil: true, schwebe: -8, haube: true },

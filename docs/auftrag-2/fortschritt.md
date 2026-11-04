@@ -127,11 +127,23 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Der Bittsteller | Grotte | 4 (Körper eher Masse) | [M6](bilder/M6/grotte/kontakt.png) |
 | Die Erhörte (Wächter) | Grotte | 4 | [M6](bilder/M6/grotte/im-spiel-waechter.png) |
 | Hintergrund Grotte (3 Varianten, Wächter-Szene) | Grotte | 4 (Madonna flächig, V2 unten leer) | [M6](bilder/M6/grotte/varianten.png) |
+| Der Helmtaucher (neu) | Hafen | 4 (Anzug etwas kastig) | [M6](bilder/M6/alte-biome/kontakt-hafen.png) |
+| Der Gepfählte (neu) | Moor | 4 | [M6](bilder/M6/alte-biome/kontakt-moor.png) |
+| Die Geprüfte (neu) | Kapelle | 4 (starke Silhouette) | [M6](bilder/M6/alte-biome/kontakt-kapelle.png) |
+| Der Kirchenvogt (neu) | Kapelle | 4 (Talar große dunkle Fläche) | [M6](bilder/M6/alte-biome/kontakt-kapelle.png) |
+| Torfstich (heller) | Moor | 4 knapp: Figuren lesbar, Boden noch sehr dunkel | [M6](bilder/M6/alte-biome/torfstich-vorher-nachher.png) |
+| Zahnrad-Wärter | Gezeitenwerk | 4 | [M7](bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png) |
+| Kanalaal | Gezeitenwerk | 4 (starke Silhouette) | [M7](bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png) |
+| Die Ölerin | Gezeitenwerk | 4 | [M7](bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png) |
+| Das Gewicht | Gezeitenwerk | 4 | [M7](bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png) |
+| Der Regulator (Wächter) | Gezeitenwerk | im Spiel 3 (dunkel vor dem Hauptrad), in Nacharbeit | [M7](bilder/M7/gezeitenwerk/im-spiel-waechter.png) |
+| Hintergrund Gezeitenwerk (3 Varianten, Wächter-Szene) | Gezeitenwerk | 4 (V2 schwächste) | [M7](bilder/M7/gezeitenwerk/hintergrund-varianten.png) |
 
 ## Entscheidungen unterwegs
 
 | Datum | Meilenstein | Entscheidung | Grund |
 |---|---|---|---|
+| 2026-11-04 | M7 | Ansage zeigt die Wucht und die Züge bis zum Schlag („⚔ 14 in 2“) statt „↑ +0“ | Gezeitenwerk meldete die irreführende Anzeige; betrifft alle Gegner mit Ansage |
 | 2026-11-04 | M5 | `tools/biom-bogen.js` baut Kontakt- und Silhouetten-Bogen eines Bioms automatisch aus den Spieldaten (auch Pakete, Ergänzungen, `--alle`) | Abnahme „Kontaktbogen automatisch“; vorher schrieb jeder Agent sein eigenes Skript |
 | 2026-11-04 | M6/M7 | Besondere Krämer: Tausch (Kerzenfrau, Grotte), Leihe (Bibliothekar, Kloster), Spiegel (Glasmeer) | Die Steckbriefe beschreiben Krämer, die anders handeln; drei kleine Regeln im Kern geben jedem Biom eine eigene Handelsstelle |
 | 2026-11-04 | M8 | 11 neue biomübergreifende Ereignisse (zusammen 15); ein Viertel der Ereignisknoten zieht aus diesem Pool (`BAL.ereignis_allgemein`), Ereignisse können als Ganzes eine Bedingung `if` haben | Vorher kamen allgemeine Ereignisse nur, wenn das Biom leer war, also nie; Bedingung für Ereignisse, die sich auf Früheres beziehen (Photograph → Noch einmal der Photograph, Fischer-Netz, Laterne, Beichte) |

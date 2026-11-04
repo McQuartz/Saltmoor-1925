@@ -133,35 +133,39 @@ function schiff(K, cfg) {
 // in die Tiefe, oben läuft die Wirbelsäule wie ein Grat. Man sieht, dass er so groß ist wie ein Berg. Im Bauch
 // glimmt das Herz durch die Rippen. Vorn das Lager der Expedition (Zelt, Schlitten, Lampe) als Maßstab.
 function flanke(K, cfg) {
-  const fr = K.fr, P = B.persp(360, 150); K.split = [160, 176];
+  const fr = K.fr, P = B.persp(250, 150); K.split = [160, 176];
   eisWand(K, 460, 40, { unten: 120 });
   lichtRiss(K, 452, 10, 70, 1.85);
-  // Herz im Inneren, durch die Rippen sichtbar
-  const [hx, hy] = P.q(3.2, 1.8, 7); herzFerne(K, hx, hy + 30, 34, 52, 1);
-  // Rippen: von der Wirbelsäule (rechts oben, X 3,5 / Y 9) nach außen gewölbt zum Eis (X -1,5)
-  const ripPts = (Z, aus) => { const pts = []; for (let k = 0; k <= 12; k++) { const u = k / 12; pts.push([3.5 - 5 * u - Math.sin(u * Math.PI) * aus, 9.5 * (1 - Math.pow(u, 1.7)) + .2, Z]); } pts.push([-1.2, .55, Z], [-.7, .45, Z]); return pts; };
-  for (let i = 12; i >= 0; i--) {
-    const Z = 1.4 * Math.pow(1.25, i), tiefe = Math.min(.8, Z / 22), eb = Z < 2.4 ? 3 : Z < 6 ? 2 : 1;
-    rippe3(K, P, eb, ripPts(Z, 1.6), .2, tiefe, 1.1 + tiefe * 1.8, i % 4 === 2 ? 1 + fr * .3 : 0);
-    // Wirbel am Grat
-    const [vx, vy] = P.q(3.5, 9.9, Z), k = P.k(Z), m = B.maske(); m.ell(vx, vy, k * .38, k * .26); m.kap(vx, vy, vx + k * .2, vy - k * .7, k * .1, k * .04);
-    K.form(eb, m, tiefe, knochenMat(1.1 + tiefe * 1.8));
-  }
+  // Das ganze Gerippe in der Ferne, halb im Eis: Grat von links (Schädel) bis rechts (Schwanz), Rippen als Bögen
+  const grat = t => [20 + t * 470, 150 - Math.sin(Math.min(1, t * 1.25) * Math.PI * .5) * 118 * (1 - Math.max(0, t - .55) * 1.2) - 6];
+  const [hx0, hy0] = grat(.5); herzFerne(K, hx0 + 10, 133, 26, 40, 1);
+  const gm = B.maske(); const gp = []; for (let k = 0; k <= 30; k++) gp.push(grat(.12 + k / 30 * .86)); gm.pfad(gp, 4, 2);
+  for (let i = 0; i < 20; i++) { const t = .14 + i * .043, [x, y] = grat(t), lh = 150 - y; if (lh < 8) continue; const pts = []; for (let k = 0; k <= 8; k++) { const u = k / 8; pts.push([x - Math.sin(u * Math.PI) * lh * .22 + u * 6, y + u * lh * 1.02]); } pts.push([x + 2, 150 - lh * .1]); gm.pfad(pts, 3, 1.5); gm.ell(x, y - 3, 4, 3); }
+  // Schädel links: lang, flach, mit Augenhöhle, in der Mark glimmt
+  gm.poly([[-M, 150], [-M, 112], [30, 100], [70, 106], [96, 124], [104, 150]]);
+  K.form(1, gm, .42, knochenMat(1.1, { verlauf: .5 }));
+  B.gluehen(K.e[1], 62, 118, 16, MARK_G, 1); K.e[1].set(62, 118, B.pk(MARK)); K.licht(62, 118, MARK, 30, .4);
+  // Eisrücken, in dem das Gerippe steckt: davor, bis über die Rippenansätze
+  const er = B.maske(); er.fn(-M, 100, W + M, 160, (x, y) => y > 136 - Math.sin(x * .03) * 6 - B.fbm(x * .02, 1, 5, 2) * 14);
+  K.form(2, er, .32, { k: EIS.slice(1), ton: 2, fase: 1.5, rand: 2, verlauf: -.6 });
   // Eis, das an den Rippen hochgeworfen ist (Schollen), dahinter Dunst
-  B.nebel(K.e[2], { y0: P.vy - 40, y1: P.vy + 10, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .3, xs: [180, 480, 80], seed: 7 });
-  boden(K, P, P.vy, [-2.6, .3, 9]);
+  B.nebel(K.e[2], { y0: P.vy - 30, y1: P.vy + 12, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .22, xs: [100, 480, 80], seed: 7 });
+  boden(K, P, P.vy, [-3.2, .3, 6]);
   for (let i = 0; i < 7; i++) { const [x, y] = P.q(-1.4 + (i % 3) * .3, 0, 2 + i * 1.3), k = P.k(2 + i * 1.3), m = B.maske(); m.poly([[x - k * .3, y], [x - k * .1, y - k * .25], [x + k * .25, y - k * .12], [x + k * .35, y]]); K.form(K.eb(y), m, Math.min(.6, i / 10), { k: EIS.slice(1), ton: 2.4, fase: 1.5, rand: 2, schatten: 2 }); }
   // Lager der Expedition: Zelt, Schlitten, Lampe
-  const [tx, ty] = P.q(-4.6, 0, 3.6), k = P.k(3.6), zm = B.maske();
+  const [tx, ty] = P.q(-4.2, 0, 4.2), k = P.k(4.2), zm = B.maske();
   zm.poly([[tx - k * .7, ty], [tx - k * .05, ty - k * .85], [tx + k * .1, ty - k * .9], [tx + k * .75, ty], [tx + k * .2, ty + 2]]);
   K.form(3, zm, .05, { k: ['#08090c', '#121318', '#1e1f26', '#2c2d35', '#3e3e46'], ton: 1.4, fase: 1.5, rand: 2, schatten: 2, muster: (px, py) => ((px - tx) % 7 === 0 ? -.4 : 0) });
   const zo = B.maske(); zo.poly([[tx - k * .12, ty], [tx - k * .02, ty - k * .5], [tx + k * .1, ty]]); B.form(K.e[3], zo, K.mat(0, { k: ['#000000', '#140a04', '#2a1608'], ton: fr < .6 ? 1.6 : .4, fase: 0, rand: 0 }));
   if (fr < .6) { K.glut(tx, ty - k * .1, k * .4, TRAN_G, 1, [3]); K.e[3].set(tx, ty - 3, B.pk(TRAN)); K.e[3].set(tx, ty - 2, B.pk(TRAN_K)); K.licht(tx, ty - 6, TRAN, 30, .6); }
-  const [sx, sy] = P.q(-3.2, 0, 2.6), ks = P.k(2.6), sl = B.maske(); sl.rect(sx - ks * .5, sy - ks * .18, ks, ks * .05); sl.kap(sx - ks * .55, sy, sx + ks * .5, sy, 1, 1); sl.kap(sx - ks * .55, sy, sx - ks * .62, sy - ks * .1, 1, 1);
+  const [sx, sy] = P.q(-3.9, 0, 2.6), ks = P.k(2.6), sl = B.maske(); sl.rect(sx - ks * .5, sy - ks * .18, ks, ks * .05); sl.kap(sx - ks * .55, sy, sx + ks * .5, sy, 1, 1); sl.kap(sx - ks * .55, sy, sx - ks * .62, sy - ks * .1, 1, 1);
   for (let j = 0; j < 3; j++) sl.rect(sx - ks * .4 + j * ks * .35, sy - ks * .18, 1.5, ks * .18); sl.rect(sx - ks * .35, sy - ks * .34, ks * .5, ks * .16);
   K.form(3, sl, .05, { k: HOLZ, ton: 1.4, fase: 1, rand: 2, schatten: 2 });
-  tranlampe(K, P, -2.4, 2.2, fr < .5);
-  trieb(K, P, -.9, 2.3, 1); trieb(K, P, -.4, 4.6, .8);
+  tranlampe(K, P, -3, 2.1, fr < .5);
+  // Vorn: Rippenbruchstücke im Eis, und junge Rippen, die aus dem Eis treiben, alle zum Wal hin gekrümmt
+  rippe3(K, P, 4, [[3.6, 0, 1.6], [3.3, 1, 1.6], [2.6, 2.2, 1.6], [1.8, 2.6, 1.6], [1.4, 2.4, 1.6]], .12, 0, 1.2, 0);
+  rippe3(K, P, 3, [[4.4, 0, 2.6], [4.2, 1.2, 2.6], [3.6, 2.4, 2.6], [3, 2.8, 2.6]], .12, .05, 1.4, .8);
+  trieb(K, P, 1.6, 2.4, 1); trieb(K, P, -1.4, 3.6, .8); trieb(K, P, 2.6, 5, .7);
   // Vordergrund: Eisscholle unten links, Rippenende oben rechts angeschnitten
   const v = B.maske(); v.poly([[-M, 236], [40, 228], [80, 246], [70, H + M], [-M, H + M]]); K.form(5, v, 0, { k: EIS.slice(0, 5), ton: 1, fase: 2, rand: 2 });
   B.partikel(K, { n: 34, farben: ['#2a3448', '#46546c', '#6a7a94'], vx: -2, vy: 3, wob: 2, wf: .4, x0: 0, x1: 480, y0: 0, y1: 220 });

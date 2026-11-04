@@ -1,0 +1,350 @@
+{
+ "id": "ufer",
+ "akt": 4,
+ "biom": {
+  "n": "Das Ufer unten",
+  "kurz": "Ufer",
+  "zeit": "außerhalb der Zeit, früher Morgen",
+  "anreise": "Unter dem schwarzen Eis liegt ein Strand. Es ist der Sand vom Anfang. Das Meer hängt darüber, und die Wellen kommen von oben.",
+  "koerper": [
+   "#040607",
+   "#0b1214",
+   "#162024",
+   "#25333a"
+  ],
+  "rand": [
+   "#5a7678",
+   "#e4dcc4"
+  ],
+  "augen": "#ffd89a",
+  "nebel": [
+   "#0c1416",
+   "#2e3e3e"
+  ],
+  "musik": "ufer",
+  "szene_alt": "pforte",
+  "gegner": [
+   "vorgaenger"
+  ],
+  "waechter": "ruft",
+  "fundpool": [
+   "strandsand",
+   "nasser_mantel",
+   "gipsabdruck",
+   "shell",
+   "compass",
+   "lantern",
+   "oilcoat",
+   "divinghelm",
+   "deepscale",
+   "boathook"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Strandwärter",
+   "ort": "in einer Badehütte ohne Tür, zwischen den Spuren",
+   "zeile": "Er vermietet Strandkörbe. Einer ist noch frei, sagt er, der neben deinem."
+  },
+  "uebergang": "Die Spuren gehen ins Wasser. Deine gehen hinterher, und der Sand schließt sich hinter dir, Abdruck für Abdruck.",
+  "weg_hinweise": {
+   "vorraum": [
+    "Am Wasser steht jemand in deinem Mantel und schaut hinaus. Er dreht sich nicht um."
+   ],
+   "kampf": [
+    "Jemand steht am Wasser, mit dem Rücken zu dir.",
+    "Im Sand eine Spur, die ins Wasser führt."
+   ],
+   "rast": [
+    "Ein Strandkorb, mit dem Rücken zu dir. Der Sitz ist noch warm."
+   ],
+   "wandbild": [
+    "In der Felswand sind Striche geritzt, Strich für Strich, wie man Tage zählt."
+   ],
+   "ereignis": [
+    "Etwas ist von oben in den Sand gefallen."
+   ],
+   "kraemer": [
+    "Eine Badehütte ohne Tür. Drinnen hängt ein Badelaken zum Trocknen."
+   ],
+   "werkstatt": [
+    "Ein umgedrehtes Boot im Sand, darunter Werkzeug."
+   ],
+   "fundstelle": [
+    "Die Flutlinie. Tang, Muscheln, ein Schuh."
+   ],
+   "finale": [
+    "Alle Spuren führen in dieselbe Richtung. Keine kommt zurück."
+   ]
+  },
+  "beute_saetze": [
+   "Die Welle über dir bricht, und nichts fällt herunter.",
+   "Im Sand ist eine Spur mehr als vorhin.",
+   "Ein Tropfen steigt vom Sand auf und kehrt an die Decke zurück.",
+   "Der Sand ist warm. Er ist warm wie am ersten Morgen.",
+   "Hinter dir schließt sich ein Abdruck, als hätte jemand den Fuß herausgezogen.",
+   "Oben rollt das Meer weiter auf dich zu. Es kommt nie an.",
+   "Eine Muschel liegt mit der Öffnung zum Wasser. Alle liegen so.",
+   "Du zählst die Abdrücke bis zum Wasser. Beim Zurückzählen sind es weniger."
+  ],
+  "vorraum_elite": "vorgaenger"
+ },
+ "musik": {
+  "n": "Ufer unten",
+  "root": 44,
+  "key": "gis-Moll",
+  "names": [
+   "G♯m",
+   "E",
+   "C♯m",
+   "D♯"
+  ],
+  "darkNames": [
+   "G♯m",
+   "A",
+   "C♯m",
+   "D♯♭9"
+  ],
+  "amb": {
+   "meer": 0.08,
+   "sand": 0.03,
+   "schimmer": 0.02
+  },
+  "rhy": "atem",
+  "detail": "hafen",
+  "phryg": true,
+  "ort": "Brandung über dir, Sand rieselt, eine Möwe, die nicht da ist",
+  "rhyN": "Atem und tiefe Brandung"
+ },
+ "foes": {
+  "vorgaenger": {
+   "n": "Der, der vor dir kam",
+   "biom": "ufer",
+   "rang": "elite",
+   "hp": 80,
+   "weak": "L",
+   "vorgaenger": true,
+   "atk_faktor": 1.8,
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 10
+    }
+   ],
+   "sprite": "vorgaenger",
+   "konzept": "Eine Gestalt in deinen Kleidern, von hinten, nass bis auf die Haut und mit Sand an den Beinen. Er trägt, was du beim letzten Mal getragen hast, und kämpft mit deinen Karten. Das Wasser tropft von ihm nach oben.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "voraus",
+    "why": "Er war vor dir hier. Er weiß, welche Karte du als Nächstes ziehst, und spielt sie zuerst."
+   },
+   "beute": "nasser_mantel",
+   "beute_satz": "Er fällt nicht. Er setzt sich in den Sand, mit dem Rücken zu dir, und schaut weiter aufs Wasser.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "ufer_spuren",
+   "t": "Die Spuren",
+   "d": "Im Sand eine Spur nackter Füße, die zum Wasser führt. Du stellst deinen Fuß in einen Abdruck. Er passt. Auch der nächste passt, und der danach.",
+   "bild": "Eine Reihe Fußabdrücke im Sand, die unter einer herabhängenden Welle enden; im vordersten steht ein Schuh.",
+   "o": [
+    {
+     "l": "Ein Stück in den Spuren gehen: einen Handgriff lernen, −5 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Die Abdrücke zuschütten, einen nach dem anderen: +6 max. Leben",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 6
+      }
+     ]
+    },
+    {
+     "l": "Rückwärts in den Spuren zurückgehen: Gipsabdruck",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "gipsabdruck"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ufer_strandkorb",
+   "t": "Der Strandkorb",
+   "d": "Ein Strandkorb steht mit dem Rücken zu dir und schaut aufs Wasser. Auf dem Schild steht die Nummer deiner Kabine von damals. Auf dem Sitz liegt ein Badelaken, noch warm, und eine Zeitung vom Tag, an dem du aufgebrochen bist.",
+   "bild": "Ein Strandkorb von hinten im Sand, gestreifter Stoff in der Haube, darüber hängt das Meer.",
+   "stummfilm": "Ein Strandkorb. Der Sitz ist warm.",
+   "o": [
+    {
+     "l": "Dich hineinsetzen: +18 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 18
+      }
+     ]
+    },
+    {
+     "l": "Die Zeitung lesen. Unter den Vermissten steht ein Name, den du kennst: eine Karte kostet dauerhaft 1 weniger, −4 max. Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Das Laken mitnehmen. Es ist nass, obwohl es warm ist: Der nasse Mantel",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "nasser_mantel"
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ],
+     "if": {
+      "event_gesehen": "ufer_spuren"
+     }
+    }
+   ]
+  },
+  {
+   "id": "ufer_flaschenpost",
+   "t": "Die Flaschenpost",
+   "d": "Von der Decke fällt eine Flasche und steckt mit dem Hals im Sand. Darin ein Zettel in deiner Schrift, die Tinte ist nicht verlaufen: »Nicht umdrehen.«",
+   "bild": "Eine grüne Flasche steckt kopfüber im Sand, darüber zieht sich ein Wassertropfen nach oben zurück.",
+   "o": [
+    {
+     "l": "Nicht umdrehen: +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ]
+    },
+    {
+     "l": "Den Zettel umdrehen. Auf der Rückseite steht nichts, aber er ist schwer: Sand vom Anfang, +15 Gold",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "strandsand"
+      },
+      {
+       "op": "gold",
+       "v": 15
+      }
+     ]
+    },
+    {
+     "l": "Die Flasche zurück nach oben werfen: −6 Leben",
+     "fx": [
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "strandsand": {
+   "n": "Sand vom Anfang",
+   "a": "talisman",
+   "st": [
+    "S"
+   ],
+   "spr": "salt",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 22,
+   "flavor": "Eine Handvoll aus der Manteltasche, warm wie am ersten Morgen. Man kann sie ausschütten, so oft man will.",
+   "cards": [
+    {
+     "n": "Rieseln",
+     "c": 1,
+     "blk": 5,
+     "weak": 1
+    }
+   ]
+  },
+  "nasser_mantel": {
+   "n": "Der nasse Mantel",
+   "a": "kleidung",
+   "st": [
+    "W"
+   ],
+   "spr": "trench",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 55,
+   "eigen": {
+    "typ": "block_haelt_halb"
+   },
+   "flavor": "Er passt dir genau. Er trocknet nicht. In der Tasche ein Zettel in deiner Schrift, den das Wasser gelöscht hat.",
+   "cards": [
+    {
+     "n": "Kragen hoch",
+     "c": 1,
+     "blk": 8
+    }
+   ]
+  },
+  "gipsabdruck": {
+   "n": "Gipsabdruck",
+   "a": "talisman",
+   "st": [
+    "G"
+   ],
+   "spr": "bone",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 48,
+   "eigen": {
+    "typ": "erste_karte_billiger"
+   },
+   "flavor": "Jemand hat einen deiner Abdrücke ausgegossen, bevor das Wasser kam. Die Zehen zeigen zum Meer.",
+   "cards": [
+    {
+     "n": "Nachtreten",
+     "c": 1,
+     "atk": 6,
+     "draw": 1
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/ufer.js"
+ ]
+}

@@ -5,7 +5,7 @@
 'use strict';
 const K = require('./hilfe/kanten');
 module.exports = {
-  id: 'kirchenvogt', biom: 'kapelle', zone: 'kapelle', w: 96, h: 120, fuss: [58, 115], kopf: [60, 18], rimBis: 113,
+  id: 'kirchenvogt', biom: 'kapelle', zone: 'kapelle', w: 96, h: 120, fuss: [58, 115], kopf: [56, 12], rimBis: 113,
   varianten: {
     kirchenvogt_a: { kragen: 19, stange: 30, kopfLiegt: true, saum: 6 },
     kirchenvogt_b: { kragen: 21, stange: 27, kopfLiegt: true, saum: 8, hut: true },
@@ -77,6 +77,8 @@ module.exports = {
         P.set(r(hx - 8), r(ky + 5), 'r1');
       }
       // Mühlsteinkragen: Pfeifenfalten als Strahlen, Licht auf der oberen Kante
+      // Leinenkante: der ganze obere Rand fängt Licht (Teller), Falten als Wellen
+      for (let a = Math.PI; a < Math.PI * 2.02; a += 0.05) { const x = r(kx + Math.cos(a) * (KR - 1.2)), y = r(ky + Math.sin(a) * (KR * 0.36 - 1)); if (P.get(x, y) >= 1 && P.get(x, y) <= 4) P.set(x, y, (r(a * 20) % 3) ? 'r1' : 'k3'); }
       for (let a = 0; a < Math.PI * 2; a += Math.PI / 11) {
         for (let q = 0.45; q <= 1; q += 0.1) { const x = r(kx + Math.cos(a) * KR * q), y = r(ky + Math.sin(a) * KR * 0.38 * q); if (P.get(x, y) >= 1 && P.get(x, y) <= 4) P.set(x, y, 'k2'); }
         const x = r(kx + Math.cos(a + 0.14) * KR * 0.9), y = r(ky + Math.sin(a + 0.14) * KR * 0.38 * 0.9);

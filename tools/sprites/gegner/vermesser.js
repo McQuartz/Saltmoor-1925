@@ -59,7 +59,7 @@ module.exports = {
     if (!v.ohneLatte) {
       const dir = [Math.sin(la), -Math.cos(la)];
       const unten = [handH[0] - dir[0] * 44, handH[1] - dir[1] * 44], mitte = [handH[0] + dir[0] * 12, handH[1] + dir[1] * 12];
-      const kn = v.knick, oben0 = [mitte[0] + kn * Math.cos(la), mitte[1] + kn * Math.sin(la)], oben = [oben0[0] + dir[0] * 40, oben0[1] + dir[1] * 40];
+      const kn = v.knick, oben0 = [mitte[0] + kn * Math.cos(la), mitte[1] + kn * Math.sin(la)], oben = [oben0[0] + dir[0] * 34, oben0[1] + dir[1] * 34];
       latte.push(C(unten[0], unten[1], mitte[0], mitte[1], 1.7, 1.7, null, { pf: 'flat' }), C(oben0[0], oben0[1], oben[0], oben[1], 1.7, 1.7, null, { pf: 'flat' }));
       lattePkt.push(unten, mitte, oben0, oben);
     }

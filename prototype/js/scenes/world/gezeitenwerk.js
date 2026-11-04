@@ -203,13 +203,13 @@ function schleusen(K) {
 function eingriff(K) {
   const fr = K.fr, sd = K.o.seed, P = B.persp(250, 150); K.split = [168, 178];
   B.feld(K.e[0], -M, -M, W + M, H + M, HIMMEL, (x, y) => 0.14 + 0.4 * Math.pow((x + M) / (W + 2 * M), 2) * (1 - y / 190) + (B.fbm(x * 0.02, y * 0.03, sd + 2, 3) - 0.5) * 0.2);
-  zulauf(K, 300, -M, 120, 10);
-  zahnrad(K, 1, 330, 250, 120, { n: 30, th: 10, sp: 7, kranz: 14, nabe: 20, tiefe: 0.75, speiche: 5, voll: false });
-  // die beiden großen Räder, Zähne greifen bei x ~ 250 ineinander
-  // zwei Räder greifen oben bei (196, 34) ineinander; das rechte steht weiter hinten
-  zahnrad(K, 2, 400, 0, 190, { n: 38, th: 18, sp: 7, kranz: 24, nabe: 32, tiefe: 0.2, rot: 0.05, speiche: 8, dicke: [7, -5], voll: true });
-  zahnrad(K, 3, 40, 60, 140, { n: 28, th: 18, sp: 7, kranz: 22, nabe: 26, tiefe: 0.04, rot: 0.02, speiche: 7, dicke: [7, -5] });
-  for (let i = 0; i < 4; i++) { const a = -0.55 + i * 0.32, rr = 128; abdruck(K, 3, 40 + Math.cos(a) * rr, 60 + Math.sin(a) * rr, 1.6, a + Math.PI / 2, i === 1 || i === 3); }
+  // der Zulauf stürzt genau durch den Eingriff herab
+  zulauf(K, 214, 30, 168, 9);
+  // zwei Räder greifen oben bei (204, 26) ineinander; das rechte steht weiter hinten
+  zahnrad(K, 2, 370, 20, 150, { n: 32, th: 16, sp: 7, kranz: 20, nabe: 26, tiefe: 0.22, rot: 0.05, speiche: 7, dicke: [6, -4] });
+  zahnrad(K, 3, 60, 10, 130, { n: 26, th: 16, sp: 7, kranz: 18, nabe: 24, tiefe: 0.03, rot: 0.02, speiche: 6, dicke: [6, -4] });
+  for (let i = 0; i < 3; i++) { const a = 0.1 + i * 0.38, rr = 121; abdruck(K, 3, 60 + Math.cos(a) * rr, 10 + Math.sin(a) * rr, 1.5, a + Math.PI / 2, i !== 1); }
+  for (let i = 0; i < 2; i++) { const a = Math.PI - 0.1 + i * 0.45, rr = 140; abdruck(K, 2, 370 + Math.cos(a) * rr, 20 + Math.sin(a) * rr, 1.4, a + Math.PI / 2, i === 0); }
   // Steg: schmal, Gitter, Geländer; darunter Kanal
   const yS = P.q(0, 0, 10)[1];
   B.feld(K.e[2], -M, yS - 4, W + M, yS + 6, WASSER, (x, y) => 0.4 + (B.fbm(x * 0.05, y * 0.3, sd, 2) - 0.5) * 0.4);

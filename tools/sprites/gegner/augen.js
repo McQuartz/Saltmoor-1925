@@ -57,7 +57,14 @@ module.exports = {
       teile.slice(1).forEach(t => K.licht(P, t.p, { c: 'r1', c2: 'k3' }));
       if (P0.aus) { P.line(lx - 5, ly - 1, lx + 5, ly - 1, 'k0', true); return; }
       // Glas: innen dunkler Schein in Magenta, gedithert; das Auge sitzt dort, wo die Flamme wäre
-      P.glow(lx + 0.5, ly, 10 * gross, 0.85, 'magenta1', 'k1');
+      // Schein im Glas: gedithert von Magenta zur Mitte bis Dunkel am Rahmen, dazu ein schräger Glanzstreif
+      const R = 13 * S, ox = Math.round(sw), oy = Math.round(ly);
+      for (let y = r(ly - 16 * S); y <= ly + 10 * S; y++) for (let x = r(lx - 11 * S); x <= lx + 11 * S; x++) {
+        if (!K.drin([glas], x, y)) continue; const c = P.get(x, y); if (c < 1 || c > 4) continue;
+        const q = Math.hypot(x + 0.5 - lx, (y + 0.5 - ly) * 1.2) / R, b = A.bay(x - ox, y - oy);
+        if (q < 0.42 && b < 0.6) P.set(x, y, 'magenta1'); else if (q < 0.75 && b < 0.85 - q) P.set(x, y, 'k3'); else if (q < 1.1 && b < 1 - q * 0.6) P.set(x, y, 'k2');
+        if (Math.abs((x - lx) + (y - ly) * 0.5 - 4 * S) < 1 && q > 0.45) P.set(x, y, 'k3');
+      }
       // Seepocken am Dach und Fuß
       for (const [ox, oy] of [[-8, -15], [6, -16], [-10, 12], [9, 13], [2, 14]]) { const x = r(lx + ox * S * 0.9), y = r(ly + oy * S * 0.9); if (P.get(x, y) && P.get(x, y) < 5) { P.set(x, y, 'k3'); P.auf(x + 1, y - 1, 'r1'); } }
       const ey = ly - 1, h = Math.max(1, Math.round(4 * gross * weit * (p.idle && f === 3 ? 0.4 : 1)));

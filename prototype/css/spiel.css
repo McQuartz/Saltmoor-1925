@@ -243,3 +243,4 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 @keyframes glanz{0%,100%{box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.15)}50%{box-shadow:0 0 calc(var(--u)*9) rgba(232,197,71,.45)}}
 
 .feind .nm .knf{color:#e8c070;margin-left:.3em;font-size:.8em}
+.abs .laedt{opacity:.75}.abs .laedt small{font-size:.6em;opacity:.8}

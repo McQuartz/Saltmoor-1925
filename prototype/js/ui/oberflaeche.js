@@ -41,7 +41,10 @@ const BES_TEXT={ruft:b=>`Ruft alle ${b.alle||3} Züge Verstärkung: ${FOES[b.geg
 function feindTip(i){const e=S.enemies[i];if(!e||e.hp<=0)return'';const ks=[e.kniff,...(e.kniffe||[])].filter(k=>k&&KNIFF_TEXT[k.art]);
  return `<b>${esc(e.n)}</b>${e.weak?`<br>Schwachstelle: ${gi(e.weak,KZ())} ${ST[e.weak].n} (×1,5)`:''}${ks.map(k=>`<br>◆ ${esc(KNIFF_TEXT[k.art](k))}${k.why?`<br><i class="hint">${esc(k.why)}</i>`:''}`).join('')}${e.besonders&&BES_TEXT[e.besonders.art]?`<br>◆ ${esc(BES_TEXT[e.besonders.art](e.besonders))}`:''}${e.vuln>0?`<br>Verwundbar ${e.vuln} (+50 %)`:''}`;}
 function absicht(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==='verborgen'){const k=it.t==='atk'?'atk':it.t==='blk'?'blk':'buff';return{k,html:`${gi(k,GZ())}?`};}if(it.t==='atk'){const v=it.v+e.str;const h=it.h?'×'+it.h:'';if(e.weak2){const n=Math.floor(v/2);return{k:'atk',html:`${gi('atk',GZ())}<s>${v}</s>${n}${h}`};}return{k:'atk',html:`${gi('atk',GZ())}${v}${h}`};}
- if(it.t==='blk')return{k:'blk',html:`${gi('blk',GZ())}${it.v}`};return{k:'buff',html:`${gi('buff',GZ())}+${it.v}`};}
+ if(it.t==='blk')return{k:'blk',html:`${gi('blk',GZ())}${it.v}`};
+ // Ansage: lädt, dann großer Schlag; zeigt die Wucht und wie viele Züge noch
+ if(it.t==='laedt'){let n=1,j=e.pi+1;while(n<9&&e.pat[j%e.pat.length].t==='laedt'){n++;j++;}const s=e.pat[j%e.pat.length];const v=(s.v||0)+e.str;return{k:'atk',html:`<span class="laedt">${gi('atk',GZ())}${v} <small>in ${n}</small></span>`};}
+ return{k:'buff',html:`${gi('buff',GZ())}+${it.v}`};}
 function gegnerHtml(f){return S.enemies.map((e,i)=>{if(e.hp<=0)return'';const b=enemyBox(e);const pv=vorschau&&vorschau.foes[i];const tg=f&&i===S.target;
   const st=[e.burn&&['burn',e.burn],e.poison&&['poison',e.poison],e.weak2&&['weak',1],e.str&&['buff',e.str]].filter(Boolean);
   return `<div class="feind ${tg?'ziel':''} ${e.rang}" data-ei="${i}" style="left:${(b.x/SW*100).toFixed(2)}%;top:${(b.kopf/SH*100).toFixed(2)}%;--fh:${(b.y-b.kopf)/SH*100}">
