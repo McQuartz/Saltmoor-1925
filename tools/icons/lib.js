@@ -211,6 +211,8 @@ function mantel(o) {
 
 // ---------------------------------------------------------------------------
 const TON_FLACH = 0.235;
+// Arm und Ärmel einer Hand als Gruppen (Haut, darüber der Ärmel bis kurz vor das Handgelenk)
+function armGruppen(h, aermelMat = 'stoff') { return [{ p: h.arm, mat: 'haut', k: 0 }, { p: h.aermel, mat: aermelMat, k: 0 }]; }
 // Rendern: gruppen (hinten -> vorne), jede mit mat. Rückgabe Index-Puffer in die Bild-Palette.
 function rendern(W, H, gruppen, pal) {
   const gs = gruppen.filter(g => g && g.p && (g.p.flat ? g.p.flat(3) : g.p).length);
@@ -267,6 +269,24 @@ function pinsel(buf, W, H, pal) {
         P.set(xx, yy, v > 0.62 ? 'flammeKern' : v > 0.38 ? 'flammeHell' : v > 0.14 + bay(xx, yy) * 0.12 ? 'flamme' : 'glutMittel');
       }
     },
+    // Mündungsfeuer: kurzer, gezackter Stern, gedithert
+    blitz(x, y, r = 4, a = 0) {
+      for (let yy = Math.floor(y - r); yy <= y + r; yy++) for (let xx = Math.floor(x - r); xx <= x + r; xx++) {
+        const dx = xx + 0.5 - x, dy = yy + 0.5 - y, d = Math.hypot(dx, dy); if (d > r) continue;
+        const w = Math.atan2(dy, dx) - a; const strahl = Math.pow(Math.abs(Math.cos(w * 2)), 6) * (Math.cos(w) > 0 ? 1 : 0.5);
+        const v = (1 - d / r) * (0.45 + strahl * 0.9);
+        if (v > 0.75) P.set(xx, yy, 'flammeKern'); else if (v > 0.5) P.set(xx, yy, 'flammeHell'); else if (v > 0.3 + bay(xx, yy) * 0.2) P.set(xx, yy, 'flamme');
+      }
+    },
+    // Tropfen (2 px, oben dunkler)
+    tropfen(x, y, c1 = 'a2', c2 = 'a3') { P.set(x, y, c1); P.set(x, y + 1, c2); },
+    // Rauch/Dampf: lockerer geditherter Fleck in einer Farbe, nur auf leerem Grund
+    rauch(cx, cy, r, c = 'stoff2', dichte = 0.5) {
+      for (let y = Math.floor(cy - r); y <= cy + r; y++) for (let x = Math.floor(cx - r); x <= cx + r; x++) {
+        if (!inb(x, y) || buf[y * W + x]) continue; const q = Math.hypot(x + 0.5 - cx, y + 0.5 - cy) / r; if (q >= 1) continue;
+        if ((1 - q) * dichte * 2 > bay(x, y) + 0.15) buf[y * W + x] = I(c);
+      }
+    },
     // Funken/Glitzer: einzelne Pixel
     funke(x, y, c = 'flammeHell') { P.set(x, y, c); },
   };
@@ -298,7 +318,7 @@ function bauen(def, o = {}) {
   const W = def.w || 48, H = def.h || 48;
   const st = o.st ?? def.st ?? [], rar = o.rar ?? def.rar ?? 'gewoehnlich';
   const pal = palette(st, rar);
-  const A = { pfad, E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
+  const A = { armGruppen, pfad, E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
   const res = def.form(A, { st, rar });
   const { buf } = rendern(W, H, res.gruppen, pal);
   const P = pinsel(buf, W, H, pal);

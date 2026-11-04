@@ -36,4 +36,7 @@ const {ladeKern}=require('./kern');
  const t2=kn({art:'kopie'},`S.hand=[{...HANDGRIFFE._t_schlag,st:[]}];playCard(0,0);S.block=0;const h=S.hp;kniffGegnerzug(S.enemies[0]);return JSON.stringify({d:h-S.hp})`);ok(t2.d===5,`kopie: schreibt deine letzte Karte ab und trifft dich mit 5 (ist ${t2.d})`);
  const t3=kn({art:'takt',v:6},`e.turns=0;kniffGegnerzug(e);const b=e.block;e.turns=1;e.block=0;kniffGegnerzug(e);return JSON.stringify({b,v:e.vuln})`);ok(t3.b===6&&t3.v>=1,`takt: Schlag gibt Block (${t3.b}), dazwischen verwundbar (${t3.v})`);
  const t4=kn({art:'voraus'},`S.draw=[{...HANDGRIFFE._t_schlag,st:['F']}];S.block=0;const h=S.hp;kniffGegnerzug(S.enemies[0]);return JSON.stringify({d:h-S.hp,w:S.enemies[0].weak})`);ok(t4.d===5&&!!t4.w,`voraus: spielt deine nächste Karte vor dir (${t4.d} Schaden), Schwachstelle ${t4.w}`);
+ // 8. „Der, der vor dir kam“: Muster aus den Karten einer Figur, Beute eines ihrer Items
+ const vg=JSON.parse(run(`(()=>{newRun('fischer',9,{dev:true});S.depth=30;FOES._t_vor={n:'Der, der vor dir kam',hp:60,weak:'L',pat:[{t:'atk',v:5}],vorgaenger:true,rang:'elite'};const e=mkEnemy('_t_vor');delete FOES._t_vor;return JSON.stringify({n:e.n,pat:e.pat,beute:S.sicheresBeute})})()`));
+ ok(/\(.+\)/.test(vg.n)&&vg.pat.length>=2&&vg.pat.some(p=>p.t==='atk')&&!!vg.beute,`Vorgänger: ${vg.n}, Muster ${vg.pat.map(p=>p.t+p.v).join('/')}, Beute ${vg.beute}`);
  console.log(fehler?`${fehler} FEHLER`:'Alles gut.');process.exit(fehler?1:0);})();

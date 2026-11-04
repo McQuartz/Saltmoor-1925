@@ -116,3 +116,8 @@ Neue Gegner, Ereignisse und Items für ein Biom, das es schon gibt (Hafen, Moor,
 - `gegner_dazu` hängt an die Gegnerliste des Bioms an, `gegner_weg` nimmt alte heraus (nur, wenn ein neuer sie ersetzt).
 - Ereignisse bekommen automatisch `biom` = das ergänzte Biom.
 - Kein `biom`-Block, keine Musik, keine Skripte; Hintergrund und Palette des alten Bioms bleiben. Sprites wie gewohnt mit der Zonenpalette des alten Bioms (`hafen`, `moor`, `kapelle`, `salz`, `stadt`, `eis`).
+
+## Akt V: Elite im Vorraum, „Der, der vor dir kam“
+
+- Ein Biom in Akt V kann im Block `biom` den Schlüssel `"vorraum_elite": "<gegner-id>"` setzen. Dann ist der Vorraum ein Pflichtkampf (Art `kampf_schwer`, Belohnung wie schwerer Kampf) gegen genau diesen Gegner; der Weg-Hinweis kommt aus `weg_hinweise.vorraum[0]`.
+- Ein Gegner mit `"vorgaenger": true` wird beim Kampfbeginn aus deinem **letzten verlorenen Run** gebaut (gespeichert in `Meta` beim Tod: Figur und angelegte Items; ohne gespeicherten Run eine andere Figur per Seed): Name `<n> (<Figur>)`, Muster = seine drei stärksten Angriffskarten und seine beste Blockkarte, Werte × `atk_faktor` (Standard 1,6), Schwachstelle = ein Stoff, den keines seiner Items hat, Beute sicher eines seiner Items. `hp`, `pat` (Rückfall, falls er kaum Angriffe hat), `sprite`, `kniff` kommen aus dem Eintrag.

@@ -1,7 +1,18 @@
 {
  "_doc": "Handgriff-Bilder 48×32 (tools/icons/bauen.js). Datei: assets/handgriffe/<id>.png. Liste aller vorhandenen IDs.",
  "handgriffe": [
+  "abwarten",
+  "atemholen",
+  "aufhebeln",
   "ausweichen",
-  "stossen"
+  "durchatmen",
+  "finte",
+  "kratzen",
+  "nachsetzen",
+  "rundumschlag",
+  "sich_sammeln",
+  "stossen",
+  "umsehen",
+  "zittern"
  ]
 }

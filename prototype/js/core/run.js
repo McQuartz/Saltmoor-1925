@@ -48,8 +48,10 @@ function genWeg(){const key=ebeneKey(),E=RUN.ebenen[key];const r=R(`weg:${S.akt}
    if(E.verschiedene&&new Set(arten).size<E.verschiedene)continue;
    if(E.einer_von&&!arten.some(a=>E.einer_von.includes(a)))continue;break;}}
  const b=biom();const used={};
+ // Ufer unten: im Vorraum wartet „Der, der vor dir kam“ (Elite, Pflicht)
+ if(key==='vorraum'&&b.vorraum_elite&&FOES[b.vorraum_elite])arten=['kampf_schwer'];
  S.weg=arten.map((art,i)=>{const hs=(b.weg_hinweise&&b.weg_hinweise[art==='kampf_schwer'?'kampf':art])||[RUN.knoten[art].n];used[art]=(used[art]||0);const hint=hs[(r.int(0,hs.length-1)+used[art]++)%hs.length];
-  const o={art,hint,i};if(art==='kampf'||art==='kampf_schwer')o.foes=rollFoes(art,r);if(art==='waechter')o.foes=[b.waechter];if(art==='finale')o.foes=[b.waechter];return o;});
+  const o={art,hint,i};if(art==='kampf'||art==='kampf_schwer')o.foes=key==='vorraum'&&b.vorraum_elite?[b.vorraum_elite]:rollFoes(art,r);if(key==='vorraum'&&b.vorraum_elite&&b.weg_hinweise&&b.weg_hinweise.vorraum)o.hint=b.weg_hinweise.vorraum[0];if(art==='waechter')o.foes=[b.waechter];if(art==='finale')o.foes=[b.waechter];return o;});
  S.phase='weg';
  Bus.emit('weg',{optionen:S.weg.map(o=>o.art),why:`Ebene ${S.ebene+1} von ${aktDef().ebenen.length} (${key}): ${S.weg.map(o=>RUN.knoten[o.art].n).join(', ')} nach Regel ${JSON.stringify(E.mindestens||E.einer_von||E.verschiedene||E.fest||E.fest_wahl||'frei')}`});
  save();Bus.emit('changed');}

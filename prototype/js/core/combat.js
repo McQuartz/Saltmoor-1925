@@ -6,13 +6,24 @@
 function buildDeck(){return rs('kampf').shuffle(deckListe());}
 
 // Gegner aus foes.json erzeugen, skaliert nach Tiefe
-function mkEnemy(id,i){const f=FOES[id];if(!f)throw new Error('Unbekannter Gegner '+id);const d=S.depth;
+function mkEnemy(id,i){const f0=FOES[id];if(!f0)throw new Error('Unbekannter Gegner '+id);const f=f0.vorgaenger?vorgaengerDef(f0):f0;const d=S.depth;
  const st=S.stufe||0,ST2=RUN.stufen||{hp_je_stufe:0,atk_alle_n_stufen:99};
  // Wächter und Boss sind je Akt eigens ausgelegt und skalieren nicht mit der Tiefe, nur mit der Schwierigkeitsstufe
  const tief=(f.rang||'normal')==='normal';const sc=(tief?1+BAL.enemy_scaling.hp_per_depth*(d-1):1)*(1+ST2.hp_je_stufe*st),as=(tief?Math.floor((d-1)/BAL.enemy_scaling.atk_every_n_depths):0)+(st>=2?Math.floor(st/ST2.atk_alle_n_stufen):0);const hp=Math.round(f.hp*sc*(tief?(BAL.enemy_scaling.hp_faktor||1):(BAL.enemy_scaling.waechter_faktor||1)));
  const r=rs('kampf');
  return{uid:++uidc,id,n:f.n,spr:f.spr||f.sprite||id,variant:f.variant,sprite:f.rang==='boss'?(f.sprite||null):f.varianten?r.pick(f.varianten):(f.sprite||null),rang:f.rang||'normal',weak:f.weak,hp,max:hp,block:0,str:0,burn:0,poison:0,weak2:0,
   pi:f.rang==='boss'||f.rang==='waechter'?0:Math.floor(r.next()*f.pat.length),as,pat:f.pat.map(p=>({...p,v:p.t==='atk'?p.v+as:p.v})),besonders:f.besonders||null,kniff:f.kniff||null,vuln:0,phase:0,turns:0,...kniffMuster(f,as)};}
+// „Der, der vor dir kam“ (Ufer unten): Figur und Items deines letzten verlorenen Runs (Meta), sonst eine Figur per Seed.
+// Sein Muster sind seine besten Karten, verstärkt (f.atk_faktor); die Beute ist eines seiner Items.
+function vorgaengerDef(f){const r=rs('kampf');let v=typeof Meta!=='undefined'&&!S.dev?Meta.get().vorgaenger:null;
+ if(!v||!JOBS.find(j=>j.id===v.job)){const j=r.pick(JOBS.filter(j=>j.id!==S.job));v={job:j.id,items:[...(j.w||[]),...(j.k||[]),...(j.t||[])]};}
+ const job=JOBS.find(j=>j.id===v.job);const ids=(v.items||[]).filter(id=>ITEMS[id]);const cards=ids.flatMap(id=>ITEMS[id].cards||[]);
+ const F=f.atk_faktor||1.6;const atk=cards.filter(c=>c.atk).sort((a,b)=>b.atk*(b.h||1)-a.atk*(a.h||1)).slice(0,3).map(c=>({t:'atk',v:Math.round(c.atk*F),...(c.h>1?{h:c.h}:{}),karte:c.n}));
+ const blk=cards.filter(c=>c.blk&&!c.atk).sort((a,b)=>b.blk-a.blk).slice(0,1).map(c=>({t:'blk',v:Math.round(c.blk*F),karte:c.n}));
+ const pat=[...atk,...blk];if(atk.length<2)pat.push(...f.pat.filter(p=>p.t!=='blk'||!blk.length));
+ const st={};ids.forEach(id=>(ITEMS[id].st||[]).forEach(k=>st[k]=(st[k]||0)+1));const alle=Object.keys(ST);const weak=alle.filter(k=>!st[k]).sort()[0]||f.weak;
+ if(ids.length)S.sicheresBeute=r.pick(ids);
+ return{...f,n:`${f.n} (${job?job.n:'?'})`,pat,weak,vorgaengerJob:v.job};}
 // Kniff „ansage“: lädt n Züge (Absicht „lädt“), dann ein großer Schlag
 function kniffMuster(f,as){const k=f.kniff;if(!k||k.art!=='ansage')return{};const p=[];for(let i=0;i<(k.zuege||2);i++)p.push({t:'laedt',v:0});p.push({t:'atk',v:(k.v||20)+as});return{pat:p,pi:0};}
 // Aufstellung: drei Tiefenreihen (0 hinten, 1 mitte, 2 vorne), per Seed mit etwas Zufall, Wächter/Boss vorne mittig

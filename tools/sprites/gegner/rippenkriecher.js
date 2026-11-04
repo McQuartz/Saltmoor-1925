@@ -16,7 +16,8 @@ module.exports = {
     const f = p.f;
     let lean = 0, atem = 0, arm = 0, kopfY = 0, fall = 0, glut = 1, zu = 0;
     // arm: 0 kriechend, 1 vordere Hand hoch ausgeholt, 2 Hand schlägt vorn auf, Rippen schnappen zu (zu)
-    if (p.idle) { atem = [0, 0, 1, 1][f]; glut = [1, .9, 1.15, 1][f]; kopfY = [0, 1, 1, 0][f]; }
+    let dy = 0;
+    if (p.idle) { dy = [0, 0, 1, 1][f]; glut = [1, .95, 1.1, 1][f]; kopfY = [0, 0, 1, 0][f]; }
     if (p.angriff) { lean = [3, 4, -6, -3][f]; arm = [0.5, 1, 2, 1.5][f]; zu = [0, 0.3, 1, 0.6][f]; glut = [1, 1.2, 1.5, 1.2][f]; }
     if (p.treffer) { lean = [3, 2][f]; glut = .6; zu = -0.4; }
     if (p.tod) { fall = r(p.q * 14); glut = Math.max(0, 1 - p.q * 2); lean = r(p.q * 2); zu = p.q * 0.6; }
@@ -29,7 +30,8 @@ module.exports = {
     const beinV = glied([[bx - 2, by + 4], [bx + 2, 111], [bx + 13, 113]], 3.6, 2.2, 'dunkel');
     // Kopf hängt tief vor der Schulter, fast am Boden
     const hx = sx - 11, hy = sy + 6 + kopfY + (arm >= 2 ? 3 : 0);
-    const kopf = E(hx, hy, 6, 5.5, 'haut');
+    const kopf = E(hx, hy, 7, 6, 'haut');
+    const haar = [C(hx - 2, hy + 3, hx - 4, hy + 13, 1.6, 0.6, 'dunkel'), C(hx + 2, hy + 4, hx + 2, hy + 12, 1.4, 0.6, 'dunkel'), C(hx - 6, hy + 1, hx - 8, hy + 10, 1.2, 0.5, 'dunkel')];
     const hals = C(sx - 2, sy - 1, hx + 2, hy - 1, 3.6, 3, null);
     // Arme: lang, auf den Handballen. Vorderer Arm holt beim Angriff aus und schlägt auf.
     const handV = arm === 0 ? [sx - 20, 112] : arm < 1.5 ? [sx - 18 - arm * 4, 70 - arm * 6] : [sx - 26, 112];
@@ -53,7 +55,7 @@ module.exports = {
       { p: armH, k: 1.2 },
       { p: [ruecken, hals], k: 2, anker: [lean, T] },
       { p: beinV, k: 1.2 },
-      { p: [kopf], k: 0, anker: [lean, T] },
+      { p: [kopf, ...haar], k: 1, anker: [lean, T] },
       { p: wirbel, k: 1.4, anker: [lean, T] },
       ...rippen.slice().reverse().filter((_, k) => k % 2 === 1).map(rp => ({ p: rp, k: 0.6 })),
       { p: armV, k: 1.2 },
@@ -72,16 +74,21 @@ module.exports = {
         // Rippenstümpfe der eigenen Brust, schwarz vor dem Glimmen
         for (let k = -4; k <= 5; k += 3) P.line(mx + k, my - 2, mx + k - 1, my + 4, 'k0', true);
         augen.push([mx, my]);
-        // Innenseiten der nahen Rippen fangen das Glimmen (warmes Gegenlicht von unten)
-        for (const rp of rippen) for (const c of rp) { const yy = r(c.y2), xx = r(c.x2); if (yy > my - 30 && yy < my + 22 && Math.hypot(xx - mx, yy - my) < 30 * glut) P.auf(xx + 1, yy, Math.hypot(xx - mx, yy - my) < 18 ? 'glut' : 'glutDim'); }
+        // Rippenwurzeln fangen das Glimmen auf der Unterseite (warmes Licht von unten, gegen das kalte Randlicht)
+        rippen.forEach((rp, i) => { const c = rp[0], c2 = rp[1]; for (let k = 0; k <= 6; k++) { const t = k / 6, x = r(c.x1 + (c2.x2 - c.x1) * t) - 1, y = r(c.y1 + (c2.y2 - c.y1) * t) + 1; if (P.get(x, y) && P.get(x, y) <= 4) P.set(x, y, k < 3 ? 'glutDim' : 'k3'); } });
+        // Licht fällt auf Unterarm und Kinn
+        P.glow(mx - 10, my + 6, 9 * glut, 0.5, 'glutDim', 'k3');
       }
-      // Fase und Kerben auf den Wirbeln
-      grat.forEach(([x, y]) => { P.auf(r(x), r(y) - 1, 'bein'); P.auf(r(x) - 1, r(y) + 1, 'k0'); });
+      // Rücken: Wirbel als Knochenknoten zwischen den Rippen, Schulterblatt als Fase
+      for (let k = 0; k <= 8; k++) { const t = k / 8, x = r(sx + 2 + (bx - sx) * t), y = r(sy - 8 + (by - sy) * t + Math.sin(t * Math.PI) * -1.5); P.auf(x, y, k % 2 ? 'r1' : 'bein'); P.auf(x, y + 1, 'k0'); }
+      for (let k = 0; k < 6; k++) P.auf(r(sx + 4 + k), r(sy - 4 + Math.abs(k - 3) * 0.6), 'k3');
+      // Hemdfetzen hängen unter dem Bauch
+      for (let k = 0; k < 5; k++) { const x = r(sx + 14 + k * 5), y0 = r(sy + 7 + (k % 2)); for (let j = 0; j < 3 + (k % 3); j++) P.set(x + (j > 2 ? 1 : 0), y0 + j, j === 0 ? 'k2' : 'k1'); }
       // Gesicht: hängt nach unten, zwei Augen, eins weiter offen
       if (!p.tod || f < 1) { const ex = r(hx - 3), ey = r(hy + 1); P.set(ex, ey, 'kern'); P.set(ex + 3, ey, 'glut'); P.glow(ex + 1.5, ey + 0.5, 4, 0.6); augen.push([ex, ey], [ex + 3, ey]); P.auf(ex + 1, ey + 3, 'k0'); P.auf(ex + 2, ey + 3, 'k0'); }
-      // Tranlampe am Gürtel (Variante b): kleines warmes Licht unter dem Becken
-      if (v.lampe && (!p.tod || f < 2)) { const lx = r(bx - 6), ly = r(by + 10); P.set(lx, ly - 2, 'k1'); P.set(lx, ly, 'tran'); P.set(lx, ly + 1, 'kern'); P.set(lx - 1, ly + 1, 'tran'); P.set(lx + 1, ly + 1, 'tran'); P.glow(lx, ly + 1, 6, 0.6); }
+      // Tranlampe (Variante b): hängt ihm am Bügel aus dem Mund, pendelt knapp über dem Boden
+      if (v.lampe && (!p.tod || f < 2)) { const lx = r(hx - 1 + (p.idle ? [0, 1, 0, -1][f] : 0)), ly = r(hy + 11); P.line(r(hx), r(hy + 4), lx, ly - 3, 'k2'); P.set(lx - 1, ly - 2, 'k3'); P.set(lx, ly - 2, 'k3'); P.set(lx + 1, ly - 2, 'k3'); P.set(lx - 1, ly - 1, 'k1'); P.set(lx + 1, ly - 1, 'k1'); P.set(lx - 1, ly, 'k1'); P.set(lx + 1, ly + 2, 'k1'); P.set(lx, ly, 'tran'); P.set(lx, ly + 1, 'kern'); P.set(lx - 1, ly + 1, 'tran'); P.set(lx + 1, ly + 1, 'tran'); P.glow(lx, ly + 1, 6, 0.6); }
     };
-    return { gruppen, details, augen };
+    return { gruppen, details, augen, dy };
   },
 };
