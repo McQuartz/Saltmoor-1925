@@ -198,3 +198,24 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .feind .abs{background:radial-gradient(ellipse,rgba(0,0,0,.45),transparent 70%)}
 .ankunft{background:rgba(0,0,0,.78);border-top:1px solid var(--messing);border-bottom:1px solid var(--messing);padding:calc(var(--u)*10) calc(var(--u)*24);max-width:calc(var(--u)*360)}
 .ankunft .neu{font-size:calc(var(--u)*5);line-height:1.35;margin:calc(var(--u)*4) 0 calc(var(--u)*6)}
+/* Auftrag 2, M1: Spieler-Lebensbalken unten mittig über der Hand */
+#spieler{left:50%;bottom:calc(var(--u)*17);transform:translateX(-50%);width:calc(var(--u)*200);display:flex;align-items:center;gap:calc(var(--u)*3);flex-wrap:wrap;justify-content:center;pointer-events:none;z-index:3}
+#spieler:empty{display:none}
+#spieler .schild{display:flex;align-items:center;gap:calc(var(--u)*1);font-family:var(--fp);font-size:calc(var(--u)*5);color:#6a7a90;opacity:.55}
+#spieler .schild.an{color:#cfe0ff;opacity:1;text-shadow:0 0 calc(var(--u)*3) #000}
+#spieler .sbar{position:relative;flex:1;height:calc(var(--u)*8);background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20,0 0 calc(var(--u)*6) rgba(0,0,0,.8);display:flex}
+#spieler .sbar i{display:block;height:100%}#spieler .sbar .hp{background:linear-gradient(#d0463e,#9a2a24)}
+#spieler .sbar .schatten{background:repeating-linear-gradient(-45deg,#5a0e0a 0 3px,#300806 3px 6px);animation:puls .9s infinite alternate}
+#spieler .sbar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fk);font-size:calc(var(--u)*5);letter-spacing:.08em;color:#fff4e0;text-shadow:1px 1px 0 #000,0 0 3px #000}
+#spieler .swarn{width:100%;text-align:center;font-size:calc(var(--u)*5);color:#ff8a7a;text-shadow:1px 1px 0 #000,0 0 4px #000}
+.zwischentitel .spaet{opacity:0;animation:spaet .5s 1.5s forwards}@keyframes spaet{to{opacity:.8}}
+/* Meldungszeile: höchstens zwei nebeneinander, nie gestapelt */
+#toast{flex-direction:row!important;justify-content:center;width:70%!important;pointer-events:auto;cursor:pointer}
+.tst .n{color:var(--gold);font-family:var(--fp);font-size:.8em;margin-left:.4em}
+.tst.raus{animation:traus .35s forwards}@keyframes traus{to{opacity:0;transform:translateY(-6px)}}
+.endschirm .innen{text-align:left}.endschirm h2{text-align:center}.endschirm .lead{text-align:center}
+.wegbilder{display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*2);margin:calc(var(--u)*4) 0}.wegbilder div{display:flex;flex-direction:column;align-items:center;font-size:calc(var(--u)*4.4);color:#bfb49a}
+.wegbild{width:calc(var(--u)*48);height:calc(var(--u)*27);image-rendering:pixelated;border:1px solid #3a2c18}.wegbilder .pfeil{color:#6a604c}
+.endschirm .stats{columns:2;column-gap:calc(var(--u)*12);font-size:calc(var(--u)*5.4);line-height:1.5}
+.deckende{display:flex;flex-wrap:wrap;gap:calc(var(--u)*3);font-size:calc(var(--u)*4.6)}.deckende .dk{width:calc(var(--u)*90);line-height:1.2}.deckende img{width:calc(var(--u)*10);height:calc(var(--u)*10);image-rendering:pixelated;vertical-align:middle;margin-right:4px}
+.endschirm .knoepfe{display:flex;gap:calc(var(--u)*4);justify-content:center;flex-wrap:wrap;margin-top:calc(var(--u)*6)}

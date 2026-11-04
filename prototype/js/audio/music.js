@@ -17,7 +17,7 @@
 // (alle tonalen Töne aus Akkord bzw. Tonleiter), Tempo nur 80 bis 88 BPM und höchstens 1 BPM pro Takt,
 // kein harter Komplett-Schnitt vor der Hochreaktion.
 
-let VOL=1;
+let VOL=1,AUFBAU=6; // AUFBAU: Takte für den Aufbau bei Wächter und Finale (Daten: balance.json → musik.boss_aufbau_takte)
 const Music=(()=>{
 // ---------- Daten: Biome ----------
 // Akkorde als Halbtöne über dem Grundton; deg = Stufe in der Tonleiter (für Motive, damit alles in der Tonart bleibt).
@@ -468,12 +468,14 @@ function barStart(t,bar){
  if(S.fin){S.chord=S.fin==='umkehren'?1:0;S.slot=null;S.duel=false;return;} // Schlussakkord bleibt stehen (auch für tonale SFX)
  // Layer schalten (mit Hysterese), nur auf Taktgrenzen
  if(S.solo){soloGates(t);}else{
- for(let i=1;i<4;i++){const on=S.gate[i]?S.wucht>=TH[i]-HYST:S.wucht>=TH[i];setGate(i,on,t,`Wucht ${z(S.wucht)} ${on?'≥':'<'} ${z(on?TH[i]:TH[i]-HYST)}`);}
+ // Aufbau bei Wächter und Finale: Layer kommen nacheinander über AUFBAU Takte (Bass/Puls, dann Stimme, zuletzt volle Wucht)
+ const cap=S.aufbau!=null?Math.min(4,1+Math.floor(Math.max(0,bar-S.aufbau)*4/AUFBAU)):4;if(cap>=4&&S.aufbau!=null){S.aufbau=null;note('aufbau','Aufbau fertig, alle Layer frei');}
+ for(let i=1;i<4;i++){const on=(S.gate[i]?S.wucht>=TH[i]-HYST:S.wucht>=TH[i])&&i<=cap;setGate(i,on,t,i>cap?`Aufbau: Layer ${i} erst in Takt ${S.aufbau+Math.ceil((i-1)*AUFBAU/4)}`:`Wucht ${z(S.wucht)} ${on?'≥':'<'} ${z(on?TH[i]:TH[i]-HYST)}`);}
  // Tutti bleibt etwas Besonderes: nur nach einer Hochreaktion oder im Boss bei voller Wucht
- setGate(4,S.spike>0||(S.scene==='boss'&&S.wucht>=TH[4]),t,S.spike>0?'Hochreaktion klingt nach':(S.scene==='boss'&&S.wucht>=TH[4]?`Boss, Wucht ${z(S.wucht)} ≥ 0,88`:'Spitze abgeklungen'));
+ setGate(4,cap>=4&&(S.spike>0||(S.scene==='boss'&&S.wucht>=TH[4])),t,S.spike>0?'Hochreaktion klingt nach':(S.scene==='boss'&&S.wucht>=TH[4]?`Boss, Wucht ${z(S.wucht)} ≥ 0,88`:'Spitze abgeklungen'));
  const dr=S.drive;S.drive=S.drive?S.wucht>=TH_DRIVE-HYST:S.wucht>=TH_DRIVE;
  if(dr!==S.drive)note(S.drive?'treibend':'ruhig',`Rhythmus: Wucht ${z(S.wucht)}`);
- lv('v',combat()&&S.foes.length?1:0,t,combat()?.2:.8);
+ lv('v',combat()&&S.foes.length&&cap>=2?1:0,t,combat()?.2:.8);
  lv(0,S.scene==='menu'?.7:1,t,1);}
  // Stimmen-Plätze: Typen in Auftrittsreihenfolge, höchstens 2, im Wechsel
  const types=[...new Set(S.foes.map(f=>f.type))].slice(0,2);
@@ -585,6 +587,7 @@ const nextBeat=()=>Math.ceil((step+1)/4)*4;
 return {
  BIOME,FOES,ROLES,STOFFE,
  // Neues Biom aus einem Daten-Paket (data/biome/<id>.json → musik): {n, root, key, names, darkNames, amb, rhy, detail, phryg}
+ aufbauTakte(n){AUFBAU=Math.max(1,n|0);},
  addBiome(k,o){if(!o||BIOME[k])return;const d=biom(o.n||k,o.root||50,o.key||'',o.names||['i','VI','iv','V'],o.darkNames||['i','♭II','iv','V♭9'],{amb:o.amb||{wind:.06},rhy:o.rhy||'holz',detail:o.detail||null,ort:o.ort||'',rhyN:o.rhyN||''});if(o.phryg){d.prog=[[0,3,7],[1,5,8],[5,8,12],[7,11,14]];d.bass=[0,1,5,7];d.deg=[0,1,3,4];d.phryg=true;}BIOME[k]=d;},
  // Lautstärke aus den Einstellungen (0..1, Standard 0,55 → etwas leiser als die Effekte)
  volume(v){VOL=Math.max(0,Math.min(1,v))/.55;if(ctx&&running)master.gain.setTargetAtTime(.75*VOL,ctx.currentTime,.15);},
@@ -594,7 +597,7 @@ return {
  get running(){return running;},
  // Szenen: menu, karte, kampf, waechter (zwischen Kampf und Boss), boss
  scene(s){if(!PUBLIC_SCENES.includes(s))return;clearFin();const was=S.scene;
-  if(!combat()&&(s==='kampf'||s==='waechter'||s==='boss')){S.momentum=0;S.anschlag=true;}S.scene=s;if(!combat())S.foes=[];
+  if(!combat()&&(s==='kampf'||s==='waechter'||s==='boss')){S.momentum=0;S.anschlag=true;}if((s==='waechter'||s==='boss')&&was!==s){S.aufbau=S.bar+1;note('aufbau',`${s}: Layer bauen sich über ${AUFBAU} Takte auf`);}else if(!(s==='waechter'||s==='boss'))S.aufbau=null;S.scene=s;if(!combat())S.foes=[];
   if(was!==s)note('szene',`${was} → ${s}`);},
  hp(v,max){S.hp=clamp(v,0,max||S.hpMax);if(max)S.hpMax=max;},
  foeSpawn(type){const k=foeId(type);if(k)S.foes.push({type:k});},

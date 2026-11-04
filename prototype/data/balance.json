@@ -87,5 +87,28 @@
   "koernung": 0.18,
   "kratzer": 0.25,
   "flackern": 0.12
+ },
+ "wucht": {
+  "_doc": "Gefühl der Treffer. eigen/gegner = Faktor auf Hitstop, Ruck, Rückstoß und Zahlengröße (eigene Treffer 25 % wuchtiger).",
+  "eigen": 1.25,
+  "gegner": 1.0,
+  "hitstop_ms": 55,
+  "hitstop_gross_ms": 120,
+  "gross_ab": 12,
+  "ruck": 3,
+  "rueckstoss": 4,
+  "zahl_px": 5,
+  "anlauf_gegner_ms": 330,
+  "mehrfach_abstand_ms": 120,
+  "letzter_treffer_extra": 1.3
+ },
+ "musik": {
+  "boss_aufbau_takte": 6
+ },
+ "meldungen": {
+  "max": 2,
+  "dauer_s": 4,
+  "wichtig_s": 6,
+  "verlauf": 20
  }
 }

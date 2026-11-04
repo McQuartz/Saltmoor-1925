@@ -100,14 +100,15 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  if(rare){const rp=rarePool();if(rp.length)pick[pick.length-1]=r.pick(rp);}
  // Gegner-Beute: kleine Chance auf das eigene Stück eines Gegners
  const beute=S.enemies.map(e=>FOES[e.id].beute).filter(id=>id&&ITEMS[id]);if(beute.length&&r.chance(.2)){pick[0]=r.pick(beute);S.beuteFrom=true;}
+ const saetze=[...(biom().beute_saetze||[]),...S.enemies.map(e=>FOES[e.id]&&FOES[e.id].beute_satz).filter(Boolean)];const fs=saetze.filter(x=>x!==S.beuteSatz);S.beuteSatz=fs.length?r.pick(fs):'Unter dem, was übrig ist, liegt etwas.';
  S.reward=pick;S.picked=false;S.phase='reward';S.hand=[];
  Bus.emit('reward',{gold:gd,items:pick,why:`Belohnung: ${gd} Gold, Auswahl aus Fundpool ${biom().kurz}${rare?', ein seltenes Item':''}`});Bus.emit('changed');}
 function takeReward(id){if(S.picked)return;if(id){if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}giveItem(id,'Fund nach dem Kampf');Bus.emit('pick');}S.picked=true;Bus.emit('changed');}
 function leaveReward(){if(!S.picked)S.picked=true;finishNode();}
-function runLost(){S.phase='strand';busy=false;const res={sieg:false,tiefe:S.depth,akt:S.akt,biom:biomId(),gegner:S.enemies.filter(e=>e.hp>0).map(e=>e.id),job:S.job};
+function runLost(){S.phase='strand';busy=false;S.stats.endeT=Date.now();const res={sieg:false,tiefe:S.depth,akt:S.akt,biom:biomId(),gegner:S.enemies.filter(e=>e.hp>0).map(e=>e.id),job:S.job};
  S.ergebnis=res;Bus.emit('game_over',{...res,why:`Leben 0 auf Tiefe ${S.depth} in ${biom().kurz}`});
  if(typeof Meta!=='undefined'&&!S.dev)S.neu=Meta.runEnde(res,S);clearSave();Bus.emit('changed');}
-function chooseEnde(art){if(S.phase!=='ankunft')return;const res={sieg:true,ende:art,tiefe:S.depth,akt:4,biom:'pforte',job:S.job};S.ergebnis=res;S.phase='ende';
+function chooseEnde(art){if(S.phase!=='ankunft')return;S.stats.endeT=Date.now();const res={sieg:true,ende:art,tiefe:S.depth,akt:4,biom:'pforte',job:S.job};S.ergebnis=res;S.phase='ende';
  Bus.emit('ende',{art,why:art==='bleiben'?'Du bleibst.':'Du kehrst um.'});if(typeof Meta!=='undefined'&&!S.dev)S.neu=Meta.runEnde(res,S);clearSave();Bus.emit('changed');}
 
 // --- Ereignisse ---
@@ -132,10 +133,10 @@ function transformRandom(why){const list=allActive().filter(it=>!def(it).bases);
 
 // --- Krämer ---
 function buy(i){const H=BAL.shop.heal;const sh=S.shop;if(!sh)return;
- if(i==='heal'){if(sh.heal||S.gold<H.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.gold-=H.price;sh.heal=true;healP(H.v,'Krämer: Laudanum');Bus.emit('changed');return;}
+ if(i==='heal'){if(sh.heal||S.gold<H.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.gold-=H.price;S.stats.goldAus=(S.stats.goldAus||0)+H.price;sh.heal=true;healP(H.v,'Krämer: Laudanum');Bus.emit('changed');return;}
  if(i==='strike'){if(sh.strike||S.gold<BAL.shop.streichen_preis){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.phase='kraemer_streichen';Bus.emit('changed');return;}
  const o=sh.items[+i];if(!o||o.sold)return;if(S.gold<o.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:`Du brauchst ${o.price}.`});return;}if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}
- S.gold-=o.price;o.sold=true;giveItem(o.id,`Gekauft für ${o.price} Gold`);Bus.emit('pick');Bus.emit('toast',{a:'GEKAUFT',b:ITEMS[o.id].n});Bus.emit('changed');}
+ S.gold-=o.price;S.stats.goldAus=(S.stats.goldAus||0)+o.price;o.sold=true;giveItem(o.id,`Gekauft für ${o.price} Gold`);Bus.emit('pick');Bus.emit('toast',{a:'GEKAUFT',b:ITEMS[o.id].n});Bus.emit('changed');}
 function kraemerStrike(uid){if(uid!=null){S.gold-=BAL.shop.streichen_preis;S.shop.strike=true;strikeItem(uid);}S.phase='kraemer';Bus.emit('changed');}
 
 // --- Rast: heilen oder ein Item verbessern ---
@@ -195,3 +196,11 @@ function loadRun(){let o;try{o=JSON.parse(localStorage.getItem(SAVE_KEY));}catch
  if(['weg','uebergang','ankunft','biomwahl'].includes(S.phase)){Bus.emit('changed');return true;}
  if(S.phase==='knoten'&&S.cur)enterNode(S.cur);else genWeg();
  Bus.emit('load',{why:`Run fortgesetzt (Seed ${S.seed}, Tiefe ${S.depth})`});return true;}
+
+// Welcher der sechs Builds (04-deckbau.md Abschnitt 7) passt am ehesten zum Deck? Grobe Zählung über Stoffe und Wirkungen.
+function buildArchetyp(){const z={glutnest:0,brackwasser:0,bollwerk:0,aderlass:0,kettenwerk:0,hagel:0};const st=new Set();
+ for(const it of allActive()){const D=def(it);D.st.forEach(k=>st.add(k));const ks=[...D.cards,...((it.hg||[]).map(id=>HANDGRIFFE[id]).filter(Boolean))];
+  for(const c of ks){const s=D.st;if(c.burn||s.includes('F'))z.glutnest+=1+(c.burn||0)/2;if(c.poison||s.includes('V'))z.brackwasser+=1+(c.poison||0)/2;
+   if(c.blk&&(s.includes('G')||s.includes('S')))z.bollwerk+=1+c.blk/6;if(c.self||c.opfer||s.includes('B'))z.aderlass+=1.2;if(c.funke||c.kette)z.kettenwerk+=1.5;if((c.h||1)>1||c.str||c.vuln||s.includes('E'))z.hagel+=1+((c.h||1)-1)*.6;}}
+ z.kettenwerk+=Math.max(0,st.size-3)*1.5;const best=Object.entries(z).sort((a,b)=>b[1]-a[1])[0];
+ const N={glutnest:'Glutnest',brackwasser:'Brackwasser',bollwerk:'Bollwerk',aderlass:'Aderlass',kettenwerk:'Kettenwerk',hagel:'Hagel'};return{id:best[0],n:N[best[0]],werte:z};}

@@ -37,8 +37,8 @@ function enemyBox(e){const sz=BU.sz||szeneHolen();const rh=sz.reihen[e.reihe??2]
  const sk=e.rang==='normal'?rh.skala:1;return{x:Math.round(e.x*SW),y:rh.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel:rh.nebel,kopf:sp&&sp.meta&&sp.meta.kopf!=null?rh.y-Math.round((sp.meta.fuss[1]-(Array.isArray(sp.meta.kopf)?sp.meta.kopf[1]:sp.meta.kopf))*sk):rh.y-Math.round(h*sk*.92)};}
 const FX={
  pos(e){return enemyBox(e);},
- hit(e,d,col){if(!e)return;const v=visOf(e);const p=enemyBox(e);v.hit=.11;v.kx=Math.min(8,3+d/3);v.anim='treffer';v.at=0;burst(p.x,p.y-p.h*.55,col||'#c8483a',Math.min(24,4+d),1.5);
-  if(d>0){BU.freeze=performance.now()+(d>=12?110:45);BU.shake=Math.max(BU.shake,Math.min(8,1.5+d/4));}},
+ hit(e,d,col,wer){if(!e)return;const W=BAL.wucht||{},k=wer==='eigen'?(W.eigen||1):(W.gegner||1);const v=visOf(e);const p=enemyBox(e);v.hit=.11;v.kx=Math.min(10,(W.rueckstoss||4)*k+d/4);v.anim='treffer';v.at=0;burst(p.x,p.y-p.h*.55,col||'#c8483a',Math.min(28,4+d)*k|0,1.5*k);
+  if(d>0){BU.freeze=performance.now()+(d>=(W.gross_ab||12)?(W.hitstop_gross_ms||120):(W.hitstop_ms||55))*k;BU.shake=Math.max(BU.shake,Math.min(9,((W.ruck||3)+d/5)*k));}},
  slash(e,col){const p=enemyBox(e);FXL.push({k:'slash',x:p.x,y:p.y-p.h*.55,col,t:0,dur:.2,s:p.w*.6,flip:Math.random()<.5});},
  ring(col,e){const p=e&&e.hp!==undefined?enemyBox(e):{x:240,y:180,h:0};FXL.push({k:'ring',x:p.x,y:p.y-p.h*.5,col,t:0,dur:.55,r:e?44:150});},
  flash(col,a){BU.flashCol=col;BU.flashA=a;},

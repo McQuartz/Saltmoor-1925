@@ -56,6 +56,8 @@ function aktion(k,el){switch(k){
  case'fortsetzen':loadRun();render();break;case'rastHeil':rastHeal();break;case'fund':takeFund();break;
  case'skipstrike':skipStrike();break;case'kstrike0':kraemerStrike(null);break;
  case'buch':zeigeOverlay(buchHtml());break;case'tagebuch':zeigeOverlay(tagebuchHtml());break;case'einst':zeigeOverlay(einstHtml());break;case'zu':closeOv();break;
+ case'gleicherSeed':{const sd=S.seed,jb=S.job;newRun(jb,sd,{});render();break;}
+ case'bildSpeichern':endbildSpeichern();break;
  case'devToggle':if(typeof Dev!=='undefined')Dev.toggle();break;}}
 function starteRun(job){const st=S.wahlStufe||0;const q=new URLSearchParams(location.search);const seed=q.get('seed')!=null&&!S.seedUsed?+q.get('seed'):neuerSeed();
  const start=S.wahlStart||null;newRun(job,seed,{dev:typeof Dev!=='undefined'&&Dev.cheat,stufe:st,start});Meta.get().stufe=st;Meta.save();render();}
@@ -63,7 +65,7 @@ document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
  if(e.key==='Escape'){S.sel=null;closeOv();render();}
  if(e.key==='d'||e.key==='D'){if(typeof Dev!=='undefined')Dev.toggle();}
  if(S.phase==='fight'&&!busy){if(e.key===' '||e.key==='e'){e.preventDefault();endTurn();}const n=+e.key;if(n>=1&&n<=9)playCard(n-1);}
- if(S.phase==='uebergang'&&(e.key===' '||e.key==='Enter'))leaveUebergang();});
+ if(S.phase==='uebergang'&&!['Shift','Control','Alt','Meta','d','D'].includes(e.key))leaveUebergang();});
 // Tooltips
 function showTip(h,x,y){const tip=$('tip');tip.innerHTML=h;tip.style.display='block';const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
 function hideTip(){$('tip').style.display='none';}
@@ -73,3 +75,9 @@ function itemTip(loc){const it=getAt(loc);if(!it)return'';const d=def(it);const[
  const rs2=ROLES.filter(r=>(d.bases||[it.id]).some(b=>r.i.includes(b)));if(rs2.length)h+=`<div class="hint">Teil von: ${rs2.map(r=>r.n).join(', ')}</div>`;
  if(it.x)h+='<div class="hint">Gestrichen: gibt keine Karte mehr.</div>';if(k==='bag'||k==='bench')h+='<div class="hint">Nicht angelegt: bringt keine Karten.</div>';
  if(S.phase==='rast'&&!S.rastDone)h+='<div class="tn">Klicken: verbessern</div>';return h;}
+
+// Endbildschirm als PNG speichern (Szene + Statistik als Text)
+function endbildSpeichern(){const c=document.createElement('canvas');c.width=960;c.height=540;const g=c.getContext('2d');g.imageSmoothingEnabled=false;g.drawImage(BU.cv,0,0,960,540);
+ g.fillStyle='rgba(0,0,0,.78)';g.fillRect(40,40,880,460);g.fillStyle='#efe4c8';g.font='28px serif';const r=S.ergebnis||{},st=S.stats||{};g.fillText('SALTMOOR 1925 · '+(r.sieg?(r.ende==='bleiben'?'Geblieben':'Umgekehrt'):'Am Strand'),70,90);
+ g.font='20px serif';const L=[`${S.jobN} · Seed ${S.seed} · ${dauerText((st.endeT||Date.now())-S.startT)}`,`Weg: ${S.route.filter(Boolean).map(b=>BIOMES[b].kurz).join(' → ')}`,`Tiefe ${r.tiefe||S.depth} · Kämpfe ${st.kaempfe||0} · Gold ${st.gold||0}`,`Schaden ${st.schadenRaus||0} / ${st.schadenRein||0} · höchster Treffer ${st.maxTreffer||0} · längste Kette ${st.maxKette||0}`,`Build: ${buildArchetyp().n} · Reaktionen ${S.disc.size}`,`Deck: ${allActive().map(it=>def(it).n).join(', ')}`];
+ L.forEach((t,i)=>g.fillText(t,70,140+i*40,820));const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download=`saltmoor-${S.seed}.png`;a.click();}

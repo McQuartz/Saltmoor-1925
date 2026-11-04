@@ -9,6 +9,7 @@ function render(){
  const ph=S.phase||'titel';document.body.dataset.phase=ph;
  $('kopf').innerHTML=S.route&&!['titel','figur','strand','ende','ankunft','uebergang','biomwahl'].includes(ph)?kopfHtml():'';
  $('gegner').innerHTML=ph==='fight'||ph==='reward'?gegnerHtml(ph==='fight'):'';
+ $('spieler').innerHTML=ph==='fight'?spielerHtml():'';
  $('panel').innerHTML=panelHtml(ph);$('panel').className=ph==='fight'?'':'an p-'+ph;
  $('leiste').innerHTML=ph==='fight'?leisteKampf():S.route&&canEquip()?gearHtml():'';
  $('leiste').className=ph==='fight'?'kampf':S.route&&canEquip()?'gear':'';
@@ -19,9 +20,12 @@ function kopfHtml(){const f=S.phase==='fight';const m=maxHp();const inc=f?incomi
  const total=allRx().length;
  return `<div class="tz">TIEFE ${romanN(Math.max(1,S.depth))}${f?` · ZUG ${S.turnNo}`:''}</div>
  <div class="sub">${esc(biom().n)} · ${S.gold} Gold · <a data-act="buch">Buch ${S.disc.size}/${total}</a></div>
- <div class="du">DU · ${esc(S.jobN).toUpperCase()}</div>${barHtml(S.hp,m,f?S.block:0,null,'gross')}
- <div class="zahlen">${S.hp}/${m}${f&&S.block?` <span class="blk">Block ${S.block}</span>`:''}</div>
- ${f&&inc?`<div class="warn">${inc} kommen → ${lose?'−'+lose+' Leben':'alles geblockt'}</div>`:''}`;}
+ ${f?'':`<div class="du">DU · ${esc(S.jobN).toUpperCase()}</div>${barHtml(S.hp,m,0,null,'gross')}<div class="zahlen">${S.hp}/${m}</div>`}`;}
+// Spieler-Lebensbalken unten mittig über der Hand: Block als Schild links, angekündigter Schaden als roter Schatten im Balken
+function spielerHtml(){const m=maxHp(),inc=incoming(),lose=Math.min(S.hp,Math.max(0,inc-S.block));const W=v=>Math.max(0,Math.min(100,v/m*100)).toFixed(1)+'%';
+ return `<div class="schild ${S.block?'an':''}" title="Block">${gi('blk',GZ())}<b>${S.block}</b></div>
+ <div class="sbar"><i class="hp" style="width:${W(S.hp-lose)}"></i>${lose?`<i class="schatten" style="width:${W(lose)}"></i>`:''}<span>${esc(S.jobN).toUpperCase()} · ${S.hp}/${m}</span></div>
+ <div class="swarn">${inc?`${inc} kommen → ${lose?'−'+lose+' Leben':'alles geblockt'}`:'nichts kommt'}</div>`;}
 // Lebensbalken mit Block-Schraffur direkt hinter dem Leben; pv = Vorschau {d, ab}
 function barHtml(hp,max,block,pv,cls=''){const W=v=>Math.max(0,Math.min(100,v/max*100)).toFixed(1)+'%';const d=pv?Math.min(hp,pv.d):0,ab=pv?Math.min(block,pv.ab):0;
  return `<div class="bar ${cls}"><i class="hp" style="width:${W(hp-d)}"></i>${d?`<i class="pv" style="width:${W(d)}"></i>`:''}${block-ab>0?`<i class="bk" style="width:${W(block-ab)}"></i>`:''}${ab?`<i class="pvb" style="width:${W(ab)}"></i>`:''}</div>`;}
@@ -98,7 +102,7 @@ function biomwahlHtml(){const a=RUN.akte[S.akt];const an=S.angebote[S.akt]||[];
  return box('weg',`<div class="ueber">${a.n.toUpperCase()} · ${esc(a.titel).toUpperCase()}</div><h2>WELCHER WEG FÜHRT HINAB?</h2>
  <div class="wege">${an.map((b,i)=>{const B=BIOMES[b];return `<div class="tuer biom" data-biom="${i}"><div class="wn">${esc(B.n).toUpperCase()}</div><div class="hinw">${esc(B.zeit||'')}</div><div class="ank">${esc(B.anreise||(B.weg_hinweise&&B.weg_hinweise.kampf&&B.weg_hinweise.kampf[0])||'')}</div></div>`;}).join('')}</div>`);}
 function uebergangHtml(){const a=RUN.akte[S.akt];const b=biom();let satz=S.akt===0?(JOBS.find(j=>j.id===S.job).ausrede):BIOMES[S.route[S.akt-1]].uebergang;
- return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p><div class="hint">Klicken zum Überspringen</div></div>`;}
+ return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p><div class="hint spaet">Klicken oder Taste drücken</div></div>`;}
 function wegHtml(){const a=RUN.akte[S.akt];const eb=a.ebenen.length;
  return box('weg',`<div class="ueber">${a.n.toUpperCase()} · ${esc(biom().kurz).toUpperCase()} · EBENE ${S.ebene+1}/${eb}</div><h2>WOHIN?</h2>${jobFaehigkeit()==='karte'?`<div class="karte-geo">Die alte Karte: ${RUN.akte.map((a,i)=>S.route[i]?(i===S.akt?`<b>${esc(BIOMES[S.route[i]].kurz)}</b>`:esc(BIOMES[S.route[i]].kurz)):a.biome.filter(b=>BIOMES[b]).map(b=>BIOMES[b].kurz).join('/')).join(' → ')}</div>`:''}
  <div class="wege">${S.weg.map((o,i)=>{const kn=RUN.knoten[o.art];const fz=o.foes&&o.art==='waechter'?FOES[o.foes[0]]:null;
@@ -108,7 +112,7 @@ function itemPick(id,attr,extra=''){const d=ITEMS[id];const ex=d.st.length>1?BAL
  return `<div class="pick ${d.rare?'selten':''}" ${attr}><img src="${spr(d.spr)}"><div class="pn">${esc(d.n)}</div><div class="pst">${d.st.map(k=>gi(k,KZ())).join('')}</div>
  <div class="ps">${AREA_N[d.a]}${d.hp?` · +${d.hp} Leben`:''}${d.passiv?' · passiv':''}<br>${d.cards.map(c=>`${esc(c.n)} (${c.c+ex}): ${esc(cardText(c))}`).join('<br>')}${d.passiv?esc(passivText(d.passiv)):''}</div>${extra}</div>`;}
 function passivText(p){return{gold_bonus:`+${p.v} Gold nach jedem Sieg`,start_block:`${p.v} Block zu Kampfbeginn`,heil_nach_sieg:`+${p.v} Leben nach jedem Sieg`,erste_karte_billiger:'Die erste Karte im Kampf kostet 0',glueck:'Ein Fund mehr zur Auswahl'}[p.typ]||p.typ;}
-function rewardHtml(){return box('reward',`<h2>${S.kampfArt==='waechter'?'DER WÄCHTER FÄLLT':'STILLE'}</h2><p class="lead">${S.goldGain?`+${S.goldGain} Gold. `:''}Unter dem, was übrig ist, liegt etwas.</p>
+function rewardHtml(){return box('reward',`<h2>${S.kampfArt==='waechter'?'DER WÄCHTER FÄLLT':'STILLE'}</h2><p class="lead">${S.goldGain?`+${S.goldGain} Gold. `:''}${esc(S.beuteSatz||'Unter dem, was übrig ist, liegt etwas.')}</p>
  ${S.picked?'<p class="hint">Eingesteckt. Leg es unten an oder lass es im Rucksack.</p>':`<div class="picks">${S.reward.map(id=>itemPick(id,`data-take="${id}"`)).join('')}</div><p><button class="deco klein" data-take="">NICHTS NEHMEN</button></p>`}
  <button class="deco" data-act="weiterReward">WEITER ›</button>`);}
 function eventHtml(){const ev=curEvent();if(!ev)return'';const done=S.phase==='event_folge';
@@ -134,13 +138,28 @@ function wandbildHtml(){const fr=FRAGS.find(f=>f.id===S.frag);const neu=S.fragNe
 function fundHtml(){const f=S.fund;return box('fund',`<h2>FUNDSTELLE</h2><p class="lead">${esc((biom().weg_hinweise.fundstelle||[''])[0])}</p>
  ${f.taken?`<p>${f.item?'Eingesteckt: '+esc(ITEMS[f.item].n):''}${f.gold?`+${f.gold} Gold`:''}${f.haken?` · Es hatte einen Haken: −${RUN.fundstelle.haken_schaden} Leben.`:''}</p>`:`<div class="picks">${f.item?itemPick(f.item,'data-act="fund"'):`<div class="pick" data-act="fund"><div class="pn">${f.gold} Gold</div></div>`}</div><p class="hint">Vielleicht hat es einen Haken.</p>`}
  <button class="deco" data-act="leave">${f.taken?'WEITER ›':'LIEGEN LASSEN ›'}</button>`);}
-function strandHtml(){const r=S.ergebnis||{};const neu=S.neu||[];
- return box('strand',`<h2>${esc(RUN.strand.titel).toUpperCase()}</h2><p class="lead">${esc(RUN.strand.text)}</p>
- <div class="liste"><div>Erreicht: Tiefe ${romanN(Math.max(1,r.tiefe||1))} · ${esc(BIOMES[r.biom||'hafen'].n)}</div><div>Gelesene Fragmente in diesem Abstieg: ${S.stats.fragmente.length}</div><div>Kämpfe gewonnen: ${S.stats.kaempfe}</div>
- ${neu.length?`<div class="neu">${neu.map(x=>'Neu: '+esc(x.n)).join('<br>')}</div>`:''}</div><button class="deco" data-act="neu">WIEDER HINAB</button> <button class="deco klein" data-act="titel">ZUM TITEL</button>`);}
+// Endbildschirm (nach Strand, Bleiben und Umkehren): Statistik, Weg, Deck, Build, neue Freischaltungen
+function dauerText(ms){const m=Math.max(0,Math.round(ms/60000));return m<60?`${m} min`:`${Math.floor(m/60)} h ${m%60} min`;}
+function endschirmHtml(titel,satz){const r=S.ergebnis||{};const st=S.stats||{};const neu=S.neu||[];const b=buildArchetyp();const j=JOBS.find(x=>x.id===S.job)||{};
+ const deck=allActive().filter(it=>!it.x).map(it=>{const D=def(it);return `<div class="dk"><img src="${spr(D.spr)}"><b>${esc(D.n)}</b> ${D.st.map(k=>gi(k,KZ())).join('')}<br><span class="hint">${D.cards.map(c=>esc(c.n)).join(', ')}${(it.hg||[]).map(id=>HANDGRIFFE[id]?', '+esc(HANDGRIFFE[id].n):'').join('')}</span></div>`;}).join('');
+ const zeile=(k,v)=>`<div><span class="hint">${k}</span> ${v}</div>`;
+ return box('endschirm',`<h2>${titel}</h2><p class="lead">${satz}</p>
+ <div class="wegbilder">${S.route.filter(Boolean).map((bi,i)=>`<div><canvas class="wegbild" data-wbiom="${bi}" width="96" height="54"></canvas><span>${esc(BIOMES[bi].kurz)}</span></div>`).join('<span class="pfeil">→</span>')}</div>
+ <div class="stats">${zeile('Figur',esc(j.n||S.jobN))}${zeile('Seed',S.seed)}${zeile('Dauer',dauerText((st.endeT||Date.now())-S.startT))}${zeile('Tiefe',romanN(Math.max(1,r.tiefe||S.depth)))}
+ ${zeile('Kämpfe',st.kaempfe||0)}${zeile('Gold',`${st.gold||0} verdient, ${st.goldAus||0} ausgegeben`)}${zeile('Schaden',`${st.schadenRaus||0} ausgeteilt, ${st.schadenRein||0} genommen`)}
+ ${zeile('Höchster Treffer',st.maxTreffer||0)}${zeile('Längste Kette',`${st.maxKette||0} Reaktionen in einem Zug`)}${zeile('Reaktionen entdeckt',`${S.disc.size} von ${allRx().length}`)}
+ ${zeile('Build',b.n)}${r.sieg?'':zeile('Todesursache',esc(st.todesursache||'die Tiefe'))}</div>
+ <h3>DAS DECK AM ENDE</h3><div class="deckende">${deck}</div>
+ ${neu.length?`<div class="neu">${neu.map(x=>'Neu: '+esc(x.n)).join('<br>')}</div>`:''}
+ <div class="knoepfe"><button class="deco" data-act="neu">NEUER ABSTIEG</button><button class="deco klein" data-act="gleicherSeed">GLEICHER SEED</button><button class="deco klein" data-act="bildSpeichern">BILD SPEICHERN</button><button class="deco klein" data-act="titel">ZUM TITEL</button></div>`);}
+function strandHtml(){return endschirmHtml(esc(RUN.strand.titel).toUpperCase(),esc(RUN.strand.text));}
 function ankunftHtml(){const A=RUN.ankunft;const j=JOBS.find(x=>x.id===S.job);
  return `<div class="ankunft"><p class="bild">${esc(A.bild)}</p><p class="wahr">„${esc(j.wahrheit)}“</p><div class="zwei"><button class="deco" data-ende="bleiben">${A.bleiben.knopf.toUpperCase()}</button><button class="deco" data-ende="umkehren">${A.umkehren.knopf.toUpperCase()}</button></div></div>`;}
-function endeHtml(){const A=RUN.ankunft;const r=S.ergebnis;const neu=S.neu||[];return `<div class="ankunft ende"><h2>${esc(A[r.ende].text)}</h2><p class="wahr">${esc(JOBS.find(x=>x.id===S.job).n)} · Tiefe ${romanN(r.tiefe)} · ${S.stats.kaempfe} Kämpfe</p>${neu.length?`<div class="neu">${neu.map(x=>'Neu: '+esc(x.n)).join('<br>')}</div>`:''}<button class="deco" data-act="titel">ZUM TITEL</button></div>`;}
+function endeHtml(){const A=RUN.ankunft;const r=S.ergebnis;return endschirmHtml(esc(A[r.ende].text).toUpperCase(),`„${esc(JOBS.find(x=>x.id===S.job).wahrheit)}“`);}
+// kleine Bilder des Wegs (Kampfszene je Biom, ganzzahlig 1:5 verkleinert)
+function wegbilderMalen(){document.querySelectorAll('canvas.wegbild').forEach(c=>{if(c.dataset.ok)return;c.dataset.ok=1;try{const sz=typeof World!=='undefined'?World.build(c.dataset.wbiom,{art:'kampf',variante:0,seed:3,fremdheit:.3}):ersatzSzene({biom:c.dataset.wbiom});
+ const t=document.createElement('canvas');t.width=SW;t.height=SH;const g=t.getContext('2d');sz.ebenen.forEach(L=>g.drawImage(L.canvas,L.x||0,L.y||0));const x=c.getContext('2d');x.imageSmoothingEnabled=false;
+ for(let y=0;y<54;y++)for(let i=0;i<96;i++){x.drawImage(t,i*5+2,y*5+2,1,1,i,y,1,1);}}catch(e){}});}
 
 // ---------- Überlagerungen: Buch der Reaktionen, Tagebuch, Einstellungen ----------
 function buchHtml(){const disc=S.disc||new Set();const all=allRx();
