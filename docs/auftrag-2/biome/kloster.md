@@ -18,6 +18,8 @@ Feste Bedingungen wie in Auftrag 1: Gegner in x 60–420 auf drei Reihen (Fußli
 
 ### Variante 0: Im Kreuzgang (Grundform: Arkade als Gitter, Blick hinaus)
 
+*Umgesetzt anders als zuerst skizziert:* Aus dem überdachten Gang heraus war das Buch nur durch die Bögen in Streifen zu sehen. Darum stehen wir jetzt **im Garten**: links läuft die Arkade (Doppelsäulen, Pultdach) zum Fluchtpunkt (150, 128), rechts steht das Buch, x 196 bis über den Bildrand, die Seiten bis an die Oberkante. Die Gegner stehen auf dem blassen Sand vor den hellen Seiten (gute Lesbarkeit). Die Schrift läuft als Band aus Zeilen vom Buchblock über den Sand bis vor die Füße, eine Nebenzunge biegt zur Arkade. Kirchturm links hinten über dem Dach, eine Doppelsäule vorne links angeschnitten, Salzgras unten rechts. Die Skizze unten bleibt als Vorlage stehen.
+
 - **Horizont** y 128, Fluchtpunkt (330, 128). Wir stehen im Gang des Kreuzgangs. Der Gang läuft von links vorne nach rechts hinten (Fluchtlinien der Bodenplatten und des Pultdachs).
 - **Blickführung:** Links die geschlossene Wand des Gangs mit Grabplatten (Maßstab: Tür zur Kirche). Rechts die Arkade: Doppelsäulen mit Rundbögen, die nach hinten kleiner werden. Durch die Bögen sieht man in den Garten und dort **das Buch**, viel größer als die Arkade: die aufgeschlagenen Seiten als zwei helle, gewölbte Flächen, dahinter der Silberhimmel.
 - **Falsches Detail:** Die Zeilen des Buchs laufen über die Seitenkante hinaus, den Buchblock hinunter, über das Gras und durch die Bögen auf die Platten des Gangs, bis unter die Gegner. Je höher `fremdheit`, desto weiter und dichter.
@@ -25,6 +27,8 @@ Feste Bedingungen wie in Auftrag 1: Gegner in x 60–420 auf drei Reihen (Fußli
 - **Ebenen:** 0 Silberhimmel mit Wolkenbänken; 1 das Buch, Kirchturm dahinter; 2 hintere Arkade, Garten; 3 vordere Arkade mit Fase und Randlicht, Kerze; 4 Boden mit Platten und Schrift; 5 eine Säule rechts vorne angeschnitten, Dachbalken oben; 6 Pergamentstaub, der im Licht steht.
 
 ### Variante 1: Das Skriptorium (Grundform: Halle mit Raster aus Pulten, Fenster als Lichtquelle)
+
+*Umgesetzt mit einer Änderung:* Das falsche Detail trägt jetzt vor allem der Pergamentstreifen, der von jedem Pult hängt und über die Dielen in den Gang läuft; jeder Streifen ist länger als der am Pult dahinter. Die Reihe der dicker werdenden Abschriften steht nur noch hinten an der linken Wand (vorne wirkte sie wie Kisten).
 
 - **Horizont** y 120, Fluchtpunkt (300, 120). Eine lange Halle unter einem Holzdach mit Bindern.
 - **Blickführung:** Pulte in zwei Reihen, schräge Schreibflächen, auf jedem ein offenes Buch und eine Kerze (nur einige brennen). Die Reihen laufen auf ein hohes Rundbogenfenster am Ende zu (rechts der Mitte), durch das das Watt-Licht fällt. Lichtbahnen vom Fenster auf den Boden.
@@ -61,7 +65,7 @@ Leitidee: Im Kloster ist alles eine Abschrift von etwas, und jede ist etwas län
 - **Was falsch ist:** Die Augen sind mit Buchbinderfaden zugenäht, damit er nicht liest, was er trägt. Durch die Stiche scheint Licht. Der Bücherturm auf seinem Rücken ist höher als er selbst und wird nach oben breiter: jedes Buch ist dicker als das darunter.
 - **Silhouette:** ein kleiner, gebeugter Junge in der Kutte unter einem nach vorn kippenden Turm aus Büchern, der oben breiter ist als unten.
 - **Kniff:** `verborgen`. Er sieht nicht, wohin er schlägt, und du auch nicht.
-- **Muster:** Tasten (2 × 3), Last absetzen (Block 6), Umkippen (9).
+- **Muster:** Tasten (2 × 3), Last absetzen (Block 6), Umkippen (8). 16 Leben.
 - **Schwachstelle Licht:** Unter den Nähten sind die Augen offen. Licht ist das, wovor man sie verschlossen hat.
 - **Stimme:** `chorknabe` (Knabenstimme, allein).
 
@@ -72,7 +76,7 @@ Leitidee: Im Kloster ist alles eine Abschrift von etwas, und jede ist etwas län
 - **Was falsch ist:** Unter der Haube ist kein Gesicht, nur die stille Oberfläche von Tinte. Darin spiegeln sich zwei Kerzen, die nicht im Raum stehen (ihre Augen). Die Tinte in den Eimern schwappt nicht, auch wenn sie schief geht.
 - **Silhouette:** eine schmale Frau mit Haube unter einem waagerechten Tragjoch, an dem links und rechts zwei schwere Eimer hängen.
 - **Kniff:** `verstopfen {n: 1}`. Sie schleudert Kleckse: eine unspielbare Karte auf die Hand.
-- **Muster:** Schwappen (5), Joch wenden (Block 5), Ausgießen (3 × 2), Klecks (7).
+- **Muster:** Schwappen (4), Joch wenden (Block 5), Ausgießen (3 × 2), Klecks (7). 21 Leben.
 - **Schwachstelle Wasser:** Wasser verdünnt Tinte, bis nichts mehr dasteht.
 - **Stimme:** `ertrunkener` (gurgelnd).
 
@@ -83,7 +87,7 @@ Leitidee: Im Kloster ist alles eine Abschrift von etwas, und jede ist etwas län
 - **Was falsch ist:** Er ist eine Säule mit Kapitell und Bogenansätzen, aber unten hat er zwei nackte, menschliche Füße, glatt getreten wie die Stufen. Im Kapitell ist ein Gesicht unter einer Kapuze gemeißelt, und es atmet.
 - **Silhouette:** ein schwerer, gerader Säulenschaft mit breitem Kapitell und zwei abgebrochenen Bogenansätzen wie Schultern, auf zwei kurzen nackten Beinen.
 - **Kniff:** `schuetzer {v: 5}`. Er gibt Verbündeten Block, wie der Kreuzgang Schatten gibt.
-- **Muster:** Stehen (Block 9), Stoß mit dem Kapitell (8), Mauern (Block 6), Einstürzen (12).
+- **Muster:** Stehen (Block 8), Stoß mit dem Kapitell (7), Mauern (Block 6), Einstürzen (11). 26 Leben.
 - **Schwachstelle Salz:** Salz aus der Watt-Luft kristallisiert im Sandstein und sprengt ihn von innen (Salzsprengung, wie an jeder Küstenkirche).
 - **Stimme:** `mumie` (tiefe Rahmentrommel auf Tonhöhe, wie Schritte auf Stein).
 
@@ -94,7 +98,7 @@ Leitidee: Im Kloster ist alles eine Abschrift von etwas, und jede ist etwas län
 - **Was falsch ist:** Sein Hals ist so lang wie ein Arm und steht waagerecht nach vorn, damit er über deine Schulter lesen kann. Statt Augen hat er zwei Lesesteine (geschliffene Glaslinsen, mit denen Mönche Schrift vergrößerten), und hinter dem Glas brennt es.
 - **Silhouette:** eine aufrechte, schmale Kutte, aus deren Kapuze ein langer, waagerechter Hals wie ein Galgen nach vorn ragt, am Ende ein kleiner Kopf mit zwei runden Gläsern.
 - **Kniff:** `einfrieren`. Er liest eine deiner Karten mit; solange er liest, kannst du sie nicht spielen.
-- **Muster:** Mitlesen (Stärke +2), Zuschnappen (7), Umblättern (Block 5), Vorlesen (3 × 3).
+- **Muster:** Mitlesen (Stärke +1), Zuschnappen (6), Umblättern (Block 5), Vorlesen (2 × 3). 20 Leben.
 - **Schwachstelle Glaube:** Ein Gebet, das man auswendig kann, steht nirgends geschrieben. Er kann es nicht mitlesen.
 - **Stimme:** `schatten` (Flüstern).
 
@@ -106,7 +110,7 @@ Leitidee: Im Kloster ist alles eine Abschrift von etwas, und jede ist etwas län
 - **Silhouette:** ein massiger, gebeugter Mönch mit hoher Kapuze hinter einem schrägen Pult auf einem Pfosten, ein überlanger Schreibarm mit Feder, davor ein Pergamentstreifen, der in Schlingen auf den Boden fällt. Eine Kerze auf der Pultecke.
 - **Kniff:** `abschrift {n: 2}`. Er mischt zwei Abschriften (unspielbar) in dein Deck: deine Karten, ein Wort länger, und darum nicht mehr zu gebrauchen. Gedacht ist dazu, dass er deine zuletzt gespielte Karte kopiert und gegen dich spielt; das braucht neues System im Kern (Vorschlag `besonders: {art: "kopiert"}`), darum steht im Paket vorerst `ruft`.
 - **Besonderheit:** `ruft {gegner: "novize", alle: 3}`. Alle drei Züge bringt ein Novize neue Bögen.
-- **Muster (5):** Zeilen (2 × 4), Initiale (12), Neue Feder (Stärke +2), Abschrift binden (Block 10), Federstriche (5 × 2).
+- **Muster (5):** Zeilen (2 × 4), Initiale (12), Neue Feder (Stärke +2), Abschrift binden (Block 10), Federstriche (5 × 2). 62 Leben.
 - **Schwachstelle Feuer:** Pergament brennt, und mit ihm jede Abschrift auf einmal.
 - **Stimme:** `chor` (Wächterstimme: viele menschliche Stimmen tief, wie ein Murmeln beim Abschreiben).
 
@@ -116,10 +120,37 @@ Leitidee: Im Kloster ist alles eine Abschrift von etwas, und jede ist etwas län
 |---|---|---|---|---|---|---|
 | `federkiel` | Federkiel | Waffe | Glaube | gewöhnlich (1 Kerbe) | Zeile ziehen (1: 3 × 2) | |
 | `tintenhorn` | Tintenhorn | Talisman | Fäulnis | gewöhnlich (1 Kerbe) | Eisengalle (1: Gift 4) | |
-| `bussriemen` | Bußriemen | Kleidung | Blut + Glaube | selten (2 Kerben) | Knoten zählen (0: 3 Leben, +1 Energie, ziehe 1) | `opfer_staerke` |
+| `bussriemen` | Bußriemen | Kleidung | Blut | selten (2 Kerben) | Knoten zählen (0: 3 Leben, +1 Energie, ziehe 1) | `opfer_staerke` |
 | `lesestein` | Lesestein | Talisman | Licht | selten (2 Kerben) | Durchsehen (1, Funke: ziehe 2) | `erste_karte_billiger` |
-| `abtssiegel` | Siegel des Abts | Talisman | Glaube + Eisen | Reliquie (2 Kerben), Beute des Abschreibers | Siegeln (1: Block 7, Behalten) | `reaktion_block {v: 1}` |
+| `abtssiegel` | Siegel des Abts | Talisman | Glaube | Reliquie (2 Kerben), Beute des Abschreibers | Siegeln (1: Block 7, Behalten) | `reaktion_block {v: 1}` |
+
+## Prüfung
+
+- `node tools/sprites/pruefen.js novize_a novize_b tintenfrau_a tintenfrau_b kreuzgangwaechter_a kreuzgangwaechter_b leser_a leser_b abschreiber`: 9 Sprites, 0 Verstöße. Der Abschreiber ist 128 × 160 (die Prüfung lässt für Wächter höchstens 128 × 160 zu, obwohl das Paketformat bis 160 × 180 erlaubt).
+- Silhouetten: je Gegner zwei Silhouetten-Fassungen im Arbeitsordner verglichen; verworfen wurden der zu niedrige Bücherturm (Novize las sich als Klumpen), die Bogenansätze als „Hörner“ (Kreuzgangwächter), der Kopf als „Faust“ am Hals (Leser). Bogen gegen alle vorhandenen Gegner: [silhouetten.png](../bilder/M6/kloster/silhouetten.png) (die ersten neun sind das Kloster). Nächster Verwandter ist der Uhrmacher (Nachtzug, ebenfalls Figur am Tisch); der Abschreiber unterscheidet sich durch die hohe Spitzkapuze, das schräge Pult auf dem Pfosten und den hellen Streifen.
+- Kontaktbogen neben Chorknabe, Hirte, Netzflickerin (je Zeile Idle 0, Angriff 2, Treffer 0, Tod 2): [kontaktbogen.png](../bilder/M6/kloster/kontaktbogen.png), Idle nebeneinander: [kontakt-favoriten-idle.png](../bilder/M6/kloster/kontakt-favoriten-idle.png).
+- Hintergründe: [hintergrund-varianten.png](../bilder/M6/kloster/hintergrund-varianten.png) (V0, V1, V2, Wächter mit Gegnern), [hintergrund-fremdheit.png](../bilder/M6/kloster/hintergrund-fremdheit.png) (V0–V2 bei Fremdheit 1, Übergang), [hintergrund-arten.png](../bilder/M6/kloster/hintergrund-arten.png) (weg, rast, werkstatt, kraemer, ereignis, wandbild, fund, uebergang).
+- Im Spiel (`newRun('fischer',3,{dev:true,route:['hafen','kloster','salz','eis','pforte']})`, `Dev.springe('kampf_schwer'|'waechter',1)`): [im-spiel-kampf.png](../bilder/M6/kloster/im-spiel-kampf.png), [im-spiel-kampf-2.png](../bilder/M6/kloster/im-spiel-kampf-2.png), [im-spiel-waechter.png](../bilder/M6/kloster/im-spiel-waechter.png). Keine Konsolenfehler.
+- `node tools/biom-test.js kloster 10`: 0 Fehler. Seeds 1–10: 9/10, Seeds 11–20: 6/10, Seeds 21–30: 5/10 (zusammen 20/30). Zum Vergleich Kapelle Seeds 1–10: 8/10. Erste Fassung der Werte war mit den inzwischen aktiven Kniffen zu hart (5/10), daher Tintenfrau, Leser, Novize und Kreuzgangwächter etwas entschärft.
 
 ## Noten
 
-(nach dem Bewertungsbogen, [06-ki-bilder.md](../06-ki-bilder.md) Abschnitt 5; folgt nach dem Prüfen)
+Bewertungsbogen [06-ki-bilder.md](../06-ki-bilder.md) Abschnitt 5, je Punkt 1–5, Gesamtnote = schwächster Punkt. Reihenfolge: Silhouette, Licht, Pixel, Konzept, Biom, im Spiel.
+
+| Bild | Si | Li | Px | Ko | Bi | Sp | **Note** | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Novize | 5 | 4 | 4 | 4 | 5 | 4 | **4** | Der kippende, nach oben breitere Bücherturm ist sofort lesbar und einmalig; die zugenähten Augen sind nur als leuchtende Naht zu erkennen, nicht als Stiche, und der Körper des Jungen ist ein dunkler Klumpen. |
+| Die Tintenfrau | 5 | 4 | 4 | 4 | 5 | 4 | **4** | Joch und Eimer geben die klarste Silhouette des Bioms, die Ausholbewegung mit dem Eimer hat Gewicht; dass das Gesicht Tinte ist, sieht man erst beim zweiten Blick am Glanzbogen, der Rock ist eine glatte Fläche. |
+| Der Kreuzgangwächter | 4 | 4 | 4 | 4 | 5 | 4 | **4** | Säule auf nackten Füßen mit Kapuzennische liest sich; das Mauerstück obenauf wirkt in Schwarz etwas wie ein Kelch, und der Schaft ist schlicht. |
+| Der Leser | 5 | 4 | 4 | 4 | 4 | 5 | **4** | Der waagerechte Hals mit den glimmenden Lesesteinen ist das stärkste Bild des Bioms und im Kampf gut zu sehen; die Kutte darunter ist eine einfache Säule ohne Hände in Variante b. |
+| Wächter: Der Abschreiber | 4 | 4 | 4 | 5 | 5 | 4 | **4** | Pult, überlanger Schreibarm und der helle, wachsende Pergamentstreifen erzählen den Wächter ohne Text; der Mönch selbst ist eine große dunkle Fläche mit wenig Binnenform, und das Motiv „Figur am Tisch“ teilt er mit dem Uhrmacher. |
+| Hintergrund V0 Kreuzgang | – | 4 | 4 | 5 | 5 | 4 | **4** | Das Buch so groß wie eine Kirche hinter den Gegnern und die Schrift, die als Zeilenband über den Sand läuft, sind sofort da; der Himmel ist eher grau als silbern und die Arkade links flach. |
+| Hintergrund V1 Skriptorium | – | 4 | 4 | 4 | 4 | 4 | **4** | Halle, Pultreihen, helles Fenster und Lichtbahn lesen sich als Skriptorium; das falsche Detail (Streifen, die länger werden) braucht einen zweiten Blick, die linke Wand ist leer. |
+| Hintergrund V2 Am Watt | – | 4 | 4 | 4 | 5 | 4 | **4** | Starke Diagonale aus Mauer und Steinweg, das Watt mit den Prielen in Zeilen und das Buch über den Dächern; die Pricke vorne rechts erinnert an eine Hand, die Schrift auf dem kleinen Buch ist zu dicht. |
+| Wächter-Szene | – | 4 | 4 | 4 | 5 | 4 | **4** | Untersicht, Buchblock als Papierwand, die Seite als durchscheinendes Dach, ferne Kirche als Maßstab; die Doppelsäule links ist eine gerade Form ohne viel Leben. |
+| Hintergrund gesamt | | | | | | | **4** | Hellster Ort des Akts, klar getrennt von Kapelle (bernstein, grün) und Grotte (Wachsgelb). |
+
+## Offen
+
+- `kniff` und neue Ereignis-Ops (`handgriff`, `schleifen`, `kerbe`) sind eingetragen; „kopiert deine letzte Karte“ für den Abschreiber braucht neues System im Kern (Vorschlag `besonders: {art: "kopiert"}`).
+- Item-Icons nutzen vorhandene Platzhalter (`knife`, `bottle`, `collar`, `shell`, `cross`), eigene 48 × 48-Icons kommen mit M5.
