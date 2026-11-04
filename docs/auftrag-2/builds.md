@@ -163,7 +163,7 @@ Sechs Karten, etwa 100 Schaden, und das Leben endet bei etwa 30, also höher als
 6. *Gegenlauf* (Kompass, stofflos, 1): reagiert selbst nicht, reicht aber Glaube an die nächste Karte weiter. Energie 3.
 7. *Salzladung* (Salzflinte, S+F, 2): 4 an allen. **Reinigendes Feuer** zum **zweiten Mal** (Gezeitenrad), **Bannkreis**, **Knistern**. Reaktionen 10, Energie 1.
 
-Sieben Karten, zehn Reaktionen, zwei Hochreaktionen: etwa 38 Schaden an **allen** Gegnern, 20 Block. Mit der letzten Energie: *Fortsetzen* träfe für 3 + 3 × 10 = 33, ×1,5 durch Verstärkt (S→S).
+Sieben Karten, zehn Reaktionen, zwei Hochreaktionen: etwa 38 Schaden an **allen** Gegnern, 24 Block. Mit der letzten Energie: *Fortsetzen* träfe für 3 + 3 × 10 = 33, ×1,5 durch Verstärkt (S→S).
 
 ---
 
@@ -273,7 +273,7 @@ Reihenfolge = Vorrang. `neutral` gilt für alle Bots als zweite Wahl.
    "stoffe": ["B", "G", "E"]
   },
   "kettenwerk": {
-   "items": ["gezeitenrad", "uhrwerk", "knotenschnur", "witchbottle", "tarot", "compass", "tartorch", "flaregun", "salt", "collar", "boots", "deepscale", "watch"],
+   "items": ["gezeitenrad", "uhrwerk", "knotenschnur", "witchbottle", "tarot", "compass", "tartorch", "saltgun", "flaregun", "collar", "salt", "deepscale", "watch"],
    "handgriffe": ["gegenlauf", "fortsetzen", "laeutwerk", "wiederholung", "umschlagen", "schwungrad", "weiterreichen", "takt_halten", "einrasten", "antippen", "durchatmen"],
    "stoffe": ["L", "S", "B", "F", "G", "W"]
   },

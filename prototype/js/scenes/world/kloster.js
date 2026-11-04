@@ -279,8 +279,12 @@ function fussDesBuchs(K, cfg) {
   K.form(1, sm, 0, { k: PERG.slice(1, 9), r: ['#ece4cc', '#fff8e2'], ton: 4.6, fase: 2, verlauf: -1.2, muster: (x, y) => (B.fbm(x * .02, y * .05, sd + 4, 2) - .5) * .8 });
   schrift(K.e[1], -M, 62, 3, y => { const l = 140 + y * 2.6; return l < W ? [Math.max(l, 150), W - 10] : null; }, '#8a7e66', sd + 9, .6);
   // Buchblock: Wand aus Papierlagen rechts der Mitte, Feuchtigkeitsflecken, Schrift läuft herab
-  const bx0 = 236, bx1 = W + M, byT = 62;
-  const bm = B.maske(); bm.poly([[bx0 + 8, byT], [bx1, byT + 6], [bx1, 214], [bx0, 204]]);
+  // ferner Flügel des Kreuzgangs und Kirche am Horizont: Maßstab gegen das Buch
+  const fern = B.maske(); fern.rect(-M, 172, 260, 26); fern.poly([[-M, 172], [250, 172], [244, 162], [-M, 160]]); fern.rect(132, 104, 22, 70); fern.poly([[128, 106], [143, 82], [158, 106]]); fern.rect(150, 140, 60, 34); fern.poly([[146, 142], [180, 122], [214, 142]]);
+  for (let i = 0; i < 12; i++) { const x = 4 + i * 20; fern.fn(x, 176, x + 13, 197, (px, py) => py > 184 || Math.hypot(px - x - 6.5, py - 184) < 6.5, 0); }
+  K.form(1, fern, .45, { ton: 1.6, fase: 1, rand: 1 });
+  const bx0 = 236, bx1 = W + M, byT = 40;
+  const bm = B.maske(); bm.poly([[bx0 + 8, byT], [300, 34], [380, 46], [bx1, 64], [bx1, 214], [bx0, 204]]);
   K.form(2, bm, 0, { k: PERG.slice(0, 7), r: ['#c2b69a', '#ece4cc'], ton: 3, fase: 2, verlauf: .5, schatten: 2, muster: (x, y) => ((y % 2) === 0 ? -.45 : 0) + ((y % 9) === 0 ? -.4 : 0) + (B.fbm(x * .015, y * .04, sd, 3) - .5) * 1.2 - (B.rausch2(x * .03, y * .01, sd + 1) > .68 ? .9 : 0) });
   // Kapitalband/Deckel unten und Rücken links als dunkle Kante
   const dk = B.maske(); dk.poly([[bx0 - 6, 200], [bx1, 210], [bx1, 220], [bx0 - 8, 208]]); dk.poly([[bx0 + 4, byT - 4], [bx0 + 14, byT - 2], [bx0 + 6, 204], [bx0 - 4, 204]]);

@@ -270,9 +270,16 @@ function hof(K) {
   { const [x0, y0] = P.q(-.4, 1.5, 7.4), [x1, y1] = P.q(.8, 0, 7.4), m = B.maske(); m.rect(x0, y0, x1 - x0, y1 - y0 - 2); m.poly([[x0 - 1, y0], [(x0 + x1) / 2, y0 - 4], [x1 + 1, y0]]); for (const xx of [x0 + 3, x1 - 3]) m.ell(xx, y1 - 1, 2.5, 2.5); K.form(2, m, .1, { k: ROST, ton: 1.4, fase: 1, rand: 2, muster: (px) => (Math.round(px) % 3 === 0 ? -.3 : 0) }); }
   // Der Schornstein: groß, rechts der Mitte; Rauch fällt außen herab und breitet sich am Boden aus
   const sx = 336, sBot = P.q(0, 0, 5)[1];
-  rauchFaellt(K, 1, sx - 90, -M, sx + 140, sBot + 14, (x, y) => { const q = (y + 12) / (sBot + 12), half = 13 + q * 7 + Math.pow(Math.max(0, q - .75) / .25, 2) * 90, d = Math.abs(x - sx); if (d < 12 + q * 7) return 0; return Math.max(0, 1 - (d - (12 + q * 7)) / (half - 12 - q * 7 + 4)) * (q > .9 ? 1 - (y - sBot + 14) / 30 : 1); }, null);
+  const innen = y => 12 + Math.max(0, (y + 12) / (sBot + 12)) * 7;
+  const plume = (x, y) => { const q = Math.max(0, (y + 12) / (sBot + 12)), d = Math.abs(x - sx), i = innen(y);
+    const breit = 7 + q * 26 + Math.pow(Math.max(0, q - .8) / .2, 2) * 110, dick = q > .8 ? Math.max(0, 1 - (y - (sBot - 12)) / 26) : 1;
+    if (d < i) return 0; return Math.max(0, 1 - (d - i) / breit) * dick * (.75 + .25 * Math.sin(y * .11 + (x > sx ? 1 : 0))); };
+  rauchFaellt(K, 1, sx - 150, -M, sx + 150, sBot + 16, plume, null);
   schornstein(K, 2, sx, -M - 4, sBot, 24, 38, 0);
   const sk = B.maske(); sk.rect(sx - 24, sBot - 8, 48, 10); K.form(2, sk, 0, { k: ZIEGEL, ton: 1.5, fase: 1, rand: 2 });
+  // Schleier vor dem Schornstein: Rauch, der über die Vorderseite herabläuft
+  rauchFaellt(K, 2, sx - 22, -M, sx + 22, sBot + 16, (x, y) => { const d = Math.abs(x - sx), i = innen(y); if (d >= i + 1) return 0; const s2 = B.rausch1(x * .35, 77); return s2 > .55 ? (s2 - .55) * 2.2 * (1 - Math.max(0, (y - 20)) / (sBot * 1.4)) : 0; }, null);
+  rauchFaellt(K, 3, sx - 160, sBot - 18, sx + 160, sBot + 22, (x, y) => { const d = Math.abs(x - sx) / 150, v = (y - (sBot - 10)) / 22; return Math.max(0, 1 - d) * Math.max(0, 1 - Math.abs(v - .5) * 2) * .9; }, null);
   // Natriumlampe am Mast rechts oben: das Gegenlicht
   const [mx, my] = [452, 26], mast = B.maske(); mast.kap(mx + 8, my, mx + 10, 200, 1.6, 2.2); mast.kap(mx - 10, my - 2, mx + 9, my, 1, 1); mast.poly([[mx - 18, my], [mx - 4, my], [mx - 7, my + 5], [mx - 15, my + 5]]);
   K.form(3, mast, 0, Object.assign({ ton: 1.3, fase: 0, rand: 1 }, MET));
