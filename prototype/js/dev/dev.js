@@ -39,7 +39,7 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
  // ----- Reiter Run -----
  t_run(){if(!S.route)return'<div class="dim">Kein Run.</div>';const M=Meta.get();let h=`<div>Seed <b class="sel">${S.seed}</b> <button data-cheat="seedcopy">kopieren</button>${S.dev?' <b class="un">Dev-Run</b>':''}</div>
   <div>Figur ${esc(S.jobN)} · ${RUN.akte[S.akt]?.n||''} · ${esc(biom().n)} · Ebene ${S.ebene+1} · Tiefe ${S.depth} · Gold ${S.gold} · Stufe ${S.stufe||0}</div>
-  <h5>Weg</h5><div>${S.route.map((b,i)=>`<span class="${i===S.akt?'next':''}">${BIOMES[b].kurz}</span>`).join(' → ')}</div><div class="dim">${(S.routeWhy||[]).map(esc).join('<br>')}</div>`;
+  <h5>Weg und Biom-Wahl</h5><div>${RUN.akte.map((a,i)=>S.route[i]?`<span class="${i===S.akt?'next':''}">${BIOMES[S.route[i]].kurz}</span>`:`<span class="dim">${(S.angebote[i]||a.biome.filter(b=>BIOMES[b])).map(b=>BIOMES[b].kurz).join(' / ')}</span>`).join(' → ')}</div><div class="dim">${(S.routeWhy||[]).map(esc).join('<br>')}</div>`;
   h+=`<h5>Nächste Weg-Wahlen (Vorschau per Seed)</h5>`;const kS=S;try{const sim=structuredClone(S);S=sim;Bus.muted=true;for(let k=0;k<3;k++){if(S.ebene+k>=RUN.akte[S.akt].ebenen.length)break;const save0=S.ebene;S.ebene=save0+k;genWeg();h+=`<div>Ebene ${S.ebene+1}: ${S.weg.map(o=>RUN.knoten[o.art].n+(o.foes?' ['+o.foes.join(',')+']':'')).join(' | ')}</div>`;S.ebene=save0;}}catch(e){h+='<div class="dim">–</div>';}finally{S=kS;Bus.muted=false;}
   h+=`<h5>Fundpool ${biom().kurz}</h5><div class="dim">${dropPool().map(id=>ITEMS[id].n).join(', ')}</div><div class="dim">Selten: ${rarePool().map(id=>ITEMS[id].n).join(', ')}</div><div class="dim">Gegner-Beute 20 % aus: ${biom().gegner.map(id=>FOES[id]&&FOES[id].beute).filter(Boolean).join(', ')||'–'}</div>`;
   h+=`<h5>Meta</h5><div>Fragmente ${M.fragmente.length}/${FRAGS.length} · Runs ${M.runs} · Siege ${M.siege} · beste Tiefe ${M.besteTiefe} · Stufe max ${M.maxStufe}</div><div class="dim">Freie Figuren: ${JOBS.filter(Meta.figurFrei).map(j=>j.n).join(', ')}</div><div class="dim">Freie Items: ${M.items.map(id=>ITEMS[id]?ITEMS[id].n:id).join(', ')||'–'}</div>`;return h;},
@@ -59,7 +59,7 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
  // ----- Reiter Cheats -----
  t_cheats(){const knoten=['kampf','kampf_schwer','waechter','finale','rast','werkstatt','kraemer','ereignis','wandbild','fundstelle'];
   return `<h5>Springen</h5><div>${RUN.akte.map((a,i)=>`<button data-cheat="akt" data-arg="${i}">${a.n}</button>`).join(' ')}</div>
-  <div>Gabelung: ${['hafen','moor','salz','stadt'].map(b=>`<button data-cheat="gabel" data-arg="${b}">${BIOMES[b].kurz}</button>`).join(' ')}</div>
+  <div>Biom erzwingen: ${Object.keys(BIOMES).map(b=>`<button data-cheat="gabel" data-arg="${b}">${BIOMES[b].kurz}</button>`).join(' ')}</div>
   <div>Knoten: ${knoten.map(k=>`<button data-cheat="knoten" data-arg="${k}">${RUN.knoten[k].n}</button>`).join(' ')}</div>
   <h5>Kampf</h5><div>Gegner: ${Object.keys(FOES).map(id=>`<button data-cheat="spawn" data-arg="${id}">${id}</button>`).join(' ')}</div>
   <div><button data-cheat="heal">Leben voll</button> <button data-cheat="energie">Energie +1</button> <button data-cheat="gold">+100 Gold</button> <button data-cheat="sieg">Kampf gewinnen</button> <button data-cheat="tod">Sterben</button></div>
@@ -73,7 +73,7 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   switch(k){
    case'seedcopy':navigator.clipboard&&navigator.clipboard.writeText(String(S.seed));break;
    case'akt':this.springe('weg',+a);break;
-   case'gabel':{const b=a;if(!S.route)return;this.markDev();const i=['hafen','moor'].includes(b)?0:2;S.route[i]=b;S.routeWhy=[...(S.routeWhy||[]),`Gabelung erzwungen: ${b}`];if(S.akt===i){BU.key='';genWeg();}render();break;}
+   case'gabel':{const b=a;if(!S.route)return;this.markDev();const i=BIOMES[b].akt;S.route[i]=b;S.routeWhy=[...(S.routeWhy||[]),`Gabelung erzwungen: ${b}`];if(S.akt===i){BU.key='';genWeg();}render();break;}
    case'knoten':this.springe(a);break;
    case'spawn':if(S.phase==='fight'){this.markDev();const e=mkEnemy(a);e.x=.5+(Math.random()-.5)*.6;e.reihe=1;S.enemies.push(e);ladeSprite(e.sprite);render();}else{this.springe('kampf');S.enemies=[mkEnemy(a)];aufstellen(S.enemies);render();}break;
    case'heal':this.markDev();S.hp=maxHp();render();break;case'energie':this.markDev();S.energy++;render();break;case'gold':this.markDev();S.gold+=100;render();break;
@@ -92,9 +92,10 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
    case'bot':{const n=+a;const r=this.botLauf(n,(S.seed||1),true);break;}}
   this.render();},
  // Direkt zu einem Knoten (Dev-Run)
- springe(art,akt){if(!S.route)newRun(JOBS[0].id,neuerSeed(),{dev:true});S.dev=true;if(akt!=null){S.akt=akt;S.ebene=0;S.depth=akt*4;}
+ springe(art,akt){if(!S.route)newRun(JOBS[0].id,neuerSeed(),{dev:true});S.dev=true;if(akt!=null){S.akt=akt;S.ebene=0;S.depth=akt*7;}
+  for(let i=0;i<=S.akt;i++)if(!S.route[i])S.route[i]=(S.angebote[i]&&S.angebote[i][0])||RUN.akte[i].biome.find(b=>BIOMES[b]);
   if(art==='weg'){BU.key='';genWeg();return;}if(art==='fight')art='kampf';
-  const b=biom();if(art==='waechter'||art==='finale'){if(art==='finale'){S.akt=4;S.ebene=1;S.depth=18;}else S.ebene=RUN.akte[S.akt].ebenen.length-1;}
+  const b=biom();if(art==='waechter'||art==='finale'){if(art==='finale'){S.akt=4;S.ebene=RUN.akte[4].ebenen.length-1;S.depth=31;for(let i=0;i<=4;i++)if(!S.route[i])S.route[i]=RUN.akte[i].biome.find(b=>BIOMES[b]);}else S.ebene=RUN.akte[S.akt].ebenen.length-1;}
   const o={art,hint:'Dev',i:0};if(art.startsWith('kampf'))o.foes=rollFoes(art,R('dev'+Date.now()));if(art==='waechter'||art==='finale')o.foes=[BIOMES[S.route[S.akt]].waechter];
   S.cur=o;if(S.depth<1)S.depth=1;BU.key='';enterNode(o);render();},
  // Autospieler, schnell. Tabelle als Ergebnis (auch für Playwright: window.BOT_ERGEBNIS)

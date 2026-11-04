@@ -383,7 +383,7 @@ function bigBell(t){const r=BIOME[S.biome].root,b=ctx.createGain();b.gain.value=
 function ambEvent(t,s,bar,ch){
  const b=BIOME[S.biome],r=b.root,k=lvAt(0,t);if(k<.05)return;const R=Math.random,dry=L[0];
  const ct=()=>ch.c[Math.floor(R()*3)];
- switch(S.biome){
+ switch(b.detail||S.biome){ // neue Biome aus Paketen leihen sich die Ortsklang-Details eines alten Bioms (detail)
   case 'hafen':if(bar%4===2&&s===8&&R()<.8){tone(farIn,t,mtof(r+12),3,{v:.07,rot:false});tone(farIn,t,mtof(r+12)*2.378,1.2,{v:.012,rot:false});}break; // ferne Glocke (Teilton 2,378 = kleine Dezime, in der Tonart)
   case 'moor':
    if(s%4===0&&R()<.14){const n=2+Math.floor(R()*3);for(let i=0;i<n;i++)noise(dry,t+i*(.015+R()*.03),.005,{f:2600,type:'highpass',q:.8,v:.08});} // Holz knackt
@@ -584,6 +584,8 @@ const nextBeat=()=>Math.ceil((step+1)/4)*4;
 // ---------- Schnittstelle fürs Spiel ----------
 return {
  BIOME,FOES,ROLES,STOFFE,
+ // Neues Biom aus einem Daten-Paket (data/biome/<id>.json → musik): {n, root, key, names, darkNames, amb, rhy, detail, phryg}
+ addBiome(k,o){if(!o||BIOME[k])return;const d=biom(o.n||k,o.root||50,o.key||'',o.names||['i','VI','iv','V'],o.darkNames||['i','♭II','iv','V♭9'],{amb:o.amb||{wind:.06},rhy:o.rhy||'holz',detail:o.detail||null,ort:o.ort||'',rhyN:o.rhyN||''});if(o.phryg){d.prog=[[0,3,7],[1,5,8],[5,8,12],[7,11,14]];d.bass=[0,1,5,7];d.deg=[0,1,3,4];d.phryg=true;}BIOME[k]=d;},
  // Lautstärke aus den Einstellungen (0..1, Standard 0,55 → etwas leiser als die Effekte)
  volume(v){VOL=Math.max(0,Math.min(1,v))/.55;if(ctx&&running)master.gain.setTargetAtTime(.75*VOL,ctx.currentTime,.15);},
  start(){if(!ctx)build();if(ctx.state==='suspended')ctx.resume();if(running)return;running=true;master.gain.setTargetAtTime(.75*VOL,ctx.currentTime,.3);nextT=ctx.currentTime+.08;lastUpd=ctx.currentTime;timer=setInterval(tick,25);},

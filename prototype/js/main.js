@@ -11,6 +11,7 @@ function skala(){const W=innerWidth,H=innerHeight;const k=Math.max(1,Math.min(Ma
  const sp=document.getElementById('spiel'),w=480*BU.k,h=sp.offsetHeight||362*BU.k;const s=Math.min(W/w,H/h);BU.s=s;sp.style.transform=`translate(${Math.round((W-w*s)/2)}px,${Math.round((H-h*s)/2)}px) scale(${s})`;}
 (async()=>{
  try{await loadData();}catch(err){document.body.insertAdjacentHTML('afterbegin',`<div style="padding:20px;color:#ff8a7a;font:16px monospace">Daten konnten nicht geladen werden (${err.message}).<br>Bitte über einen lokalen Server öffnen: cd prototype && python3 -m http.server 8000</div>`);return;}
+ await paketeEinbinden();
  skala();addEventListener('resize',()=>{skala();render();});new ResizeObserver(()=>skala()).observe(document.getElementById('spiel'));buehneInit();
  const q=new URLSearchParams(location.search);
  if(typeof Dev!=='undefined')Dev.init(q);
@@ -18,3 +19,7 @@ function skala(){const W=innerWidth,H=innerHeight;const k=Math.max(1,Math.min(Ma
  else if(q.get('job')){newRun(q.get('job'),q.get('seed')!=null?+q.get('seed'):neuerSeed(),{dev:!!q.get('springe')});if(q.get('springe'))Dev.springe(q.get('springe'),q.get('akt')!=null?+q.get('akt'):null);}
  render();requestAnimationFrame(frame);
 })();
+
+// Biom-Pakete: Hintergrund-Skripte nachladen (der Reihe nach) und Musik-Fassungen registrieren
+async function paketeEinbinden(){for(const p of PAKETE){for(const src of p.skripte||[])await new Promise(res=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>{console.warn('Skript fehlt: '+src);res();};document.head.appendChild(s);});
+ if(p.musik&&typeof Music!=='undefined')Music.addBiome(p.biom.musik||p.id,p.musik);}}

@@ -3,17 +3,15 @@
 // Alles Zufällige hängt am Seed (js/core/rng.js). Gespeichert wird nach jedem Knoten (localStorage).
 const SAVE_KEY='saltmoor.run.v1';
 
-// --- Weg durch die Welt: welcher Einstieg, welche Tiefe ---
-function routeFor(seed,job){const r=Rng.of(seed,'route');const route=[];const why=[];
- RUN.akte.forEach((a,i)=>{if(a.biome.length===1){route.push(a.biome[0]);return;}
-  if(a.wahl==='figur'){const lieb=job.vorliebe,anders=a.biome.find(b=>b!==lieb);const roll=r.next();const b=roll<a.vorliebe?lieb:anders;route.push(b);why.push(`Einstieg ${BIOMES[b].kurz}: Vorliebe ${job.n} → ${BIOMES[lieb].kurz} mit ${Math.round(a.vorliebe*100)} %, Wurf ${roll.toFixed(2)}`);}
-  else{const roll=r.next();const b=a.biome[roll<.5?0:1];route.push(b);why.push(`Akt ${i+1}: ${BIOMES[b].kurz} (Seed, Wurf ${roll.toFixed(2)})`);}});
- return{route,why};}
-
+// --- Weg durch die Welt: am Anfang jedes Akts zwei Biome zur Wahl ---
+// Akt I: die Vorliebe der Figur plus eins per Seed; sonst zwei per Seed. Biome ohne Daten werden übersprungen.
+function biomAngebot(akt){const a=RUN.akte[akt];const da=a.biome.filter(b=>BIOMES[b]);if(da.length<=1)return{biome:da,why:`${a.n}: nur ${da.map(b=>BIOMES[b].kurz).join('')}`};
+ const r=R(`angebot:${akt}`);const job=JOBS.find(j=>j.id===S.job)||JOBS[0];
+ if(a.wahl==='figur'&&da.includes(job.vorliebe)){const rest=da.filter(b=>b!==job.vorliebe);const z=r.pick(rest);return{biome:r.chance(.5)?[job.vorliebe,z]:[z,job.vorliebe],why:`${a.n}: Vorliebe ${job.n} → ${BIOMES[job.vorliebe].kurz}, dazu ${BIOMES[z].kurz} per Seed`};}
+ const two=r.sample(da,2);return{biome:two,why:`${a.n}: ${two.map(b=>BIOMES[b].kurz).join(' oder ')} per Seed aus ${da.length}`};}
 function newRun(jobId,seed,opt={}){
  const job=JOBS.find(j=>j.id===jobId)||JOBS[0];uidc=0;seed=seed>>>0;
- const{route,why}=opt.route?{route:opt.route,why:['Gabelung im Dev-Modus erzwungen']}:routeFor(seed,job);
- S={phase:'uebergang',seed,job:job.id,jobN:job.n,route,routeWhy:why,akt:0,ebene:0,depth:0,
+ S={phase:'uebergang',seed,job:job.id,jobN:job.n,route:opt.route?[...opt.route]:[],routeFixed:!!opt.route,routeWhy:opt.route?['Weg im Dev-Modus vorgegeben']:[],angebote:[],akt:0,ebene:0,depth:0,
   hp:0,bonusHp:0,gold:0,energy:BAL.energy_per_turn,block:0,ward:0,
   slots:{waffe:BAL.start_slots,kleidung:BAL.start_slots,talisman:BAL.start_slots},
   areas:{waffe:[null,null,null,null],kleidung:[null,null,null,null],talisman:[null,null,null,null]},bag:Array(BAL.bag_size).fill(null),bench:[null,null],
@@ -26,13 +24,17 @@ function newRun(jobId,seed,opt={}){
  const sv=(RUN.startvarianten||[]).find(v=>v.id===S.start);if(sv)runFx(sv.fx,{why:'Startvariante '+sv.n});
  const sr=Rng.of(seed,'schreck');const J=BAL.jumpscare;S.scareAt=(J.fenster_min[0]+sr.next()*(J.fenster_min[1]-J.fenster_min[0]))*60000;S.scares=0;
  log(job.ausrede);
- Bus.emit('run_start',{seed,job:job.id,route,why:`Seed ${seed}, Weg ${route.map(b=>BIOMES[b].kurz).join(' → ')}. ${why.join('; ')}`});
+ Bus.emit('run_start',{seed,job:job.id,why:`Seed ${seed}, ${job.n}`});
  enterAct();}
 
 // --- Akte und Ebenen ---
 function aktDef(){return RUN.akte[S.akt];}
-function enterAct(){S.phase='uebergang';S.ebene=0;Bus.emit('act_start',{akt:S.akt,biom:biomId(),why:`${aktDef().n}: ${biom().n}`});Bus.emit('changed');}
+function enterAct(){S.ebene=0;
+ if(!S.route[S.akt]||!BIOMES[S.route[S.akt]]){const an=biomAngebot(S.akt);S.angebote[S.akt]=an.biome;S.routeWhy.push(an.why);
+  if(an.biome.length>1){S.phase='biomwahl';Bus.emit('biomwahl',{biome:an.biome,why:an.why});save();Bus.emit('changed');return;}S.route[S.akt]=an.biome[0];}
+ S.phase='uebergang';Bus.emit('act_start',{akt:S.akt,biom:biomId(),why:`${aktDef().n}: ${biom().n}`});Bus.emit('changed');}
 function leaveUebergang(){genWeg();}
+function chooseBiom(i){if(S.phase!=='biomwahl')return;const b=S.angebote[S.akt][i];if(!b)return;S.route[S.akt]=b;S.routeWhy.push(`${RUN.akte[S.akt].n}: ${BIOMES[b].kurz} gewählt`);Bus.emit('biom_gewaehlt',{biom:b,why:`${BIOMES[b].n} gewählt`});enterAct();}
 function ebeneKey(){return aktDef().ebenen[S.ebene];}
 // Wege für die nächste Ebene nach den Regeln aus run.json
 function genWeg(){const key=ebeneKey(),E=RUN.ebenen[key];const r=R(`weg:${S.akt}:${S.ebene}`);let arten;
@@ -190,6 +192,6 @@ function hasSave(){try{return !!localStorage.getItem(SAVE_KEY);}catch(e){return 
 function loadRun(){let o;try{o=JSON.parse(localStorage.getItem(SAVE_KEY));}catch(e){return false;}if(!o)return false;
  o.disc=new Set(o.disc||[]);o.hochUsed=new Set(o.hochUsed||[]);uidc=o.uidc||100;Object.assign(ITEMS,o.custom||{});S=o;
  // Mitten im Knoten gespeichert: den Knoten neu betreten (deterministisch), sonst an der Weg-Wahl weitermachen
- if(S.phase==='weg'||S.phase==='uebergang'||S.phase==='ankunft'){Bus.emit('changed');return true;}
+ if(['weg','uebergang','ankunft','biomwahl'].includes(S.phase)){Bus.emit('changed');return true;}
  if(S.phase==='knoten'&&S.cur)enterNode(S.cur);else genWeg();
  Bus.emit('load',{why:`Run fortgesetzt (Seed ${S.seed}, Tiefe ${S.depth})`});return true;}

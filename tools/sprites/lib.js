@@ -30,6 +30,8 @@ const ZONEN = {
   eis:     { body: ['#030508', '#070c14', '#0e1624', '#18243a'], rim: ['#5a8ab0', '#c8e2f6'], kern: '#ffe2dc', glut: '#ff4a4a', extra: {} },
   pforte:  { body: ['#030606', '#081010', '#0e1c1c', '#163030'], rim: ['#2a8a7a', '#8af0e0'], kern: '#fff0fa', glut: '#ff6ad8', extra: { magenta1: '#8a2a7a', magenta2: '#ff8ae0' } },
 };
+// Weitere Zonen aus tools/sprites/zonen/<zone>.json (je Biom-Paket eine Datei, gleiches Format wie oben)
+try { const zd = require('path').join(__dirname, 'zonen'); for (const f of fs.readdirSync(zd)) if (f.endsWith('.json')) { const z = JSON.parse(fs.readFileSync(require('path').join(zd, f), 'utf8')); ZONEN[f.replace(/\.json$/, '')] = { extra: {}, ...z }; } } catch (e) { if (e.code !== 'ENOENT') throw e; }
 // Index-Belegung im Puffer: 0 leer, 1..4 Körper, 5 R1, 6 R2, 7 glutDim, 8 glut, 9 kern, 10.. extra
 const NAMEN = ['', 'k0', 'k1', 'k2', 'k3', 'r1', 'r2', 'glutDim', 'glut', 'kern'];
 function palette(zone) {

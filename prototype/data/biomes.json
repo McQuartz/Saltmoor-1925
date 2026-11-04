@@ -69,7 +69,8 @@
    "fundstelle": [
     "Treibgut, das die Flut dagelassen hat."
    ]
-  }
+  },
+  "akt": 0
  },
  "moor": {
   "n": "Der Moorwald",
@@ -139,7 +140,8 @@
    "fundstelle": [
     "Etwas glänzt im Torf."
    ]
-  }
+  },
+  "akt": 0
  },
  "kapelle": {
   "n": "Die überflutete Kapelle",
@@ -209,7 +211,8 @@
    "fundstelle": [
     "Der Opferstock ist aufgebrochen."
    ]
-  }
+  },
+  "akt": 1
  },
  "salz": {
   "n": "Die Salzstollen",
@@ -280,7 +283,8 @@
    "fundstelle": [
     "Eine umgekippte Lore."
    ]
-  }
+  },
+  "akt": 2
  },
  "stadt": {
   "n": "Die namenlose Stadt",
@@ -348,7 +352,8 @@
    "fundstelle": [
     "Eine Grabkammer, schon geöffnet."
    ]
-  }
+  },
+  "akt": 2
  },
  "eis": {
   "n": "Das schwarze Eis",
@@ -416,7 +421,8 @@
    "fundstelle": [
     "Eine Kiste der Expedition, halb im Eis."
    ]
-  }
+  },
+  "akt": 3
  },
  "pforte": {
   "n": "Die Pforte",
@@ -461,6 +467,7 @@
    "finale": [
     "Es ruft."
    ]
-  }
+  },
+  "akt": 4
  }
 }

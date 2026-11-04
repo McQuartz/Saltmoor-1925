@@ -7,7 +7,7 @@ const allRx=()=>[VERST,...REACT,...HOCH];
 
 function render(){
  const ph=S.phase||'titel';document.body.dataset.phase=ph;
- $('kopf').innerHTML=S.route&&!['titel','figur','strand','ende','ankunft','uebergang'].includes(ph)?kopfHtml():'';
+ $('kopf').innerHTML=S.route&&!['titel','figur','strand','ende','ankunft','uebergang','biomwahl'].includes(ph)?kopfHtml():'';
  $('gegner').innerHTML=ph==='fight'||ph==='reward'?gegnerHtml(ph==='fight'):'';
  $('panel').innerHTML=panelHtml(ph);$('panel').className=ph==='fight'?'':'an p-'+ph;
  $('leiste').innerHTML=ph==='fight'?leisteKampf():S.route&&canEquip()?gearHtml():'';
@@ -75,7 +75,7 @@ function gearHtml(){const M=BAL.max_slots;const rs=roleState().filter(x=>x.have.
 
 // ---------- Bildschirme (Panel über der Szene) ----------
 function panelHtml(ph){switch(ph){
- case'titel':return titelHtml();case'figur':return figurHtml();case'uebergang':return uebergangHtml();case'weg':return wegHtml();case'knoten':return'';
+ case'titel':return titelHtml();case'biomwahl':return biomwahlHtml();case'figur':return figurHtml();case'uebergang':return uebergangHtml();case'weg':return wegHtml();case'knoten':return'';
  case'fight':return'';case'reward':return rewardHtml();case'event':case'event_folge':return eventHtml();case'streichen':return streichenHtml('Welche Karte streichst du?','skipstrike');
  case'kraemer':return kraemerHtml();case'kraemer_streichen':return streichenHtml(`Für ${BAL.shop.streichen_preis} Gold streicht ${esc(biom().kraemer.n)} eine Karte aus deinem Deck. Das Item bleibt angelegt.`,'kstrike0');
  case'werkstatt':return werkstattHtml();case'rast':return rastHtml();case'wandbild':return wandbildHtml();case'fund':return fundHtml();
@@ -94,10 +94,13 @@ function figurHtml(){const M=Meta.get();const st=M.maxStufe;
    :`<div class="aus zu">Gesperrt</div><div class="fd">Lies ${j.frei_ab} Wandbild-Fragmente (${M.fragmente.length}/${j.frei_ab}).</div>`}</div>`;}).join('')}</div>
  ${M.start.length?`<div class="stufen">Startvariante: <button class="${!S.wahlStart?'an':''}" data-start="">keine</button>${RUN.startvarianten.filter(v=>M.start.includes(v.id)).map(v=>`<button class="${S.wahlStart===v.id?'an':''}" data-start="${v.id}" title="${esc(v.t)}">${esc(v.n)}</button>`).join('')}</div>`:''}
  ${st?`<div class="stufen">Schwierigkeit: ${[...Array(st+1).keys()].map(i=>`<button class="${(S.wahlStufe||0)===i?'an':''}" data-stufe="${i}">${romanN(i+1)}</button>`).join('')}</div>`:''}`);}
+function biomwahlHtml(){const a=RUN.akte[S.akt];const an=S.angebote[S.akt]||[];
+ return box('weg',`<div class="ueber">${a.n.toUpperCase()} · ${esc(a.titel).toUpperCase()}</div><h2>WELCHER WEG FÜHRT HINAB?</h2>
+ <div class="wege">${an.map((b,i)=>{const B=BIOMES[b];return `<div class="tuer biom" data-biom="${i}"><div class="wn">${esc(B.n).toUpperCase()}</div><div class="hinw">${esc(B.zeit||'')}</div><div class="ank">${esc(B.anreise||(B.weg_hinweise&&B.weg_hinweise.kampf&&B.weg_hinweise.kampf[0])||'')}</div></div>`;}).join('')}</div>`);}
 function uebergangHtml(){const a=RUN.akte[S.akt];const b=biom();let satz=S.akt===0?(JOBS.find(j=>j.id===S.job).ausrede):BIOMES[S.route[S.akt-1]].uebergang;
  return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p><div class="hint">Klicken zum Überspringen</div></div>`;}
 function wegHtml(){const a=RUN.akte[S.akt];const eb=a.ebenen.length;
- return box('weg',`<div class="ueber">${a.n.toUpperCase()} · ${esc(biom().kurz).toUpperCase()} · EBENE ${S.ebene+1}/${eb}</div><h2>WOHIN?</h2>${jobFaehigkeit()==='karte'?`<div class="karte-geo">Die alte Karte: ${S.route.map((b,i)=>i===S.akt?`<b>${esc(BIOMES[b].kurz)}</b>`:esc(BIOMES[b].kurz)).join(' → ')}</div>`:''}
+ return box('weg',`<div class="ueber">${a.n.toUpperCase()} · ${esc(biom().kurz).toUpperCase()} · EBENE ${S.ebene+1}/${eb}</div><h2>WOHIN?</h2>${jobFaehigkeit()==='karte'?`<div class="karte-geo">Die alte Karte: ${RUN.akte.map((a,i)=>S.route[i]?(i===S.akt?`<b>${esc(BIOMES[S.route[i]].kurz)}</b>`:esc(BIOMES[S.route[i]].kurz)):a.biome.filter(b=>BIOMES[b]).map(b=>BIOMES[b].kurz).join('/')).join(' → ')}</div>`:''}
  <div class="wege">${S.weg.map((o,i)=>{const kn=RUN.knoten[o.art];const fz=o.foes&&o.art==='waechter'?FOES[o.foes[0]]:null;
   return `<div class="tuer ${o.art}" data-weg="${i}"><div class="zei">${gi(o.art,GZ()*2)}</div><div class="wn">${kn.n.toUpperCase()}</div><div class="hinw">${esc(o.hint)}</div>
    ${fz?`<div class="ank">${esc(fz.n)}. Hinter ihm führt eine Treppe nach unten.</div>`:''}${o.foes&&jobFaehigkeit()==='karte'&&o.art.startsWith('kampf')?`<div class="ank">${o.foes.map(id=>esc(FOES[id].n)).join(', ')}</div>`:''}${typeof Dev!=='undefined'&&Dev.an&&o.foes?`<div class="devz">${o.foes.join(', ')}</div>`:''}</div>`;}).join('')}</div>`);}

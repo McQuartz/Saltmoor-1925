@@ -6,14 +6,19 @@
    "titel": "Der Einstieg",
    "biome": [
     "hafen",
-    "moor"
+    "moor",
+    "fabrik",
+    "kurhaus",
+    "nachtzug"
    ],
    "wahl": "figur",
-   "vorliebe": 0.7,
    "ebenen": [
     "e1",
     "e2",
     "e3",
+    "e4",
+    "e5",
+    "e6",
     "waechter"
    ]
   },
@@ -21,12 +26,18 @@
    "n": "Akt II",
    "titel": "Die Kapelle",
    "biome": [
-    "kapelle"
+    "kapelle",
+    "kloster",
+    "grotte"
    ],
+   "wahl": "seed",
    "ebenen": [
     "e1",
     "e2",
     "e3",
+    "e4",
+    "e5",
+    "e6",
     "waechter"
    ]
   },
@@ -35,13 +46,18 @@
    "titel": "Die Tiefe",
    "biome": [
     "salz",
-    "stadt"
+    "stadt",
+    "wald",
+    "gezeitenwerk"
    ],
    "wahl": "seed",
    "ebenen": [
     "e1",
     "e2",
     "e3",
+    "e4",
+    "e5",
+    "e6",
     "waechter"
    ]
   },
@@ -49,12 +65,18 @@
    "n": "Akt IV",
    "titel": "Das schwarze Eis",
    "biome": [
-    "eis"
+    "eis",
+    "walkathedrale",
+    "glasmeer"
    ],
+   "wahl": "seed",
    "ebenen": [
     "e1",
     "e2",
     "e3",
+    "e4",
+    "e5",
+    "e6",
     "waechter"
    ]
   },
@@ -62,10 +84,13 @@
    "n": "Akt V",
    "titel": "Die Pforte",
    "biome": [
-    "pforte"
+    "pforte",
+    "ufer"
    ],
+   "wahl": "seed",
    "ebenen": [
     "vorraum",
+    "rast",
     "finale"
    ]
   }
@@ -103,8 +128,7 @@
    "pool": [
     "rast",
     "werkstatt",
-    "kraemer",
-    "kampf_schwer"
+    "kraemer"
    ],
    "wege": [
     2,
@@ -113,6 +137,49 @@
    "einer_von": [
     "rast",
     "werkstatt"
+   ]
+  },
+  "e4": {
+   "pool": [
+    "kampf",
+    "kampf_schwer",
+    "ereignis"
+   ],
+   "wege": [
+    2,
+    3
+   ],
+   "einer_von": [
+    "kampf",
+    "kampf_schwer"
+   ]
+  },
+  "e5": {
+   "pool": [
+    "kampf",
+    "ereignis",
+    "wandbild",
+    "fundstelle",
+    "kraemer"
+   ],
+   "wege": [
+    2,
+    3
+   ],
+   "verschiedene": 2
+  },
+  "e6": {
+   "pool": [
+    "rast",
+    "kraemer",
+    "werkstatt"
+   ],
+   "wege": [
+    2,
+    3
+   ],
+   "einer_von": [
+    "rast"
    ]
   },
   "waechter": {
@@ -124,6 +191,9 @@
     "wandbild"
    ]
   },
+  "rast": {
+   "fest": "rast"
+  },
   "finale": {
    "fest": "finale"
   }
@@ -134,14 +204,7 @@
    [
     1,
     1,
-    2
-   ],
-   [
     1,
-    2,
-    2
-   ],
-   [
     2,
     2,
     2
@@ -149,9 +212,31 @@
    [
     1,
     2,
+    2,
+    2,
+    2,
     2
    ],
    [
+    2,
+    2,
+    2,
+    2,
+    2,
+    3
+   ],
+   [
+    1,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   [
+    2,
+    2,
+    2,
     2,
     2,
     2
@@ -269,5 +354,6 @@
   "hp_je_stufe": 0.12,
   "atk_alle_n_stufen": 2,
   "max": 5
- }
+ },
+ "_doc_akte": "Jeder Akt bietet am Anfang zwei Biome aus seiner Liste zur Wahl (Akt I: die Vorliebe der Figur plus eins per Seed, sonst zwei per Seed). Biome, die es (noch) nicht gibt, werden übersprungen. Gibt es nur eins, entfällt die Wahl."
 }

@@ -17,8 +17,8 @@ function bonuses(type){return roleState().filter(x=>x.on&&x.r.bonus&&x.r.bonus.t
 function passive(typ){return allActive().map(it=>def(it).passiv).filter(p=>p&&p.typ===typ);}
 function alive(){return S.enemies.filter(e=>e.hp>0);}
 function log(s){S.log.unshift(s);S.log=S.log.slice(0,14);}
-function biom(){return BIOMES[S.route?S.route[S.akt]:'hafen'];}
-function biomId(){return S.route?S.route[S.akt]:'hafen';}
+function biomId(){if(!S.route)return'hafen';return S.route[S.akt]||(S.angebote&&S.angebote[S.akt]&&S.angebote[S.akt][0])||S.route[S.akt-1]||'hafen';}
+function biom(){return BIOMES[biomId()]||BIOMES.hafen;}
 function itemOk(id){return !!ITEMS[id];}
 // Fundpool des aktuellen Bioms plus runübergreifend freigeschaltete Items
 function dropPool(){const b=biom();const extra=(S.metaItems||[]).filter(itemOk);let pool=[...(b.fundpool||[]),...extra].filter(id=>itemOk(id)&&!ITEMS[id].nodrop&&!ITEMS[id].bases&&!ITEMS[id].rare);

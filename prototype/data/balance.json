@@ -14,8 +14,8 @@
   "boss": 0
  },
  "enemy_scaling": {
-  "hp_per_depth": 0.04,
-  "atk_every_n_depths": 4
+  "hp_per_depth": 0.025,
+  "atk_every_n_depths": 6
  },
  "encounters": {
   "_doc": "Ersetzt durch run.json (Gegnerzahl) und biomes.json (Gegner je Biom)."
@@ -56,9 +56,21 @@
  "card_copies": 2,
  "grundkarten": {
   "copies": 1,
-  "waffe": {"n": "Stoßen", "c": 1, "atk": 5},
-  "kleidung": {"n": "Ausweichen", "c": 1, "blk": 5},
-  "talisman": {"n": "Zaudern", "c": 1, "blk": 4}
+  "waffe": {
+   "n": "Stoßen",
+   "c": 1,
+   "atk": 5
+  },
+  "kleidung": {
+   "n": "Ausweichen",
+   "c": 1,
+   "blk": 5
+  },
+  "talisman": {
+   "n": "Zaudern",
+   "c": 1,
+   "blk": 4
+  }
  },
  "waechter_belohnung": {
   "gold": [

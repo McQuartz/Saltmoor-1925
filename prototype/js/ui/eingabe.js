@@ -39,6 +39,7 @@ document.addEventListener('pointerup',e=>{
 document.addEventListener('click',e=>{
  const en=e.target.closest('.feind[data-ei]');if(en&&S.phase==='fight'){S.target=+en.dataset.ei;sfx.click();render();return;}
  const a=e.target.closest('[data-act]');if(a){aktion(a.dataset.act,a);return;}
+ const bw=e.target.closest('[data-biom]');if(bw){chooseBiom(+bw.dataset.biom);return;}
  const w=e.target.closest('[data-weg]');if(w){chooseWeg(+w.dataset.weg);return;}
  const bu=e.target.closest('[data-buy]');if(bu){buy(bu.dataset.buy);return;}
  const tk=e.target.closest('[data-take]');if(tk){takeReward(tk.dataset.take);return;}

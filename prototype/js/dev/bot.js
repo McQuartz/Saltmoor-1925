@@ -27,6 +27,7 @@ const Bot={
   let bi=0,bs=-1;o.forEach((x,i)=>{const s=score(x);if(s>bs){bs=s;bi=i;}});chooseWeg(bi);},
  schritt(){switch(S.phase){
   case'uebergang':leaveUebergang();break;
+  case'biomwahl':{const an=S.angebote[S.akt];const job=JOBS.find(j=>j.id===S.job);let i=an.indexOf(job&&job.vorliebe);if(i<0)i=S.seed%an.length;chooseBiom(i);break;}
   case'weg':this.wegWahl();break;
   case'fight':this.kampfZug();break;
   case'reward':if(!S.picked){takeReward(S.bag.includes(null)?S.reward[0]:'');}this.ausruesten();leaveReward();break;
