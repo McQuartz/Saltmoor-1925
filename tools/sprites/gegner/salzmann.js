@@ -11,18 +11,28 @@ function wuerfel(x, y, s, a) {
   const o = ro([0, -s]), or = ro([k, -s / 2]), ur = ro([k, s / 2]), u = ro([0, s]), ul = ro([-k, s / 2]), ol = ro([-k, -s / 2]), m = ro([0, 0]);
   return { umriss: [o, or, ur, u, ul, ol], oben: [o, or, m, ol], links: [ol, m, u, ul], rechts: [m, or, ur, u], m, o, or, ur, u, ul, ol };
 }
+// Inneres Randlicht: Kanten eines Polygons, die zum Gegenlicht (oben rechts) zeigen, eine Spur nach innen aufhellen
+function kante(P, v, c = 'r1', schwelle = 0.3) {
+  const n = v.length; let cx = 0, cy = 0; v.forEach(q => { cx += q[0] / n; cy += q[1] / n; });
+  for (let i = 0; i < n; i++) {
+    const a = v[i], b = v[(i + 1) % n]; let nx = b[1] - a[1], ny = -(b[0] - a[0]); const l = Math.hypot(nx, ny) || 1; nx /= l; ny /= l;
+    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2; if ((mx - cx) * nx + (my - cy) * ny < 0) { nx = -nx; ny = -ny; }
+    if (nx * 0.9 + ny * -0.5 < schwelle) continue;
+    const st = Math.ceil(l); for (let k = 0; k <= st; k++) { const x = a[0] + (b[0] - a[0]) * k / st - nx * 0.9, y = a[1] + (b[1] - a[1]) * k / st - ny * 0.9; const X = Math.round(x - 0.5), Y = Math.round(y - 0.5); const cur = P.get(X, Y); if (cur >= 1 && cur <= 4) P.set(X, Y, c); }
+  }
+}
 function inPoly(px, py, v) { let c = false; for (let i = 0, j = v.length - 1; i < v.length; j = i++) { if ((v[i][1] > py) !== (v[j][1] > py) && px < (v[j][0] - v[i][0]) * (py - v[i][1]) / (v[j][1] - v[i][1]) + v[i][0]) c = !c; } return c; }
 module.exports = {
   id: 'salzmann', biom: 'salz', zone: 'salz', w: 96, h: 120, fuss: [46, 115], kopf: [42, 10], rimBis: 112,
   varianten: {
     // a: großer Würfelkopf, leicht gekippt, Kristalle am Tragsack
-    salzmann_a: { kopfS: 11, kipp: 0.1, sackK: [[66, 40, 5, 0.25], [71, 50, 3.5, -0.2], [62, 33, 3, 0.5]], hals: 4 },
+    salzmann_a: { kopfS: 12, kipp: 0.14, sackK: [[63, 37, 5, 0.25], [71, 33, 6.5, -0.12], [77, 44, 3.5, 0.4], [66, 27, 3.5, 0.5]], hals: 3 },
     // b: Würfel stärker gekippt, Hals länger, die Kristalle wachsen auch auf der Schulter
-    salzmann_b: { kopfS: 10, kipp: -0.22, sackK: [[68, 44, 6, -0.15], [59, 36, 3.5, 0.4], [72, 33, 3, 0.1]], hals: 7, schulterK: 1 },
+    salzmann_b: { kopfS: 11, kipp: -0.24, sackK: [[61, 35, 4, 0.4], [70, 31, 7, -0.25], [79, 38, 4.5, 0.1]], hals: 6, schulterK: 1 },
   },
   skizzen: {
-    sil_wuerfelkopf: { kopfS: 11, kipp: 0.1, sackK: [[66, 40, 5, 0.25], [71, 50, 3.5, -0.2], [62, 33, 3, 0.5]], hals: 4 },
-    sil_langhals: { kopfS: 10, kipp: -0.22, sackK: [[68, 44, 6, -0.15], [59, 36, 3.5, 0.4], [72, 33, 3, 0.1]], hals: 7, schulterK: 1 },
+    sil_wuerfelkopf: { kopfS: 12, kipp: 0.14, sackK: [[63, 37, 5, 0.25], [71, 33, 6.5, -0.12], [77, 44, 3.5, 0.4], [66, 27, 3.5, 0.5]], hals: 3 },
+    sil_langhals: { kopfS: 11, kipp: -0.24, sackK: [[61, 35, 4, 0.4], [70, 31, 7, -0.25], [79, 38, 4.5, 0.1]], hals: 6, schulterK: 1 },
   },
   bild(p, v, A) {
     const { E, C, Pg, glied, r, bay } = A;
@@ -38,18 +48,18 @@ module.exports = {
     const beinV = glied([[bx - 5, by + 2], [bx - 9, by + 20 - fall / 2], [bx - 8, 112]], 3.8, 2.6, null);
     const beinH = glied([[bx + 5, by + 2], [bx + 9, by + 20 - fall / 2], [bx + 7, 112]], 3.8, 2.6, null);
     const fuesse = [E(bx - 11, 113, 4.6, 2.3, 'dunkel'), E(bx + 5, 113, 4.6, 2.3, 'dunkel')];
-    // Rumpf: leicht gebeugt, breite Schultern unter dem Fellumhang
+    // Rumpf: Kittel aus Wolle, leicht gebeugt
     const sx = bx - 6, sy = by - 30; // vordere Schulter
-    const rumpf = Pg([[sx - 6, sy + 3], [sx, sy - 3], [bx + 8, by - 34], [bx + 14, by - 28], [bx + 13, by - 4], [bx + 10, by + 4], [bx - 8, by + 4], [bx - 11, by - 8], [sx - 7, sy + 12]], null, { rd: 2 });
-    // Umhang: fällt in drei Bahnen, Fransensaum
-    const umhang = Pg([[sx - 7, sy + 4], [bx + 14, by - 26], [bx + 15, by - 6], [bx + 12, by - 1], [bx + 9, by - 4], [bx + 6, by], [bx + 2, by - 4], [bx - 2, by], [bx - 5, by - 4], [bx - 9, by - 1], [bx - 12, by - 6], [sx - 8, sy + 12]], null, { rd: 0.6 });
-    const falten = [C(bx - 4, by - 22, bx - 6, by - 5, 0.8, 1.2, 'dunkel'), C(bx + 5, by - 24, bx + 5, by - 5, 0.8, 1.2, 'dunkel')];
-    const guertel = C(bx - 11, by - 1, bx + 13, by - 2, 1.3, 1.3, 'dunkel');
-    const schurz = Pg([[bx - 10, by], [bx + 11, by - 1], [bx + 9, by + 7], [bx - 8, by + 8]], 'dunkel', { rd: 0.6 });
-    // Tragsack auf dem Rücken: Leder, oben offen, zwei Riemen
-    const kx = bx + 14, ky = by - 30;
-    const sack = Pg([[kx - 4, ky - 4], [kx + 8, ky - 8], [kx + 14, ky + 4], [kx + 12, ky + 22], [kx + 4, ky + 28], [kx - 3, ky + 24]], null, { rd: 2.5 });
-    const sackRand = C(kx - 4, ky - 4, kx + 8, ky - 8, 1.4, 1.4, 'dunkel');
+    const rumpf = Pg([[sx - 5, sy + 3], [sx, sy - 2], [bx + 6, by - 33], [bx + 11, by - 28], [bx + 11, by - 4], [bx + 9, by + 4], [bx - 8, by + 4], [bx - 10, by - 8], [sx - 6, sy + 12]], null, { rd: 2 });
+    // Fellumhang nur über den Schultern, zottiger Saum (heller als der Kittel)
+    const umhang = Pg([[sx - 7, sy + 2], [sx - 1, sy - 4], [bx + 7, by - 35], [bx + 13, by - 30], [bx + 13, by - 20], ...A.saum(bx + 13, sx - 8, by - 16, 7, 4, 3, p.idle ? [0, 1, 1, 0][f] : 0), [sx - 8, sy + 8]], 'haut', { rd: 0.6 });
+    const guertel = C(bx - 10, by - 1, bx + 11, by - 2, 1.4, 1.4, 'dunkel');
+    const schurz = Pg([[bx - 9, by], [bx + 10, by - 1], [bx + 8, by + 7], [bx - 7, by + 8]], 'dunkel', { rd: 0.6 });
+    // Tragsack hinter dem Rücken, höher als die Schulter, mit Holzrahmen
+    const kx = bx + 12, ky = by - 36;
+    const sack = Pg([[kx - 3, ky - 2], [kx + 9, ky - 6], [kx + 17, ky + 2], [kx + 16, ky + 24], [kx + 9, ky + 32], [kx + 1, ky + 30], [kx - 2, ky + 16]], null, { rd: 2.5 });
+    const sackRand = C(kx - 3, ky - 2, kx + 9, ky - 6, 1.5, 1.5, 'dunkel');
+    const rahmen = [C(kx + 15, ky - 10, kx + 15, ky + 34, 1.1, 1.1, 'dunkel', { pf: 'flat' }), C(kx - 1, ky - 6, kx + 1, ky + 30, 1, 1, 'dunkel', { pf: 'flat' })];
     // Hals und Würfelkopf
     const kS = v.kopfS, hx = sx - 4 + r(lean * 0.4), hy = sy - v.hals - kS + 2 + (p.idle && f === 2 ? 1 : 0);
     const hals = C(sx + 1, sy + 2, hx + 1, hy + kS * 0.6, 3.4, 2.8, 'haut');
@@ -63,8 +73,8 @@ module.exports = {
     else if (pk < 1.5) { ell = [sx - 2 + pk, sy - 6 - pk * 3]; hand = [sx + 6 - pk * 2, sy - 16 - pk * 4]; }
     else { ell = [sx - 12, sy + 2]; hand = [sx - 21, sy + 9]; }
     const armV = [...glied([[sx - 2, sy + 2], ell, hand], 3.5, 2.3, null), E(hand[0], hand[1], 2.8, 2.5, 'haut')];
-    const hh = [bx + 12 + (p.angriff ? 2 : 0), by - 8 - span];
-    const armH = [...glied([[bx + 9, by - 26], [bx + 15, by - 16], hh], 3, 2.3, null), E(hh[0], hh[1], 2.6, 2.3, 'haut')];
+    const hh = [bx + 24 + (p.angriff ? 2 : 0), by + 2 - span];
+    const armH = [...glied([[bx + 10, by - 24], [bx + 20, by - 10], hh], 3, 2.3, null), E(hh[0], hh[1], 2.6, 2.3, 'haut')];
     const spaene = [0, 1, 2].map(i => C(hh[0] - 2 + i * 2, hh[1] + 4, hh[0] + 1 + i * 3, hh[1] - 9 + i, 0.8, 0.8, 'dunkel', { pf: 'flat' }));
     const flX = hh[0] + 3, flY = hh[1] - 10;
     // Bronzepickel: Stiel, Klinge quer, Spitze in Schlagrichtung
@@ -80,16 +90,16 @@ module.exports = {
     const pickHinten = pk > 0 && pk < 1.5;
     const gruppen = [
       { p: pickHinten ? pick : [], k: 0 },
+      { p: rahmen, k: 0, anker: [lean, T] },
       { p: [sack], k: 1, anker: [lean, T] },
       { p: [sackRand], k: 0 },
       ...SK.map(w => ({ p: [Pg(w.umriss, null, { rd: 0.3, b: 1.5 })], k: 0, anker: [lean, T] })),
       { p: [beinH, fuesse[1]].flat(), k: 1 },
       { p: [beinV, fuesse[0]].flat(), k: 1 },
       { p: [rumpf], k: 2, anker: [lean, T] },
-      { p: [umhang], k: 0.5, anker: [lean, T] },
-      { p: falten, k: 0, noRim: true },
       { p: [schurz], k: 0, anker: [lean, T] },
       { p: [guertel], k: 0, noRim: true },
+      { p: [umhang], k: 0.5, anker: [lean, T] },
       { p: spaene, k: 0 },
       { p: armH, k: 1, anker: [lean, T] },
       { p: [hals], k: 0 },
@@ -100,21 +110,24 @@ module.exports = {
     const augen = [];
     const details = P => {
       const B = (x, y) => { const c = P.get(x, y); return c >= 1 && c <= 4; };
-      // Würfelflächen: oben hell gedithert, rechts mittel, links (zum Betrachter) dunkler; Grate dazwischen
-      const flaechen = (w, oben, rechts, links) => {
-        const xs = w.umriss.map(q => q[0]), ys = w.umriss.map(q => q[1]);
+      // Würfelflächen mit Verlauf (k1 < k2 < k3 < r1), gedithert: oben hell zur Lichtkante, vorn mittel, rechts dunkler mit Lichtkante
+      const STU = ['k1', 'k2', 'k3', 'r1'];
+      const stufe = (x, y, t) => { const q = Math.max(0, Math.min(0.999, t)) * 3, k = Math.floor(q); return STU[Math.min(3, (q - k) > bay(x, y) ? k + 1 : k)]; };
+      const flaechen = (w, hell) => {
+        const xs = w.umriss.map(q => q[0]), ys = w.umriss.map(q => q[1]); const s = Math.hypot(w.o[0] - w.m[0], w.o[1] - w.m[1]);
         for (let y = Math.floor(Math.min(...ys)); y <= Math.max(...ys); y++) for (let x = Math.floor(Math.min(...xs)); x <= Math.max(...xs); x++) {
           if (!B(x, y)) continue; const X = x + 0.5, Y = y + 0.5;
-          if (inPoly(X, Y, w.oben)) P.set(x, y, bay(x, y) < oben ? 'k3' : 'k2');
-          else if (inPoly(X, Y, w.rechts)) P.set(x, y, bay(x, y) < rechts ? 'k3' : 'k2');
-          else if (inPoly(X, Y, w.links)) P.set(x, y, bay(x, y) < links ? 'k2' : 'k1');
+          const dOr = Math.hypot(X - w.or[0], Y - w.or[1]) / (s * 1.7), dO = Math.hypot(X - w.o[0], Y - w.o[1]) / (s * 1.7);
+          if (inPoly(X, Y, w.oben)) P.set(x, y, stufe(x, y, hell * (1.05 - Math.min(dOr, dO) * 0.9)));
+          else if (inPoly(X, Y, w.links)) P.set(x, y, stufe(x, y, hell * (0.78 - Math.hypot(X - w.ol[0], Y - w.ol[1]) / (s * 2.2) * 0.35)));
+          else if (inPoly(X, Y, w.rechts)) P.set(x, y, stufe(x, y, hell * (0.42 - dOr * 0.2)));
         }
-        P.line(w.ol[0], w.ol[1], w.m[0], w.m[1], 'k1', true); P.line(w.m[0], w.m[1], w.u[0], w.u[1], 'k1', true);
+        P.line(w.ol[0], w.ol[1], w.m[0], w.m[1], 'k3', true); P.line(w.m[0], w.m[1], w.u[0], w.u[1], 'k1', true);
         P.line(w.m[0], w.m[1], w.or[0], w.or[1], 'r1', true);
       };
-      SK.forEach(w => flaechen(w, 0.55, 0.2, 0.15));
+      SK.forEach(w => flaechen(w, 0.85));
       // Würfelkopf: Salz ist heller als alles andere an ihm
-      flaechen(KW, 0.8, 0.45, 0.35);
+      flaechen(KW, 1);
       // Glitzern auf der Oberseite (Salzkorn), ein Pixel, wandert im Leerlauf
       const gl = [[0.3, 0.25], [0.55, 0.4], [0.4, 0.55], [0.6, 0.3]][f % 4];
       P.auf(r(KW.ol[0] + (KW.or[0] - KW.ol[0]) * gl[0]), r(KW.o[1] + (KW.m[1] - KW.o[1]) * gl[1] + 1), 'r2');
@@ -130,9 +143,20 @@ module.exports = {
         if (blick > 1.3) { P.set(r(e1x) + 1, r(e1y), 'glut'); P.set(r(e2x) + 1, r(e2y), 'glut'); }
         augen.push([r(e1x), r(e1y)], [r(e2x), r(e2y)]);
       }
+      // inneres Randlicht: Schulterfell vor dem Sack, Sack vor dem Rahmen, Kittel unter dem Fell
+      kante(P, umhang.v, 'r1', 0.1); kante(P, sack.v, 'r1', 0.2); kante(P, rumpf.v, 'k3', 0.2);
+      // Fell: hellere Strähnen gedithert über die ganze Fläche
+      for (let y = r(sy - 4); y < by - 14; y++) for (let x = r(sx - 7); x < bx + 13; x++) { const c = P.get(x, y); if (c >= 2 && c <= 4 && ((x * 3 + y * 5) % 7 === 0)) P.set(x, y, 'k3'); if (c >= 2 && c <= 4 && ((x * 5 + y * 3) % 11 === 0)) P.set(x, y, 'k1'); }
       // Fellumhang: Zotteln entlang der Schulterlinie, Fransen am Saum
-      for (let i = 0; i < 6; i++) P.auf(r(sx - 5 + i * 3.5), r(sy + 6 + i * 0.4 + (i % 2)), 'k0');
-      for (let x = r(bx - 10); x <= bx + 12; x += 2) P.auf(x, r(by - 2 + ((x * 5) % 3)), 'k3');
+      for (let i = 0; i < 9; i++) { const zx = r(sx - 4 + i * 2.4), zy = r(sy + 1 + ((i * 7) % 5)); P.auf(zx, zy, 'k1'); P.auf(zx, zy + 1, 'k1'); P.auf(zx + 1, zy - 1, 'k3'); }
+      for (let x = r(bx - 9); x <= bx + 10; x += 3) P.auf(x, r(by - 3 + ((x * 5) % 2)), 'k3');
+      // Kittel: Falten, Saum unter dem Fell
+      P.line(bx - 3, by - 14, bx - 4, by - 3, 'k0', true); P.line(bx - 2, by - 14, bx - 3, by - 3, 'k3', true); P.line(bx + 5, by - 14, bx + 5, by - 3, 'k0', true);
+      // Tragsack: Naht mit Stichen, Lederflicken, Rahmenholz unten
+      for (let y = r(ky + 2); y < ky + 24; y += 2) P.auf(r(kx + 6 + (y - ky) * 0.08), y, 'k3');
+      P.line(kx - 2, ky + 20, kx + 10, ky + 25, 'k0', true); P.line(kx - 2, ky + 19, kx + 10, ky + 24, 'k3', true);
+      P.el(kx + 1, ky + 10, 2.5, 3, 'k1', true); P.auf(r(kx), r(ky + 8), 'k3'); P.auf(r(kx + 2), r(ky + 12), 'k3');
+      // Faltenlichter im Umhang: helle Kante links neben jeder Falte
       // Riemen des Tragsacks quer über die Schulter
       P.line(sx + 2, sy - 1, bx + 6, by - 8, 'k0', true);
       // Bundschuh-Schnürung

@@ -31,7 +31,7 @@ module.exports = {
     const { E, C, Pg, r, glied, saum } = A;
     const f = p.f, W = 96, H = 120, B = v.buckel;
     let lean = 0, hy = 0, sp = 0, spY = 0, hem = 0, atem = 0, fall = 0, tropf = 0, arm = 0;
-    if (p.idle) { atem = [0, 0, 1, 1][f]; hem = [0, 1, 1, 0][f]; tropf = f; }
+    if (p.idle) { atem = [0, 0, 1, 1][f]; tropf = f; }
     if (p.angriff) { lean = [5, 3, -10, -3][f]; hy = [-6, -9, 4, 1][f]; sp = [10, 14, -12, -2][f]; spY = [-16, -22, 8, 2][f]; arm = [-2, -3, 3, 1][f]; hem = [0, 1, 3, 1][f]; }
     if (p.treffer) { lean = [3, 1][f]; hy = [-3, -1][f]; sp = 4; spY = -6; }
     if (p.tod) { fall = r(p.q * 30); lean = r(-p.q * 6); sp = r(p.q * 6); spY = r(p.q * 14); }

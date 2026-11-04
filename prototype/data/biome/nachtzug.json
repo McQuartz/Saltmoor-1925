@@ -306,7 +306,14 @@
    },
    "beute": "aufzugsschluessel",
    "beute_satz": "Seine Uhren stehen still. Alle zeigen dieselbe Zeit, und es ist nicht jetzt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "kniffe": [
+    {
+     "art": "teurer",
+     "v": 1,
+     "why": "Er stellt deine Uhr nach: eine Karte kostet diesen Zug mehr Zeit."
+    }
+   ]
   }
  },
  "items": {

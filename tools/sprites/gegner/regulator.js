@@ -27,7 +27,7 @@ module.exports = {
     const { E, C, Pg, r } = A;
     const f = p.f, W = 160, H = 180;
     let a = 0, fall = 0, kauer = 0, blick = 0;
-    if (p.idle) a = [-0.018, 0, 0.018, 0][f];
+    const scher = 0, dxIdle = p.idle ? [-1, 0, 1, 0][f] : 0; // Leerlauf: Pendeln als ganzzahlige Verschiebung (kein kriechender Dither)
     if (p.angriff) { a = [0.18, 0.27, -0.3, -0.1][f]; kauer = [1, 2, -1, 0][f]; blick = [0, 1, 2, 1][f]; }
     if (p.treffer) a = [0.09, 0.05][f];
     if (p.tod) { a = p.q * 0.08; fall = r(Math.max(0, p.q - 0.2) * 40); }
@@ -132,9 +132,10 @@ module.exports = {
         // das Lager oben glimmt
         P.set(px, py, 'glutDim'); P.set(px, py - 1, 'glut');
       }
+      if (scher) for (let y = py + 1; y < 163; y++) { const d = r(-scher * (y - py)); if (!d) continue; const row = []; for (let x = 0; x < W; x++) row.push(P.get(x, y)); for (let x = 0; x < W; x++) { const sx = x - d; if (sx >= 0 && sx < W && row[sx]) P.set(x, y, row[sx]); else P.loesch(x, y); } }
       // Tod: alles unterhalb der Linse sinkt, die Spitze bricht
       if (fall) { for (let y = H - 1; y >= 0; y--) for (let x = 0; x < W; x++) { const gi = gid[y * W + x]; if (gi >= LINSE - 1 && y + fall < H && y > 40) { const c = P.get(x, y); if (c) { P.loesch(x, y); P.set(x, y + fall, c); } } } }
     };
-    return { gruppen, details, augen };
+    return { gruppen, details, augen, dx: dxIdle };
   },
 };

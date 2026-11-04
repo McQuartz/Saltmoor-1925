@@ -241,3 +241,5 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 @keyframes aufdecken{from{transform:rotateY(90deg);opacity:0}}
 .pick.selten{border-color:var(--messing)}.pick.reliquie{border-color:var(--gold);animation:aufdecken .45s backwards,glanz 3.2s ease-in-out .5s infinite}
 @keyframes glanz{0%,100%{box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.15)}50%{box-shadow:0 0 calc(var(--u)*9) rgba(232,197,71,.45)}}
+
+.feind .nm .knf{color:#e8c070;margin-left:.3em;font-size:.8em}

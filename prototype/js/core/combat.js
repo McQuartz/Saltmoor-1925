@@ -12,7 +12,7 @@ function mkEnemy(id,i){const f0=FOES[id];if(!f0)throw new Error('Unbekannter Geg
  const tief=(f.rang||'normal')==='normal';const sc=(tief?1+BAL.enemy_scaling.hp_per_depth*(d-1):1)*(1+ST2.hp_je_stufe*st),as=(tief?Math.floor((d-1)/BAL.enemy_scaling.atk_every_n_depths):0)+(st>=2?Math.floor(st/ST2.atk_alle_n_stufen):0);const hp=Math.round(f.hp*sc*(tief?(BAL.enemy_scaling.hp_faktor||1):(BAL.enemy_scaling.waechter_faktor||1)));
  const r=rs('kampf');
  return{uid:++uidc,id,n:f.n,spr:f.spr||f.sprite||id,variant:f.variant,sprite:f.rang==='boss'?(f.sprite||null):f.varianten?r.pick(f.varianten):(f.sprite||null),rang:f.rang||'normal',weak:f.weak,hp,max:hp,block:0,str:0,burn:0,poison:0,weak2:0,
-  pi:f.rang==='boss'||f.rang==='waechter'?0:Math.floor(r.next()*f.pat.length),as,pat:f.pat.map(p=>({...p,v:p.t==='atk'?p.v+as:p.v})),besonders:f.besonders||null,kniff:f.kniff||null,vuln:0,phase:0,turns:0,...kniffMuster(f,as)};}
+  pi:f.rang==='boss'||f.rang==='waechter'?0:Math.floor(r.next()*f.pat.length),as,pat:f.pat.map(p=>({...p,v:p.t==='atk'?p.v+as:p.v})),besonders:f.besonders||null,kniff:f.kniff||null,kniffe:f.kniffe||null,vuln:0,phase:0,turns:0,...kniffMuster(f,as)};}
 // „Der, der vor dir kam“ (Ufer unten): Figur und Items deines letzten verlorenen Runs (Meta), sonst eine Figur per Seed.
 // Sein Muster sind seine besten Karten, verstärkt (f.atk_faktor); die Beute ist eines seiner Items.
 function vorgaengerDef(f){const r=rs('kampf');let v=typeof Meta!=='undefined'&&!S.dev?Meta.get().vorgaenger:null;
@@ -178,13 +178,16 @@ function sonderWirkung(c,t,mult){const s=c.sonder;if(!s)return;const why=`${c.n}
 // Kniffe der Gegner (paket-format.md): beim Treffer, zu Zugbeginn des Spielers, im Gegnerzug
 function kniffBeimTreffer(en){const k=en.kniff;if(!k)return;
  if(k.art==='dornen'&&en.hp>0||k.art==='dornen'){const v=k.v||2;const ab=Math.min(S.block,v);S.block-=ab;S.hp=Math.max(0,S.hp-(v-ab));if(v-ab>0)S.stats.todesursache=en.n+' (Dornen)';Bus.emit(v-ab>0?'player_hurt':'player_blocked',{v:v-ab,e:en,why:`${en.n} hat Dornen: ${v} zurück, Block fängt ${ab}`});}}
-function kniffeZugbeginn(){for(const en of alive()){const k=en.kniff;if(!k)continue;
+// Zusätzliche Kniffe (Feld „kniffe“, z. B. beim Uhrmacher) wirken bei Zugbeginn und nach dem Gegnerzug mit
+function kniffeVon(en){return [en.kniff,...(en.kniffe||[])].filter(Boolean);}
+function kniffeZugbeginn(){for(const en of alive())for(const k of kniffeVon(en)){
  if(k.art==='einfrieren'&&S.hand.length){const c=rs('kampf').pick(S.hand);c.frost=true;Bus.emit('toast',{a:'EINGEFROREN',b:c.n});Bus.emit('kniff',{e:en,why:`${en.n} friert „${c.n}“ für diesen Zug ein`});}
  if(k.art==='teurer'){const z=S.hand.filter(c=>!c.unspielbar&&!c.teuer);if(z.length){const c=rs('kampf').pick(z);c.teuer=k.v||1;Bus.emit('toast',{a:'TEURER',b:c.n});Bus.emit('kniff',{e:en,why:`${en.n}: „${c.n}“ kostet diesen Zug ${k.v||1} mehr${k.why?' ('+k.why+')':''}`});}}
  if(k.art==='verstopfen'){for(let n=0;n<(k.n||1);n++)S.hand.push(stoerKarte(en));Bus.emit('kniff',{e:en,why:`${en.n} steckt ${k.n||1} unspielbare Karte(n) in deine Hand`});}}}
 function stoerKarte(en){return{n:en.kniff&&en.kniff.karte||'Abschrift',c:0,unspielbar:true,st:[],src:en.n,spr:'bone',cid:'stoer'+(++uidc),verbraucht:true};}
 // nach dem eigenen Zug eines Gegners
-function kniffGegnerzug(en){const k=en.kniff;if(!k)return;const why=k.why?` (${k.why})`:'';
+function kniffGegnerzug(en){for(const k of kniffeVon(en))kniffEiner(en,k);}
+function kniffEiner(en,k){const why=k.why?` (${k.why})`:'';
  if(k.art==='waechst'){en.str+=k.v||2;Bus.emit('enemy_buff',{e:en,why:`${en.n} wächst: Stärke +${k.v||2}${why}`});}
  if(k.art==='schuetzer'){alive().filter(o=>o!==en).forEach(o=>{o.block+=k.v||4;Bus.emit('enemy_block',{e:o,why:`${en.n} schützt ${o.n}: +${k.v||4} Block`});});}
  if(k.art==='heiler'){const o=alive().filter(x=>x!==en&&x.hp<x.max).sort((a,b)=>a.hp/a.max-b.hp/b.max)[0];if(o){o.hp=Math.min(o.max,o.hp+(k.v||4));Bus.emit('enemy_heal',{e:o,why:`${en.n} heilt ${o.n} um ${k.v||4}`});}}
@@ -206,6 +209,8 @@ function gegnerTrifft(en,v,why){let d=Math.max(0,Math.round(v));if(en.weak2)d=Ma
  Bus.emit(d>0?'player_hurt':'player_blocked',{v:d,e:en,nr:1,von:1,letzter:true,why:`${why}; Block fängt ${ab}; du verlierst ${d}`});}
 // Angekündigter Schaden aller Gegner im nächsten Zug (für Warnung und Musik)
 function kniffNachAngriff(en,tot){if(tot>0)S.stats.todesursache=en.n;}
+// was der Spieler sieht: verborgene Angriffe zählen nicht mit
+function incomingSichtbar(){const v=alive().filter(e=>e.kniff&&e.kniff.art==='verborgen');if(!v.length)return incoming();const keep=v.map(e=>e.pat);v.forEach(e=>{e.pat=e.pat.map(p=>p.t==='atk'?{...p,v:-e.str,h:1}:p);});const r=incoming();v.forEach((e,i)=>e.pat=keep[i]);return Math.max(0,r);}
 function incoming(){let tot=0;for(const en of alive()){if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
 
 function endTurn(){

@@ -17,7 +17,7 @@ module.exports = {
     const f = p.f, n = v.platten.length;
     // sch: Scherung der Spitzen (Angriff: erst nach rechts holen, dann nach links schlagen); zit: Zittern je Platte
     let sch = 0, sink = 0, mundAuf = -1, licht = 1, lean = 0, zit = [0, 0, 0, 0, 0];
-    if (p.idle) { mundAuf = f % n; zit = zit.map((_, i) => (i === (f + 1) % n ? 1 : 0)); }
+    if (p.idle) { mundAuf = f % n; zit = zit.map((_, i) => (i === (f + 1) % n && f % 2 ? 1 : 0)); }
     if (p.angriff) { sch = [5, 10, -16, -7][f]; lean = [1, 2, -3, -1][f]; licht = [1.1, 1.3, 1.6, 1.2][f]; mundAuf = 99; }
     if (p.treffer) { sch = [4, 2][f]; zit = [1, -1, 1, -1, 1]; licht = 0.6; }
     if (p.tod) { sink = r(p.q * 14); sch = r(p.q * 8); licht = Math.max(0, 1 - p.q * 1.8); }
@@ -40,7 +40,7 @@ module.exports = {
     const liegend = v.liegend ? [Pg([[56, 113], [62, 106], [84, 108], [88, 113]], null, { rd: 0.4 })] : [];
     // Reihenfolge: äußere hinten, mittlere vorn
     const ord = platten.slice().sort((A2, B2) => Math.abs(B2.i - (n - 1) / 2) - Math.abs(A2.i - (n - 1) / 2));
-    const gruppen = [{ p: kiste, k: 1 }, ...ord.map(pl => ({ p: [pl.poly], k: 0, anker: [pl.z, 0] })), { p: brett, k: 0 }, { p: liegend, k: 0 }];
+    const gruppen = [{ p: kiste, k: 1 }, ...ord.map(pl => ({ p: [pl.poly], k: 0 })), { p: brett, k: 0 }, { p: liegend, k: 0 }];
     const augen = [];
     const inPoly = (x, y, v2) => { let c = false; for (let i = 0, j = v2.length - 1; i < v2.length; j = i++) { const [xi, yi] = v2[i], [xj, yj] = v2[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
     const details = P => {

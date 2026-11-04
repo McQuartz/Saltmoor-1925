@@ -21,7 +21,7 @@ document.addEventListener('pointermove',e=>{
   else{d.el.style.transform=`translate(${(e.clientX-d.x0)/(BU.s||1)}px,${(e.clientY-d.y0)/(BU.s||1)}px) rotate(${(e.clientX-d.x0)*.03}deg) scale(1.06)`;$('szene').classList.toggle('drop',inScene(e.clientX,e.clientY));}
   return;}
  if(!down&&e.target.closest){const sl=e.target.closest('.slot[data-loc]');const cd=e.target.closest('[data-card]');
-  const hv=hoverVorschau(e.target);if(hv)showTip(hv,e.clientX,e.clientY);else if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
+  const hv=hoverVorschau(e.target);const fd=S.phase==='fight'&&e.target.closest('.feind[data-ei]');if(hv)showTip(hv,e.clientX,e.clientY);else if(fd&&!cd)showTip(feindTip(+fd.dataset.ei),e.clientX,e.clientY);else if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
   const hi=cd?+cd.dataset.card:-1;if(hi!==hoverCard){hoverCard=hi;setVorschau(hi,-1);}}
  if(!down||!down.has)return;if(!down.drag&&Math.hypot(e.clientX-down.x,e.clientY-down.y)>5){down.drag=true;hideTip();$('ghost').src=itemBild(getAt(down.loc).id);$('ghost').style.display='block';}
  if(down.drag){$('ghost').style.left=(e.clientX-20)+'px';$('ghost').style.top=(e.clientY-20)+'px';}});
