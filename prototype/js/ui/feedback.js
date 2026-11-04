@@ -77,3 +77,6 @@ Bus.on('unlock',({neu})=>toast('FREIGESCHALTET',neu.map(x=>esc(x.n)).join(', '))
 Bus.on('einst',({k,v})=>{if(k==='musik'&&typeof Music!=='undefined'&&Music.volume)Music.volume(v);if(k==='effekte'&&typeof SFXB!=='undefined'&&SFXB)SFXB.gain.value=.72*v/.8;});
 // Jumpscare: höchstens einmal pro Run, nicht in den ersten 5 Minuten, abschaltbar
 setInterval(()=>{if(!S.route||S.scares||document.hidden||!Einst.get('jumpscare')||S.phase!=='fight')return;if(Date.now()-S.startT>Math.max(S.scareAt,BAL.jumpscare.nicht_vor_min*60000)){S.scares=1;if(typeof jumpscare==='function')jumpscare();Bus.emit('jumpscare',{why:'Einmal pro Abstieg, nach '+Math.round((Date.now()-S.startT)/60000)+' Minuten'});}},1000);
+// Belohnung aufdecken: kurzer Ton je Karte, tiefer Glockenschlag bei Reliquien (Wächter)
+Bus.on('reward',({items,hg})=>{if(FAST)return;const n=(hg||[]).length+(items||[]).length;for(let i=0;i<n;i++)setTimeout(()=>sfx.card(),180*i+80);
+ if((items||[]).some(id=>ITEMS[id]&&rarOf(ITEMS[id])==='reliquie')&&typeof Music!=='undefined'&&audioOn)setTimeout(()=>{try{Music.uebergang();}catch(e){}},600);});

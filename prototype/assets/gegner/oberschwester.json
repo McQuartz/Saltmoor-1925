@@ -1,0 +1,57 @@
+{
+ "id": "oberschwester",
+ "rang": "waechter",
+ "w": 128,
+ "h": 160,
+ "zone": "kurhaus",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  74,
+  155
+ ],
+ "kopf": [
+  70,
+  4
+ ],
+ "augen": [
+  [
+   34,
+   90
+  ],
+  [
+   38,
+   90
+  ],
+  [
+   66,
+   51
+  ],
+  [
+   71,
+   51
+  ]
+ ],
+ "augenfarbe": "#e6fff6"
+}

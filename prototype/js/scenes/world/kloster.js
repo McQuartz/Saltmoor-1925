@@ -14,7 +14,7 @@ const BODEN = ['#0e0c10', '#18141a', '#231d22', '#2e262a', '#3b3134', '#4a3e3e',
 const SAND = ['#1c1a1a', '#2a2624', '#38322e', '#48403a', '#5a5046', '#6c6054'];
 const HOLZ = ['#08060a', '#100c0e', '#1a1416', '#261d1e', '#342828', '#443430'];
 const WATT = ['#141418', '#1c1c22', '#26262c', '#323238', '#404046', '#525256', '#686866', '#828078'];
-const TINTE = '#1a1c34', TINTE2 = '#2a3062', KERZE = '#e6aa4a', KGLUT = '#4a3010';
+const TINTE = '#1e1a26', TINTE2 = '#2c2a44', ROT = '#8a3a20', KERZE = '#e6aa4a', KGLUT = '#4a3010';
 
 // Schrift: Zeilen aus kurzen Strichen (Wörtern) auf einer Fläche. zeile(y) -> [x0, x1] oder null
 function schrift(e, y0, y1, dz, zeile, farbe, seed, dicht) {
@@ -55,15 +55,15 @@ function buch(K, eb, o) {
   // Falz: dunkle Rinne
   for (let y = Math.floor(top(xm)) - 1; y < yb - blk; y++) { e.set(xm - 1, y, B.pk(PERG[1])); e.set(xm, y, B.pk(PERG[0])); e.set(xm + 1, y, B.pk(PERG[2])); }
   // Schrift auf den Seiten, Zeilen folgen der Wölbung (zwei Spalten je Seite)
-  const zr = Math.max(2, Math.round(o.zeile || 3));
+  const zr = Math.max(3, Math.round(o.zeile || 4));
   for (const s of [-1, 1]) {
     const a = s < 0 ? x0 + ws * .07 : xm + ws * .05, b = s < 0 ? xm - ws * .05 : x1 - ws * .07;
-    schrift(e, yo, yb - blk - 4, zr, y => { const l = [], rr = []; for (let x = a; x < b; x++) if (y > top(x) + 4) { l.push(x); } if (!l.length) return null; return [l[0], l[l.length - 1]]; }, s < 0 ? TINTE : TINTE2, sd + (s < 0 ? 1 : 2), .9);
+    schrift(e, yo, yb - blk - 4, zr, y => { const l = [], rr = []; for (let x = a; x < b; x++) if (y > top(x) + 4) { l.push(x); } if (!l.length) return null; return [l[0], l[l.length - 1]]; }, s < 0 ? TINTE : TINTE2, sd + (s < 0 ? 1 : 2), .78);
   }
   // Initiale auf der linken Seite: ein großer Buchstabe aus Tinte mit Ocker
   const ix = x0 + ws * .1, iy = top(ix) + 8, is = Math.max(4, ws * .035);
   const im = B.maske(); im.kap(ix, iy, ix, iy + is * 2.2, is * .35, is * .35); im.kap(ix, iy, ix + is * 1.3, iy + is * .5, is * .3, is * .3); im.kap(ix + is * 1.3, iy + is * .5, ix, iy + is * 1.1, is * .3, is * .3);
-  for (let y = im.y0; y <= im.y1; y++) for (let x = im.x0; x <= im.x1; x++) if (im.has(x, y)) e.set(x, y, B.pk((x + y) % 5 === 0 ? '#8a5a20' : TINTE));
+  for (let y = im.y0; y <= im.y1; y++) for (let x = im.x0; x <= im.x1; x++) if (im.has(x, y)) e.set(x, y, B.pk((x + y) % 4 === 0 ? '#c07a30' : ROT));
   // Falsches Detail: die Zeilen laufen über die Seitenkante hinaus, den Block hinunter (rechts, wo Platz fehlt)
   const lauf = 3 + Math.round(fr * 6);
   for (let k = 0; k < lauf; k++) {
@@ -98,84 +98,69 @@ function pult(K, eb, x, y, s, an, o) {
 }
 
 // =====================================================================
-// Variante 0: Im Kreuzgang. Der Gang läuft nach links hinten, rechts die Arkade, dahinter das Buch.
+// Variante 0: Im Kreuzgang. Wir stehen im Garten; links läuft die Arkade nach hinten, rechts liegt das Buch,
+// größer als der Kreuzgang. Die Schrift läuft vom Buch über den Sand bis vor unsere Füße und in die Arkade.
 function kreuzgang(K, cfg) {
   cfg = cfg || {};
-  const fr = K.fr, sd = K.o.seed, P = B.persp(150, 128), XA = 3.0, XL = -1.7, YD = 2.35; K.split = [150, 176];
-  himmel(K, 0, .45);
-  // Kirchturm hinter dem Buch (fern, flach)
-  const tm = B.maske(); tm.rect(426, 18, 30, 140); tm.poly([[422, 20], [441, -4], [460, 20]]); tm.rect(398, 70, 30, 90); tm.poly([[396, 72], [413, 58], [430, 72]]);
-  K.form(1, tm, .62, { ton: 1.3, fase: 1, rand: 1 });
-  B.feld(K.e[1], 436, 40, 446, 52, ['#2a2622', '#3a342e'], (x, y) => ((x + y) % 3 ? .2 : .8));
-  // Boden: Gang (Steinplatten, Grabplatten) links der Arkadenlinie, Garten (Salzgras, blass) rechts
-  const amLinie = y => P.vx + XA * (y - P.vy);
-  K.bodenStoffe(P.vy + 1, H + M, [
-    { cols: SAND, tf: (x, y) => { const Z = P.z(y + .5); return .55 + Math.min(.35, Z / 25) + (B.fbm(x * .05, y * .2, sd, 2) - .5) * .5 + (B.hash(x, y, 4) > .93 ? -.25 : 0); } },
-    { cols: BODEN, tf: (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h, k = P.k(Z), fx = X / .7 - Math.floor(X / .7), fz = Z / .7 - Math.floor(Z / .7); let t = .45 + (((Math.floor(X / .7) + Math.floor(Z / .7)) & 1) ? .08 : 0) + Math.min(.25, Z / 20) + (B.hash(Math.floor(X / .7), Math.floor(Z / .7), sd) - .5) * .2; if (fx * .7 * k < 1 || fz * .7 * k * k / P.h < .9) t -= .25; return t; } }
-  ], (x, y) => (x > amLinie(y) ? 0 : 1));
-  // Grabplatten der Äbte im Gang (dunkle Rechtecke mit Kreuzritzung)
-  for (const [X, Z] of [[.6, 2.4], [.9, 4.2], [.5, 7]]) { const a = P.q(X - .35, 0, Z + .45), b2 = P.q(X + .35, 0, Z + .45), c = P.q(X + .35, 0, Z - .45), d = P.q(X - .35, 0, Z - .45), m = B.maske(); m.poly([a, b2, c, d]); K.form(K.eb(c[1]), m, Math.min(.4, Z / 20), { k: BODEN.slice(0, 5), r: [B.mix(BODEN[5], pal.rand[0], .3), pal.rand[0]], ton: 1.2, fase: 1, rand: 1 }); const [cx, cy] = P.q(X, 0, Z); const e = K.e[K.eb(cy)], kk = P.k(Z); B.linie(e, cx, cy - kk * .2, cx, cy + kk * .03, B.pk(BODEN[0])); B.linie(e, cx - kk * .1, cy - kk * .1, cx + kk * .1, cy - kk * .1, B.pk(BODEN[0])); }
-  // Das Buch im Garten (Ebene 2: steht auf dem fernen Boden, hinter der Arkade)
-  const bk = buch(K, 2, { x0: 196, x1: 470, oben: -6, basis: 150, block: 30, falz: 46, zeile: 3, tiefe: .05 });
-  // Falsches Detail: Schrift läuft vom Buch über den Garten und durch die Bögen bis in den Gang
-  const zeilen = 3 + Math.round(fr * 5);
+  const fr = K.fr, sd = K.o.seed, P = B.persp(150, 128), XA = -2.6, YD = 2.3; K.split = [163, 182];
+  himmel(K, 0, .48);
+  // Kirchturm hinten links über dem Kreuzgangdach (fern, flach)
+  const tm = B.maske(); tm.rect(96, 36, 22, 96); tm.poly([[92, 38], [107, 12], [122, 38]]); K.form(1, tm, .6, { ton: 1.3, fase: 1, rand: 1 });
+  B.feld(K.e[1], 104, 50, 110, 60, ['#2a2622', '#3a342e'], (x, y) => ((x + y) % 3 ? .2 : .8));
+  // Garten: blasser Sand mit Salzgras, Wege an den Rändern
+  K.boden(P.vy + 1, H + M, SAND, (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; return .5 + Math.min(.38, Z / 22) + (B.fbm(X * .9, Z * .9, sd, 2) - .5) * .5 + (B.hash(x, y, 4) > .95 ? -.3 : 0) + (X < XA + .7 ? -.25 : 0); });
+  // Das Buch: steht im Garten rechts, Seiten bis an den Bildrand
+  const bk = buch(K, 2, { x0: 196, x1: 492, oben: 4, basis: 162, block: 26, falz: 52, zeile: 3, tiefe: .03 });
+  // Arkade links: dunkler Gang dahinter, davor Doppelsäulen mit Rundbögen, darüber Mauer und Pultdach
+  const Zs = [1.05, 1.5, 2.1, 2.9, 3.9, 5.2, 7, 9.4, 12.6, 17];
+  const innen = B.maske(), [i0x, i0y] = P.q(XA - .9, YD + .2, 1.0), [i1x, i1y] = P.q(XA - .9, YD + .2, 18), [, if1] = P.q(XA - .9, 0, 18), [, if0] = P.q(XA - .9, 0, 1.0);
+  innen.poly([[i0x, i0y], [i1x, i1y], [i1x, if1], [i0x, if0]]);
+  K.form(2, innen, .05, { k: STEIN.slice(0, 5), ton: 1.1, fase: 0, rand: 0, verlauf: .4 });
+  const aw = B.maske(), [a0x, a0y] = P.q(XA, YD, 1.0), [a1x, a1y] = P.q(XA, YD, 18), [, af1] = P.q(XA, 0, 18), [, af0] = P.q(XA, 0, 1.0);
+  aw.poly([[a0x, a0y], [a1x, a1y], [a1x, af1], [a0x, af0]]);
+  const ZvonX = x => XA * P.h / Math.min(-.001, x - P.vx);
+  for (let i = 0; i < Zs.length - 1; i++) {
+    const za = Zs[i] + .07 * Zs[i] / 2, zb = Zs[i + 1] - .07 * Zs[i + 1] / 2, zm = (za + zb) / 2, r = (zb - za) / 2, ys = 1.5;
+    aw.fn(P.q(XA, 0, za)[0] - 1, -M, P.q(XA, 0, zb)[0] + 1, H + M, (x, y) => { const Z = ZvonX(x), Y = 1 - (y - P.vy) * Z / P.h; if (Z < za || Z > zb || Y < .05) return false; return Y < ys || Math.hypot((Z - zm) / r, (Y - ys) / .55) < 1; }, 0);
+  }
+  K.form(3, aw, 0, { k: STEIN.slice(1, 9), r: pal.rand, ton: 4.2, fase: 2, verlauf: .3, schatten: 2, muster: (x, y) => { const Z = ZvonX(x), Y = 1 - (y - P.vy) * Z / P.h; return (Math.abs((Y * 4) % 1) < .07 ? -.8 : 0) + (B.hash(Math.floor(Z * 3), Math.floor(Y * 4), 3) - .5) * .5; } });
+  for (let i = 1; i < Zs.length - 1; i++) { const Z = Zs[i], [x, yb] = P.q(XA, 0, Z), [, yt] = P.q(XA, 1.5, Z), w = P.k(Z) * .2; doppelsaeule(K, K.eb(yb), x, yb, yb - yt, w, Math.min(.45, Z / 30)); }
+  const dach = B.maske(), [d0x, d0y] = P.q(XA, YD, 1.0), [d1x, d1y] = P.q(XA, YD, 18), [d2x, d2y] = P.q(XA - 1.2, YD + .9, 18), [d3x, d3y] = P.q(XA - 1.2, YD + .9, 1.0);
+  dach.poly([[d0x, d0y], [d1x, d1y], [d2x, d2y], [d3x, d3y]]);
+  K.form(3, dach, 0, { k: HOLZ, r: pal.rand, ton: 2, fase: 1, muster: (x, y) => { const Z = ZvonX(x); return (Math.abs((Z * 4) % 1) < .12 ? -.6 : 0) + ((y % 3) === 0 ? -.3 : 0); } });
+  // im Gang ein Pult mit Kerze (durch einen Bogen zu sehen)
+  if (!cfg.ohnePult) { const [px, py] = P.q(XA - .45, 0, 2.5); pult(K, 3, px, py, P.k(2.5) / 130, fr < .8, { tief: .05 }); }
+  // Falsches Detail: Schrift läuft vom Buchblock über den Sand zu uns, eine Zeile biegt in die Arkade
+  const zeilen = 4 + Math.round(fr * 5);
   for (let k = 0; k < zeilen; k++) {
-    let prev = null;
-    for (let t = 0; t <= 1; t += .004) {
-      const Z = 6.6 - t * 5.4, X = 4.6 - t * (3.9 + k * .05) + k * .16 + Math.sin(t * 7 + k) * .08;
+    let prev = null; const zurArkade = k === 1 || k === 4;
+    for (let t = 0; t <= 1; t += .0025) {
+      const Z0 = 4.55, Z = Z0 - t * (zurArkade ? 1.2 : 3.4), X = 1.2 + k * .35 - t * (zurArkade ? 3.6 + k * .1 : .9 + k * .3) + Math.sin(t * 6 + k) * .07;
       const [x, y] = P.q(X, 0, Z); const kk = P.k(Z), e = K.e[K.eb(y)];
       if (prev && Math.round(x) === prev[0] && Math.round(y) === prev[1]) continue; prev = [Math.round(x), Math.round(y)];
-      const wort = (t * 90 + k * 7) % 6 < 4.6; if (!wort) continue;
-      e.set(x, y, B.pk(TINTE)); if (kk > 70) e.set(x, y + 1, B.pk(TINTE)); if (kk > 110 && B.hash(Math.round(x), k, 3) > .5) e.set(x + 1, y, B.pk(TINTE2));
+      const ph = (t * 90 + k * 7) % 6; if (ph > 4.2) continue;
+      e.set(x, y, B.pk(TINTE)); if (kk > 50) e.set(x + 1, y, B.pk(TINTE)); if (kk > 80) { e.set(x, y + 1, B.pk(TINTE)); if (B.hash(Math.round(x), Math.round(y), k) > .6) e.set(x - 1, y - 1, B.pk(TINTE2)); }
     }
   }
-  // linke Wand des Gangs mit Tür zur Kirche
-  const lw = B.maske(), [l0x, l0y] = P.q(XL, YD, 1.0), [l1x, l1y] = P.q(XL, YD, 14), [, f0y] = P.q(XL, 0, 1.0), [, f1y] = P.q(XL, 0, 14);
-  lw.poly([[-M, l0y], [l1x, l1y], [l1x, f1y], [-M, f0y]]);
-  K.form(2, lw, .08, { k: STEIN.slice(1, 8), ton: 2.5, fase: 0, rand: 0, verlauf: -.6, muster: (x, y) => { const Z = P.h / Math.max(.01, (P.vx - x) / -XL), r = Math.floor((y - P.vy) / Math.max(2, P.k(Z) * .22)); return ((B.hash(r, Math.floor(Z * 3), 2) - .5) * .4) + (Math.abs(((y - P.vy) / Math.max(2, P.k(Z) * .22)) % 1) < .12 ? -.5 : 0); } });
-  const tz = 3.2, [t0x, t0y] = P.q(XL, 1.35, tz), [t1x] = P.q(XL, 0, tz + .55), [, tfy] = P.q(XL, 0, tz), tw = B.maske();
-  tw.poly([[t0x, t0y], [t1x, P.q(XL, 1.35, tz + .55)[1]], [t1x, P.q(XL, 0, tz + .55)[1]], [t0x, tfy]]);
-  K.form(2, tw, .05, { k: HOLZ, ton: 1.3, fase: 1, rand: 1, muster: (x) => (x % 3 === 0 ? -.4 : 0) });
-  // Lesebank an der Wand
-  const lb = B.maske(), b0 = P.q(XL + .25, .45, 1.6), b1 = P.q(XL + .25, .45, 5), b2 = P.q(XL + .25, .3, 5), b3 = P.q(XL + .25, .3, 1.6); lb.poly([b0, b1, b2, b3]);
-  K.form(3, lb, 0, { k: HOLZ, r: pal.rand, ton: 1.8, fase: 1 });
-  // Decke: Balken laufen zum Fluchtpunkt (oben links, UI-Bereich: nur dunkle Fläche)
-  const dm = B.maske(), [d0x, d0y] = P.q(XL, YD, .8), [d1x, d1y] = P.q(XA, YD, .8), [d2x, d2y] = P.q(XA, YD, 16), [d3x, d3y] = P.q(XL, YD, 16);
-  dm.poly([[d0x, d0y], [d1x, d1y], [d2x, d2y], [d3x, d3y]]);
-  K.form(2, dm, .05, { k: HOLZ, ton: 1.2, fase: 0, rand: 0, muster: (x, y) => { const Z = P.h / Math.max(.01, (P.vy - y) / (YD - 1)), X = (x - P.vx) * Z / P.h; return (Math.abs((X * 2) % 1) < .08 ? .9 : 0) + (Math.abs((Z * 1.5) % 1) < .05 ? .6 : 0); } });
-  // Arkade: Wand in der Ebene X = XA, Öffnungen mit Rundbogen zwischen Doppelsäulen
-  const Zs = [1.25, 1.8, 2.5, 3.4, 4.6, 6.2, 8.4, 11.3, 15];
-  const aw = B.maske(), [a0x, a0y] = P.q(XA, YD, 1.0), [a1x, a1y] = P.q(XA, YD, 15), [, af0] = P.q(XA, 0, 1.0), [, af1] = P.q(XA, 0, 15);
-  aw.poly([[a0x, a0y - 2], [a1x, a1y], [a1x, af1], [a0x, af0]]);
-  for (let i = 0; i < Zs.length - 1; i++) {
-    const za = Zs[i] + .12, zb = Zs[i + 1] - .12, zm = (za + zb) / 2, r = (zb - za) / 2, ys = 1.35;
-    // Öffnung: Rechteck bis Kämpfer, darüber Halbkreis (in Weltkoordinaten), projiziert
-    aw.fn(P.q(XA, 0, zb)[0] - 1, -M, P.q(XA, 0, za)[0] + 1, H + M, (x, y) => { const Z = XA * P.h / Math.max(.001, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h; if (Z < za || Z > zb || Y < .02) return false; return Y < ys || Math.hypot(Z - zm, (Y - ys) * 1.0) < r; }, 0);
-  }
-  K.form(3, aw, 0, { k: STEIN.slice(1, 9), r: pal.rand, ton: 3.8, fase: 2, verlauf: .3, muster: (x, y) => { const Z = XA * P.h / Math.max(.001, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h; return (Math.abs((Y * 4) % 1) < .07 ? -.8 : 0) + (B.hash(Math.floor(Z * 3), Math.floor(Y * 4), 3) - .5) * .5; }, schatten: 2 });
-  for (let i = 1; i < Zs.length - 1; i++) { const Z = Zs[i], [x, yb] = P.q(XA, 0, Z), [, yt] = P.q(XA, 1.35, Z), w = P.k(Z) * .24; doppelsaeule(K, K.eb(yb), x, yb, yb - yt, w, Math.min(.45, Z / 30)); }
-  // Pult im Gang mit Kerze (hier wird bei gutem Licht geschrieben)
-  if (!cfg.ohnePult) { const [px, py] = P.q(2.1, 0, 1.55); pult(K, 4, px, py, P.k(1.55) / 120, fr < .8); }
-  // Nebel: schmales Band hinter den Figuren im Garten
-  B.nebel(K.e[2], { y0: 118, y1: 158, col: B.mix(pal.nebel[1], K.fern, .4), dichte: .22, xs: [160, 470, 60], seed: 3 });
-  // Vordergrund: ein Deckenbalken oben, links angeschnittene Wandkante
-  const v = B.maske(); v.poly([[-M, -M], [W + M, -M], [W + M, 8], [-M, 22]]); v.rect(-M, -M, 18, H + 2 * M);
-  K.form(5, v, 0, { k: HOLZ, r: pal.rand, ton: 1.2, fase: 2 });
-  B.partikel(K, { n: 40, farben: ['#7a705e', '#aa9e84', '#d6ccb0'], vx: -2, vy: 3, wob: 3, wf: .3, x0: 200, x1: 480, y0: 0, y1: 180, hellSelten: 2 });
-  K.reihen = [{ y: 166, skala: .9, nebel: .3 }, { y: 190, skala: 1, nebel: .12 }, { y: 213, skala: 1, nebel: 0 }];
-  return { mitte: [230, 206], buch: bk };
+  B.nebel(K.e[2], { y0: 120, y1: 166, col: B.mix(pal.nebel[1], K.fern, .4), dichte: .2, xs: [60, 300, 60], seed: 3 });
+  // Vordergrund: Säule der Arkade vorne links angeschnitten, Salzgras am Rand
+  doppelsaeule(K, 5, -6, H + 6, 290, 70, 0);
+  const g = B.maske(); for (let i = 0; i < 14; i++) { const x = 440 + i * 3.4, h = 8 + B.hash(i, 1, sd) * 16; g.kap(x, H + 4, x + (B.hash(i, 2, sd) - .3) * 6, H - h, 1, .5); } K.form(5, g, 0, { k: STEIN.slice(0, 5), r: pal.rand, ton: 1.6, fase: 0, rand: 1 });
+  B.partikel(K, { n: 40, farben: ['#7a705e', '#aa9e84', '#d6ccb0'], vx: -2, vy: 3, wob: 3, wf: .3, x0: 160, x1: 480, y0: 0, y1: 200, hellSelten: 2 });
+  K.reihen = [{ y: 172, skala: .9, nebel: .28 }, { y: 192, skala: 1, nebel: .12 }, { y: 214, skala: 1, nebel: 0 }];
+  return { mitte: [230, 208], buch: bk };
 }
 
 // =====================================================================
 // Variante 1: Das Skriptorium. Pultreihen zum hohen Fenster am Ende; links die Abschriften, jede dicker.
 function skriptorium(K, cfg) {
   cfg = cfg || {};
-  const fr = K.fr, sd = K.o.seed, P = B.persp(300, 120), XL = -3.0, XR = 3.0, YD = 3.0, ZE = 9; K.split = [150, 172];
+  const fr = K.fr, sd = K.o.seed, P = B.persp(300, 116), XL = -3.2, XR = 3.0, YD = 3.0, ZE = 6.2; K.split = [150, 172];
   // Wände (Kalkputz, pergamentfarben), Rückwand mit Fenster
   B.feld(K.e[0], -M, -M, W + M, H + M, STEIN, (x, y) => .55 + (B.fbm(x * .03, y * .03, sd, 3) - .5) * .4);
   const [rx0, ry0] = P.q(XL, YD, ZE), [rx1, ry1] = P.q(XR, 0, ZE);
   const rw = B.maske(); rw.rect(rx0, ry0, rx1 - rx0, ry1 - ry0);
-  const fx = P.q(.6, 0, ZE)[0], fw = P.k(ZE) * .9, fyT = P.q(0, 2.6, ZE)[1], fyB = P.q(0, .9, ZE)[1];
+  const fx = P.q(.7, 0, ZE)[0], fw = P.k(ZE) * 1.5, fyT = P.q(0, 2.1, ZE)[1], fyB = P.q(0, .55, ZE)[1];
   rw.fn(fx - fw / 2, fyT - fw, fx + fw / 2, fyB, (x, y) => y > fyT || Math.hypot(x - fx, y - fyT) < fw / 2, 0);
   K.form(1, rw, .15, { k: STEIN.slice(2, 9), r: pal.rand, ton: 4.4, fase: 1, verlauf: .4, muster: (x, y) => (B.fbm(x * .05, y * .05, sd + 3, 2) - .5) * .7 });
   // Fenster: Watt-Himmel und Watt, hell; Sprossen
@@ -189,28 +174,36 @@ function skriptorium(K, cfg) {
   // Decke mit Bindern (Balken quer), oben dunkel
   const dm = B.maske(), [q0x, q0y] = P.q(XL, YD, .9), [q1x, q1y] = P.q(XR, YD, .9), [q2x, q2y] = P.q(XR, YD, ZE), [q3x, q3y] = P.q(XL, YD, ZE); dm.poly([[q0x, q0y], [q1x, q1y], [q2x, q2y], [q3x, q3y]]);
   K.form(2, dm, .05, { k: HOLZ, ton: 1.3, fase: 0, rand: 0 });
-  for (const Z of [1.6, 2.6, 4, 6, 8.6]) { const m = B.maske(), [a, b] = P.q(XL, YD, Z), [c, d] = P.q(XR, YD, Z), k = P.k(Z); m.poly([[a, b - k * .14], [c, d - k * .14], [c, d + k * .1], [a, b + k * .1]]); K.form(2, m, Math.min(.3, Z / 30), { k: HOLZ, r: pal.rand, ton: 1.6, fase: 1 }); }
+  for (const Z of [1.5, 2.4, 3.6, 5.2]) { const m = B.maske(), [a, b] = P.q(XL, YD, Z), [c, d] = P.q(XR, YD, Z), k = P.k(Z); m.poly([[a, b - k * .14], [c, d - k * .14], [c, d + k * .1], [a, b + k * .1]]); K.form(2, m, Math.min(.3, Z / 30), { k: HOLZ, r: pal.rand, ton: 1.6, fase: 1 }); }
   // Dielenboden zum Fenster hin
   K.boden(P.vy + 1, H + M, BODEN, (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h, k = P.k(Z), f = X / .45 - Math.floor(X / .45); if (Z > ZE) return -1; let t = .4 + Math.min(.3, Z / 18) + B.hash(Math.floor(X / .45), 3, sd) * .15; if (f * .45 * k < 1) t -= .25; return t; });
   // Tintenflecken auf den Dielen
   for (let i = 0; i < 9; i++) { const X = -1.8 + B.hash(i, 1, sd) * 3.6, Z = 1.6 + B.hash(i, 2, sd) * 6, [x, y] = P.q(X, 0, Z), r = Math.max(1, P.k(Z) * .06 * (.5 + B.hash(i, 3, sd))); const m = B.maske(); m.ell(x, y, r * 1.8, r * .6); const e = K.e[K.eb(y)]; for (let yy = m.y0; yy <= m.y1; yy++) for (let xx = m.x0; xx <= m.x1; xx++) if (m.has(xx, yy)) e.set(xx, yy, B.pk(TINTE)); }
   // Falsches Detail: die Abschriften auf dem Bord an der linken Wand, jede dicker als die davor (nach vorn hin)
-  let Z = ZE - .3, n = 0; const bordY = 1.25;
-  const bm = B.maske(), [bo0, bo1] = P.q(XL + .05, bordY, ZE), [bo2, bo3] = P.q(XL + .05, bordY, 1.4); bm.poly([[bo0, bo1], [bo2, bo3], [bo2, bo3 + P.k(1.4) * .06], [bo0, bo1 + 1]]); K.form(2, bm, .02, { k: HOLZ, r: pal.rand, ton: 1.6, fase: 1 });
-  while (Z > 1.5 && n < 30) {
-    const dick = .06 + n * n * .0065, hoch = .5 + Math.min(.25, n * .012);
-    const za = Z, zb = Z - dick; if (zb < 1.45) break;
-    const m = B.maske(), a = P.q(XL + .05, bordY + hoch, za), b2 = P.q(XL + .05, bordY + hoch, zb), c = P.q(XL + .05, bordY, zb), d = P.q(XL + .05, bordY, za);
-    m.poly([a, b2, c, d]); K.form(2, m, Math.min(.35, za / 30), { k: n % 3 === 1 ? HOLZ : STEIN.slice(0, 6), r: [PERG[3], PERG[7]], ton: 1.6 + (n % 2) * .4, fase: 1, rand: 2, muster: (x, y) => (Math.abs(y - (a[1] + c[1]) / 2) < 1 ? .8 : 0) });
-    Z = zb - .03; n++;
+  // eine niedrige Bank an der Wand, darauf die Abschriften stehend: oben die hellen Schnitte, vorn die Rücken
+  let Z = ZE - .2, n = 0; const bordY = .42, D = .42, XS = XL + D;
+  const bm = B.maske(), q1 = P.q(XS + .04, bordY, ZE), q2 = P.q(XS + .04, bordY, 1.25), q3 = P.q(XS + .04, 0, 1.25), q4 = P.q(XS + .04, 0, ZE); bm.poly([q1, q2, q3, q4]); K.form(3, bm, .02, { k: HOLZ, r: pal.rand, ton: 1.6, fase: 1 });
+  const buecher = [];
+  while (Z > 1.35 && n < 40) {
+    const dick = .045 + n * n * .0055, hoch = .42 + (n % 3) * .05 + Math.min(.32, n * .022);
+    const za = Z, zb = Z - dick; if (zb < 1.3) break;
+    buecher.push({ za, zb, hoch, n }); Z = zb - .02 - Math.min(.03, n * .002); n++;
+  }
+  for (const bu of buecher) {
+    const { za, zb, hoch } = bu, Y = bordY + hoch, kk = P.k(za);
+    const r1 = B.maske(); r1.poly([P.q(XS, Y, za), P.q(XS, Y, zb), P.q(XS, bordY, zb), P.q(XS, bordY, za)]);
+    const mitte = P.q(XS, bordY + hoch * .5, za)[1];
+    K.form(3, r1, Math.min(.3, za / 22), { k: (bu.n % 3 === 1 ? HOLZ : STEIN.slice(0, 6)), r: [PERG[3], PERG[7]], ton: 1.3 + (bu.n % 2) * .5, fase: 1, rand: 2, muster: (x, y) => (Math.abs(y - (mitte - kk * hoch * .3)) < Math.max(.6, kk * .018) || Math.abs(y - (mitte + kk * hoch * .3)) < Math.max(.6, kk * .018) ? 1.3 : 0) });
+    const sc = B.maske(); sc.poly([P.q(XL, Y, za), P.q(XS, Y, za), P.q(XS, Y, zb), P.q(XL, Y, zb)]);
+    K.form(3, sc, Math.min(.3, za / 22), { k: PERG.slice(2, 8), ton: 3.5, fase: 0, rand: 0, muster: (x, y) => ((y + x) % 2 ? -.6 : 0) });
   }
   // die letzte Abschrift liegt quer auf dem Boden, so dick wie eine Truhe
   { const m = B.maske(), a = P.q(XL + .3, .55, 1.6), b2 = P.q(XL + 1.2, .55, 1.6), c = P.q(XL + 1.2, 0, 1.6), d = P.q(XL + .3, 0, 1.6), e2 = P.q(XL + .3, .55, 2.4); m.poly([e2, a, b2, c, d]); K.form(4, m, 0, { k: STEIN.slice(0, 6), r: [PERG[4], PERG[8]], ton: 1.8, fase: 2, muster: (x, y) => ((y % 3 === 0 && x > d[0] + 3) ? .9 : 0) }); }
   // Pultreihen links und rechts des Gangs, Kerzen nur an einigen
-  const Zp = [2.0, 3.2, 4.6, 6.2, 7.8];
-  for (const X of [-1.4, 1.5]) Zp.slice().reverse().forEach((Zz, i) => { const [x, y] = P.q(X, 0, Zz); pult(K, K.eb(y), x, y, P.k(Zz) / 125, (i + (X > 0 ? 1 : 0)) % 2 === 0 && fr < .85, { tief: Math.min(.4, Zz / 22) }); });
+  const Zp = [1.9, 2.8, 3.8, 4.9];
+  for (const X of [-1.5, 1.6]) Zp.slice().reverse().forEach((Zz, i) => { const [x, y] = P.q(X, 0, Zz); pult(K, K.eb(y), x, y, P.k(Zz) / 72, (i + (X > 0 ? 1 : 0)) % 2 === 0 && fr < .85, { tief: Math.min(.4, Zz / 18) }); });
   // Leine mit Pergamentbögen zum Trocknen (Licht scheint durch)
-  { const [l0x, l0y] = P.q(XL, 2.3, 4.2), [l1x, l1y] = P.q(XR, 2.3, 4.2), e = K.e[2]; B.linie(e, l0x, l0y, l1x, l1y, B.pk(HOLZ[3])); const k = P.k(4.2); for (let i = 0; i < 5; i++) { const t = .12 + i * .17, x = B.lerp(l0x, l1x, t), y = B.lerp(l0y, l1y, t) + Math.sin(t * Math.PI) * 3; B.feld(e, x, y, x + k * .32, y + k * .42, PERG.slice(3), (xx, yy) => .5 + (xx - x) / (k * .32) * .3 + (B.hash(xx, yy, i) - .5) * .2 - ((yy - y) % 3 === 0 ? .3 : 0)); } }
+  { const [l0x, l0y] = P.q(XL, 2.6, 3.4), [l1x, l1y] = P.q(XR, 2.6, 3.4), e = K.e[2]; B.linie(e, l0x, l0y, l1x, l1y, B.pk(HOLZ[3])); const k = P.k(3.4) * .7; for (let i = 0; i < 5; i++) { const t = .12 + i * .17, x = B.lerp(l0x, l1x, t), y = B.lerp(l0y, l1y, t) + Math.sin(t * Math.PI) * 3; B.feld(e, x, y, x + k * .32, y + k * .42, PERG.slice(1, 6), (xx, yy) => .45 + (xx - x) / (k * .32) * .3 + (B.hash(xx, yy, i) - .5) * .2 - ((yy - y) % 3 === 0 ? .35 : 0)); } }
   B.nebel(K.e[2], { y0: 96, y1: 150, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .2, xs: [150, 440, 60], seed: 5 });
   // Vordergrund: Pultkante unten links, Binder oben
   const v = B.maske(); v.poly([[-M, 236], [64, 226], [70, 236], [-M, 252]]); v.kap(56, 232, 52, H + M, 2.4, 2.4); v.poly([[-M, -M], [W + M, -M], [W + M, 6], [-M, 14]]);
@@ -283,7 +276,7 @@ function fussDesBuchs(K, cfg) {
   // die aufgeschlagene Seite von unten: Gegenlicht scheint durch das Pergament, Schrift spiegelverkehrt sichtbar
   const sm = B.maske(); sm.poly([[110, -M], [W + M, -M], [W + M, 70], [430, 58], [360, 44], [270, 30], [190, 18], [130, 8]]);
   K.form(1, sm, 0, { k: PERG.slice(1, 9), r: ['#ece4cc', '#fff8e2'], ton: 4.6, fase: 2, verlauf: -1.2, muster: (x, y) => (B.fbm(x * .02, y * .05, sd + 4, 2) - .5) * .8 });
-  schrift(K.e[1], -M, 62, 3, y => { const l = 140 + y * 2.6; return l < W ? [Math.max(l, 150), W - 10] : null; }, '#7a705e', sd + 9, .7);
+  schrift(K.e[1], -M, 62, 3, y => { const l = 140 + y * 2.6; return l < W ? [Math.max(l, 150), W - 10] : null; }, '#8a7e66', sd + 9, .6);
   // Buchblock: Wand aus Papierlagen rechts der Mitte, Feuchtigkeitsflecken, Schrift läuft herab
   const bx0 = 236, bx1 = W + M, byT = 62;
   const bm = B.maske(); bm.poly([[bx0 + 8, byT], [bx1, byT + 6], [bx1, 214], [bx0, 204]]);

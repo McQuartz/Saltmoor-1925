@@ -12,7 +12,7 @@ const Bot={
    if(!best||best.w<=0)break;playCard(best.i,best.t);}
   if(S.phase==='fight'&&!busy)endTurn();},
  ausruesten(){// leere Slots aus dem Rucksack füllen, sonst schwächere Items tauschen (einfach: mehr Karten-Werte)
-  const wertItem=it=>{const d=def(it);return d.cards.reduce((s,c)=>s+(c.atk||0)*(c.h||1)*(c.all?1.6:1)+(c.blk||0)+(c.heal||0)+(c.poison||0)*1.5+(c.burn||0)*1.5+(c.draw||0)*3-(c.c||0)*2,0)+(d.hp||0)+(d.passiv?6:0)+d.st.length*2;};
+  const P=this.profil;const wertItem=it=>{const d=def(it);return (P&&(P.items||[]).includes(it.id)?12:0)+(P?d.st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+hgVon(it).length*3+(d.eigen?6:0)+d.cards.reduce((s,c)=>s+(c.atk||0)*(c.h||1)*(c.all?1.6:1)+(c.blk||0)+(c.heal||0)+(c.poison||0)*1.5+(c.burn||0)*1.5+(c.draw||0)*3-(c.c||0)*2,0)+(d.hp||0)+(d.passiv?6:0)+d.st.length*2;};
   for(let b=0;b<S.bag.length;b++){const it=S.bag[b];if(!it)continue;const a=def(it).a;
    for(let i=0;i<S.slots[a];i++){const cur=S.areas[a][i];if(!cur){move('bag:'+b,a+':'+i);break;}}}
   for(let b=0;b<S.bag.length;b++){const it=S.bag[b];if(!it)continue;const a=def(it).a;let worst=-1,wv=1e9;
@@ -26,11 +26,13 @@ const Bot={
    case'wandbild':return 6;case'ereignis':return 4;case'fundstelle':return 5;case'kampf':return hpq>.5?5:1;case'kampf_schwer':return hpq>.75?6:0;default:return 3;}};
   let bi=0,bs=-1;o.forEach((x,i)=>{const s=score(x);if(s>bs){bs=s;bi=i;}});chooseWeg(bi);},
  // Wert eines Handgriffs (grob, für Wahl und Kauf)
- hgWert(id){const c=HANDGRIFFE[id];if(!c||c.unspielbar)return -9;const atk=(c.atk||0)*(c.x?3:(c.h||1))*(c.all?1.6:1);return atk+(c.blk||0)*.9+(c.heal||0)+(c.poison||0)*1.6+(c.burn||0)*1.6+(c.draw||0)*3+(c.en||0)*4+(c.str||0)*4+(c.vuln||0)*2.5+(c.weak?3:0)+(c.funke?2:0)+(c.kette||0)*2+(c.behalten?1:0)+(c.sonder?4:0)-(c.opfer?c.opfer*.6:(c.c||0)*2.5);},
+ profil:null, // Build-Bot: {build, items:[], handgriffe:[], stoffe:[]} aus data/builds.json
+ hgWert(id){const c=HANDGRIFFE[id];if(!c||c.unspielbar)return -9;const P=this.profil;const bonus=P?((P.handgriffe||[]).includes(id)?8:0)+(c.build===P.build?4:0):0;return bonus+this.hgWertRoh(c);},
+ hgWertRoh(c){const atk=(c.atk||0)*(c.x?3:(c.h||1))*(c.all?1.6:1);return atk+(c.blk||0)*.9+(c.heal||0)+(c.poison||0)*1.6+(c.burn||0)*1.6+(c.draw||0)*3+(c.en||0)*4+(c.str||0)*4+(c.vuln||0)*2.5+(c.weak?3:0)+(c.funke?2:0)+(c.kette||0)*2+(c.behalten?1:0)+(c.sonder?4:0)-(c.opfer?c.opfer*.6:(c.c||0)*2.5);},
  // Bestes Item zum Ritzen: angelegt, freie Kerbe, Stoffe mit möglichst vielen Reaktionen im Deck; sonst schwächsten Handgriff überschreiben
  ritzen(){const id=S.hgPending;if(!id)return false;const st=allActive().flatMap(it=>def(it).st);
   const rx=D=>REACT.filter(r=>{const[a,b]=[...r.k];return(D.st.includes(a)&&st.includes(b))||(D.st.includes(b)&&st.includes(a));}).length;
-  const kand=besitz().filter(b=>b.an).map(b=>({...b,frei:kerbenVon(b.it)-hgVon(b.it).length,w:rx(def(b.it))+def(b.it).st.length*.3}));
+  const P=this.profil;const kand=besitz().filter(b=>b.an).map(b=>({...b,frei:kerbenVon(b.it)-hgVon(b.it).length,w:rx(def(b.it))+def(b.it).st.length*.3+(P?def(b.it).st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)}));
   const frei=kand.filter(k=>k.frei>0).sort((a,b)=>b.w-a.w);if(frei.length)return placeHandgriff(frei[0].it.uid);
   let best=null;kand.forEach(k=>hgVon(k.it).forEach((h,i)=>{if((def(k.it).fest_hg||[]).includes(h))return;const d=this.hgWert(id)-this.hgWert(h);if(d>1&&(!best||d>best.d))best={uid:k.it.uid,i,d};}));
   if(best)return placeHandgriff(best.uid,best.i);hgVerwerfen();return true;},
@@ -45,7 +47,7 @@ const Bot={
   case'fight':this.kampfZug();break;
   case'reward':if(S.hgPending&&!S.hgPicked){this.ritzen();break;}
    if(!S.hgPicked){const best=[...S.rewardHg].sort((a,c)=>this.hgWert(c)-this.hgWert(a))[0];if(best&&this.hgWert(best)>2){takeHandgriff(best);break;}skipHandgriff();break;}
-   if(!S.picked&&S.reward.length){takeReward(S.bag.includes(null)?S.reward[0]:'');}this.ausruesten();leaveReward();break;
+   if(!S.picked&&S.reward.length){const P=this.profil;const w=id=>(P&&(P.items||[]).includes(id)?10:0)+(P?ITEMS[id].st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+(rarOf(ITEMS[id])==='reliquie'?5:rarOf(ITEMS[id])==='selten'?2:0);const best=[...S.reward].sort((a,c)=>w(c)-w(a))[0];takeReward(S.bag.includes(null)?best:'');}this.ausruesten();leaveReward();break;
   case'event':{const ev=curEvent();let k=ev.o.findIndex(o=>condOk(o.if)&&!(o.fx||[]).some(f=>f.op==='lose_hp'&&S.hp<f.v+10||f.op==='fight'&&S.hp<maxHp()*.5));if(k<0)k=ev.o.findIndex(o=>condOk(o.if));chooseEvent(Math.max(0,k));break;}
   case'streichen':{const t=strikeTargets();const w=t.find(it=>def(it).cards.every(c=>!c.atk&&!c.blk));if(w)strikeItem(w.uid);else skipStrike();break;}
   case'kraemer':{if(S.hp<maxHp()*.75&&!S.shop.heal&&S.gold>=BAL.shop.heal.price)buy('heal');
@@ -63,7 +65,7 @@ const Bot={
   case'ankunft':chooseEnde(S.seed%2?'bleiben':'umkehren');break;
   default:return false;}return true;},
  // Ganzer Run, schnell. Gibt das Ergebnis zurück.
- spiele(job,seed,opt={}){const kf=FAST;FAST=true;let fehler=null,n=0;try{const M=opt.meta?Meta.get():null;const sv=M&&M.start.length?M.start[M.start.length-1]:null;newRun(job,seed,{dev:!opt.meta,start:sv,stufe:opt.stufe||0});
+ spiele(job,seed,opt={}){this.profil=opt.profil||null;const kf=FAST;FAST=true;let fehler=null,n=0;try{const M=opt.meta?Meta.get():null;const sv=M&&M.start.length?M.start[M.start.length-1]:null;newRun(job,seed,{dev:!opt.meta,start:sv,stufe:opt.stufe||0});
    while(!['strand','ende'].includes(S.phase)&&n++<5000){if(!this.schritt())throw new Error('Bot hängt in Phase '+S.phase);}
    if(n>=5000)throw new Error('Run endet nicht');}catch(e){fehler=String(e&&e.stack||e);}finally{FAST=kf;}
   const res=S.ergebnis||{};return{seed,job,sieg:!!res.sieg,ende:res.ende||null,tiefe:S.depth,akt:S.akt,biom:biomId(),route:S.route.join('>'),gegner:res.gegner||[],kaempfe:S.stats.kaempfe,zuege:S.stats.zuege||0,gold:S.stats.gold,fehler};}

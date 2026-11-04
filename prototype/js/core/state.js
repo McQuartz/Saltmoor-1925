@@ -21,10 +21,10 @@ function kerbenVon(it){const D=def(it);const b=D.kerben!=null?D.kerben:(rarOf(D)
 function hgVon(it){if(!it.hg)it.hg=[...(def(it).fest_hg||[])];return it.hg;}
 // Karte eines Handgriffs in einem Item: nimmt die Stoffe des Items an
 function hgKarte(id,it,k){const H=HANDGRIFFE[id];if(!H)return null;const D=def(it);const geschliffen=it.schliff&&it.schliff['h'+k];
- return{...H,c:Math.max(0,(H.c||0)-(geschliffen?1:0)),st:[...D.st],src:D.n,spr:H.spr||D.spr,uid:it.uid,hg:id,hgk:k,fest:(D.fest_hg||[]).includes(id),schliff:!!geschliffen};}
+ return{...H,c:Math.max(0,(H.c||0)-(geschliffen?1:0)),st:[...D.st],src:D.n,spr:H.spr||D.spr,img:(typeof hgBild==='function'&&hgBild(id))||(typeof itemBild==='function'?itemBild(it.id):''),uid:it.uid,hg:id,hgk:k,fest:(D.fest_hg||[]).includes(id),schliff:!!geschliffen};}
 // Alle Karten eines Items (Stammkarten × Kopien, dann Handgriffe), gleiche Rechnung für Deck, Vorschau und Rucksackmodus
 function kartenVon(it){if(it.x)return hgVon(it).map((id,k)=>hgKarte(id,it,k)).filter(Boolean);const D=def(it);const o=[];
- for(let k=0;k<(BAL.card_copies||1);k++)D.cards.forEach((c,ci)=>{const g=it.schliff&&it.schliff['s'+ci];o.push({...c,c:Math.max(0,c.c-(g?1:0)),st:[...D.st],src:D.n,spr:D.spr,uid:it.uid,ci,schliff:!!g,cid:it.uid+':'+ci+':'+k});});
+ for(let k=0;k<(BAL.card_copies||1);k++)D.cards.forEach((c,ci)=>{const g=it.schliff&&it.schliff['s'+ci];o.push({...c,c:Math.max(0,c.c-(g?1:0)),st:[...D.st],src:D.n,spr:D.spr,img:typeof itemBild==='function'?itemBild(it.id):'',uid:it.uid,ci,schliff:!!g,cid:it.uid+':'+ci+':'+k});});
  hgVon(it).forEach((id,k)=>{const c=hgKarte(id,it,k);if(c){c.cid=it.uid+':h'+k;o.push(c);}});return o;}
 function deckListe(items){return(items||allActive()).flatMap(kartenVon);}
 function alive(){return S.enemies.filter(e=>e.hp>0);}

@@ -238,3 +238,56 @@ Pixel-Effekte (Treffer, Block-Splitter, Grundlage für Tod/Zerfall) kommen teilw
 - Kopiert nach `prototype/js/vendor/pixelfx/` (gleiche Struktur wie im Repo, unverändert): `src/core/*.js` (ganzer Kern), `src/fx/impacts/_lib.js`, `src/fx/impacts/hit-spark.js` (`treffer`), `src/fx/impacts/blunt-hit.js` (`treffer_gross`), `src/fx/impacts/shield-block.js` (`block_splitter`), `src/fx/spawn/_lib.js` und `src/fx/status/_lib.js` (Hilfsfunktionen für die eigenen Effekte).
 - **Nicht** übernommen: die Schrift aus `gallery/fonts` (nicht MIT), alle übrigen Effekte, Werkzeuge, Galerie.
 - Eigene Effekte im pixelfx-Format liegen in `js/fx/eigene.js` (brand, gift, geschwaecht, block_auf, heilen, reaktion, hochreaktion, uebergang) und `js/fx/zerfall.js` (`tod`, angepasst aus pixelfx `spawn/disintegrate`, MIT-Hinweis im Kopf der Datei). `js/fx/bruecke.js` lädt alles als ES-Modul und setzt `window.PixelFX`; `js/fx/effekte.js` ist die Schnittstelle `PFX` fürs Spiel. Test und Kontaktbogen: `effekte.html`, `node tools/effekte-kontakt.js`.
+
+
+## Auftrag 2: Deckbau und Biom-Pakete
+
+### Biom-Pakete (`data/biome/index.json`, `data/biome/<id>.json`)
+
+Neue Biome kommen als Pakete: `index.json → pakete` listet die IDs, jede `<id>.json` enthält `id`, `akt` (0–4), `biom` (Felder wie in biomes.json), `musik` (Harmonie und Ortsklang für `Music.addBiome`), `foes`, `events`, `items`, optional `handgriffe`, `skripte` (Hintergrund-Skripte, die `main.js` nachlädt). `data.js` führt alles beim Start zusammen. Vollständiges Format und Arbeitsweise: `docs/auftrag-2/paket-format.md`.
+
+### biomes.json (neue Felder)
+
+`akt` (in welchem Akt das Biom vorkommt), `anreise` (Satz für die Biom-Wahl), `beute_saetze` (Sätze unter dem Gold nach einem Sieg, nie zweimal hintereinander derselbe).
+
+### run.json (Auftrag 2)
+
+`akte[].biome` sind jetzt Listen; am Aktanfang bietet das Spiel zwei davon zur Wahl (Akt I: Vorliebe der Figur + eins per Seed). Akte I–IV haben 6 Ebenen plus Wächter (`e1`–`e6`, `waechter`), Akt V `vorraum`, `rast`, `finale`. `kaempfe.zahl` hat je Akt 6 Einträge.
+
+### handgriffe.json
+
+Handgriffe sind Karten **ohne eigenen Stoff**: Sie stecken in einer Kerbe eines Items und nehmen dessen Stoffe an. `n`, `c`, Kartenfelder wie bei items.json, dazu die Schlagworte:
+
+| Feld | Wirkung |
+|---|---|
+| `str` | Stärke n für dich bis Kampfende (+n Schaden je Treffer) |
+| `vuln` | Ziel verwundbar n Züge (+50 % Schaden) |
+| `funke` | kostet 0, wenn die Karte eine Reaktion auslöst |
+| `kette` | +n Wirkung (Schaden, sonst Block) je Reaktion, die in diesem Zug schon ausgelöst wurde |
+| `behalten` | bleibt am Zugende auf der Hand |
+| `opfer` | zahle n Leben statt Energie |
+| `x` | verbraucht alle Energie, wirkt X-mal |
+| `unspielbar` | kann nicht gespielt werden (z. B. „Zittern“, „Abschrift“) |
+| `sonder` | Sonderwirkung, Liste in `docs/auftrag-2/handgriffe.md` |
+
+Dazu `build` (Archetyp), `rar`, `t` (Flavor), `start` (Start-Handgriff, kommt nicht als Belohnung).
+
+### items.json (neue Felder)
+
+`rar` (`gewoehnlich`/`selten`/`reliquie`), `kerben` (Plätze für Handgriffe; ohne Angabe 1 bzw. 2), `eigen` (Eigenschaft, `{typ, v}`), `flavor`, `preis` (Verkauf 40 %), optional `fest_hg` (fest eingeritzte Handgriffe). Eigenschaften (`eigen.typ`): `brand_haelt`, `energie_bleibt`, `block_haelt_halb`, `reaktion_block`, `reaktion_heil`, `hoch_zweimal`, `gift_doppelt`, `opfer_staerke`, `mehrfach_plus1`, `brand_springt`, `start_staerke`, `start_block`, `verwundbar_start`, `gold_bonus`, `heil_nach_sieg`, `erste_karte_billiger`, `glueck`, `energie_plus {v, preis: hand|heil}`. Umsetzung: `passive(typ)` in `js/core/state.js`, Wirkung in `combat.js`.
+
+### jobs.json (neu)
+
+Jede Figur startet mit drei angelegten Items (Waffe, Kleidung, Talisman), der Rest liegt im Rucksack. `hg` legt die Start-Handgriffe in die Kerben: `{"<item-id>": ["stossen"]}`.
+
+### foes.json (neu)
+
+`kniff` (genau einer, mit `why`): `dornen`, `loeschen`, `rein`, `brecher`, `abschrift`, `waechst`, `schuetzer`, `ruf`, `wechsel`, `ansage`, `nachlass`, `verborgen`, `heiler`, `einfrieren`, `verstopfen` (Felder in `docs/auftrag-2/paket-format.md`). `beute_satz`: Satz nach dem Sieg, wenn dieser Gegner dabei war. `quelle`: wie das Sprite entstand (`skript`, `ki:<dienst>`, `mix`).
+
+### balance.json (neu)
+
+`wucht` (Gefühl der Treffer, eigene ×1,25), `belohnung` (Item-Chance nach normalem Kampf, Gold fürs Überspringen), `meldungen` (Meldungszeile), `musik.boss_aufbau_takte`, `shop` (neu: `verkauf_anteil`, `hg_preis`, `hg_preis_selten`, `hg_entfernen`, `reliquie_chance`, `reliquie_preis`). Regeln: Brand halbiert sich nach dem Ticken (mit `brand_haelt` nur −1), Gift sinkt um 1.
+
+### builds.json
+
+Profile der sechs Build-Bots (`tools/build-bots.js`): je Build bevorzugte `items`, `handgriffe`, `stoffe`, optional `figuren`. Herkunft: `docs/auftrag-2/builds.md`.

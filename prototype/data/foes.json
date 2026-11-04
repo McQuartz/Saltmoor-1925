@@ -27,7 +27,11 @@
   ],
   "konzept": "Fischersfrau, die seit Generationen dasselbe Netz flickt; Glieder zu lang, der Kopf hängt unter den Schultern.",
   "stimme": "netzflickerin",
-  "beute": "knife"
+  "beute": "knife",
+  "kniff": {
+   "art": "einfrieren",
+   "why": "Ihr Netz verfängt jeden Zug eine deiner Karten."
+  }
  },
  "tiefling": {
   "n": "Tiefling",
@@ -57,7 +61,13 @@
   ],
   "konzept": "Junger Fischer mit dem Erbe des Großvaters: zu große Augen, Kiemenfalten am Hals.",
   "stimme": "tiefling",
-  "beute": "harpoon"
+  "beute": "harpoon",
+  "kniff": {
+   "art": "ruf",
+   "gegner": "tiefling",
+   "alle": 3,
+   "why": "Er ruft ins Wasser, und ein Vetter kommt herauf."
+  }
  },
  "schmuggler": {
   "n": "Schmuggler",
@@ -218,7 +228,11 @@
   ],
   "konzept": "Ein Erdhügel am Bohlenweg, bis er auf acht Insektenbeinen aufsteht und menschliche Zähne zeigt.",
   "stimme": "nest",
-  "beute": "bone"
+  "beute": "bone",
+  "kniff": {
+   "art": "verborgen",
+   "why": "Ein Hügel kündigt nichts an: Was es vorhat, sieht man nur halb."
+  }
  },
  "opfernde": {
   "n": "Der Opfernde",
@@ -319,7 +333,11 @@
   ],
   "konzept": "Stieg in der Kutte ins Wasser und lernte um; still, mit Kiemen, aus dem Mund läuft mehr Wasser, als in ihn passt.",
   "stimme": "ertrunkener",
-  "beute": "shell"
+  "beute": "shell",
+  "kniff": {
+   "art": "loeschen",
+   "why": "Für ihn ist noch Wasser: Brand erlischt an ihm am Zugende."
+  }
  },
  "glockenmutter": {
   "n": "Die Glockenmutter",
@@ -556,12 +574,18 @@
   ],
   "konzept": "Einer der Erbauer, die nicht aufrecht gingen; kriecht auf zu vielen Gelenken, das Gesicht ein Relief, das dich zeigt.",
   "stimme": "mumie",
-  "beute": "veil"
+  "beute": "veil",
+  "kniff": {
+   "art": "nachlass",
+   "was": "explodiert",
+   "v": 6,
+   "why": "Wenn die Binden reißen, entweicht der Staub von Äonen, und er trifft dich."
+  }
  },
  "windgestalt": {
   "n": "Der Wind, der Gestalt hat",
   "hp": 47,
-  "weak": "L",
+  "weak": "W",
   "pat": [
    {
     "t": "atk",
@@ -570,15 +594,19 @@
    },
    {
     "t": "blk",
-    "v": 10
-   },
-   {
-    "t": "atk",
-    "v": 11
+    "v": 8
    },
    {
     "t": "buff",
     "v": 2
+   },
+   {
+    "t": "atk",
+    "v": 18
+   },
+   {
+    "t": "atk",
+    "v": 9
    }
   ],
   "biom": "stadt",
@@ -587,17 +615,9 @@
   "varianten": [
    "windgestalt"
   ],
-  "konzept": "Eine Säule aus Sand und Fetzen, gedreht vom Atem aus dem Abgrund; ein Augenpaar wandert durch sie.",
+  "konzept": "Der Atem aus dem Abgrund hat sich aus den Binden der Erbauer einen hohlen Leib gewickelt und trägt eine Totenmaske; er atmet sichtbar ein und aus.",
   "stimme": "windgestalt",
-  "beute": "cross",
-  "besonders": {
-   "art": "schwach_wechsel",
-   "stoffe": [
-    "L",
-    "W",
-    "S"
-   ]
-  }
+  "beute": "cross"
  },
  "rufer": {
   "n": "Rufer",
@@ -656,7 +676,12 @@
   ],
   "konzept": "Geht dir nach in menschlichen Posen, aber auf allen vieren, rückwärts gebogen, der Kopf verdreht.",
   "stimme": "nachgeher",
-  "beute": "gloves"
+  "beute": "gloves",
+  "kniff": {
+   "art": "abschrift",
+   "n": 1,
+   "why": "Er macht deine Bewegungen nach, und eine davon gehört danach ihm."
+  }
  },
  "chor": {
   "n": "Der Chor im Eis",

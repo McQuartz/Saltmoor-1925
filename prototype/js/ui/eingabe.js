@@ -23,7 +23,7 @@ document.addEventListener('pointermove',e=>{
  if(!down&&e.target.closest){const sl=e.target.closest('.slot[data-loc]');const cd=e.target.closest('[data-card]');
   const hv=hoverVorschau(e.target);if(hv)showTip(hv,e.clientX,e.clientY);else if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
   const hi=cd?+cd.dataset.card:-1;if(hi!==hoverCard){hoverCard=hi;setVorschau(hi,-1);}}
- if(!down||!down.has)return;if(!down.drag&&Math.hypot(e.clientX-down.x,e.clientY-down.y)>5){down.drag=true;hideTip();$('ghost').src=spr(def(getAt(down.loc)).spr);$('ghost').style.display='block';}
+ if(!down||!down.has)return;if(!down.drag&&Math.hypot(e.clientX-down.x,e.clientY-down.y)>5){down.drag=true;hideTip();$('ghost').src=itemBild(getAt(down.loc).id);$('ghost').style.display='block';}
  if(down.drag){$('ghost').style.left=(e.clientX-20)+'px';$('ghost').style.top=(e.clientY-20)+'px';}});
 document.addEventListener('pointerup',e=>{
  if(cdrag){const d=cdrag;cdrag=null;$('aim').style.display='none';const ei=AIM.ei;AIM.ei=-1;$('szene').classList.remove('drop');vorschau=null;hoverCard=-1;

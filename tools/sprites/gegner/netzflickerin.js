@@ -18,17 +18,22 @@ module.exports = {
     const T = atem + fall; // Rücken senkt sich
     const kx = v.kopf[0] + lean + Math.min(0, lean), ky = v.kopf[1] + hy + r(fall * 0.5);
     // Rücken und Umhang: Buckel oben rechts, fällt rechts bis fast zum Boden, links zum Kopf hin
-    const ruecken = Pg([[44 + lean, 60 + T], [52 + lean, 48 - B + T], [62 + lean, 44 - B + T], [71 + lean, 47 - B + T], [76 + lean, 57 + T], [77, 76 + T * 0.6], [78, 94 + fall * 0.2], ...saum(78, 50, 101 + fall * 0.2, 5, 4, 11, hem), [49, 92], [44 + lean, 76 + T * 0.6]], null, { rd: 1.5 });
+    const ruecken = Pg([[44 + lean, 60 + T], [52 + lean, 48 - B + T], [62 + lean, 44 - B + T], [71 + lean, 47 - B + T], [76 + lean, 57 + T], [77, 68 + T * 0.7], [73, 80 + T * 0.5], [71, 88 + fall * 0.2], ...saum(72, 50, 95 + fall * 0.2, 5, 4, 11, hem), [49, 90], [44 + lean, 76 + T * 0.6]], null, { rd: 1.5 });
+    // Wirbelgrat: Knochenhöcker brechen die Rundung des Buckels auf
+    const wirbel = [[50, 52, 2], [55, 46, 2.3], [61.5, 42, 2.5], [68.5, 42.5, 2.5], [74.5, 46.5, 2.3], [78.5, 53, 2.1], [80, 61, 1.9]].map(([x, y, rr]) => E(x + lean, y - B + fall, rr, rr * 0.85, null));
+    const blatt = Pg([[64 + lean, 50 - B + T], [75 + lean, 47 - B + T], [79 + lean, 52 - B + T], [70 + lean, 56 - B + T]], null, { rd: 0.6 });
     const buckel = E(63 + lean, 54 - B + T, 13, 10 + B * 0.5, null, { pf: 'bevel' });
     const nacken = C(50 + lean, 60 + T, kx + 2, ky - 8, 8, 3.5, null);
-    const falten = [C(58 + lean, 52 + T, 70, 92, 1, 1.6, 'dunkel'), C(52 + lean, 62 + T, 58, 94, 0.8, 1.4, 'dunkel'), C(66 + lean, 48 + T, 74, 70, 0.6, 1, 'dunkel')];
+    // Rippen unter dem Tuch: schräg vom Grat nach unten, wie die Glieder eines Spinnenleibs
+    const falten = [[56, 50, 47, 64], [62, 47, 52, 66], [68, 48, 58, 71], [73, 52, 63, 77], [77, 59, 68, 84]].map(([x1, y1, x2, y2], i) => C(x1 + lean, y1 - B + fall + 2, x2 + lean * 0.5, y2 + fall, 0.7, 1.3 - i * 0.05, 'dunkel'));
     // Kopf: Schädel mit spitzem Kinn, hängt kopfüber unter der Schulter
     const kopf = E(kx, ky, 7.5, 7, 'haut', { pf: 'bevel' });
     const kinn = Pg([[kx - 6, ky + 2], [kx - 1, ky + 5], [kx - 7, ky + 10]], 'haut', { rd: 0.5 });
     // Beine unter dem Umhang: Knie knicken weit nach außen
     const fy = 114;
-    const beinA = glied([[56, 94 + fall * 0.2], [45, 104], [51, fy]], 3, 1.4, null);
-    const beinB = glied([[68, 95 + fall * 0.2], [77, 106], [70, fy]], 2.8, 1.3, null);
+    const beinA = glied([[56, 90 + fall * 0.2], [42, 97], [48, fy]], 3, 1.3, null);
+    const beinB = glied([[68, 88 + fall * 0.2], [85, 80 + r(fall * 0.5)], [81, fy]], 2.8, 1.2, null);
+    const beinC = glied([[62, 92 + fall * 0.2], [76, 98], [71, fy]], 2.4, 1.1, null);
     // Arme: zu lang, Ellbogen knicken hart; Hände halten das Netz
     const a = v.arm, nY = 98 + netzDy + r(fall * 0.4), nL = 46 + netzDx, nR = 68 + netzDx;
     const armL = glied([[50 + lean, 66 + T], [38 - 4 * (a - 1) * 10 + lean, 88 * a - 10 * (a - 1) * 8 + arbeit], [nL, nY]], 2.6, 1.1, null);
@@ -37,7 +42,9 @@ module.exports = {
     const gruppen = [
       { p: beinB, k: 1 },
       { p: armR, k: 0 },
-      { p: [ruecken, buckel, nacken], k: 4 },
+      { p: beinC, k: 1 },
+      { p: [ruecken, buckel, nacken, ...wirbel], k: 2.5 },
+      { p: [blatt], k: 1 },
       { p: falten, k: 0, noRim: true },
       { p: beinA, k: 1 },
       { p: armC, k: 0 },

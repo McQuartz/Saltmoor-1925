@@ -326,6 +326,16 @@ function unterDerLaterne(K, cfg) {
   return { mitte: [250, 214] };
 }
 
+// Fundstück: ein Arzneikästchen, offen, darin ein Thermometer, das nichts anzeigt
+function arzneikasten(K, x, y) {
+  const m = B.maske(); m.rect(x - 16, y - 12, 32, 12); m.poly([[x - 16, y - 12], [x - 12, y - 26], [x + 18, y - 25], [x + 16, y - 12]]);
+  K.form(4, m, 0, { k: HOLZ, r: pal.rand, ton: 1.8, fase: 1, schatten: 2, muster: (px, py) => (py === y - 6 ? -0.8 : 0) });
+  const th = B.maske(); th.kap(x - 8, y - 14, x + 9, y - 16, 0.8, 0.8); th.ell(x + 10, y - 16, 1.6, 1.6); K.form(4, th, 0, { k: ['#2a2010', '#4a3818', '#7a6030', '#b08a46'], r: MESS, ton: 1.8, fase: 0, rand: 1 });
+  const s2 = B.maske(); s2.ell(x, y + 1, 22, 2.5); B.form(K.e[4], s2, K.mat(0, { ton: 0, rand: 0, fase: 0 }));
+  B.gluehen(K.e[4], x, y - 12, 26, GLUT_K, 0.9);
+  K.anim.push({ p: 0.5, f(ctx, t, ox, oy) { if (Math.sin(t * 1.3) > 0.55) { ctx.fillStyle = pal.augen; ctx.fillRect(x + 10 + ox, y - 17 + oy, 1, 1); } } });
+}
+
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'rast' ? 1 : art === 'kraemer' ? 0 : art === 'ereignis' || art === 'fund' ? 2 : (o.seed + v) % 3;
@@ -333,7 +343,8 @@ function bauen(o) {
   if (art === 'waechter') info = unterDerLaterne(K, {});
   else if (art === 'uebergang') info = unterDerLaterne(K, { treppe: true });
   else info = [k => wellenbad(k, {}), liegehalle, strand][v](K);
-  B.artZusatz(K, { x: info.mitte[0], y: info.mitte[1] });
+  if (art === 'fund' || art === 'ereignis') arzneikasten(K, info.mitte[0], info.mitte[1]);
+  else B.artZusatz(K, { x: info.mitte[0], y: info.mitte[1] });
   return K.fertig();
 }
 World._biome.kurhaus = { pal, build: bauen, reliefStil: { figuren: 4, gelenke: 2, knick: 0.4 } };

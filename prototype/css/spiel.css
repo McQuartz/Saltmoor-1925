@@ -236,3 +236,8 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .dc{display:inline-block;margin-right:calc(var(--u)*3)}.gr{color:#9ae08a}.rt{color:#e8584a}.rsinfo{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*4.8);max-width:calc(var(--u)*120)}
 #tip .vkr{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}#tip .vk{width:110px;background:#060504;border:1px solid #4a3a20;padding:4px;font-size:13px;position:relative}#tip .vkc{position:absolute;right:4px;top:2px;color:var(--gold);font-family:var(--fk)}#tip .vkt{color:#bfb49a;font-size:12px}
 #tip{max-width:520px}
+/* Belohnung: Rahmen nach Seltenheit, Aufdecken nacheinander, Reliquie mit langsamem Goldglanz */
+.p-reward .pick{animation:aufdecken .45s backwards}.p-reward .pick:nth-child(2){animation-delay:.18s}.p-reward .pick:nth-child(3){animation-delay:.36s}.p-reward .pick:nth-child(4){animation-delay:.54s}
+@keyframes aufdecken{from{transform:rotateY(90deg);opacity:0}}
+.pick.selten{border-color:var(--messing)}.pick.reliquie{border-color:var(--gold);animation:aufdecken .45s backwards,glanz 3.2s ease-in-out .5s infinite}
+@keyframes glanz{0%,100%{box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.15)}50%{box-shadow:0 0 calc(var(--u)*9) rgba(232,197,71,.45)}}
