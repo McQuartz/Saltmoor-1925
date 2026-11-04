@@ -77,6 +77,7 @@ function palette(st = [], rar = 'gewoehnlich') {
   const rampe = (c) => [mix(c, '#000000', 0.86), mix(c, '#000000', 0.72), mix(c, '#000000', 0.55), mix(c, '#000000', 0.36), mix(c, '#000000', 0.12), mix(c, '#ffffff', 0.35)];
   rampe(glanzA).forEach((c, i) => add('a' + (i < 4 ? i : i === 4 ? 'G' : 'H'), c));
   rampe(glanzB).forEach((c, i) => add('b' + (i < 4 ? i : i === 4 ? 'G' : 'H'), c));
+  idx.a4 = idx.aG; idx.a5 = idx.aH; idx.b4 = idx.bG; idx.b5 = idx.bH;
   // Akzent als Material (Gruppen mit mat:'akzent'/'akzent2' rendern in der Stofffarbe)
   matBase.akzent = farben.length; ['a0', 'a1', 'a2', 'a3'].forEach(n => { add('akzent' + n.slice(1), farben[idx[n]]); }); add('akzentR1', farben[idx.aG]); add('akzentR2', farben[idx.aH]);
   matBase.akzent2 = farben.length; ['b0', 'b1', 'b2', 'b3'].forEach(n => { add('akzent2' + n.slice(1), farben[idx[n]]); }); add('akzent2R1', farben[idx.bG]); add('akzent2R2', farben[idx.bH]);

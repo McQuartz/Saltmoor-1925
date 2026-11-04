@@ -234,7 +234,7 @@ function gang(K) {
   // Ende des Gangs: kleine Kammer, hell vom Kerzenlicht, darin die Madonna
   const ka = B.maske(); ka.ell(236, 112, 30, 34); ka.rect(206, 112, 60, 26);
   B.form(K.e[0], ka, mat(K, .3, SCH.slice(3, 10), { ton: 2.6, fase: 0, rand: 0, verlauf: .6, muster: schiefer(sd + 1, .2, 3) }));
-  madonna(K, 1, 242, 136, 40, .25);
+  madonna(K, 1, 242, 142, 30, .2);
   kerzenBand(K, 1, 216, 260, x => 137 + Math.abs(x - 236) * .05, { abstand: 1, an: .85, hMax: 2, seed: 9, tiefe: .2 });
   K.glut(236, 124, 70, GLUT, 1, [0, 1]); K.licht(236, 124, FL.mitte, 80, .9);
   // Der Gang: Felsringe hintereinander, jeder mit einer unregelmäßigen Öffnung (organisch, kein Kasten)
@@ -250,17 +250,17 @@ function gang(K) {
     const m = B.maske(), yb = P.q(0, 0, Z)[1], eb = Z > 6 ? 1 : Z > 3 ? 2 : Z > 2.2 ? 3 : 5;
     m.fn(-M, -M, W + M - 1, Math.min(H + M - 1, yb + 2), (x, y) => !loch(Z, x, y) && (eb < 5 || y < 150 || Math.abs(x - 240) > 205 - (y - 150) * .3));
     B.form(K.e[eb], m, mat(K, eb === 5 ? 0 : Math.min(.45, Z / 26), eb === 5 ? SCH.slice(0, 6) : WAND, { ton: eb === 5 ? 1.5 : 2.2 + Math.min(1.5, Z / 6), fase: Math.max(1, P.k(Z) * .04), muster: schiefer(sd + i, .2, 4 + i), schatten: 2 }));
-    // an der Innenkante des Rings: Krücken links, Wachsgaben rechts
-    if (eb < 5 && Z < 5) {
+    // an der nahen Innenkante: Krücken links an der Wand, Wachsgaben rechts, groß
+    if (eb === 3 || eb === 2 && Z < 4) {
       const k = P.k(Z), kr = B.maske(), cx = P.vx, yt = P.q(0, hY, Z)[1];
-      for (let j = 0; j < 3; j++) { const x = cx - sw * k * (.9 + j * .08), y = yb - k * (.15 + j * .12); kruecke(kr, x, y, -Math.PI / 2 + (j - 1) * .25, k * 1.1, Math.max(.45, k / 90)); }
-      B.form(K.e[eb], kr, mat(K, Math.min(.4, Z / 26), HOLZ, { ton: 2, fase: 0, rand: 1, schatten: 1 }));
-      const vg = []; for (let j = 0; j < 4; j++) vg.push([Math.round(cx + sw * k * (.78 + (j % 2) * .1)), Math.round(yt + (yb - yt) * (.2 + j * .14)), ['hand', 'herz', 'augen', 'bein'][(j + i) % 4], Math.max(2, Math.round(k / 25)), Math.max(.6, k / 110)]);
-      votive(K, eb, vg, Math.min(.4, Z / 26));
+      for (let j = 0; j < 5; j++) { const x = cx - sw * k * (.93 - j * .05) + j * 2, y = yb - 2 - (j % 2) * 4; kruecke(kr, x, y, -Math.PI / 2 + (j % 2 ? .2 : -.15), k * (.9 + (j % 3) * .12), Math.max(.6, k / 60)); }
+      B.form(K.e[eb], kr, mat(K, Math.min(.3, Z / 30), HOLZ, { ton: 2, fase: 0, rand: 1, schatten: 1 }));
+      const vg = []; for (let j = 0; j < 6; j++) vg.push([Math.round(cx + sw * k * (.86 - (j % 3) * .06)), Math.round(yt + (yb - yt) * (.25 + Math.floor(j / 2) * .15)), ['hand', 'herz', 'augen', 'bein', 'hand', 'herz'][j], 3 + j, Math.max(1, k / 45)]);
+      votive(K, eb, vg, Math.min(.3, Z / 30));
     }
   });
   // Boden mit zwei Kerzenreihen an den Wänden: das sind die Fluchtlinien
-  bodenSchiefer(K, P, sd + 1, { warm: [170, 300], pfuetzen: .66, licht: (x, y) => { const Z = P.z(y + .5), X = Math.abs((x + .5 - P.vx) * Z / P.h); return Math.max(0, 1 - Math.abs(X - (sw - .3)) / 1.1) * .9 + Math.max(0, 1 - Z / 9) * .2; } });
+  bodenSchiefer(K, P, sd + 1, { warm: [170, 300], licht: (x, y) => { const Z = P.z(y + .5), X = Math.abs((x + .5 - P.vx) * Z / P.h); return Math.max(0, 1 - Math.abs(X - (sw - .3)) / .7) * .7; }, pfuetzen: .74 });
   const reihe = sd2 => { const L = []; for (let Z = 1.15; Z < 12; Z *= 1.045) { const [x, y] = P.q(sd2 * (sw - .3), 0, Z), k = P.k(Z); L.push([Math.round(x), Math.round(y), Math.max(1, Math.min(6, Math.round(k * .1 * (1 + B.hash(Math.round(Z * 30), sd2, sd))))), B.hash(Math.round(Z * 30), 3, sd) < .3 ? 1 : 0, B.hash(Math.round(Z * 30), 4, sd) < (fr < .6 ? .8 : .5)]); } return L; };
   const rl = reihe(-1), rr = reihe(1);
   kerzen(K, 4, rl.filter(c => c[1] >= 158)); kerzen(K, 3, rl.filter(c => c[1] < 158 && c[1] >= 148)); kerzen(K, 2, rl.filter(c => c[1] < 148));
