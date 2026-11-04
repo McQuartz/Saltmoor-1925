@@ -1,0 +1,58 @@
+{
+ "name": "biped",
+ "label": "Zweibeiner",
+ "size": {
+  "w": 96,
+  "h": 120,
+  "foot_x": 48,
+  "foot_y": 117
+ },
+ "params": [
+  "height",
+  "legs",
+  "bulk",
+  "belly",
+  "neck",
+  "head",
+  "headFwd",
+  "hunch",
+  "arms",
+  "armSwing",
+  "elbow",
+  "limbThick",
+  "knee",
+  "stance",
+  "asym",
+  "eyes",
+  "eyeSize",
+  "mouth",
+  "pattern",
+  "growth"
+ ],
+ "doc": {
+  "height": "Gesamthöhe",
+  "legs": "Beinanteil",
+  "bulk": "Rumpfdicke",
+  "belly": "0 Schultern breit, 1 birnenförmig",
+  "neck": "Halslänge",
+  "head": "Kopfgröße",
+  "headFwd": "Kopf vorgestreckt",
+  "hunch": "Buckel",
+  "arms": "Armlänge",
+  "armSwing": "Arme vor/zurück",
+  "elbow": "Ellbogenbeugung",
+  "limbThick": "Gliedmaßendicke",
+  "knee": "Kniebeugung",
+  "stance": "Schrittweite",
+  "asym": "Asymmetrie nah/fern",
+  "eyes": "Augenzahl 1–3",
+  "eyeSize": "Augengröße",
+  "mouth": "Maulbreite",
+  "pattern": "Stärke des Oberflächenmusters",
+  "growth": "Wucherungen (Zellautomat)"
+ },
+ "eyes_range": [
+  1,
+  3
+ ]
+}
