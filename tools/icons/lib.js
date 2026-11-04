@@ -56,7 +56,7 @@ function stoffFarbe(code) { const s = STOFFE[code]; return s ? mix(s.c, '#a49c8c
 // Lichter und Akzente (feste Farben)
 const LICHT = {
   flamme: '#e8902e', flammeHell: '#ffd28a', flammeKern: '#fff2d0', glutDim: '#5c2a10', glutMittel: '#a8501c',
-  warm: '#d89a4a', warmDim: '#4e3014', warmKern: '#fff0c8',
+  warm: '#d89a4a', warmDim: '#3c2612', warmKern: '#fff0c8',
 };
 
 // Palette eines Bildes: 0 leer; je Material 6 Farben (k0..k3, r1, r2); dann Lichter; dann Akzente a/b (4 Stufen + hell)
@@ -277,11 +277,12 @@ function pinsel(buf, W, H, pal) {
 function reliquieGlanz(buf, W, H, pal) {
   let sx = 0, sy = 0, n = 0, x0 = W, y0 = H, x1 = 0, y1 = 0;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (buf[y * W + x]) { sx += x; sy += y; n++; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
-  if (!n) return; const cx = sx / n, cy = sy / n, r = Math.max(x1 - x0, y1 - y0) * 0.42;
+  if (!n) return; const cx = sx / n, cy = sy / n, r = Math.max(x1 - x0, y1 - y0) * 0.3;
+  // nur die dunkelsten Stufen, dünn gedithert: ein Schimmer, kein Fleck
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    const i = y * W + x; const inf = pal.info[buf[i]]; if (!inf || inf.stufe >= 3) continue;
-    const q = Math.hypot(x - cx, y - cy) / r; if (q >= 1) continue; const v = (1 - q) * 0.9;
-    if (v > 0.25 + bay(x, y) * 0.75) buf[i] = pal.idx.warmDim;
+    const i = y * W + x; const inf = pal.info[buf[i]]; if (!inf || inf.stufe >= 2) continue;
+    const q = Math.hypot(x - cx, y - cy) / r; if (q >= 1) continue; const v = (1 - q) * 0.55;
+    if (v > 0.2 + bay(x, y) * 0.8) buf[i] = pal.idx.warmDim;
   }
   // Stäubchen: freie Pixel in der Nähe der oberen rechten Kante
   const staub = [];

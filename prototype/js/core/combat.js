@@ -169,6 +169,7 @@ function kniffBeimTreffer(en){const k=en.kniff;if(!k)return;
  if(k.art==='dornen'&&en.hp>0||k.art==='dornen'){const v=k.v||2;const ab=Math.min(S.block,v);S.block-=ab;S.hp=Math.max(0,S.hp-(v-ab));if(v-ab>0)S.stats.todesursache=en.n+' (Dornen)';Bus.emit(v-ab>0?'player_hurt':'player_blocked',{v:v-ab,e:en,why:`${en.n} hat Dornen: ${v} zurück, Block fängt ${ab}`});}}
 function kniffeZugbeginn(){for(const en of alive()){const k=en.kniff;if(!k)continue;
  if(k.art==='einfrieren'&&S.hand.length){const c=rs('kampf').pick(S.hand);c.frost=true;Bus.emit('toast',{a:'EINGEFROREN',b:c.n});Bus.emit('kniff',{e:en,why:`${en.n} friert „${c.n}“ für diesen Zug ein`});}
+ if(k.art==='teurer'){const z=S.hand.filter(c=>!c.unspielbar&&!c.teuer);if(z.length){const c=rs('kampf').pick(z);c.teuer=k.v||1;Bus.emit('toast',{a:'TEURER',b:c.n});Bus.emit('kniff',{e:en,why:`${en.n}: „${c.n}“ kostet diesen Zug ${k.v||1} mehr${k.why?' ('+k.why+')':''}`});}}
  if(k.art==='verstopfen'){for(let n=0;n<(k.n||1);n++)S.hand.push(stoerKarte(en));Bus.emit('kniff',{e:en,why:`${en.n} steckt ${k.n||1} unspielbare Karte(n) in deine Hand`});}}}
 function stoerKarte(en){return{n:en.kniff&&en.kniff.karte||'Abschrift',c:0,unspielbar:true,st:[],src:en.n,spr:'bone',cid:'stoer'+(++uidc),verbraucht:true};}
 // nach dem eigenen Zug eines Gegners
@@ -179,17 +180,28 @@ function kniffGegnerzug(en){const k=en.kniff;if(!k)return;const why=k.why?` (${k
  if(k.art==='loeschen'){alive().forEach(o=>{if(o.burn){o.burn=0;Bus.emit('enemy_status',{e:o,status:'geloescht',why:`${en.n} löscht den Brand${why}`});}});}
  if(k.art==='abschrift'){for(let n=0;n<(k.n||1);n++)S.discard.push(stoerKarte(en));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n||1} Abschrift(en) in deinen Ablagestapel`});}
  if(k.art==='ruf'&&FOES[k.gegner]&&en.turns%(k.alle||3)===2&&alive().length<4){const a=mkEnemy(k.gegner);a.x=rs('aufstellung').pick([.16,.84,.3,.7]);a.reihe=rs('aufstellung').pick([0,1]);S.enemies.push(a);Bus.emit('enemy_spawn',{e:a,why:`${en.n} ruft ${a.n}`});}
+ if(k.art==='kopie'){const c=S.vorherKarte;if(c&&!c.unspielbar){if(c.atk){gegnerTrifft(en,(c.atk+en.str)*(c.h||1),`${en.n} schreibt „${c.n}“ ab und spielt sie gegen dich`);}else if(c.blk){en.block+=c.blk;Bus.emit('enemy_block',{e:en,why:`${en.n} schreibt „${c.n}“ ab: +${c.blk} Block`});}
+   Bus.emit('toast',{a:'ABGESCHRIEBEN',b:c.n});}
+   if(k.n){for(let n=0;n<k.n;n++)S.discard.push(stoerKarte(en));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n} Abschrift(en) in deinen Ablagestapel`});}}
+ if(k.art==='takt'){const v=k.v||6;if(en.turns%2===0){alive().forEach(o=>{o.block+=v;});en.schlag=true;Bus.emit('kniff',{e:en,why:`${en.n} schlägt: alle Gegner +${v} Block${why}`});Bus.emit('herzschlag',{e:en});}
+   else{en.schlag=false;en.vuln=Math.max(en.vuln||0,2);Bus.emit('enemy_status',{e:en,status:'vuln',why:`Zwischen den Schlägen: ${en.n} ist verwundbar (+50 % Schaden)`});}}
+ if(k.art==='voraus'){const c=S.draw[S.draw.length-1]||S.discard[0];if(c&&!c.unspielbar){if(c.atk)gegnerTrifft(en,(c.atk+en.str)*(c.h||1),`${en.n} spielt deine nächste Karte „${c.n}“ vor dir`);else{const b=c.blk||5;en.block+=b;Bus.emit('enemy_block',{e:en,why:`${en.n} spielt deine nächste Karte „${c.n}“ vor dir: +${b} Block`});}Bus.emit('toast',{a:'VORAUS',b:c.n});}
+   const zahl={};deckListe().forEach(x=>(x.st||[]).forEach(t=>{if(ST[t])zahl[t]=zahl[t]||0;}));(S.chainLog||[]).forEach(l=>l.st.forEach(t=>{if(t in zahl)zahl[t]++;}));
+   const ks=Object.keys(zahl);if(ks.length){const min=Math.min(...ks.map(t=>zahl[t]));const w=ks.filter(t=>zahl[t]===min).sort()[0];if(en.weak!==w){en.weak=w;Bus.emit('enemy_status',{e:en,status:'schwach',why:`${en.n} ist schwach gegen den Stoff, den du am wenigsten spielst: ${ST[w].n}`});}}}
  if(k.art==='wechsel'&&k.stoffe){en.weak=k.stoffe[(en.turns+1)%k.stoffe.length];Bus.emit('enemy_status',{e:en,status:'schwach',why:`${en.n} wechselt die Schwachstelle: jetzt ${ST[en.weak].n}`});}}
 
+// Ein Gegner trifft dich außerhalb seines Musters (Kniffe kopie, voraus): Block fängt zuerst
+function gegnerTrifft(en,v,why){let d=Math.max(0,Math.round(v));if(en.weak2)d=Math.floor(d/2);const ab=Math.min(S.block,d);S.block-=ab;d-=ab;S.hp=Math.max(0,S.hp-d);if(S.stats){S.stats.schadenRein=(S.stats.schadenRein||0)+d;if(d>0)S.stats.todesursache=en.n;}
+ Bus.emit(d>0?'player_hurt':'player_blocked',{v:d,e:en,nr:1,von:1,letzter:true,why:`${why}; Block fängt ${ab}; du verlierst ${d}`});}
 // Angekündigter Schaden aller Gegner im nächsten Zug (für Warnung und Musik)
 function kniffNachAngriff(en,tot){if(tot>0)S.stats.todesursache=en.n;}
-function incoming(){let tot=0;for(const en of alive()){const it=en.pat[en.pi%en.pat.length];if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
+function incoming(){let tot=0;for(const en of alive()){if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
 
 function endTurn(){
  if(S.phase!=='fight'||busy)return;busy=true;S.vorrat=S.energy;
  let bleib=S.hand.filter(c=>c.behalten&&!c.unspielbar);
  if(passive('behalten_eine').length){const rest=S.hand.filter(c=>!bleib.includes(c)&&!c.unspielbar).sort((a,b)=>cardCost(b)-cardCost(a));if(rest[0])bleib=[...bleib,rest[0]];}
- bleib.forEach(c=>{if(c.sonder&&c.sonder.art==='zugende_hand')runFx(c.sonder.fx,{tg:alive()[0],why:`${c.n} am Zugende auf der Hand`});});S.discard.push(...S.hand.filter(c=>!bleib.includes(c)).filter(c=>!(c.unspielbar&&c.verbraucht&&c.cid&&String(c.cid).startsWith('stoer')&&c.hand)));S.hand=bleib;S.hand.forEach(c=>{c.frost=false;});S.discard.forEach(c=>{c.frost=false;});S.behaltenNaechster=bleib.length;Bus.emit('changed');
+ bleib.forEach(c=>{if(c.sonder&&c.sonder.art==='zugende_hand')runFx(c.sonder.fx,{tg:alive()[0],why:`${c.n} am Zugende auf der Hand`});});S.discard.push(...S.hand.filter(c=>!bleib.includes(c)).filter(c=>!(c.unspielbar&&c.verbraucht&&c.cid&&String(c.cid).startsWith('stoer')&&c.hand)));S.hand=bleib;S.hand.forEach(c=>{c.frost=false;c.teuer=0;});S.discard.forEach(c=>{c.frost=false;c.teuer=0;});S.behaltenNaechster=bleib.length;Bus.emit('changed');
  const list=alive();let i=0;
  const step=()=>{
   if(S.hp<=0){busy=false;return runLost();}

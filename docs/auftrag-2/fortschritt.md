@@ -132,6 +132,7 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 
 | Datum | Meilenstein | Entscheidung | Grund |
 |---|---|---|---|
+| 2026-11-04 | M6/M7 | Neue Kniffe `teurer`, `kopie`, `takt`, `voraus` im Kern; der Abschreiber kopiert jetzt deine letzte Karte (und mischt eine Abschrift) | Steckbriefe von Abschreiber, Herz und Voraus brauchten Mechaniken, die es nicht gab; jede mit Test in `tools/test-deckbau.js` |
 | 2026-11-04 | M6 | Kniff `heiler` heilt nur Verbündete, nie sich selbst | Ein Heiler, der sich selbst heilt, hielt den Autospieler in einem endlosen Kampf (Grotte, Pfarrerin, Seed 9); laut Paket-Format heilt er Verbündete |
 | 2026-11-04 | M6 | Akt-I/II-Wächter der Pakete bleiben 128 × 160, obwohl 160 × 180 erlaubt ist | Die Agenten sahen noch die alte Grenze; die Figuren sind fertig und lesbar, Vergrößern bringt wenig |
 | 2026-11-04 | M6 | Uhrmacher ohne „Karten teurer“ und „Absichten in falscher Reihenfolge“, Kerzenfrau ohne Tausch-Krämer | Brauchen neue Kernbausteine; als Kandidaten für die Zugabe notiert, der Tausch läuft vorerst als Ereignis `grotte_tausch` |

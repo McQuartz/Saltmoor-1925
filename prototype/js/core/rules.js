@@ -19,7 +19,7 @@ function cardCost(c){
  if(bonuses('stoff_free').some(b=>c.st.includes(b.stoff)))return 0;
  if(S.played===0&&S.turnNo===1&&!S.compassUsed&&passive('erste_karte_billiger').length)return 0;
  if(c.funke&&S.last&&reactionsFor(S.joker?[...S.last,...S.joker]:S.last,c.st).length)return 0; // Funke: umsonst, wenn sie eine Reaktion auslöst
- return Math.max(0,c.c+(c.st.length>1&&!c.hg?BAL.forge.double_cost_extra:0)+(c.mod||0));}
+ return Math.max(0,c.c+(c.st.length>1&&!c.hg?BAL.forge.double_cost_extra:0)+(c.mod||0)+(c.teuer||0));}
 function needsTarget(c){return !!(c.ziel||(c.atk&&!c.all)||c.poison||c.burn||c.weak||c.strip||c.vuln);}
 // Effekte aus den Daten ausführen. ctx.tg = aktuelles Ziel, ctx.why = Grund für den Dev-Modus.
 function runFx(list,ctx={}){for(const f of list||[]){const tg=ctx.tg&&ctx.tg.hp>0?ctx.tg:alive()[0];const tos=f.to==='all'?alive():tg?[tg]:[];const why=ctx.why||'';

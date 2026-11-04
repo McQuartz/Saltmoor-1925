@@ -306,9 +306,10 @@
    "konzept": "Der Armarius des Klosters schreibt das Buch ab, seit es das Buch gibt; die Hand hat ein Gelenk zu viel und hört nie auf, der Streifen wird mit jedem Bild länger.",
    "stimme": "chor",
    "kniff": {
-    "art": "abschrift",
-    "n": 2,
-    "why": "Er mischt Abschriften deiner Karten ins Deck, ein Wort länger und darum unspielbar."
+    "art": "kopie",
+    "n": 1,
+    "karte": "Abschrift",
+    "why": "Er schreibt deine letzte Karte ab und spielt sie gegen dich; die Abschrift ist ein Wort länger und darum unspielbar."
    },
    "besonders": {
     "art": "ruft",
