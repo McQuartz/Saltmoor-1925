@@ -142,7 +142,7 @@
    "kniff": {
     "art": "ansage",
     "zuege": 2,
-    "v": 16,
+    "v": 15,
     "why": "Er liest zwei Seiten zu Ende. Dann faltet er die Zeitung und klappt sich auf."
    },
    "beute": "reiseplaid",
@@ -264,12 +264,12 @@
    "n": "Der Uhrmacher im Speisewagen",
    "biom": "nachtzug",
    "rang": "waechter",
-   "hp": 76,
+   "hp": 70,
    "weak": "E",
    "pat": [
     {
      "t": "atk",
-     "v": 10
+     "v": 9
     },
     {
      "t": "blk",
@@ -282,11 +282,11 @@
     },
     {
      "t": "buff",
-     "v": 3
+     "v": 2
     },
     {
      "t": "atk",
-     "v": 18
+     "v": 16
     }
    ],
    "sprite": "uhrmacher",

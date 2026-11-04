@@ -259,6 +259,8 @@ function gang(K) {
       votive(K, eb, vg, Math.min(.3, Z / 30));
     }
   });
+  // warmes Licht der Kerzenreihen auf den Innenkanten der Ringe
+  for (const Z of [9, 6.4, 4.8, 3.6]) { const [x, y] = P.q(0, 1.2, Z); K.glut(x, y, P.k(Z) * 3.2, GLUTW, .8, [1, 2, 3]); }
   // Boden mit zwei Kerzenreihen an den Wänden: das sind die Fluchtlinien
   bodenSchiefer(K, P, sd + 1, { breite: sw * .95, warm: [170, 300], licht: (x, y) => { const Z = P.z(y + .5), X = Math.abs((x + .5 - P.vx) * Z / P.h); return Math.max(0, 1 - Math.abs(X - (sw - .3)) / .7) * .7; }, pfuetzen: .74 });
   const reihe = sd2 => { const L = []; for (let Z = 1.15; Z < 12; Z *= 1.045) { const [x, y] = P.q(sd2 * (sw - .3), 0, Z), k = P.k(Z); L.push([Math.round(x), Math.round(y), Math.max(1, Math.min(6, Math.round(k * .1 * (1 + B.hash(Math.round(Z * 30), sd2, sd))))), B.hash(Math.round(Z * 30), 3, sd) < .3 ? 1 : 0, B.hash(Math.round(Z * 30), 4, sd) < (fr < .6 ? .8 : .5)]); } return L; };
@@ -295,14 +297,12 @@ function mund(K) {
   K.glut(300, 140, 60, GLUT, .9, [2, 3]); K.licht(300, 140, FL.mitte, 70, .8);
   // Quelle: links aus dem Fels, ein Faden, der in den Teich fällt; Teich spiegelt
   const tm = B.maske(); tm.ell(150, 196, 120, 20);
-  B.form(K.e[4], tm, { k: ['#040506', '#080a0d', '#0e1216', '#161c22', '#2a2e30'].map(B.pk), r: [], ton: 1.2, fase: 0, rand: 0, muster: (x, y) => (Math.sin(y * 2.1 + Math.sin(x * .05) * 2) > .7 ? .9 : 0) + (B.hash(x, y, 2) > .985 ? 2 : 0) });
+  B.form(K.e[4], tm, { k: ['#040506', '#080a0d', '#0e1216', '#161c22', '#3a3020', '#6a5028'].map(B.pk), r: [], ton: 1.4, fase: 0, rand: 0, muster: (x, y) => (Math.sin(y * 2.1 + Math.sin(x * .05) * 2) > .7 ? .9 : 0) + (B.hash(x, y, 2) > .985 ? 2 : 0) });
   const e4 = K.e[4];
   for (let y = 180; y < 214; y++) if (y % 3) { const q = (y - 180) / 34; for (let k = -2; k <= 2; k++) if (B.hash(300 + k, y, 9) < (1 - q) * .6) e4.set(300 + k * 2 + Math.round(Math.sin(y) * 1.5), y, B.pk(k ? '#5a4220' : '#b48c4c')); }
   const ufer = B.maske(); ufer.poly([[-M, 166], [80, 172], [180, 176], [262, 172], [300, 178], [W + M, 176], [W + M, 186], [280, 188], [270, 180], [180, 180], [60, 180], [-M, 178]]);
-  B.form(K.e[3], ufer, mat(K, 0, SCH.slice(0, 8), { ton: 1.9, fase: 1, muster: schiefer(sd + 2, .1, 3), schatten: 1 }));
+  B.form(K.e[3], ufer, mat(K, 0, SCH.slice(0, 8), { ton: 1.9, fase: 1, rand: 1, muster: schiefer(sd + 2, .1, 3), schatten: 1 }));
   // Quelle: tritt aus einem Riss im Schiefer, fällt als Faden in den Teich
-  const riss = B.maske(); riss.poly([[80, 112], [96, 108], [104, 116], [90, 120]]);
-  B.form(K.e[3], riss, { k: ['#000000', '#030405'].map(B.pk), r: [], ton: .5, fase: 0, rand: 0 });
   for (let y = 116; y < 180; y++) { const x = 94 + Math.round((y - 116) * .05); if (y % 6 !== 3) K.e[3].set(x, y, B.pk(y % 4 ? '#56606b' : '#a8bccc')); if (y > 172) K.e[3].set(x + ((y & 1) ? 2 : -2), y, B.pk('#3e4752')); }
   // Krücken links an die Wand gelehnt und Votivkerzen am Ufer
   const kr = B.maske(); for (let i = 0; i < 7; i++) kruecke(kr, 14 + i * 8, 166 + (i % 2) * 2, -Math.PI / 2 + .12 - i * .03, 40 + (i % 3) * 5, 1);

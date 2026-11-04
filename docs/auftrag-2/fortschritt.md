@@ -97,6 +97,12 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Netzflickerin (Rücken) | Hafen | 4 | [M5](bilder/M5/vorher-nachher.png) |
 | Tiefling (neu) | Hafen | 4 (knapp) | [M5](bilder/M5/vorher-nachher.png) |
 | Nest (neu) | Moor | 4 | [M5](bilder/M5/vorher-nachher.png) |
+| Der Genesende | Kurhaus | 4 | [M6](bilder/M6/kurhaus/kontakt-neben-favoriten.png) |
+| Die Badefrau | Kurhaus | 4 | [M6](bilder/M6/kurhaus/kontakt-neben-favoriten.png) |
+| Der Liegende | Kurhaus | 4 | [M6](bilder/M6/kurhaus/kontakt-neben-favoriten.png) |
+| Der Kurgast mit Taucherbrille | Kurhaus | 4 (knapp, eher Mensch als fremd) | [M6](bilder/M6/kurhaus/kontakt-neben-favoriten.png) |
+| Die Oberschwester (Wächter) | Kurhaus | 4 | [M6](bilder/M6/kurhaus/im-spiel-waechter.png) |
+| Hintergrund Kurhaus (3 Varianten, Wächter-Szene) | Kurhaus | 4 | [M6](bilder/M6/kurhaus/hintergrund-varianten.png) |
 
 ## Entscheidungen unterwegs
 

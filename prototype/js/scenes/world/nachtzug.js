@@ -416,7 +416,7 @@ function abteil(K) {
   B.feld(K.e[0], -M, -M, W + M, H + M, ['#000000', '#040202'], () => .3);
   const ZE = 2.5, XW = 1.25;
   const c = { P, XL: XW, XR: XW, YC: 1.55, ZE, links: 'tafel', rechts: 'tafel', boden: 'laeufer', laeuferB: 1.0, ende: 'fenster', tuerB: 0, zFern: 9,
-    lampen: [{ X: .95, Y: 1.2, Z: 2.2 }, { X: 0, Y: 1.1, Z: 2.4 }] };
+    lampen: [{ X: .95, Y: 1.2, Z: 2.2 }, { X: 0, Y: 1.1, Z: 2.4 }, { X: 0, Y: 1.4, Z: 1.2 }] };
   wagen(K, c);
   // Fenster in der Stirnwand: groß, mit der Kurve
   const [fx0, fy0] = P.q(-.82, 1.4, ZE), [fx1, fy1] = P.q(.82, .82, ZE);
@@ -430,13 +430,13 @@ function abteil(K) {
   K.form(2, tm, 0, { k: HOLZ.slice(1, 8).map(B.col), ton: 1.8, fase: 1, rand: 2, r: RIM_W.r });
   // Bänke an beiden Seitenwänden, einander gegenüber: Sitz, Stirnseite, Rückenlehne, Kopfstütze
   for (const sg of [-1, 1]) {
-    const q = (X, Y, Z) => P.q(sg * X, Y, Z), z0 = .55, z1 = ZE - .02;
+    const q = (X, Y, Z) => P.q(sg * X, Y, Z), z0 = 1.05, z1 = ZE - .02;
     const m = B.maske();
     m.poly([q(.66, .42, z0), q(1.1, .42, z0), q(1.1, .42, z1), q(.66, .42, z1)]); // Sitzfläche
     m.poly([q(.66, 0, z0), q(.66, .42, z0), q(.66, .42, z1), q(.66, 0, z1)]); // Vorderkante
     m.poly([q(1.1, .42, z0), q(1.02, 1.28, z0), q(1.02, 1.28, z1), q(1.1, .42, z1)]); // Lehne
     m.poly([q(.66, 0, z0), q(1.25, 0, z0), q(1.25, 1.32, z0), q(1.02, 1.32, z0), q(1.1, .42, z0), q(.66, .42, z0)]); // Stirnseite (nah)
-    K.form(3, m, 0, { k: POLSTER.map(B.col), ton: 1.6 + (sg > 0 ? .3 : 0), fase: 2, rand: 2, r: sg > 0 ? RIM_W.r : RIM.r, schatten: 2, muster: (x, y) => ((x * 2 + y) % 13 === 0 ? -.4 : 0) });
+    K.form(3, m, 0, { k: POLSTER.map(B.col), ton: 2.4 + (sg > 0 ? .6 : 0), fase: 2, rand: 2, r: sg > 0 ? RIM_W.r : RIM.r, schatten: 2, muster: (x, y) => ((x * 2 + y) % 13 === 0 ? -.4 : 0) + (inPoly(x + .5, y + .5, [q(.66, .42, z0), q(1.1, .42, z0), q(1.1, .42, z1), q(.66, .42, z1)]) ? .8 : 0) });
     // Spitzendeckchen an der Kopfstütze (hell)
     const d = B.maske(); d.poly([q(1.03, 1.18, 1.3), q(1.03, 1.3, 1.3), q(1.03, 1.3, 1.75), q(1.03, 1.18, 1.75)]); K.form(3, d, 0, { k: TUCH.slice(2, 7).map(B.col), ton: 1.4, fase: 0, rand: 1, r: ['#c8a060', '#fff0d0'] });
     // Gepäcknetz mit Koffer
@@ -446,10 +446,10 @@ function abteil(K) {
     K.form(2, km, 0, { k: HOLZ.slice(1, 7).map(B.col), ton: 1.6, fase: 1, rand: 2, r: RIM.r, schatten: 1 });
   }
   // Reiseplaid auf der linken Bank, kariert
-  const pm = B.maske(), pq = (X, Y, Z) => P.q(X, Y, Z); pm.poly([pq(-1.08, .46, .9), pq(-.68, .44, .95), pq(-.66, .1, 1.05), pq(-.68, .44, 1.5), pq(-1.08, .46, 1.6)]);
+  const pm = B.maske(), pq = (X, Y, Z) => P.q(X, Y, Z); pm.poly([pq(-1.08, .46, 1.3), pq(-.68, .44, 1.35), pq(-.66, .1, 1.45), pq(-.68, .44, 1.85), pq(-1.08, .46, 1.95)]);
   K.form(3, pm, 0, { k: ['#0a0606', '#1a0c0a', '#2e1612', '#44201a', '#5e2c22', '#783a2c'].map(B.col), ton: 1.8, fase: 1, rand: 2, r: RIM.r, muster: (x, y) => (((x >> 2) + (y >> 2)) & 1 ? .5 : 0) + ((x & 3) === 0 || (y & 3) === 0 ? -.3 : 0) });
   // Leselampe an der Wand rechts, sie brennt
-  const [lx, ly] = P.q(1.18, 1.18, 2.2); B.flamme(K, Math.round(lx), Math.round(ly), { p: B.PAR[3], kern: '#fff4dc', mitte: LAMPE, aussen: '#b06a20', glut: '#3a2008' }); K.glut(lx, ly, 90, LAMPG, .95, [1, 2, 3, 4]); K.licht(lx, ly, LAMPE, 90, .9);
+  const [lx, ly] = P.q(1.18, 1.18, 2.2); B.flamme(K, Math.round(lx), Math.round(ly), { p: B.PAR[3], kern: '#fff4dc', mitte: LAMPE, aussen: '#b06a20', glut: '#3a2008', gross: 2 }); K.glut(lx, ly, 120, LAMPG, 1, [1, 2, 3, 4]); K.licht(lx, ly, LAMPE, 90, .9);
   fensterGlanz(K);
   luft(K, P);
   K.reihen = [{ y: 184, skala: .9, nebel: .3 }, { y: 200, skala: 1, nebel: .12 }, { y: 216, skala: 1, nebel: 0 }];
