@@ -105,9 +105,18 @@ function ring(cx, cy, rx, ry, r, m, o = {}, n = 14, a0 = 0, a1 = Math.PI * 2) {
   const out = []; for (let i = 0; i < n; i++) { const q0 = a0 + (a1 - a0) * i / n, q1 = a0 + (a1 - a0) * (i + 1) / n; out.push(C(cx + Math.cos(q0) * rx, cy + Math.sin(q0) * ry, cx + Math.cos(q1) * rx, cy + Math.sin(q1) * ry, r, r, m, o)); }
   return out;
 }
+// Catmull-Rom-Pfad durch alle Punkte, t in 0..1 gleichmäßig nach Abschnitten
+function pfad(pts) {
+  const n = pts.length - 1;
+  return t => { const u = Math.min(n - 1e-6, Math.max(0, t * n)); const i = Math.floor(u), f = u - i;
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(n, i + 2)];
+    const k = (a, b, c, d) => 0.5 * ((2 * b) + (-a + c) * f + (2 * a - 5 * b + 4 * c - d) * f * f + (-a + 3 * b - 3 * c + d) * f * f * f);
+    return [k(p0[0], p1[0], p2[0], p3[0]), k(p0[1], p1[1], p2[1], p3[1])]; };
+}
 // Bezier-Kurve als Kapselkette (für Seile, Ketten, Schnüre)
 function kurve(pts, r0, r1, m, o = {}, n = 12) {
-  const B = t => { let p = pts.map(q => q.slice()); while (p.length > 1) { const nx = []; for (let i = 0; i < p.length - 1; i++) nx.push([p[i][0] + (p[i + 1][0] - p[i][0]) * t, p[i][1] + (p[i + 1][1] - p[i][1]) * t]); p = nx; } return p[0]; };
+  let B = t => { let p = pts.map(q => q.slice()); while (p.length > 1) { const nx = []; for (let i = 0; i < p.length - 1; i++) nx.push([p[i][0] + (p[i + 1][0] - p[i][0]) * t, p[i][1] + (p[i + 1][1] - p[i][1]) * t]); p = nx; } return p[0]; };
+  if (o.cr) B = pfad(pts); // Catmull-Rom: Kurve geht durch alle Punkte
   const out = []; let a = B(0); for (let i = 1; i <= n; i++) { const b = B(i / n); out.push(C(a[0], a[1], b[0], b[1], r0 + (r1 - r0) * (i - 1) / n, r0 + (r1 - r0) * i / n, m, o)); a = b; }
   out.B = B; return out;
 }
@@ -160,13 +169,13 @@ function faust(o) {
 // Bausteine, die mehrere Icons teilen (jedes Icon setzt sie anders zusammen)
 // Perlenschnur entlang einer Bezier-Kurve: n Perlen mit Radius r
 function perlen(pts, n, r, m, o = {}) {
-  const k = kurve(pts, 0.4, 0.4, m, o, 40); const out = [];
+  const k = kurve(pts, 0.4, 0.4, m, { cr: true, ...o }, 40); const out = [];
   for (let i = 0; i < n; i++) { const [x, y] = k.B(i / (n - 1)); out.push(E(x, y, r, r, m, { pf: 'bevel', ...o })); }
   out.B = k.B; return out;
 }
 // Kettenglieder entlang einer Kurve, abwechselnd flach (Ring) und hochkant (Stab)
-function kettenglieder(pts, n, gr, m) {
-  const k = kurve(pts, 0.4, 0.4, m, {}, 40); const flach = [], kant = [];
+function kettenglieder(pts, n, gr, m, o = { cr: true }) {
+  const k = kurve(pts, 0.4, 0.4, m, o, 40); const flach = [], kant = [];
   for (let i = 0; i < n; i++) {
     const q = i / (n - 1), [x2, y2] = k.B(Math.min(1, q + 0.02)), [x1, y1] = k.B(Math.max(0, q - 0.02)); const [x, y] = k.B(q);
     const ax = achse(x, y, Math.atan2(y2 - y1, x2 - x1));
@@ -288,7 +297,7 @@ function bauen(def, o = {}) {
   const W = def.w || 48, H = def.h || 48;
   const st = o.st ?? def.st ?? [], rar = o.rar ?? def.rar ?? 'gewoehnlich';
   const pal = palette(st, rar);
-  const A = { E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
+  const A = { pfad, E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
   const res = def.form(A, { st, rar });
   const { buf } = rendern(W, H, res.gruppen, pal);
   const P = pinsel(buf, W, H, pal);
@@ -297,4 +306,4 @@ function bauen(def, o = {}) {
   return { buf, W, H, pal, rgba: S.zuRGBA(buf, pal) };
 }
 
-module.exports = { perlen, kettenglieder, zahnrad, mantel, S, MAT, LICHT, STOFFE, stoffFarbe, palette, rendern, pinsel, bauen, achse, apg, acap, ring, kurve, hand, faust, rad, WURZEL };
+module.exports = { pfad, perlen, kettenglieder, zahnrad, mantel, S, MAT, LICHT, STOFFE, stoffFarbe, palette, rendern, pinsel, bauen, achse, apg, acap, ring, kurve, hand, faust, rad, WURZEL };

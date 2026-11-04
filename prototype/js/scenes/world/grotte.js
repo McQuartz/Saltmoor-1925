@@ -151,7 +151,7 @@ function bodenSchiefer(K, P, sd, o) {
       return t;
     } }
   ], (x, y) => {
-    if (y <= P.vy + 1) return -1; const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h;
+    if (y <= P.vy + 1) return -1; const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; if (o.breite && Math.abs(X) > o.breite + (B.rausch1(Z * 2, sd) - .5) * .3) return -1;
     return B.fbm(X * .9, Z * .45, sd + 7, 3) > (o.pfuetzen || .62) ? 1 : 0;
   });
 }
@@ -248,7 +248,7 @@ function gang(K) {
   };
   ringe.forEach((Z, i) => {
     const m = B.maske(), yb = P.q(0, 0, Z)[1], eb = Z > 6 ? 1 : Z > 3 ? 2 : Z > 2.2 ? 3 : 5;
-    m.fn(-M, -M, W + M - 1, Math.min(H + M - 1, yb + 2), (x, y) => !loch(Z, x, y) && (eb < 5 || y < 150 || Math.abs(x - 240) > 205 - (y - 150) * .3));
+    m.fn(-M, -M, W + M - 1, H + M - 1, (x, y) => !loch(Z, x, y) && (eb < 5 || y < 150 || Math.abs(x - 240) > 205 - (y - 150) * .3));
     B.form(K.e[eb], m, mat(K, eb === 5 ? 0 : Math.min(.45, Z / 26), eb === 5 ? SCH.slice(0, 6) : WAND, { ton: eb === 5 ? 1.5 : 2.2 + Math.min(1.5, Z / 6), fase: Math.max(1, P.k(Z) * .04), muster: schiefer(sd + i, .2, 4 + i), schatten: 2 }));
     // an der nahen Innenkante: Krücken links an der Wand, Wachsgaben rechts, groß
     if (eb === 3 || eb === 2 && Z < 4) {
@@ -260,7 +260,7 @@ function gang(K) {
     }
   });
   // Boden mit zwei Kerzenreihen an den Wänden: das sind die Fluchtlinien
-  bodenSchiefer(K, P, sd + 1, { warm: [170, 300], licht: (x, y) => { const Z = P.z(y + .5), X = Math.abs((x + .5 - P.vx) * Z / P.h); return Math.max(0, 1 - Math.abs(X - (sw - .3)) / .7) * .7; }, pfuetzen: .74 });
+  bodenSchiefer(K, P, sd + 1, { breite: sw * .95, warm: [170, 300], licht: (x, y) => { const Z = P.z(y + .5), X = Math.abs((x + .5 - P.vx) * Z / P.h); return Math.max(0, 1 - Math.abs(X - (sw - .3)) / .7) * .7; }, pfuetzen: .74 });
   const reihe = sd2 => { const L = []; for (let Z = 1.15; Z < 12; Z *= 1.045) { const [x, y] = P.q(sd2 * (sw - .3), 0, Z), k = P.k(Z); L.push([Math.round(x), Math.round(y), Math.max(1, Math.min(6, Math.round(k * .1 * (1 + B.hash(Math.round(Z * 30), sd2, sd))))), B.hash(Math.round(Z * 30), 3, sd) < .3 ? 1 : 0, B.hash(Math.round(Z * 30), 4, sd) < (fr < .6 ? .8 : .5)]); } return L; };
   const rl = reihe(-1), rr = reihe(1);
   kerzen(K, 4, rl.filter(c => c[1] >= 158)); kerzen(K, 3, rl.filter(c => c[1] < 158 && c[1] >= 148)); kerzen(K, 2, rl.filter(c => c[1] < 148));
