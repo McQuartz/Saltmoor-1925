@@ -42,8 +42,22 @@ const glas = {
   muschel(P, cx, cy, r, a0 = -2.4, a1 = -0.6, ringe = 3) {
     for (let k = 1; k <= ringe; k++) { const rr = r * k / ringe; for (let a = a0; a <= a1; a += 0.6 / rr) { const x = Math.round(cx + Math.cos(a) * rr), y = Math.round(cy + Math.sin(a) * rr * 0.8); const c = P.get(x, y); if (!c || c > 4) continue; P.auf(x, y, k % 2 ? 4 : 1); } }
   },
+  // Unterlicht: Polarlicht aus dem Glas hellt die Unterseiten auf (gedithert, nur auf Körper, nicht auf Randlicht)
+  // yU = Boden (stärkstes Licht), h = Höhe, in der es ausläuft; maske(x,y) optional
+  unterlicht(P, yU, h, st = 1, maske) {
+    for (let y = Math.max(0, Math.floor(yU - h)); y <= yU + 2; y++) for (let x = 0; x < P.W; x++) {
+      const c = P.get(x, y); if (!c || c > 4) continue; if (maske && !maske(x, y)) continue;
+      const q = Math.min(1, (y - (yU - h)) / h), v = st * q * q * 0.8, b = A_bay(x, y);
+      // Unterkante: freie Zelle darunter -> heller Saum
+      const unten = !P.get(x, y + 1);
+      if (unten && v > 0.35) P.set(x, y, v > 0.8 && b < 0.5 ? 'nordlicht' : 'glutDim');
+      else if (v > 0.55 + b * 0.45) P.set(x, y, 'glutDim');
+      else if (v > b * 0.9 && c < 4) P.set(x, y, c + 1);
+    }
+  },
   hsh,
 };
+const A_bay = (x, y) => [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5][(y & 3) * 4 + (x & 3)] / 16;
 
 module.exports = {
   id: 'glasschwimmer', biom: 'glasmeer', zone: 'glasmeer', w: 96, h: 120, fuss: [50, 110], kopf: [30, 50], rimBis: 112,
@@ -68,34 +82,39 @@ module.exports = {
       return { gruppen: [{ p: g, k: 2 }], augen: [] };
     }
     const B0 = v.bogen, S = sink, lx = lean;
-    // Rumpf: liegt flach, Rücken knapp über dem Glas, Hüfte rechts taucht ein
-    const sx = 38 + lx, sy = 86 + bob + S;
-    const rumpf = Pg([[sx - 4, sy - 2], [sx + 6, sy - 7], [sx + 22, sy - 6], [sx + 38, sy + 1], [sx + 46, sy + 9], [sx + 46, WY + 6], [sx - 6, WY + 6], [sx - 8, sy + 6]], null, { rd: 2 });
-    const kopfX = 25 + lx + (ha === 2 ? -2 : 0), kopfY = 80 + bob + S;
-    const kopf = E(kopfX, kopfY, 7.5, 7, 'haut', { pf: 'bevel' });
-    const kappe = Pg([[kopfX - 7, kopfY - 1], [kopfX - 5, kopfY - 6], [kopfX + 1, kopfY - 8.5], [kopfX + 7, kopfY - 5], [kopfX + 8, kopfY + 1], [kopfX + 3, kopfY - 2], [kopfX - 3, kopfY - 2]], null, { rd: 0.8 });
-    const hals = C(kopfX + 4, kopfY + 3, sx + 2, sy + 1, 4, 5, null);
-    // Arm im Bogen (nah): Schulter -> Ellbogen hoch -> Unterarm hängt -> Hand
-    const sh = [sx + 4, sy - 3];
-    let ell, hand;
-    if (ha <= 0) { ell = [sx + 12 - ha * 4, sy - 40 * B0 - ha * 18]; hand = [sx - 8 - ha * 6, sy - 30 * B0 - ha * 22]; }
-    else if (ha < 1.5) { ell = [sx + 16 + ha * 4, sy - 44 * B0 - ha * 6]; hand = [sx + 18 + ha * 16, sy - 58 * B0 + ha * 2]; }
-    else { ell = [sx - 10, sy - 22]; hand = [sx - 30, sy + 2]; }
+    // Rumpf: Schulter links vorn, Rücken als flacher Bogen, Hüfte taucht rechts ins Glas
+    const sx = 40 + lx, sy = 84 + bob + S;
+    const rumpf = Pg([[sx - 7, sy + 2], [sx - 3, sy - 4], [sx + 6, sy - 7], [sx + 18, sy - 6], [sx + 30, sy - 2], [sx + 40, sy + 6], [sx + 46, WY], [sx - 9, WY]], null, { rd: 2 });
+    const kopfX = 26 + lx + (ha === 2 ? -2 : 0), kopfY = 79 + bob + S;
+    const kopf = E(kopfX, kopfY, 7.5, 7.2, 'haut', { pf: 'bevel' });
+    const kappe = Pg([[kopfX - 7.5, kopfY], [kopfX - 6, kopfY - 6], [kopfX, kopfY - 8.8], [kopfX + 6, kopfY - 6.5], [kopfX + 8, kopfY - 1], [kopfX + 3, kopfY - 2.5], [kopfX - 3, kopfY - 2.5]], null, { rd: 0.8 });
+    const hals = C(kopfX + 4, kopfY + 3, sx, sy + 1, 4, 5.5, null);
+    // Arm im Bogen (nah): Schulter -> Ellbogen hoch -> Unterarm hängt locker -> Hand mit Fingern nach unten
+    const sh = [sx + 3, sy - 4];
+    let ell, hand, fa = 1.9; // fa: Richtung der Finger
+    if (ha <= 0) { ell = [sx + 10 - ha * 4, sy - 46 * B0 - ha * 18]; hand = [sx - 8 - ha * 6, sy - 26 * B0 - ha * 22]; fa = 1.95; }
+    else if (ha < 1.5) { ell = [sx + 18 + ha * 4, sy - 48 * B0 - ha * 6]; hand = [sx + 22 + ha * 14, sy - 62 * B0 + ha * 2]; fa = -0.6; }
+    else { ell = [sx - 8, sy - 24]; hand = [sx - 28, sy + 2]; fa = 2.4; }
     if (S) { ell = [ell[0], ell[1] + S * 1.6]; hand = [hand[0], hand[1] + S * 1.9]; }
-    const arm = [...glied([sh, [sh[0] + (ell[0] - sh[0]) * 0.5 + 3, sh[1] + (ell[1] - sh[1]) * 0.5], ell], 4.2, 3.4, null), ...glied([ell, hand], 3.2, 2.4, null), E(hand[0], hand[1] + 2, 2.6, 3.4, 'haut')];
+    const ober = glied([sh, [sh[0] + (ell[0] - sh[0]) * 0.55 + 2, sh[1] + (ell[1] - sh[1]) * 0.55], ell], 4.6, 3.4, null);
+    const unter = glied([ell, hand], 3.2, 2.1, null);
+    const hf = [hand[0] + Math.cos(fa) * 6, hand[1] + Math.sin(fa) * 6];
+    const handF = [Pg([[hand[0] - 2.4, hand[1] - 1], [hand[0] + 2.4, hand[1] - 1], [hf[0] + 1.4, hf[1]], [hf[0] - 1.6, hf[1] + 0.5]], 'haut', { rd: 0.6 }), C(hand[0] + 1, hand[1], hand[0] + 3.5, hand[1] + 3, 0.9, 0.7, 'haut')];
     // vorderer Arm taucht vor dem Kopf ins Glas (nur Ansatz)
-    const unterArm = glied([[sx - 2, sy + 4], [kopfX - 10, WY - 2], [kopfX - 14, WY + 4]], 3.4, 2.8, null);
+    const unterArm = glied([[sx - 4, sy + 5], [kopfX - 9, WY - 4], [kopfX - 13, WY + 1]], 3.4, 2.8, null);
     // Fuß hinten: ein Schlag mit dem Bein, Ferse aus dem Glas
-    const fussX = 84 + (p.idle ? [0, 1, 1, 0][f] : 0), fussY = WY - 12 + (p.angriff ? [0, -2, -5, -3][f] : 0) + S * 1.3;
-    const bein = v.fuss ? [C(sx + 40, WY + 2, fussX - 2, fussY + 6, 4, 3, null), Pg([[fussX - 5, fussY + 5], [fussX - 1, fussY - 2], [fussX + 2, fussY - 4], [fussX + 4, fussY + 1], [fussX + 1, fussY + 7]], null, { rd: 0.8 })] : [];
-    // Bugwelle aus Glas vor dem Kopf (Kamm nach links gerollt), Kielwasser als flache Furchen nach rechts
+    const fussX = 86 + (p.idle ? [0, 1, 1, 0][f] : 0), fussY = WY - 13 + (p.angriff ? [0, -2, -5, -3][f] : 0) + S * 1.3;
+    const bein = v.fuss ? [C(sx + 42, WY, fussX - 2, fussY + 6, 3.6, 2.6, null), Pg([[fussX - 4, fussY + 5], [fussX - 1, fussY - 2], [fussX + 2, fussY - 4], [fussX + 4, fussY + 1], [fussX + 1, fussY + 7]], null, { rd: 0.8 })] : [];
+    // Bugwelle aus Glas vor dem Kopf (Kamm nach links gerollt); um den Körper wirft das Glas einen Rand auf
     const bw = v.breit || 0;
-    const welle = Pg([[0, 113], [1, 106], [5, 100], [9, 94 - bw], [6, 91 - bw], [10, 88 - bw], [16, 90], [20, 96], [26, 99], [36, 101], [52, 102], [66, 101], [76, 102], [86, 100], [93, 104], [95, 113]], null, { rd: 1 });
-    const kiel = [E(62, 104, 22, 3, null, { pf: 'flat' }), E(40, 106, 34, 3.4, null, { pf: 'flat' })];
+    const welle = Pg([[2, 106], [4, 100], [8, 94 - bw], [5, 91 - bw], [8, 87 - bw], [14, 88], [18, 94], [22, 99], [28, 102], [24, 106]], null, { rd: 0.8 });
+    const rand = [Pg([[sx - 16, WY], [sx - 10, WY - 3], [sx - 6, WY]], null, { rd: 0.6 }), Pg([[sx + 40, WY], [sx + 50, WY - 3], [sx + 56, WY]], null, { rd: 0.6 })];
+    const kiel = [];
     // Spritzer: Glasperlen, die in der Luft hängen (beim Schlag mehr)
     const perlen = [];
     const np = v.perlen + r(spritz * 6);
     for (let i = 0; i < np; i++) { const a = -2.6 + i * 0.5 + (glanz % 2) * 0.05, rr = 12 + (i * 7 % 9) + spritz * 6, cx0 = i % 2 ? 12 : fussX - 2, cy0 = i % 2 ? 88 : fussY; perlen.push(E(cx0 + Math.cos(a) * rr * (i % 2 ? 0.8 : 0.5), cy0 + Math.sin(a) * rr * 0.6 - 4, 1.2 + (i % 3) * 0.4, 1.2 + (i % 3) * 0.4, null, { pf: 'bevel' })); }
+    const arm = [...ober, ...unter];
     const sinkt = S > 0;
     const gruppen = [
       { p: unterArm, k: 1 },
@@ -103,15 +122,19 @@ module.exports = {
       { p: [rumpf, hals], k: 2, anker: [lx, bob] },
       { p: [kopf], k: 0 },
       { p: [kappe], k: 0 },
-      { p: kiel, k: 2 },
+      { p: rand, k: 1 },
       { p: [welle], k: 2 },
-      { p: sinkt && S > 14 ? [] : arm, k: 1.5 },
+      { p: sinkt && S > 14 ? [] : arm, k: 1.5, anker: [lx, bob] },
+      { p: sinkt && S > 14 ? [] : handF, k: 0.5 },
       { p: p.tod && f > 3 ? [] : perlen, k: 0 },
     ];
     const augen = [];
     const details = P => {
-      // Streifen des Wollbadeanzugs: quer über den Rücken, folgen der Rundung
-      for (let x = r(sx - 2); x <= sx + 44; x++) for (let y = r(sy - 8); y <= WY; y++) { const c = P.get(x, y); if (!c || c > 4) continue; const band = Math.floor((x - sx + (y - sy) * 0.55) / 4); if (band % 2 === 0) P.auf(x, y, c >= 3 ? 2 : 1); }
+      // Streifen des Wollbadeanzugs: quer über den Rücken, folgen der Rundung (helle Bänder gedithert)
+      for (let x = r(sx - 6); x <= sx + 46; x++) for (let y = r(sy - 8); y <= WY; y++) { const c = P.get(x, y); if (!c || c > 4) continue; const u = (x - sx + (y - sy) * 0.7) / 5, band = Math.floor(u), fr = u - band; if (band % 2 === 0 && fr > 0.15 && fr < 0.85) P.set(x, y, y < sy + 4 ? 4 : c < 3 ? 3 : 4); else if (band % 2) P.set(x, y, c > 2 ? c - 1 : c); }
+      // Wirbelsäule und Schulterblatt
+      for (let x = r(sx + 6); x <= sx + 36; x++) { const y = r(sy - 5 + Math.pow((x - sx - 10) / 26, 2) * 9); P.auf(x, y + 2, 'k0'); }
+      P.el(sx + 9.5, sy - 2.5, 4.5, 2.6, 'k3', true); P.line(sx + 6, sy, sx + 12, sy + 1, 'k0', true);
       // Kappe: Naht und Riemen, Schwimmbrille (zwei runde Gläser, leuchten von unten grün)
       const kx = r(kopfX), ky = r(kopfY);
       if (v.kappe === 'streifen') for (let x = kx - 6; x <= kx + 6; x += 3) P.auf(x, ky - 5 + (Math.abs(x - kx) > 4 ? 2 : 0), 'k3');
@@ -127,24 +150,16 @@ module.exports = {
         // offener Mund: Atemholen, seit Jahren
         if (mund) { P.auf(kx - 1, ky + 4, 'k0'); P.auf(kx, ky + 4, 'k0'); P.auf(kx - 1, ky + 5, 'k0'); P.auf(kx, ky + 5, 'glutDim'); }
       }
-      // Wo er die Fläche bricht: grünes Licht von unten, ein dünner Saum entlang der Wasserlinie
+      // Licht von unten: wo er die Fläche bricht, leuchtet das Polarlicht unter dem Glas hervor
       if (licht > 0) {
-        for (let x = 4; x < 92; x++) {
-          let y = -1; for (let yy = 86; yy < WY + 4; yy++) { if (P.get(x, yy) && P.get(x, yy) <= 6) { y = yy; break; } }
-          if (y < 0) continue;
-          const nahe = Math.abs(x - (sx + 18)) < 28 || Math.abs(x - fussX) < 6 || Math.abs(x - (kopfX - 12)) < 5;
-          if (!nahe) continue;
-          const t = licht * (0.6 + 0.4 * Math.sin(x * 0.7 + (p.idle ? f : 0)));
-          // Saum liegt an der Unterkante des Körpers, knapp über der Welle
-          for (let yy = WY + 3; yy > 90; yy--) { const c = P.get(x, yy), c2 = P.get(x, yy + 1); if (c && c2 && c <= 4 && c2 <= 4 && yy >= WY - 2 && yy <= WY + 1) { P.set(x, yy, t > 0.85 ? 'glut' : t > 0.5 ? 'nordlicht' : 'glutDim'); break; } }
-        }
-        P.glow(sx + 18, WY + 2, 18 * licht, 0.55);
-        P.glow(kopfX - 12, WY, 8 * licht, 0.6);
+        glas.unterlicht(P, WY - 3, 16, licht, (x, y) => y < WY - 2 || x < 30);
+        for (let x = 2; x < 94; x++) { const t = licht * (0.55 + 0.45 * Math.sin(x * 0.45 + (p.idle ? f * 0.8 : 0)) * Math.sin(x * 0.17 + 1)); let y = WY + 1; while (y > WY - 4 && !P.get(x, y)) y--; if (y <= WY - 4) continue; P.set(x, y, t > 0.85 ? 'glut' : t > 0.45 ? 'nordlicht' : 'glutDim'); if (t > 0.6 && P.get(x, y - 1) && P.get(x, y - 1) <= 4) P.set(x, y - 1, 'glutDim'); }
+        P.glow(sx + 18, WY + 2, 14 * licht, 0.5);
       }
       // Welle: gefrorene Ringe (Muschelbruch) und Spiegelglanz auf dem Kamm
       glas.muschel(P, 10, 100, 12, -2.6, -0.9, 3);
       glas.streif(P, [3, 108], [9, 93 - bw], 1, { hell: 0.6 });
-      for (let x = 22; x < 92; x += 6) P.auf(x, 106 + (x % 12 ? 0 : 1), 'k3');
+      
       // Glanz auf dem Rücken: Spiegelung der Eisdecke
       glas.streif(P, [sx + 14, sy - 6], [sx + 34, sy - 1], 1, { hell: 0.4 });
       // Perlen: winziger Glanzpunkt oben rechts, eine leuchtet grün (sie hat Licht von unten mitgenommen)

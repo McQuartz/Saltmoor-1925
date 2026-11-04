@@ -6,15 +6,15 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 
 | Meilenstein | Status | Notiz |
 |---|---|---|
-| M0 Einrichten und Bild-Pipeline | offen | |
+| M0 Einrichten und Bild-Pipeline | fertig | Windgestalt neu (Note 4), Biom-Paket-Format, Prüfung mit größeren Grenzen |
 | M1 Gefühl und UI | fertig | Lebensbalken unten mittig, Meldungszeile, Wucht, Mehrfachtreffer einzeln, Übergang zum Wegklicken, Beute-Sätze, Endbildschirm, Musik-Aufbau |
-| M2 Längere Akte | offen | |
+| M2 Längere Akte | fertig | 6 Ebenen + Wächter je Akt I–IV, Biom-Wahl am Aktanfang, 31 Knoten je vollem Run |
 | M3 Deckbau-Kern | fertig | Kerben, Handgriffe, 7 Schlagworte, Belohnung, Ritzen, Schleifen, Umritzen, Verkaufen, Rucksackmodus, Hover-Vorschau, Dev-Reiter Deck |
 | M4 Items, Handgriffe, Builds | fertig | 70 Handgriffe, 74 Items (18 Reliquien), 6 Builds mit Beispieldeck und Build-Bot; Builds 30–40 % (Feinabstimmung M8) |
 | M5 Pipeline und alte Schwächen | läuft | Neubauten fertig (Mumie, Nachgeher, Ertrunkener, Netzflickerin-Rücken, Tiefling, Nest, alle Note 4); Icons in Arbeit |
-| M6 Biome Akt I und II | offen | |
-| M7 Biome Akt III bis V | offen | |
-| M8 Ereignisse und Balance | offen | |
+| M6 Biome Akt I und II | läuft | Fabrik, Kurhaus, Nachtzug, Kloster, Grotte fertig (alle Note 4); neue Gegner Hafen/Moor/Kapelle in Arbeit |
+| M7 Biome Akt III bis V | läuft | Wald, Gezeitenwerk, Walkathedrale, Glasmeer, Ufer, Pforte neu, Finale neu, Gegner Salz/Stadt/Eis in Arbeit; Kern: Kniffe teurer/kopie/takt/voraus, Ergänzungspakete, Vorgänger |
+| M8 Ereignisse und Balance | läuft | 15 biomübergreifende Ereignisse, Ereignis-Test (alle Wahlen); Balance folgt, wenn alle Biome stehen |
 | M9 Abschluss | offen | |
 | Zugabe | offen | |
 

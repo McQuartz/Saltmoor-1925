@@ -41,7 +41,7 @@ const MAT = {
   wachsrot:{ body: ['#120807', '#24110d', '#3c1d16', '#582c21'], hell: '#f0b098' },
   glas:    { body: ['#070b0b', '#0f1817', '#1a2827', '#2a3c3a'], hell: '#d8f0ea' },
   stein:   { body: ['#0b0b0c', '#171719', '#252528', '#38383c'], hell: '#d0d0d4' },
-  haut:    { body: ['#110b09', '#21150f', '#342218', '#4a3222'], hell: '#e8b890' },
+  haut:    { body: ['#0e0907', '#1b110c', '#2b1b13', '#3d281c'], hell: '#e2b48c' },
   fell:    { body: ['#0c0b0a', '#1a1715', '#2a2521', '#3d362f'], hell: '#d8ccbc' },
   perlmutt:{ body: ['#080c0b', '#121c1a', '#1f2f2b', '#30463f'], hell: '#d8f4e8' },
   fleisch: { body: ['#110607', '#220c0d', '#381414', '#521e1c'], hell: '#f0a090' },
@@ -131,10 +131,10 @@ function hand(o) {
   const out = { teller: [], finger: [], daumen: [], spitzen: [] };
   out.teller.push(apg(ax, [[0, -pb * 0.8], [pl * 0.9, -pb], [pl, 0], [pl * 0.9, pb], [0, pb * 0.8]], null, { rd: 1.1 * s, b: 1.4 }));
   const fl = [[3.2, 2.4, 1.9], [3.5, 2.6, 2.0], [3.3, 2.4, 1.9], [2.6, 1.9, 1.5]];
-  const rr = [1.15, 1.2, 1.1, 0.95];
+  const rr = [1.0, 1.05, 1.0, 0.85];
   for (let i = 0; i < 4; i++) {
     const q = (-seite) * (i - 1.5) * pb * 0.62 * -1; // Zeigefinger auf Daumenseite
-    let [px, py] = ax.P(pl * (i === 3 ? 0.88 : 0.97), seite * (1.5 - i) * pb * 0.6);
+    let [px, py] = ax.P(pl * (i === 3 ? 0.88 : 0.97), seite * (1.5 - i) * pb * 0.74);
     let ang = a + seite * (1.5 - i) * spreiz * -1 * -1;
     const pts = [[px, py]];
     for (let j = 0; j < 3; j++) { ang += -seite * curl[i] * (j === 0 ? 0.9 : 1.15) * (o.krumm ?? 1); px += Math.cos(ang) * fl[i][j] * s; py += Math.sin(ang) * fl[i][j] * s; pts.push([px, py]); }
@@ -152,6 +152,7 @@ function hand(o) {
   out.ax = ax;
   return out;
 }
+const AUTO = []; // Detail-Pinsel, die Bausteine nach dem Rendern selbst setzen
 // Faust (geschlossene Hand), Knöchel zeigen in Richtung a
 function faust(o) {
   const s = o.s ?? 1, a = o.a ?? 0, seite = o.seite ?? 1; const ax = achse(o.x, o.y, a);
@@ -162,6 +163,8 @@ function faust(o) {
   const al = o.arm ?? 12;
   const arm = al > 0 ? [acap(ax, -al, 0, 0.5, 0, 2.6 * s, 2.2 * s, null)] : [];
   const aermel = al > 0 && o.aermel !== false ? [acap(ax, -al - 2, 0, -al * 0.35, 0, 3.4 * s, 3.0 * s, null)] : [];
+  // Rillen zwischen den Fingern und unter den Knöcheln (werden nach dem Rendern automatisch gemalt)
+  AUTO.push(P => { for (let i = 0; i < 3; i++) { const q = seite * (1.6 - i * 1.1 - 0.55) * s * 1.05; const [a, b] = ax.P(5.2 * s, q), [c, d] = ax.P(8.2 * s, q); P.ritz(a, b, c, d, -2); } const [e, f] = ax.P(5 * s, seite * 2 * s), [g, h] = ax.P(5 * s, -seite * 2.6 * s); P.ritz(e, f, g, h, -1); });
   return { teller, knoechel, daumen, arm, aermel, ax, alle: () => [...teller, ...knoechel], spitze: ax.P(8.5 * s, 0) };
 }
 
@@ -211,6 +214,12 @@ function mantel(o) {
 
 // ---------------------------------------------------------------------------
 const TON_FLACH = 0.235;
+// Glutnest (Grundmotiv der Glut-Handgriffe): ein flacher Haufen Kohlen, die von innen glühen
+function glutHaufen(cx, cy, w, n = 7, seed = 1) {
+  const out = []; for (let i = 0; i < n; i++) { const f = (Math.sin(seed * 9.1 + i * 3.7) + 1) / 2; const x = cx - w / 2 + (i + 0.5) * w / n, r = 2 + f * 1.6; out.push(E(x, cy - r * 0.5 - (1 - Math.abs(i / (n - 1) - 0.5) * 2) * 2, r + 0.6, r, null, { pf: 'bevel', hz: 0.6 })); }
+  AUTO.push(P => { for (let i = 0; i < n; i++) { const x = cx - w / 2 + (i + 0.5) * w / n; P.glow(x, cy - 1, 3.2, 1.1, 'glutMittel', 'glutDim'); if (i % 2) P.set(x, cy - 1, 'flamme'); } });
+  return out;
+}
 // Arm und Ärmel einer Hand als Gruppen (Haut, darüber der Ärmel bis kurz vor das Handgelenk)
 function armGruppen(h, aermelMat = 'stoff') { return [{ p: h.arm, mat: 'haut', k: 0 }, { p: h.aermel, mat: aermelMat, k: 0 }]; }
 // Rendern: gruppen (hinten -> vorne), jede mit mat. Rückgabe Index-Puffer in die Bild-Palette.
@@ -318,10 +327,12 @@ function bauen(def, o = {}) {
   const W = def.w || 48, H = def.h || 48;
   const st = o.st ?? def.st ?? [], rar = o.rar ?? def.rar ?? 'gewoehnlich';
   const pal = palette(st, rar);
-  const A = { armGruppen, pfad, E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
+  const A = { glutHaufen, armGruppen, pfad, E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
+  AUTO.length = 0;
   const res = def.form(A, { st, rar });
   const { buf } = rendern(W, H, res.gruppen, pal);
   const P = pinsel(buf, W, H, pal);
+  for (const f of AUTO) f(P);
   if (res.details) res.details(P);
   if (rar === 'reliquie' && res.glanz !== false) reliquieGlanz(buf, W, H, pal);
   return { buf, W, H, pal, rgba: S.zuRGBA(buf, pal) };
