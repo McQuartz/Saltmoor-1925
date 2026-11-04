@@ -1,0 +1,50 @@
+{
+ "name": "blob",
+ "label": "Klumpen",
+ "size": {
+  "w": 96,
+  "h": 120,
+  "foot_x": 48,
+  "foot_y": 117
+ },
+ "params": [
+  "width",
+  "height",
+  "lumps",
+  "lumpSize",
+  "squash",
+  "lean",
+  "stubs",
+  "stubLen",
+  "eyes",
+  "eyeSize",
+  "mouth",
+  "asym",
+  "bulk",
+  "limbThick",
+  "pattern",
+  "growth"
+ ],
+ "doc": {
+  "width": "Breite",
+  "height": "Höhe",
+  "lumps": "Zahl der Beulen 0–5",
+  "lumpSize": "Beulengröße",
+  "squash": "Bodenkontakt breit",
+  "lean": "Neigung",
+  "stubs": "Stummel-Gliedmaßen 0–3",
+  "stubLen": "Stummellänge",
+  "eyes": "Augenzahl 1–5",
+  "eyeSize": "Augengröße",
+  "mouth": "Maulbreite",
+  "asym": "Asymmetrie",
+  "bulk": "Dicke",
+  "limbThick": "Stummeldicke",
+  "pattern": "Stärke des Oberflächenmusters",
+  "growth": "Wucherungen (Zellautomat)"
+ },
+ "eyes_range": [
+  1,
+  5
+ ]
+}

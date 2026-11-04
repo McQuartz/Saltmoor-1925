@@ -1,0 +1,10 @@
+{
+  "name": "saltmoor-spritegen-ref",
+  "private": true,
+  "type": "module",
+  "description": "JS-Referenzimplementierung des Sprite-Generators (M1), Vorlage für den Godot-Port",
+  "scripts": {
+    "sheet": "node cli/sheet.js",
+    "test": "node --test tests/*.test.js"
+  }
+}

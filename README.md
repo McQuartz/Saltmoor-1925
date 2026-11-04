@@ -51,6 +51,7 @@ prototype/          Browser-Prototyp (reines HTML/CSS/JS, kein Build-Schritt)
   js/dev/           Dev-Modus und Autospieler
   js/sprites/       Item-Sprites (12 × 12); foes.js = alte Gegner (nur Galerie)
 tools/              Prüf- und Fotoskripte (Node, Playwright): Autospieler, Balance, Tests, Sprites
+tools/spritegen/    prozeduraler Sprite-Generator, JS-Referenz (nach Godot portiert: game/addons)
 game/               Godot-4-Projekt (folgt)
 docs/auftrag/       Auftrag „spielbarer Prototyp-Run“, Stand in fortschritt.md, Konzepte (gegner.md, progression.md, Kompositionen)
 docs/ui/            Kampf-UI: Ausgangslage Variante A und Ideenspeicher

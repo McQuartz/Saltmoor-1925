@@ -1,0 +1,52 @@
+{
+ "name": "worm",
+ "label": "Wurm",
+ "size": {
+  "w": 96,
+  "h": 120,
+  "foot_x": 48,
+  "foot_y": 117
+ },
+ "params": [
+  "length",
+  "segments",
+  "thick",
+  "taper",
+  "rise",
+  "curl",
+  "headBulb",
+  "jaw",
+  "spines",
+  "eyes",
+  "eyeSize",
+  "mouth",
+  "asym",
+  "bulk",
+  "limbThick",
+  "pattern",
+  "growth"
+ ],
+ "doc": {
+  "length": "Gesamtlänge",
+  "segments": "Zahl der Segmente 4–9",
+  "thick": "Dicke",
+  "taper": "Verjüngung zum Schwanz",
+  "rise": "Wie hoch sich der Kopf hebt",
+  "curl": "Krümmung",
+  "headBulb": "Kopfverdickung",
+  "jaw": "Kiefer",
+  "spines": "Stacheln",
+  "eyes": "Augen 0–4",
+  "eyeSize": "Augengröße",
+  "mouth": "Maul",
+  "asym": "Asymmetrie",
+  "bulk": "Dicke",
+  "limbThick": "Gliedmaßendicke",
+  "pattern": "Stärke des Oberflächenmusters",
+  "growth": "Wucherungen (Zellautomat)"
+ },
+ "eyes_range": [
+  0,
+  4
+ ]
+}

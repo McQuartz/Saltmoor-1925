@@ -1,0 +1,54 @@
+{
+ "name": "crawler",
+ "label": "Krabbler",
+ "size": {
+  "w": 96,
+  "h": 120,
+  "foot_x": 48,
+  "foot_y": 117
+ },
+ "params": [
+  "length",
+  "height",
+  "legPairs",
+  "legLen",
+  "legSpread",
+  "kneeUp",
+  "head",
+  "headDown",
+  "tail",
+  "tailLen",
+  "eyes",
+  "eyeSize",
+  "mouth",
+  "asym",
+  "bulk",
+  "limbThick",
+  "pattern",
+  "growth"
+ ],
+ "doc": {
+  "length": "Rumpflänge",
+  "height": "Rumpfhöhe über Boden",
+  "legPairs": "Beinpaare 2–4",
+  "legLen": "Beinlänge",
+  "legSpread": "Beinspreizung",
+  "kneeUp": "Knie hoch",
+  "head": "Kopfgröße",
+  "headDown": "Kopf gesenkt",
+  "tail": "Schwanz ja/nein",
+  "tailLen": "Schwanzlänge",
+  "eyes": "Augen 2–6",
+  "eyeSize": "Augengröße",
+  "mouth": "Maul",
+  "asym": "Asymmetrie",
+  "bulk": "Dicke",
+  "limbThick": "Beindicke",
+  "pattern": "Stärke des Oberflächenmusters",
+  "growth": "Wucherungen (Zellautomat)"
+ },
+ "eyes_range": [
+  2,
+  6
+ ]
+}

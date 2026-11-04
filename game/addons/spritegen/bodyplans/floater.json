@@ -1,0 +1,50 @@
+{
+ "name": "floater",
+ "label": "Schwebend",
+ "size": {
+  "w": 96,
+  "h": 120,
+  "foot_x": 48,
+  "foot_y": 117
+ },
+ "params": [
+  "body",
+  "flat",
+  "hover",
+  "tentacles",
+  "tentLen",
+  "tentSpread",
+  "tentThick",
+  "dome",
+  "eyes",
+  "eyeSize",
+  "mouth",
+  "asym",
+  "bulk",
+  "limbThick",
+  "pattern",
+  "growth"
+ ],
+ "doc": {
+  "body": "Körpergröße",
+  "flat": "0 rund, 1 flach",
+  "hover": "Schwebehöhe",
+  "tentacles": "Tentakel 2–7",
+  "tentLen": "Tentakellänge",
+  "tentSpread": "Spreizung",
+  "tentThick": "Tentakeldicke",
+  "dome": "Kuppel oben",
+  "eyes": "Augen 1–3",
+  "eyeSize": "Augengröße",
+  "mouth": "Maul",
+  "asym": "Asymmetrie",
+  "bulk": "Dicke",
+  "limbThick": "Gliedmaßendicke",
+  "pattern": "Stärke des Oberflächenmusters",
+  "growth": "Wucherungen (Zellautomat)"
+ },
+ "eyes_range": [
+  1,
+  3
+ ]
+}
