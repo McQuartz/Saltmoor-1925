@@ -3,8 +3,8 @@
 :root{color-scheme:dark;--u:2px;--messing:#b08a4a;--messing2:#e0c080;--gold:#e8c547;--txt:#ddd4bc;--dim:#8f8672;--rot:#b8302a;--blau:#6a9ad8;--violett:#a888e8;--eld:#7affc8;
  --fk:'Cinzel',serif;--ft:'IM Fell English',serif;--fl:'Limelight',serif;--fp:'Press Start 2P',monospace}
 *{box-sizing:border-box}
-html,body{margin:0;background:#000;color:var(--txt);font-family:var(--ft);user-select:none;-webkit-user-select:none;overflow-x:hidden}
-#spiel{position:relative;margin:0 auto;width:calc(var(--u)*480)}
+html,body{margin:0;background:#000;color:var(--txt);font-family:var(--ft);user-select:none;-webkit-user-select:none;overflow:hidden;height:100%}
+#spiel{position:absolute;left:0;top:0;transform-origin:0 0;width:calc(var(--u)*480)}
 #szene{position:relative;width:calc(var(--u)*480);height:calc(var(--u)*270);overflow:hidden;background:#000}
 #scene{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 #hud{position:absolute;inset:0;pointer-events:none;font-size:calc(var(--u)*6)}

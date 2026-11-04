@@ -54,6 +54,12 @@
   ]
  },
  "card_copies": 2,
+ "grundkarten": {
+  "copies": 1,
+  "waffe": {"n": "Stoßen", "c": 1, "atk": 5},
+  "kleidung": {"n": "Ausweichen", "c": 1, "blk": 5},
+  "talisman": {"n": "Zaudern", "c": 1, "blk": 4}
+ },
  "waechter_belohnung": {
   "gold": [
    34,

@@ -2,7 +2,9 @@
 // Läuft im FAST-Modus (Autospieler, Vorschau) ohne Wartezeiten synchron durch.
 
 // Deck aus den angelegten Items: jede Karte BAL.card_copies-mal, gestrichene Items (it.x) geben keine Karte.
-function buildDeck(){const d=[];for(const it of allActive()){if(it.x)continue;const D=def(it);for(let k=0;k<(BAL.card_copies||1);k++)D.cards.forEach((c,ci)=>d.push({...c,st:[...D.st],src:D.n,spr:D.spr,uid:it.uid,ci,cid:it.uid+':'+ci+':'+k}));}return rs('kampf').shuffle(d);}
+// Dazu je Item mit Karten eine Grundkarte (grundKarte in rules.js).
+function buildDeck(){const d=[];for(const it of allActive()){if(it.x)continue;const D=def(it);for(let k=0;k<(BAL.card_copies||1);k++)D.cards.forEach((c,ci)=>d.push({...c,st:[...D.st],src:D.n,spr:D.spr,uid:it.uid,ci,cid:it.uid+':'+ci+':'+k}));
+ const g=grundKarte(D);if(g)for(let k=0;k<(BAL.grundkarten.copies||1);k++)d.push({...g,st:[],src:D.n,spr:D.spr,uid:it.uid,ci:'g',grund:true,cid:it.uid+':g:'+k});}return rs('kampf').shuffle(d);}
 
 // Gegner aus foes.json erzeugen, skaliert nach Tiefe
 function mkEnemy(id,i){const f=FOES[id];if(!f)throw new Error('Unbekannter Gegner '+id);const d=S.depth;

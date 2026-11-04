@@ -157,7 +157,7 @@ function bauSets(){
 function bauFiguren(){
  $('figEinl').innerHTML=`Wählbar am Strand. Freischaltung über die Zahl gelesener Wandbild-Fragmente (<code>frei_ab</code>, von ${FRAGS.length}). Die <b>Vorliebe</b> entscheidet mit ${Math.round((RUN.akte[0].vorliebe||.7)*100)} %, ob Akt I im Hafen oder im Moorwald liegt. Karten im Startdeck: jede Karte ${BAL.card_copies||1}×.`;
  const zeile=(lbl,ids)=>ids&&ids.length?`<div class="ref">${lbl}: ${ids.map(id=>`${icon(id,24,'bild k')} <i>${esc(iname(id))}</i>`).join(' ')}</div>`:'';
- $('figRaster').innerHTML=JOBS.map(j=>{const all=[...j.w,...j.k,...j.t];const deck=all.reduce((s,id)=>s+(ITEMS[id]?ITEMS[id].cards.length:0),0)*(BAL.card_copies||1);const hp=BAL.start_hp+all.reduce((s,id)=>s+((ITEMS[id]&&ITEMS[id].hp)||0),0);
+ $('figRaster').innerHTML=JOBS.map(j=>{const all=[...j.w,...j.k,...j.t];const deck=deckGroesse(all);const hp=BAL.start_hp+all.reduce((s,id)=>s+((ITEMS[id]&&ITEMS[id].hp)||0),0);
   const set=ROLES.find(r=>r.n===j.set);
   return `<div class="kachel"><div class="kopf"><div class="kn">${esc(j.n)}</div>${j.frei_ab?et(`ab ${j.frei_ab} Fragmenten`,'gold'):et('von Anfang an','gruen')}${j.faehigkeit?et('Zusatzfigur','violett'):''}</div>
   <div class="tx">${esc(j.d)}</div>

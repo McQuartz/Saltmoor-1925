@@ -87,7 +87,7 @@ function titelHtml(){const M=Meta.get();return `<div class="titel"><h1>SALTMOOR<
  <div class="fuss">${M.runs?`${M.runs} Abstiege · ${M.fragmente.length} von ${FRAGS.length} Fragmenten`:'Etwas unter der Stadt ruft.'}</div></div>`;}
 function figurHtml(){const M=Meta.get();const st=M.maxStufe;
  return box('figur',`<h2>WER STEIGT HINAB?</h2><p class="lead">Du wachst am Strand von Saltmoor auf. Salz in der Lunge. Unter dir ruft etwas.</p>
- <div class="figuren">${JOBS.map(j=>{const frei=Meta.figurFrei(j)||(typeof Dev!=='undefined'&&Dev.an);const items=[...j.w,...j.k,...j.t];const deck=items.reduce((s,id)=>s+ITEMS[id].cards.length,0)*(BAL.card_copies||1);const set=ROLES.find(r=>r.n===j.set);
+ <div class="figuren">${JOBS.map(j=>{const frei=Meta.figurFrei(j)||(typeof Dev!=='undefined'&&Dev.an);const items=[...j.w,...j.k,...j.t];const deck=deckGroesse(items);const set=ROLES.find(r=>r.n===j.set);
   return `<div class="fig ${frei?'':'zu'}" ${frei?`data-job="${j.id}"`:''}><div class="fn">${esc(j.n).toUpperCase()}</div>
    ${frei?`<div class="aus">„${esc(j.ausrede)}“</div><div class="its">${items.map(id=>`<img src="${spr(ITEMS[id].spr)}" title="${esc(ITEMS[id].n)}">`).join('')}</div>
    <div class="fd">${esc(j.d)}</div>${j.faehigkeit_t?`<div class="set">Fähigkeit: <span class="hat">${esc(j.faehigkeit_t)}</span></div>`:''}<div class="set">${set?'Set: ':''}${set?set.i.map(id=>`<span class="${items.includes(id)?'hat':''}">${esc(ITEMS[id].n)}</span>`).join(', '):''}<br><span class="hint">${set?esc(set.t):''}</span></div><div class="deck">${deck} Karten · zieht ${BIOMES[j.vorliebe].kurz} vor</div>`
