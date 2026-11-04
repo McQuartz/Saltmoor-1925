@@ -79,14 +79,14 @@ function herzFerne(K, x, y, w, h, eb) {
 }
 // Eisboden mit Bohlenweg der Expedition (Planken quer) und eingefrorenen Knochensplittern
 function boden(K, P, y0, wegB) {
-  K.bodenStoffe(y0, H + M, [{ cols: EISBODEN, tf: (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; return .35 + B.fbm(X * 1.5, Z * 1.2, 21, 3) * .4 - Math.min(.25, Z / 40) * -1 + (Math.abs(frac(X * .7 + Z * .3) - .5) < .02 ? .3 : 0) + (B.hash(Math.floor(X * 6), Math.floor(Z * 4), 9) < .03 ? .6 : 0); } },
-    { cols: HOLZ, tf: (x, y) => { const Z = P.z(y + .5); return frac(Z * 2.6) < .14 ? .05 : .45 + B.hash(Math.floor(Z * 2.6), 1, 4) * .35 + (frac(Z * 2.6) > .8 ? .2 : 0); } }],
+  K.bodenStoffe(y0, H + M, [{ cols: EISBODEN, tf: (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; const n = B.fbm(X * 1.4, Z * 1.1, 21, 3), riss = Math.abs(B.fbm(X * 2.2, Z * 1.6, 44, 2) - .5) < .018 * Math.min(3, Z); return .3 + n * .35 + Math.min(.3, Z / 30) - (riss ? .3 : 0) + (B.hash(Math.floor(X * 9), Math.floor(Z * 9), 9) < .006 ? .5 : 0) - Math.max(0, 1.6 - Z) * .15; } },
+    { cols: HOLZ, tf: (x, y) => { const Z = P.z(y + .5); return frac(Z * 2.6) < .16 ? 0 : .22 + B.hash(Math.floor(Z * 2.6), 1, 4) * .3 + (frac(Z * 2.6) > .82 ? .18 : 0) + Math.min(.25, Z / 40); } }],
   (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h; return wegB && Math.abs(X - wegB[0]) < wegB[1] && Z < wegB[2] ? 1 : 0; });
 }
 // Junge Rippe, die aus dem Boden treibt und sich zur Mitte krümmt (falsches Detail)
 function trieb(K, P, X, Z, gross) {
   const s = Math.sign(X) || 1, pts = []; for (let i = 0; i <= 6; i++) { const q = i / 6; pts.push([X - s * q * q * .7 * gross, q * .95 * gross, Z]); }
-  rippe3(K, P, K.eb(P.q(X, 0, Z)[1]), pts, .055 * gross, Math.min(.5, Z / 20), 2.4);
+  rippe3(K, P, K.eb(P.q(X, 0, Z)[1]), pts, .055 * gross, Math.min(.5, Z / 20), 1.6 + Z * .08);
 }
 
 // =====================================================================
@@ -108,16 +108,16 @@ function schiff(K, cfg) {
       // Hakenende (nach innen, frei über dem Boden), dann der Bogen hinauf zum Grat
       pts.push([s * (Xw - .75), .55, Z], [s * (Xw - .35), .3, Z], [s * Xw, .7, Z]);
       for (let k = 1; k <= 9; k++) { const u = k / 9; pts.push([s * Xw * Math.pow(Math.cos(u * Math.PI / 2), .75), .7 + (Ya - .7) * Math.pow(Math.sin(u * Math.PI / 2), .85), Z + u * .15]); }
-      rippe3(K, P, eb, pts, .14 + (i % 2) * .02, tiefe, 2.6 - tiefe, (i % 3 === 1 && Z > 2.4 && Z < 16) ? .9 + fr * .3 : 0);
+      rippe3(K, P, eb, pts, .14 + (i % 2) * .02, tiefe, 1.3 + tiefe * 1.6, (i % 3 === 1 && Z > 2.4 && Z < 16) ? .9 + fr * .3 : 0);
     }
     // Wirbel am Grat: Knoten mit Dornfortsatz
     const [vx, vy] = P.q(0, Ya + .25, Z + .15), k = P.k(Z), m = B.maske(); m.ell(vx, vy, k * .32, k * .2); m.kap(vx, vy, vx + k * .05, vy - k * .38, k * .07, k * .03);
-    K.form(eb, m, tiefe, knochenMat(2.4 - tiefe));
+    K.form(eb, m, tiefe, knochenMat(1.3 + tiefe * 1.6));
   }
   // Grat zwischen den Wirbeln
   const g = B.maske(); for (let i = 0; i < 11; i++) { const Z1 = 1.25 * Math.pow(1.3, i), Z2 = Z1 * 1.3; g.kap(...P.q(0, Ya + .25, Z1), ...P.q(0, Ya + .25, Z2), P.k(Z1) * .08, P.k(Z2) * .08); }
   K.form(2, g, .3, knochenMat(1.6));
-  boden(K, P, P.vy, [0, .55, 24]);
+  boden(K, P, P.vy, [0, .38, 24]);
   // Junge Rippen aus dem Boden, zur Mitte gekrümmt
   for (const [X, Z, gr] of [[-1.6, 2.6, 1], [1.9, 3.3, .8], [-2.2, 5.5, .9], [1.4, 7.5, .7], [-1.2, 11, .6]]) trieb(K, P, X, Z, gr * (1 + fr * .4));
   // Tranlampen am Weg; mit der Fremdheit verlöschen die hinteren
@@ -137,17 +137,17 @@ function kiefer(K, cfg) {
   eisWand(K, 470, 60, { unten: 120 });
   lichtRiss(K, 448, 30, 60, 1.9);
   // Ferne: Schädelkuppel mit Augenhöhle, in der Mark glimmt (Wahrzeichen: das Herz ist hier nur Glimmen in der Ferne)
-  const sk = B.maske(); sk.ell(150, 150, 190, 92); sk.rect(-M, 150, 360, 30); sk.ell(260, 128, 14, 9, 0);
-  K.form(1, sk, .62, knochenMat(1.2, { verlauf: .6 }));
+  const sk = B.maske(); sk.ell(150, 150, 170, 70); sk.rect(-M, 150, 330, 20); sk.ell(260, 128, 14, 9, 0);
+  K.form(1, sk, .2, knochenMat(.5, { verlauf: .5, muster: (px, py, d) => (Math.abs(frac((px * .4 + py) / 11) - .5) < .07 ? -.5 : 0) + (B.hash(px >> 2, py >> 2, 6) < .1 ? -.4 : 0) + (d > 3 ? -.3 : 0) }));
   B.gluehen(K.e[1], 260, 128, 26, MARK_G, 1); K.e[1].set(260, 128, B.pk(MARK)); K.e[1].set(261, 128, B.pk(MARK_D)); K.licht(260, 128, MARK, 40, .5);
   herzFerne(K, 96, P.q(0, 0, 14)[1], 18, 26, 1);
   // Zweiter Kiefer (hinten), dann der vordere: Bögen von links unten nach rechts oben
   const bogen = (x0, y0, x1, y1, bauch, r0, r1, eb, tiefe, ton) => { const pts = []; for (let k = 0; k <= 16; k++) { const q = k / 16; pts.push([x0 + (x1 - x0) * q, y0 + (y1 - y0) * q - Math.sin(q * Math.PI) * bauch]); } const m = B.maske(); m.pfad(pts, r0, r1); K.form(eb, m, tiefe, knochenMat(ton)); return pts; };
-  bogen(40, 168, 470, -30, 40, 9, 13, 2, .35, 2.2);
-  const vk = bogen(-30, 250, 520, -60, 70, 22, 30, 3, .05, 2.6);
+  bogen(60, 172, 500, -20, 70, 8, 12, 2, .3, 1.6);
+  const vk = bogen(-40, 262, 530, -50, 120, 18, 26, 3, .02, 1);
   // Zahnreihe auf dem vorderen Kiefer: neue Zähne, die nach innen wachsen (falsches Detail)
   const z = B.maske(); for (let k = 3; k < 15; k += 1) { const [x, y] = vk[k], [x2, y2] = vk[k + 1], a = Math.atan2(y2 - y, x2 - x) - Math.PI / 2, l = 9 + (k % 3) * 4 + fr * 6; z.kap(x + Math.cos(a) * 18, y + Math.sin(a) * 18, x + Math.cos(a + .5) * (18 + l), y + Math.sin(a + .5) * (18 + l), 2.6, .6); }
-  K.form(3, z, .05, knochenMat(3));
+  K.form(3, z, .05, knochenMat(1.6));
   // Barten von oben: lange Platten, Kanten mit Randlicht, unten ausgefranst
   for (let i = 0; i < 26; i++) {
     const x = 130 + i * 13 + (i % 3) * 3, len = 40 + (i * 37 % 23) + Math.sin(i) * 10, m = B.maske();
@@ -183,15 +183,15 @@ function krypta(K, cfg) {
   eisWand(K, 470, -10);
   lichtRiss(K, 470, 4, 50, 2.2);
   const [hx, hy] = P.q(-.9, 0, 26); herzFerne(K, hx, hy, 16, 26, 1);
-  boden(K, P, P.vy, [.9, .5, 20]);
+  boden(K, P, P.vy, [.9, .36, 20]);
   for (let i = 9; i >= 0; i--) {
-    const Z = 1.6 * Math.pow(1.32, i), tiefe = Math.min(.8, Z / 22), eb = Z < 2.2 ? 4 : Z < 4.5 ? 3 : Z < 9 ? 2 : 1, k = P.k(Z);
+    const Z = 2.3 * Math.pow(1.3, i), tiefe = Math.min(.8, Z / 22), eb = Z < 2.9 ? 4 : Z < 4.5 ? 3 : Z < 9 ? 2 : 1, k = P.k(Z);
     // Wirbelkörper (Scheibe), Bogen mit Kanal, Dornfortsatz nach hinten oben, Querfortsätze
-    const [cx, cy] = P.q(-2.2, 1.25, Z), m = B.maske();
-    m.ell(cx, cy, k * .5, k * .78); m.ell(cx, cy - k * 1.05, k * .42, k * .4); m.kap(cx, cy - k * 1.3, cx + k * .35, cy - k * 2.7, k * .16, k * .06);
-    m.kap(cx - k * .2, cy - k * .6, cx - k * 1.3, cy - k * .9, k * .12, k * .05); m.kap(cx + k * .2, cy - k * .6, cx + k * 1.1, cy - k * .85, k * .12, k * .05);
+    const [cx, cy] = P.q(-2.4, .95, Z), m = B.maske();
+    m.ell(cx, cy, k * .46, k * .62); m.poly([[cx - k * .36, cy - k * .7], [cx - k * .3, cy - k * 1.3], [cx, cy - k * 1.48], [cx + k * .3, cy - k * 1.3], [cx + k * .36, cy - k * .7]]); m.kap(cx, cy - k * 1.3, cx + k * .35, cy - k * 2.7, k * .16, k * .06);
+    m.kap(cx - k * .25, cy - k * .75, cx - k * .75, cy - k * .95, k * .1, k * .04); m.kap(cx + k * .25, cy - k * .75, cx + k * .7, cy - k * .92, k * .1, k * .04);
     m.ell(cx, cy - k * 1.02, k * .17, k * .16, 0);
-    K.form(eb, m, tiefe, knochenMat(2.5 - tiefe, { verlauf: .3 }));
+    K.form(eb, m, tiefe, knochenMat(1.2 + tiefe * 1.8, { verlauf: .4 }));
     // Bandscheibe darunter zum Boden: Eis, in dem der Wirbel steht
     const s = B.maske(); s.ell(cx, cy + k * .78, k * .55, k * .08); B.form(K.e[eb], s, K.mat(tiefe, { k: EIS.slice(1, 6), ton: 2, fase: 0, rand: 1 }));
     // Kanal: das Mark glimmt
@@ -199,7 +199,7 @@ function krypta(K, cfg) {
     B.gluehen(e, cx, cy - k * 1.02, k * .45, MARK_G2, gl); e.set(cx, cy - k * 1.02, B.pk(i < 4 ? MARK : MARK_D)); if (k > 40) { e.set(cx + 1, cy - k * 1.02, B.pk(MARK)); e.set(cx, cy - k * 1.02 + 1, B.pk(MARK_K)); }
     K.licht(cx, cy - k * 1.02, MARK, k * .9, .45);
     // Rippenansatz rechts als Strebepfeiler, haken nach innen
-    if (i % 2 === 0) rippe3(K, P, eb, [[3.6, 0, Z], [3.4, 1.6, Z], [3.2, 3.2, Z], [2.4, 4.4, Z], [1.6, 4.1, Z], [1.3, 3.6, Z]], .16, tiefe, 2.3 - tiefe, i === 4 ? 1 : 0);
+    if (i % 2 === 0) rippe3(K, P, eb, [[3.6, 0, Z], [3.4, 1.6, Z], [3.2, 3.2, Z], [2.4, 4.4, Z], [1.6, 4.1, Z], [1.3, 3.6, Z]], .16, tiefe, 1.2 + tiefe * 1.7, i === 4 ? 1 : 0);
   }
   // Decke: Eis mit Zapfen, die nach innen (zur Wirbelreihe) gebogen sind
   for (let i = 0; i < 14; i++) { const x = 20 + i * 34 + (i % 3) * 7, l = 14 + (i * 13 % 17), m = B.maske(); m.poly([[x - 5, -M], [x + 5, -M], [x + 1, l], [x - 3, l + 6]]); K.form(2, m, .3, { k: EIS.slice(2), ton: 2, fase: 1, rand: 2 }); }

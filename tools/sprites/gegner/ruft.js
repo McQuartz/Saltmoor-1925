@@ -285,7 +285,7 @@ function auge(p, v, A) {
   let lean = P0.lean; const T = P0.fall + (p.idle ? [0, -1, -1, 0][f] : 0);
   const cx = 120;
   let cy = 90 + T, offen = 1, lang = 1;
-  if (p.idle) offen = f === 3 ? 0.75 : 1;
+  if (p.idle) offen = f === 3 ? 0.9 : 1;
   if (p.angriff) { offen = [0.55, 0.4, 1.3, 1.05][f]; lang = [0.8, 0.7, 1.35, 1.1][f]; lean = [3, 4, -14, -5][f]; cy += [-3, -6, 2, 0][f]; }
   if (p.treffer) offen = 0.35;
   if (p.tod) offen = Math.max(0.05, 1 - p.q * 1.6);
@@ -310,7 +310,7 @@ function auge(p, v, A) {
   }
   // Ketten und Fäden hängen bis zum Boden; an der mittleren der Anker
   const ketten = [], glieder = [];
-  const ky = cy + 22, sw = p.idle ? [0, 1, 1, 0][f] : p.angriff ? [1, 2, -3, -1][f] : 0;
+  const ky = cy + 22, sw = p.idle ? [0, 0, 0, 0][f] : p.angriff ? [1, 2, -3, -1][f] : 0;
   for (const [ox, len, anker] of [[-22, BODEN - ky - 10, false], [-4, BODEN - ky - 30, true], [16, BODEN - ky - 4, false]]) {
     const pts = []; for (let i = 0; i <= 8; i++) { const q = i / 8; pts.push([ex + ox + Math.sin(q * 2.4 + ox) * 2 + sw * q * q * 3 - lean * q * 0.6, ky + q * len]); }
     for (let i = 0; i < 8; i++) for (let k = 0; k < 3; k++) { const q = (i + k / 3) / 8, x = pts[i][0] + (pts[i + 1][0] - pts[i][0]) * k / 3, y = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k / 3; glieder.push(((i * 3 + k) & 1) ? E(x, y, 1.4, 2.8, null) : E(x, y, 2.6, 1.8, null)); void q; }

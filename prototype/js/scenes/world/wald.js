@@ -135,7 +135,7 @@ function schnittFront(K, eb, x, y, R, tiefe, o) {
   // Rinde als Ring: außen dunkel, oben rechts Randlicht
   for (let a = 0; a < 6.283; a += 0.01) { for (let d = 0; d < 3; d++) { const px = x + Math.cos(a) * (R - d) * (o.sx || 1), py = y + Math.sin(a) * (R - d); const f = Math.cos(a) * 0.75 - Math.sin(a) * 0.66; e.set(px, py, B.pk(B.mix(d === 0 && f > 0.4 ? RAND[1] : d < 2 && f > 0.2 ? RAND[0] : RINDE[d + 1], K.fern, tiefe))); } }
   // Die Zahlen der Vermesser: innen die höchste, nach außen abwärts, der äußerste Ring ohne Zahl
-  const dk = B.pk(B.mix('#0c0906', K.fern, tiefe)), hl = B.pk(B.mix(SCHNITT[6], K.fern, tiefe)), zN = Math.min(n - 1, o.zahlen || 7);
+  const dk = B.pk(B.mix(RAND[1], K.fern, tiefe)), hl = B.pk(B.mix('#0c0906', K.fern, tiefe)), zN = Math.min(n - 1, o.zahlen || 7);
   for (let i = 0; i < zN; i++) { const q = (i + 0.55) / n, a = -0.5 + (o.zahlWinkel || 0); const px = kx + Math.cos(a) * q * R * (o.sx || 1), py = ky + Math.sin(a) * q * R; zahl(e, px - 1, py - 2, ROEM[zN - 1 - i], dk, hl); }
   // Der äußerste Ring: frisch, heller, noch ohne Zahl
   for (let a = 0; a < 6.283; a += 0.012) { const px = kx + Math.cos(a) * (R - 4.5) * (o.sx || 1), py = ky + Math.sin(a) * (R - 4.5); if (m.has(px, py) && B.bay(px, py) < 0.6) e.set(px, py, B.pk(B.mix(SCHNITT[6], K.fern, tiefe))); }
@@ -252,20 +252,21 @@ function gefaellt(K) {
   stamm(K, 1, vx + 30, -M, vy + 3, 44, 34, 0.55, { harz: 3 }); bogen(K, 1, vx + 26, vy + 3, 8, 11, 0.55, { steine: 7 });
   // Der Stumpf, von dem der liegende Stamm kommt: hängt über der Mitte, unten gekappt
   stamm(K, 2, 236, -M, 74, 92, 64, 0.18, { krone: 'schnitt', flach: 0.3, ringe: 9, harzKern: true, harz: 6 });
+  // Boden zuerst (der Stamm liegt darauf)
+  const wb = waldboden(P, sd); K.boden(vy + 1, H + M, STEIN.slice(0, 7), wb);
+  for (let i = 0; i < 6; i++) { const x = 150 + i * 58 + r.j(16); blattwerk(K, 4, x, 214 + r.j(8), r.f(8, 14), r.f(3, 5), 0, { flach: true }); }
   // Der liegende Stamm: von links vorn (Schnittfläche) nach rechts hinten
   const e3 = K.e[3], m = B.maske(), x0 = 72, y0 = 150, R0 = 54, x1 = 520, y1 = 128, R1 = 22;
   const L = [], Rr = [];
   for (let i = 0; i <= 30; i++) { const t = i / 30, x = B.lerp(x0, x1, t), yc = B.lerp(y0, y1, t), rr = B.lerp(R0, R1, t); L.push([x, yc - rr]); Rr.push([x, yc + rr * 0.92]); }
   m.poly(L.concat(Rr.reverse()));
-  K.form(3, m, 0.06, { k: STEIN.slice(0, 8), r: RAND, ton: 0.7, fase: 2, rand: 2, schatten: 2, muster: (px, py) => { const t = (px - x0) / (x1 - x0), yc = B.lerp(y0, y1, t), rr = B.lerp(R0, R1, t), f = (py - yc) / rr; const lei = Math.sin(f * 7 + Math.sin(px * 0.03) * 0.8); return (lei > 0.6 ? 0.5 : lei < -0.6 ? -0.5 : 0) - f * 0.9 + (B.hash(px >> 3, py >> 1, 4) - 0.5) * 0.3; } });
+  K.form(3, m, 0.06, { k: STEIN.slice(0, 9), r: RAND, ton: 2.2, fase: 2, rand: 2, schatten: 2, muster: (px, py) => { const t = (px - x0) / (x1 - x0), yc = B.lerp(y0, y1, t), rr = B.lerp(R0, R1, t), f = (py - yc) / rr; const lei = Math.sin(f * 9 + Math.sin(px * 0.045 + f * 2) * 1.2); return (lei > 0.55 ? 0.8 : lei < -0.6 ? -0.9 : 0) - f * 1.6 - Math.max(0, f) * 1.2 + (B.hash(px >> 3, py >> 1, 4) - 0.5) * 0.4 + ((px * 7 + (py >> 1) * 13) % 97 === 0 ? -1.2 : 0); } });
   // Kerben der Legion im Stamm (Keile), ein Keil steckt noch, eine Dolabra lehnt daran
   for (let i = 0; i < 4; i++) { const x = 170 + i * 58, t = (x - x0) / (x1 - x0), yc = B.lerp(y0, y1, t) - B.lerp(R0, R1, t) * 0.7; const k = B.maske(); k.poly([[x - 6, yc - 3], [x + 5, yc - 4], [x, yc + 8]]); B.form(e3, k, K.mat(0, { k: ['#050403', '#0c0a07', '#3a2a14', '#7e5a22'], ton: 0.6, fase: 1, rand: 0 })); e3.set(x, yc + 6, B.pk(HARZ[5])); }
   const dol = B.maske(); dol.kap(312, 182, 296, 124, 1, 1); dol.poly([[290, 122], [304, 118], [306, 122], [292, 126]]); dol.kap(298, 121, 288, 128, 1.4, 0.6); K.form(4, dol, 0, { k: RINDE, r: RAND, ton: 1.4, fase: 0, rand: 1 });
   band(K, 120, 176, 0.4);
   // Schnittfläche vorne links: die Ringe mit den Zahlen der Vermesser
-  schnittFront(K, 3, x0, y0, R0 - 1, 0, { sx: 0.62, ringe: 10, zahlen: 9, zahlWinkel: 0.1 });
-  // Boden: Kronenschutt, eine Spur von Legionärssandalen (Nägel) entlang des Stamms
-  const wb = waldboden(P, sd); K.boden(vy + 1, H + M, STEIN.slice(0, 7), wb);
+  schnittFront(K, 3, x0, y0, R0 - 1, 0, { sx: 0.62, ringe: 8, zahlen: 7, zahlWinkel: -1.0 });
   // Kronen vom liegenden Stamm: rechts hinten liegen sie über dem Boden ausgebreitet
   krone(K, 2, 476, 138, 30, 0.3, { krone: 'boden', boden: 152 });
   traene(K, 1, 440, 14, 3.8, { staerke: 1.2 }); traene(K, 2, 300, 30, 1.8, { staerke: 0.5 }); traene(K, 2, 196, 40, 1.4, { staerke: 0.4 });

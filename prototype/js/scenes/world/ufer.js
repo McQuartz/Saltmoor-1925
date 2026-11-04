@@ -33,7 +33,7 @@ function deckeBauen(K, P, o) {
   for (let x = -M; x < W + M; x++) {
     let yTop = -M - 1;
     const Z0 = Math.max(.6, P.h * (Yc - 2.4) / (P.vy + M) * .9);
-    for (let Z = Z0; Z < 90; Z += .004 + Z * .007) {
+    for (let Z = Z0; Z < 90; Z += .003 + Z * .0045) {
       const X = (x + .5 - P.vx) * Z / P.h, ww = w(X, Z), ys = P.vy - P.h * (Yc - 1 - ww) / Z;
       if (ys <= yTop) continue;
       const u = frac(phase(X, Z)), dZ = (w(X, Z + .02) - w(X, Z - .02)) / .04;
@@ -46,7 +46,7 @@ function deckeBauen(K, P, o) {
       else t += (.12 - .3 * Math.pow((u - .14) / .86, .7)) * A0 + Math.min(.15, Math.max(0, -dZ) * .05);
       t += (B.fbm(X * .9, Z * .6, sd + 11, 2) - .5) * .14;
       const fl = B.fbm(X * 1.3 + 4, Z * .9, sd + 21, 2);
-      const schaum = u > .12 && u < .16 + (fl - .5) * .06 && ww > .25 && Z < 30 && fl > .42;
+      const schaum = u > .12 && u < .16 + (fl - .5) * .06 && ww > .25 && Z < 13 && fl > .42;
       const y0 = Math.max(-M, Math.ceil(yTop)), y1 = Math.min(P.vy, Math.floor(ys));
       for (let y = y0; y <= y1; y++) {
         let c;
@@ -60,6 +60,8 @@ function deckeBauen(K, P, o) {
     // bis zum Horizont: der helle, flache Streifen, wo Meer und Sand sich hinten treffen
     for (let y = Math.max(-M, Math.ceil(yTop)); y <= P.vy; y++) { const tt = B.clamp(.75 + .2 * Math.exp(-(((x - (o.lichtX || 380)) / 140) ** 2)), 0, .9999) * n, k = Math.floor(tt); e.set(x, y, PW[Math.min(n, (tt - k) > B.bay(x, y) ? k + 1 : k)]); }
   }
+  // unter den Schaumkronen hängen Fäden aus Wasser, wie bei einer Welle, die gleich nach unten bricht
+  for (let i = 0; i < schaumPx.length; i += 2) { const x = schaumPx[i], y = schaumPx[i + 1]; if (B.hash(x, y, 9) > .78) { const l = 1 + Math.floor(B.hash(x, y, 10) * (y < 60 ? 6 : 3)); for (let j = 1; j <= l; j++) e.set(x, y + j, PW[j < l ? 8 : 6]); } }
   // Morgenlicht hinter dem Wasser, hinten rechts: gedithertes Glühen auf der Decke
   B.gluehen(e, o.lichtX || 380, P.vy - 10, 120, MORGEN_G2, .8);
   K.licht(o.lichtX || 380, P.vy - 6, MORGEN, 160, .9);
@@ -85,13 +87,14 @@ function gischt(K, P, xs, yBis, o) {
 function saeule(K, P, Xc, Zc, rc, Yc, o) {
   o = o || {};
   const h = P.h, k = h / Zc, m = B.maske(), L = [], R = [];
-  for (let Y = 0; Y <= Yc + .3; Y += .04) {
-    const top = Math.max(0, (Y - Yc * .5) / (Yc * .5)), fuss = Math.max(0, (.5 - Y) / .5);
-    const r = rc * (1 + 3.2 * top * top + .9 * fuss * fuss) + Math.sin(Y * 3.1) * rc * .06;
+  const Yt = Yc - (o.tief || 1) + .25;
+  for (let Y = 0; Y <= Yt; Y += .04) {
+    const top = Math.max(0, (Y - Yt * .45) / (Yt * .55)), fuss = Math.max(0, (.5 - Y) / .5);
+    const r = rc * (1 + 3.6 * top * top + .9 * fuss * fuss) + Math.sin(Y * 3.1) * rc * .06;
     const [cx, cy] = P.q(Xc, Y, Zc); L.push([cx - r * k, cy]); R.push([cx + r * k, cy]);
   }
   m.poly([...L, ...R.reverse()]);
-  const yF = P.q(Xc, 0, Zc)[1], yT = P.q(Xc, Yc, Zc)[1], cx0 = P.q(Xc, 0, Zc)[0], eb = o.ebene || K.eb(yF - 1);
+  const yF = P.q(Xc, 0, Zc)[1], yT = P.q(Xc, Yt, Zc)[1], cx0 = P.q(Xc, 0, Zc)[0], eb = o.ebene || K.eb(yF - 1);
   // Wasser fällt: senkrechte Bahnen, innen durchscheinend (das Licht kommt von oben durchs Wasser)
   B.form(K.e[eb], m, K.mat(o.tiefe || 0, { k: WASSER.slice(2, 8), r: [WASSER[8], SCHAUM[1]], ton: 2.4, fase: 2, rand: 2, verlauf: -1.2,
     muster: (x, y) => { const s = B.rausch1((x - cx0) * .45, 41); return (s > .62 ? .9 : s < .3 ? -.8 : 0) + Math.max(0, 1 - Math.abs(x - cx0) / (rc * k * 1.6)) * .8; } }));
@@ -121,6 +124,26 @@ function sandBoden(K, P, o) {
     for (const [nx, nz, nr] of nass) { const d = Math.hypot(X - nx, (Z - nz) * .8) / nr; if (d < 1) t -= .22 * (1 - d * d); else if (d < 1.12) t += .1; }
     return t;
   });
+}
+// Flutlinie aus Tang und Muscheln quer über den Sand (wie am Strand vom Anfang), dazu einzelne Steine
+function flutlinie2(K, P, Z0, o) {
+  o = o || {}; const sd = (K.o.seed | 0) % 53;
+  for (let x = -M; x < W + M; x++) {
+    const X = (x + .5 - P.vx) * Z0 / P.h, Z = Z0 + Math.sin(X * .8 + sd) * .35 + (B.fbm(X * .5, 0, sd, 2) - .5) * .8, [, y] = P.q(X, 0, Z), k = P.k(Z);
+    if (o.luecke && Math.abs(X - o.luecke[0]) < o.luecke[1]) continue;
+    if (B.fbm(X * 2.2, 3, sd + 2, 2) < .44) continue; const e = K.e[K.eb(y)], dk = Math.max(1, Math.round(k * .012));
+    for (let j = 0; j < dk; j++) e.set(x, Math.round(y) + j, B.pk(j === 0 && B.hash(x, 1, sd) > .6 ? '#3a4a30' : '#151a12'));
+    if (B.hash(x, 2, sd) > .93) { e.set(x, Math.round(y) - 1, B.pk(SAND[7])); e.set(x + 1, Math.round(y) - 1, B.pk('#c8c0a8')); }
+  }
+}
+function steine(K, P, n, o) {
+  o = o || {}; const r = B.rng((K.o.seed | 0) * 31 + (o.s || 1));
+  for (let i = 0; i < n; i++) {
+    const Z = 1.2 + Math.pow(r(), 1.5) * 8, X = r.f(-6, 6) * Z / 4, [x, y] = P.q(X, 0, Z), k = P.k(Z), m = B.maske();
+    if (o.frei && Math.abs(x - o.frei[0]) < o.frei[1] && y > o.frei[2]) continue;
+    const sz = Math.max(1, k * r.f(.03, .07)); m.ell(x, y - sz * .4, sz, sz * .65);
+    K.form(K.eb(y), m, Math.min(.5, Z / 20), { k: FELS, r: [SAND[6], MORGEN], ton: 1.8, fase: sz > 3 ? 1 : 0, rand: sz > 3 ? 2 : 1, schatten: sz > 2 ? 1 : 0 });
+  }
 }
 // Fußspuren: deine. Sie führen von vorne in die Säule (oder unter die Welle) und kommen nicht zurück.
 // pfad: Liste [X, Z] in Weltkoordinaten; ende: ab welchem Anteil sie nass sind
@@ -174,22 +197,23 @@ function strandkorb(K, P, X, Z, o) {
 // Rechts der Mitte hängt die Säule auf den Sand, deine Spuren führen von links vorne hinein.
 function flutlinie(K, o) {
   o = o || {}; const P = B.persp(240, 148), Yc = 4.2, fr = K.fr; K.split = [160, 176];
-  const Xs = 1.15, Zs = 5.2;
+  const Xs = 2.9, Zs = 4.6;
   deckeBauen(K, P, { Yc, ruhig: o.ruhig, trichter: o.ohneSaeule ? null : (X, Z) => 1.1 * Math.exp(-(((X - Xs) / 1.1) ** 2) - (((Z - Zs) / 1.3) ** 2)) });
   sandBoden(K, P, { nass: o.ohneSaeule ? [[-2.4, 4.6, .7]] : [[Xs, Zs, .9], [-2.4, 4.6, .7]] });
+  flutlinie2(K, P, 2.4); flutlinie2(K, P, 6.5); steine(K, P, 14, { frei: [240, 70, 175] });
   // ferne Felsen am Horizont links (die Höhle hat Wände), klein gegen die Weite
   fels(K, 1, [[-M, P.vy + 1], [-M, P.vy - 30], [20, P.vy - 34], [44, P.vy - 20], [70, P.vy - 14], [96, P.vy - 4], [110, P.vy + 1]], .55, { rand: 1 });
   fels(K, 2, [[350, P.vy + 2], [360, P.vy - 6], [372, P.vy - 9], [384, P.vy - 3], [392, P.vy + 2]], .35);
   let s = null;
-  if (!o.ohneSaeule) s = saeule(K, P, Xs, Zs, .14, Yc, { ruhig: o.ruhig, tiefe: .05 });
+  if (!o.ohneSaeule) s = saeule(K, P, Xs, Zs, .19, Yc, { ruhig: o.ruhig, tiefe: .05, tief: 1.1 });
   // deine Spuren: von links vorne quer über den Sand in die Säule
   const ziel = o.ohneSaeule ? [Xs - .3, Zs - .6] : [Xs - .05, Zs - .1];
-  spuren(K, P, [[-1.6, 1.1], [-1.1, 1.9], [-.2, 3.0], [.6, 4.1], ziel], { nassAb: .82 });
-  if (fr > .4 && !o.ohneSaeule) spuren(K, P, [[-3.2, 2.2], [-1.9, 3.2], [-.4, 4.4], [Xs - .15, Zs + .05]], { nassAb: .8, schritt: .4 });
-  if (fr > .8 && !o.ohneSaeule) spuren(K, P, [[3.6, 1.6], [2.9, 2.8], [1.8, 4.2], [Xs + .1, Zs]], { nassAb: .8, schritt: .44 });
+  spuren(K, P, [[-1.4, 1.1], [-.7, 1.9], [.3, 2.9], [1.5, 3.8], ziel], { nassAb: .82 });
+  if (fr > .4 && !o.ohneSaeule) spuren(K, P, [[-3.2, 2.2], [-1.6, 3.4], [.6, 4.4], [Xs - .25, Zs + .05]], { nassAb: .8, schritt: .4 });
+  if (fr > .8 && !o.ohneSaeule) spuren(K, P, [[4.6, 1.6], [4.0, 2.8], [3.3, 4.0], [Xs + .15, Zs]], { nassAb: .8, schritt: .44 });
   // die tiefste Lippe vorne lässt Gischt fallen
   if (!o.ruhig) gischt(K, P, [[96, 18, .5], [131, 30, .35], [402, 12, .45], [438, 24, .3]], P.vy + 8);
-  treibholz(K, 330, 238, 1);
+  treibholz(K, 352, 240, 1);
   if (!o.ohneRand) hoehlenRand(K, [78, 70], [420, 60]);
   B.partikel(K, { n: 30, farben: [WASSER[8], SCHAUM[0]], vx: 0, vy: 14, wob: 2, wf: .6, y0: 0, y1: P.vy + 20, laenge: 2, p: .4 });
   K.reihen = [{ y: 170, skala: .9, nebel: .3 }, { y: 192, skala: 1, nebel: .12 }, { y: 214, skala: 1, nebel: 0 }];
@@ -204,6 +228,7 @@ function brecher(K) {
   const extra = (X, Z) => 2.6 * Math.exp(-(((Z - 3.6 - X * .18) / .9) ** 2)) * B.clamp((-.2 - X) / 2.2, 0, 1);
   deckeBauen(K, P, { Yc, extra, lichtX: 400, dichte: 1.1 });
   sandBoden(K, P, { nass: [[-3.6, 4.2, 1.4]], lichtX: 400 });
+  flutlinie2(K, P, 2.0); flutlinie2(K, P, 5.2); steine(K, P, 12, { s: 2, frei: [250, 70, 185] });
   // wo die Lippe auf dem Sand aufliegt: ein Schaumsaum
   const sm = B.maske(); for (let i = 0; i < 40; i++) { const X = -7 + i * .12, Z = 3.6 + X * .18 + .25; if (X > -1.4) break; const [x, y] = P.q(X, 0, Z); sm.ell(x, y, 4 + B.hash(i, 0, 2) * 4, 1.6); }
   B.form(K.e[K.eb(P.q(-3, 0, 3.4)[1])], sm, K.mat(0, { k: [WASSER[7], SCHAUM[0], SCHAUM[1], SCHAUM[1]], r: [SCHAUM[1]], ton: 1.5, fase: 0, rand: 1 }));
@@ -226,12 +251,13 @@ function strandkorbSzene(K, o) {
   const Xs = -1.9, Zs = 7.5;
   deckeBauen(K, P, { Yc, lichtX: 330, ruhig: o.ruhig, trichter: (X, Z) => 1.2 * Math.exp(-(((X - Xs) / 1.2) ** 2) - (((Z - Zs) / 1.5) ** 2)) });
   sandBoden(K, P, { nass: [[Xs, Zs, 1]], lichtX: 330 });
+  flutlinie2(K, P, 4.2); steine(K, P, 10, { s: 3, frei: [250, 70, 175] });
   // Felswand rechts in Flucht: Schichten, nass, oben vom Wasser abgeschnitten
   const XW = 2.7, unten = [], oben = [];
   for (let Z = 1; Z <= 40; Z *= 1.06) { const xo = XW + Math.sin(Z * 1.7) * .12; unten.push(P.q(xo, 0, Z)); oben.push(P.q(xo, Yc - .5 - Math.sin(Z * 2.3) * .35, Z)); }
   const wm = B.maske(); wm.poly([...unten, ...oben.reverse(), [W + M + 400, -M - 400], [W + M + 400, H + M]]);
   K.form(2, wm, .05, { k: FELS, ton: 1.5, fase: 2, rand: 2, schatten: 2, verlauf: -.6, muster: (x, y) => { const Z = (XW * P.h) / Math.max(1, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h; return (frac(Y * 3 + B.fbm(Z * .3, 0, 4, 2)) < .12 ? -.7 : 0) + (B.fbm(Z * .8, Y * 2, 5, 2) - .5) * .7; } });
-  saeule(K, P, Xs, Zs, .12, Yc, { ruhig: o.ruhig, tiefe: .1 });
+  saeule(K, P, Xs, Zs, .14, Yc, { ruhig: o.ruhig, tiefe: .1, tief: 1.2 });
   const korb = strandkorb(K, P, -.7, 2.7);
   spuren(K, P, [[.9, 1.1], [.3, 2.2], [-.2, 3.0], [-.9, 4.4], [-1.5, 6.0], [Xs, Zs - .1]], { nassAb: .85 });
   // ein Handtuch über der Armlehne des Korbs, nass
@@ -254,9 +280,10 @@ function finale(K) {
   // Spirale: die Phase dreht um die Säule
   deckeBauen(K, P, { Yc, trichter, lichtX: 240, dichte: .8, extra: (X, Z) => .25 * Math.sin(Math.atan2(Z - Zs, X - Xs) * 3 + Math.hypot(X - Xs, Z - Zs) * 2.2) * Math.exp(-((Math.hypot(X - Xs, Z - Zs) / 3) ** 2)) });
   sandBoden(K, P, { nass: [[Xs, Zs, 1.6]], lichtX: 240 });
+  flutlinie2(K, P, 2.2, { luecke: [0, 1.4] }); steine(K, P, 12, { s: 4, frei: [240, 120, 160] });
   fels(K, 1, [[-M, P.vy + 1], [-M, P.vy - 40], [30, P.vy - 30], [70, P.vy - 12], [100, P.vy + 1]], .5, { rand: 1 });
   fels(K, 1, [[W + M, P.vy + 1], [W + M, P.vy - 46], [450, P.vy - 36], [416, P.vy - 16], [380, P.vy + 1]], .5, { rand: 1 });
-  const s = saeule(K, P, Xs, Zs, .42, Yc, { tiefe: 0 });
+  const s = saeule(K, P, Xs, Zs, .42, Yc, { tiefe: 0, tief: 2.1 });
   // Spuren von überall her, alle hinein
   [[[-3.8, 1.2], [-2.6, 2.4], [-1.1, 3.8], [-.3, 4.4]], [[3.4, 1.3], [2.2, 2.6], [.9, 3.9], [.3, 4.4]], [[-.6, 1.1], [-.4, 2.6], [-.1, 4.0]],
    [[-6, 4.2], [-3.5, 4.4], [-.5, 4.6]], [[6.4, 3.6], [3.8, 4.2], [.5, 4.6]], [[1.6, 1.1], [1.1, 2.4], [.4, 4.1]]].forEach((p, i) => spuren(K, P, p, { nassAb: .75, schritt: .4 + (i % 3) * .03 }));

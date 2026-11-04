@@ -95,7 +95,7 @@ Format wie `data/events.json` (`id` mit Präfix `<biom>_`, `t`, `d`, `bild`, `o`
 ## Prüfen und benoten
 
 1. `node tools/sprites/pruefen.js <sprites…>`: 0 Verstöße.
-2. Kontaktbogen des Bioms **neben Chorknabe, Hirte, Netzflickerin** (`tools/sprites/vergleich.js` oder eigenes Skript) und Silhouetten-Bogen.
+2. Kontaktbogen des Bioms **neben Chorknabe, Hirte, Netzflickerin** und Silhouetten-Bogen: automatisch mit `node tools/biom-bogen.js <id> <ordner>` (liest die Spieldaten samt Paketen und Ergänzungen; `--alle` für jedes Biom).
 3. Hintergrund: Varianten 0–2 und Wächter-Szene über `prototype/hintergrund.html` bzw. Playwright.
 4. Im Spiel: `index.html?dev=0&job=fischer&seed=3&springe=kampf_schwer&akt=<akt>` mit erzwungenem Biom (Dev → Cheats → Biom erzwingen, oder per `page.evaluate`: `newRun('fischer',3,{dev:true,route:[…]})`), Bildschirmfoto Kampf und Wächter.
 5. `node tools/biom-test.js <id> 10`: 0 Fehler, der Akt soll schaffbar, aber nicht leicht sein (etwa 6–9 von 10).

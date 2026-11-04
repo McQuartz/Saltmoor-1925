@@ -47,11 +47,12 @@ module.exports = {
     const kx = 40 + lean + r(sp * 0.3), ky = 30 + T + hy + r(spY * 0.15);
     const hals = glied([[50 + lean, top + 2], [45 + lean + r(sp * 0.15), top - 8 + r(hy * 0.5)], [kx + 3, ky + 5]], 3, 2.2, null);
     // Kanne: flacher, breiter Leib, oben ein Kegel, der in den Ausguss übergeht; Deckel steht offen
-    const kanne = Pg([[kx - 9, ky + 4], [kx + 10, ky + 4], [kx + 11, ky - 1], [kx + 6, ky - 3], [kx - 2, ky - 6], [kx - 8, ky - 5], [kx - 11, ky - 1]], null, { rd: 1 });
-    const kanneBand = Pg([[kx - 10, ky + 1], [kx + 11, ky + 1], [kx + 11, ky + 3], [kx - 10, ky + 3]], 'dunkel', { rd: 0.2 });
-    const deckel = Pg([[kx + 2, ky - 5], [kx + 8, ky - 11], [kx + 10, ky - 10], [kx + 5, ky - 4]], null, { rd: 0.4 });
+    const KS = 1.3, kp = pts => pts.map(([a, b]) => [kx + a * KS, ky + b * KS]);
+    const kanne = Pg(kp([[-9, 4], [10, 4], [11, -1], [6, -3], [-2, -6], [-8, -5], [-11, -1]]), null, { rd: 1 });
+    const kanneBand = Pg(kp([[-10, 1.2], [11, 1.2], [11, 2.6], [-10, 2.6]]), 'dunkel', { rd: 0.2 });
+    const deckel = Pg(kp([[2, -5], [8, -11], [10, -10], [5, -4]]), null, { rd: 0.4 });
     // Ausguss: lang und dünn aus der Kegelspitze, erst waagerecht nach vorn, dann bis fast zum Boden
-    const t0 = [kx - 10, ky - 3];
+    const t0 = [kx - 10 * KS, ky - 3 * KS];
     const tip = [6 + lean * 0.3 - sp, (v.schwanen ? 70 : 82) + spY + r(fall * 0.4)];
     const mid = v.schwanen ? [kx - 30 - sp * 0.5, ky - 14 + spY * 0.3] : [kx - 26 - sp * 0.6, ky + 2 + spY * 0.2];
     const ausguss = glied([t0, mid, tip], 2.2, 0.8, null);
@@ -90,11 +91,11 @@ module.exports = {
       // Schnalle am Riemen
       P.auf(62 + lean, top + 16, 'bronze'); P.auf(63 + lean, top + 17, 'bronze');
       // Kanne: Nieten am Band, Fingerabdrücke (sieben) auf dem Bauch der Kanne
-      for (let i = -4; i <= 4; i += 2) P.auf(kx + i * 2, ky + 2, 'r1');
+      for (let i = -4; i <= 4; i += 2) P.auf(kx + i * 2.4, ky + 2.5, 'r1');
       for (let i = 0; i < 7; i++) P.auf(kx - 5 + i * 1.4, ky - 1 - (i === 0 || i === 6 ? 0 : 1), i % 2 ? 'k3' : 'k2');
       // offener Hals: darin leuchtet das Öl (das Auge der Ölerin)
       if (!p.tod || f < 1) {
-        const ox = r(kx + 3), oy = r(ky - 4);
+        const ox = r(kx + 3 * KS), oy = r(ky - 4 * KS);
         P.set(ox - 1, oy, 'glut'); P.set(ox, oy, 'kern'); P.set(ox + 1, oy, 'glut'); P.set(ox, oy + 1, 'glutDim');
         P.glow(ox + 0.5, oy + 2, 6, 0.8); P.set(ox, oy, 'kern'); augen.push([ox, oy]);
         // ein Tropfen leuchtendes Öl bildet sich an der Spitze und fällt
