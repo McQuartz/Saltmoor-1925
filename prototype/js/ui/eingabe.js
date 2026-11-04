@@ -18,7 +18,7 @@ document.addEventListener('pointermove',e=>{
   if(!d.moved)return;
   if(d.tg){const ei=enemyAt(e.clientX,e.clientY);if(ei!==AIM.ei){AIM.ei=ei;setVorschau(d.i,ei);}const col=ei>=0?'#d84a3a':'#c8a24a';const sx=d.ox,sy=d.oy,qx=sx+(e.clientX-sx)*.15,qy=Math.min(sy,e.clientY)-60;
    $('aimp').setAttribute('d',`M${sx},${sy} Q${qx},${qy} ${e.clientX},${e.clientY}`);$('aimp').setAttribute('stroke',col);$('aimh').setAttribute('fill',col);const ang=Math.atan2(e.clientY-qy,e.clientX-qx)*180/Math.PI;$('aimh').setAttribute('transform',`translate(${e.clientX},${e.clientY}) rotate(${ang})`);}
-  else{d.el.style.transform=`translate(${e.clientX-d.x0}px,${e.clientY-d.y0}px) rotate(${(e.clientX-d.x0)*.03}deg) scale(1.06)`;$('szene').classList.toggle('drop',inScene(e.clientX,e.clientY));}
+  else{d.el.style.transform=`translate(${(e.clientX-d.x0)/(BU.s||1)}px,${(e.clientY-d.y0)/(BU.s||1)}px) rotate(${(e.clientX-d.x0)*.03}deg) scale(1.06)`;$('szene').classList.toggle('drop',inScene(e.clientX,e.clientY));}
   return;}
  if(!down&&e.target.closest){const sl=e.target.closest('.slot[data-loc]');const cd=e.target.closest('[data-card]');
   if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
