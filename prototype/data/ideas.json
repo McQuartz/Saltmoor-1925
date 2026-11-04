@@ -1099,7 +1099,8 @@
  {
   "n": "Rolle: Kriegsveteran",
   "kind": "rolle",
-  "d": "Leuchtpistole, Gasmaske, Offiziersmantel. Bonus: Die erste Karte in jedem Zug wirkt doppelt."
+  "d": "Leuchtpistole, Gasmaske, Offiziersmantel. Bonus: Die erste Karte in jedem Zug wirkt doppelt.",
+  "status": "übernommen"
  },
  {
   "n": "Rolle: Taucher",
@@ -1114,7 +1115,8 @@
  {
   "n": "Rolle: Wahrsagerin",
   "kind": "rolle",
-  "d": "Tarotkarten, Auge im Glas, Spieluhr. Bonus: Jeder Wahnsinn-Punkt gibt +1 Schaden auf alle Karten."
+  "d": "Tarotkarten, Auge im Glas, Spieluhr. Bonus: Jeder Wahnsinn-Punkt gibt +1 Schaden auf alle Karten.",
+  "status": "übernommen"
  },
  {
   "n": "Dynamische Layer-Musik",

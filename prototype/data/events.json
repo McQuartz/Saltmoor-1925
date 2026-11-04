@@ -585,7 +585,7 @@
     ]
    },
    {
-    "l": "Das Glockenseil kappen: Kampf gegen Chorknabe und Kultist",
+    "l": "Das Glockenseil kappen: Kampf gegen Chorknabe und Ertrunkener",
     "fx": [
      {
       "op": "fight",
@@ -920,7 +920,7 @@
     ]
    },
    {
-    "l": "Gegen den Wind anschreien: Kampf gegen den Schatten",
+    "l": "Gegen den Wind anschreien: Kampf gegen den Boten",
     "fx": [
      {
       "op": "fight",
@@ -1002,7 +1002,7 @@
     ]
    },
    {
-    "l": "Das Eis aufschlagen: Kampf gegen das Eisgesicht",
+    "l": "Das Eis aufschlagen: Kampf gegen den Rufer",
     "fx": [
      {
       "op": "fight",

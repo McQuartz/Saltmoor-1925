@@ -16,7 +16,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt. Eine neue 
 | M7 Gegner-Besetzung | fertig | 16 Typen mit je zwei Varianten, 6 Wächter, Boss mit 3 Phasen; drei Typen im Mindeststand |
 | M8 Hintergründe | fertig | sieben Orte mit eigener Komposition, je 3 Varianten + Wächter-Szene, alle Knoten-Szenen, Labor; 60 fps |
 | M9 Inhalte und Balance | fertig (Abweichung) | 23 Items, 25 Ereignisse, Krämer je Biom, Fundpools, Gegner-Beute; Gewinnrate 22–32 %, Pforte knapp über 40 % der Niederlagen |
-| M10 Politur | offen | |
+| M10 Politur | fertig | Übergänge als Szenen, pixelfx-Effekte, Einstellungen, drei Zusatzfiguren, Galerie, Artboard, READMEs |
 | M11 Abschluss | offen | |
 
 Stand-Werte: `offen`, `läuft`, `fertig`, `Mindeststand`, `fehlt`.
@@ -217,6 +217,20 @@ Gewinnrate im Ziel (25–50 %) bzw. knapp darunter, Kampfdauer im Ziel (4–8 Z�
 
 **Einschätzung:** Inhaltlich deutlich reicher: Jedes Biom hat eigene Funde, einen Krämer mit Gesicht und Ereignisse im Ton des Ortes. Schwach: Der gierige Autospieler ist ein grober Maßstab (er nutzt Werkstatt und Gold schlecht), Menschen werden vermutlich besser abschneiden. Artboard folgt in M10.
 
+### M10 Politur (fertig)
+
+1. **Übergänge** zwischen Akten als echte Szenen (Art `uebergang` je Biom: Kirchmauer, Kirchpfad, Treppe hinter dem Altar, Spalt, Loch im Eis) mit Satz, Glockenschlag (`Music.uebergang`) und pixelfx-Übergang; geht nach ca. 4 s von selbst weiter, Klick überspringt.
+2. **Effekte mit pixelfx** (Effekt-Subagent): nur `src/core` und genutzte Effekte nach `js/vendor/pixelfx/` (MIT, `LICENSE`, `NOTICE.md`, Quelle in `data/README.md`), Brücke als ES-Modul (`js/fx/bruecke.js` → `window.PixelFX`), Schnittstelle `PFX` (`js/fx/effekte.js`). Im Spiel: Treffer (hit-spark/blunt-hit in Stofffarbe), Brand, Gift, Geschwächt, Block baut sich auf, Block-Splitter, Reaktion (Ringe in Stofffarbe), Hochreaktion, Tod als Zerfall in die eigenen Pixel des Sprites, Übergang. Alles in Zonen-/Stofffarben gedämpft, kein Weiß, kein Comic. Kontaktbogen `bilder/M10/effekte-kontakt.png`, im Kampf `bilder/M10/effekte-im-kampf.png`. Last: alle 12 Effekte gleichzeitig ca. 4 ms pro Bild.
+3. **Hochreaktion** als Höhepunkt: Atemholen in der Musik, Zwischentitel, pixelfx-Aufleuchten und leichter Ruck; kein Stummfilm.
+4. **Einstellungen** vollständig: Musik, Effekte, Stummfilm, Jumpscare, Bildschirmwackeln, Textgeschwindigkeit (Toasts, Übergang), Dev-Schalter.
+5. **Zusatzfiguren** Geologe (sieht den Weg durch die Welt und die Gegner auf der Weg-Wahl), Wahrsagerin (sieht die nächste Karte), Kriegsveteran (erste Karte im Zug ×1,5), frei ab 12/15/18 Fragmenten.
+6. **Galerie** (`gallery.html`, Subagent): zusammengesetzte Kampfszene, alle UI-Bausteine in allen Zuständen, Pixelzeichen 1×–6×, alle Gegner/Wächter/Boss-Phasen mit umschaltbaren Animationen und Konzept, alle Biome mit Varianten und Wächter-Szene, Abschnitt „alt“. **Artboard** (`artboard.html`): alle Items, Sets, Figuren, Gegner, Biome, Ereignisse, Fragmente, Run-Ablauf, Ideen mit Status. Bilder `bilder/M10/galerie.png`, `bilder/M10/artboard.png`.
+7. **README** im Hauptordner und `prototype/data/README.md` auf neuem Stand.
+
+**Abnahme:** keine Konsolenfehler auf Spiel, Galerie, Artboard, Labor-Seiten; Autospieler siehe M11.
+
+**Einschätzung:** Die Effekte sind ruhig und passen zum Look, der Tod als Zerfall ist der stärkste. Schwach: großer Treffer hat noch etwas comichafte Keile, Block-Splitter wirkt grau, Hochreaktion ist ruhig, aber nicht „groß“. Die Galerie lädt 28 Szenen (ca. 3 s).
+
 ## Entscheidungen unterwegs
 
 | Datum | Meilenstein | Entscheidung | Warum |
@@ -229,6 +243,8 @@ Gewinnrate im Ziel (25–50 %) bzw. knapp darunter, Kampfdauer im Ziel (4–8 Z�
 | 2026-11-03 | M1 | Bis M7 vorläufige Wächter (`vorlaeufig: true` in foes.json) mit alten Grafiken. | Damit jeder Akt schon einen Wächter hat. |
 | 2026-11-03 | M5 | Progression Variante B (Fragmente + Startvarianten bei Akt II/III/IV + Schwierigkeitsstufen nach dem ersten Sieg). | Siehe progression.md: wenig neues System, jeder Run kann etwas bringen. |
 | 2026-11-03 | M7 | Wächter und Boss skalieren nicht mehr mit der Tiefe, nur normale Gegner. | Sie sind je Akt eigens ausgelegt; mit Skalierung hatte der Boss auf Tiefe 18 302 statt 180 Leben. |
+| 2026-11-04 | M10 | Kriegsveteran: erste Karte ×1,5 statt doppelt. | Mit „doppelt“ gewann er 83 % der Runs; die Absicht (Eröffnungsschlag) bleibt. |
+| 2026-11-04 | M10 | Zusatzfiguren frei ab 12/15/18 Fragmenten. | Schließt an Detektiv/Okkultist/Kneipenschläger (3/6/9) an, gibt den späten Fragmenten einen Zweck. |
 | 2026-11-03 | M0 | Kein Bild-Generator verfügbar, M6 nimmt den Ersatzweg (Sprites per Skript selbst gezeichnet). | In der Sitzung gibt es kein Werkzeug zur Bilderzeugung. |
 
 ## Autospieler-Ergebnisse
