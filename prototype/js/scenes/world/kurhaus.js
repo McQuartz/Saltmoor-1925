@@ -292,7 +292,8 @@ function unterDerLaterne(K, cfg) {
   const kp = kuppelInnen(K, { cx: 250, rx: 360, yb: vy - 20, ry: 150, ax, ay, bauch: 46, n: 20, ringe: [0.3, 0.55, 0.78], tropfen: 130 });
   // Laterne im Scheitel: ein Ring aus Eisen, darin das hellste Glas
   const ring = B.maske(); ring.ell(ax, ay, 46, 26); ring.ell(ax, ay, 38, 20, 0); K.form(1, ring, 0.05, { k: EISEN, r: pal.rand, ton: 1.2, fase: 1, rand: 2 });
-  B.feld(K.e[0], ax - 40, ay - 22, ax + 40, ay + 22, GLAS, (x, y) => { const q = ((x - ax) / 38) ** 2 + ((y - ay) / 20) ** 2; if (q > 1) return -1; return 0.95 - q * 0.3 + (Math.abs(Math.sin(Math.atan2(y - ay, x - ax) * 4)) < 0.1 ? -0.5 : 0) - fr * 0.2; });
+  B.feld(K.e[0], ax - 40, ay - 22, ax + 40, ay + 22, GLAS, (x, y) => { const q = ((x - ax) / 38) ** 2 + ((y - ay) / 20) ** 2; if (q > 1) return -1; return 0.95 - q * 0.35 - fr * 0.2; });
+  const sp = B.maske(); for (let i = 0; i < 10; i++) { const a = i / 10 * 6.283; sp.kap(ax + Math.cos(a) * 6, ay + Math.sin(a) * 3.2, ax + Math.cos(a) * 38, ay + Math.sin(a) * 20, 0.6, 0.8); } sp.ell(ax, ay, 7, 4); sp.ell(ax, ay, 5, 2.6, 0); K.form(1, sp, 0.1, { k: EISEN, ton: 1, fase: 0, rand: 1 });
   for (const L of [K.e[1], K.e[2], K.e[3]]) { B.kegel(L, ax, ay + 10, Math.PI / 2 + 0.25, 0.1, 230, '#2a4644', 0.5); B.kegel(L, ax, ay + 10, Math.PI / 2 - 0.05, 0.07, 230, '#2a4644', 0.4); }
   K.glut(ax, ay, 90, GLUT_K, 0.9, [0, 1]); K.licht(ax, ay, LICHT, 120, 1);
   // niedrige Wand mit Fenstern unter dem Kämpfer

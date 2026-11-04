@@ -29,13 +29,14 @@ function startFight(ids,art='kampf'){
  log(`Tiefe ${S.depth}: ${S.enemies.map(e=>e.n).join(', ')}`);
  Bus.emit('fight_start',{art,ids,why:`${RUN.knoten[art==='schwer'?'kampf_schwer':art]?.n||art} auf Tiefe ${S.depth} (${biom().kurz}), Gegner aus dem Biom per Seed`});
  const vs=passive('verwundbar_start').reduce((s,p)=>s+(p.v||1),0);if(vs)S.enemies.forEach(e=>{e.vuln+=vs;});
- startTurn();if(pb){S.block+=pb;Bus.emit('player_block',{v:pb,why:'Eigenschaft: Block zu Kampfbeginn'});}}
+ startTurn();if(pb){S.block+=pb;Bus.emit('player_block',{v:pb,why:'Eigenschaft: Block zu Kampfbeginn'});}
+ passive('kampfstart_fx').forEach(p=>runFx(p.fx,{why:'Eigenschaft zu Kampfbeginn'}));}
 // Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), übrige Energie (energie_bleibt)
 function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0);}
 
 function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=rs('kampf').shuffle(S.discard);S.discard=[];}S.hand.push(S.draw.pop());}}
-function handSize(){return Math.max(BAL.hand_size,...bonuses('hand_size').map(b=>b.amount))-passive('energie_plus').filter(p=>p.preis==='hand').length;}
-function startTurn(){S.rxZug=0;if(S.stats&&!DRY)S.stats.zuege=(S.stats.zuege||0)+1;
+function handSize(){return Math.max(BAL.hand_size,...bonuses('hand_size').map(b=>b.amount))+passive('hand_plus').reduce((s,p)=>s+(p.v||1),0)-passive('energie_plus').filter(p=>p.preis==='hand').length;}
+function startTurn(){S.rxZug=passive('kette_start').reduce((s,p)=>s+(p.v||1),0);S.joker=null;S.vorherKarte=null;if(S.stats&&!DRY)S.stats.zuege=(S.stats.zuege||0)+1;
  // Block: verfällt, außer Bannkreis (ward) und Eigenschaft block_haelt_halb
  const halb=passive('block_haelt_halb').length?Math.floor((S.block||0)/2):0;S.block=S.ward+halb;S.ward=0;
  const bleibt=Math.min(S.vorrat||0,passive('energie_bleibt').reduce((s,p)=>s+(p.v||1),0));S.energy=energieJeZug()+bleibt;S.vorrat=0;
@@ -56,6 +57,7 @@ function hit(e,dmg,k=1,col,why=''){if(!e||e.hp<=0)return 0;let d=Math.max(0,Math
  else checkPhase(e);return d;}
 // Was beim Tod eines Gegners passiert: Kniff „nachlass“, Eigenschaft brand_springt
 function nachTod(e,brand){const k=e.kniff;
+ if(e.wandert&&e.poison>0){const z=alive().sort((a,b)=>a.poison-b.poison)[0];if(z){z.poison+=e.poison;z.wandert=true;Bus.emit('enemy_status',{e:z,status:'poison',why:`Ansteckung: Gift ${e.poison} wandert von ${e.n} zu ${z.n}`});}}
  if(brand>0&&passive('brand_springt').length){alive().forEach(o=>{o.burn+=brand;Bus.emit('enemy_status',{e:o,status:'burn',why:`Brand springt über: ${e.n} stirbt mit Brand ${brand}`});});}
  if(!k||k.art!=='nachlass')return;
  if(k.was==='explodiert'){const v=k.v||5;const ab=Math.min(S.block,v);S.block-=ab;S.hp=Math.max(1,S.hp-(v-ab));Bus.emit('player_hurt',{v:v-ab,e,why:`${e.n} zerplatzt (Nachlass): ${v} Schaden, Block fängt ${ab}`});}
@@ -85,7 +87,7 @@ function playCard(i,ei){
  const first=S.played===0;if(first&&S.turnNo===1&&passive('erste_karte_billiger').length)S.compassUsed=true;
  const xMal=c.x?S.energy:0;S.energy-=cost;S.hand.splice(i,1);if(c.verbraucht)S.exhaust.push(c);else S.discard.push(c);S.played++;
  if(c.opfer){zahleLeben(c.opfer,`${c.n}: Opfer ${c.opfer} statt Energie`);}
- const e=tgt();const rx=reactionsFor(S.last,c.st);const ctx={tg:e,card:c};
+ const e=tgt();const vorher=S.joker?[...new Set([...S.last,...S.joker])]:S.last;const rx=reactionsFor(vorher,c.st);const ctx={tg:e,card:c};
  Bus.emit('card_played',{c,e,why:`${c.n} (${c.src}) gespielt, kostet ${cost}`+(c.st.length?`, Stoff ${c.st.map(k=>ST[k].n).join(' + ')}`:', ohne Stoff')});
  let mult=1;const multWhy=[];rx.forEach(r=>{if(r.pre&&r.pre.mult){mult*=r.pre.mult;multWhy.push(`${r.n} ×${r.pre.mult}`);}});
  if(first&&jobFaehigkeit()==='erste_doppelt'){mult*=1.5;multWhy.push('Kriegsveteran: erste Karte ×1,5');}
@@ -98,11 +100,12 @@ function playCard(i,ei){
  if(card!==c)Bus.emit('toast',{a:'ERÖFFNUNG',b:c.n});
  // Kette: +n Wirkung je Reaktion, die in diesem Zug schon ausgelöst wurde
  const ketteBonus=card.kette?card.kette*(S.rxZug||0):0;if(ketteBonus)multWhy.push(`Kette +${ketteBonus}`);
- const mal=card.x?xMal:1;if(card.x)multWhy.push(`X = ${xMal}`);
+ const mal=card.x?xMal+((card.sonder&&card.sonder.art==='x_plus')?(card.sonder.v||1):0):1;if(card.x)multWhy.push(`X = ${xMal}`);
  for(let r=0;r<reps;r++)for(let m=0;m<mal;m++)applyMain(card,ctx,mult,flat,multWhy,ketteBonus);
  bonuses('stoff_block').forEach(b=>{if(c.st.includes(b.stoff))addBlock(b.amount,`Set Pfarrerin: Karte mit ${ST[b.stoff].n} gibt ${b.amount} Block`);});
- const prevSt=[...S.last];S.chainLog.push({turn:S.turnNo,n:c.n,st:[...c.st],prev:prevSt,rx:rx.map(r=>whyRx(r,prevSt,c.st))});
+ const prevSt=[...vorher];S.chainLog.push({turn:S.turnNo,n:c.n,st:[...c.st],prev:prevSt,rx:rx.map(r=>whyRx(r,prevSt,c.st))});
  let k=0;for(const r of rx){k++;if(r.s){S.hochZahl=(S.hochZahl||0)+1;if(!passive('hoch_zweimal').length||S.hochZahl>=2)S.hochUsed.add(r.n);}
+  passive('reaktion_schaden').forEach(p=>{const z=alive();if(z.length)hit(rs('kampf').pick(z),p.v||2,1,null,'Eigenschaft: Reaktion trifft');});
   passive('reaktion_block').forEach(p=>addBlock(p.v||1,`Eigenschaft: Reaktion gibt ${p.v||1} Block`));passive('reaktion_heil').forEach(p=>healP(p.v||1,`Eigenschaft: Reaktion heilt ${p.v||1}`));
   const live=ctx.tg&&ctx.tg.hp>0?ctx.tg:alive()[0];const w=S.chainLog[S.chainLog.length-1].rx.find(x=>x.n===r.n);
   const why=`${r.n} ausgelöst: ${w?w.src:''}`+(r===VERST?' (gleicher Stoff)':r.s?` (Hochreaktion ${[...r.s].join('')})`:` (Paar ${r.k} aus reactions.json)`);
@@ -110,6 +113,8 @@ function playCard(i,ei){
   const isNew=!S.disc.has(r.n);S.disc.add(r.n);log(isNew?`Reaktion entdeckt: ${r.n}`:`Reaktion: ${r.n}`);
   Bus.emit('reaction',{r,k,isNew,keys:w?w.keys:c.st,live,hoch:!!r.s,why});}
  S.rxZug=(S.rxZug||0)+rx.length;if(!DRY&&S.stats&&S.rxZug>(S.stats.maxKette||0))S.stats.maxKette=S.rxZug;if(!DRY&&S.stats)S.stats.reaktionen=(S.stats.reaktionen||0)+rx.length;
+ // Gegenlauf: merkt sich die Stoffe der Karte davor für die nächste Karte
+ S.joker=S.jokerNaechste?prevSt:null;S.jokerNaechste=false;S.vorherKarte=c.sonder&&c.sonder.art==='wiederholen'?S.vorherKarte:c;
  S.last=[...c.st];
  Bus.emit('changed');checkVictory();return true;}
 
@@ -119,7 +124,7 @@ function applyMain(c,ctx,mult,flat,multWhy=[],kette=0){
  if(c.strip&&t0){t0.block=0;Bus.emit('enemy_status',{e:t0,status:'block_weg',why:`${c.n}: Block von ${t0.n} zerbricht`});} // vor dem Schaden
  if(c.self){zahleLeben(c.self,`${c.n} kostet ${c.self} Leben`);}
  if(c.vuln&&t0){t0.vuln=(t0.vuln||0)+c.vuln;Bus.emit('enemy_status',{e:t0,status:'vuln',why:`${c.n}: ${t0.n} verwundbar ${c.vuln} Züge (+50 % Schaden)`});}
- const atk=c.atk?c.atk+kette+sonderAtk(c,t0):0;
+ const sb=c.sonder&&c.sonder.art==='schaden_gleich_block';const atk=c.atk||sb?(c.atk||0)+(c.atk?kette:0)+sonderAtk(c,t0):0;
  if(atk){let hits=c.h||1;if(hits>1&&passive('mehrfach_plus1').length){hits++;multWhy=[...multWhy,'Patronengurt: ein Treffer mehr'];}
   for(let h=0;h<hits;h++){const targets=c.all?alive():[ctx.tg&&ctx.tg.hp>0?ctx.tg:alive()[0]];
    const go=()=>targets.forEach(en=>{if(!en||en.hp<=0)return;const pstr=S.pstr||0;let d=(atk+flat+pstr)*mult;const parts=[`${c.n} ${c.atk}`];if(kette)parts.push(`Kette +${kette}`);if(flat)parts.push(`Fischer-Bonus +${flat}`);if(pstr)parts.push(`Stärke +${pstr}`);if(mult!==1)parts.push(multWhy.join(', ')||`×${mult}`);
@@ -128,6 +133,7 @@ function applyMain(c,ctx,mult,flat,multWhy=[],kette=0){
      if(en.vuln>0){d*=1.5;parts.push('verwundbar ×1,5');}
      Bus.emit('slash',{e:en,col});const blk=en.block;const real=hit(en,d,h+1,col,'');
      Bus.emit('damage_calc',{e:en,roh:Math.round(d),block:Math.min(blk,Math.round(d)),d:real,parts,why:`${real} Schaden an ${en.n}: ${parts.join('; ')}`+(blk?`; Block ${Math.min(blk,Math.round(d))}`:'')+` = ${real}`});
+     if(c.sonder&&c.sonder.art==='lebensraub'&&real>0)healP(Math.floor(real*(c.sonder.anteil||.5)),`${c.n}: Lebensraub`);
      kniffBeimTreffer(en);});
    if(h===0)go();else wait(h*((BAL.wucht&&BAL.wucht.mehrfach_abstand_ms)||120),()=>{go();Bus.emit('attack',{k:S.played+h});Bus.emit('changed');checkVictory();});}
   Bus.emit('attack',{k:S.played});}
@@ -144,14 +150,19 @@ function applyMain(c,ctx,mult,flat,multWhy=[],kette=0){
  if(c.en){S.energy+=c.en;Bus.emit('energy',{v:c.en,why:c.n});}}
 // Leben zahlen (Opfer, Karten mit self, Reaktion Opfer); Eigenschaft opfer_staerke gibt dafür Stärke
 function zahleLeben(v,why){S.hp=Math.max(1,S.hp-v);Bus.emit('self_damage',{v,why});if(passive('opfer_staerke').length){S.pstr=(S.pstr||0)+1;Bus.emit('player_buff',{v:1,why:'Herz im Glas: Leben gezahlt, Stärke +1'});}}
-// Sonderwirkungen der Handgriffe (docs/auftrag-2/handgriffe.md), werden ergänzt, sobald die Liste steht
+// Sonderwirkungen der Handgriffe (docs/auftrag-2/handgriffe.md, 12 Arten)
 function sonderAtk(c,t){const s=c.sonder;if(!s)return 0;
- if(s.art==='schaden_gleich_block')return S.block||0;
+ if(s.art==='schaden_gleich_block')return Math.floor((S.block||0)*(s.anteil||1));
  if(s.art==='schaden_je_fehlleben')return Math.floor((maxHp()-S.hp)/(s.je||5));
  return 0;}
-function sonderWirkung(c,t,mult){const s=c.sonder;if(!s)return;
- if(s.art==='brand_verdoppeln'&&t){t.burn*=2;Bus.emit('enemy_status',{e:t,status:'burn',why:`${c.n}: Brand verdoppelt auf ${t.burn}`});}
- if(s.art==='gift_verdoppeln'&&t){t.poison*=2;Bus.emit('enemy_status',{e:t,status:'poison',why:`${c.n}: Gift verdoppelt auf ${t.poison}`});}}
+function sonderWirkung(c,t,mult){const s=c.sonder;if(!s)return;const why=`${c.n}: Sonderwirkung`;
+ if(s.art==='fx')runFx(s.fx,{tg:t,why:`${c.n}`});
+ if(s.art==='brand_verdoppeln'){(s.alle?alive():t?[t]:[]).forEach(e=>{e.burn*=2;Bus.emit('enemy_status',{e,status:'burn',why:`${c.n}: Brand verdoppelt auf ${e.burn}`});});}
+ if(s.art==='gift_verdoppeln'&&t){t.poison*=2;Bus.emit('enemy_status',{e:t,status:'poison',why:`${c.n}: Gift verdoppelt auf ${t.poison}`});}
+ if(s.art==='block_verdoppeln'){const v=S.block;S.block*=2;Bus.emit('player_block',{v,why:`${c.n}: Block verdoppelt auf ${S.block}`});}
+ if(s.art==='gift_wandert'&&t){t.wandert=true;Bus.emit('enemy_status',{e:t,status:'poison',why:`${c.n}: stirbt ${t.n}, wandert das Gift weiter`});}
+ if(s.art==='stoff_joker'){S.jokerNaechste=true;Bus.emit('toast',{a:'GEGENLAUF',b:'Die nächste Karte reagiert auch mit der Karte davor'});}
+ if(s.art==='wiederholen'&&S.vorherKarte&&!S.wiederholt){const v=S.vorherKarte;S.wiederholt=true;Bus.emit('toast',{a:'NOCH EINMAL',b:v.n});applyMain(v,{tg:t},1,0,[`${c.n}: wiederholt`]);S.wiederholt=false;}}
 
 // Kniffe der Gegner (paket-format.md): beim Treffer, zu Zugbeginn des Spielers, im Gegnerzug
 function kniffBeimTreffer(en){const k=en.kniff;if(!k)return;
@@ -176,7 +187,9 @@ function incoming(){let tot=0;for(const en of alive()){const it=en.pat[en.pi%en.
 
 function endTurn(){
  if(S.phase!=='fight'||busy)return;busy=true;S.vorrat=S.energy;
- const bleib=S.hand.filter(c=>c.behalten&&!c.unspielbar);S.discard.push(...S.hand.filter(c=>!bleib.includes(c)).filter(c=>!(c.unspielbar&&c.verbraucht&&c.cid&&String(c.cid).startsWith('stoer')&&c.hand)));S.hand=bleib;S.hand.forEach(c=>{c.frost=false;});S.discard.forEach(c=>{c.frost=false;});S.behaltenNaechster=bleib.length;Bus.emit('changed');
+ let bleib=S.hand.filter(c=>c.behalten&&!c.unspielbar);
+ if(passive('behalten_eine').length){const rest=S.hand.filter(c=>!bleib.includes(c)&&!c.unspielbar).sort((a,b)=>cardCost(b)-cardCost(a));if(rest[0])bleib=[...bleib,rest[0]];}
+ bleib.forEach(c=>{if(c.sonder&&c.sonder.art==='zugende_hand')runFx(c.sonder.fx,{tg:alive()[0],why:`${c.n} am Zugende auf der Hand`});});S.discard.push(...S.hand.filter(c=>!bleib.includes(c)).filter(c=>!(c.unspielbar&&c.verbraucht&&c.cid&&String(c.cid).startsWith('stoer')&&c.hand)));S.hand=bleib;S.hand.forEach(c=>{c.frost=false;});S.discard.forEach(c=>{c.frost=false;});S.behaltenNaechster=bleib.length;Bus.emit('changed');
  const list=alive();let i=0;
  const step=()=>{
   if(S.hp<=0){busy=false;return runLost();}

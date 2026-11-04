@@ -69,6 +69,17 @@ function rauchFaellt(K, eb, x0, y0, x1, y1, dichte, maske, p) {
     for (let k = 0; k < pts.length; k += 3) { const x = pts[k], y = pts[k + 1], d = pts[k + 2]; const n = N[(((y - sh) & 127) * 64) + (x & 63)]; const v = d * n * 1.25 - .3; if (v > B.bay(x, y)) { ctx.fillStyle = cs[v > .55 ? 1 : 0]; ctx.fillRect(x + ox, y + oy, 1, 1); } }
   } });
 }
+// Rauch quillt über den Rand der Mündung und läuft außen am Schornstein herab (über der Mündung: nichts)
+function ueberlauf(sx, sTop, sBot, h0, h1) {
+  return (x, y) => {
+    const q = (y - sTop) / (sBot - sTop), d = Math.abs(x - sx), inn = h0 + (h1 - h0) * Math.max(0, q);
+    if (y < sTop - 5) return 0;
+    if (y < sTop + 2) return d < h0 + 5 ? Math.min(1, (y - sTop + 6) / 5) : 0; // Wulst auf dem Rand
+    if (d < inn) return 0;
+    const breit = 4 + q * 22 + Math.pow(Math.max(0, q - .82) / .18, 2) * 60;
+    return Math.max(0, 1 - (d - inn) / breit) * (q > .85 ? Math.max(0, 1 - (q - .85) / .2) : 1) * (.8 + .2 * Math.sin(y * .13 + (x > sx ? 2 : 0)));
+  };
+}
 // Fenster mit Sprossen (Rechteck in Bildkoordinaten); die Öffnung bleibt frei (hinten sieht man e0)
 function sprossen(K, eb, x0, y0, x1, y1, nx, ny, tiefe) {
   const m = B.maske(); m.rect(x0 - 2, y0 - 2, x1 - x0 + 4, y1 - y0 + 4); m.rect(x0, y0, x1 - x0, y1 - y0, 0);
@@ -80,7 +91,7 @@ function sprossen(K, eb, x0, y0, x1, y1, nx, ny, tiefe) {
 function hofDraussen(K, sx, sTop, sBot, sw, maskeFenster) {
   B.feld(K.e[0], -M, -M, W + M, H + M, HOF, (x, y) => .3 + .55 * Math.max(0, 1 - Math.hypot((x - 470) / 300, (y - 30) / 220)) + B.fbm(x * .02, y * .03, 4, 2) * .2);
   schornstein(K, 0, sx, sTop, sBot, sw, sw * 1.35, .35);
-  rauchFaellt(K, 0, sx - sw * 2.2, sTop - 4, sx + sw * 2.2, sBot, (x, y) => { const q = (y - sTop) / (sBot - sTop), half = sw * (.5 + .35 * q) + 2 + q * q * 18, d = Math.abs(x - sx); return d < half - 1 ? 0 : Math.max(0, 1 - (d - half) / (6 + q * 16)) * (1 - q * .4); }, maskeFenster, 0);
+  rauchFaellt(K, 0, sx - sw * 3, sTop - 6, sx + sw * 3, sBot, ueberlauf(sx, sTop, sBot, sw / 2, sw * .675), maskeFenster, 0);
 }
 // Fliesenboden (Welt-Raster) mit Rinne und nassen Glanzflecken unter den Lampen
 function fliesen(K, P, y0, glanz, rinneX) {
@@ -141,13 +152,13 @@ function packhalle(K, cfg) {
   const lampen = []; for (let Z = 2.2; Z < Zb - 1; Z += 1.9) for (const X of [-2.5, 2.4]) lampen.push([X, Z]);
   fliesen(K, P, P.vy, lampen.map(([X, Z]) => [X, Z, .9]), -.2);
   // Bänder: links und rechts entlang der Tiefe, Höhe 0,45, Beine im Takt; Dosen in gleichen Abständen
-  const baender = [[-3.0, -2.0], [1.9, 2.9]], YB = .48;
+  const baender = [[-3.0, -2.0], [1.9, 2.9]], YB = .62;
   for (let Z = Zb - 1; Z >= 1.2; Z -= .8) {
     const Z2 = Z + .8, tf = Math.min(.7, Z / 18);
     for (const [xa, xb] of baender) {
       const yFuss = P.q(xa, 0, Z)[1], eb = K.eb(yFuss), seite = xa < 0 ? xb : xa;
       quad(K, eb, [P.q(xa, YB, Z), P.q(xb, YB, Z), P.q(xb, YB, Z2), P.q(xa, YB, Z2)], tf, { k: BLECH, ton: 1.0, fase: 0, rand: 1, muster: (px, py) => (frac(P.z(py) * 2.5) < .18 ? -.5 : 0) });
-      quad(K, eb, [P.q(seite, YB, Z), P.q(seite, YB, Z2), P.q(seite, YB - .12, Z2), P.q(seite, YB - .12, Z)], tf, Object.assign({ ton: 1.6, fase: 0, rand: 1 }, MET));
+      quad(K, eb, [P.q(seite, YB, Z), P.q(seite, YB, Z2), P.q(seite, YB - .16, Z2), P.q(seite, YB - .16, Z)], tf, Object.assign({ ton: 1.6, fase: 0, rand: 1 }, MET));
       if (Math.abs(frac(Z / 1.6)) < .3) { const m = B.maske(); for (const X of [xa + .1, xb - .1]) { const [x1, y1] = P.q(X, YB - .1, Z), [x2, y2] = P.q(X, 0, Z); m.kap(x1, y1, x2, y2, Math.max(.6, P.k(Z) * .035), Math.max(.6, P.k(Z) * .035)); } K.form(eb, m, tf, Object.assign({ ton: 1.4, fase: 0 }, MET)); }
     }
     // Schemel an jedem Platz (vor dem linken Band), leer
@@ -263,22 +274,19 @@ function hof(K) {
   // Boden: nasses Pflaster mit Pfützen, die die Lampe spiegeln
   const lampX = 3.4, lampZ = 3.6;
   K.boden(P.vy, H + M, BODEN, (x, y) => { const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h, k = P.k(Z) * .35; let t = .38 + (B.hash(Math.floor(X * 3 + (Math.floor(Z * 4) & 1) * .5), Math.floor(Z * 4), 5) - .5) * .2; const fx = frac(X * 3 + (Math.floor(Z * 4) & 1) * .5), fz = frac(Z * 4); if (fx * k < .8 || fz * k * k / P.h * 4 < .6) t -= .2; const pf = B.fbm(X * .9, Z * .7, 13, 3); if (pf > .58) { t = .22 + (Math.abs(X - lampX) < .4 + (Z - lampZ) * .05 && Z > lampZ ? .6 : 0) + (B.hash(x, y, 1) > .9 ? .2 : 0); } return t; });
-  const sch = B.maske(); for (const off of [-.28, .28]) for (let i = 0; i + 1 < gl.length; i += 4) { const a = P.q(gl[i][0] + off, 0, gl[i][1]), b = P.q(gl[i + 1][0] + off, 0, gl[i + 1][1]); sch.kap(a[0], a[1], b[0], b[1], Math.max(.5, P.k(gl[i][1]) * .02), Math.max(.5, P.k(gl[i][1]) * .02)); }
+  const sch = B.maske(); for (const off of [-.28, .28]) for (let i = 0; i + 1 < gl.length; i += 1) { const a = P.q(gl[i][0] + off, 0, gl[i][1]), b = P.q(gl[i + 1][0] + off, 0, gl[i + 1][1]); sch.kap(a[0], a[1], b[0], b[1], Math.max(.5, P.k(gl[i][1]) * .02), Math.max(.5, P.k(gl[i][1]) * .02)); }
   for (let i = 0; i < gl.length; i += 12) { const a = P.q(gl[i][0] - .45, 0, gl[i][1]), b = P.q(gl[i][0] + .45, 0, gl[i][1]); B.linie(K.e[K.eb(a[1])], a[0], a[1], b[0], b[1], B.pk(BODEN[0])); }
   for (const eb of [2, 3, 4]) { const part = B.maske(); for (let y = 0; y < H + M; y++) for (let x = -M; x < W + M; x++) if (sch.has(x, y) && K.eb(y) === eb) part.put(x, y, 1), part._grow(x, y, x, y); K.form(eb, part, 0, { k: ROST, ton: 2.8, fase: 0, rand: 1 }); }
   // Güterwagen am Gleisende, vor dem Tor
   { const [x0, y0] = P.q(-.4, 1.5, 7.4), [x1, y1] = P.q(.8, 0, 7.4), m = B.maske(); m.rect(x0, y0, x1 - x0, y1 - y0 - 2); m.poly([[x0 - 1, y0], [(x0 + x1) / 2, y0 - 4], [x1 + 1, y0]]); for (const xx of [x0 + 3, x1 - 3]) m.ell(xx, y1 - 1, 2.5, 2.5); K.form(2, m, .1, { k: ROST, ton: 1.4, fase: 1, rand: 2, muster: (px) => (Math.round(px) % 3 === 0 ? -.3 : 0) }); }
   // Der Schornstein: groß, rechts der Mitte; Rauch fällt außen herab und breitet sich am Boden aus
   const sx = 336, sBot = P.q(0, 0, 5)[1];
-  const innen = y => 12 + Math.max(0, (y + 12) / (sBot + 12)) * 7;
-  const plume = (x, y) => { const q = Math.max(0, (y + 12) / (sBot + 12)), d = Math.abs(x - sx), i = innen(y);
-    const breit = 7 + q * 26 + Math.pow(Math.max(0, q - .8) / .2, 2) * 110, dick = q > .8 ? Math.max(0, 1 - (y - (sBot - 12)) / 26) : 1;
-    if (d < i) return 0; return Math.max(0, 1 - (d - i) / breit) * dick * (.75 + .25 * Math.sin(y * .11 + (x > sx ? 1 : 0))); };
-  rauchFaellt(K, 1, sx - 150, -M, sx + 150, sBot + 16, plume, null);
-  schornstein(K, 2, sx, -M - 4, sBot, 24, 38, 0);
+  const sTop = 22, innen = y => 8 + Math.max(0, (y - sTop) / (sBot - sTop)) * 7;
+  rauchFaellt(K, 1, sx - 150, sTop - 8, sx + 150, sBot + 16, ueberlauf(sx, sTop, sBot, 8, 15), null);
+  schornstein(K, 2, sx, sTop, sBot, 16, 30, 0);
   const sk = B.maske(); sk.rect(sx - 24, sBot - 8, 48, 10); K.form(2, sk, 0, { k: ZIEGEL, ton: 1.5, fase: 1, rand: 2 });
   // Schleier vor dem Schornstein: Rauch, der über die Vorderseite herabläuft
-  rauchFaellt(K, 2, sx - 22, -M, sx + 22, sBot + 16, (x, y) => { const d = Math.abs(x - sx), i = innen(y); if (d >= i + 1) return 0; const s2 = B.rausch1(x * .35, 77); return s2 > .55 ? (s2 - .55) * 2.2 * (1 - Math.max(0, (y - 20)) / (sBot * 1.4)) : 0; }, null);
+  rauchFaellt(K, 2, sx - 22, sTop - 6, sx + 22, sBot + 16, (x, y) => { const d = Math.abs(x - sx), i = innen(y); if (y < sTop - 5) return 0; if (y < sTop + 1) return d < 14 ? 1 : 0; if (d >= i + 1) return 0; const s2 = B.rausch1(x * .35, 77); return s2 > .55 ? (s2 - .55) * 2.2 * (1 - Math.max(0, (y - 20)) / (sBot * 1.4)) : 0; }, null);
   rauchFaellt(K, 3, sx - 160, sBot - 18, sx + 160, sBot + 22, (x, y) => { const d = Math.abs(x - sx) / 150, v = (y - (sBot - 10)) / 22; return Math.max(0, 1 - d) * Math.max(0, 1 - Math.abs(v - .5) * 2) * .9; }, null);
   // Natriumlampe am Mast rechts oben: das Gegenlicht
   const [mx, my] = [452, 26], mast = B.maske(); mast.kap(mx + 8, my, mx + 10, 200, 1.6, 2.2); mast.kap(mx - 10, my - 2, mx + 9, my, 1, 1); mast.poly([[mx - 18, my], [mx - 4, my], [mx - 7, my + 5], [mx - 15, my + 5]]);
@@ -303,7 +311,7 @@ function hauptband(K) {
   const yw = P.q(0, 0, Zw)[1];
   const fen = [[52, 150], [196, 300], [348, 432]], fy0 = 8, fy1 = 118;
   const inF = (x, y) => fen.some(([a, b]) => x > a && x < b && y > fy0 + Math.max(0, 1 - ((x - a) / (b - a) - .5) ** 2 * 4) * -0 && y < fy1 && (y > fy0 + 14 || Math.hypot((x - (a + b) / 2) / ((b - a) / 2), (y - fy0 - 14) / 14) < 1));
-  hofDraussen(K, 262, -24, 140, 40, inF);
+  hofDraussen(K, 250, 40, 140, 30, inF);
   // Wand mit den Fensteröffnungen (Rundbogen oben), Kacheln unten
   const wm = B.maske(); wm.rect(-M, -M, W + 2 * M, yw + M + 1); wm.fn(-M, -M, W + M, yw, inF, 0);
   K.form(1, wm, .08, { k: KALK, ton: 1.4, fase: 2, verlauf: -.4, schatten: 2, muster: (x, y) => (y > fy1 + 10 ? (((x + 2) % 10 === 0 || (y - fy1) % 7 === 0) ? -.4 : .2) : B.fbm(x * .05, y * .04, 3, 2) * .4 - .2) });

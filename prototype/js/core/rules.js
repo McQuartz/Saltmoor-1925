@@ -18,7 +18,7 @@ function cardCost(c){
  if(c.x)return S.energy||0; // X: verbraucht alle Energie
  if(bonuses('stoff_free').some(b=>c.st.includes(b.stoff)))return 0;
  if(S.played===0&&S.turnNo===1&&!S.compassUsed&&passive('erste_karte_billiger').length)return 0;
- if(c.funke&&S.last&&reactionsFor(S.last,c.st).length)return 0; // Funke: umsonst, wenn sie eine Reaktion auslöst
+ if(c.funke&&S.last&&reactionsFor(S.joker?[...S.last,...S.joker]:S.last,c.st).length)return 0; // Funke: umsonst, wenn sie eine Reaktion auslöst
  return Math.max(0,c.c+(c.st.length>1&&!c.hg?BAL.forge.double_cost_extra:0)+(c.mod||0));}
 function needsTarget(c){return !!(c.ziel||(c.atk&&!c.all)||c.poison||c.burn||c.weak||c.strip||c.vuln);}
 // Effekte aus den Daten ausführen. ctx.tg = aktuelles Ziel, ctx.why = Grund für den Dev-Modus.

@@ -9,6 +9,8 @@ const B = World.B, W = B.W, H = B.H, M = B.M;
 const pal = { koerper: ['#050608', '#0b0e12', '#151a20', '#212831'], rand: ['#a48a4c', '#f4e2a6'], augen: '#ff6a3c', nebel: ['#121418', '#2a2822'], fern: '#2a2620' };
 // nasser Schiefer, dunkel -> hell (mit kaltem Glanz oben)
 const SCH = ['#030405', '#06080a', '#0a0d10', '#0f1317', '#151a1f', '#1c2229', '#252c34', '#303841', '#3e4752', '#56606b'];
+// Höhlenwand im Kerzenschein: Schiefer, der warmes Licht zurückwirft (heller als die Figuren, damit sie stehen)
+const WAND = ['#07080a', '#0d0f12', '#15161a', '#1e1e20', '#2a2724', '#38322a', '#4a3f30', '#5e4e38'];
 const WACHS = ['#1c130b', '#2e2012', '#46301a', '#644624', '#8a6634', '#b48c4c', '#d8b468', '#f0d8a0', '#fff2d0'];
 const TROPF = ['#14130f', '#211f19', '#302d25', '#423e33', '#575144', '#6e6754', '#8a8168', '#a89d80', '#c8bc9c'];
 const HOLZ = ['#0a0806', '#140f0b', '#1f1711', '#2c2118', '#3a2c20', '#4c3a2a'];
@@ -145,7 +147,7 @@ function bodenSchiefer(K, P, sd, o) {
     { cols: ['#030405', '#07090c', '#0c1014', '#141a20', '#3a3020', '#7a5a2a', '#c8984a'], tf: (x, y) => {
       // Pfütze: dunkel, spiegelt warmes Licht in senkrechten Streifen unter dem Kerzenfeld
       const Z = P.z(y + .5); let t = .25 + Math.min(.15, 3 / Z);
-      if (x > wx0 && x < wx1) { const q = Math.sin((x - wx0) / (wx1 - wx0) * Math.PI); if (B.hash(x >> 1, 0, sd) < q * .55 && Math.sin(Z * 9 + B.hash(x >> 1, 1, sd) * 6) > .1) t += .4 + q * .3 * B.hash(x >> 1, 2, sd); }
+      if (x > wx0 && x < wx1) { const q = Math.sin((x - wx0) / (wx1 - wx0) * Math.PI); if (Z > 1.6 && B.hash(x, 0, sd) < q * .4 && Math.sin(Z * 9 + B.hash(x, 1, sd) * 6) > .3) t += .4 + q * .3 * B.hash(x, 2, sd); }
       return t;
     } }
   ], (x, y) => {
@@ -163,7 +165,7 @@ function tropfen(K, x0, x1, y0, y1, n) { B.partikel(K, { n: n || 14, farben: ['#
 function kerzenwand(K, cfg) {
   cfg = cfg || {}; const fr = K.fr, sd = K.o.seed, P = B.persp(262, 150); K.split = [152, 162];
   // Ebene 0: Höhlenwand, warm vom Kerzenfeld, kalt oben rechts am Spalt
-  B.feld(K.e[0], -M, -M, W + M, H + M, SCH, (x, y) => .2 + Math.max(0, 1 - Math.hypot((x - 260) * .7, (y - 130) * 1.3) / 170) * .3 + Math.max(0, 1 - Math.hypot(x - 430, y + 10) / 120) * .25 - (Math.abs(x - 352) < 40 && y < 90 ? .12 : 0) + schiefer(sd, .25, 6)(x, y) * .3);
+  B.feld(K.e[0], -M, -M, W + M, H + M, WAND, (x, y) => .25 + Math.max(0, 1 - Math.hypot((x - 250) * .6, (y - 130) * 1.1) / 200) * .45 - (Math.abs(x - 352) < 36 && y < 90 ? .15 : 0) - Math.max(0, (60 - y) / 200) + schiefer(sd, .25, 6)(x, y) * .25);
   const spalt = B.maske(); spalt.poly([[392, -M], [446, -M], [440, 6], [428, 22], [420, 34], [414, 24], [404, 10]]);
   B.form(K.e[0], spalt, { k: ['#1c2632', '#2c3a4a', '#40546a', '#5a7088'].map(B.pk), r: [], ton: 1.6, fase: 0, rand: 0, verlauf: 1.2 });
   for (const L of [K.e[0], K.e[1]]) B.kegel(L, 420, 10, 2.15, .16, 200, '#1a2430', .55);
@@ -226,7 +228,7 @@ function kerzenwand(K, cfg) {
 // am Boden zwei Reihen Kerzen als Fluchtlinien, hinten klein die Madonna, abgewandt.
 function gang(K) {
   const fr = K.fr, sd = K.o.seed, P = B.persp(236, 134); K.split = [148, 158];
-  B.feld(K.e[0], -M, -M, W + M, H + M, SCH, (x, y) => .14 + Math.max(0, 1 - Math.hypot((x - 214) * .9, (y - 120) * 1.2) / 120) * .5 + schiefer(sd, .2, 5)(x, y) * .2);
+  B.feld(K.e[0], -M, -M, W + M, H + M, WAND, (x, y) => .3 + Math.max(0, 1 - Math.hypot((x - 236) * .8, (y - 120) * 1.2) / 140) * .5 + schiefer(sd, .2, 5)(x, y) * .2);
   // Ende des Gangs: kleine Kammer, hell vom Kerzenlicht, darin die Madonna
   const ka = B.maske(); ka.ell(236, 112, 30, 34); ka.rect(206, 112, 60, 26);
   B.form(K.e[0], ka, mat(K, .3, SCH.slice(3, 10), { ton: 2.6, fase: 0, rand: 0, verlauf: .6, muster: schiefer(sd + 1, .2, 3) }));
@@ -245,9 +247,9 @@ function gang(K) {
   ringe.forEach((Z, i) => {
     const m = B.maske(), yb = P.q(0, 0, Z)[1], eb = Z > 6 ? 1 : Z > 3 ? 2 : Z > 2.2 ? 3 : 5;
     m.fn(-M, -M, W + M - 1, Math.min(H + M - 1, yb + 2), (x, y) => !loch(Z, x, y) && (eb < 5 || y < 150 || Math.abs(x - 240) > 205 - (y - 150) * .3));
-    B.form(K.e[eb], m, mat(K, eb === 5 ? 0 : Math.min(.45, Z / 26), SCH.slice(0, eb === 5 ? 6 : 8), { ton: eb === 5 ? 1.5 : 1.9, fase: Math.max(1, P.k(Z) * .04), muster: schiefer(sd + i, .2, 4 + i), schatten: 2 }));
+    B.form(K.e[eb], m, mat(K, eb === 5 ? 0 : Math.min(.45, Z / 26), eb === 5 ? SCH.slice(0, 6) : WAND, { ton: eb === 5 ? 1.5 : 2.2 + Math.min(1.5, Z / 6), fase: Math.max(1, P.k(Z) * .04), muster: schiefer(sd + i, .2, 4 + i), schatten: 2 }));
     // an der Innenkante des Rings: Krücken links, Wachsgaben rechts
-    if (eb < 5 && Z < 9) {
+    if (eb < 5 && Z < 5) {
       const k = P.k(Z), kr = B.maske(), cx = P.vx, yt = P.q(0, hY, Z)[1];
       for (let j = 0; j < 3; j++) { const x = cx - sw * k * (.9 + j * .08), y = yb - k * (.15 + j * .12); kruecke(kr, x, y, -Math.PI / 2 + (j - 1) * .25, k * 1.1, Math.max(.45, k / 90)); }
       B.form(K.e[eb], kr, mat(K, Math.min(.4, Z / 26), HOLZ, { ton: 2, fase: 0, rand: 1, schatten: 1 }));
@@ -282,7 +284,7 @@ function mund(K) {
   // Höhlenrahmen: alles außer der Öffnung ist Fels
   const rm = B.maske(); rm.rect(-M, -M, W + 2 * M, H + 2 * M);
   rm.poly([[262, 170], [266, 120], [282, 70], [310, 34], [350, 16], [400, 14], [440, 30], [462, 70], [474, 120], [480, 170]], 0);
-  B.form(K.e[2], rm, mat(K, .02, SCH.slice(0, 8), { ton: 1.7, fase: 3, muster: schiefer(sd, .35, 6), r: RIMK, schatten: 2 }));
+  B.form(K.e[2], rm, mat(K, .02, WAND, { ton: 1.6, fase: 3, muster: (x, y) => schiefer(sd, .35, 6)(x, y) + Math.max(0, 1 - Math.hypot(x - 200, y - 130) / 200) * 2.2, r: RIMK, schatten: 2 }));
   // Madonna in der Öffnung, Rücken zur See, das Gesicht zur Felswand links
   const fs = B.maske(); fs.poly([[262, 172], [274, 150], [300, 144], [330, 150], [338, 172]]);
   B.form(K.e[2], fs, mat(K, .05, SCH.slice(1, 8), { ton: 1.8, fase: 2, r: RIMK, muster: schiefer(sd + 1, .3, 3) }));
@@ -296,9 +298,10 @@ function mund(K) {
   for (let y = 180; y < 214; y++) if (y % 3) { const q = (y - 180) / 34; for (let k = -2; k <= 2; k++) if (B.hash(300 + k, y, 9) < (1 - q) * .6) e4.set(300 + k * 2 + Math.round(Math.sin(y) * 1.5), y, B.pk(k ? '#5a4220' : '#b48c4c')); }
   const ufer = B.maske(); ufer.poly([[-M, 166], [80, 172], [180, 176], [262, 172], [300, 178], [W + M, 176], [W + M, 186], [280, 188], [270, 180], [180, 180], [60, 180], [-M, 178]]);
   B.form(K.e[3], ufer, mat(K, 0, SCH.slice(0, 8), { ton: 1.9, fase: 1, muster: schiefer(sd + 2, .1, 3), schatten: 1 }));
-  for (let y = 60; y < 186; y++) { const x = 92 + Math.round(Math.sin(y * .05) * 2 + (y > 120 ? (y - 120) * .06 : 0)); if (y % 5 !== 2) K.e[3].set(x, y, B.pk(y % 3 ? '#56606b' : '#a8bccc')); }
-  const qm = B.maske(); qm.ell(92, 58, 8, 5); qm.ell(92, 58, 5, 3, 0);
-  B.form(K.e[3], qm, mat(K, 0, SCH.slice(0, 8), { ton: 1.4, fase: 1 }));
+  // Quelle: tritt aus einem Riss im Schiefer, fällt als Faden in den Teich
+  const riss = B.maske(); riss.poly([[80, 112], [96, 108], [104, 116], [90, 120]]);
+  B.form(K.e[3], riss, { k: ['#000000', '#030405'].map(B.pk), r: [], ton: .5, fase: 0, rand: 0 });
+  for (let y = 116; y < 180; y++) { const x = 94 + Math.round((y - 116) * .05); if (y % 6 !== 3) K.e[3].set(x, y, B.pk(y % 4 ? '#56606b' : '#a8bccc')); if (y > 172) K.e[3].set(x + ((y & 1) ? 2 : -2), y, B.pk('#3e4752')); }
   // Krücken links an die Wand gelehnt und Votivkerzen am Ufer
   const kr = B.maske(); for (let i = 0; i < 7; i++) kruecke(kr, 14 + i * 8, 166 + (i % 2) * 2, -Math.PI / 2 + .12 - i * .03, 40 + (i % 3) * 5, 1);
   B.form(K.e[3], kr, mat(K, 0, HOLZ, { ton: 2, fase: 0, rand: 1, schatten: 1 }));
@@ -321,7 +324,7 @@ function mund(K) {
 // aus Kerzen und Wachs. Untersicht. Beim Übergang: dort, wohin sie blickt, ein Spalt mit Stufen nach unten.
 function nah(K, cfg) {
   cfg = cfg || {}; const fr = K.fr, sd = K.o.seed, P = B.persp(230, 190); K.split = [192, 200];
-  B.feld(K.e[0], -M, -M, W + M, H + M, SCH, (x, y) => .18 + Math.max(0, 1 - Math.hypot((x - 340) * .7, y - 200) / 220) * .35 + schiefer(sd, .3, 7)(x, y) * .25);
+  B.feld(K.e[0], -M, -M, W + M, H + M, WAND, (x, y) => .22 + Math.max(0, 1 - Math.hypot((x - 300) * .6, y - 190) / 240) * .5 - Math.max(0, (50 - y) / 160) + schiefer(sd, .3, 7)(x, y) * .25);
   tropfsteine(K, 1, -M, W + M, -4, 40, .25, sd + 3, .5);
   // die Wand, auf die sie blickt (rechts), mit Wachsfluss
   const wr = B.maske(); wr.poly([[420, -M], [W + M, -M], [W + M, 210], [440, 200], [430, 140], [414, 60]]);
@@ -390,7 +393,7 @@ function bauen(o) {
   else if (art === 'uebergang') info = nah(K, { spalt: true });
   else info = [kerzenwand, gang, mund][v](K);
   const x = info.mitte[0], y = info.mitte[1];
-  if (art === 'rast') { for (let i = 0; i < 4; i++) B.dith(K.e[i], -M, -M, W + M, H + M, pal.koerper[0], (px) => .22 + .1 * i - Math.abs(px - x) / 1600); kerzenkreis(K, x, y + 10); }
+  if (art === 'rast') { for (let i = 0; i < 4; i++) B.dith(K.e[i], -M, -M, W + M, H + M, pal.koerper[0], (px) => .1 + .04 * i - Math.abs(px - x) / 2400); kerzenkreis(K, x, y + 10); }
   else if (art === 'kraemer') kerzenfrau(K, x + 30, y - 2);
   else if (art === 'werkstatt') B.werkbank(K, x, y + 4);
   else if (art === 'fund' || art === 'ereignis') wachshaufen(K, 4, x, y + 4, 1.6, 21);

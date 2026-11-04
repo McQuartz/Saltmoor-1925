@@ -1,0 +1,750 @@
+{
+ "_doc": "Biom-Paket Der Nachtzug (Akt I). Konzept und Noten: docs/auftrag-2/biome/nachtzug.md. Format: docs/auftrag-2/paket-format.md",
+ "id": "nachtzug",
+ "akt": 0,
+ "biom": {
+  "n": "Der Nachtzug",
+  "kurz": "Nachtzug",
+  "zeit": "1925, nach Mitternacht",
+  "anreise": "Am Ende der Uferstraße steht ein Zug mit offenen Türen. Saltmoor hat keinen Bahnhof.",
+  "koerper": [
+   "#070405",
+   "#110a0a",
+   "#1e1211",
+   "#2e1c19"
+  ],
+  "rand": [
+   "#58789a",
+   "#cfe2f6"
+  ],
+  "augen": "#ffc870",
+  "nebel": [
+   "#140c0c",
+   "#3a2a2a"
+  ],
+  "musik": "nachtzug",
+  "gegner": [
+   "mitreisender",
+   "gepaeck",
+   "kontrolleurin",
+   "schlafwagenkind"
+  ],
+  "waechter": "uhrmacher",
+  "fundpool": [
+   "fahrkartenzange",
+   "schaffneruhr",
+   "reiseplaid",
+   "kohlenschaufel",
+   "trench",
+   "swordcane",
+   "lantern",
+   "laudanum",
+   "smellingsalts",
+   "officercoat"
+  ],
+  "kraemer": {
+   "n": "Der Schaffner",
+   "ort": "im Gepäckwagen, zwischen den Fundsachen",
+   "zeile": "Er verkauft, was Fahrgäste liegen gelassen haben. Einiges davon gehört dir. Du hast es noch nicht verloren."
+  },
+  "uebergang": "Der Zug hält ein zweites Mal. Die Tür geht auf, die Stufen führen ins Wasser, bis an eine Kirchenmauer. Die Glocke läutet, obwohl niemand zieht.",
+  "weg_hinweise": {
+   "kampf": [
+    "Im nächsten Wagen raschelt eine Zeitung.",
+    "Jemand sitzt im Gang auf seinem Koffer.",
+    "Ein Kind geht barfuß durch den Gang. Es schläft.",
+    "Die Kontrolle kommt. Man hört die Zange."
+   ],
+   "ereignis": [
+    "Eine Abteiltür steht einen Spalt offen. Drinnen brennt Licht.",
+    "Im Speisewagen ist für dich gedeckt."
+   ],
+   "wandbild": [
+    "Zwischen zwei Fenstern ist etwas in die Täfelung geschnitzt, älter als der Zug."
+   ],
+   "kraemer": [
+    "Im Gepäckwagen brennt eine Laterne. Der Schaffner zählt Fundsachen."
+   ],
+   "werkstatt": [
+    "Die Werkbank des Zugführers, zwischen Milchkannen."
+   ],
+   "rast": [
+    "Ein leeres Abteil. Die Leselampe brennt schon."
+   ],
+   "fundstelle": [
+    "Ein Koffer steht allein im Gang. Das Schloss ist warm."
+   ]
+  },
+  "beute_saetze": [
+   "Unter dem Gold liegt eine gelochte Fahrkarte. Das Ziel ist Saltmoor.",
+   "Unter dem Gold liegt eine Taschenuhr. Sie geht rückwärts, ganz leise.",
+   "Unter dem Gold liegt ein Gepäckschein mit deiner Nummer.",
+   "Unter dem Gold liegt eine Zeitung von morgen. Die Todesanzeigen sind herausgerissen.",
+   "Unter dem Gold liegt ein Kinderschuh, noch warm.",
+   "Unter dem Gold liegt ein Speisekartenblatt. Gestrichen ist alles bis auf ein Gericht, das es nicht gibt.",
+   "Unter dem Gold liegt ein Messingknopf von einer Uniform, die niemand mehr trägt.",
+   "Unter dem Gold liegt ein Fahrplan. Saltmoor steht darin, zwischen zwei Orten, die es nicht gibt."
+  ]
+ },
+ "musik": {
+  "n": "Nachtzug",
+  "root": 47,
+  "key": "h-Moll",
+  "names": [
+   "Hm",
+   "G",
+   "Em",
+   "F♯"
+  ],
+  "darkNames": [
+   "Hm",
+   "C",
+   "Em",
+   "F♯♭9"
+  ],
+  "amb": {
+   "wind": 0.04,
+   "gaenge": 0.05
+  },
+  "rhy": "holz",
+  "detail": "hafen",
+  "ort": "Schienenstöße, Wind am Fensterspalt, ferne Glocke",
+  "rhyN": "Schienenstöße auf Holz, Pauke"
+ },
+ "foes": {
+  "mitreisender": {
+   "n": "Der Mitreisende",
+   "biom": "nachtzug",
+   "rang": "normal",
+   "hp": 28,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 5
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "mitreisender_a",
+   "varianten": [
+    "mitreisender_a",
+    "mitreisender_b"
+   ],
+   "konzept": "Ein Herr mit Melone liest auf seinem Koffer Zeitung. Seine Beine sind zu lang, er hat sie zusammengelegt wie einen Zollstock; die Knie stehen höher als sein Hut.",
+   "stimme": "schmuggler",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 16,
+    "why": "Er liest zwei Seiten zu Ende. Dann faltet er die Zeitung und klappt sich auf."
+   },
+   "beute": "reiseplaid",
+   "beute_satz": "Seine Zeitung ist von morgen. Die Seite mit den Todesanzeigen fehlt.",
+   "quelle": "skript"
+  },
+  "gepaeck": {
+   "n": "Das Gepäckstück",
+   "biom": "nachtzug",
+   "rang": "normal",
+   "hp": 28,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 7
+    }
+   ],
+   "sprite": "gepaeck_a",
+   "varianten": [
+    "gepaeck_a",
+    "gepaeck_b"
+   ],
+   "konzept": "Überseekoffer, Handkoffer und Hutschachtel, mit einem Riemen zusammengeschnallt, laufen auf zwei Menschenarmen. Aus dem Kofferspalt hängt ein Ärmel, und innen brennt Licht.",
+   "stimme": "mumie",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Es nimmt eine deiner Karten an sich, wie man Gepäck aufgibt. Zurück gibt es sie erst am nächsten Halt."
+   },
+   "beute": "kohlenschaufel",
+   "beute_satz": "Im Koffer lag ordentlich gefaltet ein Mantel. Er hat deine Größe.",
+   "quelle": "skript"
+  },
+  "kontrolleurin": {
+   "n": "Die Kontrolleurin",
+   "biom": "nachtzug",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "kontrolleurin_a",
+   "varianten": [
+    "kontrolleurin_a",
+    "kontrolleurin_b"
+   ],
+   "konzept": "Uniformmantel bis zum Boden, Schirmmütze, die offene Hand viel zu weit ausgestreckt: Der Arm hat ein Gelenk zu viel. Ihr Gesicht ist gelocht wie eine Fahrkarte, und durch die Löcher scheint Licht.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "abschrift",
+    "n": 1,
+    "why": "Sie stellt dir einen Nachlöseschein aus. Er gilt für keine Strecke."
+   },
+   "beute": "fahrkartenzange",
+   "beute_satz": "Ihr Fahrscheinheft ist voll. Auf jedem Abschnitt steht dein Name.",
+   "quelle": "skript"
+  },
+  "schlafwagenkind": {
+   "n": "Das Schlafwagenkind",
+   "biom": "nachtzug",
+   "rang": "normal",
+   "hp": 16,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 6
+    }
+   ],
+   "sprite": "schlafwagenkind_a",
+   "varianten": [
+    "schlafwagenkind_a",
+    "schlafwagenkind_b"
+   ],
+   "konzept": "Ein Kind im Nachthemd geht im Schlaf durch den Gang, die Arme vorgestreckt. Sein Haar fällt nach oben, als hinge es kopfüber, und durch die geschlossenen Lider scheint Licht.",
+   "stimme": "chorknabe",
+   "kniff": {
+    "art": "ruf",
+    "gegner": "mitreisender",
+    "alle": 3,
+    "why": "Es ruft im Schlaf nach jemandem. Jemand steigt zu."
+   },
+   "beute": null,
+   "beute_satz": "Wo das Kind stand, liegt eine Bahnsteigkarte für einen Bahnhof, den es nicht gibt.",
+   "quelle": "skript"
+  },
+  "uhrmacher": {
+   "n": "Der Uhrmacher im Speisewagen",
+   "biom": "nachtzug",
+   "rang": "waechter",
+   "hp": 76,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 18
+    }
+   ],
+   "sprite": "uhrmacher",
+   "varianten": [
+    "uhrmacher"
+   ],
+   "konzept": "Ein langer, gebeugter Reisender mit Uhrmacherlupe dreht einen Aufzugsschlüssel, der im Boden des Speisewagens steckt: Er zieht den Zug auf. Im Mantelfutter hängen Taschenuhren, und alle gehen rückwärts.",
+   "stimme": "glockenmutter",
+   "kniff": {
+    "art": "brecher",
+    "why": "Er dreht die Zeit zurück bis vor deinen Schutz."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "mitreisender",
+    "alle": 3
+   },
+   "beute": "aufzugsschluessel",
+   "beute_satz": "Seine Uhren stehen still. Alle zeigen dieselbe Zeit, und es ist nicht jetzt.",
+   "quelle": "skript"
+  }
+ },
+ "items": {
+  "fahrkartenzange": {
+   "n": "Fahrkartenzange",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "pick",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 30,
+   "flavor": "Sie locht in jede Karte dasselbe Muster. Es ist kein Datum.",
+   "cards": [
+    {
+     "n": "Lochen",
+     "c": 0,
+     "atk": 3,
+     "vuln": 1
+    }
+   ]
+  },
+  "schaffneruhr": {
+   "n": "Taschenuhr des Schaffners",
+   "a": "talisman",
+   "st": [],
+   "spr": "watch",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 55,
+   "eigen": {
+    "typ": "energie_bleibt",
+    "v": 1
+   },
+   "flavor": "Sie geht genau. Nur nicht in diese Richtung.",
+   "cards": [
+    {
+     "n": "Fahrplan",
+     "c": 0,
+     "draw": 1,
+     "behalten": true
+    }
+   ]
+  },
+  "reiseplaid": {
+   "n": "Reiseplaid",
+   "a": "kleidung",
+   "st": [
+    "W"
+   ],
+   "hp": 4,
+   "spr": "coat",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 50,
+   "eigen": {
+    "typ": "start_block",
+    "v": 5
+   },
+   "flavor": "Es riecht nach einem Haus, in dem du nie gewohnt hast.",
+   "cards": [
+    {
+     "n": "Einhüllen",
+     "c": 1,
+     "blk": 6,
+     "behalten": true
+    }
+   ]
+  },
+  "kohlenschaufel": {
+   "n": "Kohlenschaufel des Heizers",
+   "a": "waffe",
+   "st": [
+    "F"
+   ],
+   "spr": "shovel",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 55,
+   "eigen": {
+    "typ": "brand_haelt"
+   },
+   "flavor": "Der Heizer ist nie ausgestiegen. Der Stiel ist noch warm von seinen Händen.",
+   "cards": [
+    {
+     "n": "Nachschaufeln",
+     "c": 1,
+     "atk": 4,
+     "burn": 2
+    }
+   ]
+  },
+  "aufzugsschluessel": {
+   "n": "Aufzugsschlüssel",
+   "a": "talisman",
+   "st": [
+    "E",
+    "L"
+   ],
+   "spr": "compass",
+   "nodrop": 1,
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 120,
+   "eigen": {
+    "typ": "energie_plus",
+    "v": 1,
+    "preis": "hand"
+   },
+   "flavor": "Wer ihn dreht, bekommt Zeit. Woher, sagt keiner.",
+   "cards": [
+    {
+     "n": "Aufziehen",
+     "c": 0,
+     "en": 1,
+     "draw": 1,
+     "verbraucht": true
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "events": [
+  {
+   "id": "nachtzug_fahrkarte",
+   "t": "Die Fahrkarte",
+   "d": "Im Gang liegt eine Fahrkarte nach Saltmoor, schon gelocht. Auf der Rückseite steht dein Name, in einer Handschrift, die du erst noch lernen wirst.",
+   "bild": "Eine Fahrkarte auf dem Läufer im Gang, das Lochmuster leuchtet im Lampenlicht, dahinter die Fenster mit derselben Kurve.",
+   "o": [
+    {
+     "l": "Einstecken: +1 Kerbe an einem Item, −4 max. Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Beim Schaffner abgeben: +20 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 20
+      }
+     ]
+    },
+    {
+     "l": "Zerreißen: eine Karte streichen",
+     "fx": [
+      {
+       "op": "strike"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nachtzug_gedeck",
+   "t": "Gedeckt für zwei",
+   "d": "Im Speisewagen ist ein Tisch gedeckt. Die Suppe dampft, das Besteck liegt richtig herum. Der Stuhl dir gegenüber ist zurückgeschoben, als wäre gerade jemand aufgestanden.",
+   "bild": "Ein Tisch mit weißem Tuch und Tischlampe, zwei Teller, einer davon benutzt, der Stuhl gegenüber leer und zurückgeschoben.",
+   "o": [
+    {
+     "l": "Essen: volles Leben, −5 max. Leben",
+     "fx": [
+      {
+       "op": "full_heal"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Warten, bis er zurückkommt: einen Handgriff lernen, −7 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ]
+    },
+    {
+     "l": "Das Silber einstecken: +25 Gold, Kampf gegen den Mitreisenden",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 25
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "mitreisender"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nachtzug_kurve",
+   "t": "Die Kurve",
+   "d": "Du zählst die Fenster. Jedes zeigt denselben Hang, dasselbe Gleis in derselben Kurve, dasselbe erleuchtete Haus. Im letzten Fenster steht jemand im Haus und winkt.",
+   "bild": "Eine Reihe Zugfenster, in jedem dieselbe nächtliche Landschaft; im hintersten ein kleines Licht, davor eine winkende Gestalt.",
+   "stummfilm": true,
+   "o": [
+    {
+     "l": "Zurückwinken: eine Reaktion entdecken, −4 max. Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Das Fenster herunterlassen: ein seltenes Item, −9 Leben",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "lose_hp",
+       "v": 9
+      }
+     ]
+    },
+    {
+     "l": "Die Vorhänge zuziehen, alle: +7 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 7
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nachtzug_lupe",
+   "t": "Ein Herr mit Lupe",
+   "d": "In einem Abteil sitzt ein Herr mit einer Uhrmacherlupe vor dem Auge. Er feilt an etwas Kleinem und sagt, ohne aufzusehen, er könne dir eine Stunde abnehmen. Er meint nicht die Zeit des Zugs.",
+   "bild": "Ein Abteil im Lampenlicht, ein gebeugter Mann mit Lupe, auf dem Klapptisch Feilen und ein offenes Uhrwerk.",
+   "o": [
+    {
+     "l": "Eine Karte schleifen lassen (kostet dauerhaft 1 weniger): −6 max. Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ]
+    },
+    {
+     "l": "Ihm die Taschenuhr zeigen: +1 Kerbe, er sieht sehr lange auf das Zifferblatt",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "item": "watch"
+     }
+    },
+    {
+     "l": "Ihm die Uhr des Schaffners zeigen: eine Karte schleifen, ohne Preis",
+     "fx": [
+      {
+       "op": "schleifen"
+      }
+     ],
+     "if": {
+      "item": "schaffneruhr"
+     }
+    },
+    {
+     "l": "Die Tür leise wieder schließen: +5 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nachtzug_koffer",
+   "t": "Dein Koffer",
+   "d": "Im Gepäckwagen steht ein Koffer mit deinen Initialen. Der Aufkleber ist von einem Bahnhof, den es nicht gibt. Innen liegen Dinge, die du noch nicht verloren hast.",
+   "bild": "Ein abgestoßener Lederkoffer zwischen Postsäcken, ein schiefer Reiseaufkleber, der Riemen offen.",
+   "o": [
+    {
+     "l": "Öffnen: ein zufälliges Item, −5 Leben",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Den Riemen lösen: ein seltenes Item, Kampf gegen das Gepäckstück",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "gepaeck"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Den Gepäckschein abreißen und gehen: +15 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 15
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nachtzug_kontrolle",
+   "t": "Die Kontrolle",
+   "d": "Die Kontrolleurin steht in der Abteiltür und hält dir die Hand hin. Sie hat sie nicht ausgestreckt, sie war schon so lang. Durch ihr Gesicht scheint die Gangbeleuchtung.",
+   "bild": "Eine Schaffnerin in der Tür, die Hand weit ins Abteil gestreckt, das Gesicht gelocht, dahinter Licht.",
+   "o": [
+    {
+     "l": "Die Fahrkarte mit deinem Namen zeigen: sie locht ein zweites Mal, ein Handgriff",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      }
+     ],
+     "if": {
+      "event_gesehen": "nachtzug_fahrkarte"
+     }
+    },
+    {
+     "l": "Nachlösen: −15 Gold, +8 Leben",
+     "fx": [
+      {
+       "op": "gold",
+       "v": -15
+      },
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ],
+     "if": {
+      "gold_min": 15
+     }
+    },
+    {
+     "l": "Keine Fahrkarte haben: Kampf gegen die Kontrolleurin",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "kontrolleurin"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nachtzug_netz",
+   "t": "Das schlafende Kind",
+   "d": "Ein Kind schläft im Gepäcknetz, eingerollt wie ein Mantel. Es spricht im Schlaf die Namen von Bahnhöfen. Einer davon ist der Ort, an dem du geboren bist.",
+   "bild": "Ein Gepäcknetz über einer Polsterbank, darin ein Kind im Nachthemd, das Haar hängt nach oben durch die Maschen.",
+   "o": [
+    {
+     "l": "Einen Segen über es sprechen: +6 max. Leben, das Kind wacht nicht auf",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "job": "pfarrerin"
+     }
+    },
+    {
+     "l": "Ihm die Decke hochziehen: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    },
+    {
+     "l": "Es wecken: Kampf gegen das Schlafwagenkind und den Mitreisenden, ein seltenes Item",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "schlafwagenkind",
+        "mitreisender"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "skripte": [
+  "js/scenes/world/nachtzug.js"
+ ]
+}

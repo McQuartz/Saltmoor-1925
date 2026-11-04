@@ -6,14 +6,41 @@
   "kurz": "Kurhaus",
   "zeit": "1925, Nachsaison",
   "anreise": "Oben auf der Klippe steht das Seebad, weiß wie im Prospekt von 1900. Die Gäste sind nie abgereist.",
-  "koerper": ["#040707", "#091112", "#121c1e", "#1d2c2e"],
-  "rand": ["#4f8480", "#bcdcd4"],
+  "koerper": [
+   "#040707",
+   "#091112",
+   "#121c1e",
+   "#1d2c2e"
+  ],
+  "rand": [
+   "#4f8480",
+   "#bcdcd4"
+  ],
   "augen": "#e6fff6",
-  "nebel": ["#14262a", "#3a5a5a"],
+  "nebel": [
+   "#14262a",
+   "#3a5a5a"
+  ],
   "musik": "kurhaus",
-  "gegner": ["genesender", "badefrau", "liegender", "kurgast"],
+  "gegner": [
+   "genesender",
+   "badefrau",
+   "liegender",
+   "kurgast"
+  ],
   "waechter": "oberschwester",
-  "fundpool": ["badethermometer", "waermflasche", "kurkarte", "inhalationsmaske", "laudanum", "smellingsalts", "gasmask", "salt", "veil", "divinghelm"],
+  "fundpool": [
+   "badethermometer",
+   "waermflasche",
+   "kurkarte",
+   "inhalationsmaske",
+   "laudanum",
+   "smellingsalts",
+   "gasmask",
+   "salt",
+   "veil",
+   "divinghelm"
+  ],
   "ereignisse": [],
   "kraemer": {
    "n": "Der Apotheker",
@@ -22,13 +49,30 @@
   },
   "uebergang": "Im Wellenbad führt die Treppe ins Becken. Sie hat mehr Stufen, als das Becken tief ist, und unten läutet eine Glocke.",
   "weg_hinweise": {
-   "kampf": ["Hinter dem Paravent liegt jemand und atmet nicht.", "Nasse Fußspuren, die aus dem Becken kommen.", "Ein Rollstuhl steht im Gang, die Bremse gelöst."],
-   "ereignis": ["Eine Klingel auf dem Tresen, noch warm von einer Hand.", "Im Inhalatorium hängt der Nebel still."],
-   "wandbild": ["Unter den Kacheln im Becken ist etwas eingeritzt, älter als das Bad."],
-   "kraemer": ["Die Kurapotheke hat geöffnet. Sie hat nie geschlossen."],
-   "werkstatt": ["Der Maschinenraum unter dem Wellenbad. Die Kolben stehen still und sind warm."],
-   "rast": ["Ein freier Stuhl in der Liegehalle, die Decke schon aufgeschlagen."],
-   "fundstelle": ["Ein Arzneikästchen, offen stehen gelassen."]
+   "kampf": [
+    "Hinter dem Paravent liegt jemand und atmet nicht.",
+    "Nasse Fußspuren, die aus dem Becken kommen.",
+    "Ein Rollstuhl steht im Gang, die Bremse gelöst."
+   ],
+   "ereignis": [
+    "Eine Klingel auf dem Tresen, noch warm von einer Hand.",
+    "Im Inhalatorium hängt der Nebel still."
+   ],
+   "wandbild": [
+    "Unter den Kacheln im Becken ist etwas eingeritzt, älter als das Bad."
+   ],
+   "kraemer": [
+    "Die Kurapotheke hat geöffnet. Sie hat nie geschlossen."
+   ],
+   "werkstatt": [
+    "Der Maschinenraum unter dem Wellenbad. Die Kolben stehen still und sind warm."
+   ],
+   "rast": [
+    "Ein freier Stuhl in der Liegehalle, die Decke schon aufgeschlagen."
+   ],
+   "fundstelle": [
+    "Ein Arzneikästchen, offen stehen gelassen."
+   ]
   },
   "beute_saetze": [
    "Sein Puls ist so ruhig wie zuvor.",
@@ -42,68 +86,254 @@
   ]
  },
  "musik": {
-  "n": "Kurhaus", "root": 45, "key": "a-Moll",
-  "names": ["Am", "F", "Dm", "E"], "darkNames": ["Am", "B", "Dm", "E♭9"],
-  "amb": {"meer": 0.04, "wind": 0.03, "schimmer": 0.02},
-  "rhy": "atem", "detail": "salz",
+  "n": "Kurhaus",
+  "root": 45,
+  "key": "a-Moll",
+  "names": [
+   "Am",
+   "F",
+   "Dm",
+   "E"
+  ],
+  "darkNames": [
+   "Am",
+   "B",
+   "Dm",
+   "E♭9"
+  ],
+  "amb": {
+   "meer": 0.04,
+   "wind": 0.03,
+   "schimmer": 0.02
+  },
+  "rhy": "atem",
+  "detail": "salz",
   "ort": "Tropfen aus der Kuppel, fernes Meer, ein Atem, der nicht dazugehört",
   "rhyN": "Atem, Pauke"
  },
  "foes": {
   "genesender": {
-   "n": "Der Genesende", "biom": "kurhaus", "rang": "normal", "hp": 26, "weak": "S",
-   "pat": [{"t": "blk", "v": 7}, {"t": "buff", "v": 2}, {"t": "atk", "v": 9}],
-   "sprite": "genesender_a", "varianten": ["genesender_a", "genesender_b"],
+   "n": "Der Genesende",
+   "biom": "kurhaus",
+   "rang": "normal",
+   "hp": 30,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 10
+    }
+   ],
+   "sprite": "genesender_a",
+   "varianten": [
+    "genesender_a",
+    "genesender_b"
+   ],
    "konzept": "Ein Lungenkranker aus der Liegehalle, jetzt kerngesund: die Brust gewölbt wie ein Blasebalg, der Kopf im Nacken, ein Licht zwischen den Rippen. Er atmet nicht mehr.",
    "stimme": "schatten",
-   "kniff": {"art": "rein", "why": "Er hat aufgehört zu atmen; was in ihm ist, fault nicht mehr."},
+   "kniff": {
+    "art": "rein",
+    "why": "Er hat aufgehört zu atmen; was in ihm ist, fault nicht mehr."
+   },
    "beute": "smellingsalts",
    "beute_satz": "Seine Brust ist kalt. Das Licht darin brennt weiter, ohne Luft.",
    "quelle": "skript"
   },
   "badefrau": {
-   "n": "Die Badefrau", "biom": "kurhaus", "rang": "normal", "hp": 22, "weak": "F",
-   "pat": [{"t": "atk", "v": 3, "h": 2}, {"t": "blk", "v": 5}, {"t": "atk", "v": 7}],
-   "sprite": "badefrau_a", "varianten": ["badefrau_a", "badefrau_b"],
+   "n": "Die Badefrau",
+   "biom": "kurhaus",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 8
+    }
+   ],
+   "sprite": "badefrau_a",
+   "varianten": [
+    "badefrau_a",
+    "badefrau_b"
+   ],
    "konzept": "Sie hat 1900 die Damen aus dem Badekarren ins Meer getaucht. Ihre Arme stecken bis zu den Ellbogen in einer Pfütze, die tiefer ist als der Boden.",
    "stimme": "ertrunkener",
-   "kniff": {"art": "loeschen", "why": "Sie gießt über alles, was brennt, Wasser aus einem Becken, das es nicht gibt."},
+   "kniff": {
+    "art": "loeschen",
+    "why": "Sie gießt über alles, was brennt, Wasser aus einem Becken, das es nicht gibt."
+   },
    "beute": "waermflasche",
    "beute_satz": "Wo sie stand, ist der Boden nass. Die Pfütze ist tiefer als dein Arm.",
    "quelle": "skript"
   },
   "liegender": {
-   "n": "Der Liegende", "biom": "kurhaus", "rang": "normal", "hp": 30, "weak": "L",
-   "pat": [{"t": "blk", "v": 8}, {"t": "atk", "v": 4, "h": 2}, {"t": "blk", "v": 6}],
-   "sprite": "liegender_a", "varianten": ["liegender_a", "liegender_b"],
+   "n": "Der Liegende",
+   "biom": "kurhaus",
+   "rang": "normal",
+   "hp": 32,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 6
+    }
+   ],
+   "sprite": "liegender_a",
+   "varianten": [
+    "liegender_a",
+    "liegender_b"
+   ],
    "konzept": "Liegekur nach Vorschrift: in Decken geschnürt, nur das Gesicht frei. Das Paket ist zu lang für den Stuhl und liegt am Boden weiter. Er steht nie auf, er klappt hoch.",
    "stimme": "torfstecherin",
-   "kniff": {"art": "schuetzer", "v": 4, "why": "Er zieht die Decke über die anderen. Liegen ist die Kur."},
+   "kniff": {
+    "art": "schuetzer",
+    "v": 5,
+    "why": "Er zieht die Decke über die anderen. Liegen ist die Kur."
+   },
    "beute": "kurkarte",
    "beute_satz": "Die Decken sind noch festgeschnürt. Sie sind länger als jeder Stuhl.",
    "quelle": "skript"
   },
   "kurgast": {
-   "n": "Der Kurgast mit Taucherbrille", "biom": "kurhaus", "rang": "normal", "hp": 20, "weak": "W",
-   "pat": [{"t": "buff", "v": 2}, {"t": "atk", "v": 10}, {"t": "atk", "v": 3, "h": 2}],
-   "sprite": "kurgast_a", "varianten": ["kurgast_a", "kurgast_b"],
+   "n": "Der Kurgast mit Taucherbrille",
+   "biom": "kurhaus",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    }
+   ],
+   "sprite": "kurgast_a",
+   "varianten": [
+    "kurgast_a",
+    "kurgast_b"
+   ],
    "konzept": "Ein Herr im gestreiften Badeanzug, der seit fünfundzwanzig Jahren springen will. Die Brille ist voll Wasser, die Augen schwimmen darin, jedes für sich.",
    "stimme": "augen",
-   "kniff": {"art": "wechsel", "stoffe": ["W", "E", "L"], "why": "Das Wasser in seiner Brille fängt jeden Zug ein anderes Licht."},
+   "kniff": {
+    "art": "wechsel",
+    "stoffe": [
+     "W",
+     "E",
+     "L"
+    ],
+    "why": "Das Wasser in seiner Brille fängt jeden Zug ein anderes Licht."
+   },
    "beute": "badethermometer",
    "beute_satz": "Seine Brille ist noch voll. Darin dreht sich etwas, das seinen Platz sucht.",
    "quelle": "skript"
   },
   "oberschwester": {
-   "n": "Die Oberschwester", "biom": "kurhaus", "rang": "waechter", "hp": 70, "weak": "B",
-   "pat": [{"t": "blk", "v": 12}, {"t": "atk", "v": 9}, {"t": "buff", "v": 2}, {"t": "atk", "v": 4, "h": 3}, {"t": "atk", "v": 14}],
-   "sprite": "oberschwester", "varianten": ["oberschwester"],
+   "n": "Die Oberschwester",
+   "biom": "kurhaus",
+   "rang": "waechter",
+   "hp": 80,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 16
+    }
+   ],
+   "sprite": "oberschwester",
+   "varianten": [
+    "oberschwester"
+   ],
    "konzept": "Übergroß, die gestärkte Haube steht wie ein Segel über ihr. Sie trägt eine Zinkwanne voll stillem Wasser, darin ruht ein Patient mit offenen Augen. Das Wasser bleibt waagerecht, auch wenn sie damit zuschlägt.",
    "stimme": "chor",
-   "kniff": {"art": "abschrift", "n": 1, "karte": "Ruhe", "why": "Sie verschreibt dir Ruhe. Die Karte tut nichts. Das ist die Kur."},
-   "besonders": {"art": "phasen", "bei": [0.5],
-    "muster": [[{"t": "atk", "v": 6, "h": 2}, {"t": "blk", "v": 14}, {"t": "atk", "v": 15}, {"t": "buff", "v": 2}]],
-    "ruft": {"gegner": "genesender", "alle": 3, "anzahl": 1}},
+   "kniff": {
+    "art": "abschrift",
+    "n": 1,
+    "karte": "Ruhe",
+    "why": "Sie verschreibt dir Ruhe. Die Karte tut nichts. Das ist die Kur."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 7,
+       "h": 2
+      },
+      {
+       "t": "blk",
+       "v": 14
+      },
+      {
+       "t": "atk",
+       "v": 18
+      },
+      {
+       "t": "buff",
+       "v": 3
+      }
+     ]
+    ],
+    "ruft": {
+     "gegner": "genesender",
+     "alle": 3,
+     "anzahl": 1
+    }
+   },
    "beute": "stilleswasser",
    "beute_satz": "Die Wanne steht gerade auf den Kacheln. Der Patient darin hat sich nicht gerührt.",
    "quelle": "skript"
@@ -111,103 +341,430 @@
  },
  "events": [
   {
-   "id": "kurhaus_visite", "t": "Die Visite",
+   "id": "kurhaus_visite",
+   "t": "Die Visite",
    "d": "Die Oberschwester geht die Liegehalle ab und liest jedes Krankenblatt laut vor: Temperatur normal, Appetit gut, Atmung keine. An einem leeren Stuhl bleibt sie stehen. Auf der Tafel steht dein Name.",
    "bild": "Eine Reihe eingepackter Patienten auf Liegestühlen, alle Gesichter zu dir, und ein Stuhl, dessen Decke schon aufgeschlagen ist.",
    "o": [
-    {"l": "Dich hinlegen und einpacken lassen: volles Leben, −5 max. Leben", "fx": [{"op": "full_heal"}, {"op": "max_hp", "v": -5}]},
-    {"l": "Dein Krankenblatt lesen: eine Reaktion entdecken, −5 Leben", "fx": [{"op": "discover"}, {"op": "lose_hp", "v": 5}]},
-    {"l": "Deinen Namen von der Tafel wischen: Kampf gegen den Liegenden", "fx": [{"op": "fight", "foes": ["liegender"]}]}
+    {
+     "l": "Dich hinlegen und einpacken lassen: volles Leben, −5 max. Leben",
+     "fx": [
+      {
+       "op": "full_heal"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Dein Krankenblatt lesen: eine Reaktion entdecken, −5 Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Deinen Namen von der Tafel wischen: Kampf gegen den Liegenden",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "liegender"
+       ]
+      }
+     ]
+    }
    ]
   },
   {
-   "id": "kurhaus_inhalatorium", "t": "Das Inhalatorium",
+   "id": "kurhaus_inhalatorium",
+   "t": "Das Inhalatorium",
    "d": "Zehn Gäste sitzen in einer Reihe vor den Düsen, die Masken vor dem Gesicht, und atmen den Salzdampf ein. Nur ein. Der Nebel im Raum hängt still, auch als du hindurchgehst, und schließt sich hinter dir nicht.",
    "bild": "Ein gekachelter Raum voll weißem Nebel, eine Reihe Rücken auf Hockern, Schläuche aus Messing, und ein Gang durch den Nebel, so breit wie du.",
    "o": [
-    {"l": "Eine freie Maske nehmen: Inhalationsmaske, −6 Leben", "fx": [{"op": "give_item", "item": "inhalationsmaske"}, {"op": "lose_hp", "v": 6}]},
-    {"l": "Zehn Minuten mitatmen: eine Karte kostet dauerhaft 1 weniger, −8 Leben", "fx": [{"op": "schleifen"}, {"op": "lose_hp", "v": 8}]},
-    {"l": "Die Ventile zudrehen: Kampf gegen den Genesenden", "fx": [{"op": "fight", "foes": ["genesender"]}]}
+    {
+     "l": "Eine freie Maske nehmen: Inhalationsmaske, −6 Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "inhalationsmaske"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ]
+    },
+    {
+     "l": "Zehn Minuten mitatmen: eine Karte kostet dauerhaft 1 weniger, −8 Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ]
+    },
+    {
+     "l": "Die Ventile zudrehen: Kampf gegen den Genesenden",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "genesender"
+       ]
+      }
+     ]
+    }
    ]
   },
   {
-   "id": "kurhaus_wellen", "t": "Wellen um elf",
+   "id": "kurhaus_wellen",
+   "t": "Wellen um elf",
    "d": "Um elf schaltet der Bademeister die Wellenmaschine ein. Es ist elf. Unter dem Becken laufen die Kolben, das Wasser bleibt glatt wie Glas, aber die Treibenden heben und senken sich im Takt.",
    "bild": "Ein stilles Becken unter der beschlagenen Kuppel, darin Köpfe in einer Reihe, die sich heben, ohne dass sich die Oberfläche bewegt.",
    "o": [
-    {"l": "Einen herausziehen: ein seltenes Item, Kampf gegen die Badefrau", "fx": [{"op": "give_rare"}, {"op": "fight", "foes": ["badefrau"]}]},
-    {"l": "Die Maschine nachstellen: +1 Kerbe an einem Item, −5 Leben", "fx": [{"op": "kerbe"}, {"op": "lose_hp", "v": 5}]},
-    {"l": "Am Rand sitzen und mitzählen: eine Karte streichen, +6 Leben", "fx": [{"op": "strike"}, {"op": "heal", "v": 6}]}
+    {
+     "l": "Einen herausziehen: ein seltenes Item, Kampf gegen die Badefrau",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "badefrau"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Die Maschine nachstellen: +1 Kerbe an einem Item, −5 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Am Rand sitzen und mitzählen: eine Karte streichen, +6 Leben",
+     "fx": [
+      {
+       "op": "strike"
+      },
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ]
+    }
    ]
   },
   {
-   "id": "kurhaus_badekarren", "t": "Der Badekarren", "stummfilm": true,
+   "id": "kurhaus_badekarren",
+   "t": "Der Badekarren",
+   "stummfilm": true,
    "d": "Ein Badekarren steht draußen im tiefen Wasser, die Tür offen zum Meer. Auf der untersten Stufe stehen nasse Schuhe, ordentlich nebeneinander. Sie haben deine Größe.",
    "bild": "Eine gestreifte Badekabine auf hohen Rädern, bis zu den Achsen im stillen Wasser, die Tür ein schwarzes Rechteck, davor ein Paar Schuhe.",
    "o": [
-    {"l": "Hinausschwimmen: ein seltenes Item, −5 max. Leben", "fx": [{"op": "give_rare"}, {"op": "max_hp", "v": -5}]},
-    {"l": "Die Schuhe anziehen: +1 Kleidungs-Slot, −4 Leben", "fx": [{"op": "add_slot", "area": "kleidung"}, {"op": "lose_hp", "v": 4}], "if": {"slot_below_max": "kleidung"}},
-    {"l": "Die Leine kappen und zusehen, wie er treibt: +12 Gold", "fx": [{"op": "gold", "v": 12}]}
+    {
+     "l": "Hinausschwimmen: ein seltenes Item, −5 max. Leben",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Die Schuhe anziehen: +1 Kleidungs-Slot, −4 Leben",
+     "fx": [
+      {
+       "op": "add_slot",
+       "area": "kleidung"
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ],
+     "if": {
+      "slot_below_max": "kleidung"
+     }
+    },
+    {
+     "l": "Die Leine kappen und zusehen, wie er treibt: +12 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 12
+      }
+     ]
+    }
    ]
   },
   {
-   "id": "kurhaus_kurkonzert", "t": "Das Kurkonzert",
+   "id": "kurhaus_kurkonzert",
+   "t": "Das Kurkonzert",
    "d": "Im Musikpavillon spielt die Kurkapelle einen Walzer. Die Hörner sind an den Lippen, die Backen der Bläser ganz still. Das Publikum klatscht an der richtigen Stelle, alle gleichzeitig, und keiner holt danach Luft.",
    "bild": "Ein runder Pavillon im Milchlicht, Messing glänzt, Stuhlreihen mit Rücken in Mänteln, kein Atemhauch in der kalten Luft.",
    "o": [
-    {"l": "Bis zum Schluss bleiben: einen Handgriff lernen, −4 Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "lose_hp", "v": 4}]},
-    {"l": "Einen Groschen in den Hut: −10 Gold, +12 Leben", "fx": [{"op": "gold", "v": -10}, {"op": "heal", "v": 12}], "if": {"gold_min": 10}},
-    {"l": "Fragen, wie die Hörner ohne Atem klingen: Kampf gegen den Kurgast", "fx": [{"op": "fight", "foes": ["kurgast"]}]}
+    {
+     "l": "Bis zum Schluss bleiben: einen Handgriff lernen, −4 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ]
+    },
+    {
+     "l": "Einen Groschen in den Hut: −10 Gold, +12 Leben",
+     "fx": [
+      {
+       "op": "gold",
+       "v": -10
+      },
+      {
+       "op": "heal",
+       "v": 12
+      }
+     ],
+     "if": {
+      "gold_min": 10
+     }
+    },
+    {
+     "l": "Fragen, wie die Hörner ohne Atem klingen: Kampf gegen den Kurgast",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "kurgast"
+       ]
+      }
+     ]
+    }
    ]
   },
   {
-   "id": "kurhaus_gaestebuch", "t": "Das Gästebuch",
+   "id": "kurhaus_gaestebuch",
+   "t": "Das Gästebuch",
    "d": "Der Portier dreht dir das Gästebuch hin. Dein Name steht schon darin, in deiner Schrift, Ankunft Juli 1900. Daneben die Spalte Abreise, leer, und in den Zeilen darunter dasselbe, Jahr um Jahr.",
    "bild": "Ein aufgeschlagenes Buch auf einem Tresen aus Marmor, eine Klingel, ein Füllhalter, und eine Spalte, die nach unten hin immer leerer wird.",
    "o": [
-    {"l": "„Ich bin Fischer. Ich war nie hier.“ Er streicht die Zeile: eine Karte streichen, +10 Gold", "fx": [{"op": "strike"}, {"op": "gold", "v": 10}], "if": {"job": "fischer"}},
-    {"l": "„Die Schwester hat mich schon auf der Tafel.“ Er nickt: +1 Kerbe an einem Item", "fx": [{"op": "kerbe"}], "if": {"event_gesehen": "kurhaus_visite"}},
-    {"l": "Die Kurkarte vorzeigen: ein Item tauschen, +8 Leben", "fx": [{"op": "item_tausch"}, {"op": "heal", "v": 8}], "if": {"item": "kurkarte"}},
-    {"l": "Abreise eintragen, heute: +1 Talisman-Slot, −6 max. Leben", "fx": [{"op": "add_slot", "area": "talisman"}, {"op": "max_hp", "v": -6}], "if": {"slot_below_max": "talisman"}},
-    {"l": "Nichts eintragen: +6 Leben", "fx": [{"op": "heal", "v": 6}]}
+    {
+     "l": "„Ich bin Fischer. Ich war nie hier.“ Er streicht die Zeile: eine Karte streichen, +10 Gold",
+     "fx": [
+      {
+       "op": "strike"
+      },
+      {
+       "op": "gold",
+       "v": 10
+      }
+     ],
+     "if": {
+      "job": "fischer"
+     }
+    },
+    {
+     "l": "„Die Schwester hat mich schon auf der Tafel.“ Er nickt: +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "event_gesehen": "kurhaus_visite"
+     }
+    },
+    {
+     "l": "Die Kurkarte vorzeigen: ein Item tauschen, +8 Leben",
+     "fx": [
+      {
+       "op": "item_tausch"
+      },
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ],
+     "if": {
+      "item": "kurkarte"
+     }
+    },
+    {
+     "l": "Abreise eintragen, heute: +1 Talisman-Slot, −6 max. Leben",
+     "fx": [
+      {
+       "op": "add_slot",
+       "area": "talisman"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ],
+     "if": {
+      "slot_below_max": "talisman"
+     }
+    },
+    {
+     "l": "Nichts eintragen: +6 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ]
+    }
    ]
   }
  ],
  "items": {
   "badethermometer": {
-   "n": "Badethermometer", "a": "talisman", "st": ["W"], "spr": "watch",
-   "rar": "gewoehnlich", "kerben": 1, "preis": 25,
+   "n": "Badethermometer",
+   "a": "talisman",
+   "st": [
+    "W"
+   ],
+   "spr": "watch",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 25,
    "flavor": "Die Säule fällt jeden Tag ein wenig. Seit März steht sie unter null, und die Schwestern tragen es so ein.",
-   "cards": [{"n": "Fieber messen", "c": 0, "blk": 2, "draw": 1, "vuln": 1}]
+   "cards": [
+    {
+     "n": "Fieber messen",
+     "c": 0,
+     "blk": 2,
+     "draw": 1,
+     "vuln": 1
+    }
+   ]
   },
   "waermflasche": {
-   "n": "Wärmflasche", "a": "kleidung", "st": ["F", "W"], "spr": "bottle", "hp": 3,
-   "rar": "selten", "kerben": 2, "preis": 45,
-   "eigen": {"typ": "start_block", "v": 5},
+   "n": "Wärmflasche",
+   "a": "kleidung",
+   "st": [
+    "F",
+    "W"
+   ],
+   "spr": "bottle",
+   "hp": 3,
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 45,
+   "eigen": {
+    "typ": "start_block",
+    "v": 5
+   },
    "flavor": "Kupfer, mit Flanell bezogen. Sie ist noch warm, und niemand hat sie gefüllt.",
-   "cards": [{"n": "An den Leib drücken", "c": 1, "blk": 6, "heal": 2}]
+   "cards": [
+    {
+     "n": "An den Leib drücken",
+     "c": 1,
+     "blk": 6,
+     "heal": 2
+    }
+   ]
   },
   "kurkarte": {
-   "n": "Kurkarte", "a": "talisman", "st": ["G"], "spr": "tarot",
-   "rar": "selten", "kerben": 2, "preis": 40,
-   "eigen": {"typ": "heil_nach_sieg", "v": 4},
+   "n": "Kurkarte",
+   "a": "talisman",
+   "st": [
+    "G"
+   ],
+   "spr": "tarot",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 40,
+   "eigen": {
+    "typ": "heil_nach_sieg",
+    "v": 4
+   },
    "flavor": "Für jeden Kurtag ein Stempel. Die letzten Felder sind schon gestempelt, mit Daten, die noch kommen.",
-   "cards": [{"n": "Abstempeln lassen", "c": 1, "blk": 5, "behalten": true}]
+   "cards": [
+    {
+     "n": "Abstempeln lassen",
+     "c": 1,
+     "blk": 5,
+     "behalten": true
+    }
+   ]
   },
   "inhalationsmaske": {
-   "n": "Inhalationsmaske", "a": "kleidung", "st": ["S"], "spr": "gasmask", "hp": 2,
-   "rar": "gewoehnlich", "kerben": 1, "preis": 30,
+   "n": "Inhalationsmaske",
+   "a": "kleidung",
+   "st": [
+    "S"
+   ],
+   "spr": "gasmask",
+   "hp": 2,
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 30,
    "flavor": "Für den Soledampf am Morgen, zehn Minuten. Sie beschlägt nur, wenn ein anderer sie trägt.",
-   "cards": [{"n": "Salzdampf", "c": 1, "atk": 3, "all": true, "weak": 1}]
+   "cards": [
+    {
+     "n": "Salzdampf",
+     "c": 1,
+     "atk": 3,
+     "all": true,
+     "weak": 1
+    }
+   ]
   },
   "stilleswasser": {
-   "n": "Das stille Wasser", "a": "talisman", "st": ["W", "G"], "spr": "holywater", "rare": 1, "nodrop": true,
-   "rar": "reliquie", "kerben": 2, "preis": 90,
-   "eigen": {"typ": "block_haelt_halb"},
+   "n": "Das stille Wasser",
+   "a": "talisman",
+   "st": [
+    "W",
+    "G"
+   ],
+   "spr": "holywater",
+   "rare": 1,
+   "nodrop": true,
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 90,
+   "eigen": {
+    "typ": "block_haelt_halb"
+   },
    "flavor": "Ein Glas aus ihrer Wanne. Es schwappt nicht, auch wenn du rennst.",
-   "cards": [{"n": "Stillhalten", "c": 1, "blk": 9, "behalten": true}]
+   "cards": [
+    {
+     "n": "Stillhalten",
+     "c": 1,
+     "blk": 9,
+     "behalten": true
+    }
+   ]
   }
  },
  "handgriffe": {},
- "skripte": ["js/scenes/world/kurhaus.js"]
+ "skripte": [
+  "js/scenes/world/kurhaus.js"
+ ]
 }

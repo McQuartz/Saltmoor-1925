@@ -203,7 +203,7 @@ function einstHtml(){const E=Einst.all();const sl=(k,n)=>`<label>${n}<input type
  return box('einst',`<h2>EINSTELLUNGEN</h2><div class="formular">${sl('musik','Musik')}${sl('effekte','Effekte')}${cb('stummfilm','Stummfilm-Rauschen bei besonderen Anlässen')}${cb('jumpscare','Jumpscare (höchstens einmal pro Abstieg)')}${cb('wackeln','Bildschirmwackeln')}
  <label>Textgeschwindigkeit<select data-einst="text"><option value="0.6" ${E.text==.6?'selected':''}>langsam</option><option value="1" ${E.text==1?'selected':''}>normal</option><option value="1.6" ${E.text==1.6?'selected':''}>schnell</option></select></label>
  <label><input type="checkbox" ${typeof Dev!=='undefined'&&Dev.an?'checked':''} data-act="devToggle"> Dev-Modus</label></div><button class="deco klein" data-act="zu">SCHLIESSEN</button>`);}
-function zeigeOverlay(html){const o=$('overlay');o.innerHTML=html;o.classList.add('an');}
+function zeigeOverlay(html){if(typeof hideTip==='function')hideTip();const o=$('overlay');o.innerHTML=html;o.classList.add('an');}
 function closeOv(){$('overlay').classList.remove('an');}
 // Wandbild-Relief zeichnen (prozedural; im Stil der Hintergründe, sobald World.relief da ist)
 function reliefMalen(){const c=$('relief');if(!c)return;const x=c.getContext('2d');x.imageSmoothingEnabled=false;

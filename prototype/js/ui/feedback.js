@@ -32,7 +32,7 @@ function musikSzene(){if(typeof Music==='undefined'||!audioOn)return;const ph=S.
 function dominanterStoff(){const c={};allActive().forEach(it=>def(it).st.forEach(k=>c[k]=(c[k]||0)+1));let b='keiner',n=0;for(const k in c)if(c[k]>n){n=c[k];b=k;}return b;}
 const musFoe=id=>{const f=FOES[id];return f&&f.stimme?f.stimme:{cultist:'kultist',fishman:'tiefling',drowned:'ertrunkener',shade:'schatten',boss:'ruft'}[id]||id;};
 let lastPhase=null;
-Bus.on('changed',()=>{render();if(S.phase!==lastPhase){if(lastPhase==='fight'||lastPhase==='reward'){MELD.zeigt=[];MELD.queue=[];meldZeichnen(true);}lastPhase=S.phase;musikSzene();if(S.phase==='wandbild')setTimeout(reliefMalen,0);if(S.phase==='strand'||S.phase==='ende')setTimeout(wegbilderMalen,0);if(S.phase==='strand')setTimeout(()=>sfx.die&&0,0);}if(typeof Music!=='undefined'&&audioOn&&S.route){try{Music.hp(S.hp,maxHp());if(S.phase==='fight'&&incoming()>S.block)Music.telegraph();}catch(e){}}});
+Bus.on('changed',()=>{render();if(typeof hideTip==='function'&&!document.querySelector('[data-hg]:hover,[data-take]:hover,[data-buy]:hover,[data-buyhg]:hover'))hideTip();if(S.phase!==lastPhase){if(lastPhase==='fight'||lastPhase==='reward'){MELD.zeigt=[];MELD.queue=[];meldZeichnen(true);}lastPhase=S.phase;musikSzene();if(S.phase==='wandbild')setTimeout(reliefMalen,0);if(S.phase==='strand'||S.phase==='ende')setTimeout(wegbilderMalen,0);if(S.phase==='strand')setTimeout(()=>sfx.die&&0,0);}if(typeof Music!=='undefined'&&audioOn&&S.route){try{Music.hp(S.hp,maxHp());if(S.phase==='fight'&&incoming()>S.block)Music.telegraph();}catch(e){}}});
 Bus.on('deal',()=>{dealAnim=true;});
 Bus.on('card_played',()=>sfx.card());
 Bus.on('no_energy',()=>{sfx.bad();});

@@ -132,7 +132,7 @@
   },
   "funkenflug": {
    "n": "Funkenflug",
-   "c": 0,
+   "c": 1,
    "funke": true,
    "sonder": {
     "art": "fx",
@@ -436,7 +436,7 @@
   },
   "schwelle": {
    "n": "Schwelle",
-   "c": 0,
+   "c": 1,
    "funke": true,
    "sonder": {
     "art": "fx",
@@ -696,7 +696,7 @@
   },
   "umschlagen": {
    "n": "Umschlagen",
-   "c": 0,
+   "c": 1,
    "draw": 1,
    "funke": true,
    "build": "kettenwerk",

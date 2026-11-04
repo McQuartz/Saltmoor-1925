@@ -139,7 +139,7 @@ Sechs Karten, etwa 100 Schaden, und das Leben endet bei etwa 30, also höher als
 - **Kern:** viele Reaktionen pro Zug. Funke macht Karten umsonst, Kette zahlt die Länge aus, Gegenlauf reicht Stoffe weiter.
 - **Stütze:** Tarotkarten und Hexenflasche (Funke), Kompass (erste Karte 0), Die Knotenschnur (Kette startet bei 1), Offenes Uhrwerk (`reaktion_schaden`).
 - **Höhepunkt:** Das Gezeitenrad (`hoch_zweimal`): zwei Hochreaktionen in einem Zug, dazu Läutwerk mit Kette 3 an allen.
-- **Schwäche:** Abschrift und Verstopfen (Kloster), Einfrieren, Gegner mit wechselnder Schwachstelle stören wenig, aber Gegner mit viel Block.
+- **Schwäche:** Abschrift und Verstopfen (Kloster) zerreißen die Kette, Einfrieren, Gegner, die viele Karten pro Zug bestrafen (Kontrolleurin im Nachtzug).
 
 **Beispieldeck, Ende Akt IV (22 Karten, 7 mit Kosten 0, 9 mit Funke):**
 
