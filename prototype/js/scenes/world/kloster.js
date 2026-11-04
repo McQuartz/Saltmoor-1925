@@ -73,6 +73,15 @@ function buch(K, eb, o) {
   }
   return { top, xm, yb };
 }
+// Schrift auf dem Boden: Zeilen quer zum Blick, von Z0 bis Z1 (nach vorn), Mitte mx(Z), halbe Breite hw(Z)
+function schriftBand(K, P, sd, Z0, Z1, mx, hw) {
+  const c = B.pk(TINTE), c2 = B.pk(TINTE2);
+  for (let Z = Z0; Z > Z1; Z -= .09 * Math.min(1, Z / 2.2)) {
+    const kk = P.k(Z), X0 = mx(Z) - hw(Z), X1 = mx(Z) + hw(Z), [xa, y] = P.q(X0, 0, Z), [xb] = P.q(X1, 0, Z), e = K.e[K.eb(y)];
+    const zi = Math.round(Z * 100); let x = xa + (B.hash(zi, 1, sd) < .25 ? kk * .12 : 0);
+    while (x < xb) { const l = Math.max(1, Math.round(kk * (.03 + B.hash(Math.round(x), zi, sd) * .09))); for (let k = 0; k < l && x + k < xb; k++) { e.set(x + k, y, c); if (kk > 95) e.set(x + k, y + 1, (k % 3) ? c : c2); } if (kk > 70) e.set(x + 1, y - 1, c); x += l + Math.max(1, Math.round(kk * .025)); }
+  }
+}
 // Säulenpfeiler der Arkade (Doppelsäule mit Würfelkapitell), stehend auf (x, yb), Höhe hh, Breite w
 function doppelsaeule(K, eb, x, yb, hh, w, tief) {
   const m = B.maske(), d = Math.max(1, w * .34), sw = Math.max(1, w * .22), ht = yb - hh;
@@ -130,18 +139,10 @@ function kreuzgang(K, cfg) {
   K.form(3, dach, 0, { k: HOLZ, r: pal.rand, ton: 2, fase: 1, muster: (x, y) => { const Z = ZvonX(x); return (Math.abs((Z * 4) % 1) < .12 ? -.6 : 0) + ((y % 3) === 0 ? -.3 : 0); } });
   // im Gang ein Pult mit Kerze (durch einen Bogen zu sehen)
   if (!cfg.ohnePult) { const [px, py] = P.q(XA - .45, 0, 2.5); pult(K, 3, px, py, P.k(2.5) / 130, fr < .8, { tief: .05 }); }
-  // Falsches Detail: Schrift läuft vom Buchblock über den Sand zu uns, eine Zeile biegt in die Arkade
-  const zeilen = 4 + Math.round(fr * 5);
-  for (let k = 0; k < zeilen; k++) {
-    let prev = null; const zurArkade = k === 1 || k === 4;
-    for (let t = 0; t <= 1; t += .0025) {
-      const Z0 = 4.55, Z = Z0 - t * (zurArkade ? 1.2 : 3.4), X = 1.2 + k * .35 - t * (zurArkade ? 3.6 + k * .1 : .9 + k * .3) + Math.sin(t * 6 + k) * .07;
-      const [x, y] = P.q(X, 0, Z); const kk = P.k(Z), e = K.e[K.eb(y)];
-      if (prev && Math.round(x) === prev[0] && Math.round(y) === prev[1]) continue; prev = [Math.round(x), Math.round(y)];
-      const ph = (t * 90 + k * 7) % 6; if (ph > 4.2) continue;
-      e.set(x, y, B.pk(TINTE)); if (kk > 50) e.set(x + 1, y, B.pk(TINTE)); if (kk > 80) { e.set(x, y + 1, B.pk(TINTE)); if (B.hash(Math.round(x), Math.round(y), k) > .6) e.set(x - 1, y - 1, B.pk(TINTE2)); }
-    }
-  }
+  // Falsches Detail: die Schrift passt nicht mehr ins Buch. Sie läuft als Zeilen über den Sand zu uns,
+  // ein Band wie eine Seite, die aus dem Buch fließt; eine Nebenzunge biegt zur Arkade.
+  schriftBand(K, P, sd, 4.55, 1.25 - fr * .1, Z => 1.5 - (4.55 - Z) * .42 + Math.sin(Z * 2.2) * .18, Z => .55 + (4.55 - Z) * .16);
+  schriftBand(K, P, sd + 5, 4.5, 2.6 - fr * .9, Z => .6 - (4.5 - Z) * 1.4, Z => .3 + (4.5 - Z) * .05);
   B.nebel(K.e[2], { y0: 120, y1: 166, col: B.mix(pal.nebel[1], K.fern, .4), dichte: .2, xs: [60, 300, 60], seed: 3 });
   // Vordergrund: Säule der Arkade vorne links angeschnitten, Salzgras am Rand
   doppelsaeule(K, 5, -6, H + 6, 290, 70, 0);
@@ -185,7 +186,7 @@ function skriptorium(K, cfg) {
   const bm = B.maske(), q1 = P.q(XS + .04, bordY, ZE), q2 = P.q(XS + .04, bordY, 1.25), q3 = P.q(XS + .04, 0, 1.25), q4 = P.q(XS + .04, 0, ZE); bm.poly([q1, q2, q3, q4]); K.form(3, bm, .02, { k: HOLZ, r: pal.rand, ton: 1.6, fase: 1 });
   const buecher = [];
   while (Z > 1.35 && n < 40) {
-    const dick = .045 + n * n * .0055, hoch = .42 + (n % 3) * .05 + Math.min(.32, n * .022);
+    const dick = .05 + n * n * .0032, hoch = .4 + (n % 3) * .04 + Math.min(.3, n * .02);
     const za = Z, zb = Z - dick; if (zb < 1.3) break;
     buecher.push({ za, zb, hoch, n }); Z = zb - .02 - Math.min(.03, n * .002); n++;
   }
@@ -193,7 +194,7 @@ function skriptorium(K, cfg) {
     const { za, zb, hoch } = bu, Y = bordY + hoch, kk = P.k(za);
     const r1 = B.maske(); r1.poly([P.q(XS, Y, za), P.q(XS, Y, zb), P.q(XS, bordY, zb), P.q(XS, bordY, za)]);
     const mitte = P.q(XS, bordY + hoch * .5, za)[1];
-    K.form(3, r1, Math.min(.3, za / 22), { k: (bu.n % 3 === 1 ? HOLZ : STEIN.slice(0, 6)), r: [PERG[3], PERG[7]], ton: 1.3 + (bu.n % 2) * .5, fase: 1, rand: 2, muster: (x, y) => (Math.abs(y - (mitte - kk * hoch * .3)) < Math.max(.6, kk * .018) || Math.abs(y - (mitte + kk * hoch * .3)) < Math.max(.6, kk * .018) ? 1.3 : 0) });
+    K.form(3, r1, Math.min(.3, za / 22), { k: (bu.n % 3 === 1 ? HOLZ.slice(1) : STEIN.slice(2, 8)), r: [PERG[3], PERG[7]], ton: 2.2 + (bu.n % 2) * .8, fase: 1, rand: 2, muster: (x, y) => (Math.abs(y - (mitte - kk * hoch * .3)) < Math.max(.6, kk * .018) || Math.abs(y - (mitte + kk * hoch * .3)) < Math.max(.6, kk * .018) ? 1.3 : 0) });
     const sc = B.maske(); sc.poly([P.q(XL, Y, za), P.q(XS, Y, za), P.q(XS, Y, zb), P.q(XL, Y, zb)]);
     K.form(3, sc, Math.min(.3, za / 22), { k: PERG.slice(2, 8), ton: 3.5, fase: 0, rand: 0, muster: (x, y) => ((y + x) % 2 ? -.6 : 0) });
   }
@@ -292,9 +293,7 @@ function fussDesBuchs(K, cfg) {
   }
   // Boden (Garten), Schrift in Zeilen zu uns
   K.boden(P.vy + 1, H + M, SAND, (x, y) => { const Z = P.z(y + .5); return .55 + Math.min(.3, Z / 20) + (B.fbm(x * .05, y * .2, sd, 2) - .5) * .5; });
-  for (let k = 0; k < 4 + Math.round(fr * 4); k++) {
-    for (let t = 0; t < 1; t += .003) { const Z = 5 - t * 4, X = 1.2 - t * (2.2 + k * .25) + k * .3, [x, y] = P.q(X, 0, Z); if ((t * 120 + k * 5) % 7 < 5) { const e = K.e[K.eb(y)]; e.set(x, y, B.pk(TINTE)); if (P.k(Z) > 60) e.set(x + 1, y, B.pk(TINTE)); } }
-  }
+  schriftBand(K, P, sd, 5.2, 1.3 - fr * .1, Z => .9 - (5.2 - Z) * .5, Z => .5 + (5.2 - Z) * .2);
   // Säule der Arkade links, angeschnitten; dahinter Bogenansatz
   doppelsaeule(K, 3, 46, 212, 230, 58, 0);
   const bg = B.maske(); bg.pfad([[58, -10], [110, -20], [150, -40]], 14, 12); K.form(3, bg, 0, { k: STEIN.slice(1, 9), r: pal.rand, ton: 3.2, fase: 2 });

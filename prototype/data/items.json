@@ -6,11 +6,16 @@
    "E"
   ],
   "spr": "poker",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Aus dem Ofen des Pfarrhauses. Die Spitze ist seit 1911 nicht ganz abgekühlt.",
   "cards": [
    {
     "n": "Zuschlagen",
     "c": 1,
-    "atk": 6
+    "atk": 5,
+    "vuln": 1
    }
   ]
  },
@@ -21,11 +26,16 @@
    "E"
   ],
   "spr": "knife",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 22,
+  "flavor": "Es hat mehr Fische geöffnet, als du Tage gelebt hast, und es zählt mit.",
   "cards": [
    {
     "n": "Stechen",
     "c": 0,
-    "atk": 3
+    "atk": 2,
+    "h": 2
    }
   ]
  },
@@ -36,11 +46,16 @@
    "W"
   ],
   "spr": "harpoon",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 32,
+  "flavor": "Die Leine ist neu. Der Knoten daran ist von deinem Bruder, und er ist noch nass.",
   "cards": [
    {
     "n": "Harpunieren",
     "c": 2,
-    "atk": 12
+    "atk": 9,
+    "vuln": 2
    }
   ]
  },
@@ -51,6 +66,10 @@
    "F"
   ],
   "spr": "revolver",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 30,
+  "flavor": "Sechs Kammern. In einer steckt immer eine Patrone, die du nicht geladen hast.",
   "cards": [
    {
     "n": "Schuss",
@@ -67,24 +86,16 @@
    "E"
   ],
   "spr": "pan",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 22,
+  "flavor": "Gusseisen, schwarz vom Fett von vierzig Wintern. Sie riecht nach Sonntag, auch hier unten.",
   "cards": [
    {
     "n": "Pfanne hoch",
     "c": 1,
-    "blk": 7
-   }
-  ]
- },
- "plank": {
-  "n": "Holzbrett",
-  "a": "waffe",
-  "st": [],
-  "spr": "plank",
-  "cards": [
-   {
-    "n": "Deckung",
-    "c": 1,
-    "blk": 6
+    "blk": 6,
+    "weak": 1
    }
   ]
  },
@@ -95,12 +106,16 @@
    "G"
   ],
   "spr": "bible",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 28,
+  "flavor": "Vorn stehen die Namen der Familie. Der letzte ist in deiner Schrift und noch ohne Datum.",
   "cards": [
    {
     "n": "Psalm",
     "c": 1,
-    "blk": 5,
-    "heal": 1
+    "blk": 6,
+    "behalten": true
    }
   ]
  },
@@ -111,11 +126,16 @@
    "E"
   ],
   "spr": "pick",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 30,
+  "flavor": "Der Stiel ist Esche. Die Spitze ist aus einem Eisen, das in keiner Hütte geschmolzen wurde.",
   "cards": [
    {
     "n": "Hacken",
     "c": 2,
-    "atk": 13
+    "atk": 10,
+    "strip": true
    }
   ]
  },
@@ -126,12 +146,16 @@
    "E"
   ],
   "spr": "shovel",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 24,
+  "flavor": "Sie gräbt leichter nach unten als zur Seite.",
   "cards": [
    {
     "n": "Graben",
     "c": 1,
     "atk": 4,
-    "blk": 3
+    "blk": 4
    }
   ]
  },
@@ -142,12 +166,16 @@
    "B"
   ],
   "spr": "dagger",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 28,
+  "flavor": "Der Griff ist warm, wenn du ihn findest, auch nach einer Nacht im Moor.",
   "cards": [
    {
     "n": "Aderlass",
-    "c": 1,
-    "atk": 8,
-    "self": 2
+    "c": 0,
+    "opfer": 2,
+    "atk": 6
    }
   ]
  },
@@ -158,12 +186,16 @@
    "F"
   ],
   "spr": "torch",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 24,
+  "flavor": "Pech, Werg und ein Lappen, auf dem noch ein Monogramm zu lesen ist. Deins.",
   "cards": [
    {
     "n": "Fackel schwingen",
     "c": 1,
-    "atk": 4,
-    "burn": 1
+    "atk": 3,
+    "burn": 2
    }
   ]
  },
@@ -172,11 +204,16 @@
   "a": "waffe",
   "st": [],
   "spr": "bottle",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 20,
+  "flavor": "Leer. Das Etikett nennt eine Brennerei, die vor deiner Geburt abgebrannt ist.",
   "cards": [
    {
     "n": "Flaschenhieb",
     "c": 1,
-    "atk": 6
+    "atk": 5,
+    "weak": 1
    }
   ]
  },
@@ -186,11 +223,16 @@
   "st": [],
   "hp": 4,
   "spr": "woolcoat",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 24,
+  "flavor": "Grobe Wolle vom Schaf der Tante. In der Tasche ein Zettel: „nicht nach unten“.",
   "cards": [
    {
     "n": "Ducken",
     "c": 1,
-    "blk": 5
+    "blk": 4,
+    "draw": 1
    }
   ]
  },
@@ -202,11 +244,18 @@
   ],
   "hp": 2,
   "spr": "oilcoat",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Gelb, steif, nach Tran riechend. Das Wasser perlt ab, auch das, das von innen kommt.",
   "cards": [
    {
     "n": "Abperlen",
     "c": 1,
-    "blk": 6
+    "blk": 5,
+    "eroeffnung": {
+     "blk": 4
+    }
    }
   ]
  },
@@ -218,11 +267,16 @@
   ],
   "hp": 3,
   "spr": "boots",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 22,
+  "flavor": "Geflickt mit Gummi von woanders. Trocken bleiben sie nie lange.",
   "cards": [
    {
     "n": "Waten",
     "c": 0,
-    "blk": 3
+    "blk": 2,
+    "draw": 1
    }
   ]
  },
@@ -232,11 +286,18 @@
   "st": [],
   "hp": 2,
   "spr": "cap",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 20,
+  "flavor": "Tief ins Gesicht. Unter dem Schirm ist es immer etwas dunkler, als es sein dürfte.",
   "cards": [
    {
     "n": "Kopfnuss",
     "c": 1,
-    "atk": 5
+    "atk": 5,
+    "eroeffnung": {
+     "weak": 1
+    }
    }
   ]
  },
@@ -248,11 +309,18 @@
   ],
   "hp": 1,
   "spr": "gloves",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 22,
+  "flavor": "Leder, Nieten über den Knöcheln. Der linke hat sechs Finger, der sechste ist zugenäht.",
   "cards": [
    {
     "n": "Faust",
     "c": 0,
-    "atk": 3
+    "atk": 3,
+    "eroeffnung": {
+     "str": 1
+    }
    }
   ]
  },
@@ -264,12 +332,16 @@
   ],
   "hp": 2,
   "spr": "veil",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 24,
+  "flavor": "Schwarzer Tüll für eine Beerdigung, die erst noch angesetzt wird.",
   "cards": [
    {
     "n": "Trauern",
     "c": 1,
     "blk": 4,
-    "heal": 2
+    "heal": 3
    }
   ]
  },
@@ -281,12 +353,16 @@
   ],
   "hp": 2,
   "spr": "robe",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Der Saum ist steif von etwas, das kein Wasser auswäscht.",
   "cards": [
    {
     "n": "Blutzeichen",
     "c": 0,
-    "en": 1,
-    "self": 3
+    "opfer": 2,
+    "en": 1
    }
   ]
  },
@@ -296,11 +372,17 @@
   "st": [],
   "hp": 3,
   "spr": "trench",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "In der Innentasche eine Akte mit deinem Namen, datiert auf nächstes Jahr.",
   "cards": [
    {
     "n": "Beschatten",
     "c": 0,
-    "draw": 1
+    "draw": 1,
+    "vuln": 1,
+    "ziel": true
    }
   ]
  },
@@ -311,11 +393,16 @@
    "G"
   ],
   "spr": "rosary",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Neunundfünfzig Perlen. Beim Beten sind es immer sechzig.",
   "cards": [
    {
     "n": "Gebet",
     "c": 1,
-    "heal": 5
+    "heal": 4,
+    "blk": 3
    }
   ]
  },
@@ -326,6 +413,10 @@
    "L"
   ],
   "spr": "lantern",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Sturmfest, sagt der Händler. Die Flamme neigt sich trotzdem, immer zur selben Seite: nach unten.",
   "cards": [
    {
     "n": "Blenden",
@@ -342,6 +433,10 @@
    "S"
   ],
   "spr": "salt",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 20,
+  "flavor": "Grobes Meersalz in Leinen. Was darüber geht, hinterlässt Spuren, die zu keinem Fuß passen.",
   "cards": [
    {
     "n": "Salz streuen",
@@ -357,11 +452,16 @@
    "V"
   ],
   "spr": "shell",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Halt sie ans Ohr. Es ist kein Meer darin, sondern Atem.",
   "cards": [
    {
     "n": "Lauschen",
     "c": 1,
-    "poison": 3
+    "poison": 3,
+    "draw": 1
    }
   ]
  },
@@ -370,11 +470,22 @@
   "a": "talisman",
   "st": [],
   "spr": "watch",
+  "rar": "selten",
+  "kerben": 2,
+  "preis": 52,
+  "eigen": {
+   "typ": "energie_bleibt",
+   "v": 1
+  },
+  "flavor": "Sie geht genau. Nur nicht in dieselbe Richtung wie du.",
   "cards": [
    {
     "n": "Aufziehen",
     "c": 0,
-    "draw": 2
+    "draw": 1,
+    "eroeffnung": {
+     "draw": 1
+    }
    }
   ]
  },
@@ -385,11 +496,15 @@
    "F"
   ],
   "spr": "candle",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Sie brennt, ohne kürzer zu werden. Das Wachs, das abtropft, ist rot.",
   "cards": [
    {
     "n": "Entzünden",
-    "c": 1,
-    "burn": 3
+    "c": 0,
+    "burn": 2
    }
   ]
  },
@@ -400,11 +515,16 @@
    "G"
   ],
   "spr": "cross",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Echtes Silber, sagt die Punze. Nachts ist es schwerer als am Tag.",
   "cards": [
    {
     "n": "Kreuz zeigen",
     "c": 1,
-    "atk": 6
+    "atk": 5,
+    "blk": 3
    }
   ]
  },
@@ -416,7 +536,15 @@
    "G"
   ],
   "spr": "holywater",
+  "rar": "selten",
   "rare": 1,
+  "kerben": 2,
+  "preis": 56,
+  "eigen": {
+   "typ": "reaktion_block",
+   "v": 1
+  },
+  "flavor": "Aus dem Taufbecken von St. Brendan, vor der Flut abgefüllt. Das Wasser steht schief in der Flasche.",
   "cards": [
    {
     "n": "Besprengen",
@@ -434,7 +562,11 @@
    "L"
   ],
   "spr": "tartorch",
+  "rar": "selten",
   "rare": 1,
+  "kerben": 2,
+  "preis": 52,
+  "flavor": "Der Teer stammt von einem Schiff, das nie gebaut wurde. Er brennt mit hellem, freundlichem Licht.",
   "cards": [
    {
     "n": "Teer und Flamme",
@@ -452,12 +584,17 @@
    "S"
   ],
   "spr": "silverknife",
+  "rar": "selten",
   "rare": 1,
+  "kerben": 2,
+  "preis": 54,
+  "flavor": "Silber über Eisen, mit Salz geschliffen. Die Klinge beschlägt, wenn etwas lügt.",
   "cards": [
    {
     "n": "Silberschnitt",
     "c": 1,
-    "atk": 8
+    "atk": 6,
+    "vuln": 1
    }
   ]
  },
@@ -469,13 +606,17 @@
    "F"
   ],
   "spr": "saltgun",
+  "rar": "selten",
   "rare": 1,
+  "kerben": 2,
+  "preis": 54,
+  "flavor": "Grobsalz statt Schrot, gegen Krähen. Die Krähen in Saltmoor fürchten es nicht mehr, andere schon.",
   "cards": [
    {
     "n": "Salzladung",
-    "c": 2,
-    "atk": 6,
-    "all": 1
+    "c": 1,
+    "atk": 4,
+    "all": true
    }
   ]
  },
@@ -487,7 +628,15 @@
    "G"
   ],
   "spr": "bloodrosary",
+  "rar": "selten",
   "rare": 1,
+  "kerben": 2,
+  "preis": 54,
+  "eigen": {
+   "typ": "reaktion_heil",
+   "v": 1
+  },
+  "flavor": "Die Perlen sind aus Glas, und in jeder steht ein Tropfen, der nicht trocknet.",
   "cards": [
    {
     "n": "Blutgebet",
@@ -504,14 +653,18 @@
    "V"
   ],
   "spr": "bone",
+  "rar": "gewoehnlich",
+  "kerben": 0,
+  "preis": 8,
+  "nodrop": 1,
+  "flavor": "Ein Fingerknochen, zu lang für einen Finger.",
   "cards": [
    {
     "n": "Splitter",
     "c": 0,
     "atk": 3
    }
-  ],
-  "nodrop": 1
+  ]
  },
  "boathook": {
   "n": "Bootshaken",
@@ -520,6 +673,10 @@
    "W"
   ],
   "spr": "boathook",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Zum Festmachen. Am Haken hängt Tang aus einer Tiefe, in die kein Boot fährt.",
   "cards": [
    {
     "n": "Heranziehen",
@@ -536,13 +693,18 @@
    "E"
   ],
   "spr": "boardaxe",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 30,
+  "flavor": "Vom Kutter „Margarethe“, der 1919 mit voller Besatzung heimkam. Zu voll.",
   "cards": [
    {
     "n": "Entern",
     "c": 1,
-    "atk": 7,
+    "atk": 4,
+    "h": 2,
     "eroeffnung": {
-     "atk": 5
+     "vuln": 2
     }
    }
   ]
@@ -555,6 +717,10 @@
   ],
   "hp": 5,
   "spr": "sealskin",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 28,
+  "flavor": "Robbenfell, innen noch warm. Es atmet, wenn du stillstehst.",
   "cards": [
    {
     "n": "Fettschicht",
@@ -573,13 +739,17 @@
    "V"
   ],
   "spr": "scythe",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 30,
+  "flavor": "Das Blatt ist rostig, aber nur auf der Seite, die zum Moor zeigt.",
   "cards": [
    {
     "n": "Mähen",
     "c": 2,
-    "atk": 5,
-    "all": 1,
-    "poison": 2
+    "atk": 4,
+    "all": true,
+    "poison": 3
    }
   ]
  },
@@ -590,10 +760,15 @@
    "L"
   ],
   "spr": "tarot",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 30,
+  "flavor": "Ein Blatt fehlt im Satz. Es liegt jedes Mal obenauf, wenn du nicht hinsiehst.",
   "cards": [
    {
     "n": "Legen",
     "c": 1,
+    "funke": true,
     "draw": 2,
     "weak": 1
    }
@@ -604,10 +779,14 @@
   "a": "talisman",
   "st": [],
   "spr": "harefoot",
-  "cards": [],
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 30,
   "passiv": {
    "typ": "glueck"
-  }
+  },
+  "flavor": "Die linke Hinterpfote eines Hasen. Die Krallen wachsen noch.",
+  "cards": []
  },
  "collar": {
   "n": "Priesterkragen",
@@ -617,6 +796,10 @@
   ],
   "hp": 1,
   "spr": "collar",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Gestärktes Leinen. Wer ihn trägt, wird gegrüßt, auch von Dingen ohne Mund.",
   "cards": [
    {
     "n": "Segnen",
@@ -635,6 +818,10 @@
    "E"
   ],
   "spr": "swordcane",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 30,
+  "flavor": "Ein Spazierstock mit Silberknauf. Die Klinge darin ist länger als der Stock.",
   "cards": [
    {
     "n": "Blankziehen",
@@ -654,11 +841,20 @@
    "B"
   ],
   "spr": "witchbottle",
+  "rar": "selten",
   "rare": 1,
+  "kerben": 2,
+  "preis": 54,
+  "eigen": {
+   "typ": "reaktion_schaden",
+   "v": 1
+  },
+  "flavor": "Nägel, Haar, Salz, unter einer Schwelle vergraben. Jemand hat sie wieder ausgegraben, nicht du.",
   "cards": [
    {
     "n": "Versiegeln",
     "c": 1,
+    "funke": true,
     "blk": 6,
     "weak": 1
    }
@@ -671,11 +867,15 @@
    "L"
   ],
   "spr": "musicbox",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Sie spielt ein Lied, das deine Mutter sang. Die letzte Strophe kennst du nicht, sie schon.",
   "cards": [
    {
     "n": "Wiegenlied",
-    "c": 2,
-    "blk": 8,
+    "c": 1,
+    "blk": 7,
     "weak": 1,
     "verbraucht": true
    }
@@ -689,7 +889,15 @@
    "W"
   ],
   "spr": "anchorchain",
+  "rar": "selten",
   "rare": 1,
+  "kerben": 2,
+  "preis": 58,
+  "eigen": {
+   "typ": "start_staerke",
+   "v": 1
+  },
+  "flavor": "Sieben Meter Kette ohne Anker. Am letzten Glied sind Kratzspuren, von innen.",
   "cards": [
    {
     "n": "Kette schwingen",
@@ -707,11 +915,18 @@
   ],
   "hp": 2,
   "spr": "cultmask",
+  "rar": "gewoehnlich",
+  "kerben": 2,
+  "preis": 24,
+  "fest_hg": [
+   "zittern"
+  ],
+  "flavor": "Gebleichtes Holz, zwei Augenlöcher. Wer sie aufsetzt, sieht durch ein drittes.",
   "cards": [
    {
     "n": "Verstellen",
-    "c": 1,
-    "blk": 8
+    "c": 0,
+    "blk": 9
    }
   ]
  },
@@ -723,7 +938,15 @@
    "L"
   ],
   "spr": "flaregun",
+  "rar": "selten",
   "rare": 1,
+  "kerben": 2,
+  "preis": 56,
+  "eigen": {
+   "typ": "verwundbar_start",
+   "v": 1
+  },
+  "flavor": "Für Seenot. Wer das Rot da unten sieht, kommt, aber nicht zur Rettung.",
   "cards": [
    {
     "n": "Signal",
@@ -743,9 +966,13 @@
   ],
   "hp": 2,
   "spr": "gasmask",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 28,
+  "flavor": "Aus dem Krieg mitgebracht. Der Filter riecht nach Mandeln, und manchmal atmet er schneller als du.",
   "cards": [
    {
-    "n": "Durchatmen",
+    "n": "Durch den Filter",
     "c": 1,
     "blk": 5,
     "draw": 1
@@ -760,6 +987,10 @@
   ],
   "hp": 4,
   "spr": "officercoat",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 32,
+  "flavor": "Messingknöpfe, ein Riss im Futter. Der Kragen steht stramm, als warte er auf einen Befehl.",
   "cards": [
    {
     "n": "Kommando",
@@ -776,10 +1007,14 @@
   "a": "talisman",
   "st": [],
   "spr": "compass",
-  "cards": [],
+  "rar": "selten",
+  "kerben": 2,
+  "preis": 50,
   "passiv": {
    "typ": "erste_karte_billiger"
-  }
+  },
+  "flavor": "Die Nadel zeigt nach unten. In Saltmoor hält das niemand für einen Fehler.",
+  "cards": []
  },
  "dynamite": {
   "n": "Dynamit",
@@ -788,6 +1023,10 @@
    "F"
   ],
   "spr": "dynamite",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 28,
+  "flavor": "Drei Stangen aus dem Steinbruch. Die Lunte war schon einmal an und ist von selbst wieder ausgegangen.",
   "cards": [
    {
     "n": "Lunte",
@@ -806,6 +1045,10 @@
    "F"
   ],
   "spr": "rum",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 24,
+  "flavor": "Jamaika-Rum aus dem Schmugglerkeller. Der Pegel in der Flasche steigt über Nacht.",
   "cards": [
    {
     "n": "Schluck",
@@ -822,10 +1065,17 @@
    "B"
   ],
   "spr": "laudanum",
+  "rar": "gewoehnlich",
+  "kerben": 2,
+  "preis": 24,
+  "fest_hg": [
+   "zittern"
+  ],
+  "flavor": "Zwanzig Tropfen auf Zucker. Danach zittern die Hände, im Takt von etwas, das nicht dein Herz ist.",
   "cards": [
    {
     "n": "Tropfen",
-    "c": 1,
+    "c": 0,
     "heal": 12,
     "verbraucht": true
    }
@@ -838,11 +1088,16 @@
    "S"
   ],
   "spr": "smellingsalts",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 22,
+  "flavor": "Hirschhornsalz im Fläschchen. Es weckt dich, nur nie ganz im selben Zimmer.",
   "cards": [
    {
     "n": "Aufwachen",
     "c": 0,
     "draw": 2,
+    "en": 1,
     "verbraucht": true
    }
   ]
@@ -854,11 +1109,16 @@
    "W"
   ],
   "spr": "deepscale",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 26,
+  "flavor": "Groß wie ein Handteller, perlmuttgrün. Sie passt genau auf die Narbe an deinem Hals.",
   "cards": [
    {
     "n": "Schuppenhaut",
-    "c": 0,
-    "blk": 4
+    "c": 1,
+    "funke": true,
+    "blk": 5
    }
   ]
  },
@@ -871,12 +1131,21 @@
   ],
   "hp": 6,
   "spr": "divinghelm",
+  "rar": "selten",
   "rare": 1,
+  "kerben": 2,
+  "preis": 58,
+  "eigen": {
+   "typ": "start_block",
+   "v": 6
+  },
+  "flavor": "Messing und Glas, Baujahr 1898. Im Helm riecht es nach dem Atem eines anderen.",
   "cards": [
    {
     "n": "Luft anhalten",
     "c": 1,
-    "blk": 12
+    "blk": 10,
+    "behalten": true
    }
   ]
  },
@@ -887,6 +1156,10 @@
    "L"
   ],
   "spr": "minerlamp",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 28,
+  "flavor": "Karbid und Wasser. Das Licht reicht genau so weit, wie man gerade noch umkehren könnte.",
   "cards": [
    {
     "n": "Ausleuchten",
@@ -898,5 +1171,391 @@
     }
    }
   ]
+ },
+ "kohlenschaufel": {
+  "n": "Kohlenschaufel des Heizers",
+  "a": "waffe",
+  "st": [
+   "F"
+  ],
+  "spr": "shovel",
+  "rar": "selten",
+  "kerben": 2,
+  "preis": 56,
+  "eigen": {
+   "typ": "brand_haelt"
+  },
+  "biom": "nachtzug",
+  "flavor": "Vom Heizer der Lok, der nie ausstieg. Am Blatt klebt Kohle, die nach Haar riecht.",
+  "cards": [
+   {
+    "n": "Schaufeln",
+    "c": 1,
+    "blk": 4,
+    "burn": 2
+   }
+  ]
+ },
+ "ofen": {
+  "n": "Der Ofen unter der Fabrik",
+  "a": "talisman",
+  "st": [
+   "F"
+  ],
+  "spr": "candle",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 170,
+  "eigen": {
+   "typ": "brand_springt"
+  },
+  "biom": "fabrik",
+  "flavor": "Eine gusseiserne Ofentür, klein wie eine Hand. Dahinter brennt es, obwohl kein Ofen daran hängt.",
+  "cards": [
+   {
+    "n": "Glutkern",
+    "c": 1,
+    "burn": 4
+   }
+  ]
+ },
+ "zunderbuechse": {
+  "n": "Zunderbüchse des Leuchtturmwärters",
+  "a": "talisman",
+  "st": [
+   "F"
+  ],
+  "spr": "smellingsalts",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "kampfstart_fx",
+   "fx": [
+    {
+     "op": "status",
+     "to": "all",
+     "status": "burn",
+     "v": 3
+    }
+   ]
+  },
+  "flavor": "Blech, Feuerstein, Zunder. Der Zunder ist schon angekohlt, an einem Ende, das keiner angezündet hat.",
+  "cards": []
+ },
+ "moorglas": {
+  "n": "Glas mit Moorwasser",
+  "a": "talisman",
+  "st": [
+   "V"
+  ],
+  "spr": "holywater",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 165,
+  "eigen": {
+   "typ": "gift_doppelt"
+  },
+  "flavor": "Ein Einmachglas, randvoll und braun. Wenn du es schüttelst, setzt sich der Schlamm nach oben.",
+  "cards": []
+ },
+ "ehering": {
+  "n": "Ehering einer Ertrunkenen",
+  "a": "talisman",
+  "st": [
+   "W"
+  ],
+  "spr": "deepscale",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "kampfstart_fx",
+   "fx": [
+    {
+     "op": "status",
+     "to": "all",
+     "status": "poison",
+     "v": 3
+    }
+   ]
+  },
+  "flavor": "Gold, innen graviert: „Bis dass“. Der Rest ist abgeschliffen, von innen nach außen.",
+  "cards": [
+   {
+    "n": "Ring drehen",
+    "c": 1,
+    "poison": 3,
+    "behalten": true
+   }
+  ]
+ },
+ "taufstein": {
+  "n": "Taufstein-Splitter",
+  "a": "talisman",
+  "st": [
+   "G"
+  ],
+  "spr": "shell",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 165,
+  "eigen": {
+   "typ": "block_haelt_halb"
+  },
+  "flavor": "Granit mit einer Rinne für Wasser. Das Wasser darin ist nie verdunstet und nie gefroren.",
+  "cards": [
+   {
+    "n": "Taufe",
+    "c": 1,
+    "blk": 6,
+    "behalten": true
+   }
+  ]
+ },
+ "kloeppel": {
+  "n": "Glockenklöppel von St. Brendan",
+  "a": "waffe",
+  "st": [
+   "G"
+  ],
+  "spr": "pick",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 150,
+  "eigen": {
+   "typ": "reaktion_block",
+   "v": 2
+  },
+  "flavor": "Ein Eisenkolben, schwer wie ein Kind. Die Glocke dazu läutet noch, unter Wasser, ohne ihn.",
+  "cards": [
+   {
+    "n": "Läuten",
+    "c": 1,
+    "atk": 4,
+    "blk": 4
+   }
+  ]
+ },
+ "herzglas": {
+  "n": "Herz im Glas",
+  "a": "talisman",
+  "st": [
+   "B"
+  ],
+  "spr": "witchbottle",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 165,
+  "eigen": {
+   "typ": "opfer_staerke"
+  },
+  "flavor": "In Formalin, mit einem Datum beschriftet. Es schlägt, wenn du blutest, einmal für jeden Tropfen.",
+  "cards": [
+   {
+    "n": "Herzschlag",
+    "c": 0,
+    "opfer": 2,
+    "atk": 7
+   }
+  ]
+ },
+ "egelglas": {
+  "n": "Glas mit Blutegeln",
+  "a": "talisman",
+  "st": [
+   "V"
+  ],
+  "spr": "laudanum",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 145,
+  "eigen": {
+   "typ": "reaktion_heil",
+   "v": 2
+  },
+  "flavor": "Apothekerglas mit Messingdeckel. Die Egel darin sind satt, und keiner weiß, wovon.",
+  "cards": []
+ },
+ "gezeitenrad": {
+  "n": "Das Gezeitenrad",
+  "a": "talisman",
+  "st": [
+   "W"
+  ],
+  "spr": "compass",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 170,
+  "eigen": {
+   "typ": "hoch_zweimal"
+  },
+  "biom": "gezeitenwerk",
+  "flavor": "Ein Zahnrad aus grüner Bronze, mit sieben Zähnen mehr, als auf den Rand passen.",
+  "cards": []
+ },
+ "uhrwerk": {
+  "n": "Offenes Uhrwerk",
+  "a": "talisman",
+  "st": [
+   "E"
+  ],
+  "spr": "watch",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 150,
+  "eigen": {
+   "typ": "reaktion_schaden",
+   "v": 2
+  },
+  "flavor": "Ohne Gehäuse, ohne Zifferblatt. Es tickt nur, wenn in der Nähe etwas geschieht.",
+  "cards": [
+   {
+    "n": "Ticken",
+    "c": 1,
+    "funke": true,
+    "draw": 2
+   }
+  ]
+ },
+ "knotenschnur": {
+  "n": "Die Knotenschnur",
+  "a": "talisman",
+  "st": [
+   "W"
+  ],
+  "spr": "rosary",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "kette_start",
+   "v": 1
+  },
+  "flavor": "Eine Lotschnur mit einem Knoten je Faden Tiefe. Unten sind mehr Knoten, als die Schnur lang ist.",
+  "cards": []
+ },
+ "patronengurt": {
+  "n": "Patronengurt des Lotsen",
+  "a": "kleidung",
+  "st": [
+   "E"
+  ],
+  "hp": 2,
+  "spr": "officercoat",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 165,
+  "eigen": {
+   "typ": "mehrfach_plus1"
+  },
+  "flavor": "Zwanzig Schlaufen, neunzehn Patronen. Die letzte hat der Lotse behalten, für sich.",
+  "cards": [
+   {
+    "n": "Gurt leeren",
+    "c": 1,
+    "atk": 2,
+    "h": 3
+   }
+  ]
+ },
+ "scherenfernrohr": {
+  "n": "Scherenfernrohr",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "minerlamp",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "verwundbar_start",
+   "v": 2
+  },
+  "flavor": "Aus dem Graben, mit zwei Hörnern. Was du darin siehst, sieht schon zurück.",
+  "cards": []
+ },
+ "sargnagelring": {
+  "n": "Ring aus Sargnägeln",
+  "a": "talisman",
+  "st": [
+   "E"
+  ],
+  "spr": "cross",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "start_staerke",
+   "v": 2
+  },
+  "flavor": "Drei Nägel, zum Ring gebogen. Der Sarg, aus dem sie sind, ist noch zu.",
+  "cards": []
+ },
+ "uhr_ohne_zeiger": {
+  "n": "Uhr ohne Zeiger",
+  "a": "talisman",
+  "st": [],
+  "spr": "watch",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 175,
+  "eigen": {
+   "typ": "energie_plus",
+   "v": 1,
+   "preis": "hand"
+  },
+  "flavor": "Ein Zifferblatt ohne Zeiger. Sie gibt dir Zeit und nimmt sie dir aus der Hand.",
+  "cards": []
+ },
+ "ewiges_licht": {
+  "n": "Ewiges Licht",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "lantern",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 175,
+  "eigen": {
+   "typ": "energie_plus",
+   "v": 1,
+   "preis": "heil"
+  },
+  "flavor": "Ein rotes Altarlicht, das man nicht auspusten kann. Es brennt von deiner Wärme, und du merkst es.",
+  "cards": []
+ },
+ "kerbholz": {
+  "n": "Kerbholz",
+  "a": "talisman",
+  "st": [],
+  "spr": "plank",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "behalten_eine"
+  },
+  "flavor": "Ein Stab mit einer Kerbe für jede Schuld. Die letzte ist frisch, und daneben steht dein Name.",
+  "cards": []
+ },
+ "dreiglas": {
+  "n": "Brille mit drei Gläsern",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "tarot",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 150,
+  "eigen": {
+   "typ": "hand_plus",
+   "v": 1
+  },
+  "flavor": "Ein Gestell mit drei runden Gläsern. Das mittlere sitzt auf der Stirn, und es ist von innen beschlagen.",
+  "cards": []
  }
 }

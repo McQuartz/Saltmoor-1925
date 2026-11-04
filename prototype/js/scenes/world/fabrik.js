@@ -13,7 +13,7 @@ const ROST = ['#0a0503', '#160a05', '#24100a', '#361a0e', '#4c2614', '#64341c'];
 const ZIEGEL = ['#0a0605', '#140b08', '#20110c', '#2c1810', '#3a2014', '#4a2a1a'];
 const BLECH = ['#0b120f', '#152019', '#203027', '#2e4336', '#3e5747', '#566e5c'];
 const HOF = ['#120f08', '#1c170c', '#282010', '#352a14', '#463718', '#5a461e', '#73581f'];
-const RAUCH = ['#2c2c22', '#3e3c2c', '#525036', '#686440'];
+const RAUCH = ['#34342a', '#4c4a38', '#686448', '#88825a'];
 const NAT = '#ffb84a', NAT_K = '#fff2c4', NAT_G = '#3a2a0c', NAT_G2 = '#5a400e';
 const MET = { k: ['#040605', '#09110e', '#122019', '#1d3327', '#2a4636'] };
 
@@ -57,7 +57,7 @@ function schornstein(K, eb, x, yTop, yBot, wTop, wBot, tiefe) {
 // Rauch, der fällt: Dichte d(x,y) 0..1; statisch als Dither in eb, dazu Bewegung (Schlieren nach unten)
 function rauchFaellt(K, eb, x0, y0, x1, y1, dichte, maske, p) {
   const C = RAUCH.map(B.pk);
-  B.feld(K.e[eb], x0, y0, x1, y1, RAUCH, (x, y) => { if (maske && !maske(x, y)) return -1; const d = dichte(x, y) * (.55 + .5 * B.fbm(x * .07, y * .03, 21, 3)); if (d < .25) return -1; return (d - .25) * 1.3; });
+  B.feld(K.e[eb], x0, y0, x1, y1, RAUCH, (x, y) => { if (maske && !maske(x, y)) return -1; const d = dichte(x, y) * (.6 + .55 * B.fbm(x * .07, y * .03, 21, 3)); if (d < .18) return -1; return (d - .18) * 1.25; });
   void C;
   // Bewegung: Pixelliste mit Dichte, Rauschen wandert nach unten
   const pts = [];
@@ -89,7 +89,7 @@ function fliesen(K, P, y0, glanz, rinneX) {
     const fx = frac(X * 2), fz = frac(Z * 2);
     let t = .42 + (B.hash(Math.floor(X * 2), Math.floor(Z * 2), 7) - .5) * .18 - Math.max(0, 1 - Z / 3) * .12 + Math.min(.15, Z / 40);
     if (fx * k < 1 || fz * k * k / P.h * 2 < .7) t -= .22;
-    if (rinneX !== undefined && Math.abs(X - rinneX) < .12) t = .08 + (Math.sin(Z * 5) > .7 ? .25 : 0);
+    if (rinneX !== undefined && Math.abs(X - rinneX) < .06) t = .14 + (Math.sin(Z * 5) > .6 ? .3 : 0);
     for (const g of glanz) { const d = Math.hypot((X - g[0]) * 1.4, (Z - g[1]) * .7); if (d < g[2]) t += (1 - d / g[2]) * .5 * (B.fbm(X * 3, Z * 2, 9, 2) > .45 ? 1 : .3); }
     return t;
   });
@@ -104,7 +104,7 @@ function packhalle(K, cfg) {
   const inFenster = (Z, Y) => Y > fy0 && Y < fy1 && fenster.some(([a, b]) => Z > a && Z < b);
   // Ebene 0: Hof (sichtbar durch die Fenster rechts)
   const offen = (x, y) => { if (x <= P.vx) return false; const Z = XR * P.h / (x - P.vx), Y = 1 - (y - P.vy) * Z / P.h; return inFenster(Z, Y); };
-  hofDraussen(K, 432, -20, 150, 22, offen);
+  hofDraussen(K, 458, -20, 150, 24, offen);
   // Decke, Wände, Rückwand: je Pixel aus der Raumgeometrie, nach Tiefe auf die Ebenen verteilt
   const ebZ = Z => Z < 3.2 ? 3 : Z < 7 ? 2 : 1;
   const L = [new Uint8Array((W + 2 * M) * (H + 2 * M))];
@@ -154,7 +154,7 @@ function packhalle(K, cfg) {
     if (Math.abs(frac((Z + .4) / 1.9)) < .2 && Z < 10) { const [sx, sy] = P.q(-1.6, 0, Z + .3), k = P.k(Z + .3), m = B.maske(); m.rect(sx - k * .14, sy - k * .32, k * .28, Math.max(1, k * .04)); m.kap(sx - k * .1, sy - k * .3, sx - k * .12, sy, Math.max(.5, k * .015), Math.max(.5, k * .015)); m.kap(sx + k * .1, sy - k * .3, sx + k * .12, sy, Math.max(.5, k * .015), Math.max(.5, k * .015)); K.form(K.eb(sy), m, tf, Object.assign({ ton: 1.2, fase: 0 }, MET)); }
   }
   // Dosen auf den Bändern, alle gleich weit auseinander
-  for (let Z = Zb - 1.2; Z >= 1.6; Z -= .4) for (const [xa, xb] of baender) { const [x, y] = P.q((xa + xb) / 2, YB, Z), k = P.k(Z); if (x < -M || x > W + M) continue; dose(K, K.eb(P.q(xa, 0, Z)[1]), Math.round(x), Math.round(y), Math.round(k * .16), Math.min(.7, Z / 18)); }
+  for (let Z = Zb - 1.2; Z >= 1.6; Z -= .3) for (const [xa, xb] of baender) for (const X of [xa + .3, xb - .3]) { const [x, y] = P.q(X, YB, Z), k = P.k(Z); if (x < -M || x > W + M) continue; dose(K, K.eb(P.q(xa, 0, Z)[1]), Math.round(x), Math.round(y), Math.max(2, Math.round(k * .085)), Math.min(.7, Z / 18)); }
   // Dosenturm am Ende des linken Bandes (vorne), Kübel
   if (!cfg.ohneTurm) dosenturm(K, 4, 64, 214, 9, 5, 0);
   // Lampen im Takt über den Bändern; mit fremdheit gehen sie aus (die hinteren zuerst)
@@ -190,12 +190,12 @@ function kesselhaus(K, cfg) {
   B.feld(K.e[1], -M, yk, W + M, yw, KACHEL, (x, y) => { const fx = (x + 3) % 9, fy = (y - yk) % 7; return .5 - (fx === 0 || fy === 0 ? .3 : 0) + (B.hash(Math.floor((x + 3) / 9), Math.floor((y - yk) / 7), 4) - .5) * .15; });
   // Rohrbündel waagerecht unter der Decke, mit Flanschen; senkrechte Abgänge zu den Türen
   const rm = B.maske(); [[18, 3.2], [30, 2.6], [40, 2.2], [48, 1.8]].forEach(([y, r]) => rm.kap(-M, y, W + M, y + 2, r, r));
-  const xs = [-2.4, -1.2, 0, 1.2, 2.4].map(X => P.q(X, 0, Zw)[0]);
+  const xs = [-3.4, -1.7, 0, 1.7, 3.4].map(X => P.q(X, 0, Zw)[0]);
   xs.forEach(x => { rm.kap(x + 14, 30, x + 14, yk - 26, 1.6, 1.6); rm.rect(x + 11, 44, 7, 3); });
   for (let x = 30; x < W; x += 64) for (const y of [18, 30]) rm.rect(x, y - 4, 3, 9);
   K.form(1, rm, .12, { k: ROST, ton: 1.6, fase: 1, rand: 2 });
   // Retorten: runde Türen mit Ring, Handrad, Schrauben; eine steht einen Spalt offen
-  const R = Math.round(kw * .62), yc = P.q(0, 1.05, Zw)[1];
+  const R = Math.round(kw * .68), yc = P.q(0, 1.25, Zw)[1];
   xs.forEach((x, i) => {
     const offen = i === 3;
     const ring = B.maske(); ring.ell(x, yc, R + 4, R + 4); K.form(1, ring, .1, { k: ROST, ton: 1.5, fase: 2, rand: 2, schatten: 2 });
@@ -247,10 +247,10 @@ function hof(K) {
   const Xf = -2.2, Zf0 = 1.1, Zf1 = 9, Yf = 3.3;
   const fass = B.maske(); fass.poly([P.q(Xf, Yf, Zf0), P.q(Xf, Yf, Zf1), P.q(Xf, 0, Zf1), P.q(Xf, 0, Zf0)]); fass.poly([P.q(Xf, Yf, Zf1), P.q(Xf - .6, Yf + .7, Zf1 + .4), P.q(Xf - .6, Yf + .7, Zf0), P.q(Xf, Yf, Zf0)]);
   K.form(2, fass, .05, { k: ZIEGEL, ton: 1.3, fase: 1, rand: 2, muster: (px, py) => (py % 3 === 0 ? -.3 : 0) });
-  for (let Z = 1.4; Z < Zf1 - .4; Z += .9) for (const [Y0, Y1] of [[.6, 1.5], [1.9, 2.8]]) {
-    const m = B.maske(); m.poly([P.q(Xf, Y1, Z), P.q(Xf, Y1, Z + .5), P.q(Xf, Y0, Z + .5), P.q(Xf, Y0, Z)]);
+  for (let Z = 1.4; Z < Zf1 - .4; Z += .9) for (const [Y0, Y1] of [[.7, 1.45], [1.95, 2.7]]) {
+    const m = B.maske(); m.poly([P.q(Xf, Y1, Z), P.q(Xf, Y1, Z + .42), P.q(Xf, Y0, Z + .42), P.q(Xf, Y0, Z)]); m.kap(...P.q(Xf, Y1, Z + .21), ...P.q(Xf, Y0, Z + .21), .6, .6, 0); m.kap(...P.q(Xf, (Y0 + Y1) / 2, Z), ...P.q(Xf, (Y0 + Y1) / 2, Z + .42), .6, .6, 0);
     const an = fr < .6 || B.hash(Math.round(Z * 10), Y0 * 10, 3) > fr * .8;
-    B.form(K.e[Z < 2.5 ? 3 : 2], m, K.mat(0, { k: an ? ['#0c2416', '#164a2c', '#24703e', '#3e9a58'] : KALK, ton: an ? 1.5 : .6, fase: 0, rand: 0, muster: (px, py) => (B.hash(px, py >> 1, 2) - .5) * .5 }));
+    B.form(K.e[Z < 2.5 ? 3 : 2], m, K.mat(0, { k: an ? ['#08140c', '#0e2a18', '#184426', '#2a6038', '#4a7a40'] : KALK, ton: an ? 1.6 : .6, verlauf: an ? .8 : 0, fase: 0, rand: 0, muster: (px, py) => (B.hash(px, py >> 1, 2) - .5) * .5 }));
     if (an) K.glut(...P.q(Xf + .4, (Y0 + Y1) / 2, Z + .25), P.k(Z) * .7, '#0e2a14', .7, [2, 3]);
   }
   // Ladetor mit Paletten voller Dosentürme

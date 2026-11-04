@@ -1,0 +1,213 @@
+{
+ "id": "grotte",
+ "akt": 1,
+ "biom": {
+  "n": "Die Grotte der Gaben",
+  "kurz": "Grotte",
+  "zeit": "eine Wallfahrt, die nicht aufgehört hat",
+  "anreise": "Ein Pilgerpfad, in die Steilküste gehauen. Von unten steigt warme Luft herauf, und sie riecht nach Wachs.",
+  "koerper": ["#050608", "#0b0e12", "#151a20", "#212831"],
+  "rand": ["#a48a4c", "#f4e2a6"],
+  "augen": "#ff6a3c",
+  "nebel": ["#121418", "#2a2822"],
+  "musik": "grotte",
+  "gegner": ["wachshand", "geheilter", "quellwaerter", "bittsteller"],
+  "waechter": "erhoerte",
+  "fundpool": ["votivherz", "pilgerstab", "quellwasser", "wachsauge", "candle", "holywater", "rosary", "veil", "swordcane", "cross"],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Die Kerzenfrau",
+   "ort": "an der Kerzenwand, zwischen den Stufen",
+   "zeile": "Nimmt kein Geld. Sie legt deine Gabe in die eine Hand und ihre in die andere und wiegt, welche wärmer ist."
+  },
+  "uebergang": "Dort, wohin die Madonna blickt, ist ein Spalt im Schiefer. Stufen führen hinab, ausgetreten von Knien.",
+  "weg_hinweise": {
+   "kampf": ["Krücken klappern, obwohl keiner sie trägt.", "Etwas kniet zwischen den Kerzen.", "Im Becken schöpft jemand Wasser, ohne Eimer."],
+   "ereignis": ["Eine Kerze ist ausgegangen. Die einzige.", "An der Wand hängt ein Zettel mit einem Namen."],
+   "wandbild": ["Im Tropfstein ist ein Gesicht, älter als die Madonna."],
+   "kraemer": ["Eine Frau zählt Kerzen und verzählt sich nie."],
+   "werkstatt": ["Der Tisch des Wachsziehers. Die Dochte sind schon geschnitten."],
+   "rast": ["Eine trockene Nische hinter den Krücken."],
+   "fundstelle": ["Ein Haufen Gaben, noch warm."]
+  },
+  "beute_saetze": [
+   "Das Wachs an deinen Händen ist warm. Vorhin war es nicht da.",
+   "An der Wand brennt eine Kerze mehr.",
+   "Jemand hat dir für den Kampf gedankt. Du hast nicht gehört, wer.",
+   "Die Münzen sind nass vom Quellwasser und riechen nach Weihrauch.",
+   "Eine Krücke mehr hängt an der Wand. Du hast sie nicht hingehängt.",
+   "Das Gold war eine Gabe. An wen, steht nicht dabei.",
+   "Unter dem Gold liegt ein Wachsauge. Es ist dir zugewandt."
+  ]
+ },
+ "musik": {
+  "n": "Grotte der Gaben", "root": 47, "key": "h-Moll",
+  "names": ["Hm", "G", "Em", "F♯"], "darkNames": ["Hm", "C", "Em", "F♯♭9"],
+  "amb": {"stollen": 0.05, "meer": 0.03}, "rhy": "holz", "detail": "salz",
+  "ort": "Tropfen im Schiefer, Brandung hinter dem Fels, Kerzen knistern", "rhyN": "Krücken auf Stein, Pauke"
+ },
+ "foes": {
+  "wachshand": {
+   "n": "Die Wachshände", "biom": "grotte", "rang": "normal", "hp": 21, "weak": "F",
+   "pat": [{"t": "atk", "v": 2, "h": 4}, {"t": "blk", "v": 5}, {"t": "atk", "v": 3, "h": 3}],
+   "sprite": "wachshand_a", "varianten": ["wachshand_a", "wachshand_b"],
+   "konzept": "Ein Hügel aus geopferten Wachshänden, der weitergreift; darin Votivaugen, die dich ansehen. Er ist warm.",
+   "stimme": "netzflickerin",
+   "kniff": {"art": "kleinvieh", "why": "Viele Hände, und jede greift nur ein wenig."},
+   "beute": "wachsauge", "beute_satz": "Ein Wachsfinger liegt im Gold und krümmt sich langsam.",
+   "quelle": "skript"
+  },
+  "geheilter": {
+   "n": "Der Geheilte", "biom": "grotte", "rang": "normal", "hp": 23, "weak": "G",
+   "pat": [{"t": "atk", "v": 6}, {"t": "atk", "v": 3, "h": 2}, {"t": "atk", "v": 8}],
+   "sprite": "geheilter_a", "varianten": ["geheilter_a", "geheilter_b"],
+   "konzept": "Kam an Krücken und ging ohne. Seitdem geht er auf allen vieren, die Knie nach hinten geknickt, den Kopf im Nacken vor Dank.",
+   "stimme": "salzlaeufer",
+   "kniff": {"art": "waechst", "v": 1, "why": "Er läuft schneller, je länger er läuft. Er hat es so lange nicht gekonnt."},
+   "beute": "pilgerstab", "beute_satz": "Wo er lag, lehnt ein Paar Krücken an der Wand. Sie sind neu.",
+   "quelle": "skript"
+  },
+  "quellwaerter": {
+   "n": "Der Quellwärter", "biom": "grotte", "rang": "normal", "hp": 27, "weak": "V",
+   "pat": [{"t": "atk", "v": 7}, {"t": "blk", "v": 6}, {"t": "atk", "v": 4, "h": 2}],
+   "sprite": "quellwaerter_a", "varianten": ["quellwaerter_a", "quellwaerter_b"],
+   "konzept": "Schöpfte den Pilgern mit der Kelle aus der Quelle. Steht jetzt bis zur Hüfte in einer Schale, die eine Handbreit tief ist.",
+   "stimme": "ertrunkener",
+   "kniff": {"art": "heiler", "v": 5, "why": "Er schöpft für die anderen. Für sich selbst nie."},
+   "beute": "quellwasser", "beute_satz": "Die Kelle liegt neben dem Gold. Sie ist voll, und nichts läuft heraus.",
+   "quelle": "skript"
+  },
+  "bittsteller": {
+   "n": "Der Bittsteller", "biom": "grotte", "rang": "normal", "hp": 22, "weak": "W",
+   "pat": [{"t": "blk", "v": 5}, {"t": "atk", "v": 5}, {"t": "atk", "v": 9}],
+   "sprite": "bittsteller_a", "varianten": ["bittsteller_a", "bittsteller_b"],
+   "konzept": "Rutscht seit der letzten Wallfahrt auf Knien, ein Bündel Kerzen auf dem Rücken, länger als er. Er hält dir ein Wachsherz hin. Das Wachs an seinen Kerzen läuft nach oben.",
+   "stimme": "kultist",
+   "kniff": {"art": "nachlass", "was": "item", "why": "Was er bringen wollte, bleibt liegen, wenn er fällt."},
+   "beute": "votivherz", "beute_satz": "Das Wachsherz, das er hielt, liegt bei dir. Es schlägt nicht. Es ist nur warm.",
+   "quelle": "skript"
+  },
+  "erhoerte": {
+   "n": "Die Erhörte", "biom": "grotte", "rang": "waechter", "hp": 60, "weak": "S",
+   "pat": [{"t": "atk", "v": 8}, {"t": "buff", "v": 2}, {"t": "atk", "v": 3, "h": 4}, {"t": "blk", "v": 10}, {"t": "atk", "v": 14}],
+   "sprite": "erhoerte", "varianten": ["erhoerte"],
+   "konzept": "Eine Pilgerin, deren Gebet erhört wurde, ganz und gar: aus Wachs, die Hände über dem Kopf gefaltet, und aus den Fingerspitzen brennt ein Docht.",
+   "stimme": "glockenmutter",
+   "kniff": {"art": "waechst", "v": 1, "why": "Sie schmilzt im eigenen Licht und wird dabei schneller."},
+   "besonders": {"art": "ruft", "gegner": "wachshand", "alle": 3},
+   "beute": "docht", "beute_satz": "Wo sie stand, ist eine Lache Wachs. Darin der Abdruck von zwei gefalteten Händen.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "grotte_kruecken", "t": "Die Krückenwand",
+   "d": "Hunderte Krücken hängen an der Wand, an jeder ein Zettel mit Namen und Tag der Heilung. Eine ist auf deinen Namen beschriftet. Der Tag ist noch leer.",
+   "bild": "Eine Felswand voller Krücken im Kerzenlicht, kleine Zettel daran, einer davon frisch und weiß.",
+   "o": [
+    {"l": "Die Krücke nehmen: Pilgerstab, −4 max. Leben", "fx": [{"op": "give_item", "item": "pilgerstab"}, {"op": "max_hp", "v": -4}]},
+    {"l": "Den Tag eintragen: +1 Kerbe an einem Item, −8 Leben", "fx": [{"op": "kerbe"}, {"op": "lose_hp", "v": 8}], "if": {"hp_min": 9}},
+    {"l": "Deinen Namen ausstreichen: eine Karte streichen", "fx": [{"op": "strike"}]}
+   ]
+  },
+  {
+   "id": "grotte_quelle", "t": "Die Quelle",
+   "d": "Das Wasser tritt warm aus dem Schiefer und fällt in ein Becken. Auf dem Grund liegt, was man nicht mehr brauchte: Brillen, ein Hörrohr, ein Glasauge. Das Glasauge dreht sich, als du dich bückst.",
+   "bild": "Ein steinernes Becken unter einem Wasserfaden, auf dem Grund Brillen und ein Glasauge im Kerzenschein.",
+   "o": [
+    {"l": "Trinken: +14 Leben", "fx": [{"op": "heal", "v": 14}]},
+    {"l": "Abfüllen: Quellwasser, −10 Gold", "fx": [{"op": "give_item", "item": "quellwasser"}, {"op": "gold", "v": -10}], "if": {"gold_min": 10}},
+    {"l": "Dein Weihwasser hineingießen: eine Karte kostet dauerhaft 1 weniger", "fx": [{"op": "schleifen"}], "if": {"item": "holywater"}}
+   ]
+  },
+  {
+   "id": "grotte_wachszieher", "t": "Der Tisch des Wachsziehers",
+   "d": "Auf dem Tisch stehen die Formen für die Gaben: Hand, Bein, Herz, Augenpaar. Eine Hand ist frisch gegossen und noch weich. Sie hat deine Narbe am Daumen.",
+   "bild": "Ein Arbeitstisch mit Gussformen aus Gips, Dochte im Bündel, eine weiche Wachshand mit einer Narbe.",
+   "o": [
+    {"l": "Die Hand in die Form drücken: einen Handgriff lernen, −5 Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "lose_hp", "v": 5}], "if": {"hp_min": 6}},
+    {"l": "Die Formen schärfen: eine Karte schleifen, −15 Gold", "fx": [{"op": "schleifen"}, {"op": "gold", "v": -15}], "if": {"gold_min": 15}},
+    {"l": "Die Hand einschmelzen: +6 Leben", "fx": [{"op": "heal", "v": 6}]}
+   ]
+  },
+  {
+   "id": "grotte_abgewandt", "t": "Die Abgewandte", "stummfilm": true,
+   "d": "Du zwängst dich zwischen die Madonna und die Wand, um ihr ins Gesicht zu sehen. Sie hat keins. Der Tropfstein ist dort glatt gerieben wie eine Türklinke. Hinter dir, an der Wand, ist das, was sie ansieht.",
+   "bild": "Nahe vor dem Tropfstein: eine glatte, glänzende Fläche, wo das Gesicht sein müsste, und im Rücken des Betrachters ein warmes Licht.",
+   "o": [
+    {"l": "Dich umdrehen: eine Reliquie, −10 max. Leben", "fx": [{"op": "reliquie"}, {"op": "max_hp", "v": -10}]},
+    {"l": "Die Augen schließen und rückwärts gehen: eine Reaktion entdecken", "fx": [{"op": "discover"}]},
+    {"l": "Ihr eine Kerze zu Füßen stellen: +8 Leben", "fx": [{"op": "heal", "v": 8}]}
+   ]
+  },
+  {
+   "id": "grotte_mehr", "t": "Es werden mehr",
+   "d": "Du zählst die Wachshände am Boden des Gangs: dreiundvierzig. Auf dem Rückweg sind es vierundvierzig. Die neue ist noch weich, und sie zeigt auf dich.",
+   "bild": "Ein Gang mit Wachshaufen auf dem Boden, aus denen Hände ragen, eine davon heller als die anderen.",
+   "o": [
+    {"l": "Sie zerdrücken: Kampf gegen die Wachshände", "fx": [{"op": "fight", "foes": ["wachshand", "wachshand"]}]},
+    {"l": "Sie warm halten, bis sie fest ist: +1 Kerbe an einem Item", "fx": [{"op": "kerbe"}, {"op": "lose_hp", "v": 4}], "if": {"hp_min": 5}},
+    {"l": "Nicht mehr zählen und weitergehen: +4 Leben", "fx": [{"op": "heal", "v": 4}]}
+   ]
+  },
+  {
+   "id": "grotte_stimme", "t": "Dieselbe Stimme",
+   "d": "Aus dem Becken spricht eine Stimme, die du kennst. Sie hat dich schon einmal gerufen, aus einem Brunnen in Saltmoor. Sie fragt, ob dir der Platz gefällt, den sie dir gegeben hat.",
+   "bild": "Ein dunkles Wasserbecken, darin keine Spiegelung, nur Kerzenpunkte an der falschen Stelle.",
+   "o": [
+    {"l": "Ja sagen: ein Item tauschen, +10 max. Leben", "fx": [{"op": "item_tausch"}, {"op": "max_hp", "v": 10}], "if": {"event_gesehen": "alle_brunnen"}},
+    {"l": "Fragen, wer sie ist: +6 max. Leben, −10 Leben", "fx": [{"op": "max_hp", "v": 6}, {"op": "lose_hp", "v": 10}], "if": {"hp_min": 11}},
+    {"l": "Ein Gebet sprechen, das du von früher kennst (Pfarrerin): eine Karte kostet dauerhaft 1 weniger", "fx": [{"op": "schleifen"}], "if": {"job": "pfarrerin"}},
+    {"l": "Weggehen: +5 Leben", "fx": [{"op": "heal", "v": 5}]}
+   ]
+  },
+  {
+   "id": "grotte_tausch", "t": "Gabe gegen Gabe",
+   "d": "Die Kerzenfrau sitzt auf der untersten Stufe. Sie nimmt kein Geld. Sie legt deine Gabe in die eine Hand und ihre in die andere und wiegt, welche wärmer ist.",
+   "bild": "Eine alte Frau zwischen tausend Kerzen, die Hände offen, in jeder etwas aus Wachs.",
+   "o": [
+    {"l": "Tauschen: ein Item gegen ein anderes", "fx": [{"op": "item_tausch"}]},
+    {"l": "Ihr dein Wachsherz zeigen: +1 Kerbe an einem Item, +6 Leben", "fx": [{"op": "kerbe"}, {"op": "heal", "v": 6}], "if": {"item": "votivherz"}},
+    {"l": "Ihr nur zusehen: +3 Leben", "fx": [{"op": "heal", "v": 3}]}
+   ]
+  }
+ ],
+ "items": {
+  "votivherz": {
+   "n": "Votivherz", "a": "talisman", "st": ["G"], "spr": "candle",
+   "rar": "selten", "kerben": 2, "preis": 44,
+   "eigen": {"typ": "reaktion_heil", "v": 1},
+   "flavor": "Ein Herz aus Wachs, so groß wie eine Faust. Es ist warm, und es wird nicht kälter.",
+   "cards": [{"n": "Ein Herz hinlegen", "c": 1, "blk": 5, "heal": 2}]
+  },
+  "pilgerstab": {
+   "n": "Pilgerstab", "a": "waffe", "st": ["E"], "spr": "swordcane",
+   "rar": "gewoehnlich", "kerben": 1, "preis": 22,
+   "flavor": "Im Griff sind Kerben, eine für jede Wallfahrt. Es sind mehr, als ein Leben Jahre hat.",
+   "cards": [{"n": "Pilgerschritt", "c": 1, "atk": 5, "blk": 3}]
+  },
+  "quellwasser": {
+   "n": "Quellwasser", "a": "talisman", "st": ["W"], "spr": "holywater",
+   "rar": "gewoehnlich", "kerben": 1, "preis": 24,
+   "eigen": {"typ": "heil_nach_sieg", "v": 2},
+   "flavor": "In einer Flasche mit einem Korken aus Wachs. Wer daraus trinkt, wird gesund und vergisst, wovon.",
+   "cards": [{"n": "Benetzen", "c": 1, "heal": 4, "draw": 1}]
+  },
+  "wachsauge": {
+   "n": "Wachsauge", "a": "talisman", "st": ["L"], "spr": "lantern",
+   "rar": "selten", "kerben": 2, "preis": 40,
+   "eigen": {"typ": "verwundbar_start", "v": 1},
+   "flavor": "Man opfert es für ein geheiltes Auge. Es sieht in die Richtung, in die du gleich gehen wirst.",
+   "cards": [{"n": "Angesehen werden", "c": 0, "vuln": 2, "funke": true}]
+  },
+  "docht": {
+   "n": "Docht der Erhörten", "a": "talisman", "st": ["F", "G"], "spr": "candle",
+   "rar": "reliquie", "kerben": 2, "preis": 90, "nodrop": true,
+   "eigen": {"typ": "brand_haelt"},
+   "flavor": "Ein Docht, der aus keiner Kerze mehr ragt. Er brennt, wenn du betest, und manchmal, wenn du es nicht tust.",
+   "cards": [{"n": "Erhört werden", "c": 1, "burn": 4, "heal": 2}]
+  }
+ },
+ "handgriffe": {},
+ "skripte": ["js/scenes/world/grotte.js"]
+}

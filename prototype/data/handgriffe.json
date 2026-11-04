@@ -1,1 +1,936 @@
-{"_doc":"Handgriffe: Karten ohne eigenen Stoff, die in Kerben von Items stecken (04-deckbau.md Abschnitt 2). Format in data/README.md.","handgriffe":{}}
+{
+ "_doc": "Handgriffe: Karten ohne eigenen Stoff, die in Kerben von Items stecken und deren Stoffe annehmen (04-deckbau.md Abschnitt 2). Kartenfelder wie items.json, dazu build (glutnest, brackwasser, bollwerk, aderlass, kettenwerk, hagel, neutral), rar (gewoehnlich, selten), t (Flavor), stoffe (Stoffe, zu denen der Handgriff passt: nur Gewichtung der Auswahl), start (Start-Handgriff, nicht im Beutepool), ziel (braucht ein Ziel), sonder (Sonderwirkung, Regeln in docs/auftrag-2/handgriffe.md).",
+ "handgriffe": {
+  "stossen": {
+   "n": "Stoßen",
+   "c": 1,
+   "atk": 5,
+   "start": true,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Gerade nach vorn, mit dem, was du gerade in der Hand hast."
+  },
+  "ausweichen": {
+   "n": "Ausweichen",
+   "c": 1,
+   "blk": 5,
+   "start": true,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Einen halben Schritt zur Seite, wie Großvater, wenn die Netze schlugen."
+  },
+  "durchatmen": {
+   "n": "Durchatmen",
+   "c": 0,
+   "draw": 1,
+   "start": true,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Einmal tief Luft holen. Die Luft hier unten schmeckt nach nichts, auch nicht nach Luft."
+  },
+  "abwarten": {
+   "n": "Abwarten",
+   "c": 0,
+   "blk": 3,
+   "start": true,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Stillhalten und zählen. Was sich bewegt, kommt von selbst."
+  },
+  "atemholen": {
+   "n": "Atemholen",
+   "c": 0,
+   "en": 1,
+   "verbraucht": true,
+   "build": "neutral",
+   "rar": "selten",
+   "t": "Die Luft anhalten, bis das Herz schneller schlägt als die Angst."
+  },
+  "kratzen": {
+   "n": "Kratzen",
+   "c": 0,
+   "atk": 3,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Mit den Nägeln, wenn sonst nichts mehr da ist. Sie wachsen hier unten schneller."
+  },
+  "aufhebeln": {
+   "n": "Aufhebeln",
+   "c": 1,
+   "atk": 4,
+   "strip": true,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Das Eisen in den Spalt, und dann mit dem ganzen Gewicht."
+  },
+  "nachsetzen": {
+   "n": "Nachsetzen",
+   "c": 1,
+   "atk": 4,
+   "draw": 1,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Hinterher, solange der andere noch schwankt."
+  },
+  "finte": {
+   "n": "Finte",
+   "c": 1,
+   "atk": 3,
+   "weak": 1,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Nach links zeigen, nach rechts schlagen. Es fällt jedes Mal darauf herein, als lerne es nicht."
+  },
+  "sich_sammeln": {
+   "n": "Sich sammeln",
+   "c": 1,
+   "blk": 4,
+   "heal": 2,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Die Hände auf die Knie, bis die Füße wieder dir gehören."
+  },
+  "umsehen": {
+   "n": "Umsehen",
+   "c": 1,
+   "draw": 2,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Sich einmal ganz umdrehen. Danach ist es nie ganz dieselbe Richtung."
+  },
+  "rundumschlag": {
+   "n": "Rundumschlag",
+   "c": 2,
+   "atk": 6,
+   "all": true,
+   "build": "neutral",
+   "rar": "selten",
+   "t": "Mit beiden Armen im Kreis, wie in der Hafenkneipe, wenn das Licht ausgeht."
+  },
+  "zittern": {
+   "n": "Zittern",
+   "c": 0,
+   "unspielbar": true,
+   "nodrop": true,
+   "build": "neutral",
+   "rar": "gewoehnlich",
+   "t": "Die Hand weiß etwas, das du nicht weißt."
+  },
+  "schueren": {
+   "n": "Schüren",
+   "c": 1,
+   "ziel": true,
+   "sonder": {
+    "art": "brand_verdoppeln"
+   },
+   "build": "glutnest",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Nicht pusten. Stochern, bis die Glut antwortet."
+  },
+  "funkenflug": {
+   "n": "Funkenflug",
+   "c": 0,
+   "funke": true,
+   "sonder": {
+    "art": "fx",
+    "fx": [
+     {
+      "op": "status",
+      "to": "all",
+      "status": "burn",
+      "v": 1
+     }
+    ]
+   },
+   "build": "glutnest",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Ein Schlag gegen das Scheit, und die Funken fliegen dorthin, wo keiner hinsieht."
+  },
+  "nachlegen": {
+   "n": "Nachlegen",
+   "c": 1,
+   "burn": 3,
+   "behalten": true,
+   "build": "glutnest",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Ein Scheit nach dem anderen, wie Großvater, der nie ein Feuer ausgehen ließ."
+  },
+  "glimmen": {
+   "n": "Glimmen",
+   "c": 1,
+   "atk": 2,
+   "burn": 2,
+   "funke": true,
+   "build": "glutnest",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Die Glut im hohlen Handteller tragen. Dass es nicht weh tut, ist das Falsche daran."
+  },
+  "zuendeln": {
+   "n": "Zündeln",
+   "c": 0,
+   "burn": 1,
+   "draw": 1,
+   "build": "glutnest",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Ein Streichholz, das am Daumennagel angeht, immer beim ersten Mal."
+  },
+  "qualm": {
+   "n": "Qualm",
+   "c": 0,
+   "burn": 1,
+   "weak": 1,
+   "build": "glutnest",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Nasses Holz aufs Feuer, und der Rauch zieht dahin, wo er soll."
+  },
+  "brandmal": {
+   "n": "Brandmal",
+   "c": 1,
+   "burn": 2,
+   "vuln": 1,
+   "ziel": true,
+   "build": "glutnest",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Das Eisen nur kurz aufdrücken. Die Haut merkt sich die Form länger als du."
+  },
+  "glut_halten": {
+   "n": "Glut in der Faust",
+   "c": 1,
+   "blk": 5,
+   "burn": 1,
+   "build": "glutnest",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Die Faust um die Kohle schließen und warten, wer zuerst loslässt."
+  },
+  "flaechenbrand": {
+   "n": "Flächenbrand",
+   "c": 2,
+   "atk": 3,
+   "all": true,
+   "sonder": {
+    "art": "fx",
+    "fx": [
+     {
+      "op": "status",
+      "to": "all",
+      "status": "burn",
+      "v": 3
+     }
+    ]
+   },
+   "build": "glutnest",
+   "rar": "selten",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Wie im Sommer 1921, als das Moor drei Wochen brannte und niemand löschen wollte."
+  },
+  "ofentuer": {
+   "n": "Ofentür",
+   "c": 3,
+   "ziel": true,
+   "sonder": {
+    "art": "brand_verdoppeln",
+    "alle": true
+   },
+   "build": "glutnest",
+   "rar": "selten",
+   "stoffe": [
+    "F"
+   ],
+   "t": "Den Riegel umlegen und zurücktreten. Was drinnen wartet, war nie Kohle."
+  },
+  "sickern": {
+   "n": "Sickern",
+   "c": 1,
+   "poison": 2,
+   "behalten": true,
+   "sonder": {
+    "art": "zugende_hand",
+    "fx": [
+     {
+      "op": "status",
+      "to": "all",
+      "status": "poison",
+      "v": 1
+     }
+    ]
+   },
+   "build": "brackwasser",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "V",
+    "W"
+   ],
+   "t": "Das Wasser nicht schöpfen. Es findet allein in jede Ritze."
+  },
+  "ansteckung": {
+   "n": "Ansteckung",
+   "c": 1,
+   "poison": 4,
+   "sonder": {
+    "art": "gift_wandert"
+   },
+   "build": "brackwasser",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "V",
+    "W"
+   ],
+   "t": "Wie die Frauen im Moor sagen: Was einer hat, haben bald alle im Haus."
+  },
+  "lauern": {
+   "n": "Lauern",
+   "c": 0,
+   "blk": 3,
+   "poison": 1,
+   "build": "brackwasser",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "V",
+    "W"
+   ],
+   "t": "Bis zur Brust im Schilf stehen und atmen wie das Moor."
+  },
+  "spucken": {
+   "n": "Spucken",
+   "c": 0,
+   "poison": 2,
+   "build": "brackwasser",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "V",
+    "W"
+   ],
+   "t": "Den bitteren Speichel, den man nach einem Tag im Torf im Mund hat. Er ist grün."
+  },
+  "umruehren": {
+   "n": "Umrühren",
+   "c": 0,
+   "poison": 1,
+   "draw": 1,
+   "build": "brackwasser",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "V",
+    "W"
+   ],
+   "t": "Mit dem Stock im Tümpel rühren, mit der Sonne, nie dagegen."
+  },
+  "schlick": {
+   "n": "Schlick werfen",
+   "c": 1,
+   "poison": 2,
+   "weak": 1,
+   "build": "brackwasser",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "V",
+    "W"
+   ],
+   "t": "Eine Handvoll Grund, warm und lebendig, mitten ins Gesicht."
+  },
+  "bodensatz": {
+   "n": "Bodensatz",
+   "c": 1,
+   "poison": 3,
+   "draw": 1,
+   "build": "brackwasser",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "V",
+    "W"
+   ],
+   "t": "Das Glas schwenken, bis der Satz aufsteigt und sich darin etwas umdreht."
+  },
+  "faulen_lassen": {
+   "n": "Faulen lassen",
+   "c": 2,
+   "ziel": true,
+   "sonder": {
+    "art": "gift_verdoppeln"
+   },
+   "build": "brackwasser",
+   "rar": "selten",
+   "stoffe": [
+    "V",
+    "W"
+   ],
+   "t": "Nichts tun. Warten. Das Moor ist geduldiger als jede Wunde."
+  },
+  "hinabziehen": {
+   "n": "Hinabziehen",
+   "c": 2,
+   "atk": 2,
+   "all": true,
+   "sonder": {
+    "art": "fx",
+    "fx": [
+     {
+      "op": "status",
+      "to": "all",
+      "status": "poison",
+      "v": 3
+     }
+    ]
+   },
+   "build": "brackwasser",
+   "rar": "selten",
+   "stoffe": [
+    "V",
+    "W"
+   ],
+   "t": "Unter Wasser nach den Füßen greifen und nicht loslassen. Man zieht nie allein."
+  },
+  "kanzelschlag": {
+   "n": "Kanzelschlag",
+   "c": 2,
+   "ziel": true,
+   "sonder": {
+    "art": "schaden_gleich_block"
+   },
+   "build": "bollwerk",
+   "rar": "selten",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Mit der flachen Hand aufs Pult, dass die ganze Gemeinde zusammenfährt, auch die in der letzten Bank, die keiner kennt."
+  },
+  "standhalten": {
+   "n": "Standhalten",
+   "c": 1,
+   "blk": 6,
+   "behalten": true,
+   "build": "bollwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Die Füße fest auf die Fliesen, wie der Küster, der 1912 die Tür hielt."
+  },
+  "schwelle": {
+   "n": "Schwelle",
+   "c": 0,
+   "funke": true,
+   "sonder": {
+    "art": "fx",
+    "fx": [
+     {
+      "op": "ward",
+      "v": 3
+     }
+    ]
+   },
+   "build": "bollwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Salz auf die Türschwelle, eine Linie, ohne abzusetzen."
+  },
+  "gegenstemmen": {
+   "n": "Gegenstemmen",
+   "c": 0,
+   "blk": 3,
+   "behalten": true,
+   "build": "bollwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Die Schulter ans Holz und nicht fragen, was auf der anderen Seite drückt."
+  },
+  "kreidekreis": {
+   "n": "Kreidekreis",
+   "c": 0,
+   "blk": 2,
+   "sonder": {
+    "art": "fx",
+    "fx": [
+     {
+      "op": "ward",
+      "v": 2
+     }
+    ]
+   },
+   "build": "bollwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Ein Kreis um die eigenen Füße. Er schließt sich, auch wenn du ihn nicht fertig ziehst."
+  },
+  "kniefall": {
+   "n": "Kniefall",
+   "c": 1,
+   "blk": 4,
+   "sonder": {
+    "art": "fx",
+    "fx": [
+     {
+      "op": "ward",
+      "v": 4
+     }
+    ]
+   },
+   "build": "bollwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Niederknien, damit es über dich hinweggeht."
+  },
+  "weihen": {
+   "n": "Weihen",
+   "c": 1,
+   "blk": 4,
+   "heal": 3,
+   "build": "bollwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Drei Kreuze auf die Stirn, mit Daumen und Spucke."
+  },
+  "wache": {
+   "n": "Wache halten",
+   "c": 1,
+   "blk": 4,
+   "behalten": true,
+   "sonder": {
+    "art": "zugende_hand",
+    "fx": [
+     {
+      "op": "ward",
+      "v": 3
+     }
+    ]
+   },
+   "build": "bollwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Die ganze Nacht sitzen, den Rücken zur Wand, die Kerze zwischen den Knien."
+  },
+  "schulterstoss": {
+   "n": "Schulterstoß",
+   "c": 1,
+   "ziel": true,
+   "sonder": {
+    "art": "schaden_gleich_block",
+    "anteil": 0.5
+   },
+   "build": "bollwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Hinter der Deckung hervor, mit allem Gewicht, das man noch hat."
+  },
+  "bannspruch": {
+   "n": "Bannspruch",
+   "c": 2,
+   "sonder": {
+    "art": "block_verdoppeln"
+   },
+   "build": "bollwerk",
+   "rar": "selten",
+   "stoffe": [
+    "G",
+    "S"
+   ],
+   "t": "Den Satz, den die Großmutter nur einmal im Leben sagte, laut und ohne Luft zu holen."
+  },
+  "bluteid": {
+   "n": "Bluteid",
+   "c": 0,
+   "en": 2,
+   "opfer": 3,
+   "build": "aderlass",
+   "rar": "selten",
+   "stoffe": [
+    "B"
+   ],
+   "t": "In die Hand schneiden und sie drücken. Der Schwur gilt, solange es tropft."
+  },
+  "aufschneiden": {
+   "n": "Aufschneiden",
+   "c": 0,
+   "draw": 2,
+   "opfer": 2,
+   "build": "aderlass",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "B"
+   ],
+   "t": "Ein Schnitt am Unterarm, und für einen Atemzug sieht man alles sehr klar."
+  },
+  "handschnitt": {
+   "n": "Handschnitt",
+   "c": 0,
+   "atk": 4,
+   "opfer": 1,
+   "build": "aderlass",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "B"
+   ],
+   "t": "Über die Handfläche ziehen, schnell, wie beim Fischeausnehmen."
+  },
+  "wunde_hand": {
+   "n": "Wunde Hand",
+   "c": 1,
+   "atk": 4,
+   "sonder": {
+    "art": "schaden_je_fehlleben",
+    "je": 5
+   },
+   "build": "aderlass",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "B"
+   ],
+   "t": "Mit der Hand zuschlagen, die schon offen ist. Sie spürt nichts mehr, nur die Richtung."
+  },
+  "durch_die_zaehne": {
+   "n": "Durch die Zähne",
+   "c": 1,
+   "atk": 5,
+   "sonder": {
+    "art": "lebensraub",
+    "anteil": 0.5
+   },
+   "build": "aderlass",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "B"
+   ],
+   "t": "Zubeißen und nicht loslassen. Es schmeckt nach dir."
+  },
+  "abbinden": {
+   "n": "Abbinden",
+   "c": 1,
+   "blk": 3,
+   "heal": 4,
+   "build": "aderlass",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "B"
+   ],
+   "t": "Den Gürtel um den Arm, fest, bis die Finger kalt werden."
+  },
+  "blutzoll": {
+   "n": "Blutzoll",
+   "c": 1,
+   "str": 2,
+   "self": 2,
+   "build": "aderlass",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "B"
+   ],
+   "t": "Zwei Tropfen in die Erde, damit sie dir die Hand führt."
+  },
+  "letzter_tropfen": {
+   "n": "Letzter Tropfen",
+   "c": 2,
+   "atk": 5,
+   "all": true,
+   "sonder": {
+    "art": "schaden_je_fehlleben",
+    "je": 4
+   },
+   "build": "aderlass",
+   "rar": "selten",
+   "stoffe": [
+    "B"
+   ],
+   "t": "Wenn kaum etwas übrig ist, ist das Wenige sehr scharf."
+  },
+  "rausch": {
+   "n": "Rausch",
+   "c": 0,
+   "atk": 5,
+   "self": 1,
+   "x": true,
+   "build": "aderlass",
+   "rar": "selten",
+   "stoffe": [
+    "B"
+   ],
+   "t": "Nicht mehr zählen. Weiter, bis jemand anderes für dich aufhört."
+  },
+  "umschlagen": {
+   "n": "Umschlagen",
+   "c": 0,
+   "draw": 1,
+   "funke": true,
+   "build": "kettenwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Die Karte wenden, ohne hinzusehen. Sie ist schon die richtige."
+  },
+  "einrasten": {
+   "n": "Einrasten",
+   "c": 0,
+   "blk": 2,
+   "kette": 1,
+   "build": "kettenwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Ein leises Klicken in den Schultern, als falle etwas an seinen Platz."
+  },
+  "antippen": {
+   "n": "Antippen",
+   "c": 0,
+   "atk": 2,
+   "kette": 1,
+   "build": "kettenwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Zwei Finger an die Schläfe des anderen, ganz sanft, im richtigen Augenblick."
+  },
+  "fortsetzen": {
+   "n": "Fortsetzen",
+   "c": 1,
+   "atk": 3,
+   "kette": 3,
+   "build": "kettenwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Den Schwung der letzten Bewegung nehmen und nicht aufhören."
+  },
+  "takt_halten": {
+   "n": "Takt halten",
+   "c": 1,
+   "blk": 3,
+   "kette": 2,
+   "funke": true,
+   "build": "kettenwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Mit dem Fuß zählen. Bei sieben fängt man wieder an, bei acht nicht."
+  },
+  "weiterreichen": {
+   "n": "Weiterreichen",
+   "c": 1,
+   "draw": 2,
+   "funke": true,
+   "build": "kettenwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Was du in der Hand hast, gleich weitergeben, bevor es schwer wird."
+  },
+  "schwungrad": {
+   "n": "Schwungrad",
+   "c": 1,
+   "en": 1,
+   "funke": true,
+   "build": "kettenwerk",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Einmal anstoßen. Dann dreht es sich allein, und du bist der, der mitdreht."
+  },
+  "gegenlauf": {
+   "n": "Gegenlauf",
+   "c": 1,
+   "sonder": {
+    "art": "stoff_joker"
+   },
+   "build": "kettenwerk",
+   "rar": "selten",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Gegen den Takt treten, damit das Werk hinter dir weiterläuft."
+  },
+  "wiederholung": {
+   "n": "Wiederholung",
+   "c": 2,
+   "sonder": {
+    "art": "wiederholen"
+   },
+   "build": "kettenwerk",
+   "rar": "selten",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Dieselbe Bewegung noch einmal, genau so. Die Welt hat sie beim ersten Mal nicht geglaubt."
+  },
+  "laeutwerk": {
+   "n": "Läutwerk",
+   "c": 3,
+   "atk": 4,
+   "all": true,
+   "kette": 3,
+   "build": "kettenwerk",
+   "rar": "selten",
+   "stoffe": [
+    "L"
+   ],
+   "t": "Alle Glocken auf einmal anschlagen, und jede läutet die nächste."
+  },
+  "anschlagen": {
+   "n": "Anschlagen",
+   "c": 0,
+   "vuln": 1,
+   "ziel": true,
+   "build": "hagel",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "E"
+   ],
+   "t": "Den Kolben an die Wange, ein Auge zu. Das andere sieht genauer, als dir lieb ist."
+  },
+  "durchladen": {
+   "n": "Durchladen",
+   "c": 0,
+   "str": 1,
+   "verbraucht": true,
+   "build": "hagel",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "E"
+   ],
+   "t": "Ein Ruck am Hebel, und die Hand ist für den Rest des Tages ruhig."
+  },
+  "nachladen": {
+   "n": "Nachladen",
+   "c": 1,
+   "str": 2,
+   "behalten": true,
+   "build": "hagel",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "E"
+   ],
+   "t": "Patrone für Patrone, ohne hinzusehen, so wie es im Graben ging."
+  },
+  "zweimal": {
+   "n": "Zweimal",
+   "c": 1,
+   "atk": 3,
+   "h": 2,
+   "build": "hagel",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "E"
+   ],
+   "t": "Einmal für dich, einmal für den, der hinter dir steht."
+  },
+  "kurze_stoesse": {
+   "n": "Kurze Stöße",
+   "c": 1,
+   "atk": 2,
+   "h": 3,
+   "build": "hagel",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "E"
+   ],
+   "t": "Drei kurze, wie beim Nebelsignal, damit es jeder versteht."
+  },
+  "zielen": {
+   "n": "Zielen",
+   "c": 1,
+   "vuln": 2,
+   "draw": 1,
+   "ziel": true,
+   "build": "hagel",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "E"
+   ],
+   "t": "Über Kimme und Korn auf die Stelle, an der bei Menschen das Herz sitzt."
+  },
+  "abrollen": {
+   "n": "Abrollen",
+   "c": 1,
+   "blk": 5,
+   "draw": 1,
+   "build": "hagel",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "E"
+   ],
+   "t": "Sich fallen lassen und rollen, wie man es nur einmal beigebracht bekommt."
+  },
+  "salve": {
+   "n": "Salve",
+   "c": 2,
+   "atk": 3,
+   "h": 2,
+   "all": true,
+   "build": "hagel",
+   "rar": "selten",
+   "stoffe": [
+    "E"
+   ],
+   "t": "Der Befehl kommt von hinten, und die ganze Reihe gehorcht. Auch die, die schon lange liegen."
+  },
+  "trommelfeuer": {
+   "n": "Trommelfeuer",
+   "c": 0,
+   "atk": 3,
+   "x": true,
+   "sonder": {
+    "art": "x_plus",
+    "v": 1
+   },
+   "build": "hagel",
+   "rar": "selten",
+   "stoffe": [
+    "E"
+   ],
+   "t": "Nicht zielen. Den Abzug halten, bis die Stille aufhört."
+  }
+ }
+}
