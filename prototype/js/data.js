@@ -17,7 +17,12 @@ async function loadData(base='data/',fetchJson){
  // Items, die ein Fragment freischaltet, sind erst danach im Fundpool (meta)
  FRAGS.forEach(f=>{if(f.schaltet&&f.schaltet.art==='item'&&ITEMS[f.schaltet.id])ITEMS[f.schaltet.id].meta=true;});
  HANDGRIFFE=(hg&&hg.handgriffe)||{};PAKETE=packs;let evAll=ev;
- for(const p of packs){BIOMES[p.id]={...p.biom,akt:p.akt};Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.id,...e})));}
+ for(const p of packs){
+  // Ergänzung eines vorhandenen Bioms (Auftrag 2, M6/M7): {"id":"hafen_plus","ergaenzt":"hafen","gegner_dazu":[…],"gegner_weg":[…],"fundpool_dazu":[…],foes,events,items}
+  if(p.ergaenzt){const b=BIOMES[p.ergaenzt];if(!b)continue;const weg=new Set(p.gegner_weg||[]);b.gegner=(b.gegner||[]).filter(g=>!weg.has(g)).concat((p.gegner_dazu||[]).filter(g=>!(b.gegner||[]).includes(g)));
+   if(p.fundpool_dazu)b.fundpool=[...new Set((b.fundpool||[]).concat(p.fundpool_dazu))];
+   Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.ergaenzt,...e})));continue;}
+  BIOMES[p.id]={...p.biom,akt:p.akt};Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.id,...e})));}
  EVENTS=evAll.map((e,i)=>({id:e.id||('alt_'+i),biom:e.biom||'alle',...e}));
 }
 const chip=k=>`<span class="st" style="background:${ST[k].c}" title="${ST[k].n}">${ST[k].s}</span>`;

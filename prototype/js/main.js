@@ -22,4 +22,4 @@ function skala(){const W=innerWidth,H=innerHeight;const k=Math.max(1,Math.min(Ma
 
 // Biom-Pakete: Hintergrund-Skripte nachladen (der Reihe nach) und Musik-Fassungen registrieren
 async function paketeEinbinden(){for(const p of PAKETE){for(const src of p.skripte||[])await new Promise(res=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>{console.warn('Skript fehlt: '+src);res();};document.head.appendChild(s);});
- if(p.musik&&typeof Music!=='undefined')Music.addBiome(p.biom.musik||p.id,p.musik);}}
+ if(p.musik&&typeof Music!=='undefined')Music.addBiome((p.biom&&p.biom.musik)||p.id,p.musik);}}

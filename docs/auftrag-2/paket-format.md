@@ -99,3 +99,20 @@ Format wie `data/events.json` (`id` mit Präfix `<biom>_`, `t`, `d`, `bild`, `o`
 4. Im Spiel: `index.html?dev=0&job=fischer&seed=3&springe=kampf_schwer&akt=<akt>` mit erzwungenem Biom (Dev → Cheats → Biom erzwingen, oder per `page.evaluate`: `newRun('fischer',3,{dev:true,route:[…]})`), Bildschirmfoto Kampf und Wächter.
 5. `node tools/biom-test.js <id> 10`: 0 Fehler, der Akt soll schaffbar, aber nicht leicht sein (etwa 6–9 von 10).
 6. Noten nach [06-ki-bilder.md](06-ki-bilder.md) Abschnitt 5 ehrlich in `docs/auftrag-2/biome/<id>.md`; alles unter 4 neu, bevor das Paket fertig ist.
+
+## Ergänzung eines alten Bioms
+
+Neue Gegner, Ereignisse und Items für ein Biom, das es schon gibt (Hafen, Moor, Kapelle, Salz, Stadt, Eis, Pforte), kommen als **Ergänzungspaket** `prototype/data/biome/<biom>_plus.json`, eingetragen in `index.json` wie jedes Paket. So bleibt `data/foes.json` unangetastet und mehrere Ergänzungen können gleichzeitig entstehen.
+
+```json
+{
+ "id": "hafen_plus", "ergaenzt": "hafen",
+ "gegner_dazu": ["kielholer"], "gegner_weg": [], "fundpool_dazu": ["…"],
+ "foes": { "kielholer": { … wie oben, "biom": "hafen" … } },
+ "events": [ … ], "items": { … }
+}
+```
+
+- `gegner_dazu` hängt an die Gegnerliste des Bioms an, `gegner_weg` nimmt alte heraus (nur, wenn ein neuer sie ersetzt).
+- Ereignisse bekommen automatisch `biom` = das ergänzte Biom.
+- Kein `biom`-Block, keine Musik, keine Skripte; Hintergrund und Palette des alten Bioms bleiben. Sprites wie gewohnt mit der Zonenpalette des alten Bioms (`hafen`, `moor`, `kapelle`, `salz`, `stadt`, `eis`).
