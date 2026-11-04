@@ -192,3 +192,7 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .voraus{font-size:calc(var(--u)*4.6);color:var(--violett);font-style:italic}
 .karte-geo{font-size:calc(var(--u)*5);color:#bfa870;font-style:italic;margin-bottom:calc(var(--u)*4)}
 .fig{width:calc(var(--u)*92)}
+/* Lesbarkeit auf hellen Orten (Salzstollen): dezente dunkle Unterlage, keine Box */
+#kopf{background:radial-gradient(ellipse at 30% 40%,rgba(0,0,0,.62),rgba(0,0,0,.35) 60%,transparent 75%);padding:calc(var(--u)*3);margin:calc(var(--u)*-3)}
+.feind .info{background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.55) 25%,rgba(0,0,0,.55) 80%,rgba(0,0,0,0));padding:calc(var(--u)*1) calc(var(--u)*2)}
+.feind .abs{background:radial-gradient(ellipse,rgba(0,0,0,.45),transparent 70%)}

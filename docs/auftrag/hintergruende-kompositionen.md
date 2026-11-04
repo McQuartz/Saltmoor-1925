@@ -44,7 +44,7 @@ Palette Hafen (blau), Augen `#ffe9a0`, warmes Gelb nur für Laternen und das ein
 ### Variante 2: Bootssteg
 
 - **Horizont** y 154, sehr tief. Fluchtpunkt (206, 154). Blickpunkt: niedrig, fast auf dem Wasser.
-- **Blickführung:** Der Steg läuft von rechts unten nach links in die See. Rechts am Ufer die Silhouette des Viertels, klein. Der Leuchtturm steht links auf einer Landzunge, der Kegel streicht nach rechts **über die Stadt**.
+- **Blickführung:** Ein breiter Anleger läuft aus dem Vordergrund zum Fluchtpunkt in die See, seine Planken sind die Fluchtlinien. Rechts am Ufer die Silhouette des Viertels, klein. Der Leuchtturm steht links auf einer Landzunge, der Kegel streicht nach rechts **über die Stadt**.
 - **Details und warum:** Ruderboote liegen am Steg festgemacht (links), ein Boot ist kieloben aufs Ufer gezogen. Pfähle mit Algenkante, unregelmäßig, weil oft geflickt. Eine Laterne am Stegende (für heimkehrende Boote).
 
 ### Wächter: Am Fuß des Leuchtturms
@@ -58,15 +58,15 @@ Palette Wald (violett) für Himmel, Bäume und Steine, Moor (grün) für Wasser 
 ### Variante 0: Bohlenweg
 
 - **Horizont** y 150. Der Himmel nimmt mehr als die Hälfte ein. Blickpunkt: auf dem Weg im Moor.
-- **Blickführung:** Ein Bohlenweg in S-Form läuft von unten links durch das Wasser nach rechts hinten und steigt zur Anhöhe hinauf, auf der der **Steinkreis** steht (etwa x 360, y 112). Der Weg ist keine Gerade, sondern folgt dem festen Boden.
+- **Blickführung:** Ein Bohlenweg in S-Form läuft von unten links durch das Wasser nach rechts hinten und steigt zur Anhöhe hinauf, auf der der **Steinkreis** steht (etwa x 428, y 100: rechts der üblichen Gegnerplätze und vor einem helleren Himmelsfleck, damit er sichtbar bleibt). Der Weg ist keine Gerade, sondern folgt dem festen Boden.
 - **Falsches Detail:** Alle Bäume neigen sich **zum Steinkreis**. Links stehende neigen sich nach rechts, die rechts hinter dem Kreis nach links. Mit fremdheit nimmt die Neigung zu. In den Wasserlöchern links vorne spiegeln sich **Sterne, die am Himmel nicht stehen** (eigene Muster, leicht grünlich). Am Himmel ein Sternbild, das man zu kennen glaubt (wie der Orion), aber der Gürtel hat vier Sterne.
 - **Details und warum:** Abgestorbene Erlen und Birken stehen dort, wo der Boden fest ist, also am Weg und auf der Anhöhe, nicht im offenen Wasser. Ein Torfstapel am Wegrand (hier wird gestochen). Bohlen sind teils gebrochen.
 
 ### Variante 1: Torfstich
 
-- **Horizont** y 122. Fluchtpunkt der Stichkanten (300, 122).
-- **Blickführung:** Ein ausgestochener Graben läuft schräg von rechts vorne nach links hinten, seine Stichwände sind getreppt. Der Steinkreis steht klein auf dem Horizont (x 300).
-- **Details und warum:** Torfsoden sind zum Trocknen zu kleinen Pyramiden gestapelt, nur an der trockenen Grabenkante. Ein Spaten steckt im Torf, wo zuletzt gestochen wurde. Eine Schubkarre. Wenige Bäume, alle zum Kreis geneigt. Dunkles Wasser im Grabengrund mit fremden Sternen.
+- **Horizont** y 124. Fluchtpunkt (236, 124). Wir stehen im ausgestochenen Graben.
+- **Blickführung:** Rechts steigt die Stichwand in drei Stufen auf und läuft zum Fluchtpunkt; links ist das Ufer niedrig und offen, dort steht der Steinkreis klein auf einer fernen Kuppe (x 196).
+- **Details und warum:** Torfsoden zu kleinen Pyramiden gestapelt, nur auf den Stufen (dort trocknen sie). Ein Spaten steckt in der frischen Stichkante vorne. Eine Schubkarre im Graben. Wenige Bäume links, alle zum Kreis geneigt. Pfützen im Grabengrund mit fremden Sternen.
 
 ### Variante 2: Im Steinkreis
 
@@ -84,26 +84,29 @@ Palette Kapelle (bernstein), Augen `#fff4d0`. Licht: Das Rundfenster ist die Hau
 
 ### Variante 0: Mittelschiff
 
+- **Licht-Nachtrag:** Die Wasserfläche ist eine echte schräge Ebene (Höhe = 0,5 − 0,12·X, mit fremdheit steiler). Daraus folgt die schräge Wasserkante an den Pfeilern und auf der Chorwand und der trockene Streifen ganz rechts.
 - **Horizont** y 140, Fluchtpunkt (240, 140), mittig: die einzige streng symmetrische Szene des Spiels.
 - **Blickführung:** Säulen links und rechts laufen zum Altar; dahinter das **Rundfenster** (Mitte x 240, y 70) mit grünem Maßwerk-Licht.
 - **Falsches Detail:** Das Wasser steht **schräg**: Die Wasserlinie an den Säulen ist links höher als rechts (Neigung etwa 10 Grad), die Bänke tauchen links tiefer ein. Zwei Kerzen brennen **unter Wasser** weiter, mit gebrochenem Licht.
 - **Details und warum:** Die Bankreihen ragen mit den Lehnen aus dem Wasser, die vorderen gekippt. Kerzen stehen auf Treibholz dort, wo gebetet wurde: am Altar und an der zweiten Bank links (dort kniete jemand). Gewölberippen oben laufen aus dem Bild (die Ecke links oben bleibt dunkles Gewölbe).
 
-### Variante 1: Seitenschiff
+### Variante 1: Seitenkapelle
 
-- **Horizont** y 150, Fluchtpunkt weit links (70, 150). Schrägansicht.
-- **Blickführung:** Rechts öffnen sich Arkadenbögen ins Mittelschiff, durch den hintersten sieht man einen Teil des Rundfensters. Links an der Wand ein Seitenaltar mit einem Kerzenständer voller Votivkerzen (hier beten die Leute).
-- **Details und warum:** Ein Beichtstuhl halb im Wasser. Die Wasserlinie an den Arkadenpfeilern steigt nach links an.
+- **Horizont** y 150, Fluchtpunkt (300, 150). Frontal vor der Seitenwand.
+- **Blickführung:** Ein großer Spitzbogen öffnet sich in eine Seitenkapelle. Darin ein Seitenaltar mit einer Figur in der Nische und einem gestuften Ständer voller Votivkerzen: hier beten die Leute, darum ist hier das meiste warme Licht.
+- **Falsches Detail:** Weil das Wasser schräg steht, ist der Boden links überflutet und rechts trocken. Die nasse Kante läuft schräg quer durch die Kirche. Eine Hochwassermarke an der Wand ist ebenso schräg. Grünes Licht vom (unsichtbaren) Rundfenster fällt als Band von rechts unten nach links **oben**. Zwei Kerzen brennen unter Wasser.
+- **Details und warum:** Ein Beichtstuhl rechts (auf dem trockenen Teil), Pfeiler links vorne als Rahmen.
 
 ### Variante 2: Empore
 
-- **Horizont** y 96, Aufsicht. Blickpunkt auf der Empore über dem Wasser.
-- **Blickführung:** Vorne der Holzboden der Empore mit Brüstung (auf ihm stehen die Gegner). Hinter der Brüstung fällt der Raum ab: unten das schräge Wasser mit winzigen Bänken. Gegenüber, auf Augenhöhe, das Rundfenster groß.
+- **Horizont** y 100. Blickpunkt auf der Empore, hoch über dem Wasser.
+- **Blickführung:** Vorne der Dielenboden der Empore (auf ihm stehen die Gegner), dahinter quer die Brüstung mit Docken. Durch die Lücken sieht man tief unten das Wasser mit winzigen Bankreihen (eigene, viel höhere Perspektive). Gegenüber, fast auf Augenhöhe, das Rundfenster; Pfeilerköpfe und Bögen ragen aus der Tiefe.
 - **Details und warum:** Gesangbuchpult und Orgelpfeifen am rechten Rand (Empore = Orgel). Der Krämer (Küster) steht hier.
 
 ### Wächter: Vor dem Altar
 
-- Altar nah, Rundfenster riesig (Radius ~78) mittig oben, Stufen aus dem Wasser.
+- Gleicher Aufbau wie das Mittelschiff, aber nah: Chorwand bei Tiefe 8, Rundfenster groß (Radius ~70) mittig oben, Altar mit Stufen aus dem Wasser.
+- **Übergang** nutzt diesen Ausschnitt und öffnet hinter dem Altar die Treppe nach unten, grün beleuchtet.
 
 ## Akt 3a: Die Salzstollen
 
@@ -180,12 +183,13 @@ Palette Eis, Augen `#ff4a4a`. Licht: Die Höhlendecke ist ein Himmel ohne Sterne
 
 Palette Grund (türkis), Augen `#ff6ad8`. **Licht von links** (gespiegelt). Der Umriss der Pforte wandert langsam zwischen Magenta und Türkis.
 
-### Variante 0 bis 2
+### Variante 0 bis 2 (vereinfacht)
 
-- **V0:** Pforte in der Mitte, der Horizont wölbt sich zur Szene hin. Links und rechts Treppen, die im Kreis zu sich selbst führen. Der Boden spiegelt.
-- **V1:** Näher an einer der Treppen, die Pforte klein hinten.
-- **V2:** Alles gespiegelt: der Boden ist ein zweiter Himmel.
-- **Wächter (Finale):** die Pforte nah und groß.
+- **V0:** Pforte (hohe Linse aus Randlicht, Farbe wandert in sechs festen Stufen zwischen Magenta und Türkis) in der Mitte. Innen Ringe, die immer kleiner werden (nah und unendlich fern). Der Horizont wölbt sich an den Rändern nach oben. Links und rechts Stufenringe auf Schäften: Treppen, die im Kreis zu sich selbst führen. Der Boden spiegelt die Pforte. Funken treiben langsam auf die Öffnung zu.
+- **V1:** Nah an einem großen Stufenring links, die Pforte klein rechts hinten.
+- **V2:** Der Boden ist ein zweiter Himmel: Sterne oben und gespiegelt unten, die Pforte doppelt.
+- **Wächter (Finale):** die Pforte nah und groß, hinter dem Boss.
+- **ankunft:** V0 ruhig: die Pforte innen hell und offen, kein Sog.
 
 ## Andere Knoten (Arten)
 
@@ -203,4 +207,30 @@ Alle Arten nutzen den Ort ihres Bioms, mit anderem Ausschnitt:
 
 ## Prüfung
 
-(wird nach den Bildschirmfotos ergänzt)
+
+Bilder: [bilder/M8/](bilder/M8/). Je Biom `<biom>-kampf-v0.png` (×2, mit Gegner-Platzhaltern), `<biom>-varianten.png` (V0, V1, V2, Wächter), `<biom>-fremdheit.png` (0 / 0,5 / 1), `<biom>-arten.png` (weg, rast, werkstatt, krämer, ereignis, wandbild, fund, übergang), dazu `uebersicht.png`, `sonderszenen.png` (strand, ankunft, titel), `reliefs.png`, `bildrate.txt`. Erzeugt mit `node tools/hintergruende-fotos.js --arten --fremd`.
+
+### Prüffragen je Biom (Kampf, Variante 0)
+
+| Biom | Ort ohne Text? | Wahrzeichen / falsches Detail sichtbar? | ≥ 4 Tiefenebenen? | Nebel < 1/3? | Klischee? | Stil wie Figuren? | Organisch oder Raster? |
+|---|---|---|---|---|---|---|---|
+| Hafen | Ja: Speicherflucht, Kai, Kran, Leuchtturm, Netze. | Ja. Leuchtturm rechts frei von Gegnern, Kegel sucht über den Dächern. Zugemauerte Fenster lesbar, das eine warme Fenster sitzt hoch über den Köpfen. | Ja (Himmel, Mole/Turm, hintere Speicher und Kran, vordere Speicher mit Laterne, Kai, Dalben vorne). | Ja, ein Band von etwa 25 %. | Nein. | Ja: Randlicht oben rechts, Fase, Dither. Speicherfassaden etwas flach. | Organisch gesetzt; die Fensterraster sind Architektur und darum regelmäßig. Pfützen wirken teils fleckig. |
+| Moorwald | Ja: toter Wald, Bohlenweg, Wasserlöcher. | Steinkreis rechts auf der Anhöhe gut, Neigung der Bäume zur Mitte erkennbar, aber nur, wenn man es weiß. Die fremden Sterne im Wasser lesen sich eher als Glühwürmchen. Das Sternbild mit vier Gürtelsternen braucht einen zweiten Blick. | Ja. | Ja. | Nein (kein Mond, keine Grabsteine; die Steine sind Menhire). | Ja, Zweige sind etwas zu hell. | Organisch: Haine, S-Weg, Binsen nur an Wasserrändern. |
+| Kapelle | Ja, sofort. | Ja: Rundfenster grün, Strahlen steigen nach oben, Wasserkante schräg, Kerzen unter Wasser (animiert). | Ja. | Ja. | Nein. | Ja; die Quaderwand ist etwas unruhig. | Symmetrisch gewollt; Bänke verdreht, Kerzen dort, wo gebetet wurde. |
+| Salzstollen | Ja: hell, Schienen, Lore, Holzstempel, Grubenlampe. | Säulen lesen sich als gewachsen. Fossilien mit Augen nach unten klar, nur klein. Die Lore steht (statisch, sie fährt nicht). | Ja. | Ja. | Nein. | Ja, sticht als einziges helles Biom heraus. | Organisch: Säulen ungleich in der Tiefe, Kruste aus Voronoi-Zellen. |
+| Namenlose Stadt | Ja: Fries, flache Türen, niedrige Stufen. | Reliefband über die ganze Breite gut. Figuren lesen sich eher als Strichmännchen mit Knicken als „zu viele Gelenke“. Aufsteigender Sand ist nur in Bewegung zu sehen. | Ja (V0 eher flach, der frontale Aufbau ist Absicht). | Ja. | Nein; das „Große“ im Band erinnert entfernt an eine Sonne. | Ja. | Unregelmäßige Abstände im Band; die Stufenbänder sind gewollt gleichmäßig. |
+| Schwarzes Eis | Ja: Eisfläche, gefrorene Brecher, Höhlendecke. | Umriss unter dem Eis jetzt nur zu ahnen, an derselben Stelle in allen Eis-Szenen. Die Narbe vor einer Welle fällt kaum auf. | Ja. | Ja. | Nein. | Ja. | Organisch; die Risse laufen als Fluchtlinien, sind aber gleichmäßig verteilt. |
+| Pforte | Ja, als „anderer Ort“. | Pforte mit wandernder Farbe, Licht von links, Treppenringe. | Mittel: nur drei klar getrennte Ebenen. | Ja. | Grenzwertig: Linsenform und Ringe sind eher Science-Fiction als Lovecraft. | Ja, gespiegelt. | Bewusst konzentrisch. **Vereinfacht.** |
+
+### Gesamturteil
+
+- **Stark:** Die sieben Orte sind im Übersichtsbild sofort unterscheidbar, nach Farbe und nach Aufbau: Diagonale, Senke mit Anhöhe, kippende Symmetrie, Untersicht, Fries, Aufsicht, konzentrisch. Die Wahrzeichen stehen außerhalb der üblichen Gegnerplätze oder über den Köpfen. Kapelle und Salz sind am stärksten.
+- **Schwach:** Pforte (vereinfacht) und die Moor-Variante Torfstich (die Stichwand ist zu dunkel). Weite Bodenflächen sind in Hafen und Stadt noch ruhig; das ist für die Karten-UI unten gut, wirkt ohne UI aber leer. Wandbild-Reliefs (`World.relief`) sind nur ein Grundgerüst. Die Varianten sind andere Stellen desselben Ortes, aber V0 ist je Biom deutlich am gründlichsten.
+- **Bildrate:** Mit Ebenen, Animation, 4 Platzhaltern, Vordergrund und Luft braucht ein Bild in headless Chromium (Software-Rendering) 0,3 bis 0,6 ms, im Hafen 2 ms (der Leuchtturmkegel wird neu berechnet, wenn er sich bewegt). Das ist weit unter 16,7 ms, also 60 fps. Der Aufbau einer Szene dauert 35 bis 220 ms, einmal pro Knoten. Werte in `bilder/M8/bildrate.txt`.
+
+## Technik (wie gebaut)
+
+- `World.build(biom, {variante, seed, fremdheit, art})` liefert `{w, h, rand, ebenen[5], vorne, reihen[3], lichter, zeichneAnimiert, zeichneVordergrund, zeichneHintergrund, zeichneEbene, zeichne}`.
+- **Abweichung:** Jede Ebene ist 504 × 294 groß (12 px Rand, damit beim Verschieben kein leerer Streifen entsteht) und trägt `x: -12, y: -12`. Zu zeichnen also bei `(e.x - round(kamera.x*parallax), e.y - round(kamera.y*parallax))`. Bequemer: `szene.zeichneHintergrund(ctx, t, kamera)`, dann die Gegner, dann `szene.zeichneVordergrund(ctx, t, kamera)`.
+- Der Boden ist je nach Tiefe auf die Ebenen 2, 3 und 4 verteilt (`K.split`). So überdeckt der nahe Boden nichts, was weiter hinten steht.
+- `Math.random` nur in Partikeln, Möwen, Funken und Wasserglitzern. Alles andere hängt am Seed (splitmix32) oder ist fest gesetzt.

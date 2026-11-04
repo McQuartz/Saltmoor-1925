@@ -454,17 +454,17 @@ B.feuer = function (K, x, y) {
 B.werkbank = function (K, x, y, d) {
   const m = B.maske(); m.rect(x - 34, y - 22, 68, 5); m.rect(x - 31, y - 17, 4, 17); m.rect(x + 27, y - 17, 4, 17); m.rect(x - 31, y - 9, 62, 2);
   m.rect(x - 22, y - 30, 12, 8); m.kap(x + 4, y - 23, x + 18, y - 25, 1, 1); m.kap(x + 16, y - 28, x + 20, y - 22, 2, 2);
-  B.form(K.e[3], m, K.mat(0, { ton: 1.6, schatten: 2 }));
+  B.form(K.e[4], m, K.mat(0, { ton: 1.6, schatten: 2 }));
   const s = B.maske(); s.ell(x, y + 1, 40, 3); B.form(K.e[4], s, K.mat(0, { ton: 0, rand: 0, fase: 0 }));
-  if (d !== false) B.flamme(K, x - 16, y - 31, { p: .3 });
+  if (d !== false) { B.flamme(K, x - 16, y - 31, { p: .5 }); K.glut(x - 16, y - 30, 40, '#4a3010', .8, [3, 4]); }
 };
 B.stand = function (K, x, y) {
   const m = B.maske();
   m.rect(x - 30, y - 26, 60, 6); m.rect(x - 28, y - 20, 56, 20); m.kap(x - 32, y - 72, x - 32, y, 1.6, 1.6); m.kap(x + 32, y - 76, x + 32, y, 1.6, 1.6);
   m.poly([[x - 40, y - 70], [x + 40, y - 78], [x + 42, y - 70], [x - 38, y - 62]]);
   for (let i = 0; i < 4; i++) m.ell(x - 18 + i * 12 + (i % 2) * 2, y - 30 - (i % 2) * 2, 4 + (i % 2), 4);
-  B.form(K.e[3], m, K.mat(0, { ton: 1.5, schatten: 2 }));
-  B.flamme(K, x + 24, y - 60, { p: .3 }); for (const L of [K.e[3], K.e[4]]) B.gluehen(L, x + 24, y - 58, 40, '#4a3010', .8);
+  B.form(K.e[4], m, K.mat(0, { ton: 1.5, schatten: 2 }));
+  B.flamme(K, x + 24, y - 60, { p: .5 }); for (const L of [K.e[3], K.e[4]]) B.gluehen(L, x + 24, y - 58, 40, '#4a3010', .8);
 };
 B.fundstueck = function (K, x, y, pal) {
   const m = B.maske(); m.rect(x - 14, y - 12, 28, 12); m.poly([[x - 15, y - 12], [x - 12, y - 18], [x + 12, y - 18], [x + 15, y - 12]]);

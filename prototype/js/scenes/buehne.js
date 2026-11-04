@@ -34,7 +34,7 @@ function visOf(e){let v=BU.vis.get(e.uid);if(!v){v={hit:0,kx:0,lunge:0,dying:0,g
 // Position eines Gegners in der Szene (Fußpunkt, Größe), aus Aufstellung und Reihen der Szene
 function enemyBox(e){const sz=BU.sz||szeneHolen();const rh=sz.reihen[e.reihe??2]||sz.reihen[2];const sp=e.sprite&&SPRITES[e.sprite];
  let w=96,h=120;if(sp&&sp.meta){w=sp.meta.w;h=sp.meta.h;}else if(e.spr==='boss'){w=160;h=140;}else{w=64;h=80;}
- const sk=e.rang==='normal'?rh.skala:1;return{x:Math.round(e.x*SW),y:rh.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel:rh.nebel,kopf:sp&&sp.meta&&sp.meta.kopf?rh.y-Math.round((sp.meta.fuss[1]-sp.meta.kopf[1])*sk):rh.y-Math.round(h*sk*.92)};}
+ const sk=e.rang==='normal'?rh.skala:1;return{x:Math.round(e.x*SW),y:rh.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel:rh.nebel,kopf:sp&&sp.meta&&sp.meta.kopf!=null?rh.y-Math.round((sp.meta.fuss[1]-(Array.isArray(sp.meta.kopf)?sp.meta.kopf[1]:sp.meta.kopf))*sk):rh.y-Math.round(h*sk*.92)};}
 const FX={
  pos(e){return enemyBox(e);},
  hit(e,d,col){if(!e)return;const v=visOf(e);const p=enemyBox(e);v.hit=.11;v.kx=Math.min(8,3+d/3);v.anim='treffer';v.at=0;burst(p.x,p.y-p.h*.55,col||'#c8483a',Math.min(24,4+d),1.5);
@@ -63,8 +63,8 @@ function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.fr
  const atm=Math.sin(t*.35)*1.2;BU.cam.x+=(((BU.maus.x-240)/240)*4-BU.cam.x)*.05;BU.cam.y+=(((BU.maus.y-135)/135)*2+atm-BU.cam.y)*.05;
  BU.shake*=Math.pow(.002,dt||.016);const sx=(Math.random()-.5)*BU.shake,sy=(Math.random()-.5)*BU.shake;const cam={x:BU.cam.x+sx,y:BU.cam.y+sy};
  g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.fillStyle='#000';g.fillRect(0,0,SW,SH);
- sz.ebenen.forEach(L=>{g.drawImage(L.canvas,Math.round(-cam.x*L.parallax),Math.round(-cam.y*L.parallax));});
- try{sz.zeichneAnimiert&&sz.zeichneAnimiert(g,t,cam);}catch(e){}
+ if(sz.zeichneHintergrund){try{sz.zeichneHintergrund(g,t,cam);}catch(e){}}
+ else{sz.ebenen.forEach(L=>{g.drawImage(L.canvas,(L.x||0)-Math.round(cam.x*L.parallax),(L.y||0)-Math.round(cam.y*L.parallax));});try{sz.zeichneAnimiert&&sz.zeichneAnimiert(g,t,cam);}catch(e){}}
  if(S.enemies&&['fight','reward'].includes(S.phase)){const list=[...S.enemies].sort((a,b)=>(a.reihe-b.reihe)||(a.x-b.x));list.forEach(e=>zeichneGegner(g,e,dt,t,cam));}
  if(typeof PFX!=='undefined')try{PFX.zeichne(g,dt);}catch(e){}
  try{sz.zeichneVordergrund&&sz.zeichneVordergrund(g,t,cam);}catch(e){}

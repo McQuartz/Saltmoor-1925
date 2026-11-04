@@ -1,0 +1,7 @@
+hafen: 2.04 ms/Bild, Aufbau 71 ms
+moor: 0.39 ms/Bild, Aufbau 56 ms
+kapelle: 0.59 ms/Bild, Aufbau 133 ms
+salz: 0.30 ms/Bild, Aufbau 62 ms
+stadt: 0.32 ms/Bild, Aufbau 78 ms
+eis: 0.28 ms/Bild, Aufbau 85 ms
+pforte: 0.61 ms/Bild, Aufbau 35 ms

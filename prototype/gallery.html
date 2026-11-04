@@ -4,102 +4,78 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Saltmoor Galerie</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<style>
-/* Galerie: jeder Baustein des Spiels einzeln, zum Anschauen und Weiterentwerfen */
-body{overflow-y:auto}
-#gal{max-width:1180px;margin:0 auto;padding:24px 16px 80px}
-#gal>header h1{font-family:var(--fd);font-size:18px;color:var(--parch);margin:0 0 8px}
-#gal>header p{color:var(--dim);margin:0 0 6px;font-size:19px}
-#gal nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
-#gal nav a{font-family:var(--fd);font-size:9px;color:var(--eld);text-decoration:none;border:2px solid #2e3a35;padding:7px 9px;background:#0b0f0e}
-#gal section{margin-top:34px}
-#gal h2{font-family:var(--fd);font-size:12px;color:var(--parch);border-bottom:2px solid #2e3a35;padding-bottom:8px;margin:0 0 6px}
-#gal .lead{color:var(--dim);font-size:18px;margin:0 0 14px}
-#gal code{font-family:monospace;font-size:14px;color:#b9c9bf;background:#111716;padding:1px 4px}
-.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
-.grid.big{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
-.tile{background:#0b0f0e;border:2px solid #1f2826;padding:12px;display:flex;flex-direction:column;gap:6px}
-.tile canvas.spr{image-rendering:pixelated;width:100%;background:radial-gradient(ellipse at 50% 85%,#1a2422,#060807 70%);border:1px solid #1a2220}
-.tile .n{font-family:var(--fd);font-size:10px;color:var(--parch);line-height:1.5}
-.tile .meta{font-size:16px;color:#9aa39a;line-height:1.1}
-.tile .id{font-family:monospace;font-size:12px;color:#5a6a64}
-.tile a{color:var(--eld);font-size:16px}
-.items{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
-.items .tile{flex-direction:row;align-items:center;padding:8px}
-.items img{width:48px;height:48px;image-rendering:pixelated;flex:none}
-.items .n{font-size:8px;overflow-wrap:anywhere}
-.items .tile>div{min-width:0}
-.row{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end}
-.spec{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
-.spec>.lbl{font-family:var(--fd);font-size:8px;color:#6a7a74;margin-bottom:14px}
-.cq{container-type:inline-size;width:min(100%,900px);position:relative}
-.cq .info{position:static;transform:none}
-.cardrow{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;padding:10px 0 20px}
-.cardrow .card{position:relative;transform:none;margin:0}
-.scenes canvas{width:100%;image-rendering:pixelated;border:1px solid #1a2220}
-#demoToast{position:relative;left:auto;top:auto;transform:none;width:100%;min-height:140px}
-.chainDemo{position:relative;height:330px}
-.chainDemo #chainbox{position:absolute;right:0;left:0;top:0;bottom:0;width:auto}
-button.sm{font-size:9px;padding:8px 10px}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&family=Limelight&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/spiel.css">
+<link rel="stylesheet" href="css/galerie.css">
 </head>
 <body>
+<!-- pixel.js holt sich document.getElementById('scene') (altes 320×180-Erbe für zones.js und foes.js), darum hier versteckt -->
 <canvas id="scene" width="320" height="180" style="display:none"></canvas>
-<div id="gal">
+<div id="seite">
  <header>
-  <h1>SALTMOOR · GALERIE</h1>
-  <p>Alle Bausteine des Prototyps einzeln: Gegner, Boss-Entwürfe, Items, Oberfläche, Szenen. Alles hier kommt aus denselben Dateien wie das Spiel.</p>
-  <p>Zum Spiel: <a href="index.html" style="color:var(--eld)">index.html</a> · Gegner, Varianten und Welten per Zufall erzeugen: <a href="lab.html" style="color:var(--eld)">lab.html</a></p>
-  <nav><a href="artboard.html" style="color:#ffd23f;border-color:#8a6a1a">Artboard: alles im Spiel ›</a><a href="lab.html" style="color:#ffd23f;border-color:#8a6a1a">Sprite-Labor (prozedural) ›</a><a href="#bosse">Boss-Entwürfe</a><a href="#gegner">Gegner</a><a href="#items">Items</a><a href="#ui">Oberfläche</a><a href="#karten">Karten</a><a href="#feedback">Schaden und Meldungen</a><a href="#szenen">Szenen</a><a href="#stoffe">Stoffe</a></nav>
+  <h1>SALTMOOR</h1>
+  <div class="unter">GALERIE · DIE BAUSTEINE DES SPIELS</div>
+  <p>Jeder Baustein einzeln und so, wie das Spiel ihn zeichnet: Oberfläche (Variante A), Pixelzeichen, alle Gegner mit ihren Animationen, die sieben Biome als Szenen und ganz unten die alten Zeichner. Alles kommt aus denselben Dateien wie das Spiel; die Beispiele laufen über einen kleinen Beispielzustand <code>S</code>.</p>
+  <p>Zum Spiel: <a href="index.html">index.html</a> · Der ganze Inhalt als Liste: <a href="artboard.html">artboard.html</a> · Hintergrund-Labor: <a href="hintergrund.html">hintergrund.html</a></p>
  </header>
+ <nav class="sprung"><a href="#ui">Oberfläche</a><a href="#zeichen">Pixelzeichen</a><a href="#gegner">Gegner</a><a href="#biome">Biome</a><a href="#alt">Alt</a><a href="artboard.html" class="hell">Artboard ›</a></nav>
 
- <section id="bosse"><h2>BOSS-ENTWÜRFE</h2>
-  <p class="lead">Zeichner in <code>js/sprites/foes.js</code> → <code>BOSS_VARIANTS</code>. Welcher im Spiel kommt, steht in <code>data/foes.json</code> bei <code>boss.variant</code>. Zum Ausprobieren im Kampf den Link unter dem Entwurf öffnen. Beim Auge folgt die Pupille der Maus.</p>
-  <div class="grid big" id="bossGrid"></div></section>
+ <section class="abschnitt" id="ui"><h2>OBERFLÄCHE <small>js/ui/oberflaeche.js · css/spiel.css</small></h2>
+  <p class="einl">Zuerst alles zusammen, wie im Kampf: Szene aus <code>World.build</code>, Gegner aus den Sheets (Bühne <code>js/scenes/buehne.js</code>), darüber <code>gegnerHtml()</code> und <code>kopfHtml()</code>, darunter <code>leisteKampf()</code>. Darunter jeder Baustein einzeln in seinen Zuständen. Maßstab: 1 Szenenpixel = 2 Bildschirmpixel (wie bei 1280 × 720).</p>
+  <div id="demo" class="demo"></div>
+  <h3 class="unter">KARTEN <small>cardHtml()</small></h3><div class="kartenreihe" id="karten"></div>
+  <h3 class="unter">LEBENSBALKEN <small>barHtml(leben, max, block, vorschau)</small></h3><div class="reihe" id="balken"></div>
+  <h3 class="unter">ABSICHTEN <small>absicht(gegner)</small></h3><div class="reihe" id="absichten"></div>
+  <h3 class="unter">ZUSTÄNDE <small>gi(zustand) + Zahl, wie unter dem Gegner</small></h3><div class="reihe" id="zustaende"></div>
+  <h3 class="unter">ENERGIE, KNÖPFE, STOFFRAD</h3><div class="reihe" id="knoepfe"></div><div class="reihe" id="raeder"></div>
+  <h3 class="unter">AUSRÜSTUNG <small>gearHtml(), slotHtml()</small></h3><div id="gear"></div>
+  <h3 class="unter">FUNDE <small>itemPick()</small></h3><div class="panelbox" id="picks"></div>
+  <h3 class="unter">WEG-WAHL, ZETTEL, WANDBILD <small>wegHtml(), eventHtml(), wandbildHtml()</small></h3><div class="reihe oben" id="panels"></div>
+ </section>
 
- <section id="gegner"><h2>GEGNER</h2>
-  <p class="lead">Zeichner in <code>js/sprites/foes.js</code> → <code>FOE_DRAW</code>, Werte in <code>data/foes.json</code>. Jeder Gegner ist 64×80 Pixel, die Füße stehen bei 32,78.</p>
-  <div class="grid" id="foeGrid"></div></section>
+ <section class="abschnitt" id="zeichen"><h2>PIXELZEICHEN <small>js/ui/zeichen.js · GLY</small></h2>
+  <p class="einl">9 × 9 Pixel, immer ganzzahlig vergrößert (hier 1×, 2×, 4× und 6×). Form und Farbe tragen beide, damit man die Stoffe auch ohne Farbsehen unterscheidet.</p>
+  <div id="zeichenBox"></div></section>
 
- <section id="items"><h2>ITEMS</h2>
-  <p class="lead">12×12-Pixel-Sprites in <code>js/sprites/items.js</code> (<code>SPR</code>, Farbtausch in <code>SWAP</code>), Werte und Karten in <code>data/items.json</code>. Gold umrandet = selten mit zwei Stoffen.</p>
-  <div class="items" id="itemGrid"></div></section>
+ <section class="abschnitt" id="gegner"><h2>GEGNER <small>data/foes.json · assets/gegner/*.png</small></h2>
+  <p class="einl">Alle Sheets mit allen Animationen (Format: <code>docs/auftrag/sprites.md</code>), 2× vergrößert, auf dem Nebel ihres Bioms. Die Augen glühen wie im Spiel nachträglich. Knöpfe schalten die Animation je Gegner um, oben für alle. Konzepte ausführlich: <code>docs/auftrag/gegner.md</code>.</p>
+  <div class="animknoepfe" id="alleAnim" style="margin-bottom:12px"></div>
+  <div id="gegnerBox"></div></section>
 
- <section id="ui"><h2>OBERFLÄCHE</h2>
-  <p class="lead">Bausteine aus <code>js/ui/components.js</code>. Jede Funktion bekommt Daten und gibt HTML zurück; Aussehen in <code>style.css</code>.</p>
-  <div class="cq" id="uiBox"></div></section>
+ <section class="abschnitt" id="biome"><h2>BIOME <small>World.build(biom, {variante, seed, fremdheit, art})</small></h2>
+  <p class="einl">Je Biom die drei Kampf-Varianten und die Wächter-Szene mit ihrem Wächter auf der vorderen Reihe. Die Szenen werden nacheinander gebaut und nur animiert, solange sie zu sehen sind.</p>
+  <div id="biomBox"></div></section>
 
- <section id="karten"><h2>KARTEN</h2>
-  <p class="lead"><code>cardHtml(karte, optionen)</code>. Zustände: normal, reagiert mit der Karte davor, zu teuer, Doppel-Stoff (kostet mehr Energie).</p>
-  <div class="cq"><div class="cardrow" id="cardRow"></div></div></section>
-
- <section id="feedback"><h2>SCHADEN UND MELDUNGEN</h2>
-  <p class="lead">Wie Treffer, Heilung und Block aussehen, stellt <code>js/ui/feedback.js</code> ein. Farben der schwebenden Zahlen: <code>FLOAT_COL</code> in components.js.</p>
-  <div class="row" id="fbRow"></div>
-  <div class="cq" style="margin-top:14px"><div class="grid big"><div class="tile"><div class="n">Meldung (toast)</div><div id="toast" class="demoT" style="position:relative;left:auto;top:auto;transform:none;width:100%;min-height:150px"></div></div>
-   <div class="tile"><div class="n">Ketten-Anzeige</div><div class="chainDemo"><div id="chainbox"></div></div></div></div></div></section>
-
- <section id="szenen"><h2>SZENEN</h2>
-  <p class="lead">Hintergründe aus <code>js/scenes/zones.js</code>, gemalt mit den Helfern in <code>js/scenes/pixel.js</code>. Welche Tiefe welche Zone ist, steht in <code>data/balance.json</code> → <code>zones</code>.</p>
-  <div class="grid big scenes" id="sceneGrid"></div></section>
-
- <section id="stoffe"><h2>STOFFE UND REAKTIONEN</h2>
-  <p class="lead">Aus <code>data/stoffe.json</code> und <code>data/reactions.json</code>.</p>
-  <div id="stoffBox"></div></section>
+ <section class="abschnitt" id="alt"><h2>ALT <small>js/sprites/foes.js · js/scenes/zones.js</small></h2>
+  <p class="einl">Nicht mehr im Spiel. Die alten Gegner-Zeichner (64 × 80, Boss-Entwürfe 160 × 140) und die alten Zonen (320 × 180) bleiben nur hier zum Vergleich.</p>
+  <h3 class="unter">ALTE GEGNER UND BOSS-ENTWÜRFE</h3><div class="raster schmal" id="altGegner"></div>
+  <h3 class="unter">ALTE ZONEN</h3><div class="raster zwei" id="altZonen"></div></section>
 </div>
-<div id="vig"></div>
 
 <script src="js/data.js"></script>
+<script src="js/core/rng.js"></script>
 <script src="js/core/bus.js"></script>
 <script src="js/core/state.js"></script>
 <script src="js/core/rules.js"></script>
+<script src="js/core/combat.js"></script>
+<script src="js/core/run.js"></script>
+<script src="js/core/meta.js"></script>
 <script src="js/scenes/pixel.js"></script>
 <script src="js/sprites/items.js"></script>
 <script src="js/sprites/foes.js"></script>
 <script src="js/scenes/zones.js"></script>
-<script src="js/ui/components.js"></script>
+<script src="js/scenes/world/basis.js"></script>
+<script src="js/scenes/world/hafen.js"></script>
+<script src="js/scenes/world/moor.js"></script>
+<script src="js/scenes/world/kapelle.js"></script>
+<script src="js/scenes/world/salz.js"></script>
+<script src="js/scenes/world/stadt.js"></script>
+<script src="js/scenes/world/eis.js"></script>
+<script src="js/scenes/world/pforte.js"></script>
+<script src="js/scenes/buehne.js"></script>
+<script src="js/ui/zeichen.js"></script>
+<script src="js/ui/einstellungen.js"></script>
+<script src="js/ui/oberflaeche.js"></script>
 <script src="js/gallery.js"></script>
 </body>
 </html>

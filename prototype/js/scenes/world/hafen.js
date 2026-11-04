@@ -122,7 +122,7 @@ function boden(K, P, istKai, o) {
     const fx = X / cx + off - col, fz = Z / cz - row, pxw = k * cx, pzh = k * cz * k / P.h;
     const fern = 1 - (y - P.vy) / P.h;
     let t = .2 + .12 * B.hash(col, row, s) + Math.pow(fern, 5) * .6 - (1 - fern) * .1;
-    const nass = B.fbm(X * 1.1, Z * 1.6, s + 3, 2); if (nass > .66 && !o.trocken) return .42 + fern * .35 + (Math.sin(y * 2.1 + X * 3) > .6 ? .12 : 0);
+    const nass = B.fbm(X * .9, Z * 1.4, s + 3, 3); if (nass > .7 && !o.trocken) return .42 + fern * .35 + (Math.sin(y * 2.1 + X * 3) > .6 ? .12 : 0);
     if (pxw > 3) { if (fx * pxw < .9 || fz * Math.max(1, pzh) < .7) t -= .2; else if ((1 - fz) * Math.max(1, pzh) < 1.2 && fx > .4) t += .13; }
     if (o.schiene) for (const sx of o.schiene) if (Math.abs(X - sx) * k < .55 + k * .004) t = .62 + Math.pow(1 - (y - P.vy) / P.h, 3) * .3;
     if (o.rinne && Math.abs(X - o.rinne) * k < 1.2 + k * .02) t = .14;
@@ -234,7 +234,7 @@ function kai(K, o) {
   const H1 = [
     { X: -15, Za: 4.6, Zb: 8.2, H: 9.6 + r.j(.3), giebel: 2.6, treppe: true, eb: 3, tiefe: .06, achsen: 3, luke: 1 },
     { X: -15.8, Za: 8.2, Zb: 11.6, H: 8.4 + r.j(.3), giebel: 2.2, eb: 3, tiefe: .16, achsen: 3 },
-    { X: -14.6, Za: 11.6, Zb: 16.5, H: 9.3, giebel: 2.6, treppe: true, eb: 2, tiefe: .3, achsen: 3, luke: 1, stirn: -15.8, licht: [3, 2] },
+    { X: -14.6, Za: 11.6, Zb: 16.5, H: 11.4, giebel: 2.6, treppe: true, eb: 2, tiefe: .3, achsen: 3, luke: 1, stirn: -15.8, licht: [5, 2] },
     { X: -15.4, Za: 16.5, Zb: 23, H: 7.6 + r.j(.4), giebel: 2, eb: 2, tiefe: .42, achsen: 3 },
     { X: -15, Za: 23, Zb: 34, H: 8.2, giebel: 2.4, treppe: true, eb: 1, tiefe: .55, achsen: 4 },
     { X: -14, Za: 34, Zb: 60, H: 5, giebel: 1.4, eb: 1, tiefe: .66, achsen: 3 }
@@ -436,5 +436,64 @@ function bauen(o) {
   B.artZusatz(K, { x: info.mitte[0], y: info.mitte[1] });
   return K.fertig();
 }
+// ---------- Sonderszenen ----------
+// Strand: Morgen am Strand von Saltmoor, Möwen. Hier endet ein Run (nach der Niederlage).
+function strand(o) {
+  const K = B.kontext(pal, Object.assign({}, o, { art: 'strand' })), r = K.r, P = B.persp(240, 120); K.split = [150, 166];
+  const MORGEN = ['#1a2232', '#2a3448', '#3e4a60', '#56627a', '#727c90', '#9098a6', '#b0b2b4', '#ccc4b4', '#e0d4bc'];
+  B.feld(K.e[0], -M, -M, W + M, 122, MORGEN, (x, y) => { const v = (y + M) / (122 + M); return v * .7 + Math.exp(-(((x - 380) / 120) ** 2)) * v * v * .35 + (B.fbm(x * .008, y * .05, 3, 3) - .5) * .12; });
+  // Dunstbänke, unten vom Morgen beleuchtet
+  B.feld(K.e[0], -M, 40, W + M, 110, MORGEN, (x, y) => { const c = B.fbm(x * .006, y * .05, 8, 3) - .55 + Math.sin((y - 40) / 70 * Math.PI) * .1; if (c < 0) return -1; return .45 + (y - 40) / 70 * .2 + (c < .03 ? .15 : 0); });
+  // Saltmoor fern links auf der Landzunge, der Leuchtturm aus (Morgen)
+  const lz = B.maske(); lz.poly([[-M, 124], [-M, 104], [30, 100], [70, 102], [110, 108], [150, 116], [190, 122]]); K.form(1, lz, .55, { ton: 1, fase: 1 });
+  let x = 4; for (let i = 0; i < 8; i++) { const w = 8 + r.f(0, 8), hh = 6 + r.f(0, 10), m = B.maske(), yb = 103 + i * 1.8; m.rect(x, yb - hh, w, hh + 3); m.poly([[x - 1, yb - hh], [x + w / 2, yb - hh - 4], [x + w + 1, yb - hh]]); K.form(1, m, .5, { ton: 1.1, fase: 1 }); x += w + r.f(0, 4); }
+  const kt = B.maske(); kt.rect(46, 70, 6, 30); kt.poly([[45, 70], [49, 58], [53, 70]]); K.form(1, kt, .5, { ton: 1.1, fase: 1 });
+  leuchtturm(K, 1, 150, 112, 34, 6, .5, { lit: 99, fenster: 2 });
+  // See mit Brandungslinien, nasser Sand mit Flutlinien und Spiegelung
+  const SEE = ['#1a2232', '#2a3448', '#3e4a60', '#56627a', '#7a8494', '#a0a4a8'];
+  const SAND = ['#1a1814', '#2a2620', '#3e382e', '#544c3e', '#6e6452', '#8a806a', '#a89c84'];
+  const ufer = x => 168 + Math.sin(x * .012 + 1) * 10 + Math.sin(x * .037) * 4;
+  B.feld(K.e[1], -M, 120, W + M, 200, SEE, (x, y) => .55 - (y - 120) / 80 * .3 + (Math.sin(y * 1.6 + B.rausch2(x * .02, y * .2, 2) * 5) > .8 ? .2 : 0) + Math.exp(-(((x - 380) / 60) ** 2)) * .2);
+  K.boden(140, H + M, SAND, (x, y) => { if (y < ufer(x)) return -1; const f = (y - ufer(x)) / 100; let t = .5 - f * .3 + (B.fbm(x * .03, y * .08, 4, 2) - .5) * .2; for (const d of [6, 15, 29]) if (Math.abs(y - ufer(x) - d - Math.sin(x * .05 + d) * 2) < .8) t += .2; if (y - ufer(x) < 10 && Math.sin(y * 2) > 0) t += .12; return t; });
+  // Treibholz und Tang, Fußspuren aus dem Wasser
+  const th = B.maske(); th.pfad([[300, 214], [330, 210], [356, 213]], 3, 2); th.kap(320, 211, 314, 202, 1.2, .8); K.form(4, th, 0, { k: SAND.slice(0, 4), r: ['#8a806a', '#e0d4bc'], ton: 2 });
+  for (let i = 0; i < 12; i++) { const q = i / 12, px = 210 + q * 30 + (i & 1 ? 3 : -3), py = 176 + q * 70; K.e[K.eb(py)].set(px, py, B.pk(SAND[1])); K.e[K.eb(py)].set(px + 1, py, B.pk(SAND[1])); }
+  // Brandung: Schaumlinien laufen an und ziehen sich zurück
+  K.anim.push({ p: .3, f(ctx, t, ox, oy) { for (let k = 0; k < 3; k++) { const ph = (t * .12 + k / 3) % 1, dy = Math.sin(ph * Math.PI) * 10 - 6; ctx.fillStyle = k === 1 ? '#e0dcd0' : '#a0a4a8'; for (let x = -M; x < W + M; x += 2) { const y = Math.round(ufer(x) + dy - k * 3 + Math.sin(x * .1 + t + k) * 1.2); if (Math.sin(x * .23 + k * 2 + t * .5) > -.3) ctx.fillRect(x + ox, y + oy, 2, 1); } } } });
+  // Möwen: kleine Winkel, gleiten in Kreisen
+  const mw = []; for (let i = 0; i < 6; i++) mw.push({ cx: 120 + Math.random() * 300, cy: 40 + Math.random() * 60, rx: 20 + Math.random() * 60, ry: 6 + Math.random() * 14, v: .15 + Math.random() * .25, ph: Math.random() * 6.28 });
+  K.luft.push({ p: .4, f(ctx, t, ox, oy) { ctx.fillStyle = '#1a2232'; for (const g of mw) { const a = t * g.v + g.ph, x = Math.round(g.cx + Math.cos(a) * g.rx) + ox, y = Math.round(g.cy + Math.sin(a) * g.ry) + oy, f = Math.sin(t * 5 + g.ph) > 0 ? 1 : 0; ctx.fillRect(x - 2, y - f, 2, 1); ctx.fillRect(x + 1, y - f, 2, 1); ctx.fillRect(x, y, 1, 1); } } });
+  B.partikel(K, { n: 30, farben: ['#a0a4a8', '#e0dcd0'], vx: -6, vy: -1, wob: 3, wf: .5, y0: 150, y1: 210, p: .6 });
+  K.reihen = [{ y: 182, skala: .9, nebel: .3 }, { y: 198, skala: 1, nebel: .12 }, { y: 214, skala: 1, nebel: 0 }];
+  return K.fertig();
+}
+// Titel: Saltmoor bei Nacht von der Küste
+function titel(o) {
+  const K = B.kontext(pal, Object.assign({}, o, { art: 'titel' })), r = K.r; K.split = [200, 230];
+  himmel(K, 150, 360, { baender: 1.8 });
+  wasser(K, 1, 148, H + M, null);
+  // Saltmoor am Hang gegenüber: Häuser gestaffelt, Kirchturm, viele kleine Lichter
+  const hang = B.maske(); hang.poly([[40, 150], [80, 140], [140, 124], [200, 116], [260, 120], [310, 134], [360, 146], [380, 152], [40, 152]]); K.form(1, hang, .5, { ton: 1, fase: 1 });
+  const lichter = [];
+  for (let i = 0; i < 34; i++) {
+    const x = 70 + r.f(0, 290), yb = 152 - Math.max(0, 34 - Math.abs(x - 210) * .25) + r.f(-3, 4), w = 7 + r.f(0, 9), hh = 6 + r.f(0, 9), m = B.maske();
+    m.rect(x, yb - hh, w, hh + 3); m.poly([[x - 1, yb - hh], [x + w / 2, yb - hh - 4 - r.f(0, 3)], [x + w + 1, yb - hh]]); K.form(1, m, .45 - (yb - 118) / 200, { ton: 1.1, fase: 1 });
+    if (r() < .55) lichter.push([Math.round(x + 2 + r.f(0, w - 4)), Math.round(yb - hh + 3 + r.f(0, hh - 4))]);
+  }
+  const kt = B.maske(); kt.rect(204, 70, 10, 50); kt.poly([[202, 70], [209, 46], [216, 70]]); K.form(1, kt, .42, { ton: 1.1, fase: 1 });
+  for (const [x, y] of lichter) { K.e[1].set(x, y, B.pk(WARM)); B.gluehen(K.e[1], x, y, 5, '#3a2a10', .9); }
+  for (const [x, y] of lichter) if (r() < .5) spiegel(K, 1, x, 152, 152 + (y > 140 ? 18 : 12), '#6a5028', .6);
+  const lamp = leuchtturm(K, 1, 420, 150, 70, 11, .45, { lit: 1, fenster: 3, fels: true });
+  // Klippe vorne links, Gras am Rand
+  const kl = B.maske(); kl.poly([[-M, H + M], [-M, 168], [40, 160], [100, 166], [150, 182], [200, 208], [230, H + M]]); K.form(4, kl, 0, { ton: 1.1, fase: 2, verlauf: .4, muster: (x, y) => (B.rausch2(x * .1, y * .1, 3) - .5) * .7 });
+  const gr = B.maske(); for (let x = -M; x < 200; x += 3) { const y = x < 40 ? 162 - x * .05 : x < 100 ? 160 + (x - 40) * .1 : 166 + (x - 100) * .32; gr.kap(x, y + 2, x + Math.sin(x) * 2, y - 3 - B.hash(x, 0, 2) * 5, .6, .4); } K.form(5, gr, 0, { ton: 1, fase: 0, rand: 1 });
+  kegel(K, lamp[0], lamp[1], Math.PI + .2, .3, 440);
+  B.wasserGlanz(K, { x0: 200, x1: W + M, y0: 154, y1: H, n: 80, farben: ['#2a405c', '#4a6a8a'], p: .05, pow: 1.5 });
+  B.partikel(K, { n: 40, farben: ['#2a3a52', '#3c5070'], vx: -10, vy: 50, laenge: 2 });
+  return K.fertig();
+}
+World._spezial.strand = strand;
+World._spezial.titel = titel;
+
 World._biome.hafen = { pal, build: bauen, reliefStil: { figuren: 4, gelenke: 3, knick: .5 } };
 })();

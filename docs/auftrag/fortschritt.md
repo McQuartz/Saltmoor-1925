@@ -14,7 +14,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt. Eine neue 
 | M5 Meta und Progression | fertig | Konzept B, 21 Fragmente, Figuren, Startvarianten, Stufen, Tagebuch, Ankunft, Strand |
 | M6 Sprite-Pipeline (KI-Sprites) | fertig | Ersatzweg: per Skript gezeichnet, 41 Sheets, Prüfung 0 Verstöße, Idle/Angriff/Treffer/Tod |
 | M7 Gegner-Besetzung | fertig | 16 Typen mit je zwei Varianten, 6 Wächter, Boss mit 3 Phasen; drei Typen im Mindeststand |
-| M8 Hintergründe | offen | |
+| M8 Hintergründe | fertig | sieben Orte mit eigener Komposition, je 3 Varianten + Wächter-Szene, alle Knoten-Szenen, Labor; 60 fps |
 | M9 Inhalte und Balance | offen | |
 | M10 Politur | offen | |
 | M11 Abschluss | offen | |
@@ -178,6 +178,14 @@ Je normalem Typ zwei Varianten, Wächter 128 × 160, Boss 160 × 160. Alle acht 
 **Abnahme:** Jedes Biom hat 2–3 Typen und einen Wächter, die Pforte den Boss. Gegner-Regel nach Tiefe sichtbar (Hafen/Moor menschlich, Kapelle verwandelt, Salz/Stadt fremd, Eis Nachahmer, Pforte formlos). Autospieler 50 Seeds ohne Fehler. Kontaktbögen je Biom in `bilder/M7/<biom>.png` (alle Typen und Varianten), im Spiel `bilder/M7/im-spiel-*.png`.
 
 **Einschätzung:** Die Favoriten und die Wächter (Lotse, Glockenmutter, Wurm) tragen den Look. Schwach und im Mindeststand: Erbauer-Mumie (liest sich als Raupe), Nachgeher (wie ein Tisch mit hängendem Kopf), Ertrunkener (Silhouette ein Klumpen). Der Tiefling sieht eher nach Leuchtbrille als nach Fisch aus, das Nest eher nach Spinne als nach Hügel. Galerie mit Konzepten folgt in M10.
+
+### M8 Hintergründe (fertig, Pforte vereinfacht)
+
+Gebaut von einem Hintergrund-Subagenten, eingebunden von mir. Kompositionen zuerst in Worten (`docs/auftrag/hintergruende-kompositionen.md`, je Ort und Variante Horizont, Blickpunkt, Licht, Wahrzeichen, falsches Detail, wo was steht und warum; unten die ehrlich beantworteten Prüffragen je Bild). Renderer `prototype/js/scenes/world/` (`basis.js` + eine Datei je Biom; Strand und Titel in `hafen.js`, Ankunft in `pforte.js`): Formen aus parametrisierten Funktionen mit Fase, Randlicht oben rechts, Kontaktschatten, Bayer-Dither, Perspektive, Lichtkegel, Glühen, Nebel nur als Band/Tiefenhinweis, Partikel. Jede Ebene einmal gerendert, dann nur verschoben. Je Ort drei Varianten (andere Stellen desselben Ortes), Wächter-Szene, eigene Ausschnitte für Weg, Rast (Feuer), Werkstatt (Werkbank), Krämer (Stand), Ereignis, Wandbild, Fund, Übergang (Kirchmauer, Kirchpfad, Treppe hinter dem Altar, Spalt im Salz/Stadt, Loch im Eis). `fremdheit` steigt mit der Ebene im Akt. Labor: `prototype/hintergrund.html` (Biom, Variante, Art, Seed, fremdheit, Ebenen an/aus, PNG speichern). Die alten Zonen-Szenen sind aus dem Spiel raus.
+
+**Abnahme:** Bildschirmfoto je Biom mit Gegnern im Spiel: `bilder/M8/im-spiel-*.png`; Übersicht aller sieben: `bilder/M8/uebersicht.png`; drei Varianten je Ort: `bilder/M8/<biom>-varianten.png`; Arten und fremdheit: `<biom>-arten.png`, `<biom>-fremdheit.png`. Prüffragen je Bild: in der Kompositions-Datei. Bildrate im Spiel (Kampf, drei Gegner, headless Chromium, 240 Bilder): Hafen, Kapelle, Salz, Eis je 16,6 ms im Mittel, 95-%-Wert 16,7–16,8 ms → 60 fps. Szene allein (Labor): 0,3–2 ms pro Bild, Aufbau einmalig 35–220 ms.
+
+**Einschätzung:** Die Orte sind jetzt klar unterscheidbar und haben echte Tiefe; am stärksten Kapelle (grünes Rundfenster von unten, schräges Wasser, Kerzen unter Wasser) und Salzstollen (hell, gewachsene Säulen, Fossilien, die nach unten blicken). Hafen gut (Kegel sucht landeinwärts, zugemauerte Fenster), Eis gut (gefrorene Brecher, Umriss unter dem Eis immer an derselben Stelle). Schwach: Moor-Variante Torfstich zu dunkel, die fremden Sterne im Wasser lesen sich wie Glühwürmchen; in der Stadt wirken die Relieffiguren wie Strichmännchen; die Pforte wirkt eher nach Science-Fiction als nach Lovecraft (vereinfacht, wie erlaubt). Variante 0 ist je Ort am gründlichsten. Im hellen Salzstollen braucht die Schrift eine dunkle Unterlage (eingebaut).
 
 ## Entscheidungen unterwegs
 
