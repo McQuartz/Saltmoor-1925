@@ -27,10 +27,10 @@ module.exports = {
     const falten = [[54, 60, 50, 110], [61, 58, 60, 111], [67, 62, 70, 109]].map(([a, b, c, d], i) => C(a + X, b + T, c, d, 0.7, 1.4, 'dunkel', { noRim: true }));
     // Mühlsteinkragen: flache Scheibe, leicht von oben gesehen
     const KR = v.kragen, kx = 55 + X, ky = sch - 1;
-    const kragen = E(kx, ky, KR, KR * 0.36, 'haut', { pf: 'bevel', tone: 0.12 });
+    const kragen = E(kx, ky, KR, KR * 0.36, 'haut', { pf: 'bevel', tone: 0.3 });
     // Kopf liegt auf dem Kragen, auf der Seite, Gesicht zu dir (links)
     const hx = v.kopfLiegt ? kx - KR + 8 + nick : kx - 3, hy = v.kopfLiegt ? ky - 5 : ky - 10;
-    const kopf = v.kopfLiegt ? E(hx, hy, 7, 5, 'haut') : E(hx, hy - 2, 5.5, 7, 'haut');
+    const kopf = v.kopfLiegt ? E(hx, hy - 1, 8, 5.5, null) : E(hx, hy - 2, 5.5, 7, 'haut');
     const haar = v.kopfLiegt ? Pg([[hx + 3, hy - 5], [hx + 8, hy - 3], [hx + 8, hy + 3], [hx + 4, hy + 4]], null, { rd: 1 }) : Pg([[hx - 5, hy - 8], [hx + 5, hy - 9], [hx + 6, hy - 4], [hx - 4, hy - 5]], null, { rd: 1 });
     const hut = v.hut ? [Pg([[kx + 6, ky - 2], [kx + 12, ky - 4], [kx + 14, ky - 15], [kx + 9, ky - 16], [kx + 6, ky - 12]], null, { rd: 1 })] : []; // der Hut steht noch auf dem Kragen, wo der Kopf war
     // Arme: der hintere ruht am Leib, der vordere hält die Stange
@@ -69,10 +69,16 @@ module.exports = {
       K.licht(P, [...armV, handV], { c: 'r1', c2: 'k3' });
       K.schatten(P, [kragen], { d: [0, 2] });
       K.licht(P, [beutel], { c: 'r1', c2: 'k3' });
-      K.licht(P, [kopf], { c: 'r1', c2: null });
+      K.licht(P, [kopf], { c: 'r1', c2: 'k3' });
+      if (v.kopfLiegt) {
+        K.schatten(P, [kopf], { d: [0, 1] });
+        // Haar fällt vom Scheitel über den Tellerrand
+        for (let i = 0; i < 4; i++) { const x0 = r(hx - 7 + i * 1.2), y0 = r(hy - 2 + i); P.line(x0, y0, x0 - 2 + (i & 1), r(ky + 4 + i * 1.5), i % 2 ? 'k0' : 'k1'); }
+        P.set(r(hx - 8), r(ky + 5), 'r1');
+      }
       // Mühlsteinkragen: Pfeifenfalten als Strahlen, Licht auf der oberen Kante
       for (let a = 0; a < Math.PI * 2; a += Math.PI / 11) {
-        for (let q = 0.45; q <= 1; q += 0.1) { const x = r(kx + Math.cos(a) * KR * q), y = r(ky + Math.sin(a) * KR * 0.38 * q); if (P.get(x, y) >= 1 && P.get(x, y) <= 4) P.set(x, y, 'k1'); }
+        for (let q = 0.45; q <= 1; q += 0.1) { const x = r(kx + Math.cos(a) * KR * q), y = r(ky + Math.sin(a) * KR * 0.38 * q); if (P.get(x, y) >= 1 && P.get(x, y) <= 4) P.set(x, y, 'k2'); }
         const x = r(kx + Math.cos(a + 0.14) * KR * 0.9), y = r(ky + Math.sin(a + 0.14) * KR * 0.38 * 0.9);
         if (P.get(x, y) >= 1 && P.get(x, y) <= 4) P.set(x, y, Math.sin(a) < 0 ? 'r1' : 'k3');
       }
@@ -89,7 +95,11 @@ module.exports = {
       for (let x = 44; x <= 72; x += 3) P.auf(x, 111, (x / 3 | 0) % 2 ? 'r1' : 'k3');
       // Gesicht: liegt quer, die Augen übereinander statt nebeneinander
       if (augenAn) {
-        if (v.kopfLiegt) { const ex = r(hx - 4), ey = r(hy - 2); P.glow(ex + 0.5, ey + 2, 4.5, 0.8); P.set(ex, ey, 'kern'); P.set(ex, ey - 1, 'glut'); P.set(ex + 1, ey + 4, 'glut'); P.set(ex + 1, ey + 5, 'glutDim'); P.line(ex - 2, ey + 1, ex - 2, ey + 3, 'k0'); augen.push([ex, ey], [ex + 1, ey + 4]); }
+        if (v.kopfLiegt) { // Kopf liegt auf dem rechten Ohr: Scheitel links, Kinn rechts, Augen übereinander, Mund senkrecht
+          const ex = r(hx - 1), ey = r(hy - 4); P.glow(ex + 0.5, ey + 3, 4.5, 0.8);
+          P.set(ex, ey, 'kern'); P.set(ex, ey + 1, 'glut'); P.set(ex, ey + 4, 'glut'); P.set(ex, ey + 5, 'glutDim');
+          P.line(r(hx + 4), r(hy - 4), r(hx + 4), r(hy + 1), 'k0', true); P.auf(r(hx + 2), r(hy - 2), 'k3');
+          augen.push([ex, ey], [ex, ey + 4]); }
         else { const ex = r(hx - 3), ey = r(hy - 2); P.set(ex, ey, 'kern'); P.set(ex + 3, ey, 'glut'); augen.push([ex, ey], [ex + 3, ey]); }
       }
       // Glöckchen am Bügel: glänzt, schwingt beim Schlag

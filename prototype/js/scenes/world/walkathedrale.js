@@ -129,49 +129,44 @@ function schiff(K, cfg) {
 }
 
 // =====================================================================
-// Variante 1: Der Kiefer. Seitlicher Blick in den Schädel: Der Unterkiefer steigt von links vorn als riesiger Bogen
-// nach rechts oben aus dem Bild, dahinter der zweite. Von oben hängen die Barten wie ein Vorhang aus Pfeifen.
-// Rechts das Lager der Expedition (Zelt, Schlitten) als Maßstab. In der Ferne die Schädelkuppel, ein Auge glimmt.
-function kiefer(K, cfg) {
-  const fr = K.fr, P = B.persp(200, 150); K.split = [160, 176];
-  eisWand(K, 470, 60, { unten: 120 });
-  lichtRiss(K, 448, 30, 60, 1.9);
-  // Ferne: Schädelkuppel mit Augenhöhle, in der Mark glimmt (Wahrzeichen: das Herz ist hier nur Glimmen in der Ferne)
-  const sk = B.maske(); sk.ell(150, 150, 170, 70); sk.rect(-M, 150, 330, 20); sk.ell(260, 128, 14, 9, 0);
-  K.form(1, sk, .2, knochenMat(.5, { verlauf: .5, muster: (px, py, d) => (Math.abs(frac((px * .4 + py) / 11) - .5) < .07 ? -.5 : 0) + (B.hash(px >> 2, py >> 2, 6) < .1 ? -.4 : 0) + (d > 3 ? -.3 : 0) }));
-  B.gluehen(K.e[1], 260, 128, 26, MARK_G, 1); K.e[1].set(260, 128, B.pk(MARK)); K.e[1].set(261, 128, B.pk(MARK_D)); K.licht(260, 128, MARK, 40, .5);
-  herzFerne(K, 96, P.q(0, 0, 14)[1], 18, 26, 1);
-  // Zweiter Kiefer (hinten), dann der vordere: Bögen von links unten nach rechts oben
-  const bogen = (x0, y0, x1, y1, bauch, r0, r1, eb, tiefe, ton) => { const pts = []; for (let k = 0; k <= 16; k++) { const q = k / 16; pts.push([x0 + (x1 - x0) * q, y0 + (y1 - y0) * q - Math.sin(q * Math.PI) * bauch]); } const m = B.maske(); m.pfad(pts, r0, r1); K.form(eb, m, tiefe, knochenMat(ton)); return pts; };
-  bogen(60, 172, 500, -20, 70, 8, 12, 2, .3, 1.6);
-  const vk = bogen(-40, 262, 530, -50, 120, 18, 26, 3, .02, 1);
-  // Zahnreihe auf dem vorderen Kiefer: neue Zähne, die nach innen wachsen (falsches Detail)
-  const z = B.maske(); for (let k = 3; k < 15; k += 1) { const [x, y] = vk[k], [x2, y2] = vk[k + 1], a = Math.atan2(y2 - y, x2 - x) - Math.PI / 2, l = 9 + (k % 3) * 4 + fr * 6; z.kap(x + Math.cos(a) * 18, y + Math.sin(a) * 18, x + Math.cos(a + .5) * (18 + l), y + Math.sin(a + .5) * (18 + l), 2.6, .6); }
-  K.form(3, z, .05, knochenMat(1.6));
-  // Barten von oben: lange Platten, Kanten mit Randlicht, unten ausgefranst
-  for (let i = 0; i < 26; i++) {
-    const x = 130 + i * 13 + (i % 3) * 3, len = 40 + (i * 37 % 23) + Math.sin(i) * 10, m = B.maske();
-    m.poly([[x - 4, -M], [x + 4, -M], [x + 3, len - 4], [x + 1, len + 3], [x - 1, len], [x - 3, len + 4]]);
-    K.form(i % 2 ? 2 : 3, m, i % 2 ? .3 : .12, { k: HOLZ.map(c => B.mix(c, '#141826', .5)), ton: 2, fase: 1, rand: 2, muster: (px, py) => (px % 3 === 0 ? -.6 : 0) });
+// Variante 1: Die Flanke. Von außen, auf dem Eis neben dem Wal: Die Rippen stehen als riesige Bögen in einer Reihe
+// in die Tiefe, oben läuft die Wirbelsäule wie ein Grat. Man sieht, dass er so groß ist wie ein Berg. Im Bauch
+// glimmt das Herz durch die Rippen. Vorn das Lager der Expedition (Zelt, Schlitten, Lampe) als Maßstab.
+function flanke(K, cfg) {
+  const fr = K.fr, P = B.persp(360, 150); K.split = [160, 176];
+  eisWand(K, 460, 40, { unten: 120 });
+  lichtRiss(K, 452, 10, 70, 1.85);
+  // Herz im Inneren, durch die Rippen sichtbar
+  const [hx, hy] = P.q(3.2, 1.8, 7); herzFerne(K, hx, hy + 30, 34, 52, 1);
+  // Rippen: von der Wirbelsäule (rechts oben, X 3,5 / Y 9) nach außen gewölbt zum Eis (X -1,5)
+  const ripPts = (Z, aus) => { const pts = []; for (let k = 0; k <= 12; k++) { const u = k / 12; pts.push([3.5 - 5 * u - Math.sin(u * Math.PI) * aus, 9.5 * (1 - Math.pow(u, 1.7)) + .2, Z]); } pts.push([-1.2, .55, Z], [-.7, .45, Z]); return pts; };
+  for (let i = 12; i >= 0; i--) {
+    const Z = 1.4 * Math.pow(1.25, i), tiefe = Math.min(.8, Z / 22), eb = Z < 2.4 ? 3 : Z < 6 ? 2 : 1;
+    rippe3(K, P, eb, ripPts(Z, 1.6), .2, tiefe, 1.1 + tiefe * 1.8, i % 4 === 2 ? 1 + fr * .3 : 0);
+    // Wirbel am Grat
+    const [vx, vy] = P.q(3.5, 9.9, Z), k = P.k(Z), m = B.maske(); m.ell(vx, vy, k * .38, k * .26); m.kap(vx, vy, vx + k * .2, vy - k * .7, k * .1, k * .04);
+    K.form(eb, m, tiefe, knochenMat(1.1 + tiefe * 1.8));
   }
-  boden(K, P, P.vy, null);
-  // Lager der Expedition: Zelt, Schlitten, Fässer; Tranlampe davor
-  const [tx, ty] = P.q(2.6, 0, 3.2), k = P.k(3.2), zm = B.maske();
-  zm.poly([[tx - k * .7, ty], [tx - k * .05, ty - k * .9], [tx + k * .1, ty - k * .95], [tx + k * .75, ty], [tx + k * .2, ty + 2]]);
-  K.form(3, zm, .1, { k: ['#0a0b0e', '#15161a', '#22232a', '#32323a', '#46454c'], ton: 1.6, fase: 1.5, rand: 2, schatten: 2, muster: (px, py) => ((px - tx) % 7 === 0 ? -.4 : 0) });
-  const zo = B.maske(); zo.poly([[tx - k * .12, ty], [tx - k * .02, ty - k * .55], [tx + k * .1, ty]]); B.form(K.e[3], zo, K.mat(0, { k: ['#000', '#050403', '#0a0705'], ton: .5, fase: 0, rand: 0 }));
-  if (fr < .7) { K.glut(tx, ty - k * .15, k * .35, TRAN_G, 1, [3]); K.e[3].set(tx - 1, ty - 4, B.pk(TRAN)); K.licht(tx, ty - 6, TRAN, 30, .6); }
-  const sl = B.maske(); const [sx, sy] = P.q(1.4, 0, 2.5), ks = P.k(2.5); sl.rect(sx - ks * .5, sy - ks * .18, ks, ks * .05); sl.kap(sx - ks * .55, sy, sx + ks * .5, sy, 1, 1); sl.kap(sx - ks * .55, sy, sx - ks * .62, sy - ks * .1, 1, 1);
+  // Eis, das an den Rippen hochgeworfen ist (Schollen), dahinter Dunst
+  B.nebel(K.e[2], { y0: P.vy - 40, y1: P.vy + 10, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .3, xs: [180, 480, 80], seed: 7 });
+  boden(K, P, P.vy, [-2.6, .3, 9]);
+  for (let i = 0; i < 7; i++) { const [x, y] = P.q(-1.4 + (i % 3) * .3, 0, 2 + i * 1.3), k = P.k(2 + i * 1.3), m = B.maske(); m.poly([[x - k * .3, y], [x - k * .1, y - k * .25], [x + k * .25, y - k * .12], [x + k * .35, y]]); K.form(K.eb(y), m, Math.min(.6, i / 10), { k: EIS.slice(1), ton: 2.4, fase: 1.5, rand: 2, schatten: 2 }); }
+  // Lager der Expedition: Zelt, Schlitten, Lampe
+  const [tx, ty] = P.q(-4.6, 0, 3.6), k = P.k(3.6), zm = B.maske();
+  zm.poly([[tx - k * .7, ty], [tx - k * .05, ty - k * .85], [tx + k * .1, ty - k * .9], [tx + k * .75, ty], [tx + k * .2, ty + 2]]);
+  K.form(3, zm, .05, { k: ['#08090c', '#121318', '#1e1f26', '#2c2d35', '#3e3e46'], ton: 1.4, fase: 1.5, rand: 2, schatten: 2, muster: (px, py) => ((px - tx) % 7 === 0 ? -.4 : 0) });
+  const zo = B.maske(); zo.poly([[tx - k * .12, ty], [tx - k * .02, ty - k * .5], [tx + k * .1, ty]]); B.form(K.e[3], zo, K.mat(0, { k: ['#000000', '#140a04', '#2a1608'], ton: fr < .6 ? 1.6 : .4, fase: 0, rand: 0 }));
+  if (fr < .6) { K.glut(tx, ty - k * .1, k * .4, TRAN_G, 1, [3]); K.e[3].set(tx, ty - 3, B.pk(TRAN)); K.e[3].set(tx, ty - 2, B.pk(TRAN_K)); K.licht(tx, ty - 6, TRAN, 30, .6); }
+  const [sx, sy] = P.q(-3.2, 0, 2.6), ks = P.k(2.6), sl = B.maske(); sl.rect(sx - ks * .5, sy - ks * .18, ks, ks * .05); sl.kap(sx - ks * .55, sy, sx + ks * .5, sy, 1, 1); sl.kap(sx - ks * .55, sy, sx - ks * .62, sy - ks * .1, 1, 1);
   for (let j = 0; j < 3; j++) sl.rect(sx - ks * .4 + j * ks * .35, sy - ks * .18, 1.5, ks * .18); sl.rect(sx - ks * .35, sy - ks * .34, ks * .5, ks * .16);
-  K.form(3, sl, .05, { k: HOLZ, ton: 1.8, fase: 1, rand: 2, schatten: 2 });
-  tranlampe(K, P, 1.1, 2.1, fr < .6);
-  trieb(K, P, -1.4, 2.4, .9); trieb(K, P, .2, 4.4, .7);
-  // Vordergrund: Bartenkante oben links
-  const v = B.maske(); v.poly([[-M, -M], [70, -M], [40, 30], [10, 60], [-M, 80]]); K.form(5, v, 0, knochenMat(1, { k: KNOCHEN.slice(0, 5) }));
-  B.nebel(K.e[2], { y0: P.vy - 30, y1: P.vy + 16, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .24, xs: [0, 330, 80], seed: 7 });
-  B.partikel(K, { n: 30, farben: ['#2a3448', '#46546c'], vx: -1, vy: 3, wob: 2, wf: .4, x0: 200, x1: 480, y0: 0, y1: 220 });
-  K.reihen = [{ y: 182, skala: .9, nebel: .28 }, { y: 200, skala: 1, nebel: .1 }, { y: 216, skala: 1, nebel: 0 }];
-  return { mitte: [230, 214], P };
+  K.form(3, sl, .05, { k: HOLZ, ton: 1.4, fase: 1, rand: 2, schatten: 2 });
+  tranlampe(K, P, -2.4, 2.2, fr < .5);
+  trieb(K, P, -.9, 2.3, 1); trieb(K, P, -.4, 4.6, .8);
+  // Vordergrund: Eisscholle unten links, Rippenende oben rechts angeschnitten
+  const v = B.maske(); v.poly([[-M, 236], [40, 228], [80, 246], [70, H + M], [-M, H + M]]); K.form(5, v, 0, { k: EIS.slice(0, 5), ton: 1, fase: 2, rand: 2 });
+  B.partikel(K, { n: 34, farben: ['#2a3448', '#46546c', '#6a7a94'], vx: -2, vy: 3, wob: 2, wf: .4, x0: 0, x1: 480, y0: 0, y1: 220 });
+  K.reihen = [{ y: 180, skala: .9, nebel: .28 }, { y: 199, skala: 1, nebel: .1 }, { y: 216, skala: 1, nebel: 0 }];
+  return { mitte: [200, 214], P };
 }
 
 // =====================================================================
@@ -288,7 +283,7 @@ function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante, info;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'kraemer' ? 1 : art === 'rast' ? 0 : art === 'werkstatt' ? 2 : art === 'ereignis' || art === 'fund' ? 0 : art === 'uebergang' ? 3 : (o.seed + v) % 3;
   if (art === 'waechter' || v === 3) info = kammer(K, {});
-  else info = [schiff, kiefer, krypta][v](K, {});
+  else info = [schiff, flanke, krypta][v](K, {});
   if (art === 'kraemer') kraemerStand(K, 330, 210);
   else if (art === 'ereignis' || art === 'fund') walzahn(K, info.mitte[0] - 10, info.mitte[1]);
   else if (art === 'uebergang') abstieg(K, 240, 222);

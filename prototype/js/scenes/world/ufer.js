@@ -33,8 +33,8 @@ function deckeBauen(K, P, o) {
   for (let x = -M; x < W + M; x++) {
     let yTop = -M - 1;
     const Z0 = Math.max(.6, P.h * (Yc - 2.4) / (P.vy + M) * .9);
-    for (let Z = Z0; Z < 90; Z += .003 + Z * .0045) {
-      const X = (x + .5 - P.vx) * Z / P.h, ww = w(X, Z), ys = P.vy - P.h * (Yc - 1 - ww) / Z;
+    for (let Z = Z0, X = 0, ww = 0, ys = 0; Z < 90; Z += (.003 + Z * .0045) / (1 + ww * 2.5)) {
+      X = (x + .5 - P.vx) * Z / P.h; ww = w(X, Z); ys = P.vy - P.h * (Yc - 1 - ww) / Z;
       if (ys <= yTop) continue;
       const u = frac(phase(X, Z)), dZ = (w(X, Z + .02) - w(X, Z - .02)) / .04;
       const fern = B.clamp(1 - 5 / Z, 0, 1), licht = Math.exp(-(((x - (o.lichtX || 380)) / 150) ** 2));
@@ -98,13 +98,16 @@ function saeule(K, P, Xc, Zc, rc, Yc, o) {
   // Wasser fällt: senkrechte Bahnen, innen durchscheinend (das Licht kommt von oben durchs Wasser)
   B.form(K.e[eb], m, K.mat(o.tiefe || 0, { k: WASSER.slice(2, 8), r: [WASSER[8], SCHAUM[1]], ton: 2.4, fase: 2, rand: 2, verlauf: -1.2,
     muster: (x, y) => { const s = B.rausch1((x - cx0) * .45, 41); return (s > .62 ? .9 : s < .3 ? -.8 : 0) + Math.max(0, 1 - Math.abs(x - cx0) / (rc * k * 1.6)) * .8; } }));
+  // oben geht die Säule ohne Kante in die Decke über: die obersten Pixel lösen sich gedithert auf
+  const fade = (yF - yT) * .35;
+  for (let y = Math.floor(yT) - 1; y < yT + fade; y++) for (let x = Math.floor(m.x0); x <= m.x1; x++) if (m.has(x, y) && (y - yT) / fade < B.bay(x, y) * 1.1) K.e[eb].set(x, y, 0);
   // Fuß: Schaumring und nasser, dunkler Sand
   const ring = B.maske(); ring.ell(cx0, yF, rc * k * 2.2, Math.max(2, rc * k * .32)); ring.ell(cx0, yF - 1, rc * k * 1.2, Math.max(1.5, rc * k * .18), 0);
   B.form(K.e[eb], ring, K.mat(0, { k: [WASSER[6], WASSER[8], SCHAUM[0], SCHAUM[1]], r: [SCHAUM[1]], ton: 1.6, fase: 0, rand: 1 }));
   K.glut(cx0, (yF + yT) / 2, rc * k * 5, '#16241e', .8, [1, 2, 3]);
   K.licht(cx0, yF - rc * k, SEE, rc * k * 6, .6);
   // Bewegung: Bahnen gleiten nach unten
-  const pts = []; for (let y = Math.max(-M, Math.floor(yT)); y < yF; y++) for (let x = Math.floor(m.x0); x <= m.x1; x++) if (m.has(x, y) && B.hash(x, 0, 7) > .55) pts.push(x, y);
+  const pts = []; for (let y = Math.max(-M, Math.floor(yT + fade * .5)); y < yF; y++) for (let x = Math.floor(m.x0); x <= m.x1; x++) if (m.has(x, y) && B.hash(x, 0, 7) > .55) pts.push(x, y);
   const cs = [B.css(SCHAUM[1]), B.css(WASSER[9])];
   if (!o.ruhig) K.anim.push({ p: B.PAR[eb], f(ctx, t, ox, oy) { for (let i = 0; i < pts.length; i += 2) { const x = pts[i], y = pts[i + 1], v = frac(y * .07 - t * .9 + B.hash(x, 1, 3)); if (v > .9) { ctx.fillStyle = cs[v > .97 ? 0 : 1]; ctx.fillRect(x + ox, y + oy, 1, 1); } } } });
   return { x: cx0, y: yF, r: rc * k };
@@ -181,17 +184,20 @@ function hoehlenRand(K, links, rechts) {
 function treibholz(K, x, y, s) { const th = B.maske(); th.pfad([[x, y], [x + 30 * s, y - 4 * s], [x + 56 * s, y - 1 * s]], 3 * s, 2 * s); th.kap(x + 20 * s, y - 3 * s, x + 14 * s, y - 12 * s, 1.2 * s, .8 * s); K.form(4, th, 0, { k: SAND.slice(0, 4), r: [SAND[6], MORGEN], ton: 2, schatten: 2 }); }
 // Strandkorb (1925, Ostsee- und Nordseebad), von hinten: Korbgeflecht, die Haube, er schaut aufs Wasser
 function strandkorb(K, P, X, Z, o) {
-  o = o || {}; const k = P.k(Z), [x, y] = P.q(X, 0, Z), w = .7 * k, hh = 1.0 * k, eb = K.eb(y - 1), m = B.maske();
-  m.rect(x - w / 2, y - hh * .62, w, hh * .62 - k * .06);
-  m.fn(x - w / 2 - k * .03, y - hh, x + w / 2 + k * .03, y - hh * .6, (px, py) => { const u = (px - x) / (w / 2 + k * .03), v = (py - (y - hh * .62)) / (hh * .4); return u * u + v * v * .9 <= 1 || (py > y - hh * .7 && Math.abs(u) <= 1); });
-  m.rect(x - w / 2 + k * .04, y - k * .08, k * .08, k * .08); m.rect(x + w / 2 - k * .12, y - k * .08, k * .08, k * .08);
-  K.form(eb, m, o.tiefe || 0, { k: KORB, r: [SAND[5], MORGEN], ton: 1.6, fase: 1.5, rand: 2, schatten: 2,
-    muster: (px, py) => ((Math.floor(px + py * .6) & 3) === 0 ? -.55 : (Math.floor(px - py * .6) & 3) === 0 ? .3 : 0) + (Math.abs(py - (y - hh * .62)) < 1.2 ? -.8 : 0) });
-  // Saum der Haube: gestreifter Stoff, der unten heraushängt (das einzige Bunte, ausgeblichen)
-  for (let px = Math.round(x - w / 2); px <= x + w / 2; px++) { const c = (Math.floor((px - x) / Math.max(1, k * .06)) & 1) ? '#5a4a3a' : '#2a3436'; K.e[eb].set(px, Math.round(y - hh * .62) + 1, B.pk(c)); }
+  o = o || {}; const k = P.k(Z), [x, y] = P.q(X, 0, Z), w = .6 * k, hh = 1.15 * k, eb = K.eb(y - 1), yS = y - hh * .5;
+  const m = B.maske();
+  // Korb: unten schmaler Kasten auf zwei Kufen, oben die Haube, die über die Seiten steht und sich nach vorn wölbt
+  m.poly([[x - w * .46, y - k * .05], [x - w * .5, yS], [x + w * .5, yS], [x + w * .46, y - k * .05]]);
+  m.fn(x - w * .62, y - hh, x + w * .62, yS + 2, (px, py) => { const u = (px - x) / (w * .6), v = (py - (yS + 1)) / (hh * .5); return u * u * (1 + Math.max(0, -v) * .1) + v * v <= 1 && py <= yS + 2; });
+  m.rect(x - w * .66, yS - k * .02, w * 1.32, k * .05); // Armlehnen stehen seitlich heraus
+  m.rect(x - w * .44, y - k * .05, k * .06, k * .05); m.rect(x + w * .44 - k * .06, y - k * .05, k * .06, k * .05);
+  K.form(eb, m, o.tiefe || 0, { k: KORB, r: [SAND[5], MORGEN], ton: 1.7, fase: 1.5, rand: 2, schatten: 2,
+    muster: (px, py) => { const reihe = Math.floor((py - y) / Math.max(2, k * .045)); return ((Math.floor(px * .7 + (reihe & 1) * 1.5) & 1) ? .35 : -.25) + (Math.abs(py - yS) < 1.2 ? -.9 : 0) + ((py - y) % Math.max(4, Math.round(k * .18)) === 0 ? -.5 : 0); } });
+  // die Haube ist innen mit gestreiftem Stoff bespannt: am Rand sieht man die Streifen, ausgeblichen
+  const e = K.e[eb];
+  for (let a = -2.6; a <= -.54; a += .02) { const px = Math.round(x + Math.cos(a) * w * .6), py = Math.round(yS + 1 + Math.sin(a) * hh * .5); if (a < -1.4) continue; e.set(px + 1, py, B.pk((Math.floor(a * 9) & 1) ? '#6a6a5c' : '#2a3e4a')); }
   return { x, y, w, hh };
 }
-
 // =====================================================================
 // Variante 0: Die Flutlinie. Weiter Strand, flacher Horizont; die Wellenreihen der Decke rollen auf dich zu.
 // Rechts der Mitte hängt die Säule auf den Sand, deine Spuren führen von links vorne hinein.
@@ -230,8 +236,8 @@ function brecher(K) {
   sandBoden(K, P, { nass: [[-3.6, 4.2, 1.4]], lichtX: 400 });
   flutlinie2(K, P, 2.0); flutlinie2(K, P, 5.2); steine(K, P, 12, { s: 2, frei: [250, 70, 185] });
   // wo die Lippe auf dem Sand aufliegt: ein Schaumsaum
-  const sm = B.maske(); for (let i = 0; i < 40; i++) { const X = -7 + i * .12, Z = 3.6 + X * .18 + .25; if (X > -1.4) break; const [x, y] = P.q(X, 0, Z); sm.ell(x, y, 4 + B.hash(i, 0, 2) * 4, 1.6); }
-  B.form(K.e[K.eb(P.q(-3, 0, 3.4)[1])], sm, K.mat(0, { k: [WASSER[7], SCHAUM[0], SCHAUM[1], SCHAUM[1]], r: [SCHAUM[1]], ton: 1.5, fase: 0, rand: 1 }));
+  const sm = B.maske(); for (let i = 0; i < 40; i++) { const X = -7 + i * .12, Z = 3.6 + X * .18 + .25; if (X > -1.4) break; if (B.hash(i, 3, 2) < .35) continue; const [x, y] = P.q(X, 0, Z); sm.ell(x, y + B.hash(i, 1, 2) * 3, 2 + B.hash(i, 0, 2) * 4, 1.2); }
+  B.form(K.e[K.eb(P.q(-3, 0, 3.4)[1])], sm, K.mat(0, { k: [WASSER[5], WASSER[7], SCHAUM[0], SCHAUM[1]], r: [SCHAUM[0]], ton: 1.3, fase: 0, rand: 1 }));
   gischt(K, P, [[40, 60, .6], [62, 70, .5], [84, 78, .45], [118, 92, .35], [150, 104, .3]], P.q(-2, 0, 3.4)[1]);
   spuren(K, P, [[.4, 1.1], [-.2, 2.0], [-1.2, 2.9], [-2.4, 3.5], [-3.3, 3.75]], { nassAb: .72 });
   fels(K, 2, [[430, P.vy + 2], [440, P.vy - 16], [460, P.vy - 24], [W + M, P.vy - 30], [W + M, P.vy + 2]], .25);
@@ -253,10 +259,13 @@ function strandkorbSzene(K, o) {
   sandBoden(K, P, { nass: [[Xs, Zs, 1]], lichtX: 330 });
   flutlinie2(K, P, 4.2); steine(K, P, 10, { s: 3, frei: [250, 70, 175] });
   // Felswand rechts in Flucht: Schichten, nass, oben vom Wasser abgeschnitten
-  const XW = 2.7, unten = [], oben = [];
+  const XW = 3.6, unten = [], oben = [];
   for (let Z = 1; Z <= 40; Z *= 1.06) { const xo = XW + Math.sin(Z * 1.7) * .12; unten.push(P.q(xo, 0, Z)); oben.push(P.q(xo, Yc - .5 - Math.sin(Z * 2.3) * .35, Z)); }
   const wm = B.maske(); wm.poly([...unten, ...oben.reverse(), [W + M + 400, -M - 400], [W + M + 400, H + M]]);
-  K.form(2, wm, .05, { k: FELS, ton: 1.5, fase: 2, rand: 2, schatten: 2, verlauf: -.6, muster: (x, y) => { const Z = (XW * P.h) / Math.max(1, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h; return (frac(Y * 3 + B.fbm(Z * .3, 0, 4, 2)) < .12 ? -.7 : 0) + (B.fbm(Z * .8, Y * 2, 5, 2) - .5) * .7; } });
+  K.form(2, wm, .12, { k: FELS, ton: 2.2, fase: 2, rand: 2, schatten: 2, muster: (x, y) => { const Z = (XW * P.h) / Math.max(1, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h, sY = Y * 2.6 + B.fbm(Z * .25, 0, 4, 2) * .8, lage = Math.floor(sY), q = frac(sY);
+    return (B.hash(lage, 0, 9) - .5) * 1.4 + (q > .9 ? 1.4 : q < .1 ? -1 : 0) + (B.fbm(Z * .9, Y * 3, 5, 2) - .5) * .6 - Math.max(0, 1.5 - Z) * .4; } });
+  // Wasser sickert aus den Fugen der Wand und läuft nach unten
+  for (let i = 0; i < 9; i++) { const Z = 1.6 + i * .9, [x0, y0] = P.q(XW, 1.2 + (i % 3) * .5, Z), [, y1] = P.q(XW, 0, Z); for (let y = Math.round(y0); y < y1; y++) if (B.bay(x0, y) < .7) K.e[2].set(Math.round(x0) + (y % 5 === 0 ? 1 : 0), y, B.pk(WASSER[7])); }
   saeule(K, P, Xs, Zs, .14, Yc, { ruhig: o.ruhig, tiefe: .1, tief: 1.2 });
   const korb = strandkorb(K, P, -.7, 2.7);
   spuren(K, P, [[.9, 1.1], [.3, 2.2], [-.2, 3.0], [-.9, 4.4], [-1.5, 6.0], [Xs, Zs - .1]], { nassAb: .85 });

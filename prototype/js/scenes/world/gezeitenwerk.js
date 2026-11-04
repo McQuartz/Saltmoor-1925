@@ -110,13 +110,14 @@ function buehne(K, eb, x, y, s, lampe) {
   if (lampe && K.fr < 0.8) { B.flamme(K, Math.round(x - 10 * s), Math.round(y - 13 * s), { p: 0.3, kern: '#fff4d0', mitte: LAMPE, aussen: '#a05a10', glut: LAMPG }); for (const i of [eb, eb + 1].filter(i => i < 5)) B.gluehen(K.e[i], x - 10 * s, y - 13 * s, 34 * s, LAMPG, 0.8); }
 }
 // Großer Hebel mit Griff für sieben Finger
-function hebel(K, eb, x, y, h, s, ab) {
-  const m = B.maske(); m.kap(x, y, x + h * 0.22, y - h, 4.5 * s, 3 * s); m.ell(x, y, 8 * s, 6 * s); m.rect(x - 14 * s, y, 28 * s, 6 * s);
-  const gx = x + h * 0.22, gy = y - h; m.kap(gx - 9 * s, gy - 4 * s, gx + 9 * s, gy + 2 * s, 4 * s, 4 * s);
+function hebel(K, eb, x, y, h, s, ab, neig) {
+  const ng = neig === undefined ? 0.22 : neig;
+  const m = B.maske(); m.kap(x, y, x + h * ng, y - h, 4.5 * s, 3 * s); m.ell(x, y, 8 * s, 6 * s); m.rect(x - 14 * s, y, 28 * s, 6 * s);
+  const gx = x + h * ng, gy = y - h; m.kap(gx - 9 * s, gy - 4 * s, gx + 9 * s, gy + 2 * s, 4 * s, 4 * s);
   K.form(eb, m, 0, { k: BRONZE.slice(1), r: pal.rand, ton: 2, fase: 2, rand: 2, schatten: 2, muster: (px, py) => (Math.abs(py - gy + (px - gx) * 0.33) < 1 ? -1 : 0) });
   const e = K.e[eb], bl = B.pk(MESS[0]);
   for (let i = 0; i < 7; i++) { const u = -7 * s + i * 2.3 * s; e.set(gx + u, gy - 1 * s + u * 0.33 - 3.4 * s, bl); e.set(gx + u, gy + u * 0.33 + 3.6 * s, B.pk(BRONZE[0])); }
-  if (ab) abdruck(K, eb, x + h * 0.09, y - h * 0.42, s * 1.15, -0.1, true);
+  if (ab) abdruck(K, eb, x + h * ng * 0.4, y - h * 0.42, s * 1.15, -0.1, true);
 }
 
 // =====================================================================
@@ -151,7 +152,7 @@ function hauptrad(K, cfg) {
   // Säulen der Halle rechts (Maßstab), Rohr links
   for (const [X, Z] of [[6.2, 6], [6.2, 11]]) { const [x, yb] = P.q(X, 0, Z), [, yt] = P.q(X, 6, Z), k = P.k(Z); const m = B.maske(); m.rect(x - k * 0.25, Math.max(-M, yt), k * 0.5, yb - yt); m.rect(x - k * 0.34, yb - k * 0.18, k * 0.68, k * 0.18); K.form(Z > 8 ? 2 : 3, m, Z > 8 ? 0.2 : 0.05, { k: BRONZE.slice(0, 6), r: pal.rand, ton: 1.6, fase: 2, schatten: 2, muster: px => (Math.round(px - x) % 5 === 0 ? -0.5 : 0) }); }
   // Vordergrund: links ein Hebel mit Griff für sieben Finger, rechts die Kante eines Zahns
-  hebel(K, 5, nah ? 34 : 42, H + 4, 150, 1.6, true);
+  hebel(K, 5, nah ? 10 : 14, H + 4, 140, 1.6, true, 0.08);
   const v = B.maske(); v.poly([[440, H + M], [462, 150], [W + M, 140], [W + M, H + M]]); K.form(5, v, 0, { k: BRONZE.slice(0, 5), r: pal.rand, ton: 1.4, fase: 3 });
   B.nebel(K.e[2], { y0: yG - 30, y1: yG + 8, col: B.mix(pal.nebel[1], K.fern, 0.35), dichte: 0.32, xs: [-20, 500, 60], seed: 3 });
   B.partikel(K, { n: 26, farben: [PHOS_G, HIMMEL[6]], vx: -2, vy: -4, wob: 3, wf: 0.4, x0: 0, x1: 480, y0: 40, y1: 200, p: 0.8, blink: 0.7 });

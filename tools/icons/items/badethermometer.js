@@ -1,20 +1,23 @@
-// Badethermometer: schwimmendes Holzthermometer in Form eines kleinen Bootskörpers, oben eine Öse mit Kordel,
-// in der Mitte die Glasröhre, deren Säule unter null steht.
+// Badethermometer: ein schwimmendes Holzthermometer mit breitem, oben gerundetem Brett und Loch für die Kordel,
+// in der Mitte die Glasröhre mit Skala; die Säule steht unter null (der rote Faden ist fast ganz unten).
 'use strict';
 module.exports = {
   form(A) {
-    const { achse, apg, acap, ring } = A;
-    const ax = achse(24, 3, Math.PI / 2 + 0.25);
-    const koerper = [apg(ax, [[4, -4], [30, -5.6], [40, -3.2], [44, 0], [40, 3.2], [30, 5.6], [4, 4], [1, 0]], null, { b: 2.2, rd: 1 })];
-    const roehre = [acap(ax, 9, 0, 37, 0, 1.3, 1.3)];
-    const kugel = [acap(ax, 37, 0, 38, 0, 2.2, 2.2)];
-    const oese = ring(...ax.P(-1, 0), 2.4, 2.4, 0.8, null, {}, 8);
+    const { achse, apg, acap, kurve } = A;
+    const ax = achse(24, 4, Math.PI / 2 + 0.3);
+    const brett = [apg(ax, [[0, -3], [3, -6], [38, -6.5], [42, -3], [42, 3], [38, 6.5], [3, 6], [0, 3]], null, { b: 2, rd: 1 })];
+    const roehre = [acap(ax, 6, 0, 36, 0, 1.4, 1.4)];
+    const kugel = [acap(ax, 36, 0, 37, 0, 2.4, 2.4)];
+    const [kx, ky] = ax.P(2, 0);
+    const kordel = kurve([[kx, ky], [kx + 8, ky - 2], [kx + 12, ky + 5], [kx + 16, ky + 2]], 0.7, 0.6, null, {}, 10);
     return {
-      gruppen: [{ p: oese, mat: 'messing', k: 0 }, { p: koerper, mat: 'holzhell', k: 0 }, { p: roehre, mat: 'glas', k: 0, tone: 0.1 }, { p: kugel, mat: 'akzent', k: 0, tone: 0.1 }],
+      gruppen: [{ p: kordel, mat: 'wolle', k: 0 }, { p: brett, mat: 'holzhell', k: 0 }, { p: roehre, mat: 'glas', k: 0, tone: 0.15 }, { p: kugel, mat: 'rotstoff', k: 0, tone: 0.2 }],
       details(P) {
-        for (let t = 30; t < 37; t++) P.set(...ax.P(t, 0), 'a3');
-        for (let t = 10; t < 37; t += 3) { P.set(...ax.P(t, -3), 'holz0'); if (t % 2) P.set(...ax.P(t, -3.8), 'holz0'); }
-        P.set(...ax.P(29, -3.4), 'a2');
+        P.set(kx, ky, 'kohle0');
+        for (let t = 33; t < 37; t++) P.set(...ax.P(t, 0), 'rotstoff3');
+        for (let t = 8; t < 36; t += 2.5) { P.set(...ax.P(t, -3), 'holz0'); P.set(...ax.P(t, -4), 'holz0'); if (Math.round(t) % 5 === 0) P.set(...ax.P(t, -5), 'holz0'); }
+        for (let t = 8; t < 36; t += 5) P.set(...ax.P(t, 3.5), 'holz1');
+        P.set(...ax.P(30, -2.6), 'a3');
       },
     };
   },
