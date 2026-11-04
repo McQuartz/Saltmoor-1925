@@ -43,7 +43,7 @@ function eins(art, id, daten) {
   const def = require(f);
   const d = daten[id] || {};
   // Handgriffe haben keinen eigenen Stoff: der Akzent kommt aus 'stoffe' (Gewichtung) oder dem Skript
-  const st = art === 'items' ? (d.st || def.st || []) : (def.st || d.stoffe || []);
+  const st = art === 'items' ? (d.st || def.st || []) : (def.st || L.FAMILIE_ST[d.build] || d.stoffe || []);
   const rar = art === 'items' ? (d.rar || def.rar || 'gewoehnlich') : 'gewoehnlich';
   const b = L.bauen(def, { st, rar });
   if (b.W !== (art === 'items' ? 48 : 48) || b.H !== (art === 'items' ? 48 : 32)) throw new Error(`${id}: falsche Größe ${b.W}×${b.H}`);

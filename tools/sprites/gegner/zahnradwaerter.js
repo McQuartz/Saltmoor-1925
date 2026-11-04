@@ -44,7 +44,7 @@ module.exports = {
   id: 'zahnradwaerter', biom: 'gezeitenwerk', zone: 'gezeitenwerk', w: 96, h: 120, fuss: [52, 116], kopf: [54, 14], rimBis: 113,
   varianten: {
     zahnradwaerter_a: { n: 13, rx: 22, ry: 27, speichen: 7, arme: 1 },
-    zahnradwaerter_b: { n: 11, rx: 20, ry: 25, speichen: 5, arme: 2, kleinesRad: true, kopf: [56, 10] },
+    zahnradwaerter_b: { n: 9, rx: 20, ry: 25, th: 7, speichen: 5, arme: 2, kopf: [56, 10] },
   },
   // Silhouetten-Proben (nicht gebaut): ein Rad auf dem Rücken einer gebückten Gestalt las sich wie die
   // Netzflickerin mit Schild; ein Rad ohne Beine, rollend, war nur ein Kreis und hatte keinen Körper.
@@ -63,8 +63,8 @@ module.exports = {
     const ru = v.ruecken, ohneB = v.ohneBeine;
     const cx = 52 + lean, cy = (ohneB ? 82 : 50) + atem + kn + fall * (ohneB ? 0 : 1), rx = v.rx, ry = v.ry;
     // Dicke des Rades: eine zweite Scheibe nach hinten rechts versetzt
-    const hinten = Pg(kranz(cx + 4, cy - 2, rx, ry, v.n, 5, rot + 0.11), null, { rd: 0.4 });
-    const vorn = Pg(kranz(cx, cy, rx, ry, v.n, 5, rot), null, { rd: 0.4 });
+    const hinten = Pg(kranz(cx + 4, cy - 2, rx, ry, v.n, v.th || 5, rot + 0.11), null, { rd: 0.4 });
+    const vorn = Pg(kranz(cx, cy, rx, ry, v.n, v.th || 5, rot), null, { rd: 0.4 });
     const nabe = E(cx - 1, cy, 7.5, 8.5, 'haut', { pf: 'bevel' });
     const nabenring = E(cx - 1, cy, 10.5, 12, null, { pf: 'bevel' });
     // Beine: Vogelbeine, das Knie nach hinten (rechts), dünn und lang
@@ -87,7 +87,7 @@ module.exports = {
     // zweiter Arm (Variante b): hält einen Schlüssel aus Bronze mit sieben Bärten
     const arm2 = [], schluessel = [];
     if (v.arme > 1) {
-      const s0 = [cx + 6, cy + 8], s1 = [cx + 2 - r(armA * 6), cy + 26 - r(armA * 6)], s2 = [cx - 8 - r(armA * 10), cy + 34 - r(armA * 12)];
+      const s0 = [cx + 5, cy + 6], s1 = [cx + 24 - r(armA * 4), cy + 22 - r(armA * 6)], s2 = [cx + 22 - r(armA * 8), cy + 42 - r(armA * 10)];
       arm2.push(...glied([s0, s1, s2], 2.2, 1.3, null));
       schluessel.push(C(s2[0] + 2, s2[1] - 8, s2[0] - 2, s2[1] + 16, 1.1, 1.1, null), E(s2[0] + 2.5, s2[1] - 10, 3, 3, null));
       for (let i = 0; i < 4; i++) schluessel.push(C(s2[0] - 2 + i * 0.1, s2[1] + 10 + i * 2, s2[0] - 5 - (i % 2) * 2, s2[1] + 10 + i * 2, 0.6, 0.6, null));
@@ -127,8 +127,10 @@ module.exports = {
       for (let i = 0; i < v.speichen; i++) { const a = (i + 0.5) / v.speichen * TAU - rot; P.auf(cx + Math.cos(a) * (rx - 4.5), cy + Math.sin(a) * (ry - 5.5), 'r1'); }
       // Fingerabdrücke auf dem Kranz: sieben Punkte im Bogen, ein Hauch Bronze, blank gegriffen
       const ab = [cx - rx * 0.62, cy - ry * 0.42];
-      for (let i = 0; i < 7; i++) { const a = -2.4 + i * 0.22; P.auf(ab[0] + Math.cos(a) * 4, ab[1] + Math.sin(a) * 4.5, i === 3 ? 'bronze' : 'k3'); }
-      P.auf(ab[0] + 1, ab[1] + 1, 'k3');
+      for (let i = 0; i < 7; i++) { const a = -2.4 + i * 0.22; P.auf(ab[0] + Math.cos(a) * 4, ab[1] + Math.sin(a) * 4.5, i % 3 === 0 ? 'glutDim' : 'k3'); }
+      P.auf(ab[0] + 1, ab[1] + 1, 'glutDim'); P.auf(ab[0], ab[1] + 1, 'k3');
+      // blank gegriffene Zahnspitzen oben links (Bronze), wo sieben Finger zupacken
+      for (let i = 0; i < v.n; i++) { const a = (i + 0.27) / v.n * TAU - rot; if (Math.cos(a) > -0.2 || Math.sin(a) > 0.2) continue; const tx = cx + Math.cos(a) * (rx + (v.th || 5) * 0.7), ty = cy + Math.sin(a) * (ry + (v.th || 5) * 0.7 * ry / rx); if (P.get(r(tx), r(ty))) P.set(tx, ty, 'bronze'); }
       // Augen: zwei Lichter übereinander in der Nabe
       if (!p.tod || f < 1) {
         const ex = r(cx - 2), e1 = r(cy - 3), e2 = r(cy + 3);

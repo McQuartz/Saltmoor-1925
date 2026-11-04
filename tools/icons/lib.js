@@ -307,4 +307,6 @@ function bauen(def, o = {}) {
   return { buf, W, H, pal, rgba: S.zuRGBA(buf, pal) };
 }
 
-module.exports = { pfad, perlen, kettenglieder, zahnrad, mantel, S, MAT, LICHT, STOFFE, stoffFarbe, palette, rendern, pinsel, bauen, achse, apg, acap, ring, kurve, hand, faust, rad, WURZEL };
+// Akzentfarbe der Handgriff-Bilder je Build-Familie (Handgriffe haben keinen eigenen Stoff)
+const FAMILIE_ST = { glutnest: ['F'], brackwasser: ['V'], bollwerk: ['G'], aderlass: ['B'], kettenwerk: ['E'], hagel: ['F'], neutral: [] };
+module.exports = { FAMILIE_ST, pfad, perlen, kettenglieder, zahnrad, mantel, S, MAT, LICHT, STOFFE, stoffFarbe, palette, rendern, pinsel, bauen, achse, apg, acap, ring, kurve, hand, faust, rad, WURZEL };

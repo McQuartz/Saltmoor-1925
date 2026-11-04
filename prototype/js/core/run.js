@@ -67,9 +67,11 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
   case'kampf_schwer':startFight(o.foes,'schwer');break;
   case'waechter':startFight(o.foes,'waechter');break;
   case'finale':startFight(o.foes,'finale');break;
-  case'ereignis':{const pool=EVENTS.filter(e=>e.biom===biomId());const seen=S.stats.events||[];const fresh=pool.filter(e=>!seen.includes(e.id));
-   const alle=EVENTS.filter(e=>e.biom==='alle'&&!seen.includes(e.id));const ev=r.pick(fresh.length?fresh:alle.length?alle:EVENTS);
-   S.stats.events=[...seen,ev.id];S.event=ev.id;S.phase='event';Bus.emit('event',{ev,why:`Ereignis „${ev.t}“ aus ${fresh.length?b.kurz:'allgemein'} per Seed`});break;}
+  case'ereignis':{const seen=S.stats.events||[];const geht=e=>!seen.includes(e.id)&&condOk(e.if);const fresh=EVENTS.filter(e=>e.biom===biomId()&&geht(e));
+   // biomübergreifende Ereignisse: in einem Viertel der Fälle (BAL.ereignis_allgemein), sonst nur, wenn das Biom leer ist
+   const alle=EVENTS.filter(e=>e.biom==='alle'&&geht(e));const allg=alle.length&&(!fresh.length||r.chance(BAL.ereignis_allgemein!=null?BAL.ereignis_allgemein:.25));
+   const ev=r.pick(allg?alle:fresh.length?fresh:EVENTS.filter(e=>!e.if));
+   S.stats.events=[...seen,ev.id];S.event=ev.id;S.phase='event';Bus.emit('event',{ev,why:`Ereignis „${ev.t}“ aus ${allg?'allgemein':b.kurz} per Seed`});break;}
   case'kraemer':{const SH=BAL.shop;const o2=[...r.sample(dropPool(),SH.normal_items),...r.sample(rarePool(),SH.rare_items)];
    const hgA=handgriffAngebot(r,'mix',2).map(id=>({id,price:(HANDGRIFFE[id].rar==='selten'?SH.hg_preis_selten:SH.hg_preis)||40,sold:false}));
    const rel=r.chance(SH.reliquie_chance||.15)?reliquienPool():[];

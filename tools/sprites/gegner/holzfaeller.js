@@ -17,9 +17,9 @@ module.exports = {
     const { E, C, Pg, r, glied, saum } = A;
     const f = p.f;
     let atem = 0, lean = 0, axA = 0, axX = 0, axY = 0, armDy = 0, fall = 0, augen = true, splitter = 0;
-    if (p.idle) { atem = [0, 0, 1, 1][f]; axA = [0, 0.02, 0.04, 0.02][f]; armDy = [0, 0, 1, 1][f]; }
+    if (p.idle) { axA = [0, 0.03, 0.06, 0.03][f]; armDy = [0, 0, 1, 1][f]; }
     // Angriff: weit zurück ausholen, über den Kopf, mit Gewicht nach vorn unten durch, zurückfedern
-    if (p.angriff) { lean = [3, 1, -6, -2][f]; axA = [0.55, 0.15, -2.15, -1.1][f]; axX = [3, 0, -6, -2][f]; axY = [-1, -3, 4, 1][f]; armDy = [1, 0, 3, 1][f]; splitter = f === 2 ? 1 : 0; }
+    if (p.angriff) { lean = [3, 1, -6, -2][f]; axA = [-0.4, 0.6, 2.73, 1.0][f]; axX = [4, -4, -28, -10][f]; axY = [-2, -6, 31, -1][f]; armDy = [1, 0, -4, -2][f]; splitter = f === 2 ? 1 : 0; }
     if (p.treffer) { lean = [3, 1][f]; axA = [0.25, 0.1][f]; armDy = [-2, -1][f]; }
     if (p.tod) { fall = r(p.q * 22); augen = f < 1; lean = r(p.q * 4); axA = p.q * 0.9; armDy = r(p.q * 10); }
     const T = atem + fall, sch = v.schief || 0;
@@ -79,12 +79,12 @@ module.exports = {
       ...glied([[ende[0] - 1, ende[1] + 3], [ende[0] - 5, ende[1] + 10], [ende[0] - 4, ende[1] + 14]], 1, 0.5, null),
       ...(v.zweig ? glied([[ende[0] + 8, ende[1] - 3], [ende[0] + 6, ende[1] - 12], [ende[0] + 9, ende[1] - 16]], 1, 0.5, null) : []),
     ];
+    const axt = [{ p: [stiel], k: 0, pf: 'flat' }, { p: [beil, hacke], k: 0 }, { p: armR, k: 1 }];
+    const vorn = p.angriff && f >= 2;
     const gruppen = [
-      { p: [stiel], k: 0, pf: 'flat' },
-      { p: [beil, hacke], k: 0 },
-      { p: armR, k: 1 },
-      { p: [beinR, fussR], k: 1 },
-      { p: [beinL, fussL], k: 1 },
+      ...(vorn ? [] : axt),
+      { p: [beinR, fussR], k: 1, anker: [0, 0] },
+      { p: [beinL, fussL], k: 1, anker: [0, 0] },
       { p: [rock], k: 1, tone: 0.05 },
       { p: [brust], k: 1, tone: 0.1 },
       ...schienen.map((s, i) => ({ p: [s], k: 0, tone: 0.12 - i * 0.03 })),
@@ -97,7 +97,9 @@ module.exports = {
       { p: schulterL, k: 0.5, tone: 0.08 },
       { p: zweige, k: 0.5 },
       { p: armHolz, k: 1, tone: 0.06 },
+      ...(vorn ? axt : []),
     ];
+    gruppen.forEach(g => { if (!g.anker) g.anker = [0, r(T)]; });
     const augenL = [];
     const details = P => {
       // Jahresringe im Gesicht: konzentrisch um einen Kern, der unten links sitzt (der Baum wuchs schief)

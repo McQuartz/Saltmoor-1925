@@ -1119,5 +1119,411 @@
     ]
    }
   ]
+ },
+ {
+  "id": "alle_photograph",
+  "biom": "alle",
+  "t": "Der Photograph",
+  "d": "Ein Mann mit Plattenkamera will ein Bild von dir, für die Zeitung in Saltmoor. Er sagt, du seist schon dreimal bei ihm gewesen. Er hat die Platten dabei.",
+  "bild": "Ein Stativ mit schwarzem Tuch, daneben drei Glasplatten an einen Stein gelehnt; auf allen dreien stehst du, jedes Mal ein Stück weiter unten.",
+  "o": [
+   {
+    "l": "Stillhalten für das Bild: lerne einen Handgriff",
+    "fx": [
+     {
+      "op": "handgriff",
+      "zufall": true
+     }
+    ]
+   },
+   {
+    "l": "Die Platten ansehen: eine Reaktion entdecken, -5 Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "lose_hp",
+      "v": 5
+     }
+    ]
+   },
+   {
+    "l": "Die Platten zerschlagen: +25 Gold aus seiner Kasse",
+    "fx": [
+     {
+      "op": "gold",
+      "v": 25
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "alle_schleifstein",
+  "biom": "alle",
+  "t": "Der Schleifer",
+  "d": "Ein Scherenschleifer schiebt seinen Karren durch einen Ort, durch den kein Karren passt. Er schleift alles, sagt er, auch Dinge, die nicht scharf sein sollen.",
+  "bild": "Ein Schleifkarren mit Tretrad, der Stein nass und rot, Funken, die nach oben fallen.",
+  "o": [
+   {
+    "l": "Eine Karte schleifen lassen (kostet dauerhaft 1 weniger): 20 Gold",
+    "fx": [
+     {
+      "op": "gold",
+      "v": -20
+     },
+     {
+      "op": "schleifen"
+     }
+    ],
+    "if": {
+     "gold_min": 20
+    }
+   },
+   {
+    "l": "Eine Kerbe in ein Item schleifen lassen: -8 Leben",
+    "fx": [
+     {
+      "op": "lose_hp",
+      "v": 8
+     },
+     {
+      "op": "kerbe"
+     }
+    ],
+    "if": {
+     "hp_min": 12
+    }
+   },
+   {
+    "l": "Weitergehen",
+    "fx": []
+   }
+  ]
+ },
+ {
+  "id": "alle_brief",
+  "biom": "alle",
+  "t": "Ein Brief an dich",
+  "d": "Im Sand steckt ein Brief, adressiert an dich, mit einer Briefmarke aus einem Jahr, das noch nicht war. Die Handschrift ist deine.",
+  "bild": "Ein Umschlag, halb im Boden, die Marke zeigt einen Leuchtturm mit dem Licht nach unten.",
+  "o": [
+   {
+    "l": "Lesen: +10 max. Leben, ein zufälliges Item verwandelt sich",
+    "fx": [
+     {
+      "op": "max_hp",
+      "v": 10
+     },
+     {
+      "op": "transform"
+     }
+    ]
+   },
+   {
+    "l": "Ungelesen verbrennen: volles Leben",
+    "fx": [
+     {
+      "op": "full_heal"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "alle_wiederkehr",
+  "biom": "alle",
+  "t": "Noch einmal der Photograph",
+  "d": "Derselbe Photograph. Er hat jetzt eine vierte Platte. Er sagt, diesmal hast du dich bewegt.",
+  "bild": "Vier Glasplatten; auf der vierten ist der Ort leer, nur ein Fleck, wo du hättest stehen sollen.",
+  "if": {
+   "event_gesehen": "alle_photograph"
+  },
+  "o": [
+   {
+    "l": "Die vierte Platte nehmen: eine Reliquie, -10 max. Leben",
+    "fx": [
+     {
+      "op": "reliquie"
+     },
+     {
+      "op": "max_hp",
+      "v": -10
+     }
+    ]
+   },
+   {
+    "l": "Dich noch einmal hinstellen: lerne einen seltenen Handgriff",
+    "fx": [
+     {
+      "op": "handgriff",
+      "rar": "selten"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "alle_taucher",
+  "biom": "alle",
+  "t": "Der Taucher",
+  "d": "Ein Mann im Taucheranzug sitzt auf dem Trockenen und pumpt sich selbst Luft. Er will tauschen. Er sagt, oben gebe es nichts mehr, was er brauche.",
+  "bild": "Ein Kupferhelm mit beschlagenem Fenster, ein Schlauch, der in den Boden führt statt nach oben.",
+  "o": [
+   {
+    "l": "Tauschen: ein Item gegen ein anderes",
+    "fx": [
+     {
+      "op": "item_tausch"
+     }
+    ]
+   },
+   {
+    "l": "Ihm die Pumpe halten: +15 Leben, +10 Gold",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 15
+     },
+     {
+      "op": "gold",
+      "v": 10
+     }
+    ]
+   },
+   {
+    "l": "Den Schlauch durchschneiden: Kampf",
+    "fx": [
+     {
+      "op": "fight"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "alle_kreide",
+  "biom": "alle",
+  "t": "Die Kreidezeichen",
+  "d": "Jemand hat Zahlen an die Wand geschrieben, Striche in Fünferbündeln. Die letzte Zahl ist die Zahl deiner Kämpfe. Daneben ist noch Platz.",
+  "bild": "Eine Wand voller Kreidestriche, unten ein Kreidestummel, noch warm.",
+  "o": [
+   {
+    "l": "Einen Strich dazusetzen: ritze einen Handgriff um",
+    "fx": [
+     {
+      "op": "umritzen"
+     }
+    ]
+   },
+   {
+    "l": "Alles wegwischen: +1 Energie auf Dauer, -15 max. Leben",
+    "fx": [
+     {
+      "op": "energie_dauer",
+      "v": 1
+     },
+     {
+      "op": "max_hp",
+      "v": -15
+     }
+    ],
+    "if": {
+     "hp_min": 30
+    }
+   },
+   {
+    "l": "Die Kreide einstecken: +8 Gold",
+    "fx": [
+     {
+      "op": "gold",
+      "v": 8
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "alle_fischer_netz",
+  "biom": "alle",
+  "t": "Ein Netz, das du kennst",
+  "d": "Ein Netz hängt quer über dem Weg. Die Knoten sind deine, du erkennst den doppelten Schotstek, den nur dein Vater so machte. Im Netz zappelt etwas, das nicht atmet.",
+  "bild": "Ein Fischernetz zwischen zwei Felsen, darin ein Fang aus Händen.",
+  "if": {
+   "job": "fischer"
+  },
+  "o": [
+   {
+    "l": "Den Fang behalten: ein seltenes Item",
+    "fx": [
+     {
+      "op": "give_rare"
+     }
+    ]
+   },
+   {
+    "l": "Das Netz flicken und weiterknoten: lerne „Nachsetzen“",
+    "fx": [
+     {
+      "op": "handgriff",
+      "id": "nachsetzen"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "alle_laterne_spricht",
+  "biom": "alle",
+  "t": "Die Laterne",
+  "d": "Deine Laterne flackert in einem Takt. Lang, kurz, kurz. Sie hat das in Saltmoor nie getan.",
+  "bild": "Eine Sturmlaterne auf einem Stein, ihr Licht fällt in eine Richtung, die es nicht gibt.",
+  "if": {
+   "item": "lantern"
+  },
+  "o": [
+   {
+    "l": "Dem Licht folgen: lerne einen Handgriff, -6 Leben",
+    "fx": [
+     {
+      "op": "handgriff",
+      "zufall": true
+     },
+     {
+      "op": "lose_hp",
+      "v": 6
+     }
+    ]
+   },
+   {
+    "l": "Den Docht kürzen: +1 Kerbe an einem Item",
+    "fx": [
+     {
+      "op": "kerbe"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "alle_kirchenbuch",
+  "biom": "alle",
+  "t": "Das Kirchenbuch",
+  "d": "Ein Taufregister liegt aufgeschlagen auf einem Stein, trocken, als wäre es eben abgelegt worden. Dein Name steht darin. Das Datum ist dreihundert Jahre alt.",
+  "bild": "Ein Folioband, die Tinte braun, eine Zeile frisch und schwarz.",
+  "o": [
+   {
+    "l": "Den Eintrag streichen: +12 max. Leben, -20 Gold",
+    "fx": [
+     {
+      "op": "max_hp",
+      "v": 12
+     },
+     {
+      "op": "gold",
+      "v": -20
+     }
+    ],
+    "if": {
+     "gold_min": 20
+    }
+   },
+   {
+    "l": "Deine Paten nachlesen: eine Reaktion entdecken, +8 Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "heal",
+      "v": 8
+     }
+    ]
+   },
+   {
+    "l": "Eine Seite herausreißen: ein zufälliges Item, -6 Leben",
+    "fx": [
+     {
+      "op": "give_random"
+     },
+     {
+      "op": "lose_hp",
+      "v": 6
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "alle_pfarrerin_beichte",
+  "biom": "alle",
+  "t": "Jemand will beichten",
+  "d": "Ein Mann kniet im Dunkel und erkennt dich am Kragen. Er will beichten, sofort. Was er erzählt, ist etwas, das du getan hast, morgen.",
+  "bild": "Ein Kniender vor einer Wand, die Hände gefaltet um einen Gegenstand, den man nicht sieht.",
+  "if": {
+   "job": "pfarrerin"
+  },
+  "o": [
+   {
+    "l": "Absolution erteilen: volles Leben, ritze einen Handgriff um",
+    "fx": [
+     {
+      "op": "full_heal"
+     },
+     {
+      "op": "umritzen"
+     }
+    ]
+   },
+   {
+    "l": "Ihn fragen, was in seinen Händen ist: ein seltenes Item, -10 Leben",
+    "fx": [
+     {
+      "op": "give_rare"
+     },
+     {
+      "op": "lose_hp",
+      "v": 10
+     }
+    ],
+    "if": {
+     "hp_min": 15
+    }
+   }
+  ]
+ },
+ {
+  "id": "alle_stummfilm_zug",
+  "biom": "alle",
+  "t": "Ein Zug fährt vorbei",
+  "stummfilm": true,
+  "d": "Ein Zug fährt vorbei, an einem Ort ohne Gleise. In jedem Fenster sitzt jemand und winkt. Im letzten Wagen sitzt niemand, nur dein Mantel auf der Bank.",
+  "bild": "Fenster an Fenster im Dunkel, Gesichter wie aus Papier, ein leerer letzter Wagen.",
+  "o": [
+   {
+    "l": "Zurückwinken: +6 Leben, eine Reaktion entdecken",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 6
+     },
+     {
+      "op": "discover"
+     }
+    ]
+   },
+   {
+    "l": "Aufspringen und den Mantel holen: ein zufälliges Item, Kampf",
+    "fx": [
+     {
+      "op": "give_random"
+     },
+     {
+      "op": "fight"
+     }
+    ]
+   }
+  ]
  }
 ]
