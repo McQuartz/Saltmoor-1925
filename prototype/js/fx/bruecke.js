@@ -6,7 +6,7 @@ import { createFx, createFrame, clearFrame, actTiming, hex, luma, fit } from "..
 import * as hitSpark from "../vendor/pixelfx/src/fx/impacts/hit-spark.js";
 import * as bluntHit from "../vendor/pixelfx/src/fx/impacts/blunt-hit.js";
 import * as shieldBlock from "../vendor/pixelfx/src/fx/impacts/shield-block.js";
-import * as disintegrate from "../vendor/pixelfx/src/fx/spawn/disintegrate.js";
+import * as zerfall from "./zerfall.js";
 import * as eigene from "./eigene.js";
 
 window.PixelFX = {
@@ -17,7 +17,7 @@ window.PixelFX = {
     "impacts/hit-spark": hitSpark,
     "impacts/blunt-hit": bluntHit,
     "impacts/shield-block": shieldBlock,
-    "spawn/disintegrate": disintegrate,
+    "saltmoor/zerfall": zerfall, // angepasst aus spawn/disintegrate
     "saltmoor/brand": eigene.brand,
     "saltmoor/gift": eigene.gift,
     "saltmoor/geschwaecht": eigene.geschwaecht,

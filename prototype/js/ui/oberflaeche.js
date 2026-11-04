@@ -95,7 +95,7 @@ function figurHtml(){const M=Meta.get();const st=M.maxStufe;
  ${M.start.length?`<div class="stufen">Startvariante: <button class="${!S.wahlStart?'an':''}" data-start="">keine</button>${RUN.startvarianten.filter(v=>M.start.includes(v.id)).map(v=>`<button class="${S.wahlStart===v.id?'an':''}" data-start="${v.id}" title="${esc(v.t)}">${esc(v.n)}</button>`).join('')}</div>`:''}
  ${st?`<div class="stufen">Schwierigkeit: ${[...Array(st+1).keys()].map(i=>`<button class="${(S.wahlStufe||0)===i?'an':''}" data-stufe="${i}">${romanN(i+1)}</button>`).join('')}</div>`:''}`);}
 function uebergangHtml(){const a=RUN.akte[S.akt];const b=biom();let satz=S.akt===0?(JOBS.find(j=>j.id===S.job).ausrede):BIOMES[S.route[S.akt-1]].uebergang;
- return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p><div class="hint">Klicken zum Weitergehen</div></div>`;}
+ return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p><div class="hint">Klicken zum Überspringen</div></div>`;}
 function wegHtml(){const a=RUN.akte[S.akt];const eb=a.ebenen.length;
  return box('weg',`<div class="ueber">${a.n.toUpperCase()} · ${esc(biom().kurz).toUpperCase()} · EBENE ${S.ebene+1}/${eb}</div><h2>WOHIN?</h2>${jobFaehigkeit()==='karte'?`<div class="karte-geo">Die alte Karte: ${S.route.map((b,i)=>i===S.akt?`<b>${esc(BIOMES[b].kurz)}</b>`:esc(BIOMES[b].kurz)).join(' → ')}</div>`:''}
  <div class="wege">${S.weg.map((o,i)=>{const kn=RUN.knoten[o.art];const fz=o.foes&&o.art==='waechter'?FOES[o.foes[0]]:null;

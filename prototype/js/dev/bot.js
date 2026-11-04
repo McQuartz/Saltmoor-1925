@@ -4,6 +4,8 @@
 const Bot={
  // Bewertung einer Karte aus der Vorschau
  wert(p,inc){if(!p)return-1;let v=0;p.foes.forEach(f=>{v+=f.d+f.ab*.4+(f.kill?12:0);});const offen=Math.max(0,inc-S.block);v+=Math.min(p.block,offen)*1.3+p.block*.1;v+=Math.max(0,p.hp)*.8;if(p.hp<0)v+=p.hp*(S.hp<15?2:.6);v+=p.energy*3;return v;},
+ // beste Karte jetzt (für den geklickten Run in tools/selbst-spielen.js): {i,t} oder null
+ besteKarte(){const inc=incoming();let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
  kampfZug(){let guard=0;while(S.phase==='fight'&&!busy&&guard++<30){const inc=incoming();let best=null;
    S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];
     ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});
@@ -18,6 +20,8 @@ const Bot={
    if(worst>=0&&wertItem(it)>wv+2)move('bag:'+b,a+':'+worst);}
   // Rucksack voll halten vermeiden: schwächstes wegwerfen, wenn kein Platz
   if(!S.bag.includes(null)){let wi=-1,wv=1e9;S.bag.forEach((it,i)=>{if(it){const w=wertItem(it);if(w<wv){wv=w;wi=i;}}});if(wi>=0)move('bag:'+wi,'trash');}},
+ wegIndex(){const o=S.weg;const hpq=S.hp/maxHp();const score=x=>({rast:hpq<.55?10:2,werkstatt:4,kraemer:S.gold>=40?(hpq<.5?8:5):1,wandbild:6,ereignis:4,fundstelle:5,kampf:hpq>.5?5:1,kampf_schwer:hpq>.75?6:0})[x.art]??3;let bi=0,bs=-1;o.forEach((x,i)=>{const s=score(x);if(s>bs){bs=s;bi=i;}});return bi;},
+ eventIndex(){const ev=curEvent();let k=ev.o.findIndex(o=>condOk(o.if)&&!(o.fx||[]).some(f=>f.op==='lose_hp'&&S.hp<f.v+10||f.op==='fight'&&S.hp<maxHp()*.5));if(k<0)k=ev.o.findIndex(o=>condOk(o.if));return Math.max(0,k);},
  wegWahl(){const o=S.weg;const hpq=S.hp/maxHp();const score=x=>{switch(x.art){case'rast':return hpq<.55?10:2;case'werkstatt':return 4;case'kraemer':return S.gold>=40?(hpq<.5?8:5):1;
    case'wandbild':return 6;case'ereignis':return 4;case'fundstelle':return 5;case'kampf':return hpq>.5?5:1;case'kampf_schwer':return hpq>.75?6:0;default:return 3;}};
   let bi=0,bs=-1;o.forEach((x,i)=>{const s=score(x);if(s>bs){bs=s;bi=i;}});chooseWeg(bi);},

@@ -45,7 +45,7 @@ const PFX = (() => {
   function stoffRampe(c) {
     const [h, s, l] = zuHsl(rgbAus(c)), S = s * 0.5;
     const stufen = [0.05, 0.09, 0.15, 0.23, 0.33, 0.46].map((L) => ausHsl(h, S, Math.min(L, l * 0.8)));
-    return [...stufen, ausHsl(h, s * 0.65, Math.min(0.74, Math.max(l * 0.9, 0.56)))];
+    return [...stufen, ausHsl(h, s * 0.45, Math.min(0.72, Math.max(l * 0.9, 0.56)))];
   }
   /** Zonenfarben: Körper (dunkel), Randlicht (mittel), Augen als einziger heller Akzent. */
   function biomRampe(B) {
@@ -94,20 +94,21 @@ const PFX = (() => {
   }
 
   // ------------------------------------------------------------------ Welche Effekte es gibt
-  // id: pixelfx-Id; umf: nach Helligkeit auf die Palette abbilden (fremde Effekte); pal: Standardpalette;
+  // id: pixelfx-Id; umf: nach Helligkeit auf die Palette abbilden (fremde Effekte); deckel: höchste Stufe dabei
+  // (große Flächen bekommen nicht den hellen Akzent); pal: Standardpalette;
   // box(o, a): Zeichenfläche um den Ursprung [x0, y0, x1, y1]; dy: Ursprung so weit unter (x, y).
   const DEF = {
     treffer: { id: 'impacts/hit-spark', umf: true, pal: 'asche', gamma: 1.25, licht: 0.45, opt: (o) => ({ height: o.hoehe ?? 14, aim: 0.1 }), dy: (o) => o.hoehe ?? 14 },
-    treffer_gross: { id: 'impacts/blunt-hit', umf: true, pal: 'asche', gamma: 1.15, licht: 0.4, opt: (o) => ({ height: o.hoehe ?? 18 }), dy: (o) => o.hoehe ?? 18 },
+    treffer_gross: { id: 'impacts/blunt-hit', umf: true, pal: 'asche', gamma: 1.5, deckel: 5, licht: 0.4, opt: (o) => ({ height: o.hoehe ?? 18 }), dy: (o) => o.hoehe ?? 18 },
     brand: { id: 'saltmoor/brand', pal: 'F', koerper: true, licht: 0.6 },
     gift: { id: 'saltmoor/gift', pal: 'V', koerper: true, licht: 0.6 },
     geschwaecht: { id: 'saltmoor/geschwaecht', pal: 'grau', koerper: true, licht: 0.5 },
-    block_splitter: { id: 'impacts/shield-block', umf: true, pal: 'E', gamma: 1.2, licht: 0.4 },
+    block_splitter: { id: 'impacts/shield-block', umf: true, pal: 'E', gamma: 1.6, deckel: 4, licht: 0.4 },
     block_auf: { id: 'saltmoor/block-auf', pal: 'E', licht: 0.6, box: (o) => { const G = o.groesse; return [-G * 0.5 - 6, -G * 1.3 - 6, G * 0.5 + 6, 4]; } },
-    heilen: { id: 'saltmoor/heilen', pal: 'L', licht: 0.6, box: (o) => { const G = o.groesse; return [-G * 0.7 - 4, -G * 1.7, G * 0.7 + 4, 4]; } },
+    heilen: { id: 'saltmoor/heilen', pal: 'L', licht: 1.0, box: (o) => { const G = o.groesse; return [-G * 0.7 - 4, -G * 1.7, G * 0.7 + 4, 4]; } },
     reaktion: { id: 'saltmoor/reaktion', pal: 'W', licht: 0.6, box: (o) => { const G = o.groesse; return [-G * 1.6, -G * 1.1, G * 1.6, G * 1.1]; } },
-    hochreaktion: { id: 'saltmoor/hochreaktion', pal: 'L', licht: 0.7, box: (o) => { const G = o.groesse; return [-G * 1.15, -G * 1.25, G * 1.15, G * 0.75]; } },
-    tod: { id: 'spawn/disintegrate', umf: true, pal: 'hafen', gamma: 1.0, licht: 0.4, koerper: true, zeigeKoerper: true, keinSpiegel: true, opt: (o) => ({ wind: (o.richtung ?? 1) < 0 ? -1 : 1 }) },
+    hochreaktion: { id: 'saltmoor/hochreaktion', pal: 'L', licht: 1.3, box: (o) => { const G = o.groesse; return [-G * 1.15, -G * 1.25, G * 1.15, G * 0.75]; } },
+    tod: { id: 'saltmoor/zerfall', umf: true, pal: 'hafen', gamma: 1.0, licht: 0.4, koerper: true, zeigeKoerper: true, keinSpiegel: true, opt: (o) => ({ wind: (o.richtung ?? 1) < 0 ? -1 : 1 }) },
     uebergang: { id: 'saltmoor/uebergang', pal: 'hafen', licht: 0, ganz: true },
   };
   const namen = Object.keys(DEF);
@@ -159,7 +160,7 @@ const PFX = (() => {
       const b = d.ganz ? [0, 0, opts.w, opts.h] : boxVon(d, mod, { ...o, groesse }, akteur, flip);
       const e = {
         name, ebene: o.ebene, fx, mod, d, opts, akteur, b, tempo: o.tempo ?? 1, mitte: o.mitte, mitteGerufen: false,
-        umf: !!d.umf, gamma: d.gamma ?? 1.2, lichtK: o.licht ?? d.licht ?? 0.5,
+        umf: !!d.umf, gamma: d.gamma ?? 1.2, deckel: d.deckel ?? pal.length - 1, lichtK: o.licht ?? d.licht ?? 0.5,
         rampe: pal.map(rgbAus), lichtFarbe: rgbAus(pal[Math.max(0, pal.length - 2)]),
         frame: null, cc: null, lc: null,
       };
@@ -207,7 +208,7 @@ const PFX = (() => {
       if (a) {
         let r = c & 255, gg = (c >>> 8) & 255, b = (c >>> 16) & 255;
         if (e.umf) {
-          const l = (0.299 * r + 0.587 * gg + 0.114 * b) / 255, k = Math.min(N - 1, Math.floor(Math.pow(l, e.gamma) * N));
+          const l = (0.299 * r + 0.587 * gg + 0.114 * b) / 255, k = Math.min(e.deckel, N - 1, Math.floor(Math.pow(l, e.gamma) * N));
           r = R[k][0]; gg = R[k][1]; b = R[k][2];
         }
         cd[j] = r; cd[j + 1] = gg; cd[j + 2] = b; cd[j + 3] = a;
@@ -216,10 +217,10 @@ const PFX = (() => {
       if (l && e.lichtK > 0) {
         const lr = l & 255, lg = (l >>> 8) & 255, lb = (l >>> 16) & 255, m = Math.max(lr, lg, lb);
         const x = (i % f.w) + f.ox, y = ((i / f.w) | 0) + f.oy;
-        const q = Math.min(LICHT_STUFEN, Math.floor((m / 255) * e.lichtK * LICHT_STUFEN + BAY[((y & 3) << 2) | (x & 3)] - 0.5)) / LICHT_STUFEN;
+        const q = Math.min(LICHT_STUFEN, Math.floor((m / 255) * e.lichtK * LICHT_STUFEN + BAY[((y & 3) << 2) | (x & 3)])) / LICHT_STUFEN * 0.5;
         if (q > 0) {
           if (e.umf) { ld[j] = LF[0] * q; ld[j + 1] = LF[1] * q; ld[j + 2] = LF[2] * q; }
-          else { ld[j] = (lr / m) * 255 * q * 0.8; ld[j + 1] = (lg / m) * 255 * q * 0.8; ld[j + 2] = (lb / m) * 255 * q * 0.8; }
+          else { ld[j] = (lr / m) * 255 * q; ld[j + 1] = (lg / m) * 255 * q; ld[j + 2] = (lb / m) * 255 * q; }
           ld[j + 3] = 255; licht = true;
         } else ld[j + 3] = 0;
       } else ld[j + 3] = 0;

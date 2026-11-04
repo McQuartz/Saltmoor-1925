@@ -52,6 +52,18 @@ function stellen(a, n, seed) {
   return out;
 }
 
+// Stellen an den Seitenkanten des Rumpfs (Mitte des Körpers)
+function seitenStellen(a, n, seed) {
+  const S = shape(a), out = [];
+  for (let i = 0; i < n; i++) {
+    const my = Math.round(S.h * (0.35 + 0.4 * rand(i, seed, 5))), row = S.rows[my];
+    if (!row || row[0] < 0) continue;
+    const links = i % 2 === 0;
+    out.push({ x: a.x + (links ? row[0] : row[1]) + 0.5, y: a.y + my + 0.5, n: 100 + i * 7 + seed });
+  }
+  return out;
+}
+
 // ---------------------------------------------------------------- Brand: kurze Flammen am Körper
 export const brand = {
   meta: {
@@ -61,15 +73,15 @@ export const brand = {
   },
   draw(p, t, o) {
     const C = ramp(o).map(hex), F = fit(o.palette, 9).reverse().map(hex), a = koerper(o), D = 1.6;
-    const env = huelle(t, 0.12, 0.6, D), k = clamp(a.h / 48, 0.8, 1.7);
-    const sp = stellen(a, clamp(Math.round(a.w / 9), 3, 7), o.seed);
-    // ganz kalte Flammen: ohne weißen Kern
-    const LAG = [[1, 1, 7], [0.72, 0.8, 5], [0.45, 0.58, 3]];
+    const env = huelle(t, 0.12, 0.6, D), k = clamp(a.h / 48, 0.9, 1.8);
+    const sp = [...stellen(a, clamp(Math.round(a.w / 7), 3, 8), o.seed), ...seitenStellen(a, 4, o.seed)];
+    // gedämpfte Flammen: dunkler Rand, Glut, ein kleiner heller Kern nur in den großen Zungen
+    const LAG = [[1, 1, 6], [0.74, 0.84, 4], [0.5, 0.64, 2], [0.26, 0.36, 1]];
     sp.forEach((s, i) => {
-      const fl = 0.75 + 0.35 * noise2(t * 6, i * 3.1, o.seed);
-      const h = (3 + 3 * rand(i, o.seed)) * k * fl * env;
-      tongue(p, s.x, s.y, h, 1 + 0.4 * k, -1.2 * h / 5, F, t, D, s.n, LAG);
-      p.glow(s.x, s.y - h * 0.4, 5 + 3 * k, C[4], 0.14 * env);
+      const fl = 0.7 + 0.4 * noise2(t * 6, i * 3.1, o.seed), auf = smooth(0, 0.25, t - 0.05 * (i % 4));
+      const h = (5 + 5 * rand(i, o.seed)) * k * fl * env * auf;
+      tongue(p, s.x, s.y + 1, h, 1.4 + 0.5 * k, -1.5 * h / 6, F, t, D, s.n, LAG);
+      p.glow(s.x, s.y - h * 0.4, 6 + 4 * k, C[5], 0.3 * env);
     });
     // Funken steigen auf und kühlen ab
     stream(t, 0.05, D - 0.5, 16 * k, o.seed + 1, (r) => r.range(0.45, 0.9), (age, life, r, i) => {
@@ -96,12 +108,12 @@ export const gift = {
     // Flecken über dem Körper (gedithert, wandern langsam nach unten)
     for (const [mx, my] of S.body) {
       const n = noise2(mx * 0.18, my * 0.18 - t * 1.2, o.seed);
-      const k = clamp((n - 0.15) * 2.2) * env;
-      if (k > 0.05) p.dot(a.x + mx, a.y + my, n > 0.55 ? C[3] : C[2], k * 0.7);
+      const k = clamp((n - 0.05) * 2.4) * env;
+      if (k > 0.05) p.dot(a.x + mx, a.y + my, n > 0.5 ? C[4] : C[3], k * 0.85);
     }
     // Tropfen von den Seitenkanten
     const seiten = S.side;
-    stream(t, 0.15, D - 0.5, 10, o.seed + 1, (r) => r.range(0.4, 0.75), (age, life, r, i) => {
+    stream(t, 0.15, D - 0.5, 18, o.seed + 1, (r) => r.range(0.4, 0.75), (age, life, r, i) => {
       const [mx, my] = seiten[Math.floor(r.next() * seiten.length)];
       const x = a.x + mx + 0.5, y0 = a.y + my + 0.5, y = Math.min(-1, y0 + 4 * age + 160 * age * age);
       const c = age / life < 0.6 ? C[4] : C[3];
@@ -110,9 +122,9 @@ export const gift = {
       else p.dot(x + (i % 2 ? 1 : -1), -1, C[3], 1 - age / life);
     });
     // Blasen: steigen vom oberen Umriss, platzen
-    const sp = stellen(a, 5, o.seed);
-    stream(t, 0.1, D - 0.6, 6, o.seed + 2, (r) => r.range(0.5, 0.9), (age, life, r, i) => {
-      const s = sp[i % sp.length], u = age / life, x = s.x + r.range(-3, 3) + Math.sin(age * 7 + i) * 0.8, y = s.y - age * r.range(8, 16);
+    const sp = seitenStellen(a, 6, o.seed);
+    stream(t, 0.1, D - 0.6, 10, o.seed + 2, (r) => r.range(0.5, 0.9), (age, life, r, i) => {
+      const s = sp[i % sp.length], u = age / life, x = s.x + (s.x < 0 ? -1 : 1) * r.range(0, 3) + Math.sin(age * 7 + i) * 0.8, y = s.y - age * r.range(8, 16);
       if (u < 0.85) {
         const rr = u < 0.3 ? 0.6 : 1.4;
         p.circle(x, y, rr, C[5], 0.9);
@@ -121,7 +133,7 @@ export const gift = {
     });
     // Dunst am Boden
     haze(p, 0, -1, a.w * 0.7, 3, C[3], 0.35 * env);
-    p.glow(0, a.y * 0.4, a.h * 0.45, C[3], 0.08 * env);
+    p.glow(0, a.y * 0.5, a.h * 0.5, C[4], 0.22 * env);
   },
 };
 
@@ -165,7 +177,7 @@ export const blockAuf = {
     options: { palette: ["#07090c", "#10161c", "#1c2630", "#2e3c4a", "#4a5e70", "#7890a4", "#b4c8d8"], groesse: 48, seed: 11 },
   },
   draw(p, t, o) {
-    const C = ramp(o).map(hex), D = 1.2, G = o.groesse, rx = G * 0.42, ry = G * 0.62, cy = -ry;
+    const C = ramp(o).map(hex), D = 1.2, G = o.groesse, rx = G * 0.42, ry = G * 0.55, cy = -ry;
     const auf = ease.outCubic(clamp(t / 0.38)), aus = 1 - smooth(0.55, D, t);
     const front = ry - 2 * ry * auf; // y relativ zur Mitte, wandert von unten nach oben
     const g = Math.max(4, Math.round(G / 9));
@@ -176,8 +188,9 @@ export const blockAuf = {
         const rand_ = d > 0.86, gitter = ((x + y + 400) % g === 0) || ((x - y + 400) % g === 0);
         if (!rand_ && !gitter) continue;
         const naheFront = y - front < 2.5 && auf < 1;
-        const c = naheFront ? C[6] : rand_ ? (x > 0 && y < 0 ? C[5] : C[4]) : C[3];
-        const a = naheFront ? 1 : (rand_ ? 1 : 0.8) * (0.35 + 0.65 * aus) * aus;
+        const licht = x / rx * 0.6 - y / ry * 0.8; // Gegenlicht von oben rechts
+        const c = naheFront ? C[6] : rand_ ? (licht > 0.45 ? C[5] : licht > -0.2 ? C[4] : C[2]) : licht > 0.3 ? C[4] : C[3];
+        const a = naheFront ? 1 : (rand_ ? 1 : 0.75) * (0.3 + 0.7 * aus) * aus;
         p.dot(x, cy + y, c, a);
       }
     if (auf < 1) p.glowLine(-rx * 0.8, cy + front, rx * 0.8, cy + front, 5, C[5], 0.25);
@@ -196,14 +209,14 @@ export const heilen = {
     const C = ramp(o).map(hex), D = 1.8, G = o.groesse, env = huelle(t, 0.25, 0.7, D), W = G * 0.45;
     const q = clamp(t / 0.9);
     if (q < 1) band(p, 0, 0, 4 + W * ease.outCubic(q), 0.24, 1.5, (1 - q) * 1.1, [C[3], C[4], C[5], C[6]]);
-    stream(t, 0.05, D - 0.6, 26, o.seed, (r) => r.range(0.7, 1.2), (age, life, r, i) => {
+    stream(t, 0.05, D - 0.6, 44, o.seed, (r) => r.range(0.7, 1.2), (age, life, r, i) => {
       const u = age / life, x0 = r.range(-W, W) * 0.8, x = x0 + Math.sin(age * 3 + i) * 1.5, y = -1 - age * r.range(30, 60);
       const c = u < 0.25 ? C[6] : u < 0.6 ? C[5] : C[4];
       p.dot(x, y, c, 1 - u * u);
       if (r.chance(0.35)) p.dot(x, y + 1, C[3], (1 - u) * 0.8);
     });
     p.glowLine(0, -2, 0, -G * 1.2, W * 0.9, C[4], 0.12 * env);
-    p.glow(0, -2, W * 1.1, C[5], 0.16 * env);
+    p.glow(0, -G * 0.3, W * 1.4, C[5], 0.3 * env);
   },
 };
 
@@ -224,13 +237,13 @@ export const hochreaktion = {
     // zwei Ringe, flach, laufen langsam auseinander
     for (const [t0, s] of [[0.15, 1], [0.55, 0.8]]) {
       const q = clamp((t - t0) / 1.8);
-      if (q > 0 && q < 1) band(p, 0, G * 0.35, 6 + G * s * ease.outCubic(q), 0.3, 1.6, (1 - q) * 1.1, [C[3], C[4], C[5], C[6]]);
+      if (q > 0 && q < 1) band(p, 0, G * 0.35, 6 + G * s * ease.outCubic(q), 0.3, 1.4, (1 - q) * 1.0, [C[2], C[3], C[4], C[5]]);
     }
     // ein heller Kern, der ruhig pulsiert
     const kern = atem * (0.85 + 0.15 * Math.sin(t * 9));
     if (kern > 0.05) {
-      p.circle(0, 0, 1.5 + 2.5 * kern, C[5], kern);
-      p.circle(0, 0, 0.8 + 1.2 * kern, C[6], kern);
+      p.circle(0, 0, 1 + 1.5 * kern, C[5], kern);
+      p.px(0, 0, C[6]);
     }
     // Teilchen steigen aus der Fläche
     stream(t, 0.2, D - 0.7, 30, o.seed, (r) => r.range(0.9, 1.5), (age, life, r, i) => {
@@ -271,8 +284,8 @@ export const uebergang = {
             if (d < -0.05) continue;
             let c;
             if (d > 0.02) c = C[0];
-            else if (d > -0.01) c = C[2];
-            else c = C[3];
+            else if (d > -0.01) c = C[1];
+            else c = C[2];
             // Kante fein gedithert, damit sie nicht wie eine Linie wirkt
             if (d <= 0.02 && bay(x, y) > 0.55 + d * 8) continue;
             p.put(x, y, c, 1);

@@ -1,11 +1,15 @@
+// Saltmoor: Tod eines Gegners. Angepasst aus pixelfx spawn/disintegrate (MIT, Copyright (c) 2026 Patch,
+// Copyright (c) 2026 Hugo Duprez; siehe js/vendor/pixelfx/LICENSE und NOTICE.md). Änderungen: keine Sternfunkeln
+// (Lichtpunkte statt Kreuze), kein weißer Aufblitz-Kranz, Bodenring und Ladung leiser, Motive kühlen in der Palette ab.
+// Original-Hinweis:
 // The flickering outline, the white silhouette flash and the body's own pixels flying off as bits of light are
 // adapted from Sprite Fusion's open-source movement (https://www.spritefusion.com/pixel-art-vfx/movement),
 // MIT License, Copyright (c) 2026 Hugo Duprez.
-import { Particles, Lights, P, Rng, fit, band, sparkle, clamp, smooth, ease, rand, noise, noise2, TAU, WHITE, mix, scale, READY } from "../../core/index.js";
-import { bodyOf, rimOf } from "./_lib.js";
+import { Particles, Lights, P, Rng, fit, band, sparkle, clamp, smooth, ease, rand, noise, noise2, TAU, WHITE, mix, scale, READY } from "../vendor/pixelfx/src/core/index.js";
+import { bodyOf, rimOf } from "../vendor/pixelfx/src/fx/spawn/_lib.js";
 
 export const meta = {
-  name: "Disintegrate",
+  name: "Zerfall",
   desc: "The character crackles with light, flashes white, then peels away from the head down: each pixel flares white-hot and streams off on the wind as a cooling mote of light.",
   tags: ["spawn", "death", "disintegrate", "dissolve", "pixels", "energy", "light", "one-shot"],
   size: [176, 100],
@@ -34,10 +38,12 @@ export const act = {
   ],
 };
 
-const FLASH = 0.42, WHITE_T = 0.07, P0 = FLASH + WHITE_T, PEEL = 1.2, CORE_Y = -20;
+const FLASH = 0.42, WHITE_T = 0.07, P0 = FLASH + WHITE_T, PEEL = 1.2;
 export const actorAlpha = (t) => (t < FLASH - 0.1 ? 1 : 0);
 
 export function create(o) {
+  // Saltmoor: Mitte des Körpers statt fester Höhe des 38-px-Dummys
+  const CORE_Y = Math.round((o.actor?.y ?? -38) * 0.5);
   const C = fit(o.palette, 8), A = fit(o.accent, 3), R = new Rng(o.seed), W = o.wind, floor = () => 0;
   // what a mote cools through after its white flare: the main ramp, or the accent for variety
   const COOL = [[C[6], C[5], C[5], C[4]], [A[2], A[1], A[1], A[0]], [WHITE, C[6], C[5], C[5]]];
@@ -59,7 +65,7 @@ export function create(o) {
     b.gone = true;
     const lo = b.y > -9 && R.chance(0.22), kind = lo ? 2 : R.chance(0.42) ? 1 : R.chance(0.07) ? 3 : 0;
     if (kind === 3) {
-      ps.spawn(P.STAR, b.x, b.y, R.range(-6, 14) * W, R.range(-26, -8), R.range(0.6, 1.1), R.chance(0.5) ? C[6] : WHITE, R.range(1, 2.2));
+      ps.spawn(P.MOTE, b.x, b.y, R.range(-6, 14) * W, R.range(-26, -8), R.range(0.6, 1.1), C[5], 1);
       return;
     }
     const life = kind === 2 ? R.range(0.7, 1.2) : kind === 1 ? R.range(0.25, 0.5) : R.range(0.9, 1.7);
@@ -84,10 +90,7 @@ export function create(o) {
         flashed = true;
         lights.add(0, CORE_Y, 64, C[4], 0.85, 0.6);
         lights.add(0, CORE_Y, 30, WHITE, 0.8, 0.14);
-        for (let i = 0; i < 14; i++) {
-          const a = R.range(0, TAU), sp = R.range(50, 150);
-          ps.spawn(P.STAR, R.range(-6, 6), CORE_Y + R.range(-10, 10), Math.cos(a) * sp, Math.sin(a) * sp * 0.7 - 25, R.range(0.35, 0.8), R.pick([WHITE, C[6], C[5]]), R.range(0.6, 1.8));
-        }
+
       }
       // the peel front eats the body
       if (t >= P0) {
@@ -130,7 +133,7 @@ export function create(o) {
     drawBack(p) {
       // the floor ring from the flash, far half
       const k = (t - FLASH) / 0.5;
-      if (k > 0 && k < 1) band(p, 0, 0, 6 + 30 * ease.outCubic(k), 0.18, Math.max(1, 3.5 * (1 - k)), 1.15 - k, C, (g) => Math.sin(g) < 0, k < 0.12);
+      if (k > 0 && k < 1) band(p, 0, 0, 6 + 30 * ease.outCubic(k), 0.18, Math.max(1, 2 * (1 - k)), 0.7 - 0.7 * k, C, (g) => Math.sin(g) < 0, false);
       // a cold pool on the floor while the body burns away
       const pool = smooth(0.1, FLASH, t) * (1 - smooth(P0 + PEEL * 0.8, P0 + PEEL + 0.6, t));
       if (pool > 0) p.glow(0, -1, 30, C[4], 0.22 * pool);
@@ -163,7 +166,7 @@ export function create(o) {
         }
         if (white) {
           p.glow(0, CORE_Y, 34, C[5], 0.7);
-          sparkle(p, 0, CORE_Y - 3, 9, C[6], C[4], 0.5);
+
         }
       }
       // light rides the peel front down the body
@@ -174,7 +177,7 @@ export function create(o) {
       }
       // the floor ring, near half
       const k = (t - FLASH) / 0.5;
-      if (k > 0 && k < 1) band(p, 0, 0, 6 + 30 * ease.outCubic(k), 0.18, Math.max(1, 3.5 * (1 - k)), 1.15 - k, C, (g) => Math.sin(g) >= 0, k < 0.12);
+      if (k > 0 && k < 1) band(p, 0, 0, 6 + 30 * ease.outCubic(k), 0.18, Math.max(1, 2 * (1 - k)), 0.7 - 0.7 * k, C, (g) => Math.sin(g) >= 0, false);
       // the motes: flare white, cool down the ramp, leave a short tail, dither out
       for (const m of motes) {
         const age = m.max - m.life, k2 = m.life / m.max, a = k2 < 0.35 ? k2 / 0.35 : 1;

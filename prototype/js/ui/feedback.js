@@ -4,7 +4,7 @@ const FLOAT_COL={dmg:'#e8d8c0',big:'#ffd23f',heal:'#9ae08a',block:'#9cc3ff',hurt
 function floatAt(el,txt,col,k=0){if(!el||FAST)return;const r=el.getBoundingClientRect();const f=document.createElement('div');f.className='float';f.textContent=txt;f.style.color=col;
  f.style.left=(r.left+r.width/2+(Math.random()-.5)*30)+'px';f.style.top=(r.top+r.height*.3)+'px';f.style.fontSize=(BU.k*5+Math.min(12,k))+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),1000);}
 function floatScene(e,txt,col,k){const b=enemyBox(e);const r=BU.cv.getBoundingClientRect();const fake={getBoundingClientRect:()=>({left:r.left+b.x/SW*r.width-10,top:r.top+(b.y-b.h*.6)/SH*r.height,width:20,height:20})};floatAt(fake,txt,col,k);}
-function toast(a,b,hoch){if(FAST)return;const t=$('toast');if(!t)return;const d=document.createElement('div');d.className='tst'+(hoch?' hoch':'');d.innerHTML=`${a}<small>${b||''}</small>`;t.appendChild(d);setTimeout(()=>d.remove(),2400);while(t.children.length>3)t.firstChild.remove();}
+function toast(a,b,hoch){if(FAST)return;const t=$('toast');if(!t)return;const d=document.createElement('div');d.className='tst'+(hoch?' hoch':'');d.innerHTML=`${a}<small>${b||''}</small>`;t.appendChild(d);setTimeout(()=>d.remove(),Math.round(2400/(Einst.get('text')||1)));while(t.children.length>3)t.firstChild.remove();}
 // Zwischentitel (nur Hochreaktionen, 0,6 s, Art déco)
 function zwischentitel(txt){if(FAST)return;const z=$('zwt');z.innerHTML=`<div><span>${txt}</span></div>`;z.classList.remove('an');void z.offsetWidth;z.classList.add('an');setTimeout(()=>z.classList.remove('an'),650);}
 function vig(){const v=$('vig');if(!v)return;v.classList.remove('an');void v.offsetWidth;v.classList.add('an');}
@@ -17,7 +17,9 @@ function musikSzene(){if(typeof Music==='undefined'||!audioOn)return;const ph=S.
 function dominanterStoff(){const c={};allActive().forEach(it=>def(it).st.forEach(k=>c[k]=(c[k]||0)+1));let b='keiner',n=0;for(const k in c)if(c[k]>n){n=c[k];b=k;}return b;}
 const musFoe=id=>{const f=FOES[id];return f&&f.stimme?f.stimme:{cultist:'kultist',fishman:'tiefling',drowned:'ertrunkener',shade:'schatten',boss:'ruft'}[id]||id;};
 let lastPhase=null;
-Bus.on('changed',()=>{render();if(S.phase!==lastPhase){lastPhase=S.phase;musikSzene();if(S.phase==='wandbild')setTimeout(reliefMalen,0);if(S.phase==='strand')setTimeout(()=>sfx.die&&0,0);}if(typeof Music!=='undefined'&&audioOn&&S.route){try{Music.hp(S.hp,maxHp());if(S.phase==='fight'&&incoming()>S.block)Music.telegraph();}catch(e){}}});
+Bus.on('changed',()=>{render();if(S.phase!==lastPhase){lastPhase=S.phase;musikSzene();if(S.phase==='wandbild')setTimeout(reliefMalen,0);
+  // Übergangsbild: geht nach ein paar Sekunden von selbst weiter (Klick überspringt), Dauer nach Textgeschwindigkeit
+  if(S.phase==='uebergang'&&!FAST){const a=S.akt,sd=S.seed;setTimeout(()=>{if(S.phase==='uebergang'&&S.akt===a&&S.seed===sd)leaveUebergang();},Math.round(4200/(Einst.get('text')||1)));}if(S.phase==='strand')setTimeout(()=>sfx.die&&0,0);}if(typeof Music!=='undefined'&&audioOn&&S.route){try{Music.hp(S.hp,maxHp());if(S.phase==='fight'&&incoming()>S.block)Music.telegraph();}catch(e){}}});
 Bus.on('deal',()=>{dealAnim=true;});
 Bus.on('card_played',()=>sfx.card());
 Bus.on('no_energy',()=>{sfx.bad();});
