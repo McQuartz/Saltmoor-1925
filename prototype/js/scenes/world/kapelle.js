@@ -44,7 +44,7 @@ function pfeiler(K, eb, x, yTop, yBot, w, tiefe, o) {
   m.poly([[x - w * .75, yTop + w * .5], [x - w * .62, yTop - w * .2], [x + w * .62, yTop - w * .2], [x + w * .75, yTop + w * .5]]);
   m.rect(x - w * .7, yTop - w * .45, w * 1.4, w * .3);
   const dienst = Math.max(2, Math.round(w / 4));
-  K.form(eb, m, tiefe, { ton: 1, fase: Math.max(1, w * .08), verlauf: .35, muster: (px, py) => ((Math.round(px - x + w / 2) % dienst === 0) ? -.35 : 0) + (B.hash(px, py >> 2, 6) - .5) * .25, schatten: o.schatten ? 2 : 0 });
+  K.form(eb, m, tiefe, { ton: o.ton === undefined ? .55 : o.ton, fase: Math.max(1, w * .08), verlauf: .3, muster: (px, py) => ((Math.round(px - x + w / 2) % dienst === 0) ? -.35 : 0) + (B.hash(px, py >> 2, 6) - .5) * .25, schatten: o.schatten ? 2 : 0 });
 }
 function kerze(K, eb, x, y, h, an, o) {
   const e = K.e[eb], c = B.pk(o && o.farbe || KERZE), c2 = B.pk('#a08a60');
@@ -78,7 +78,7 @@ function schiff(K, cfg) {
   const fr = K.fr, nah = !!cfg.nah, P = B.persp(240, nah ? 150 : 140), w0 = .5, b = -.12 - .06 * fr; K.split = nah ? [176, 186] : [150, 160];
   const Zap = nah ? 8 : 16, kap = P.k(Zap);
   // Ebene 0: Gewölbedunkel und Chorwand
-  B.feld(K.e[0], -M, -M, W + M, H + M, WAND, (x, y) => .55 + y / H * .9 + quader(6, 11)(x, y) * .5 - Math.abs(x - 240) / 480);
+  B.feld(K.e[0], -M, -M, W + M, H + M, WAND, (x, y) => .62 + y / H * .7 + quader(6, 11)(x, y) * .3 - Math.abs(x - 240) / 520);
   const chor = B.maske(); spitzbogenMaske(chor, 240 - 4.6 * kap * 1.25, 240 + 4.6 * kap * 1.25, P.q(0, 7.5, Zap * .8)[1], 5.5 * kap, 1); chor.rect(240 - 4.6 * kap * 1.25, P.q(0, 7.5, Zap * .8)[1], 9.2 * kap * 1.25, 200);
   B.form(K.e[0], chor, K.mat(.15, { ton: 2.2, fase: 0, rand: 0, muster: quader(Math.max(3, Math.round(kap * .55)), Math.round(kap * 1.1)) }));
   const fy = P.q(0, nah ? 7.2 : 9.4, Zap)[1], fR = (nah ? 3.7 : 4.4) * kap;

@@ -68,6 +68,7 @@ function playCard(i,ei){
  const e=tgt();const rx=reactionsFor(S.last,c.st);const ctx={tg:e,card:c};
  Bus.emit('card_played',{c,e,why:`${c.n} (${c.src}) gespielt, kostet ${cost}`+(c.st.length?`, Stoff ${c.st.map(k=>ST[k].n).join(' + ')}`:', ohne Stoff')});
  let mult=1;const multWhy=[];rx.forEach(r=>{if(r.pre&&r.pre.mult){mult*=r.pre.mult;multWhy.push(`${r.n} ×${r.pre.mult}`);}});
+ if(first&&jobFaehigkeit()==='erste_doppelt'){mult*=1.5;multWhy.push('Kriegsveteran: erste Karte ×1,5');}
  bonuses('every_nth_mult').forEach(b=>{if(S.played%b.n===0){mult*=b.mult;multWhy.push(`Kneipenschläger ×${b.mult}`);Bus.emit('toast',{a:'KNEIPENSCHLÄGER',b:`Karte ${b.n}: doppelt`});}});
  const flat=bonuses('stoff_flat').filter(b=>c.st.includes(b.stoff)).reduce((s,b)=>s+b.amount,0);
  const rep=rx.find(r=>r.pre&&r.pre.repeat);const reps=rep?rep.pre.repeat:1;

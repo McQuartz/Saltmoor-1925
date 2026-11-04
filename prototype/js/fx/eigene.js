@@ -281,3 +281,42 @@ export const uebergang = {
     };
   },
 };
+
+// ---------------------------------------------------------------- Reaktion: Ring/Welle in Stofffarbe
+export const reaktion = {
+  meta: {
+    name: "Reaktion", desc: "Punkte ziehen sich zusammen, ein kurzer Kern, dann laufen zwei Ringe in der Stofffarbe auseinander.",
+    size: [140, 110], origin: [70, 55], duration: 1.3, loop: false, fps: 30,
+    options: { palette: ["#06080c", "#0c121c", "#16202e", "#223246", "#344a64", "#4c6888", "#9ab8d8"], groesse: 40, seed: 23 },
+  },
+  draw(p, t, o) {
+    const C = ramp(o).map(hex), G = o.groesse, T0 = 0.24;
+    // Anlauf: Punkte ziehen sich auf die Mitte zusammen
+    if (t < T0 + 0.04)
+      for (let i = 0; i < 14; i++) {
+        const an = (i / 14) * TAU + rand(i, o.seed) * 0.4, q = ease.inCubic(clamp(t / T0)), r = G * 0.8 * (1 - q) + 2;
+        p.px(Math.cos(an) * r, Math.sin(an) * r * 0.6, q > 0.7 ? C[5] : C[4]);
+        if (q > 0.3) p.px(Math.cos(an) * (r + 1.5), Math.sin(an) * (r + 1.5) * 0.6, C[3]);
+      }
+    // Kern
+    const k = clamp(1 - Math.abs(t - T0) / 0.18);
+    if (k > 0) {
+      p.circle(0, 0, 1 + 3 * k, C[4], k);
+      p.circle(0, 0, 0.6 + 1.5 * k, C[6], k);
+      p.glow(0, 0, G * 0.6, C[5], 0.35 * k);
+    }
+    // zwei Ringe, leicht schräg, laufen aus
+    for (const [t0, s, sy] of [[T0, 1, 0.6], [T0 + 0.14, 0.7, 0.45]]) {
+      const q = clamp((t - t0) / 0.95);
+      if (q <= 0 || q >= 1) continue;
+      const r = 3 + G * s * ease.outCubic(q);
+      band(p, 0, 0, r, sy, Math.max(1, 2.4 * (1 - q)), 1.15 - q, [C[2], C[3], C[5], C[6]]);
+    }
+    // Splitter in der Stofffarbe treiben nach außen
+    stream(t, T0, T0 + 0.05, 200, o.seed, (r) => r.range(0.5, 0.9), (age, life, r, i) => {
+      const an = r.range(0, TAU), v = r.range(20, 45) * (G / 40), u = age / life;
+      const x = Math.cos(an) * v * age * (1 - 0.4 * age), y = Math.sin(an) * v * age * 0.6 * (1 - 0.4 * age);
+      p.dot(x, y, u < 0.4 ? C[5] : C[4], 1 - u);
+    });
+  },
+};

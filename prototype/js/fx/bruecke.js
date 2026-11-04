@@ -6,7 +6,6 @@ import { createFx, createFrame, clearFrame, actTiming, hex, luma, fit } from "..
 import * as hitSpark from "../vendor/pixelfx/src/fx/impacts/hit-spark.js";
 import * as bluntHit from "../vendor/pixelfx/src/fx/impacts/blunt-hit.js";
 import * as shieldBlock from "../vendor/pixelfx/src/fx/impacts/shield-block.js";
-import * as implosion from "../vendor/pixelfx/src/fx/explosions/implosion.js";
 import * as disintegrate from "../vendor/pixelfx/src/fx/spawn/disintegrate.js";
 import * as eigene from "./eigene.js";
 
@@ -18,7 +17,6 @@ window.PixelFX = {
     "impacts/hit-spark": hitSpark,
     "impacts/blunt-hit": bluntHit,
     "impacts/shield-block": shieldBlock,
-    "explosions/implosion": implosion,
     "spawn/disintegrate": disintegrate,
     "saltmoor/brand": eigene.brand,
     "saltmoor/gift": eigene.gift,
@@ -27,6 +25,7 @@ window.PixelFX = {
     "saltmoor/heilen": eigene.heilen,
     "saltmoor/hochreaktion": eigene.hochreaktion,
     "saltmoor/uebergang": eigene.uebergang,
+    "saltmoor/reaktion": eigene.reaktion,
   },
 };
 window.dispatchEvent(new Event("pixelfx-bereit"));

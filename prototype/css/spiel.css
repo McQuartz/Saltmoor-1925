@@ -189,3 +189,6 @@ button.deco small{font-family:var(--ft);font-size:.75em;letter-spacing:0}
 #scare{position:fixed;inset:0;display:none;z-index:99;background:#000}#scare.on{display:block}#scare canvas{width:100%;height:100%;image-rendering:pixelated}
 #devBtn{position:fixed;right:6px;bottom:6px;z-index:70;font-family:monospace;font-size:10px;background:#000;color:#4a5a50;border:1px solid #1a2420;padding:3px 6px}
 body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
+.voraus{font-size:calc(var(--u)*4.6);color:var(--violett);font-style:italic}
+.karte-geo{font-size:calc(var(--u)*5);color:#bfa870;font-style:italic;margin-bottom:calc(var(--u)*4)}
+.fig{width:calc(var(--u)*92)}
