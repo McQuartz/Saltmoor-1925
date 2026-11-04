@@ -11,7 +11,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M2 Längere Akte | offen | |
 | M3 Deckbau-Kern | offen | |
 | M4 Items, Handgriffe, Builds | offen | |
-| M5 Pipeline und alte Schwächen | offen | |
+| M5 Pipeline und alte Schwächen | läuft | Neubauten fertig (Mumie, Nachgeher, Ertrunkener, Netzflickerin-Rücken, Tiefling, Nest, alle Note 4); Icons in Arbeit |
 | M6 Biome Akt I und II | offen | |
 | M7 Biome Akt III bis V | offen | |
 | M8 Ereignisse und Balance | offen | |
@@ -19,6 +19,19 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | Zugabe | offen | |
 
 ## Einträge je Meilenstein
+
+### M0 Einrichten und Bild-Pipeline (fertig)
+
+- Branch frisch vom aktuellen `main` (Name von der Sitzung vorgegeben), Draft-PR [McQuartz/Saltmoor-1925#14](https://github.com/McQuartz/Saltmoor-1925/pull/14).
+- Bild-Wege: kein Bild-Werkzeug, kein API-Schlüssel in der Sitzung → nur Weg A (selbst per Skript) möglich; ein Vergleich mit Weg B entfällt (siehe Entscheidungen).
+- Testgegner **Windgestalt** neu durch die ganze Pipeline aus 06-ki-bilder.md (Konzept in Worten, drei Silhouetten verglichen – alte Säule, „Qualle“ verworfen weil Krake-mit-Maske, „Gestalt“ gewählt –, Licht/Pixel, Animation, Prüfung, im Spiel). Neues Konzept: der Atem aus dem Abgrund in einem Leib aus Binden mit Totenmaske, atmet sichtbar ein (Block, Stärke) und aus (18 Schaden). Schwachstelle fest Wasser statt wechselnd (verständlicher Kampf). Kontaktbogen neben den Favoriten: `bilder/M0/windgestalt-kontakt.png`, im Spiel: `bilder/M0/im-spiel-stadt-waechter.png`. **Note 4** (Silhouette, Licht, Pixel, Konzept, Biom, im Spiel je 4; schwächster Punkt: kastige Schulterlappen).
+- Werkzeuge für die Masse: Biom-Pakete (`paket-format.md`), Zonen-Paletten je Datei, `tools/biom-test.js`, Prüfgrenzen für Wächter (160 × 180) und Finale (240 × 220).
+
+### M5 (Teil 1): Neubauten der schwachen Gegner
+
+Neu gebaut (Subagent, Weg A, gleiche IDs): Erbauer-Mumie (hockender Echsenleib in Binden, Menschenmaske vor der Schnauze), Nachgeher (Mensch im Rückwärtsbogen, Kopf hängt kopfüber), Ertrunkener (schwebt an Land, als wäre er noch unter Wasser), Netzflickerin (nur Rücken: knotiger Wirbelgrat, Spinnenknie), Tiefling (flacher Fischkopf ohne Hals, Flossenkamm), Nest (Grashügel mit Warnpflock, steht erst im Angriff auf). Jeder bekommt einen Kniff (Mumie explodiert beim Tod, Nachgeher mischt Abschriften, Ertrunkener löscht Brand, Netzflickerin friert eine Karte ein, Tiefling ruft einen Vetter, Nest verbirgt die Absicht). Bögen: `bilder/M5/vorher-nachher.png`, `silhouetten.png`, `animationen.png`, `im-spiel-*.png`. Konzepte und Noten: `neubauten.md`.
+
+**Meine Prüfung der Bögen:** Mumie, Nachgeher und Ertrunkener sind klar besser lesbar als vorher, das Nest liest sich jetzt als Hügel. Der Tiefling wirkt eher froschartig als fischig, für mich eine knappe 4. Keiner erreicht die Feinheit der Favoriten.
 
 ### M1 Gefühl und UI (fertig)
 
@@ -39,6 +52,13 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 
 | Was | Biom | Note | Bild |
 |---|---|---|---|
+| Windgestalt (Wächter, neu) | Stadt | 4 | [M0](bilder/M0/windgestalt-kontakt.png) |
+| Erbauer-Mumie (neu) | Stadt | 4 | [M5](bilder/M5/vorher-nachher.png) |
+| Nachgeher (neu) | Eis | 4 | [M5](bilder/M5/vorher-nachher.png) |
+| Ertrunkener (neu) | Kapelle | 4 | [M5](bilder/M5/vorher-nachher.png) |
+| Netzflickerin (Rücken) | Hafen | 4 | [M5](bilder/M5/vorher-nachher.png) |
+| Tiefling (neu) | Hafen | 4 (knapp) | [M5](bilder/M5/vorher-nachher.png) |
+| Nest (neu) | Moor | 4 | [M5](bilder/M5/vorher-nachher.png) |
 
 ## Entscheidungen unterwegs
 
