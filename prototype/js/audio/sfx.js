@@ -10,7 +10,7 @@ function au(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioCon
  OUT=AC.createGain();const lim=AC.createDynamicsCompressor();lim.threshold.value=-4;lim.knee.value=2;lim.ratio.value=20;lim.attack.value=.001;lim.release.value=.12;
  OUT.connect(lim).connect(AC.destination);
  // SFX-Bus: trocken + etwas Hall
- SFXB=AC.createGain();SFXB.gain.value=.9;const rv=AC.createConvolver(),len=AC.sampleRate*1.4,ib=AC.createBuffer(2,len,AC.sampleRate);
+ SFXB=AC.createGain();SFXB.gain.value=.72*(typeof Einst!=='undefined'?Einst.get('effekte')/.8:1); // etwas leiser gemischt, damit der Limiter weniger arbeitetconst rv=AC.createConvolver(),len=AC.sampleRate*1.4,ib=AC.createBuffer(2,len,AC.sampleRate);
  for(let c=0;c<2;c++){const x=ib.getChannelData(c);for(let i=0;i<len;i++)x[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);}
  rv.buffer=ib;const wet=AC.createGain();wet.gain.value=.16;SFXB.connect(OUT);SFXB.connect(rv).connect(wet).connect(OUT);
 }catch(e){}}

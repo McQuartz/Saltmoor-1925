@@ -1,0 +1,116 @@
+/* Nebenseiten (artboard.html, gallery.html): Seitenaufbau im Stil von Variante A.
+   Lädt nach css/spiel.css, damit Karten, Balken, Knöpfe und Zettel genau wie im Spiel aussehen.
+   --u ist hier fest 2px (wie im Spiel bei 1280 × 720); BU.k wird in den Skripten passend auf 2 gesetzt. */
+:root{--u:2px;--linie:#3a2c18;--kachel:#070605}
+html,body{overflow-y:auto;user-select:text;-webkit-user-select:text;background:#000}
+body{font-size:18px;line-height:1.3}
+#seite{max-width:1400px;margin:0 auto;padding:28px 16px 100px}
+#seite a{color:var(--messing2)}
+#seite>header h1{font-family:var(--fl);font-weight:400;font-size:40px;letter-spacing:.18em;color:#efe4c8;margin:0}
+#seite>header .unter{font-family:var(--fk);letter-spacing:.3em;color:#bfa870;font-size:13px;margin:4px 0 14px}
+#seite>header p{color:var(--dim);margin:0 0 6px;max-width:980px}
+nav.sprung{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 4px;position:sticky;top:0;z-index:20;background:#000;padding:8px 0;border-bottom:1px solid var(--linie)}
+nav.sprung a{font-family:var(--fk);font-size:12px;letter-spacing:.1em;text-decoration:none;border:1px solid #4a3a20;padding:5px 9px;background:#060504;color:#d8c890!important}
+nav.sprung a:hover{border-color:var(--messing2)}
+nav.sprung a.hell{color:var(--gold)!important;border-color:#8a6a2a}
+nav.sprung input{font-family:var(--ft);font-size:17px;background:#060504;color:var(--txt);border:1px solid #4a3a20;padding:3px 8px;min-width:200px;flex:1}
+nav.sprung select,nav.sprung button.sm{font-family:var(--fk);font-size:12px;background:#060504;color:#d8c890;border:1px solid #4a3a20;padding:4px 8px}
+section.abschnitt{margin-top:46px;scroll-margin-top:64px}
+section.abschnitt>h2{font-family:var(--fk);font-weight:700;font-size:20px;letter-spacing:.14em;color:#efe4c8;border-bottom:1px solid var(--messing);box-shadow:0 3px 0 -2px #3a2c18;padding-bottom:8px;margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+section.abschnitt>h2 small{font-family:var(--ft);font-weight:400;font-size:14px;letter-spacing:0;color:#6a604c;font-style:italic}
+h3.unter{font-family:var(--fk);font-size:14px;letter-spacing:.14em;color:#d8c890;margin:26px 0 10px;font-weight:700}
+h3.unter small{font-family:var(--ft);font-weight:400;letter-spacing:0;color:#8f8672;font-style:italic;margin-left:8px}
+p.einl{color:#cfc4a8;font-style:italic;margin:0 0 14px;max-width:1080px}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#cfc4a8;background:#14100a;padding:1px 4px}
+.raster{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.raster.breit{grid-template-columns:repeat(auto-fill,minmax(400px,1fr))}
+.raster.schmal{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.raster.zwei{grid-template-columns:repeat(2,minmax(0,1fr))}
+.kachel{background:var(--kachel);border:1px solid #2e2414;box-shadow:inset 0 0 0 2px #000,inset 0 0 0 3px #1a140c;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.kachel.selten{border-color:#8a6a2a}
+.kachel.idee{border-style:dashed;border-color:#4a5a50}
+.kachel.idee.uebernommen{border-color:#5a7a4a;opacity:.72}
+.kachel.idee.gestrichen{border-color:#5a2a20;opacity:.5}
+.kachel.idee.gestrichen .kn{text-decoration:line-through}
+.kachel .kopf{display:flex;gap:10px;align-items:center}
+.kachel .kopf>div{min-width:0}
+.kachel .kn{font-family:var(--fl);font-size:17px;color:#efe4c8;line-height:1.1;overflow-wrap:anywhere}
+.kachel .kn.k{font-family:var(--fk);font-weight:700;font-size:14px;letter-spacing:.1em}
+.kachel .mt{font-size:15px;color:#a89c80;line-height:1.2}
+.kachel .id{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#5a5040}
+.kachel .tx{font-size:16px;color:var(--txt);line-height:1.2}
+.kachel .tx i,.kachel .zitat{font-style:italic;color:#d8c890}
+.kachel .ref{font-size:14px;color:#8f8672;line-height:1.2;overflow-wrap:anywhere}
+.kachel .ref i{font-style:normal;color:#cfc4a8}
+.etiketten{display:flex;flex-wrap:wrap;gap:4px}
+.et{font-family:var(--fk);font-size:10px;letter-spacing:.1em;padding:2px 6px 1px;border:1px solid #4a3a20;color:#a89c80;line-height:1.3;text-transform:uppercase;white-space:nowrap}
+.et.gold{color:var(--gold);border-color:#8a6a2a}.et.gruen{color:#9ad8a0;border-color:#3a5a3a}.et.rot{color:#ff8a7a;border-color:#6a2a20}.et.blau{color:#9fc4ff;border-color:#2a4a70}.et.violett{color:var(--violett);border-color:#4a3a70}
+.bild{image-rendering:pixelated;flex:none;background:#000;border:1px solid #2a2014;padding:3px}
+.bild.k{padding:0;border:none;background:none;vertical-align:middle}
+.kzeile{border-left:2px solid var(--kb,#6a5a3a);padding:1px 0 1px 8px;font-size:16px;line-height:1.15}
+.kzeile b{font-family:var(--fl);font-weight:400;font-size:14px;color:#efe4c8}
+.kzeile .ko{display:inline-block;font-family:var(--fk);font-weight:700;font-size:12px;color:#000;background:var(--messing2);padding:0 5px;margin-right:5px}
+.leer{color:#6a604c;font-style:italic;border:1px dashed #3a2c18;padding:12px}
+.versteckt{display:none!important}
+canvas.figur{image-rendering:pixelated;display:block;margin:0 auto}
+canvas.szene{image-rendering:pixelated;display:block;border:1px solid #2a2014}
+.farben{display:flex;gap:2px;flex-wrap:wrap;align-items:center}
+.farben i{display:block;width:22px;height:22px;border:1px solid #000;box-shadow:0 0 0 1px #2a2014}
+.farben span{font-size:12px;color:#6a604c;margin:0 6px 0 4px}
+.abs-reihe{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;min-height:calc(var(--u)*12)}
+.abs-reihe .feind{position:relative;transform:none;width:auto;left:auto;top:auto}
+.abs-reihe .feind .abs{position:static;transform:none;margin:0}
+.abs-reihe .pfeil{color:#6a604c;font-size:14px}
+table.tab{border-collapse:collapse;font-size:16px;margin:6px 0 10px}
+table.tab th,table.tab td{border:1px solid #2e2414;padding:4px 9px;text-align:left;vertical-align:top}
+table.tab th{font-family:var(--fk);font-size:12px;letter-spacing:.1em;color:#d8c890;font-weight:700;background:#0a0806}
+table.tab td.z{text-align:center;font-family:var(--fk);font-weight:700;color:#efe4c8}
+/* Reaktions-Matrix */
+.mxwrap{overflow-x:auto;padding-bottom:6px}
+.mx{border-collapse:collapse;font-size:14px}
+.mx th{font-weight:normal;padding:4px}
+.mx td{border:1px solid #2e2414;width:96px;height:46px;text-align:center;vertical-align:middle;padding:3px;line-height:1.05;color:#3a3020;background:#070605}
+.mx td.an{color:var(--gold);cursor:help}
+.mx td.gleich{color:#ffb35a;background:#140d06;cursor:help}
+.mx td.an:hover,.mx td.gleich:hover{outline:1px solid var(--messing2)}
+/* Ablauf */
+.akte{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.akte .kachel{padding:10px}
+.ebene{border-top:1px solid #2e2414;padding-top:6px;margin-top:4px}
+.ebene .en{font-family:var(--fk);font-size:12px;letter-spacing:.12em;color:#d8c890}
+.knz{display:inline-flex;align-items:center;gap:4px;margin-right:8px;font-size:15px;white-space:nowrap}
+/* Galerie */
+.spec{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.spec>.lbl{font-family:var(--fk);font-size:11px;letter-spacing:.12em;color:#8f8672;text-transform:uppercase}
+.reihe{display:flex;flex-wrap:wrap;gap:22px 26px;align-items:flex-end;margin:10px 0 18px}
+.reihe.oben{align-items:flex-start}
+.kartenreihe{display:flex;flex-wrap:wrap;gap:30px 26px;align-items:flex-start;padding:28px 6px 10px}
+.kartenreihe .karte{cursor:default}
+.radw .radl{font-family:var(--fk);font-size:calc(var(--u)*3.6);fill:#a89c80;letter-spacing:.1em}
+.zeichenraster{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.zeichen{background:var(--kachel);border:1px solid #2e2414;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.zeichen .gr{display:flex;align-items:flex-end;gap:8px}
+.zeichen .zn{font-family:var(--fk);font-size:12px;letter-spacing:.1em;color:#d8c890}
+.zeichen .zk{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#5a5040}
+.animknoepfe{display:flex;gap:4px;flex-wrap:wrap}
+.animknoepfe button{font-family:var(--fk);font-size:11px;letter-spacing:.08em;background:#000;border:1px solid #4a3a20;color:#a89c80;padding:3px 8px;cursor:pointer}
+.animknoepfe button.an{border-color:var(--gold);color:var(--gold)}
+.sheets{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:flex-end}
+.sheets figure{margin:0;text-align:center;width:min-content}
+.sheets figcaption{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#6a604c;margin-top:3px}
+.biomblock{margin:18px 0 34px}
+.biomblock .szenen{display:grid;grid-template-columns:repeat(2,max-content);gap:12px 14px;margin-top:10px}
+.biomblock figure{margin:0}
+.biomblock figcaption{font-size:14px;color:#8f8672;margin-top:3px}
+.hinweis{color:#c8a070;font-style:italic;font-size:15px}
+.demo{position:relative;margin:10px 0 0}
+.demo #szene{margin:0}
+.demo #hud{pointer-events:none}
+.demo #gegner .feind{pointer-events:none}
+.demo #kopf{position:absolute}
+.leistebox{width:calc(var(--u)*480);background:#000;border-top:1px solid #1a140c}
+.leistebox #leiste{height:calc(var(--u)*92);padding-top:calc(var(--u)*14)}
+.gearbox{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*3);padding:calc(var(--u)*5) 0;width:calc(var(--u)*480);background:#000;border:1px solid #1a140c}
+.panelbox{display:flex;justify-content:center;align-items:flex-start;padding:10px;background:#050403;border:1px solid #1a140c}
+.panelbox .box{max-height:none}
+.panelbox .wandbild{padding:10px}

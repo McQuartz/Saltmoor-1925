@@ -1,7 +1,15 @@
 [
  {
-  "n": "Hafenarbeiter",
+  "id": "fischer",
+  "n": "Fischer",
   "d": "Kennt das Wasser. Und was darin wohnt.",
+  "set": "Fischer",
+  "ausrede": "Mein Bruder ist mit dem Boot nicht zurückgekommen.",
+  "wahrheit": "Er ist nicht ertrunken. Er ist hinabgeschwommen.",
+  "vorliebe": "hafen",
+  "instrument": "Ziehharmonika",
+  "musik": "fischer",
+  "frei_ab": 0,
   "w": [
    "harpoon",
    "knife"
@@ -13,13 +21,19 @@
   "t": [
    "salt"
   ],
-  "bag": [
-   "boots"
-  ]
+  "bag": []
  },
  {
-  "n": "Totengräber",
+  "id": "friedhofswaerter",
+  "n": "Friedhofswärter",
   "d": "Gräbt für die Gemeinde. Manchmal gräbt etwas zurück.",
+  "set": "Friedhofswärter",
+  "ausrede": "Die Gräber sind leer. Ich will wissen, wohin die Toten gehen.",
+  "wahrheit": "Sie gehen nach unten.",
+  "vorliebe": "moor",
+  "instrument": "Spieluhr",
+  "musik": "friedhofswaerter",
+  "frei_ab": 0,
   "w": [
    "shovel",
    "pan"
@@ -31,16 +45,22 @@
   "t": [
    "lantern"
   ],
-  "bag": [
-   "boots"
-  ]
+  "bag": []
  },
  {
-  "n": "Pfarrerswitwe",
-  "d": "Ihr Mann predigte von Dingen unter der Kirche.",
+  "id": "pfarrerin",
+  "n": "Pfarrerin",
+  "d": "Ihr Vorgänger predigte von Dingen unter der Kirche.",
+  "set": "Pfarrerin",
+  "ausrede": "Ich muss meine Gemeinde vor dem Kult in der Kapelle retten.",
+  "wahrheit": "Ihre Glocke läutet auch unter Wasser weiter.",
+  "vorliebe": "moor",
+  "instrument": "Orgel",
+  "musik": "pfarrerin",
+  "frei_ab": 0,
   "w": [
-   "revolver",
-   "bible"
+   "bible",
+   "revolver"
   ],
   "k": [
    "woolcoat",
@@ -49,8 +69,152 @@
   "t": [
    "rosary"
   ],
-  "bag": [
-   "veil"
-  ]
+  "bag": []
+ },
+ {
+  "id": "detektiv",
+  "n": "Detektiv",
+  "d": "Raucht zu viel. Schläft zu wenig. Liest Akten, die niemand lesen wollte.",
+  "set": "Detektiv",
+  "ausrede": "Eine Reihe von Vermisstenfällen. Alle Spuren führen zum Wasser.",
+  "wahrheit": "Er ist der nächste Fall.",
+  "vorliebe": "hafen",
+  "instrument": "Gedämpfte Trompete",
+  "musik": "detektiv",
+  "frei_ab": 3,
+  "w": [
+   "revolver",
+   "knife"
+  ],
+  "k": [
+   "trench"
+  ],
+  "t": [
+   "lantern"
+  ],
+  "bag": []
+ },
+ {
+  "id": "okkultist",
+  "n": "Okkultist",
+  "d": "Hat die Bücher gelesen. Alle. Auch die, die man nicht liest.",
+  "set": "Okkultist",
+  "ausrede": "Ich suche das Wissen der Erbauer.",
+  "wahrheit": "Der Einzige, der ehrlich war. Und der Erste, der den Verstand verlor.",
+  "vorliebe": "moor",
+  "instrument": "Glasharfe",
+  "musik": "okkultist",
+  "frei_ab": 6,
+  "w": [
+   "dagger"
+  ],
+  "k": [
+   "robe",
+   "gloves"
+  ],
+  "t": [
+   "salt"
+  ],
+  "bag": []
+ },
+ {
+  "id": "kneipenschlaeger",
+  "n": "Kneipenschläger",
+  "d": "Hat in jeder Hafenkneipe Hausverbot. In zweien zweimal.",
+  "set": "Kneipenschläger",
+  "ausrede": "Ich habe Schulden. Man sagt, da unten liegt Gold.",
+  "wahrheit": "Das Gold ist alt. Sehr alt.",
+  "vorliebe": "hafen",
+  "instrument": "Verstimmtes Klavier",
+  "musik": "kneipenschlaeger",
+  "frei_ab": 9,
+  "w": [
+   "bottle"
+  ],
+  "k": [
+   "gloves",
+   "oilcoat"
+  ],
+  "t": [
+   "lantern"
+  ],
+  "bag": []
+ },
+ {
+  "id": "geologe",
+  "n": "Geologe",
+  "d": "Der Überlebende einer Expedition. Hat eine Karte, die niemand gezeichnet haben kann.",
+  "set": null,
+  "ausrede": "Ich war schon einmal unten. Die anderen sind nicht zurückgekommen.",
+  "wahrheit": "Die Karte war seine eigene Handschrift.",
+  "vorliebe": "moor",
+  "instrument": "Ziehharmonika",
+  "musik": "fischer",
+  "frei_ab": 12,
+  "faehigkeit": "karte",
+  "faehigkeit_t": "Sieht von Anfang an, welcher Weg in Akt III liegt, und auf jeder Weg-Wahl, welche Gegner warten.",
+  "w": [
+   "pick",
+   "knife"
+  ],
+  "k": [
+   "oilcoat",
+   "boots"
+  ],
+  "t": [
+   "lantern"
+  ],
+  "bag": []
+ },
+ {
+  "id": "wahrsagerin",
+  "n": "Wahrsagerin",
+  "d": "Liest Karten auf dem Jahrmarkt. Diesmal liest sie die richtigen.",
+  "set": null,
+  "ausrede": "Die Karten zeigen seit Wochen dasselbe Bild. Ich will wissen, was es bedeutet.",
+  "wahrheit": "Das Bild war ein Spiegel.",
+  "vorliebe": "hafen",
+  "instrument": "Glasharfe",
+  "musik": "okkultist",
+  "frei_ab": 15,
+  "faehigkeit": "voraus",
+  "faehigkeit_t": "Sieht die oberste Karte des Stapels.",
+  "w": [
+   "torch",
+   "dagger"
+  ],
+  "k": [
+   "veil",
+   "woolcoat"
+  ],
+  "t": [
+   "candle"
+  ],
+  "bag": []
+ },
+ {
+  "id": "veteran",
+  "n": "Kriegsveteran",
+  "d": "Flandern, 1917. Er hört das Gas noch, wenn es still ist.",
+  "set": null,
+  "ausrede": "Unten ist es leiser als in meinem Kopf.",
+  "wahrheit": "Es war nie still.",
+  "vorliebe": "hafen",
+  "instrument": "Gedämpfte Trompete",
+  "musik": "detektiv",
+  "frei_ab": 18,
+  "faehigkeit": "erste_doppelt",
+  "faehigkeit_t": "Die erste Karte in jedem Zug wirkt anderthalbfach.",
+  "w": [
+   "poker"
+  ],
+  "k": [
+   "trench",
+   "boots"
+  ],
+  "t": [
+   "salt"
+  ],
+  "bag": []
  }
 ]

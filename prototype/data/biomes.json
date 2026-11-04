@@ -1,0 +1,466 @@
+{
+ "_doc": "Die sieben Biome. Paletten: koerper (4 dunkle Stufen), rand (Randlicht innen/außen), augen, nebel (fern/nah). Gegner verweisen auf foes.json, Ereignisse auf events.json (id), fundpool auf items.json.",
+ "hafen": {
+  "n": "Das Hafenviertel",
+  "kurz": "Hafen",
+  "zeit": "1925",
+  "koerper": [
+   "#05070a",
+   "#0b1016",
+   "#141c26",
+   "#22303e"
+  ],
+  "rand": [
+   "#4a6a8a",
+   "#cfe6ff"
+  ],
+  "augen": "#ffe9a0",
+  "nebel": [
+   "#0e1628",
+   "#2a3a52"
+  ],
+  "musik": "hafen",
+  "szene_alt": "hafen",
+  "gegner": [
+   "netzflickerin",
+   "tiefling",
+   "schmuggler"
+  ],
+  "waechter": "lotse",
+  "fundpool": [
+   "harpoon",
+   "knife",
+   "oilcoat",
+   "salt",
+   "poker",
+   "boardaxe",
+   "sealskin",
+   "deepscale"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Witwe Haskins",
+   "ort": "unter dem Vordach der Fischhalle",
+   "zeile": "Ihr Mann ist 1919 hinausgefahren. Sie verkauft, was die Flut bringt, und fragt nie, wem es gehört hat."
+  },
+  "uebergang": "Die Kais enden an einer Kirchenmauer, die zur Hälfte im Wasser steht. Die Glocke läutet, obwohl niemand zieht.",
+  "weg_hinweise": {
+   "kampf": [
+    "Spuren im Schlick, die zum Wasser führen.",
+    "Jemand flickt Netze, obwohl es Nacht ist.",
+    "Hinter den Kisten atmet etwas."
+   ],
+   "ereignis": [
+    "Ein Fenster mit warmem Licht, ganz oben.",
+    "Eine Stimme in der Gasse sagt deinen Namen."
+   ],
+   "wandbild": [
+    "In die Kaimauer ist etwas geritzt, älter als der Hafen."
+   ],
+   "kraemer": [
+    "Eine Laterne unter dem Vordach der Fischhalle."
+   ],
+   "werkstatt": [
+    "Das Bootshaus. Die Werkbank ist noch warm."
+   ],
+   "rast": [
+    "Ein trockener Winkel unter dem Steg."
+   ],
+   "fundstelle": [
+    "Treibgut, das die Flut dagelassen hat."
+   ]
+  }
+ },
+ "moor": {
+  "n": "Der Moorwald",
+  "kurz": "Moorwald",
+  "zeit": "Volksglaube, Jahrhunderte alt",
+  "koerper": [
+   "#060508",
+   "#0e0b14",
+   "#1a1424",
+   "#2a2238"
+  ],
+  "rand": [
+   "#6a5a9a",
+   "#e0d0ff"
+  ],
+  "augen": "#9affe0",
+  "nebel": [
+   "#120e1c",
+   "#2e2644"
+  ],
+  "musik": "moor",
+  "szene_alt": "wald",
+  "gegner": [
+   "hirte",
+   "torfstecherin",
+   "nest"
+  ],
+  "waechter": "opfernde",
+  "fundpool": [
+   "shovel",
+   "woolcoat",
+   "lantern",
+   "gloves",
+   "torch",
+   "shell",
+   "harefoot"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Torfmann",
+   "ort": "auf dem Bohlenweg, unter einem Dach aus Rinde",
+   "zeile": "Tauscht nur gegen Gold, das er dann im Moor versenkt."
+  },
+  "uebergang": "Der alte Kirchpfad führt aus dem Moor. Am Ende steht die Kapelle, und das Wasser in ihr steht schief.",
+  "weg_hinweise": {
+   "kampf": [
+    "Ein Hirte ohne Herde steht zwischen den Bäumen.",
+    "Der Torf ist aufgegraben, mit bloßen Händen.",
+    "Etwas Großes liegt im Farn und atmet."
+   ],
+   "ereignis": [
+    "Ein Wasserloch, in dem fremde Sterne stehen.",
+    "Am Steinkreis brennt ein Licht."
+   ],
+   "wandbild": [
+    "Ein Stein mit Kerben, die zur Mitte zeigen."
+   ],
+   "kraemer": [
+    "Rauch über dem Bohlenweg."
+   ],
+   "werkstatt": [
+    "Eine Köhlerhütte, die Esse noch warm."
+   ],
+   "rast": [
+    "Eine trockene Senke unter einer Eiche."
+   ],
+   "fundstelle": [
+    "Etwas glänzt im Torf."
+   ]
+  }
+ },
+ "kapelle": {
+  "n": "Die überflutete Kapelle",
+  "kurz": "Kapelle",
+  "zeit": "ein Kult, der dem Ruf vor dir gefolgt ist",
+  "koerper": [
+   "#070504",
+   "#120c08",
+   "#22160e",
+   "#382618"
+  ],
+  "rand": [
+   "#a06a2a",
+   "#ffe0a0"
+  ],
+  "augen": "#fff4d0",
+  "nebel": [
+   "#1a1008",
+   "#3a2614"
+  ],
+  "musik": "kapelle",
+  "szene_alt": "kapelle",
+  "gegner": [
+   "chorknabe",
+   "ertrunkener"
+  ],
+  "waechter": "glockenmutter",
+  "fundpool": [
+   "bible",
+   "rosary",
+   "veil",
+   "candle",
+   "robe",
+   "cross",
+   "holywater",
+   "cultmask"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Küster",
+   "ort": "auf der Empore, über dem Wasser",
+   "zeile": "Verkauft die Gaben der Gemeinde. Die Gemeinde braucht sie nicht mehr. Seinen Spazierstock hat er unten vergessen."
+  },
+  "uebergang": "Die Treppe hinter dem Altar führt nach unten. Sie ist nass, obwohl es nicht regnet.",
+  "weg_hinweise": {
+   "kampf": [
+    "Ein Chor singt im Wasser.",
+    "Gestalten in Kutten knien zwischen den Bänken.",
+    "Jemand steht reglos im Mittelgang."
+   ],
+   "ereignis": [
+    "Eine Kerze brennt unter Wasser.",
+    "Der Beichtstuhl ist besetzt."
+   ],
+   "wandbild": [
+    "Ein Fresko hinter dem Taufstein, halb abgeblättert."
+   ],
+   "kraemer": [
+    "Licht auf der Empore."
+   ],
+   "werkstatt": [
+    "Die Sakristei. Werkzeug für Glocken."
+   ],
+   "rast": [
+    "Eine trockene Kirchenbank auf der Empore."
+   ],
+   "fundstelle": [
+    "Der Opferstock ist aufgebrochen."
+   ]
+  }
+ },
+ "salz": {
+  "n": "Die Salzstollen",
+  "kurz": "Salzstollen",
+  "zeit": "Römerzeit und Vorzeit",
+  "koerper": [
+   "#070606",
+   "#100d0c",
+   "#1c1716",
+   "#2c2421"
+  ],
+  "rand": [
+   "#9a8a80",
+   "#f4ece4"
+  ],
+  "augen": "#ff9a5a",
+  "nebel": [
+   "#2a2422",
+   "#6a5e58"
+  ],
+  "musik": "salz",
+  "szene_alt": "grund",
+  "gegner": [
+   "schlundtraeger",
+   "salzlaeufer",
+   "grabwaechter"
+  ],
+  "waechter": "wurm",
+  "fundpool": [
+   "salt",
+   "lantern",
+   "shovel",
+   "pick",
+   "silverknife",
+   "saltgun",
+   "dynamite",
+   "smellingsalts"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der letzte Hauer",
+   "ort": "an der Lorenkehre",
+   "zeile": "Arbeitet seit 1911 hier unten. Schichtende hat ihm niemand gesagt."
+  },
+  "uebergang": "Unter dem Salz liegt ein Meer, das es nicht mehr gibt. Ganz unten ist es noch da, schwarz und gefroren.",
+  "weg_hinweise": {
+   "kampf": [
+    "Etwas tastet mit zu vielen Fühlern an der Wand.",
+    "Ein Helm im Salz, und darunter ein Kopf.",
+    "Die Lore fährt bergab, ohne dass jemand schiebt."
+   ],
+   "ereignis": [
+    "Eine Grubenlampe brennt in einem toten Stollen.",
+    "Römische Zeichen über einem zugemauerten Gang."
+   ],
+   "wandbild": [
+    "Fossilien in der Wand, die alle nach unten blicken."
+   ],
+   "kraemer": [
+    "Pfeifen an der Lorenkehre."
+   ],
+   "werkstatt": [
+    "Die Schmiede der Hauer."
+   ],
+   "rast": [
+    "Eine Nische im Holzverbau."
+   ],
+   "fundstelle": [
+    "Eine umgekippte Lore."
+   ]
+  }
+ },
+ "stadt": {
+  "n": "Die namenlose Stadt",
+  "kurz": "Namenlose Stadt",
+  "zeit": "vor dem Menschen",
+  "koerper": [
+   "#080404",
+   "#140a0a",
+   "#241212",
+   "#3a1c18"
+  ],
+  "rand": [
+   "#a0402a",
+   "#ffc0a0"
+  ],
+  "augen": "#ffe060",
+  "nebel": [
+   "#1c0e0a",
+   "#4a2a1c"
+  ],
+  "musik": "stadt",
+  "szene_alt": "grund",
+  "gegner": [
+   "bote",
+   "mumie"
+  ],
+  "waechter": "windgestalt",
+  "fundpool": [
+   "dagger",
+   "candle",
+   "watch",
+   "tartorch",
+   "bloodrosary",
+   "swordcane"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Die Vermesserin",
+   "ort": "in einer Halle, deren Decke hüfthoch ist",
+   "zeile": "Kam 1903 mit einer Expedition. Misst seither Türen, die zu breit sind."
+  },
+  "uebergang": "Der Wind trägt Sand nach oben aus dem Abgrund. Darunter ist es kalt, und das Wasser ist schwarz und fest.",
+  "weg_hinweise": {
+   "kampf": [
+    "Ein Schatten bewegt sich gegen den Wind.",
+    "Etwas in Binden kriecht durch einen zu niedrigen Gang.",
+    "Ein Mund öffnet sich in einer Brust."
+   ],
+   "ereignis": [
+    "Eine Trommel schlägt, ohne Spieler.",
+    "Eine Treppe mit Stufen, zu niedrig für Füße."
+   ],
+   "wandbild": [
+    "Das Reliefband läuft hier weiter."
+   ],
+   "kraemer": [
+    "Eine Messlatte lehnt an der Wand."
+   ],
+   "werkstatt": [
+    "Ein Werktisch aus Stein, für andere Hände gebaut."
+   ],
+   "rast": [
+    "Ein Raum, in dem der Wind schweigt."
+   ],
+   "fundstelle": [
+    "Eine Grabkammer, schon geöffnet."
+   ]
+  }
+ },
+ "eis": {
+  "n": "Das schwarze Eis",
+  "kurz": "Schwarzes Eis",
+  "zeit": "vor dem Leben an Land",
+  "koerper": [
+   "#030508",
+   "#070c14",
+   "#0e1624",
+   "#18243a"
+  ],
+  "rand": [
+   "#5a8ab0",
+   "#e8f6ff"
+  ],
+  "augen": "#ff4a4a",
+  "nebel": [
+   "#060a12",
+   "#1a2a40"
+  ],
+  "musik": "eis",
+  "szene_alt": "grund",
+  "gegner": [
+   "rufer",
+   "nachgeher"
+  ],
+  "waechter": "chor",
+  "fundpool": [
+   "trench",
+   "boots",
+   "holywater",
+   "gasmask",
+   "laudanum",
+   "rum"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Schlittenführer",
+   "ort": "neben einem eingefrorenen Schlitten",
+   "zeile": "Gehörte zur Expedition von 1903, wie die Vermesserin. Hat seinen Namen vergessen, aber nicht die Preise."
+  },
+  "uebergang": "Im Eis ist ein Loch, und darunter ist kein Wasser mehr. Nur eine Öffnung, nah und unendlich fern zugleich.",
+  "weg_hinweise": {
+   "kampf": [
+    "Jemand ruft deinen Namen, mit deiner Stimme.",
+    "Ein Gesicht treibt unter dem Eis.",
+    "Etwas geht auf allen vieren, wie ein Mensch."
+   ],
+   "ereignis": [
+    "Eine Welle steht gefroren, ein Stück weiter als vorhin.",
+    "Ein Zelt der Expedition."
+   ],
+   "wandbild": [
+    "Im Eis eingeschlossen: ein Relief, das niemand gemacht hat."
+   ],
+   "kraemer": [
+    "Ein Schlitten, beladen."
+   ],
+   "werkstatt": [
+    "Das Werkzeugzelt der Expedition."
+   ],
+   "rast": [
+    "Ein Feuer aus Schlittenholz."
+   ],
+   "fundstelle": [
+    "Eine Kiste der Expedition, halb im Eis."
+   ]
+  }
+ },
+ "pforte": {
+  "n": "Die Pforte",
+  "kurz": "Pforte",
+  "zeit": "außerhalb der Zeit",
+  "koerper": [
+   "#030606",
+   "#081010",
+   "#0e1c1c",
+   "#163030"
+  ],
+  "rand": [
+   "#2a8a7a",
+   "#a0fff0"
+  ],
+  "augen": "#ff6ad8",
+  "nebel": [
+   "#061212",
+   "#1a3a3a"
+  ],
+  "musik": "pforte",
+  "szene_alt": "grund",
+  "gegner": [
+   "augen"
+  ],
+  "waechter": "ruft",
+  "fundpool": [],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Niemand",
+   "ort": "",
+   "zeile": ""
+  },
+  "uebergang": "",
+  "weg_hinweise": {
+   "rast": [
+    "Ein Ort, an dem die Zeit kurz stillsteht."
+   ],
+   "wandbild": [
+    "Die letzte Wand. Sie zeigt dich."
+   ],
+   "finale": [
+    "Es ruft."
+   ]
+  }
+ }
+}

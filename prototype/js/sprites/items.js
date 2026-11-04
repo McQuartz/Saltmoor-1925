@@ -30,7 +30,30 @@ cultist:['....rrrr....','...rrrrrr...','..rrkkkkrr..','..rrkyykrr..','..rrkkkkrr
 fishman:['...nnnnnn...','..nnnnnnnn..','.nwknnnnwkn.','.nnnnnnnnnn.','.nnNNNNNNnn.','..nnnnnnnn..','...nnNNnn...','..nnnnnnnn..','.nn.nnnn.nn.','.n..nnnn..n.','....n..n....','...nn..nn...'],
 drowned:['....dddd....','...dCCCCd...','...CkCCkC...','...CCCCCC...','....CddC....','..CCcccCCC..','.CC.cccc.CC.','.C..cccc..C.','....cccc....','....c..c....','....c..c....','...cc..cc...'],
 shade:['............','....pppp....','...pppppp...','..ppeppepp..','..pppppppp..','.pppppppppp.','.pPpppppPpp.','pppppppppppp','pp.pp.pp.pp.','p..p..p..p..','............','............'],
-boss:['...pppppp...','..pPPPPPPp..','.ppyppppypp.','.pppeppeppp.','..pppppppp..','.p.pPppPp.p.','p..p.pp.p..p','p.p..pp..p.p','.p..p..p..p.','p..p.pp.p..p','.pp..pp..pp.','............']
+boss:['...pppppp...','..pPPPPPPp..','.ppyppppypp.','.pppeppeppp.','..pppppppp..','.p.pPppPp.p.','p..p.pp.p..p','p.p..pp..p.p','.p..p..p..p.','p..p.pp.p..p','.pp..pp..pp.','............'],
+boathook:['.........GG.','........G..G','.........G.G','........gGG.','.......b....','......b.....','.....b......','....b.......','...b........','..b.........','.b..........','............'],
+boardaxe:['............','..gGGg......','.gGGGGg.....','.gGGGGbb....','..gGg.bb....','.......bb...','........bb..','.........bb.','..........b.','............','............','............'],
+sealskin:['............','..t......t..','.tTt....tTt.','.tTTttttTTt.','..tTTkTTTt..','..tTTTTkTt..','..tTkTTTTt..','..tTTTTTTt..','.tTTTkTTTTt.','.tTt....tTt.','..t......t..','............'],
+scythe:['..GGGGGG....','.G......Gb..','G........b..','.........b..','........b...','........b...','.......b....','.......b....','......bb....','......b.....','.....b......','.....b......'],
+tarot:['..pppppp....','..pPPPPp....','..pPywwwwww.','..pyywwRRww.','..pPywRwwRw.','..pPPwRwwRw.','..pPPwwRRww.','..pPPwwRRww.','..pPPwRwwRw.','..pppwRwwRw.','.....wwRRww.','.....wwwwww.'],
+harefoot:['.....yy.....','....y..y....','.....yy.....','....kkkk....','....TTTT....','...TTTTTT...','...TTwTTT...','...TTTTTT...','..TTTTTTTT..','..TTsTTsTT..','..TT.TT.TT..','............'],
+collar:['............','...kkkkkk...','..kwwwwwwk..','.kddkwwkddk.','kdddkwwkdddk','kddddkkddddk','kddddddddddk','kdDddddddDdk','kdDddddddDdk','kddddddddddk','kkkkkkkkkkkk','............'],
+swordcane:['...yyyy.....','..y...yy....','......yy....','......bb....','......bb....','......GG....','......Gw....','......GG....','......bb....','......bb....','......bb....','......kk....'],
+witchbottle:['.....kk.....','....kbbk....','.....BB.....','....bBBb....','...bBBBBb...','..bBBgBBBb..','..bBgBgBBb..','..bBBRBBBb..','..bBBBBBBb..','...bBBBBb...','....bbbb....','............'],
+musicbox:['..P.....P...','..PP....PP..','.PP....PP...','............','.bbbbbbbbbb.','.bBBBBBBBBb.','.bBByyyyBBbg','.bBBBBBBBBbg','.bBBBBBBBBb.','.bbbbbbbbbb.','..k......k..','............'],
+anchorchain:['.....gg.....','....g..g....','.....gg.....','.....Gg.....','...GGGggg...','.....Gg.....','.....Gg.....','.g...Gg...g.','.gg..Gg..gg.','..gg.Gg.gg..','..gggggggg..','.....gg.....'],
+cultmask:['...wwwwww...','..wwwwwwww..','.wwRwwwwRww.','.wkkRwwRkkw.','.wkkwwwwkkw.','.wwwwwwwwww.','.wwwwrrwwww.','..wwrwwrww..','..wwwwwwww..','...wrrrrw...','....wwww....','............'],
+flaregun:['............','............','.ooooooook..','.oyyyyyyok..','.ooooooook..','.....kook...','....kbbk....','...kbbbk....','...kbbk.....','...kkk......','............','............'],
+gasmask:['...nnnnnn...','..nnnnnnnn..','.nnCCnnCCnn.','.nCkkCCkkCn.','.nnCCnnCCnn.','..nnnnnnnn..','...nnggnn...','....gGGg....','....gGGg....','....gggg....','.....kk.....','............'],
+officercoat:['............','...nn..nn...','..nnnnnnnn..','.nnnynnynnn.','.nn.nnnn.nn.','.nn.nynn.nn.','.nn.nnnn.nn.','.nn.nynn.nn.','....nnnn....','....nn.nn...','............','............'],
+compass:['.....yy.....','...yyyyyy...','..ywwwwwwy..','.ywwwggwwwy.','.ywwwggwwwy.','.ywwwggwwwy.','.ywwwRRwwwy.','.ywwwRRwwwy.','..ywwRRwwy..','...yyRRyy...','.....RR.....','............'],
+dynamite:['.........y..','........o...','.......k....','......k.....','...rrrRr....','...rRRrr....','...rrrrr....','...kkkkk....','...rRRrr....','...rrrrr....','...rrrrr....','............'],
+rum:['.....kk.....','.....bb.....','.....bb.....','....bBBb....','...bBbbbb...','...bBbbbb...','...bBbbbb...','...byyyyb...','...bbbbbb...','...bbbbbb...','............','............'],
+laudanum:['............','.....kk.....','.....kk.....','.....bb.....','....bBBb....','...bBBBBb...','...bwwwwb...','...bwrrwb...','...bwwwwb...','...bBBBBb...','...bbbbbb...','............'],
+smellingsalts:['....C..C....','...C..C.....','....C..C....','...C..C.....','...gggggg...','..gGGGGGGg..','..gwwwwwwg..','..gwGwwGwg..','..gwwwwwwg..','..gggggggg..','............','............'],
+deepscale:['............','.....cc.....','....cCCc....','...cCCCCc...','..cCCwCCCc..','..cCwCCCCc..','..cCCCCCCc..','..ccCCCCcc..','...cCCCCc...','....cCCc....','.....cc.....','............'],
+divinghelm:['....oooo....','..ooyyyyoo..','.oyyyyyyyyo.','.oykkkkkkyo.','oyykcCCckyyo','oyykCddCkyyo','oyykcddckyyo','.oykkkkkkyo.','.oyyyyyyyyo.','..oooooooo..','.gggggggggg.','.gGgGgGgGgg.'],
+minerlamp:['....gg......','...g..g.....','....gg......','....kk......','...kBBk.....','..kByyBk....','..kyyoyk....','..kyooyk....','..kByyBk....','..kBBBBk....','...kkkk.....','............']
 };
 const SWAP={oilcoat:['coat',{b:'y',B:'o'}],robe:['coat',{b:'r',B:'R'}],trench:['coat',{b:'t',B:'T'}],woolcoat:['coat',{}],holywater:['bottle',{n:'d',N:'D',w:'C'}],tartorch:['torch',{b:'k',o:'n'}],silverknife:['dagger',{r:'y',G:'w'}],saltgun:['revolver',{g:'w',G:'T',b:'t'}],bloodrosary:['rosary',{r:'R',y:'r'}]};
 const sprCache={};

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saltmoor – Effekte</title>
+<style>
+ :root{--grund:#07080b;--schrift:#9aa3ad;--leise:#5a636d}
+ body{margin:0;background:var(--grund);color:var(--schrift);font:13px/1.4 Georgia,serif}
+ header{padding:14px 20px 4px}
+ h1{font-size:16px;font-weight:normal;margin:0 0 4px;letter-spacing:.04em}
+ p{margin:0;color:var(--leise)}
+ #raster{display:flex;flex-wrap:wrap;gap:14px;padding:14px 20px}
+ figure{margin:0}
+ figcaption{font-size:12px;color:var(--leise);padding:3px 0 0}
+ canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+ #kontakt{padding:0}
+</style>
+</head>
+<body>
+<header>
+ <h1>Effekte (pixelfx + eigene)</h1>
+ <p>Jedes Feld 120 × 90 Szenenpixel, × 3. Ein Effekt-Pixel ist ein Szenen-Pixel. <code>?kontakt=1</code> zeigt den Kontaktbogen.</p>
+</header>
+<div id="raster"></div>
+<canvas id="kontakt" hidden></canvas>
+<script src="js/fx/effekte.js"></script>
+<script type="module" src="js/fx/bruecke.js"></script>
+<script>
+// Testseite: zeigt jeden PFX-Effekt in einem eigenen 120×90-Feld über dunklem Zonen-Hintergrund.
+const FW = 120, FH = 90, K = 3, FUSS = [60, 84];
+const BIOME = ['hafen', 'moor', 'kapelle', 'salz', 'stadt', 'eis', 'pforte'];
+const BAY = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(v => (v + .5) / 16);
+// was jedes Feld zeigt: Palette, Biom des Hintergrunds, Gegner sichtbar?, Aufruf-Optionen
+const FELDER = [
+ { n: 'treffer', biom: 'hafen', gegner: true, o: { x: 64, y: 50 } },
+ { n: 'treffer_gross', biom: 'moor', gegner: true, o: { x: 62, y: 52 } },
+ { n: 'brand', biom: 'kapelle', gegner: true, bild: true },
+ { n: 'gift', biom: 'moor', gegner: true, bild: true },
+ { n: 'geschwaecht', biom: 'salz', gegner: true, bild: true },
+ { n: 'block_splitter', biom: 'stadt', gegner: false, o: { x: 44, y: 84 } },
+ { n: 'block_auf', biom: 'eis', gegner: false, o: { x: 60, y: 84, groesse: 56 } },
+ { n: 'heilen', biom: 'kapelle', gegner: false, o: { x: 60, y: 84, groesse: 44 } },
+ { n: 'reaktion', biom: 'hafen', gegner: true, o: { x: 60, y: 54, palette: 'F', groesse: 34 } },
+ { n: 'hochreaktion', biom: 'pforte', gegner: false, o: { x: 60, y: 46, groesse: 44 } },
+ { n: 'tod', biom: 'moor', gegner: false, bild: true, todBild: true },
+ { n: 'uebergang', biom: 'hafen', gegner: true, o: { x: 0, y: 0, w: FW, h: FH } },
+];
+
+let BIOMDATEN = null, GEGNER = null;
+const hx = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+function hintergrund(biom) {
+ const B = (BIOMDATEN && BIOMDATEN[biom]) || { nebel: ['#0e1628', '#2a3a52'], koerper: ['#05070a', '#0b1016', '#141c26', '#22303e'] };
+ const c = document.createElement('canvas'); c.width = FW; c.height = FH; const x = c.getContext('2d'); const id = x.createImageData(FW, FH), d = id.data;
+ const A = hx(B.nebel[0]), Z = hx(B.nebel[0]).map((v, k) => Math.round(v + (hx(B.nebel[1])[k] - v) * .5)), K0 = hx(B.koerper[0]), K1 = hx(B.koerper[1]);
+ for (let y = 0; y < FH; y++) for (let i = 0; i < FW; i++) {
+  let col;
+  if (y < FUSS[1]) { const q = Math.max(0, 1 - Math.abs(y - 50) / 40) * .55 * Math.exp(-(((i - 60) / 34) ** 2)); col = q > BAY[((y & 3) << 2) | (i & 3)] ? Z : A; }
+  else col = (y - FUSS[1]) / 6 > BAY[((y & 3) << 2) | (i & 3)] ? K0 : K1;
+  const o = (y * FW + i) * 4; d[o] = col[0]; d[o + 1] = col[1]; d[o + 2] = col[2]; d[o + 3] = 255;
+ }
+ x.putImageData(id, 0, 0); return c;
+}
+// Testgegner: erstes Ruhebild des Hirten, auf die Hälfte verkleinert (nächster Nachbar), damit er ins Feld passt
+function ladeGegner() {
+ return new Promise(res => {
+  const img = new Image();
+  img.onload = () => {
+   const s = document.createElement('canvas'); s.width = 96; s.height = 120; s.getContext('2d').drawImage(img, 0, 0, 96, 120, 0, 0, 96, 120);
+   const c = document.createElement('canvas'); c.width = 48; c.height = 60; const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
+   x.drawImage(s, 0, 0, 96, 120, 0, 0, 48, 60); res(c);
+  };
+  img.onerror = () => res(null);
+  img.src = 'assets/gegner/hirte_a.png';
+ });
+}
+const gegnerPos = () => [FUSS[0] - 24, FUSS[1] - 58]; // Füße des verkleinerten Hirten liegen bei (24, 58)
+
+function starte(f, ebene) {
+ const o = Object.assign({ x: FUSS[0], y: FUSS[1], seed: 7, ebene }, f.o || {});
+ if (f.bild && GEGNER) { const [bx, by] = gegnerPos(); Object.assign(o, { bild: GEGNER, bx, by }); }
+ if (f.n === 'tod' || f.n === 'uebergang') o.palette = f.biom;
+ return PFX.spiel(f.n, o);
+}
+function feldMalen(g, f, bg, zeigeGegner) {
+ g.setTransform(1, 0, 0, 1, 0, 0); g.imageSmoothingEnabled = false; g.drawImage(bg, 0, 0);
+ if (zeigeGegner && GEGNER) { const [bx, by] = gegnerPos(); g.drawImage(GEGNER, bx, by); }
+}
+
+// ---- Live-Ansicht: jedes Feld spielt seinen Effekt in Schleife
+function live() {
+ const raster = document.getElementById('raster');
+ const felder = FELDER.map((f, i) => {
+  const fig = document.createElement('figure'), cv = document.createElement('canvas');
+  cv.width = FW; cv.height = FH; cv.style.width = FW * K + 'px'; cv.style.height = FH * K + 'px';
+  const cap = document.createElement('figcaption'); cap.textContent = f.n + ' · ' + f.biom;
+  fig.append(cv, cap); raster.append(fig);
+  return { f, g: cv.getContext('2d'), bg: hintergrund(f.biom), ebene: 'feld' + i, warte: .4 + i * .05, an: false };
+ });
+ let alt = performance.now();
+ function schritt(jetzt) {
+  const dt = Math.min(.05, (jetzt - alt) / 1000); alt = jetzt;
+  felder.forEach(F => {
+   const lauft = laufendIn(F.ebene);
+   if (!lauft) { F.warte -= dt; if (F.warte <= 0) { starte(F.f, F.ebene); F.warte = .7; F.an = true; } }
+   feldMalen(F.g, F.f, F.bg, F.f.gegner || (F.f.n === 'tod' && !laufendIn(F.ebene)));
+   PFX.zeichne(F.g, dt, F.ebene);
+  });
+  requestAnimationFrame(schritt);
+ }
+ requestAnimationFrame(schritt);
+}
+const laufendIn = ebene => PFX.laeuft(null, ebene);
+
+// ---- Kontaktbogen: jede Zeile ein Effekt, Spalten = Zeitpunkte (Anteile der Dauer), deterministisch
+const ANTEILE = [.06, .16, .3, .46, .64, .85];
+function kontakt() {
+ document.getElementById('raster').hidden = true;
+ const cv = document.getElementById('kontakt'); cv.hidden = false;
+ const LW = 150, KW = FW * K, KH = FH * K, GAP = 6, KOPF = 22;
+ cv.width = LW + ANTEILE.length * (KW + GAP); cv.height = KOPF + FELDER.length * (KH + GAP);
+ const G = cv.getContext('2d'); G.imageSmoothingEnabled = false; G.fillStyle = '#07080b'; G.fillRect(0, 0, cv.width, cv.height);
+ G.font = '15px Georgia, serif'; G.fillStyle = '#7d8691';
+ ANTEILE.forEach((a, j) => G.fillText(Math.round(a * 100) + ' %', LW + j * (KW + GAP) + 4, 16));
+ const zelle = document.createElement('canvas'); zelle.width = FW; zelle.height = FH; const z = zelle.getContext('2d');
+ const leer = document.createElement('canvas'); leer.width = FW; leer.height = FH; const lz = leer.getContext('2d');
+ FELDER.forEach((f, i) => {
+  const bg = hintergrund(f.biom), y0 = KOPF + i * (KH + GAP);
+  G.fillStyle = '#9aa3ad'; G.fillText(f.n, 8, y0 + 20); G.fillStyle = '#5a636d'; G.fillText(f.biom, 8, y0 + 40);
+  ANTEILE.forEach((a, j) => {
+   const ebene = 'k' + i + '_' + j; const e = starte(f, ebene); if (!e) return;
+   const D = e.mod.meta.duration || 1, ziel = a * D, dt = 1 / 60;
+   let t = 0; while (t + dt < ziel) { PFX.zeichne(lz, dt, ebene); t += dt; }
+   feldMalen(z, f, bg, f.gegner);
+   PFX.zeichne(z, ziel - t, ebene);
+   PFX.leeren(ebene);
+   G.drawImage(zelle, 0, 0, FW, FH, LW + j * (KW + GAP), y0, KW, KH);
+   G.fillStyle = '#5a636d'; G.fillText(ziel.toFixed(2) + ' s', LW + j * (KW + GAP) + 4, y0 + KH - 6);
+  });
+ });
+ document.body.dataset.fertig = '1';
+}
+
+async function los() {
+ try { const r = await fetch('data/biomes.json'); BIOMDATEN = r.ok ? await r.json() : null; } catch (e) { BIOMDATEN = null; }
+ GEGNER = await ladeGegner();
+ if (new URLSearchParams(location.search).get('kontakt')) kontakt(); else live();
+}
+if (window.PixelFX) los(); else window.addEventListener('pixelfx-bereit', los, { once: true });
+</script>
+</body>
+</html>

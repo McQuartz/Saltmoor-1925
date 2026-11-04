@@ -1,60 +1,101 @@
 # Saltmoor 1925
 
-Ein Cosmic-Horror-Roguelike im Neuengland des Jahres 1925. Du bist niemand Besonderes, nur jemand mit dem, was er tragen kann, auf einer Jagd, die immer tiefer führt. Gekämpft wird rundenbasiert mit Karten, die aus deiner angelegten Ausrüstung kommen. Spielst du zwei Karten direkt nacheinander, reagieren ihre Stoffe miteinander.
+Ein Cosmic-Horror-Roguelike im Neuengland des Jahres 1925. Etwas unter Saltmoor ruft. Du steigst durch fünf feste Akte immer tiefer und in immer ältere Zeiten hinab, bis zur Pforte, und entscheidest dort, ob du bleibst oder umkehrst. Gekämpft wird rundenbasiert mit Karten, die aus deiner angelegten Ausrüstung kommen. Spielst du zwei Karten direkt nacheinander, reagieren ihre Stoffe miteinander. Verlierst du, spuckt dich die Tiefe aus, und du wachst am Strand auf; was du an den Wänden gelesen hast, bleibt.
+
+## Prototyp starten
+
+Die Daten werden per `fetch` geladen, deshalb braucht der Prototyp einen kleinen lokalen Server (Doppelklick auf die HTML-Datei geht nicht).
+
+* macOS: `prototype/start.command` doppelklicken
+* Windows: `prototype/start.bat` doppelklicken
+* oder im Terminal:
+
+```bash
+cd prototype && python3 -m http.server 8000
+```
+
+Dann http://localhost:8000 öffnen (Chrome, Firefox, Safari; ab 1280 × 720).
+
+**Tasten:** Karten ziehen oder anklicken (Zahlen 1–9), Gegner anklicken = Ziel, Leertaste oder E = Zug beenden, D = Dev-Modus, Esc = schließen.
+
+**Testhilfen über die Adresse:**
+
+* `?seed=N` fester Seed (gleicher Seed + gleiche Entscheidungen = gleicher Run)
+* `?dev=1` Dev-Modus an (zeigt, was passiert und warum; Cheats, Autospieler)
+* `?job=fischer&seed=3` direkt mit einer Figur starten
+* `?job=pfarrerin&springe=waechter&akt=2` direkt zu einem Knoten (`kampf`, `kampf_schwer`, `waechter`, `finale`, `rast`, `werkstatt`, `kraemer`, `ereignis`, `wandbild`, `fundstelle`), als Dev-Run
+* `?bot=50&seed=1` Autospieler: 50 Runs ab Seed 1, Tabelle am Ende
 
 ## Ordner
 
 ```
-prototype/        Browser-Prototyp zum Ausprobieren und Entwerfen
-  index.html      das Spiel
-  artboard.html   der ganze Spielinhalt auf einer Seite: Stoffe, Reaktionen, Items, Sets, Gegner, Ereignisse, Run-Ablauf, Ideen
-  ideen.html      Ideenkiste: vorgeschlagene neue Items und Mechaniken mit Ja/Vielleicht/Nein zum Durchgehen
-  musik.html      Musik-Labor: dynamische Layer-Musik zum Anhören
-  klangliste.html alle Audiodateien, die wir selbst erstellen müssen (Daten: data/audio.json)
-  gallery.html    alle Bausteine einzeln: Gegner, Boss-Entwürfe, Items, UI, Szenen
-  lab.html        Sprite-Labor: prozedurale Gegner, Varianten aus einem Bild, Welten aus Schichten
-  data/           alle Spielwerte als JSON (Items, Gegner, Reaktionen, Balance ...), siehe data/README.md
-  js/core/        Spielregeln ohne Grafik: Zustand, Kampf, Run-Ablauf, Reaktionen
-  js/sprites/     Pixel-Sprites der Items und Zeichner der Gegner und Boss-Entwürfe
-  js/scenes/      Hintergründe, Bühne, Partikel und Effekte
-  js/procgen/     prozedurale Gegner (creature.js), Varianten (variants.js), Welten (backdrop.js)
-  js/ui/          Oberfläche: Bausteine, Bildschirme, Eingabe, Effekt-Zuordnung, Jumpscare
-  js/audio/       Soundeffekte (WebAudio, ohne Dateien)
-  style.css       Aussehen der Oberfläche
-game/             Godot-4-Projekt (folgt)
-docs/spritegen/   Plan, Recherche und Agenten-Regeln für den prozeduralen Sprite-Generator
-docs/auftrag/     Komplettauftrag für den spielbaren Prototyp-Run: Plan, Meilensteine, Entscheidungen, Agenten-Prompt
-docs/ui/          Kampf-UI: Ausgangslage (Variante A) und alle Gestaltungsideen aus den Entwürfen
+prototype/          Browser-Prototyp (reines HTML/CSS/JS, kein Build-Schritt)
+  index.html        das Spiel
+  artboard.html     der ganze Spielinhalt auf einer Seite
+  gallery.html      alle Bausteine einzeln: UI, Stoffzeichen, Gegner mit Animationen, Biome, alte Grafik
+  hintergrund.html  Hintergrund-Labor (Biom, Variante, Seed, fremdheit, Ebenen, PNG)
+  effekte.html      Effekt-Labor (pixelfx)
+  musik.html        Musik-Labor: dynamische Layer-Musik, alle sieben Biome
+  klangliste.html   Audiodateien, die wir selbst aufnehmen oder bauen (data/audio.json)
+  ideen.html        Ideenkiste
+  lab.html          altes Sprite-Labor (prozedurale Teile, nur noch zum Nachsehen)
+  data/             alle Spielwerte als JSON, Formate in data/README.md
+  assets/gegner/    Gegner-Sprite-Sheets (PNG + JSON), gebaut mit tools/sprites/
+  css/spiel.css     Aussehen des Spiels (Variante A)
+  js/core/          Spielregeln ohne Grafik: rng (Seed), state, rules, combat, run, meta
+  js/ui/            Oberfläche: Bildschirme, Eingabe, Spielgefühl (Effekte, Klang, Musik), Pixelzeichen, Einstellungen
+  js/scenes/        Bühne (480 × 270), world/ (Hintergründe je Biom)
+  js/fx/            Effekte über pixelfx (Brücke, eigene Effekte)
+  js/vendor/pixelfx MIT, nur genutzte Teile (Quelle in data/README.md)
+  js/audio/         Musik und Soundeffekte (WebAudio, ohne Dateien, keine KI-Sounds)
+  js/dev/           Dev-Modus und Autospieler
+  js/sprites/       Item-Sprites (12 × 12); foes.js = alte Gegner (nur Galerie)
+tools/              Prüf- und Fotoskripte (Node, Playwright): Autospieler, Balance, Tests, Sprites
+game/               Godot-4-Projekt (folgt)
+docs/auftrag/       Auftrag „spielbarer Prototyp-Run“, Stand in fortschritt.md, Konzepte (gegner.md, progression.md, Kompositionen)
+docs/ui/            Kampf-UI: Ausgangslage Variante A und Ideenspeicher
+docs/spritegen/     Ziel-Look der Figuren und (nachrangig) der prozedurale Sprite-Generator
 ```
-
-## Prototyp starten
-
-Die Daten werden per `fetch` geladen, deshalb braucht der Prototyp einen kleinen lokalen Server (direkt per Doppelklick auf die HTML-Datei geht es nicht).
-
-* macOS: `prototype/start.command` doppelklicken
-* Windows: `prototype/start.bat` doppelklicken
-* oder im Terminal: `cd prototype && python3 -m http.server 8000`, dann http://localhost:8000 öffnen
-
-Testhilfen über die Adresse:
-
-* `index.html?depth=12&boss=maw` startet direkt beim Boss mit dem Entwurf „Der Schlund“ (`eye`, `maw`, `king`)
-* `index.html?depth=6&job=2` startet auf Tiefe 6 mit der dritten Startfigur
 
 ## Wie die Teile zusammenhängen
 
-1. `data/*.json` enthält alle Zahlen und Texte. Reaktionen und Ereignisse sind als Effektlisten beschrieben (`{"op":"damage","to":"all","v":12}`), nicht als Code.
-2. `js/core/` setzt die Regeln um und kennt keine Grafik. Was passiert, meldet es über den Ereignis-Bus: `Bus.emit('enemy_hit', {e, d})`.
-3. `js/ui/feedback.js` hört auf diese Ereignisse und entscheidet, wie sie aussehen und klingen: Zahlen, Partikel, Beben, Sounds.
-4. `js/ui/components.js` enthält die einzelnen UI-Bausteine (Karte, Slot, Lebensbalken, Block-Anzeige, Absicht, Ketten-Panel). `js/ui/render.js` setzt daraus die Bildschirme zusammen.
+1. `data/*.json` enthält alle Zahlen und Texte: Akte und Ebenen (`run.json`), Biome (`biomes.json`), Gegner, Items, Reaktionen, Ereignisse, Fragmente, Figuren. Effekte sind Listen (`{"op":"damage","to":"all","v":12}`), kein Code.
+2. `js/core/` setzt die Regeln um, kennt keine Grafik und hängt allen Zufall an den Seed. Was passiert, meldet es über den Bus mit Grund: `Bus.emit('reaction', {r, why: 'Feuer folgte auf Eisen'})`. Der Kampf kann synchron laufen; so nutzen Autospieler und Schadens-Vorschau dieselbe Rechnung wie das Spiel.
+3. `js/ui/feedback.js` hört zu und entscheidet, wie es aussieht und klingt (Effekte, Zahlen, Sounds, Musik).
+4. `js/ui/oberflaeche.js` setzt die Bildschirme zusammen, `js/scenes/buehne.js` zeichnet die Szene.
+5. `js/dev/dev.js` hört ebenfalls nur zu und erklärt.
+
+## Prüfen
+
+```bash
+node tools/test-run.js
+```
+
+```bash
+node tools/test-vorschau.js 300
+```
+
+```bash
+node tools/balance.js 50 1
+```
+
+```bash
+node tools/bot-browser.js 20 1
+```
+
+```bash
+node tools/sprites/pruefen.js
+```
+
+(Die Browser-Skripte brauchen den laufenden Server auf Port 8000.)
 
 ## Entwerfen
 
-* **Neuer Boss-Entwurf:** in `js/sprites/foes.js` eine Funktion in `BOSS_VARIANTS` eintragen und in `BOSS_INFO` beschreiben. Er erscheint sofort in der Galerie und ist mit `?boss=<name>&depth=12` spielbar.
-* **Neuer Gegner:** Zeichner in `FOE_DRAW`, Werte in `data/foes.json`, ab welcher Tiefe er kommt in `data/balance.json` → `encounters.pool_from_depth`.
-* **Neues Item:** Eintrag in `data/items.json`, Sprite in `js/sprites/items.js` (12×12 Zeichen, Farben aus `PAL`).
-* **Neue Reaktion:** Eintrag in `data/reactions.json` mit Effektliste.
-* **UI ändern:** Baustein in `js/ui/components.js`, Aussehen in `style.css`, prüfen in `gallery.html`.
+* **Neuer Gegner:** Konzept in `docs/auftrag/gegner.md`, Sprite als Skript in `tools/sprites/gegner/<id>.js` (Weg in `docs/auftrag/sprites.md`), Werte in `data/foes.json`, Biom in `data/biomes.json`.
+* **Neues Item:** `data/items.json`, Sprite in `js/sprites/items.js`, in einen Fundpool in `biomes.json`.
+* **Neues Ereignis:** `data/events.json` mit `biom`.
+* **Neuer Ort oder Variante:** `js/scenes/world/<biom>.js`, Komposition zuerst in `docs/auftrag/hintergruende-kompositionen.md`.
 
 ## Weg nach Godot
 
-Die Trennung oben entspricht der geplanten Godot-Struktur: JSON-Daten werden direkt übernommen, `core/` wird zu reinen GDScript-Klassen, der Bus zu Signalen, jeder UI-Baustein zu einer eigenen Szene. Siehe `game/README.md` und das Tech-Stack-Dokument: https://claude.ai/artifact/RsW8nWsDDJnErSyyFGWUus
+Die Trennung oben entspricht der geplanten Godot-Struktur: JSON-Daten werden direkt übernommen, `core/` wird zu reinen GDScript-Klassen, der Bus zu Signalen, Bildschirme zu Szenen. Siehe `game/README.md` und das Tech-Stack-Dokument: https://claude.ai/artifact/RsW8nWsDDJnErSyyFGWUus
