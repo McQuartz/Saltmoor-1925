@@ -115,6 +115,12 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Das Schlafwagenkind | Nachtzug | 4 | [M6](bilder/M6/nachtzug/kontaktbogen.png) |
 | Der Uhrmacher im Speisewagen (Wächter) | Nachtzug | 4 | [M6](bilder/M6/nachtzug/im-spiel-waechter.png) |
 | Hintergrund Nachtzug (3 Varianten, Wächter-Szene) | Nachtzug | 4 (Decken ruhig, Gepäckwagen leer) | [M6](bilder/M6/nachtzug/hintergrund-varianten.png) |
+| Die Ausnehmerin | Fabrik | 4 | [M6](bilder/M6/fabrik/kontakt.png) |
+| Das Dosenkind | Fabrik | 4 (Arm wie ein Stock) | [M6](bilder/M6/fabrik/kontakt.png) |
+| Der Kesselmann | Fabrik | 4 (stärkste Figur des Pakets) | [M6](bilder/M6/fabrik/kontakt.png) |
+| Der Kühlhausgast | Fabrik | 4 | [M6](bilder/M6/fabrik/kontakt.png) |
+| Die Schicht (Wächter) | Fabrik | 4 (knapp: Masse innen dicht, Lampenschnur unsichtbar) | [M6](bilder/M6/fabrik/im-spiel-waechter.png) |
+| Hintergrund Fabrik (3 Varianten, Wächter-Szene) | Fabrik | 4 (Kesselhaus hinter Gegnern unruhig) | [M6](bilder/M6/fabrik/varianten.png) |
 
 ## Entscheidungen unterwegs
 
