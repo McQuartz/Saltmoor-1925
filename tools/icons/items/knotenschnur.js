@@ -1,16 +1,15 @@
-// Die Knotenschnur: eine Lotschnur, oben zur losen Rolle gewickelt, hängt senkrecht herab, mit einem Knoten
-// je Faden Tiefe (unten immer dichter), am Ende das schwere Bleilot.
+// Die Knotenschnur: eine Lotschnur, die in einer großen Schlaufe von links oben herabfällt, mit einem dicken Knoten
+// je Faden Tiefe (unten immer dichter), am Ende das schwere, kegelige Bleilot. Unten mehr Knoten, als die Schnur lang ist.
 'use strict';
 module.exports = {
   form(A) {
-    const { kurve, E, Pg, ring } = A;
-    const rolle = [...ring(24, 9, 8, 5, 1.3, null, {}, 16), ...ring(24, 10, 6, 3.6, 1.2, null, {}, 14)];
-    const schnur = kurve([[27, 13], [25, 22], [23, 30], [24, 36]], 0.9, 0.9, null, {}, 14);
-    const knoten = []; let y = 16; for (let i = 0; i < 9; i++) { const [x, yy] = schnur.B(Math.min(1, (y - 13) / 23)); knoten.push(E(x, yy, 1.8, 1.6, null, { pf: 'bevel', hz: 0.6 })); y += 4 - i * 0.38; }
-    const lot = [Pg([[21, 36], [27, 36], [29, 44], [24, 47], [19, 44]], null, { b: 2, rd: 1 })];
+    const { kurve, E, Pg } = A;
+    const schnur = kurve([[6, 4], [18, 2], [26, 12], [14, 20], [20, 28], [30, 30], [34, 34]], 1, 1, null, { cr: true }, 40);
+    const knoten = []; const qs = [0.12, 0.26, 0.38, 0.49, 0.58, 0.66, 0.73, 0.79, 0.84, 0.88, 0.92]; for (const q of qs) { const [x, y] = schnur.B(q); knoten.push(E(x, y, 2, 2, null, { pf: 'bevel', hz: 0.6 })); }
+    const lot = [Pg([[31, 33], [38, 32], [44, 42], [40, 46], [33, 44]], null, { b: 2, rd: 1 })];
     return {
-      gruppen: [{ p: rolle, mat: 'wolle', k: 0.6 }, { p: [...schnur, ...knoten], mat: 'wolle', k: 0 }, { p: lot, mat: 'eisen', k: 0 }],
-      details(P) { P.set(24, 45, 'a3'); P.set(23, 44, 'a2'); P.set(26, 39, 'eisen3'); },
+      gruppen: [{ p: [...schnur, ...knoten], mat: 'wolle', k: 0.4 }, { p: lot, mat: 'eisen', k: 0 }],
+      details(P) { P.set(40, 44, 'a3'); P.set(39, 43, 'a2'); P.set(36, 35, 'eisen3'); },
     };
   },
 };

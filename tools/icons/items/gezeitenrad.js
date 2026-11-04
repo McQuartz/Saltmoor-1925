@@ -11,7 +11,7 @@ module.exports = {
     return {
       gruppen: [{ p: rad1, mat: 'kupfer', k: 0 }, { p: rad2, mat: 'akzent', k: 0, tone: 0.15 }, { p: speichen, mat: 'kupfer', k: 0 }, { p: nabe, mat: 'kupfer', k: 0 }],
       details(P) {
-        for (let y = 0; y < 48; y++) for (let x = 0; x < 48; x++) { const r = Math.hypot(x + 0.5 - 24, y + 0.5 - 24); const i = P.info(x, y); if (i && i.mat === 'akzent' && r < 10.5 && i.stufe < 4) { let an = false; for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2 + 0.3; const d = Math.abs((x + 0.5 - 24) * Math.sin(a) - (y + 0.5 - 24) * Math.cos(a)); if (d < 1.8 && (x - 24) * Math.cos(a) + (y - 24) * Math.sin(a) > 0) an = true; } if (!an && r > 4) P.loesch(x, y); } }
+        for (let y = 0; y < 48; y++) for (let x = 0; x < 48; x++) { const r = Math.hypot(x + 0.5 - 24, y + 0.5 - 24); const i = P.info(x, y); if (i && i.mat === 'akzent' && r < 10.5 && i.stufe < 4) { let an = false; for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2 + 0.3; const d = Math.abs((x + 0.5 - 24) * Math.sin(a) - (y + 0.5 - 24) * Math.cos(a)); if (d < 1.8 && (x - 24) * Math.cos(a) + (y - 24) * Math.sin(a) > 0) an = true; } if (!an && r > 4) P.set(x, y, 'kupfer0'); } }
         P.set(24, 24, 'kohle0'); P.set(22, 22, 'a4');
       },
     };

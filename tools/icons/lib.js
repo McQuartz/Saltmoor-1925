@@ -128,19 +128,22 @@ function hand(o) {
   const s = o.s ?? 1, a = o.a ?? 0, seite = o.seite ?? 1, curl = o.curl ?? [0, 0, 0, 0], spreiz = o.spreiz ?? 0.12;
   const ax = achse(o.x, o.y, a);
   const pl = 6.5 * s, pb = 2.7 * s; // Handteller-Länge, halbe Breite
-  const out = { teller: [], finger: [], daumen: [], spitzen: [] };
+  const out = { teller: [], finger: [], daumen: [], spitzen: [] }; const fingerPts = [];
   out.teller.push(apg(ax, [[0, -pb * 0.8], [pl * 0.9, -pb], [pl, 0], [pl * 0.9, pb], [0, pb * 0.8]], null, { rd: 1.1 * s, b: 1.4 }));
   const fl = [[3.2, 2.4, 1.9], [3.5, 2.6, 2.0], [3.3, 2.4, 1.9], [2.6, 1.9, 1.5]];
-  const rr = [1.0, 1.05, 1.0, 0.85];
+  const rr = [1.2, 1.25, 1.18, 1.0];
   for (let i = 0; i < 4; i++) {
     const q = (-seite) * (i - 1.5) * pb * 0.62 * -1; // Zeigefinger auf Daumenseite
     let [px, py] = ax.P(pl * (i === 3 ? 0.88 : 0.97), seite * (1.5 - i) * pb * 0.74);
     let ang = a + seite * (1.5 - i) * spreiz * -1 * -1;
     const pts = [[px, py]];
     for (let j = 0; j < 3; j++) { ang += -seite * curl[i] * (j === 0 ? 0.9 : 1.15) * (o.krumm ?? 1); px += Math.cos(ang) * fl[i][j] * s; py += Math.sin(ang) * fl[i][j] * s; pts.push([px, py]); }
+    fingerPts.push(o.ohne && o.ohne.includes(i) ? null : pts);
     if (o.ohne && o.ohne.includes(i)) continue;
-    out.finger.push(...glied(pts, rr[i] * s, rr[i] * 0.8 * s, null)); out.spitzen.push([px, py]); void q;
+    out.finger.push(...glied(pts, rr[i] * s, rr[i] * 0.78 * s, null)); out.spitzen.push([px, py]); void q;
   }
+  // dunkle Fuge zwischen benachbarten Fingern, ein heller Nagel an jeder Spitze (nach dem Rendern)
+  AUTO.push(P => { for (let i = 0; i < 3; i++) { const A1 = fingerPts[i], B1 = fingerPts[i + 1]; if (!A1 || !B1) continue; for (let j = 0; j < 3; j++) { const m0 = [(A1[j][0] + B1[j][0]) / 2, (A1[j][1] + B1[j][1]) / 2], m1 = [(A1[j + 1][0] + B1[j + 1][0]) / 2, (A1[j + 1][1] + B1[j + 1][1]) / 2]; if (Math.hypot(A1[j + 1][0] - B1[j + 1][0], A1[j + 1][1] - B1[j + 1][1]) > 4 * s) break; P.ritz(m0[0], m0[1], m1[0], m1[1], -3); } } for (const f of fingerPts) if (f) { const [x, y] = f[3]; const i = P.info(Math.round(x), Math.round(y)); if (i && i.mat === 'haut' && i.stufe < 4) P.stufe(x, y, +1); } });
   // Daumen: vom Handballen schräg nach vorn auf der Daumenseite
   const dc = o.daumen ?? 0.2; let [dx, dy] = ax.P(pl * 0.25, seite * pb * 0.9); let da = a + seite * (o.daumenWinkel ?? 0.85); const dp = [[dx, dy]];
   const dl = [2.8, 2.4, 1.9];
@@ -156,15 +159,16 @@ const AUTO = []; // Detail-Pinsel, die Bausteine nach dem Rendern selbst setzen
 // Faust (geschlossene Hand), Knöchel zeigen in Richtung a
 function faust(o) {
   const s = o.s ?? 1, a = o.a ?? 0, seite = o.seite ?? 1; const ax = achse(o.x, o.y, a);
-  const teller = [apg(ax, [[0, -2.4 * s], [5.5 * s, -3.3 * s], [7.5 * s, -2 * s], [7.5 * s, 2.4 * s], [5.5 * s, 3.4 * s], [0, 2.4 * s]], null, { rd: 1.2 * s, b: 1.5 })];
-  const knoechel = [0, 1, 2, 3].map(i => { const [x, y] = ax.P(7.2 * s, seite * (1.6 - i * 1.1) * s * 1.05); return E(x, y, 1.3 * s, 1.3 * s, null, { pf: 'bevel' }); });
-  const [d0x, d0y] = ax.P(2 * s, seite * 2.8 * s), [d1x, d1y] = ax.P(6.2 * s, seite * 1.0 * s);
-  const daumen = [C(d0x, d0y, d1x, d1y, 1.4 * s, 1.15 * s, null)];
+  // Handrücken, vorn abgerundet; davor die vier eingerollten Finger als Wülste, darüber quer der Daumen
+  const teller = [apg(ax, [[0, -2.5 * s], [4.5 * s, -3.5 * s], [7 * s, -3.3 * s], [7.6 * s, 0], [7 * s, 3.3 * s], [4.5 * s, 3.5 * s], [0, 2.5 * s]], null, { rd: 1.1 * s, b: 1.4 })];
+  const knoechel = [0, 1, 2, 3].map(i => { const q = seite * (1.65 - i * 1.1) * s; return acap(ax, 8 * s, q, 5.4 * s, q - seite * 0.3 * s, 1.25 * s, 1.15 * s); });
+  const [d0x, d0y] = ax.P(2.2 * s, seite * 3.2 * s), [d1x, d1y] = ax.P(6.6 * s, seite * 0.9 * s);
+  const daumen = [C(d0x, d0y, d1x, d1y, 1.45 * s, 1.15 * s, null)];
   const al = o.arm ?? 12;
   const arm = al > 0 ? [acap(ax, -al, 0, 0.5, 0, 2.6 * s, 2.2 * s, null)] : [];
   const aermel = al > 0 && o.aermel !== false ? [acap(ax, -al - 2, 0, -al * 0.35, 0, 3.4 * s, 3.0 * s, null)] : [];
   // Rillen zwischen den Fingern und unter den Knöcheln (werden nach dem Rendern automatisch gemalt)
-  AUTO.push(P => { for (let i = 0; i < 3; i++) { const q = seite * (1.6 - i * 1.1 - 0.55) * s * 1.05; const [a, b] = ax.P(5.2 * s, q), [c, d] = ax.P(8.2 * s, q); P.ritz(a, b, c, d, -2); } const [e, f] = ax.P(5 * s, seite * 2 * s), [g, h] = ax.P(5 * s, -seite * 2.6 * s); P.ritz(e, f, g, h, -1); });
+  AUTO.push(P => { for (let i = 0; i < 3; i++) { const q = seite * (1.65 - i * 1.1 - 0.55) * s; const [a, b] = ax.P(5 * s, q), [c, d] = ax.P(8.6 * s, q); P.ritz(a, b, c, d, -3); } const [e, f] = ax.P(4.6 * s, seite * 1.6 * s), [g, h] = ax.P(4.6 * s, -seite * 3 * s); P.ritz(e, f, g, h, -1); });
   return { teller, knoechel, daumen, arm, aermel, ax, alle: () => [...teller, ...knoechel], spitze: ax.P(8.5 * s, 0) };
 }
 
@@ -221,6 +225,16 @@ function glutHaufen(cx, cy, w, n = 7, seed = 1) {
   for (let i = 0; i < n; i++) { const t = (i + rnd(i) * 0.8) / n, x = cx - w / 2 + t * w, hoch = 1 - Math.abs(t - 0.5) * 2; const r = 1.8 + rnd(i + 9) * 1.8; const y = cy - r * 0.6 - hoch * 2.5 - rnd(i + 3) * 1.5; out.push(E(x, y, r + 0.8, r, null, { pf: 'bevel', hz: 0.6 })); if (rnd(i + 5) > 0.35) glut.push([x + rnd(i + 7) * 2 - 1, y + r * 0.4, rnd(i + 11)]); }
   AUTO.push(P => { for (const [x, y, f] of glut) { P.glow(x, y, 2.5 + f * 1.5, 1.1, 'glutMittel', 'glutDim'); if (f > 0.5) P.set(x, y, 'flamme'); if (f > 0.85) P.set(x, y - 1, 'flammeHell'); } });
   return out;
+}
+// Gewehr im Profil (Grundmotiv der Hagel-Handgriffe): Schaft links, Lauf nach rechts; gibt Formen und Achse zurück
+function gewehr(x, y, a = 0, laenge = 40) {
+  const ax = achse(x, y, a);
+  return { ax,
+    schaft: [apg(ax, [[0, -1.5], [12, -2.6], [16, -2], [16, 2], [12, 2.2], [3, 6], [-1, 5]], null, { b: 1.6, rd: 0.8 })],
+    system: [apg(ax, [[14, -2.8], [24, -2.8], [24, 1.2], [14, 1.6]], null, { b: 1 })],
+    lauf: [acap(ax, 22, -1.6, laenge, -1.6, 1.2, 1.1)],
+    vorder: [apg(ax, [[23, -0.8], [laenge - 6, -0.6], [laenge - 6, 1.2], [23, 1.6]], null, { b: 0.8 })],
+    muendung: ax.P(laenge + 1, -1.6) };
 }
 // Arm und Ärmel einer Hand als Gruppen (Haut, darüber der Ärmel bis kurz vor das Handgelenk)
 function armGruppen(h, aermelMat = 'stoff') { return [{ p: h.arm, mat: 'haut', k: 0 }, { p: h.aermel, mat: aermelMat, k: 0 }]; }
@@ -280,13 +294,13 @@ function pinsel(buf, W, H, pal) {
         P.set(xx, yy, v > 0.62 ? 'flammeKern' : v > 0.38 ? 'flammeHell' : v > 0.14 + bay(xx, yy) * 0.12 ? 'flamme' : 'glutMittel');
       }
     },
-    // Mündungsfeuer: kurzer, gezackter Stern, gedithert
+    // Mündungsfeuer: eine kurze Flammenzunge in Schussrichtung a, gedithert (kein Comic-Stern)
     blitz(x, y, r = 4, a = 0) {
-      for (let yy = Math.floor(y - r); yy <= y + r; yy++) for (let xx = Math.floor(x - r); xx <= x + r; xx++) {
-        const dx = xx + 0.5 - x, dy = yy + 0.5 - y, d = Math.hypot(dx, dy); if (d > r) continue;
-        const w = Math.atan2(dy, dx) - a; const strahl = Math.pow(Math.abs(Math.cos(w * 2)), 6) * (Math.cos(w) > 0 ? 1 : 0.5);
-        const v = (1 - d / r) * (0.45 + strahl * 0.9);
-        if (v > 0.75) P.set(xx, yy, 'flammeKern'); else if (v > 0.5) P.set(xx, yy, 'flammeHell'); else if (v > 0.3 + bay(xx, yy) * 0.2) P.set(xx, yy, 'flamme');
+      for (let yy = Math.floor(y - r); yy <= y + r; yy++) for (let xx = Math.floor(x - r * 0.5); xx <= x + r * 1.2; xx++) {
+        const dx = xx + 0.5 - x, dy = yy + 0.5 - y; const t = dx * Math.cos(a) + dy * Math.sin(a), q = -dx * Math.sin(a) + dy * Math.cos(a);
+        if (t < -1) continue; const breite = (t < 0 ? 1.2 : 1.6 * (1 - t / r) + 0.4) * (r / 4); if (Math.abs(q) > breite || t > r) continue;
+        const v = (1 - Math.max(0, t) / r) * (1 - Math.abs(q) / (breite + 0.5));
+        if (v > 0.55) P.set(xx, yy, 'flammeKern'); else if (v > 0.35) P.set(xx, yy, 'flammeHell'); else if (v > 0.12 + bay(xx, yy) * 0.2) P.set(xx, yy, 'flamme');
       }
     },
     // Tropfen (2 px, oben dunkler)
@@ -329,7 +343,7 @@ function bauen(def, o = {}) {
   const W = def.w || 48, H = def.h || 48;
   const st = o.st ?? def.st ?? [], rar = o.rar ?? def.rar ?? 'gewoehnlich';
   const pal = palette(st, rar);
-  const A = { glutHaufen, armGruppen, pfad, E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
+  const A = { gewehr, glutHaufen, armGruppen, pfad, E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
   AUTO.length = 0;
   const res = def.form(A, { st, rar });
   const { buf } = rendern(W, H, res.gruppen, pal);

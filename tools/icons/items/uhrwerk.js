@@ -1,19 +1,19 @@
-// Offenes Uhrwerk: ohne Gehäuse und Zifferblatt, eine durchbrochene Platine mit drei ineinandergreifenden
-// Rädern verschiedener Größe und der Unruh mit Spirale oben. Kleinteilig, anders als das große Gezeitenrad.
+// Offenes Uhrwerk: ohne Gehäuse, ein Haufen ineinandergreifender Räder verschiedener Größe, deren Zähne
+// frei nach außen stehen, oben die Unruh mit ihrer Spirale. Kleinteilig, anders als das große Gezeitenrad.
 'use strict';
 module.exports = {
   form(A) {
-    const { zahnrad, E, ring, Pg } = A;
-    const platine = [Pg([[8, 20], [20, 8], [36, 10], [42, 26], [34, 40], [16, 42], [6, 32]], null, { b: 1.4, rd: 1 })];
-    const r1 = [zahnrad(19, 29, 9, 14, 2)], r2 = [zahnrad(32, 30, 5.5, 10, 1.8)], r3 = [zahnrad(29, 18, 4, 8, 1.6)];
-    const unruh = ring(17, 13, 6, 6, 1, null, {}, 14);
-    const steine = [E(19, 29, 1.6, 1.6), E(32, 30, 1.4, 1.4), E(29, 18, 1.2, 1.2)];
+    const { zahnrad, E, ring, C } = A;
+    const r1 = [zahnrad(18, 30, 11, 18, 2.4)], r2 = [zahnrad(35, 33, 7, 12, 2.2)], r3 = [zahnrad(31, 16, 5, 10, 2)];
+    const unruh = ring(13, 11, 6.5, 6.5, 1, null, {}, 16);
+    const bruecke = [C(13, 11, 31, 16, 1.2, 1.2), C(31, 16, 35, 33, 1.2, 1.2)];
+    const steine = [E(18, 30, 1.6, 1.6), E(35, 33, 1.4, 1.4), E(31, 16, 1.2, 1.2), E(13, 11, 1.2, 1.2)];
     return {
-      gruppen: [{ p: platine, mat: 'messing', k: 0, tone: -0.3 }, { p: r1, mat: 'messing', k: 0 }, { p: r2, mat: 'stahl', k: 0 }, { p: r3, mat: 'messing', k: 0 }, { p: unruh, mat: 'stahl', k: 0 }, { p: steine, mat: 'akzent', k: 0, tone: 0.2 }],
+      gruppen: [{ p: r1, mat: 'messing', k: 0 }, { p: r2, mat: 'stahl', k: 0 }, { p: r3, mat: 'messing', k: 0 }, { p: unruh, mat: 'stahl', k: 0 }, { p: bruecke, mat: 'stahl', k: 0, tone: -0.1 }, { p: steine, mat: 'akzent', k: 0, tone: 0.2 }],
       details(P) {
-        for (let a = 0; a < 12; a += 0.25) { const r = 0.6 + a * 0.35; P.auf(17 + Math.cos(a) * r, 13 + Math.sin(a) * r, 'stahl3'); }
-        for (const [x, y, r] of [[19, 29, 5.5]]) for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + 0.4; P.el(x + Math.cos(a) * r * 0.6, y + Math.sin(a) * r * 0.6, 1.6, 1.6, 'messing0', true); }
-        P.set(18, 28, 'aH');
+        for (let a = 0; a < 10; a += 0.3) { const r = 0.8 + a * 0.45; P.set(13 + Math.cos(a) * r, 11 + Math.sin(a) * r, 'stahl2'); }
+        for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2 + 0.4; P.el(18 + Math.cos(a) * 6, 30 + Math.sin(a) * 6, 1.8, 1.8, 'messing0', true); }
+        P.set(17, 29, 'aH');
       },
     };
   },

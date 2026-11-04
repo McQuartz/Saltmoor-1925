@@ -1,0 +1,53 @@
+{
+ "id": "moor_plus",
+ "ergaenzt": "moor",
+ "gegner_dazu": ["gepfaehlter"],
+ "gegner_weg": [],
+ "fundpool_dazu": ["weidenschlinge"],
+ "foes": {
+  "gepfaehlter": {
+   "n": "Der Gepfählte", "biom": "moor", "rang": "normal", "hp": 24, "weak": "S",
+   "pat": [{"t": "blk", "v": 7}, {"t": "atk", "v": 6}, {"t": "atk", "v": 3, "h": 2}],
+   "sprite": "gepfaehlter_a", "varianten": ["gepfaehlter_a", "gepfaehlter_b"],
+   "konzept": "Vor siebzehnhundert Jahren mit der Weidenschlinge um den Hals ins Moor gelegt, unter ein Flechtwerk gedrückt und festgepfählt, damit er nicht wiederkommt. Die Torfstecher haben die Pfähle mit ausgestochen. Er kniet unter dem Flechtwerk wie unter einem Dach; die Augen sind zu, aber das Licht kommt durch die Lider.",
+   "stimme": "mumie",
+   "kniff": {"art": "dornen", "v": 2, "why": "Die Pfähle stecken noch in ihm. Wer zuschlägt, greift hinein."},
+   "beute": "weidenschlinge",
+   "beute_satz": "Er legt sich zurück in den Torf, ordentlich, wie man ihn hingelegt hat. Die Pfähle stehen wieder senkrecht.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "moor_pfaehle",
+   "t": "Drei Pfähle",
+   "d": "Im frisch gestochenen Torf stecken drei angespitzte Pfähle, schräg, wie Zeltpflöcke. Zwischen ihnen liegt ein Flechtwerk aus Weiden, so frisch, als hätte es jemand gestern gebunden. Darunter hebt und senkt sich der Torf, ganz langsam, wenn du nicht hinsiehst.",
+   "bild": "Ein Weidenflechtwerk auf schwarzem Torf, drei schräge Pfähle durch die Ruten, am Rand der Grube die liegengelassenen Torfspaten.",
+   "o": [
+    {"l": "Einen Pfahl herausziehen: Weidenschlinge, Kampf gegen den Gepfählten", "fx": [{"op": "give_item", "item": "weidenschlinge"}, {"op": "fight", "foes": ["gepfaehlter"]}]},
+    {"l": "Den Pfahl tiefer schlagen: +6 max. Leben, −9 Leben", "fx": [{"op": "max_hp", "v": 6}, {"op": "lose_hp", "v": 9}]},
+    {"l": "Gold unter das Flechtwerk legen, wie man es früher tat: −12 Gold, +1 Kerbe an einem Item", "fx": [{"op": "gold", "v": -12}, {"op": "kerbe"}], "if": {"gold_min": 12}}
+   ]
+  },
+  {
+   "id": "moor_sode",
+   "t": "Die Sode mit der Hand",
+   "d": "Am Bohlenweg trocknen Torfsoden in Stapeln, säuberlich wie Ziegel. Aus einer ragt eine Hand, braun wie Leder, die Nägel unversehrt, die Finger sauber gekrümmt. Sie hält etwas fest, und als du näher kommst, hält sie es fester.",
+   "bild": "Ein Stapel dunkler Torfziegel neben dem Bohlenweg, aus der mittleren Reihe ragt eine gegerbte Hand mit geschlossener Faust.",
+   "o": [
+    {"l": "Die Finger aufbiegen: ein zufälliges Item, −5 Leben", "fx": [{"op": "give_random"}, {"op": "lose_hp", "v": 5}]},
+    {"l": "Die Torfstecherin hat diese Sode gestochen. Ihr die Hand zurückbringen: einen Handgriff lernen", "fx": [{"op": "handgriff", "zufall": true}], "if": {"event_gesehen": "moor_torf"}},
+    {"l": "Die Sode in die Esse der Köhlerhütte legen: eine Karte streichen", "fx": [{"op": "strike"}]}
+   ]
+  }
+ ],
+ "items": {
+  "weidenschlinge": {
+   "n": "Weidenschlinge", "a": "talisman", "st": ["V"], "spr": "collar",
+   "rar": "gewoehnlich", "kerben": 1, "preis": 22,
+   "eigen": {"typ": "verwundbar_start", "v": 1},
+   "flavor": "Drei Weidenruten, gedreht und geknotet. Siebzehnhundert Jahre im Moor, und der Knoten hält noch.",
+   "cards": [{"n": "Zuziehen", "c": 1, "atk": 4, "vuln": 1}]
+  }
+ }
+}

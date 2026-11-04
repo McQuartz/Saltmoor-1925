@@ -3,7 +3,7 @@
 // --alt-m7: Gegner aus data/foes_m7.json mit der Biom-Zuordnung daraus (bis sie foes.json ersetzt)
 // Gibt Gewinnrate, Ø Tiefe, Niederlagen je Biom, Ø Züge je Kampf und die tödlichsten Gegner aus.
 const {ladeKern}=require('./kern');const fs=require('fs'),path=require('path');
-(async()=>{const a=process.argv.slice(2);const n=+(a[0]||50),s0=+(a[1]||1);const K=ladeKern();await K.init();
+(async()=>{const a=process.argv.slice(2);const pos=a.filter(x=>!x.startsWith('--'));const n=+(pos[0]||50),s0=+(pos[1]||1);const K=ladeKern();await K.init();
  if(a.includes('--alt-m7')){const f=JSON.parse(fs.readFileSync(path.join(__dirname,'../prototype/data/foes_m7.json'),'utf8'));
   K.run(`FOES=${JSON.stringify(f)};for(const b in BIOMES){const ids=Object.keys(FOES).filter(k=>FOES[k].biom===b);BIOMES[b].gegner=ids.filter(k=>FOES[k].rang==='normal');const w=ids.find(k=>FOES[k].rang!=='normal');if(w)BIOMES[b].waechter=w;}`);}
  for(const x of a.filter(x=>x.startsWith('--set=')))K.run(x.slice(6));

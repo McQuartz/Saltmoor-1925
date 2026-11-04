@@ -10,7 +10,7 @@ module.exports = {
     const [ex, ey] = spirale.B(1);
     const kreuz = [C(ex, ey + 2, ex, ey + 13, 1.1, 1.1), C(ex - 3.5, ey + 6, ex + 3.5, ey + 6, 1, 1)];
     return {
-      gruppen: [{ p: schnur, mat: 'leder', k: 0, ohneR2: true }, { p: spirale, mat: 'glas', k: 0, tone: 0.05 }, { p: kreuz, mat: 'eisen', k: 0 }],
+      gruppen: [{ p: spirale, mat: 'glas', k: 1.2, tone: 0.05 }, { p: kreuz, mat: 'eisen', k: 0 }],
       details(P) {
         for (let i = 0; i < 22; i++) { const [x, y] = spirale.B(i / 21); P.set(x - 0.5, y + 0.6, 'a3'); P.set(x - 0.5, y - 0.4, 'a2'); }
         P.set(ex, ey + 15, 'a3'); P.set(ex, ey + 16, 'a2');

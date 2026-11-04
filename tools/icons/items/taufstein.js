@@ -1,17 +1,17 @@
-// Taufstein-Splitter: ein grober Granitbrocken mit gebrochenen Kanten, oben eine glatte Rinne,
-// in der Wasser steht, das nie verdunstet. Eine Hälfte eines eingemeißelten Kreuzes an der Bruchkante.
+// Taufstein-Splitter: ein kantiger Granitbrocken mit scharfen Bruchkanten, eine Ecke des alten Beckens:
+// oben die glatte Rinne mit Wasser, das nie verdunstet; an der Bruchkante ein halbes eingemeißeltes Kreuz.
 'use strict';
 module.exports = {
   form(A) {
     const { Pg } = A;
-    const stein = [Pg([[6, 26], [12, 14], [24, 9], [38, 12], [43, 22], [40, 36], [30, 43], [14, 42], [6, 36]], null, { b: 3, rd: 0.8 })];
-    const rinne = [Pg([[12, 19], [24, 13], [37, 16], [36, 22], [24, 20], [13, 25]], null, { b: 1.2, rd: 1 })];
+    const stein = [Pg([[3, 30], [9, 13], [20, 16], [27, 5], [37, 10], [45, 24], [41, 34], [44, 44], [26, 41], [12, 45]], null, { b: 2.4, rd: 0.2 })];
+    const rinne = [Pg([[10, 17], [20, 19], [27, 10], [36, 14], [34, 18], [27, 15], [21, 23], [11, 21]], null, { b: 1.2, rd: 0.6 })];
     return {
       gruppen: [{ p: stein, mat: 'stein', k: 0 }, { p: rinne, mat: 'stein', k: 0, tone: -0.35, ohneRand: true }],
       details(P) {
-        for (let x = 14; x < 36; x++) { const y = Math.round(19.5 - (x < 24 ? (x - 14) * 0.45 : (34 - x) * 0.2 + 0) + (x >= 24 ? 0.5 : 0)); P.auf(x, y + 1, x % 4 ? 'akzent2' : 'aG'); P.auf(x, y + 2, 'akzent1'); }
-        P.ritz(30, 28, 30, 38, -2); P.ritz(26, 32, 34, 32, -2);
-        for (const [x, y] of [[10, 30], [17, 36], [36, 28], [22, 39], [40, 30]]) P.stufe(x, y, -1);
+        P.line(12, 19, 20, 21, 'akzent2', true); P.line(21, 20, 27, 12, 'akzent2', true); P.line(27, 12, 34, 15, 'aG', true); P.set(24, 16, 'aH');
+        P.ritz(33, 27, 33, 38, -2); P.ritz(28, 31, 38, 31, -2);
+        P.ritz(20, 16, 18, 40, -1); P.ritz(37, 10, 41, 34, -1);
       },
     };
   },

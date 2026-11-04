@@ -142,4 +142,6 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 
 ## Probleme
 
+- 2026-11-04, M8 Vorarbeit: `tools/balance.js` las den ersten `--set=`-Schalter als Startseed (Seeds `NaN`, alle Messungen mit `--set` waren falsch). Behoben. Neuer Hebel `BAL.enemy_scaling.atk_faktor` (Standard 1). Zwischenmessung, 60 Runs, generischer Bot, noch während Biome entstehen: heute 40 %, 3,6 Züge je Kampf; mit Leben ×1,45, Wächter ×1,4, Angriff ×0,7 sind es 45 % bei 4,4 Zügen. Mehr Gegnerleben allein macht den Run deutlich schwerer, weil Kniffe wie „wächst“ und „ruft“ mit der Zahl der Züge wirken. Übernommen wird erst in M8, wenn alle Pakete fertig sind (die Agenten stimmen gegen den heutigen Stand ab).
+
 ## Bericht

@@ -7,8 +7,8 @@
 module.exports = {
   id: 'markfresser', biom: 'walkathedrale', zone: 'walkathedrale', w: 96, h: 120, fuss: [44, 115], kopf: [24, 50], rimBis: 113,
   varianten: {
-    markfresser_a: { glieder: 7, dick: 1, kringel: 1 },
-    markfresser_b: { glieder: 8, dick: 1.15, kringel: 1.4, buckel: true },
+    markfresser_a: { glieder: 7, dick: 1.3, kringel: 1 },
+    markfresser_b: { glieder: 8, dick: 1.45, kringel: 1.25, buckel: true },
   },
   // verworfen: Made aufgerichtet hinter ihm wie ein Sack (Masse ohne Lesart, der Junge geht unter)
   skizzen: { skizze_aufrecht: { glieder: 6, dick: 1, kringel: 0, aufrecht: true } },
@@ -28,7 +28,7 @@ module.exports = {
       const q = i / (n - 1);
       let x, y;
       if (v.aufrecht) { x = 50 + q * 12; y = 100 - q * 60; }
-      else { const hoch = q > 0.62 ? Math.pow((q - 0.62) / 0.38, 1.6) * 30 * v.kringel : 0; x = 40 + q * 44 - hoch * 0.25; y = 101 - Math.sin(q * Math.PI) * 5 - hoch; }
+      else { const hoch = q > 0.62 ? Math.pow((q - 0.62) / 0.38, 1.6) * 30 * v.kringel : 0; x = 42 + q * 42 - hoch * 0.25; y = 101 - Math.sin(q * Math.PI) * 5 - hoch; }
       const rr = (6.5 + 7 * Math.sin(Math.PI * (0.12 + q * 0.7))) * D * (1 - q * 0.35) + (i % 2 ? puls * 0.5 : 0) * (1 - q);
       seg.push({ x: x + lean * (1 - q) * 0.3, y: y + fall * 0.3, rx: rr * 1.05, ry: rr * (0.92 + (v.buckel && i === 2 ? 0.25 : 0)) });
     }
@@ -38,11 +38,11 @@ module.exports = {
     const neig = 0.25 + beug * 0.55, len = 30;
     const shx = bx - Math.sin(neig) * len, shy = by - Math.cos(neig) * len;
     const rumpf = Pg([[bx - 6, by + 2], [bx + 6, by + 1], [shx + 7, shy + 2], [shx + 4, shy - 3], [shx - 5, shy - 2], [shx - 6, shy + 4]], null, { rd: 2 });
-    const hx = shx - 4 - Math.sin(neig) * 6, hy = shy - 8 + (saug ? 1 : 0);
-    const kopf = E(hx, hy, 5.6, 6.2, 'haut');
-    const hals = C(shx - 1, shy, hx + 1, hy + 3, 2.6, 2.2, null);
+    const hx = shx - 5 - Math.sin(neig) * 7, hy = shy - 10 + (saug ? 1 : 0);
+    const kopf = E(hx, hy, 6.4, 7, 'haut');
+    const hals = C(shx - 1, shy, hx + 2, hy + 4, 2.2, 1.8, null);
     // Knochen: gespalten, am Mund; beim Biss weggerissen und als Keule nach vorn
-    const kb = beug > 0.6 ? [[hx - 22, hy + 12], [hx - 4, hy - 4]] : [[hx - 14, hy + 8 + saug], [hx + 8, hy - 12]];
+    const kb = beug > 0.6 ? [[hx - 24, hy + 14], [hx - 6, hy - 2]] : [[hx - 15, hy + 16 + saug], [hx - 5, hy + 4]];
     const knochen = [C(kb[0][0], kb[0][1], kb[1][0], kb[1][1], 2.6, 2.2, 'haut'), E(kb[1][0], kb[1][1], 3.6, 3, 'haut'), E(kb[1][0] + 2, kb[1][1] + 2, 2.6, 2.4, 'haut')];
     // Arme: dünn, halten den Knochen
     const kmx = (kb[0][0] + kb[1][0]) / 2, kmy = (kb[0][1] + kb[1][1]) / 2;
@@ -66,10 +66,10 @@ module.exports = {
       // Glieder: der Ring zwischen zwei Gliedern ist dunkel, dahinter glimmt das Mark durch die Haut
       seg.forEach((s, i) => {
         if (i >= n - 2) return;
-        const lx = r(s.x - s.rx * 0.25), ly = r(s.y + s.ry * 0.15), t = glut * (1 - i / n) * (i % 2 ? 1 : 0.85);
+        const lx = r(s.x + s.rx * 0.3), ly = r(s.y - s.ry * 0.05), t = glut * (1 - i / n * 0.8) * (i % 2 ? 1 : 0.85);
         if (glut > 0) {
-          P.glow(lx, ly, s.rx * 0.85 * Math.max(0.3, t), 0.85 * t, 'glutDim', 'k3');
-          for (let k = -2; k <= 2; k++) P.auf(lx + k, ly + Math.abs(k) * 0.3, t > 0.6 && Math.abs(k) < 2 ? 'glut' : 'mark');
+          P.glow(lx, ly, s.rx * 1.0 * Math.max(0.35, t), 0.9 * t, 'glutDim', 'k3');
+          for (let k = -3; k <= 3; k++) P.auf(lx + (Math.abs(k) > 1 ? 1 : 0), ly + k, t > 0.6 && Math.abs(k) < 2 ? 'glut' : 'mark');
           if (t > 0.75) P.set(lx, ly, 'kern');
           if (i < 2) augen.push([lx, ly]);
         }

@@ -1,19 +1,18 @@
-// Uhr ohne Zeiger: ein großes, gebrochenes Emaille-Zifferblatt ohne Gehäuse, schräg wie eine Scheibe,
-// römische Stundenstriche, in der Mitte nur das leere Loch. Ein Splitter fehlt am Rand.
+// Uhr ohne Zeiger: ein Emaille-Zifferblatt ohne Gehäuse, an einer Öse aufgehängt; ein großer Keil ist
+// herausgebrochen (die fehlende Stunde), in der Mitte steht nur der leere Zapfen. Sie gibt dir Zeit und nimmt sie.
 'use strict';
 module.exports = {
   form(A) {
-    const { E, Pg } = A;
-    const blatt = [E(24, 24, 20, 17, null, { pf: 'bevel', hz: 0.15 })];
-    const splitter = [Pg([[38, 30], [44, 36], [39, 40]], null, { b: 0.6 })];
+    const { Pg, C, ring } = A;
+    const pts = []; for (let a = -0.15; a <= Math.PI * 2 - 1.15; a += 0.12) pts.push([24 + Math.cos(a) * 18, 26 + Math.sin(a) * 18]);
+    const blatt = [Pg([[24, 26], ...pts], null, { b: 1.6, rd: 0.4 })];
+    const oese = ring(24, 5, 2.6, 2.6, 0.9, null, {}, 10);
+    const zapfen = [C(24, 26, 24, 26, 1.6, 1.6)];
     return {
-      gruppen: [{ p: blatt, mat: 'papier', k: 0 }, { p: splitter, mat: 'papier', k: 0 }],
+      gruppen: [{ p: oese, mat: 'messing', k: 0 }, { p: blatt, mat: 'papier', k: 0 }, { p: zapfen, mat: 'messing', k: 0 }],
       details(P) {
-        for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2 - Math.PI / 2; const x = 24 + Math.cos(a) * 15, y = 24 + Math.sin(a) * 12.5; P.line(x, y, 24 + Math.cos(a) * 13, 24 + Math.sin(a) * 10.8, 'kohle1', true); if (i % 3 === 0) P.set(24 + Math.cos(a) * 15.5 + 1, 24 + Math.sin(a) * 13, 'kohle1'); }
-        P.el(24, 24, 1.5, 1.5, 'kohle0', true); P.set(24, 23, 'a3');
-        // Bruch: dunkle Linie von der Lücke zum Rand
-        P.line(36, 30, 30, 26, 'papier0', true); P.line(30, 26, 27, 27, 'papier0', true);
-        for (let y = 33; y < 42; y++) for (let x = 36; x < 46; x++) { if (y - 30 > (x - 36) * 1.4 && y > 30 && x < 41 + (y - 33) * 0.2 && P.info(x, y) && P.info(x, y).stufe < 4) P.loesch(x, y); }
+        for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2 - Math.PI / 2; if (a > -1.2 + Math.PI * 2 - 1.15 - Math.PI * 2 && a < -0.2 && false) continue; const x0 = 24 + Math.cos(a) * 15.5, y0 = 26 + Math.sin(a) * 15.5; if (!P.info(Math.round(x0), Math.round(y0))) continue; P.line(x0, y0, 24 + Math.cos(a) * 13, 26 + Math.sin(a) * 13, 'kohle1', true); }
+        P.ritz(24, 26, 11, 15, -1); P.set(24, 25, 'a3');
       },
     };
   },

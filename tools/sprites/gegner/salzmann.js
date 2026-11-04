@@ -26,13 +26,13 @@ module.exports = {
   id: 'salzmann', biom: 'salz', zone: 'salz', w: 96, h: 120, fuss: [46, 115], kopf: [42, 10], rimBis: 112,
   varianten: {
     // a: großer Würfelkopf, leicht gekippt, Kristalle am Tragsack
-    salzmann_a: { kopfS: 12, kipp: 0.14, sackK: [[63, 37, 5, 0.25], [71, 33, 6.5, -0.12], [77, 44, 3.5, 0.4], [66, 27, 3.5, 0.5]], hals: 3 },
+    salzmann_a: { kopfS: 13, kipp: 0.14, sackK: [[66, 39, 5, 0.25], [74, 35, 6.5, -0.12], [80, 46, 3.5, 0.4], [70, 29, 3.5, 0.5]], hals: 3 },
     // b: Würfel stärker gekippt, Hals länger, die Kristalle wachsen auch auf der Schulter
-    salzmann_b: { kopfS: 11, kipp: -0.24, sackK: [[61, 35, 4, 0.4], [70, 31, 7, -0.25], [79, 38, 4.5, 0.1]], hals: 6, schulterK: 1 },
+    salzmann_b: { kopfS: 12, kipp: -0.24, sackK: [[64, 37, 4, 0.4], [73, 33, 7, -0.25], [82, 40, 4.5, 0.1]], hals: 6, schulterK: 1 },
   },
   skizzen: {
-    sil_wuerfelkopf: { kopfS: 12, kipp: 0.14, sackK: [[63, 37, 5, 0.25], [71, 33, 6.5, -0.12], [77, 44, 3.5, 0.4], [66, 27, 3.5, 0.5]], hals: 3 },
-    sil_langhals: { kopfS: 11, kipp: -0.24, sackK: [[61, 35, 4, 0.4], [70, 31, 7, -0.25], [79, 38, 4.5, 0.1]], hals: 6, schulterK: 1 },
+    sil_wuerfelkopf: { kopfS: 13, kipp: 0.14, sackK: [[66, 39, 5, 0.25], [74, 35, 6.5, -0.12], [80, 46, 3.5, 0.4], [70, 29, 3.5, 0.5]], hals: 3 },
+    sil_langhals: { kopfS: 12, kipp: -0.24, sackK: [[64, 37, 4, 0.4], [73, 33, 7, -0.25], [82, 40, 4.5, 0.1]], hals: 6, schulterK: 1 },
   },
   bild(p, v, A) {
     const { E, C, Pg, glied, r, bay } = A;
@@ -56,7 +56,7 @@ module.exports = {
     const guertel = C(bx - 10, by - 1, bx + 11, by - 2, 1.4, 1.4, 'dunkel');
     const schurz = Pg([[bx - 9, by], [bx + 10, by - 1], [bx + 8, by + 7], [bx - 7, by + 8]], 'dunkel', { rd: 0.6 });
     // Tragsack hinter dem Rücken, höher als die Schulter, mit Holzrahmen
-    const kx = bx + 12, ky = by - 36;
+    const kx = bx + 14, ky = by - 34;
     const sack = Pg([[kx - 3, ky - 2], [kx + 9, ky - 6], [kx + 17, ky + 2], [kx + 16, ky + 24], [kx + 9, ky + 32], [kx + 1, ky + 30], [kx - 2, ky + 16]], null, { rd: 2.5 });
     const sackRand = C(kx - 3, ky - 2, kx + 9, ky - 6, 1.5, 1.5, 'dunkel');
     const rahmen = [C(kx + 15, ky - 10, kx + 15, ky + 34, 1.1, 1.1, 'dunkel', { pf: 'flat' }), C(kx - 1, ky - 6, kx + 1, ky + 30, 1, 1, 'dunkel', { pf: 'flat' })];
@@ -88,6 +88,7 @@ module.exports = {
       pick.push(Pg([[e[0] - nx * 3 * sp - dx, e[1] - ny * 3 * sp - dy], [e[0] - nx * 3 * sp + dx * 3, e[1] - ny * 3 * sp + dy * 3], [e[0] + nx * 10 * sp + dx * 1, e[1] + ny * 10 * sp + dy * 1], [e[0] + nx * 1 * sp - dx * 1.5, e[1] + ny * 1 * sp - dy * 1.5]], null, { rd: 0.3 }));
     }
     const pickHinten = pk > 0 && pk < 1.5;
+    const schneide = pick[1].v;
     const gruppen = [
       { p: pickHinten ? pick : [], k: 0 },
       { p: rahmen, k: 0, anker: [lean, T] },
@@ -112,20 +113,20 @@ module.exports = {
       const B = (x, y) => { const c = P.get(x, y); return c >= 1 && c <= 4; };
       // Würfelflächen mit Verlauf (k1 < k2 < k3 < r1), gedithert: oben hell zur Lichtkante, vorn mittel, rechts dunkler mit Lichtkante
       const STU = ['k1', 'k2', 'k3', 'r1'];
-      const stufe = (x, y, t) => { const q = Math.max(0, Math.min(0.999, t)) * 3, k = Math.floor(q); return STU[Math.min(3, (q - k) > bay(x, y) ? k + 1 : k)]; };
+      const stufe = (x, y, t) => { const q = Math.max(0, Math.min(0.999, t)) * 3, k = Math.floor(q); return STU[Math.min(3, (q - k) > bay(x - lean, y - T) ? k + 1 : k)]; };
       const flaechen = (w, hell) => {
         const xs = w.umriss.map(q => q[0]), ys = w.umriss.map(q => q[1]); const s = Math.hypot(w.o[0] - w.m[0], w.o[1] - w.m[1]);
         for (let y = Math.floor(Math.min(...ys)); y <= Math.max(...ys); y++) for (let x = Math.floor(Math.min(...xs)); x <= Math.max(...xs); x++) {
           if (!B(x, y)) continue; const X = x + 0.5, Y = y + 0.5;
           const dOr = Math.hypot(X - w.or[0], Y - w.or[1]) / (s * 1.7), dO = Math.hypot(X - w.o[0], Y - w.o[1]) / (s * 1.7);
-          if (inPoly(X, Y, w.oben)) P.set(x, y, stufe(x, y, hell * (1.05 - Math.min(dOr, dO) * 0.9)));
-          else if (inPoly(X, Y, w.links)) P.set(x, y, stufe(x, y, hell * (0.78 - Math.hypot(X - w.ol[0], Y - w.ol[1]) / (s * 2.2) * 0.35)));
-          else if (inPoly(X, Y, w.rechts)) P.set(x, y, stufe(x, y, hell * (0.42 - dOr * 0.2)));
+          if (inPoly(X, Y, w.oben)) P.set(x, y, stufe(x, y, hell * (1.25 - Math.min(dOr, dO) * 0.7)));
+          else if (inPoly(X, Y, w.links)) P.set(x, y, stufe(x, y, hell * (0.92 - Math.hypot(X - w.ol[0], Y - w.ol[1]) / (s * 2.2) * 0.4)));
+          else if (inPoly(X, Y, w.rechts)) P.set(x, y, stufe(x, y, hell * (0.6 - dOr * 0.25)));
         }
         P.line(w.ol[0], w.ol[1], w.m[0], w.m[1], 'k3', true); P.line(w.m[0], w.m[1], w.u[0], w.u[1], 'k1', true);
         P.line(w.m[0], w.m[1], w.or[0], w.or[1], 'r1', true);
       };
-      SK.forEach(w => flaechen(w, 0.85));
+      SK.forEach(w => flaechen(w, 0.95));
       // Würfelkopf: Salz ist heller als alles andere an ihm
       flaechen(KW, 1);
       // Glitzern auf der Oberseite (Salzkorn), ein Pixel, wandert im Leerlauf
@@ -144,9 +145,16 @@ module.exports = {
         augen.push([r(e1x), r(e1y)], [r(e2x), r(e2y)]);
       }
       // inneres Randlicht: Schulterfell vor dem Sack, Sack vor dem Rahmen, Kittel unter dem Fell
-      kante(P, umhang.v, 'r1', 0.1); kante(P, sack.v, 'r1', 0.2); kante(P, rumpf.v, 'k3', 0.2);
-      // Fell: hellere Strähnen gedithert über die ganze Fläche
-      for (let y = r(sy - 4); y < by - 14; y++) for (let x = r(sx - 7); x < bx + 13; x++) { const c = P.get(x, y); if (c >= 2 && c <= 4 && ((x * 3 + y * 5) % 7 === 0)) P.set(x, y, 'k3'); if (c >= 2 && c <= 4 && ((x * 5 + y * 3) % 11 === 0)) P.set(x, y, 'k1'); }
+      kante(P, [[sx - 7, sy + 2], [sx - 1, sy - 4], [bx + 7, by - 35], [bx + 13, by - 30], [bx + 13, by - 20], [sx - 8, sy + 8]], 'r1', 0.1); kante(P, sack.v, 'r1', 0.2); kante(P, rumpf.v, 'k3', 0.2);
+      // Fell: senkrechte Strähnen, oben heller (Gegenlicht), unten dunkel
+      const UP = [[sx - 7, sy + 2], [sx - 1, sy - 4], [bx + 7, by - 35], [bx + 13, by - 30], [bx + 13, by - 16], [sx - 8, sy + 10]];
+      for (let y = r(sy - 6); y < by - 10; y++) for (let x = r(sx - 9); x < bx + 15; x++) {
+        const c = P.get(x, y); if (c < 1 || c > 4 || !inPoly(x + 0.5, y + 0.5, UP)) continue;
+        const str = ((x * 13) % 5), t = 0.75 - (y - (sy - 4)) / 26 + (str === 0 ? 0.25 : str === 3 ? -0.2 : 0);
+        P.set(x, y, stufe(x, y, t * 0.92));
+      }
+      // Beinwickel: Querstreifen
+      for (let y = r(by + 8); y < 110; y += 3) { for (const lx of [bx - 9, bx + 8]) { P.auf(r(lx - 2), y, 'k3'); P.auf(r(lx - 1), y, 'k3'); P.auf(r(lx), y + 1, 'k0'); } }
       // Fellumhang: Zotteln entlang der Schulterlinie, Fransen am Saum
       for (let i = 0; i < 9; i++) { const zx = r(sx - 4 + i * 2.4), zy = r(sy + 1 + ((i * 7) % 5)); P.auf(zx, zy, 'k1'); P.auf(zx, zy + 1, 'k1'); P.auf(zx + 1, zy - 1, 'k3'); }
       for (let x = r(bx - 9); x <= bx + 10; x += 3) P.auf(x, r(by - 3 + ((x * 5) % 2)), 'k3');
@@ -161,6 +169,8 @@ module.exports = {
       P.line(sx + 2, sy - 1, bx + 6, by - 8, 'k0', true);
       // Bundschuh-Schnürung
       P.auf(r(bx - 9), 110, 'k3'); P.auf(r(bx + 7), 110, 'k3');
+      // Bronzeklinge: Schneide glänzt
+      P.line(schneide[1][0], schneide[1][1], schneide[2][0], schneide[2][1], 'r1', true);
       // Spanbündel brennt: inneres Licht, beleuchtet Hand und Sack von unten
       if (flamme > 0) {
         P.glow(flX + 0.5, flY + 3.5, 11 * flamme, 0.9);
