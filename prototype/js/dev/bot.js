@@ -13,8 +13,9 @@ const Bot={
     ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});
    if(!best||best.w<=0)break;playCard(best.i,best.t);}
   if(S.phase==='fight'&&!busy)endTurn();},
+ wertItem(it){const P=this.profil;const d=def(it);return (P&&(P.items||[]).includes(it.id)?12:0)+(P?d.st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+hgVon(it).length*3+(d.eigen?6:0)+d.cards.reduce((s,c)=>s+(c.atk||0)*(c.h||1)*(c.all?1.6:1)+(c.blk||0)+(c.heal||0)+(c.poison||0)*1.5+(c.burn||0)*1.5+(c.draw||0)*3-(c.c||0)*2,0)+(d.hp||0)+(d.passiv?6:0)+d.st.length*2;},
  ausruesten(){// leere Slots aus dem Rucksack füllen, sonst schwächere Items tauschen (einfach: mehr Karten-Werte)
-  const P=this.profil;const wertItem=it=>{const d=def(it);return (P&&(P.items||[]).includes(it.id)?12:0)+(P?d.st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+hgVon(it).length*3+(d.eigen?6:0)+d.cards.reduce((s,c)=>s+(c.atk||0)*(c.h||1)*(c.all?1.6:1)+(c.blk||0)+(c.heal||0)+(c.poison||0)*1.5+(c.burn||0)*1.5+(c.draw||0)*3-(c.c||0)*2,0)+(d.hp||0)+(d.passiv?6:0)+d.st.length*2;};
+  const wertItem=it=>this.wertItem(it);
   for(let b=0;b<S.bag.length;b++){const it=S.bag[b];if(!it)continue;const a=def(it).a;
    for(let i=0;i<S.slots[a];i++){const cur=S.areas[a][i];if(!cur){move('bag:'+b,a+':'+i);break;}}}
   for(let b=0;b<S.bag.length;b++){const it=S.bag[b];if(!it)continue;const a=def(it).a;let worst=-1,wv=1e9;
@@ -52,7 +53,8 @@ const Bot={
    if(!S.picked&&S.reward.length){const P=this.profil;const w=id=>(P&&(P.items||[]).includes(id)?10:0)+(P?ITEMS[id].st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+(rarOf(ITEMS[id])==='reliquie'?5:rarOf(ITEMS[id])==='selten'?2:0);const best=[...S.reward].sort((a,c)=>w(c)-w(a))[0];takeReward(S.bag.includes(null)?best:'');}this.ausruesten();leaveReward();break;
   case'event':{const ev=curEvent();let k=ev.o.findIndex(o=>condOk(o.if)&&!(o.fx||[]).some(f=>f.op==='lose_hp'&&S.hp<f.v+10||f.op==='fight'&&S.hp<maxHp()*.5));if(k<0)k=ev.o.findIndex(o=>condOk(o.if));chooseEvent(Math.max(0,k));break;}
   case'streichen':{const t=strikeTargets();const w=t.find(it=>def(it).cards.every(c=>!c.atk&&!c.blk));if(w)strikeItem(w.uid);else skipStrike();break;}
-  case'kraemer':{if(S.hp<maxHp()*.75&&!S.shop.heal&&S.gold>=BAL.shop.heal.price)buy('heal');
+  case'kraemer':{if(S.shop.art==='tausch'){S.shop.items.forEach((o,i)=>{if(o.sold)return;let wl=null,wv=1e9;S.bag.forEach((it,b)=>{if(it){const w=this.wertItem(it);if(w<wv){wv=w;wl='bag:'+b;}}});if(wl&&this.wertItem({id:o.id,uid:-1})>wv+3){S.sel=wl;buy(i);}});S.sel=null;}
+   if(S.hp<maxHp()*.75&&!S.shop.heal&&S.gold>=BAL.shop.heal.price)buy('heal');
    {const i=(S.shop.hg||[]).findIndex(o=>!o.sold&&S.gold>=o.price+15&&this.hgWert(o.id)>4);if(i>=0){kaufeHandgriff(i);break;}}S.shop.items.map((o,i)=>[o,i]).sort((a,b)=>(ITEMS[b[0].id].rare?1:0)-(ITEMS[a[0].id].rare?1:0)).forEach(([o,i])=>{if(!o.sold&&S.gold>=o.price&&S.bag.includes(null))buy(i);});this.ausruesten();leaveNode();break;}
   case'kraemer_streichen':kraemerStrike(null);break;
   case'werkstatt':{const cand=[...S.bag.map((it,i)=>it?'bag:'+i:null),...AREAS.flatMap(a=>S.areas[a].map((it,i)=>it?a+':'+i:null))].filter(Boolean);let done=false;

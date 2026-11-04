@@ -56,7 +56,7 @@ module.exports = {
     const { E, C, Pg, r, glied } = A;
     const f = p.f, W = 96, H = 120;
     let lean = 0, rot = 0, armA = 0, atem = 0, fall = 0, kn = 0, fing = 0, sinkY = 0;
-    if (p.idle) { atem = [0, 0, 1, 1][f]; rot = [0, 0, 0.035, 0.035][f]; fing = [0, 1, 1, 0][f]; }
+    if (p.idle) { atem = [0, 0, 1, 1][f]; fing = [0, 1, 1, 0][f]; }
     if (p.angriff) { lean = [4, 2, -9, -3][f]; rot = [-0.1, 0.25, 0.7, 0.85][f]; armA = [-0.9, -0.3, 1.0, 0.35][f]; kn = [3, 1, -1, 0][f]; fing = [2, 0, -1, 0][f]; }
     if (p.treffer) { lean = [3, 1][f]; rot = [-0.06, -0.03][f]; armA = -0.25; kn = 1; }
     if (p.tod) { fall = r(p.q * 34); lean = r(p.q * 6); rot = p.q * 0.6; armA = p.q * 0.6; sinkY = 0; }
@@ -110,6 +110,7 @@ module.exports = {
       { p: arm, k: 0.5, kante: true },
       { p: finger, k: 0, kante: true },
     ];
+    gruppen.forEach(g => { if (!g.anker) g.anker = [r(lean), r(atem + kn + fall)]; });
     const { gid } = LIB.render(W, H, gruppen, LIB.palette(v.zone || 'gezeitenwerk'));
     const augen = [];
     const details = P => {

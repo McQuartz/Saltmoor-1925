@@ -40,7 +40,7 @@ module.exports = {
     // Leib: sackiger Taucheranzug, Schulterstück (Corselet) aus Kupfer mit Bolzen
     const leib = Pg([[32 + X, 56 + T], [60 + X, 56 + T], [63 + X, 66 + T], [62 + X, 79 + T], [58 + X, 89 + T], [37 + X, 91 + T], [30 + X, 86 + T], [28 + X, 76 + T], [30 + X, 64 + T]], null, { rd: 3 });
     const bauch = E(37 + X, 79 + T, 8, 8, null);
-    const korselett = Pg([[27 + X, 56 + T], [33 + X, 48 + T + B], [57 + X, 48 + T + B], [65 + X, 55 + T], [62 + X, 61 + T], [30 + X, 61 + T]], 'haut', { rd: 1 });
+    const korselett = Pg([[28 + X, 57 + T], [31 + X, 51 + T + B * 0.5], [37 + X, 48 + T + B], [53 + X, 48 + T + B], [60 + X, 51 + T + B * 0.5], [64 + X, 56 + T], [61 + X, 61 + T], [45 + X, 63 + T], [31 + X, 61 + T]], 'haut', { rd: 2 });
     const brustblei = Pg([[34 + X, 65 + T], [48 + X, 65 + T], [47 + X, 73 + T], [41 + X, 77 + T], [35 + X, 73 + T]], null, { rd: 0.6 });
     const gurt = C(32 + X, 84 + T, 60 + X, 84 + T, 1.8, 1.8, 'dunkel');
     // Beine: sackig, Bleischuhe als schwere Klötze mit Sohle
@@ -58,16 +58,16 @@ module.exports = {
     const hX = hand[0] + L, hY = hand[1] + T + 1, wz = [], lang = v.werkzeug === 'haken' ? 30 : 10;
     const e = [hX + Math.cos(wa) * lang, hY + Math.sin(wa) * lang];
     if (v.werkzeug === 'haken') { // Haken schleift am Boden, Widerhaken zeigt nach hinten
-      wz.push(C(hX - Math.cos(wa) * 6, hY - Math.sin(wa) * 6, e[0], e[1], 1.1, 1.1, 'dunkel', { pf: 'flat' }));
+      wz.push(C(hX - Math.cos(wa) * 6, hY - Math.sin(wa) * 6, e[0], e[1], 1.4, 1.2, 'dunkel', { pf: 'flat' }));
       const nx = -Math.sin(wa), ny = Math.cos(wa), dx = Math.cos(wa), dy = Math.sin(wa);
-      wz.push(...glied([e, [e[0] + dx * 4, e[1] + dy * 4], [e[0] + dx * 5 - nx * 5, e[1] + dy * 5 - ny * 5], [e[0] + dx * 2 - nx * 7, e[1] + dy * 2 - ny * 7]], 1.6, 0.9, null));
+      wz.push(...glied([e, [e[0] + dx * 5, e[1] + dy * 5], [e[0] + dx * 6 - nx * 6, e[1] + dy * 6 - ny * 6], [e[0] + dx * 2 - nx * 8, e[1] + dy * 2 - ny * 8]], 2, 1, null));
     } else {
-      const la = p.angriff ? wa : Math.PI / 2 + schwing * 0.08, ll = p.angriff ? 16 : 14;
+      const la = p.angriff ? [-1.9, -2.3, 2.5, 2.1][f] : Math.PI / 2 + schwing * 0.08, ll = p.angriff ? 18 : 14;
       const ende = [hX + Math.cos(la) * ll, hY + Math.sin(la) * ll];
       wz.push(C(hX, hY, ende[0], ende[1], 0.6, 0.6, 'dunkel', { pf: 'flat', noRim: true }));
       wz.push(Pg([[ende[0] - 3, ende[1]], [ende[0] + 3, ende[1]], [ende[0] + 4, ende[1] + 8], [ende[0], ende[1] + 11], [ende[0] - 4, ende[1] + 8]], null, { rd: 0.5 }));
     }
-    const wzHinten = p.angriff && f < 2;
+    const wzHinten = p.angriff && f < 2 && v.werkzeug === 'haken';
     const gruppen = [
       { p: schlauch, k: 0.5 },
       { p: wzHinten ? wz : [], k: 0 },
@@ -92,7 +92,7 @@ module.exports = {
       K.licht(P, [brustblei], { c: 'r1', c2: 'k3' });
       K.schatten(P, [brustblei], { d: [0, 1] });
       K.licht(P, [schuhV], { c: 'r1', c2: null, d: [0, -1] }); K.licht(P, [schuhH], { c: 'k3', c2: null, d: [0, -1] });
-      K.licht(P, [...armV, ...handV], { c: 'r1', c2: 'k3' }); K.schatten(P, [leib, bauch], { d: [-2, 0], c: 'k1' });
+      K.licht(P, [...armV, ...handV], { c: 'r1', c2: 'k3' });
       K.licht(P, [leib, bauch], { c: 'k3', c2: null, d: [1, -1] });
       K.licht(P, [manschV], { c: 'r1', c2: null }); K.schatten(P, [manschV], { d: [-1, 1] });
       K.licht(P, [...armH], { c: 'k3', c2: null });
@@ -101,8 +101,8 @@ module.exports = {
       for (let y = r(hy - HR); y <= hy + HR; y++) for (let x = r(hx - HR); x <= hx + HR; x++) {
         const dx = (x + 0.5 - hx) / HR, dy = (y + 0.5 - hy) / HR, q = Math.hypot(dx, dy), u = dx * 0.6 - dy * 0.8;
         const c = P.get(x, y); if (c < 1 || c > 4 || q > 0.86) continue;
-        if (q > 0.58 && u > 0.42) P.set(x, y, A.bay(x, y) < (u - 0.42) * 2.2 ? 'k3' : c);
-        if (q > 0.66 && q < 0.76 && u > 0.62 && (x + y) % 3) P.set(x, y, 'r1');
+        if (q > 0.58 && u > 0.4) P.set(x, y, A.bay(x, y) < (u - 0.4) * 1.6 ? (q > 0.68 && u > 0.6 ? 'r1' : 'k3') : c);
+        if (q > 0.68 && q < 0.79 && u > 0.56) P.set(x, y, 'r1');
       }
       for (let x = r(hx - HR + 4); x <= hx + HR - 3; x++) { const u = (x - hx) / HR, y = r(hy + HR - 4 + 1.5 * u * u); if (P.get(x, y) >= 1 && P.get(x, y) <= 4) { P.set(x, y, 'k0'); P.set(x, y - 1, x % 4 === 0 ? 'r1' : 'k3'); } }
       for (let y = r(hy - HR + 3); y <= hy + HR - 6; y++) { const x = r(hx + 2 + (y - hy) * 0.15); if (P.get(x, y) <= 4) P.auf(x, y, 'k1'); if (P.get(x + 1, y) <= 4 && y % 3 === 0) P.auf(x + 1, y, 'k3'); }

@@ -29,7 +29,7 @@ Zum Testen im Spiel trägt das Paket seine `<id>` in `prototype/data/biome/index
   "musik": "fabrik",
   "gegner": ["ausnehmerin", "dosenkind", "kesselmann", "kuehlhausgast"], "waechter": "schicht",
   "fundpool": ["…item-ids, alte und eigene…"],
-  "kraemer": {"n": "Die Vorarbeiterin", "ort": "…", "zeile": "…"},
+  "kraemer": {"n": "Die Vorarbeiterin", "ort": "…", "zeile": "…", "art": "optional: tausch | leihe | spiegel"},
   "uebergang": "Satz beim Abstieg aus diesem Biom in den nächsten Akt",
   "weg_hinweise": {"kampf": ["…","…","…"], "ereignis": ["…","…"], "wandbild": ["…"], "kraemer": ["…"], "werkstatt": ["…"], "rast": ["…"], "fundstelle": ["…"]},
   "beute_saetze": ["mindestens 6 Sätze, die nach einem Sieg unter dem Gold stehen"]
@@ -44,6 +44,7 @@ Zum Testen im Spiel trägt das Paket seine `<id>` in `prototype/data/biome/index
 }
 ```
 
+- `kraemer.art` (optional): `tausch` (Items nur gegen ein eigenes Item, kein Gold), `leihe` (Items für 30 % des Preises, gehen am Anfang des nächsten Akts zurück), `spiegel` (die Waren des letzten Krämers mit vertauschten Stoffen: Feuer↔Wasser, Eisen↔Fäulnis, Salz↔Blut, Glaube↔Licht). Ohne `art` ein gewöhnlicher Krämer.
 - `akt`: 0 = Akt I … 4 = Akt V (so wie in `data/run.json`, wo das Biom schon eingetragen ist).
 - `musik`: Harmonie und Ortsklang aus den vorhandenen Bausteinen von `js/audio/music.js` (kein neuer Klangcode nötig). `root` = MIDI-Grundton (andere Tonart als die Nachbarbiome des Akts), `amb` aus `meer, sumpf, insekten, wind, stollen, gaenge, sand, eisgrund, schimmer` (Pegel 0,02–0,11), `rhy` aus `ketten, holz, glocken, hacke, trommel, eis, atem`, `detail` = Biom, dessen Einzelklänge (Glocke, Tropfen, Orgel …) mitlaufen: `hafen, moor, kapelle, salz, stadt, eis, pforte`. Optional `"phryg": true` (dauerhaft halb gekippt).
 

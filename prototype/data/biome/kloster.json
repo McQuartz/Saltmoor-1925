@@ -45,7 +45,8 @@
   "kraemer": {
    "n": "Der Bibliothekar",
    "ort": "hinter dem Lesepult der Bibliothek, an der Kette",
-   "zeile": "Er verkauft nichts, er verleiht. Was du von ihm hast, hat ein Rückgabedatum, und es ist heute. Er trägt dich in die Liste ein, mit einem Wort mehr, als du heißt."
+   "zeile": "Er verkauft nichts, er verleiht. Was du von ihm hast, hat ein Rückgabedatum, und es ist heute. Er trägt dich in die Liste ein, mit einem Wort mehr, als du heißt.",
+   "art": "leihe"
   },
   "uebergang": "Unter dem Rücken des Buchs führt eine Treppe nach unten. Die Stufen sind beschrieben, und die Schrift wird mit jeder Stufe älter.",
   "weg_hinweise": {

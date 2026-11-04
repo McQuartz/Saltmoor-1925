@@ -31,7 +31,7 @@ function newRun(jobId,seed,opt={}){
 
 // --- Akte und Ebenen ---
 function aktDef(){return RUN.akte[S.akt];}
-function enterAct(){S.ebene=0;
+function enterAct(){S.ebene=0;if(S.akt>0)leiheZurueck();
  if(!S.route[S.akt]||!BIOMES[S.route[S.akt]]){const an=biomAngebot(S.akt);S.angebote[S.akt]=an.biome;S.routeWhy.push(an.why);
   if(an.biome.length>1){S.phase='biomwahl';Bus.emit('biomwahl',{biome:an.biome,why:an.why});save();Bus.emit('changed');return;}S.route[S.akt]=an.biome[0];}
  S.phase='uebergang';Bus.emit('act_start',{akt:S.akt,biom:biomId(),why:`${aktDef().n}: ${biom().n}`});Bus.emit('changed');}
@@ -78,7 +78,14 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
    const hgA=handgriffAngebot(r,'mix',2).map(id=>({id,price:(HANDGRIFFE[id].rar==='selten'?SH.hg_preis_selten:SH.hg_preis)||40,sold:false}));
    const rel=r.chance(SH.reliquie_chance||.15)?reliquienPool():[];
    S.shop={items:o2.map(id=>({id,price:ITEMS[id].rare?SH.rare_price:r.int(SH.normal_price[0],SH.normal_price[1]),sold:false})),hg:hgA,heal:false,strike:false};
-   if(rel.length)S.shop.items.push({id:r.pick(rel),price:SH.reliquie_preis||140,sold:false});S.phase='kraemer';
+   if(rel.length)S.shop.items.push({id:r.pick(rel),price:SH.reliquie_preis||140,sold:false});
+   // Besondere Krämer (Steckbriefe Auftrag 2): tausch = Item gegen Item, leihe = billig, aber nur bis zum nächsten Akt, spiegel = Waren des letzten Krämers mit vertauschten Stoffen
+   const kart=b.kraemer&&b.kraemer.art;S.shop.art=kart||null;
+   if(kart==='tausch')S.shop.items.forEach(o=>{o.price=0;o.tausch=true;});
+   if(kart==='leihe')S.shop.items.forEach(o=>{o.price=Math.max(5,Math.round(o.price*(SH.leih_anteil||.3)));o.leihe=true;});
+   if(kart==='spiegel'){const alt=(S.letzterKraemer&&S.letzterKraemer.length?S.letzterKraemer:o2).filter(id=>ITEMS[id]);S.shop.items=alt.map(id=>({id:spiegelItem(id),price:ITEMS[id].rare?SH.rare_price:r.int(SH.normal_price[0],SH.normal_price[1]),sold:false}));}
+   else S.letzterKraemer=S.shop.items.map(o=>o.id);
+   S.phase='kraemer';
    Bus.emit('kraemer',{why:`Krämer ${b.kraemer.n}: Sortiment aus dem Fundpool von ${b.kurz}`});break;}
   case'werkstatt':S.forged=false;S.phase='werkstatt';break;
   case'rast':S.rastDone=false;S.phase='rast';break;
@@ -147,11 +154,18 @@ function transformRandom(why){const list=allActive().filter(it=>!def(it).bases);
  log(`${old} wird zu ${def(it).n}`);Bus.emit('transform',{why:`${why}: ${old} verwandelt sich in ${def(it).n}`});after();}
 
 // --- Krämer ---
+// Spiegel-Krämer: dasselbe Item mit vertauschten Stoffen (Feuer↔Wasser, Eisen↔Fäulnis, Salz↔Blut, Glaube↔Licht)
+const SPIEGEL={F:'W',W:'F',E:'V',V:'E',S:'B',B:'S',G:'L',L:'G'};
+function spiegelItem(id){const D=ITEMS[id];if(!D||D.spiegel)return id;const nid='sp_'+id;if(!ITEMS[nid]){const nd=JSON.parse(JSON.stringify(D));nd.st=(D.st||[]).map(k=>SPIEGEL[k]||k);(nd.cards||[]).forEach(c=>{if(c.st)c.st=c.st.map(k=>SPIEGEL[k]||k);});nd.n=D.n+', gespiegelt';nd.spiegel=id;nd.bases=[id];nd.nodrop=true;ITEMS[nid]=nd;S.custom[nid]=nd;}return nid;}
+// Leihgaben des Bibliothekars gehen beim nächsten Akt zurück
+function leiheZurueck(){const weg=[];besitz().forEach(b=>{if(b.it.leihe!=null&&b.it.leihe<S.akt){weg.push(def(b.it).n);setAt(b.loc,null);}});if(weg.length){Bus.emit('toast',{a:'ZURÜCKGEGEBEN',b:weg.join(', ')});log('Leihgabe zurück: '+weg.join(', '));}}
 function buy(i){const H=BAL.shop.heal;const sh=S.shop;if(!sh)return;
  if(i==='heal'){if(sh.heal||S.gold<H.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.gold-=H.price;S.stats.goldAus=(S.stats.goldAus||0)+H.price;sh.heal=true;healP(H.v,'Krämer: Laudanum');Bus.emit('changed');return;}
  if(i==='strike'){if(sh.strike||S.gold<BAL.shop.streichen_preis){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.phase='kraemer_streichen';Bus.emit('changed');return;}
- const o=sh.items[+i];if(!o||o.sold)return;if(S.gold<o.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:`Du brauchst ${o.price}.`});return;}if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}
- S.gold-=o.price;S.stats.goldAus=(S.stats.goldAus||0)+o.price;o.sold=true;giveItem(o.id,`Gekauft für ${o.price} Gold`);Bus.emit('pick');Bus.emit('toast',{a:'GEKAUFT',b:ITEMS[o.id].n});Bus.emit('changed');}
+ const o=sh.items[+i];if(!o||o.sold)return;
+ if(o.tausch){const gabe=S.sel&&getAt(S.sel);if(!gabe){Bus.emit('bad',{a:'GABE GEGEN GABE',b:'Wähl unten zuerst ein Item, das du hergibst.'});return;}const gn=def(gabe).n;setAt(S.sel,null);S.sel=null;o.sold=true;giveItem(o.id,`Getauscht gegen ${gn}`);Bus.emit('pick');Bus.emit('toast',{a:'GETAUSCHT',b:`${gn} → ${ITEMS[o.id].n}`});Bus.emit('changed');return;}
+ if(S.gold<o.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:`Du brauchst ${o.price}.`});return;}if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}
+ S.gold-=o.price;S.stats.goldAus=(S.stats.goldAus||0)+o.price;o.sold=true;giveItem(o.id,`Gekauft für ${o.price} Gold`);if(o.leihe){const neu=besitz().map(b=>b.it).filter(it=>it.id===o.id&&it.leihe==null).pop();if(neu)neu.leihe=S.akt;}Bus.emit('pick');Bus.emit('toast',{a:'GEKAUFT',b:ITEMS[o.id].n});Bus.emit('changed');}
 function kraemerStrike(uid){if(uid!=null){S.gold-=BAL.shop.streichen_preis;S.shop.strike=true;strikeItem(uid);}S.phase='kraemer';Bus.emit('changed');}
 
 // --- Rast: heilen oder ein Item verbessern ---

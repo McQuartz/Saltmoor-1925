@@ -63,7 +63,7 @@ module.exports = {
   id: 'glasschwimmer', biom: 'glasmeer', zone: 'glasmeer', w: 96, h: 120, fuss: [50, 110], kopf: [30, 50], rimBis: 112,
   varianten: {
     glasschwimmer_a: { bogen: 1, kappe: 'leder', perlen: 7, fuss: true },
-    glasschwimmer_b: { bogen: 0.85, kappe: 'streifen', perlen: 5, fuss: true, breit: 3, spaet: true },
+    glasschwimmer_b: { bogen: 0.9, kappe: 'streifen', perlen: 5, fuss: true, breit: 3, reich: true },
   },
   skizzen: { skizze_kopfsprung: { kopfsprung: true } },
   glas,
@@ -72,7 +72,7 @@ module.exports = {
     const f = p.f;
     // ha: Armstellung 0 Ruhe (Bogen oben), 1 weit ausgeholt (hinten), 2 Schlag (vorn unten); sink: Tod
     let ha = 0, lean = 0, bob = 0, mund = 1, sink = 0, spritz = 0, glanz = 1, licht = 1;
-    if (p.idle) { bob = [0, 0, 1, 1][f]; mund = [1, 1, 0, 1][f]; glanz = f; }
+    if (p.idle) { bob = 0; mund = [1, 1, 0, 1][f]; glanz = f; }
     if (p.angriff) { ha = [0.5, 1, 2, 1.6][f]; lean = [2, 4, -6, -3][f]; spritz = [0, 0, 1, 0.6][f]; licht = [1.1, 1.3, 1.6, 1.2][f]; mund = [1, 1, 0, 1][f]; }
     if (p.treffer) { lean = [3, 1][f]; ha = -0.4; licht = 0.6; mund = 0; }
     if (p.tod) { sink = r(p.q * 22); licht = Math.max(0, 1 - p.q * 1.6); ha = -0.6 * p.q; }
@@ -95,6 +95,8 @@ module.exports = {
     if (ha <= 0) { ell = [sx + 10 - ha * 4, sy - 46 * B0 - ha * 18]; hand = [sx - 8 - ha * 6, sy - 26 * B0 - ha * 22]; fa = 1.95; }
     else if (ha < 1.5) { ell = [sx + 18 + ha * 4, sy - 48 * B0 - ha * 6]; hand = [sx + 22 + ha * 14, sy - 62 * B0 + ha * 2]; fa = -0.6; }
     else { ell = [sx - 8, sy - 24]; hand = [sx - 28, sy + 2]; fa = 2.4; }
+    if (v.reich && ha <= 0) { ell = [sx - 2 + ha * 3, sy - 34 - ha * 10 + bob]; hand = [sx - 16 + ha * 4, sy - 52 - ha * 14]; fa = -2.2; }
+    if (p.idle) { hand = [hand[0] + [0, 1, 1, 0][f], hand[1] + [0, 0, 1, 1][f]]; ell = [ell[0], ell[1] + [0, 0, 1, 0][f]]; }
     if (S) { ell = [ell[0], ell[1] + S * 1.6]; hand = [hand[0], hand[1] + S * 1.9]; }
     const ober = glied([sh, [sh[0] + (ell[0] - sh[0]) * 0.55 + 2, sh[1] + (ell[1] - sh[1]) * 0.55], ell], 4.6, 3.4, null);
     const unter = glied([ell, hand], 3.2, 2.1, null);
@@ -108,7 +110,10 @@ module.exports = {
     // Bugwelle aus Glas vor dem Kopf (Kamm nach links gerollt); um den Körper wirft das Glas einen Rand auf
     const bw = v.breit || 0;
     const welle = Pg([[2, 106], [4, 100], [8, 94 - bw], [5, 91 - bw], [8, 87 - bw], [14, 88], [18, 94], [22, 99], [28, 102], [24, 106]], null, { rd: 0.8 });
-    const rand = [Pg([[sx - 16, WY], [sx - 10, WY - 3], [sx - 6, WY]], null, { rd: 0.6 }), Pg([[sx + 40, WY], [sx + 50, WY - 3], [sx + 56, WY]], null, { rd: 0.6 })];
+    // Lippe: der vordere Rand des Lochs im Glas, ein flacher Bogen vor dem Körper
+    const lip = x => WY + 2 - 3.5 * Math.sin(Math.PI * Math.min(1, Math.max(0, (x - 14) / 80)));
+    const lp = []; for (let x = 12; x <= 96; x += 4) lp.push([x, lip(x) - 1]); for (let x = 96; x >= 12; x -= 4) lp.push([x, lip(x) + 2.4]);
+    const rand = [Pg(lp, null, { rd: 0.3 })];
     const kiel = [];
     // Spritzer: Glasperlen, die in der Luft hängen (beim Schlag mehr)
     const perlen = [];
@@ -122,8 +127,9 @@ module.exports = {
       { p: [rumpf, hals], k: 2, anker: [lx, bob] },
       { p: [kopf], k: 0 },
       { p: [kappe], k: 0 },
-      { p: rand, k: 1 },
+      
       { p: [welle], k: 2 },
+      { p: rand, k: 0 },
       { p: sinkt && S > 14 ? [] : arm, k: 1.5, anker: [lx, bob] },
       { p: sinkt && S > 14 ? [] : handF, k: 0.5 },
       { p: p.tod && f > 3 ? [] : perlen, k: 0 },
@@ -152,8 +158,8 @@ module.exports = {
       }
       // Licht von unten: wo er die Fläche bricht, leuchtet das Polarlicht unter dem Glas hervor
       if (licht > 0) {
-        glas.unterlicht(P, WY - 3, 16, licht, (x, y) => y < WY - 2 || x < 30);
-        for (let x = 2; x < 94; x++) { const t = licht * (0.55 + 0.45 * Math.sin(x * 0.45 + (p.idle ? f * 0.8 : 0)) * Math.sin(x * 0.17 + 1)); let y = WY + 1; while (y > WY - 4 && !P.get(x, y)) y--; if (y <= WY - 4) continue; P.set(x, y, t > 0.85 ? 'glut' : t > 0.45 ? 'nordlicht' : 'glutDim'); if (t > 0.6 && P.get(x, y - 1) && P.get(x, y - 1) <= 4) P.set(x, y - 1, 'glutDim'); }
+        glas.unterlicht(P, WY - 3, 16, licht, (x, y) => y < lip(x) - 2);
+        for (let x = 16; x < 94; x++) { const t = licht * (0.55 + 0.45 * Math.sin(x * 0.45 + (p.idle ? f * 0.8 : 0)) * Math.sin(x * 0.17 + 1)); const y = Math.round(lip(x) - 2); const c = P.get(x, y); if (!c || c > 4) continue; P.set(x, y, t > 0.85 ? 'glut' : t > 0.45 ? 'nordlicht' : 'glutDim'); if (t > 0.6 && P.get(x, y - 1) && P.get(x, y - 1) <= 4) P.set(x, y - 1, 'glutDim'); }
         P.glow(sx + 18, WY + 2, 14 * licht, 0.5);
       }
       // Welle: gefrorene Ringe (Muschelbruch) und Spiegelglanz auf dem Kamm

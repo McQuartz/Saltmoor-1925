@@ -41,7 +41,7 @@ const MAT = {
   wachsrot:{ body: ['#120807', '#24110d', '#3c1d16', '#582c21'], hell: '#f0b098' },
   glas:    { body: ['#070b0b', '#0f1817', '#1a2827', '#2a3c3a'], hell: '#d8f0ea' },
   stein:   { body: ['#0b0b0c', '#171719', '#252528', '#38383c'], hell: '#d0d0d4' },
-  haut:    { body: ['#0e0907', '#1b110c', '#2b1b13', '#3d281c'], hell: '#e2b48c' },
+  haut:    { body: ['#0b0706', '#160e0a', '#24170f', '#352318'], hell: '#e2b48c' },
   fell:    { body: ['#0c0b0a', '#1a1715', '#2a2521', '#3d362f'], hell: '#d8ccbc' },
   perlmutt:{ body: ['#080c0b', '#121c1a', '#1f2f2b', '#30463f'], hell: '#d8f4e8' },
   fleisch: { body: ['#110607', '#220c0d', '#381414', '#521e1c'], hell: '#f0a090' },
@@ -216,8 +216,10 @@ function mantel(o) {
 const TON_FLACH = 0.235;
 // Glutnest (Grundmotiv der Glut-Handgriffe): ein flacher Haufen Kohlen, die von innen glühen
 function glutHaufen(cx, cy, w, n = 7, seed = 1) {
-  const out = []; for (let i = 0; i < n; i++) { const f = (Math.sin(seed * 9.1 + i * 3.7) + 1) / 2; const x = cx - w / 2 + (i + 0.5) * w / n, r = 2 + f * 1.6; out.push(E(x, cy - r * 0.5 - (1 - Math.abs(i / (n - 1) - 0.5) * 2) * 2, r + 0.6, r, null, { pf: 'bevel', hz: 0.6 })); }
-  AUTO.push(P => { for (let i = 0; i < n; i++) { const x = cx - w / 2 + (i + 0.5) * w / n; P.glow(x, cy - 1, 3.2, 1.1, 'glutMittel', 'glutDim'); if (i % 2) P.set(x, cy - 1, 'flamme'); } });
+  const rnd = i => { const v = Math.sin(seed * 12.9898 + i * 78.233) * 43758.5453; return v - Math.floor(v); };
+  const out = [], glut = [];
+  for (let i = 0; i < n; i++) { const t = (i + rnd(i) * 0.8) / n, x = cx - w / 2 + t * w, hoch = 1 - Math.abs(t - 0.5) * 2; const r = 1.8 + rnd(i + 9) * 1.8; const y = cy - r * 0.6 - hoch * 2.5 - rnd(i + 3) * 1.5; out.push(E(x, y, r + 0.8, r, null, { pf: 'bevel', hz: 0.6 })); if (rnd(i + 5) > 0.35) glut.push([x + rnd(i + 7) * 2 - 1, y + r * 0.4, rnd(i + 11)]); }
+  AUTO.push(P => { for (const [x, y, f] of glut) { P.glow(x, y, 2.5 + f * 1.5, 1.1, 'glutMittel', 'glutDim'); if (f > 0.5) P.set(x, y, 'flamme'); if (f > 0.85) P.set(x, y - 1, 'flammeHell'); } });
   return out;
 }
 // Arm und Ärmel einer Hand als Gruppen (Haut, darüber der Ärmel bis kurz vor das Handgelenk)

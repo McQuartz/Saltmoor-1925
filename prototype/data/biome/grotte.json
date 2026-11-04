@@ -45,7 +45,8 @@
   "kraemer": {
    "n": "Die Kerzenfrau",
    "ort": "an der Kerzenwand, zwischen den Stufen",
-   "zeile": "Nimmt kein Geld. Sie legt deine Gabe in die eine Hand und ihre in die andere und wiegt, welche wärmer ist."
+   "zeile": "Nimmt kein Geld. Sie legt deine Gabe in die eine Hand und ihre in die andere und wiegt, welche wärmer ist.",
+   "art": "tausch"
   },
   "uebergang": "Dort, wohin die Madonna blickt, ist ein Spalt im Schiefer. Stufen führen hinab, ausgetreten von Knien.",
   "weg_hinweise": {

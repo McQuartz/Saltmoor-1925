@@ -80,6 +80,7 @@ module.exports = {
       { p: [kanneBand], k: 0, noRim: true },
       { p: [deckel], k: 0, kante: true },
     ];
+    gruppen.forEach(g => { if (!g.anker) g.anker = [r(lean), r(T)]; });
     const { gid } = LIB.render(W, H, gruppen, LIB.palette('gezeitenwerk'));
     const augen = [];
     const details = P => {

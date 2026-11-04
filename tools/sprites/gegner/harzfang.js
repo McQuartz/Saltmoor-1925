@@ -17,7 +17,7 @@ module.exports = {
     const { E, C, Pg, r, glied } = A;
     const f = p.f, S = v.tropfen;
     let dy = 0, dx = 0, offen = 0, zuck = [0, 0, 0, 0, 0, 0, 0, 0], puls = 0, fall = 0, augen = true, riss = false;
-    if (p.idle) { puls = [0, 1, 2, 1][f]; zuck = [[0, 0, 0, 0, 0, 0, 0, 0], [1, 0, 0, 0, -1, 0, 0, 0], [0, 0, 1, 0, 0, 0, 1, 0], [0, 1, 0, 0, 0, 0, 0, -1]][f]; }
+    if (p.idle) { puls = [0, 0.4, 0.8, 0.4][f]; zuck = [[0, 0, 0, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0]][f]; }
     // Angriff: zieht sich am Faden hoch, spreizt die Beine, lässt sich fallen und greift nach vorn, zieht sich zurück
     if (p.angriff) { dy = [-8, -12, 14, 2][f]; dx = [1, 2, -14, -4][f]; offen = [0.3, 1, 0.7, 0.2][f]; puls = [1, 2, 3, 1][f]; }
     if (p.treffer) { dx = [4, 2][f]; dy = [-2, -1][f]; offen = 0.15; }
@@ -57,7 +57,7 @@ module.exports = {
       const gx = cx - 1, gy = top + dh * 0.66;
       for (let y = r(top + 3); y <= r(top + dh); y++) for (let x = r(cx - dw); x <= r(cx + dw); x++) {
         const c = P.get(x, y); if (!c || c > 4) continue;
-        const q = Math.hypot((x + 0.5 - gx) / (dw * 0.95), (y + 0.5 - gy) / (dh * 0.5)) - puls * 0.03;
+        const q = Math.hypot((x + 0.5 - gx) / (dw * 0.95), (y + 0.5 - gy) / (dh * 0.5)) - puls * 0.02;
         const b = A.bay(x, y);
         if (q < 0.28) P.set(x, y, b < 0.5 ? 'harz' : 'r1');
         else if (q < 0.55) P.set(x, y, b < 0.75 - (q - 0.28) * 1.5 ? 'r1' : 'glutDim');

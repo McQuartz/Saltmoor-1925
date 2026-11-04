@@ -39,4 +39,12 @@ const {ladeKern}=require('./kern');
  // 8. „Der, der vor dir kam“: Muster aus den Karten einer Figur, Beute eines ihrer Items
  const vg=JSON.parse(run(`(()=>{newRun('fischer',9,{dev:true});S.depth=30;FOES._t_vor={n:'Der, der vor dir kam',hp:60,weak:'L',pat:[{t:'atk',v:5}],vorgaenger:true,rang:'elite'};const e=mkEnemy('_t_vor');delete FOES._t_vor;return JSON.stringify({n:e.n,pat:e.pat,beute:S.sicheresBeute})})()`));
  ok(/\(.+\)/.test(vg.n)&&vg.pat.length>=2&&vg.pat.some(p=>p.t==='atk')&&!!vg.beute,`Vorgänger: ${vg.n}, Muster ${vg.pat.map(p=>p.t+p.v).join('/')}, Beute ${vg.beute}`);
+ // 9. Besondere Krämer: Tausch, Leihe, Spiegel
+ const kr=art=>JSON.parse(run(`(()=>{newRun('fischer',9,{dev:true});S.route=['hafen','kapelle','salz','eis','pforte'];S.akt=0;S.depth=3;const b=biom();const alt=b.kraemer.art;b.kraemer.art=${JSON.stringify(art)};S.letzterKraemer=['knife','lantern'];S.gold=500;enterNode({art:'kraemer',hint:''});b.kraemer.art=alt;
+  const vor=besitz().length;const loc=besitz().find(x=>!x.an).loc;S.sel=loc;const gold=S.gold;buy(0);const it=besitz().map(x=>x.it).find(x=>x.id===S.shop.items[0].id);
+  let zurueck=null;if(${JSON.stringify(art)}==='leihe'){S.akt=1;leiheZurueck();zurueck=!besitz().some(x=>x.it.id===S.shop.items[0].id);}
+  return JSON.stringify({ids:S.shop.items.map(o=>o.id),st:S.shop.items.map(o=>ITEMS[o.id].st),gold:gold-S.gold,vor,nach:besitz().length,sold:S.shop.items[0].sold,zurueck})})()`));
+ const ta=kr('tausch');ok(ta.sold&&ta.gold===0&&ta.nach===ta.vor,`Tausch-Krämer: Item gegen Item, kein Gold (${ta.vor}→${ta.nach} Items)`);
+ const le=kr('leihe');ok(le.sold&&le.gold>0&&le.zurueck,`Leih-Krämer: billig (${le.gold} Gold), im nächsten Akt zurück`);
+ const sp=kr('spiegel');ok(sp.ids[0]==='sp_knife'&&sp.ids[1]==='sp_lantern',`Spiegel-Krämer: Waren des letzten Krämers gespiegelt (${sp.ids.join(', ')}; Stoffe ${JSON.stringify(sp.st)})`);
  console.log(fehler?`${fehler} FEHLER`:'Alles gut.');process.exit(fehler?1:0);})();

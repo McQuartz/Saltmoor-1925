@@ -32,7 +32,8 @@ module.exports = {
     const { E, C, Pg, r } = A;
     const f = p.f, W = 96, H = 120;
     let dy = 0, sw = 0, auge = 0, fall = 0, quetsch = 0;
-    if (p.idle) { sw = [0, 0, 1, 0][f]; }
+    let dxBild = 0;
+    if (p.idle) { dxBild = [0, 0, 1, 0][f]; }
     if (p.angriff) { dy = [-10, -24, 6, 2][f]; auge = [1, 2, 2, 1][f]; quetsch = [0, 0, 2, 0][f]; }
     if (p.treffer) { dy = [-2, -1][f]; sw = [1, 0][f]; }
     if (p.tod) { fall = r(Math.min(1, p.q * 1.6) * 10); }
@@ -101,6 +102,6 @@ module.exports = {
       // Aufschlag: Staub springt seitlich weg
       if (p.angriff && f === 2) for (let i = 1; i < 6; i++) { P.set(cx - 8 - i * 3, 114 - (i % 2), 'r1'); P.set(cx + 8 + i * 3, 114 - ((i + 1) % 2), 'r1'); }
     };
-    return { gruppen, details, augen };
+    return { gruppen, details, augen, dx: dxBild };
   },
 };
