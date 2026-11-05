@@ -282,36 +282,53 @@ module.exports = {
     // Eine alte Frau zwischen tausend Kerzen, die Hände offen, in jeder etwas aus Wachs.
     grotte_tausch(K) {
       const { B } = K;
-      fels(K, .2, {});
-      // Stufen aus Fels, auf jeder Reihen von Kerzen
-      const stufen = [24, 36, 48, 60, 72, 84];
-      stufen.forEach((y, i) => { K.feld(0, y, 160, y + 12, SCH.slice(1, 7), (x, yy) => .3 + (yy === y ? .4 : 0) - (yy - y) / 40 + (B.hash(x >> 2, yy, i) - .5) * .2); });
-      // Die Frau: sitzt auf der untersten Stufe, Kopftuch, Schultertuch, die Hände offen nach vorn
-      const fm = K.maske(), fx = 80;
-      fm.poly([[fx - 9, 44], [fx + 9, 44], [fx + 16, 70], [fx + 20, 88], [fx - 20, 88], [fx - 16, 70]]);
-      fm.ell(fx, 46, 11, 5);
-      fm.ell(fx, 36, 5.5, 6.5); fm.poly([[fx - 6.5, 34], [fx + 6.5, 34], [fx + 11, 50], [fx - 11, 50]]);
-      fm.kap(fx - 9, 48, fx - 16, 62, 3, 2.6); fm.kap(fx - 16, 62, fx - 24, 64, 2.6, 2.2);
-      fm.kap(fx + 9, 48, fx + 16, 62, 3, 2.6); fm.kap(fx + 16, 62, fx + 24, 64, 2.6, 2.2);
-      fm.ell(fx - 26, 64, 3.4, 1.8); fm.ell(fx + 26, 64, 3.4, 1.8);
-      // Kerzen ringsum: viele kleine Flammen, hinter und neben ihr
-      const alle = [];
-      stufen.forEach((y, i) => {
-        alle.push(...kerzenBand(K, 2, 158, x => y + 1 + Math.round(B.rausch1(x * .3, i) * 2), { abstand: 1.7 + i * .25, luecke: .3, rot: .12, hMin: 1, hMax: 2 + (i > 2 ? 2 : 1), an: .65, seed: i, hof: 0, ohne: x => fm.has(x, y - 2) || fm.has(x, y) || Math.abs(x - 80) > 70 - i * 2 + B.hash(x, i, 3) * 10 }));
+      fels(K, .22, {});
+      // Felsstufen, unregelmäßig gebrochen
+      const kanten = [30, 44, 58, 72];
+      kanten.forEach((y0, i) => {
+        const kf = x => y0 + Math.round(B.rausch1(x * .08, i + 3) * 4 - 2);
+        K.feld(0, y0 - 3, 160, y0 + 14, SCH.slice(1, 8), (x, y) => y < kf(x) ? -1 : .32 + (y === kf(x) ? .45 : 0) - (y - kf(x)) / 30 + (B.hash(x >> 2, y, i) - .5) * .2);
       });
-      K.licht(fx, 40, 90, '#2a1a0a', .8, { ohne: fm });
-      for (const [x, y, h, , an] of alle) if (an && B.hash(x, y, 9) < .3) K.licht(x, y - h - 1, 5, FL.glut, .6, { ohne: fm });
+      // Die Kerzenfrau: sitzt auf der untersten Stufe, Kopftuch, Schultertuch
+      const fm = K.maske(), fx = 80;
+      fm.poly([[fx - 10, 42], [fx + 10, 42], [fx + 17, 68], [fx + 22, 90], [fx - 22, 90], [fx - 17, 68]]);
+      fm.ell(fx, 44, 12, 5);
+      fm.ell(fx, 33, 6, 7); fm.poly([[fx - 7, 31], [fx + 7, 31], [fx + 12, 48], [fx - 12, 48]]);
+      // Arme angewinkelt, die Unterarme nach vorn zum Schoß
+      fm.kap(fx - 11, 47, fx - 15, 60, 3.2, 2.8); fm.kap(fx - 15, 60, fx - 9, 66, 2.8, 2.4);
+      fm.kap(fx + 11, 47, fx + 15, 60, 3.2, 2.8); fm.kap(fx + 15, 60, fx + 9, 66, 2.8, 2.4);
+      // Kerzen: verstreut, ungleich hoch, viele erloschen, keine Reihen
+      const tr = B.rng(91), L = [];
+      for (let n = 0; n < 70 && L.length < 44; n++) {
+        const st = tr.i(0, 3), x = Math.round(tr.f(4, 156)), y = kanten[st] + Math.round(B.rausch1(x * .08, st + 3) * 4 - 2) + 1 + tr.i(0, 3);
+        if (Math.abs(x - fx) < 24 && y > 26) continue;
+        if (L.some(([a, b]) => Math.abs(a - x) < 3 && Math.abs(b - y) < 3)) continue;
+        L.push([x, y, tr.i(1, 5), tr() < .12 ? 1 : tr() < .3 ? 2 : 0, tr() < .55]);
+      }
+      kerzen(K, L, { hof: 9, staerke: .5 });
+      K.licht(fx, 30, 80, '#1e1208', .7, { ohne: fm });
       K.form(fm, 0, { k: ['#030202', '#080605', '#0e0b09', '#16110d'], ton: 1, fase: 0, rand: 0 });
-      K.kante(fm, fx, 20, 70, ['#8a5a20', '#ffd27a'], { nah: .35, min: -.2 });
-      // Gesicht: ein Rest Licht unter dem Tuch
-      K.set(fx - 1, 38, '#3a2a1a'); K.set(fx + 1, 38, '#3a2a1a'); K.set(fx, 40, '#2a1e14');
-      // In jeder Hand etwas aus Wachs: links ein Herz, rechts eine kleine Hand
-      K.licht(fx - 26, 60, 12, '#4a3012', .9); K.licht(fx + 26, 60, 12, '#4a3012', .9);
-      const herz = K.maske(); herz.ell(fx - 27.5, 59.5, 2, 1.9); herz.ell(fx - 24.5, 59.5, 2, 1.9); herz.poly([[fx - 29.5, 60], [fx - 22.5, 60], [fx - 26, 64]]);
-      K.form(herz, 0, { k: WACHS.slice(4, 9), r: [WACHS[8]], ton: 2.6, fase: 0, rand: 1, L: [0, -1] });
-      const hd = K.maske(); handMaske(hd, fx + 23, 63, -Math.PI / 2 + .2, .75, { spreiz: .25 });
-      K.form(hd, 0, { k: WACHS.slice(4, 9), r: [WACHS[8]], ton: 2.6, fase: 0, rand: 1, L: [0, -1] });
-      K.vignette(.65, { cx: 80, cy: 50, farbe: SCH[0] });
+      K.kante(fm, fx, 0, 90, ['#5a3a18', '#a07034'], { nah: .2, min: .2 });
+      // Die offenen Hände im Schoß, in jeder etwas aus Wachs: die helle Stelle
+      K.licht(fx, 64, 30, '#4a3012', .95);
+      K.licht(fx, 64, 14, '#5a3c16', .8);
+      const HAUT = ['#2a1e16', '#4e3a28', '#7a5e40', '#a07e58'];
+      const haende = K.maske();
+      for (const sx of [-1, 1]) {
+        const hx = fx + sx * 8, hy = 67;
+        haende.ell(hx, hy, 5, 2.4);
+        for (let f = 0; f < 4; f++) haende.ell(hx - sx * 1 + sx * (f * 1.6 - 2.4) * -1, hy + 2.2, .9, 1);
+        haende.kap(hx + sx * 4, hy - 1, hx + sx * 6, hy - 3, 1, .8);   // Daumen
+      }
+      K.form(haende, 0, { k: HAUT, r: ['#c89a6a', '#f0d0a0'], ton: 2.4, fase: 1, rand: 1, L: [0, -1] });
+      const herz = K.maske(); herz.ell(fx - 9.4, 63.6, 1.9, 1.8); herz.ell(fx - 6.6, 63.6, 1.9, 1.8); herz.poly([[fx - 11.3, 64], [fx - 4.7, 64], [fx - 8, 67.5]]);
+      K.form(herz, 0, { k: WACHS.slice(4, 9), r: [WACHS[8], '#ffffff'], ton: 2.8, fase: 0, rand: 1, L: [0, -1] });
+      const hd = K.maske(); handMaske(hd, fx + 8, 66.5, -Math.PI / 2 + .15, .7, { spreiz: .25 });
+      K.form(hd, 0, { k: WACHS.slice(4, 9), r: [WACHS[8], '#ffffff'], ton: 2.8, fase: 0, rand: 1, L: [0, -1] });
+      K.kante(fm, fx, 66, 22, ['#6a4a20', '#d8a868'], { nah: .5, min: .1 });
+      // Gesicht unter dem Tuch: nur ein Rest Licht von unten
+      K.set(fx - 2, 36, '#2a1e14'); K.set(fx + 2, 36, '#2a1e14'); K.set(fx, 38, '#24180f'); K.linie(fx - 2, 40, fx + 2, 40, '#20160e');
+      K.vignette(.6, { cx: 80, cy: 54, farbe: SCH[0] });
     },
   },
 };
