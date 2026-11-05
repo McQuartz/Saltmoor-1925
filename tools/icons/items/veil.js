@@ -11,7 +11,7 @@ module.exports = {
     return {
       gruppen: [{ p: schleier, mat: 'tuch', k: 0, tone: 0.1 }, { p: krempe, mat: 'tuch', k: 0, tone: 0.18 }, { p: kopf, mat: 'tuch', k: 0, tone: 0.2 }, { p: blume, mat: 'tuch', k: 0, tone: 0.3 }],
       details(P) {
-        for (let y = 21; y < 44; y++) for (let x = 6; x < 43; x++) { const i = P.info(x, y); if (!i || i.mat !== 'tuch' || i.stufe >= 4) continue; let rand = false; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (!P.get(x + dx, y + dy)) rand = true; if (rand) continue; P.set(x, y, (x + y) % 3 === 0 || (x - y + 99) % 3 === 0 ? 'tuch3' : 'tuch0'); }
+        for (let y = 21; y < 44; y++) for (let x = 6; x < 43; x++) { const i = P.info(x, y); if (!i || i.mat !== 'tuch' || i.stufe >= 4) continue; let rand = false; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (!P.get(x + dx, y + dy)) rand = true; if (rand) continue; P.set(x, y, (x + y) % 4 === 0 || (x - y + 100) % 4 === 0 ? 'tuchR1' : 'tuch0'); }
         for (let x = 8; x < 41; x++) for (let y = 30; y < 44; y++) { if (P.info(x, y) && !P.get(x, y + 1)) { P.set(x, y, x % 2 ? 'tuchR1' : 'a2'); break; } }
         P.ritz(14, 13, 34, 13, -2); P.set(32, 6, 'a3'); P.set(31, 7, 'a2');
       },

@@ -7,7 +7,7 @@
 (function () {
 'use strict';
 const B = World.B, W = B.W, H = B.H, M = B.M;
-const pal = { koerper: ['#04050a', '#090b13', '#12151f', '#1e2230'], rand: ['#958a74', '#f2e8ce'], augen: '#ff8c70', nebel: ['#080a12', '#2a2e3c'] };
+const pal = { koerper: ['#04050a', '#0a0c15', '#161a26', '#2a2e3e'], rand: ['#958a74', '#f2e8ce'], augen: '#ff8c70', nebel: ['#080a12', '#2a2e3c'] };
 const KNOCHEN = ['#06070b', '#0f1016', '#1a1b21', '#28282c', '#3a3835', '#534e45', '#71695a', '#968a72'];
 const EIS = ['#020308', '#04070f', '#070c18', '#0b1322', '#111c30', '#19283f', '#24364f', '#33496a'];
 const EISBODEN = ['#030409', '#060a12', '#0a101c', '#101828', '#172235', '#202e44'];
