@@ -186,8 +186,8 @@ function kniffeVon(en){return [en.kniff,...(en.kniffe||[])].filter(Boolean);}
 function kniffeZugbeginn(){for(const en of alive())for(const k of kniffeVon(en)){
  if(k.art==='einfrieren'&&S.hand.length){const c=rs('kampf').pick(S.hand);c.frost=true;Bus.emit('toast',{a:'EINGEFROREN',b:c.n});Bus.emit('kniff',{e:en,why:`${en.n} friert „${c.n}“ für diesen Zug ein`});}
  if(k.art==='teurer'){const z=S.hand.filter(c=>!c.unspielbar&&!c.teuer);if(z.length){const c=rs('kampf').pick(z);c.teuer=k.v||1;Bus.emit('toast',{a:'TEURER',b:c.n});Bus.emit('kniff',{e:en,why:`${en.n}: „${c.n}“ kostet diesen Zug ${k.v||1} mehr${k.why?' ('+k.why+')':''}`});}}
- if(k.art==='verstopfen'){for(let n=0;n<(k.n||1);n++)S.hand.push(stoerKarte(en));Bus.emit('kniff',{e:en,why:`${en.n} steckt ${k.n||1} unspielbare Karte(n) in deine Hand`});}}}
-function stoerKarte(en){return{n:en.kniff&&en.kniff.karte||'Abschrift',c:0,unspielbar:true,st:[],src:en.n,spr:'bone',cid:'stoer'+(++uidc),verbraucht:true};}
+ if(k.art==='verstopfen'){for(let n=0;n<(k.n||1);n++)S.hand.push(stoerKarte(en,k));Bus.emit('kniff',{e:en,why:`${en.n} steckt ${k.n||1} unspielbare Karte(n) in deine Hand`});}}}
+function stoerKarte(en,k){return{n:k&&k.karte||en.kniff&&en.kniff.karte||'Abschrift',c:0,unspielbar:true,st:[],src:en.n,spr:'bone',cid:'stoer'+(++uidc),verbraucht:true};}
 // nach dem eigenen Zug eines Gegners
 function kniffGegnerzug(en){for(const k of kniffeVon(en))kniffEiner(en,k);}
 function kniffEiner(en,k){const why=k.why?` (${k.why})`:'';
@@ -195,11 +195,11 @@ function kniffEiner(en,k){const why=k.why?` (${k.why})`:'';
  if(k.art==='schuetzer'){alive().filter(o=>o!==en).forEach(o=>{o.block+=k.v||4;Bus.emit('enemy_block',{e:o,why:`${en.n} schützt ${o.n}: +${k.v||4} Block`});});}
  if(k.art==='heiler'){const o=alive().filter(x=>x!==en&&x.hp<x.max).sort((a,b)=>a.hp/a.max-b.hp/b.max)[0];if(o){o.hp=Math.min(o.max,o.hp+(k.v||4));Bus.emit('enemy_heal',{e:o,why:`${en.n} heilt ${o.n} um ${k.v||4}`});}}
  if(k.art==='loeschen'){alive().forEach(o=>{if(o.burn){o.burn=0;Bus.emit('enemy_status',{e:o,status:'geloescht',why:`${en.n} löscht den Brand${why}`});}});}
- if(k.art==='abschrift'){for(let n=0;n<(k.n||1);n++)S.discard.push(stoerKarte(en));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n||1} Abschrift(en) in deinen Ablagestapel`});}
+ if(k.art==='abschrift'){for(let n=0;n<(k.n||1);n++)S.discard.push(stoerKarte(en,k));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n||1}× „${k.karte||(en.kniff&&en.kniff.karte)||"Abschrift"}“ in deinen Ablagestapel`});}
  if(k.art==='ruf'&&FOES[k.gegner]&&en.turns%(k.alle||3)===2&&alive().length<4){const a=mkEnemy(k.gegner);a.gerufen=true;if(a.kniff&&a.kniff.art==='ruf')a.kniff=null;a.x=rs('aufstellung').pick([.16,.84,.3,.7]);a.reihe=rs('aufstellung').pick([0,1]);S.enemies.push(a);Bus.emit('enemy_spawn',{e:a,why:`${en.n} ruft ${a.n}`});}
  if(k.art==='kopie'){const c=S.vorherKarte;if(c&&!c.unspielbar){if(c.atk){gegnerTrifft(en,(c.atk+en.str)*(c.h||1),`${en.n} schreibt „${c.n}“ ab und spielt sie gegen dich`);}else if(c.blk){en.block+=c.blk;Bus.emit('enemy_block',{e:en,why:`${en.n} schreibt „${c.n}“ ab: +${c.blk} Block`});}
    Bus.emit('toast',{a:'ABGESCHRIEBEN',b:c.n});}
-   if(k.n){for(let n=0;n<k.n;n++)S.discard.push(stoerKarte(en));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n} Abschrift(en) in deinen Ablagestapel`});}}
+   if(k.n){for(let n=0;n<k.n;n++)S.discard.push(stoerKarte(en,k));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n}× „${k.karte||(en.kniff&&en.kniff.karte)||"Abschrift"}“ in deinen Ablagestapel`});}}
  if(k.art==='takt'){const v=k.v||6;if(en.turns%2===0){alive().forEach(o=>{o.block+=v;});en.schlag=true;Bus.emit('kniff',{e:en,why:`${en.n} schlägt: alle Gegner +${v} Block${why}`});Bus.emit('herzschlag',{e:en});}
    else{en.schlag=false;en.vuln=Math.max(en.vuln||0,2);Bus.emit('enemy_status',{e:en,status:'vuln',why:`Zwischen den Schlägen: ${en.n} ist verwundbar (+50 % Schaden)`});}}
  if(k.art==='voraus'){const c=S.draw[S.draw.length-1]||S.discard[0];if(c&&!c.unspielbar){if(c.atk)gegnerTrifft(en,(c.atk+en.str)*(c.h||1),`${en.n} spielt deine nächste Karte „${c.n}“ vor dir`);else{const b=c.blk||5;en.block+=b;Bus.emit('enemy_block',{e:en,why:`${en.n} spielt deine nächste Karte „${c.n}“ vor dir: +${b} Block`});}Bus.emit('toast',{a:'VORAUS',b:c.n});}

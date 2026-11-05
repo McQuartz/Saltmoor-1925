@@ -36,7 +36,7 @@ module.exports = {
     // Kreis des Tuchs (Leerlauf), Ausholen und Peitschen (Angriff)
     let lean = 0, bob = 0, fall = 0, hand = null, tuchA = 0, schnapp = 0;
     const kr = [[0, 0], [-2, -2], [-4, 0], [-2, 2]];
-    if (p.idle) { const k = kr[f]; hand = [k[0], k[1]]; bob = [0, 0, 1, 1][f]; tuchA = [0, 0.15, 0.05, -0.1][f]; }
+    if (p.idle) { const k = kr[f]; hand = [k[0], k[1]]; bob = 0; tuchA = [0, 0.15, 0.05, -0.1][f]; }
     if (p.angriff) { lean = [3, 5, -5, -2][f]; hand = [[14, -8], [22, -10], [-12, 10], [-4, 4]][f]; schnapp = [0, 0, 1, 0.4][f]; tuchA = [0.6, 0.9, -1.2, -0.4][f]; }
     if (p.treffer) { lean = [3, 1][f]; hand = [6, 6]; tuchA = 0.4; }
     if (p.tod) { fall = r(p.q * 16); lean = r(p.q * 4); hand = [8, 18 + r(p.q * 10)]; tuchA = 0.6; }

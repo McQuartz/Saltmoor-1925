@@ -31,7 +31,7 @@ module.exports = {
     const { E, C, Pg, r, glied } = A;
     const f = p.f, W = 96, H = 120;
     let lean = 0, atem = 0, fall = 0, arm = 0;
-    if (p.idle) atem = [0, 0, 1, 1][f];
+    if (p.idle) atem = 0;
     // arm: 0 hängt, 1 ausgeholt (hinter dem Kopf), 2 Schlag nach vorn unten
     if (p.angriff) { lean = [2, 4, -7, -3][f]; arm = [0.6, 1, 2, 1.5][f]; }
     if (p.treffer) lean = [3, 1][f];
@@ -46,7 +46,7 @@ module.exports = {
     const ring = [E(cx, 56 + T, 18, 10, null, { pf: 'bevel' })];
     const ringLoch = E(cx, 55 + T, 13, 3.2, null);
     // Kopf mit Südwester (Krempe hinten lang)
-    const kopf = E(cx - 2, 28 + T, 7, 8, 'haut', { pf: 'bevel' });
+    const kopf = E(cx - 4, 28 + T, 7.5, 8, 'haut', { pf: 'bevel' });
     const hut = [Pg([[cx - 9, 24 + T], [cx - 6, 16 + T], [cx + 5, 15 + T], [cx + 8, 22 + T]], null, { rd: 1.5 }), Pg([[cx - 13, 24 + T], [cx + 8, 21 + T], [cx + 16, 28 + T], [cx + 10, 27 + T], [cx - 12, 27 + T]], 'dunkel', { rd: 0.6 })];
     // Arm vorn: hängt, holt aus, schlägt
     let hand, ell;
@@ -103,9 +103,9 @@ module.exports = {
       
       // Gesicht: aufgedunsen, Mund offen, Augen trüb hell
       if (!p.tod || f < 1) {
-        const ex = r(cx - 6), ey = r(28 + T);
+        const ex = r(cx - 10), ey = r(28 + T);
         P.glow(ex + 1.5, ey + 0.5, 4, 0.5);
-        P.set(ex, ey, 'glut'); P.set(ex + 4, ey, 'kern'); augen.push([ex + 4, ey]);
+        P.set(ex, ey, 'kern'); P.set(ex + 4, ey, 'glut'); augen.push([ex, ey]);
         P.auf(ex + 1, ey + 5, 'k0'); P.auf(ex + 2, ey + 5, 'k0'); P.auf(ex + 1, ey + 6, 'k1');
       }
       // Stiefel: Schaftkante
@@ -125,7 +125,7 @@ module.exports = {
         }
         // was fehlt, bleibt als Umriss aus Staub im Strahl stehen (jedes zweite Pixel)
         for (const [x, y] of geist) P.loesch(x, y);
-        if (!p.tod || f < 2) for (const [x, y, rd] of geist) if (rd && (x + y + (p.idle ? f : 0)) % 2 === 0) P.set(x, y, 'glutDim');
+        if (!p.tod || f < 2) for (const [x, y, rd] of geist) if (rd && (x + y) % 2 === 0) P.set(x, y, 'glutDim');
         for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
           const c = P.get(x, y); if (!c || c >= 7) continue;
           if (seite(x + 1, y) < 0 || seite(x + 1, y - 1) < 0) P.set(x, y, p.tod ? 'r1' : 'r2');

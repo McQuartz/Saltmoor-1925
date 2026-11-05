@@ -1,0 +1,61 @@
+{
+ "id": "brennofen",
+ "rang": "waechter",
+ "w": 160,
+ "h": 180,
+ "zone": "ziegelgruben",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  80,
+  174
+ ],
+ "kopf": [
+  76,
+  6
+ ],
+ "augen": [
+  [
+   76,
+   145
+  ],
+  [
+   83,
+   145
+  ],
+  [
+   66,
+   114
+  ],
+  [
+   92,
+   114
+  ],
+  [
+   62,
+   12
+  ]
+ ],
+ "augenfarbe": "#fff1b0"
+}

@@ -16,7 +16,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M7 Biome Akt III bis V | fertig | Wald, Gezeitenwerk (Akt III), Walkathedrale, Glasmeer (Akt IV), Ufer unten, Pforte neu, Finale neu (Akt V); neue Gegner Salz, Stadt, Eis; alle Noten 4. Kern: Kniffe teurer/kopie/takt/voraus/verborgen, Pendel, Tausch-/Leih-/Spiegel-Krämer, Vorgänger, Ergänzungspakete |
 | M8 Ereignisse und Balance | fertig | ≥5 Ereignisse je Biom, 15 biomübergreifende, Test aller Wahlen; Builds 44–72 % (Ø 59 %), generischer Bot 65 %, kein Akt über 35 % der Niederlagen; Kampf Ø 4,1–4,5 Züge |
 | M9 Abschluss | fertig | Geklickter Run (40 Stationen), Galerie und Artboard erweitert, Bericht unten |
-| Zugabe | offen | |
+| Zugabe | läuft | Vier neue Biome: Leuchtturmhof (I), Glockengießerei (II), Ziegelgruben (III), Mond unter dem Eis (IV), alle Note 4, biom-test 14–17/20, 0 Fehler. Kern: Störkarten-Name aus dem auslösenden Kniff |
 
 ## Einträge je Meilenstein
 
@@ -202,11 +202,25 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Die Seelilie (neu) | Eis | 4 (starke Silhouette) | [M7](bilder/M7/alte-biome/eis-bogen.png) |
 | Item-Icons (125) | alle | 4 (alle; zweite Runde für 13, knapp: Trauerschleier, Knotenschnur bei 32 px) | [M5](bilder/M5/icons.png) |
 | Handgriff-Bilder (70) | alle | 4 (alle; zweite Runde: große Hand plus Gegenstand, mehr Licht; jetzt auch in der Handgriff-Wahl zu sehen) | [M5](bilder/M5/handgriffe.png) |
+| Leuchtturmhof: Lampenputzer, Rückwärtsmöwe, Der aus dem Strahl, Fensterzählerin (neu) | Leuchtturm | 4 (Möwe liest sich erst im Angriff rückwärts; Strahlgänger stärkste Silhouette) | [Zugabe](bilder/Zugabe/leuchtturm/leuchtturm-bogen.png) |
+| Die Linse (Wächter, neu) | Leuchtturm | 4 (im Spiel klar vor warmem Lichthof) | [Zugabe](bilder/Zugabe/leuchtturm/im-spiel-waechter.png) |
+| Hintergrund Leuchtturmhof (Hof, Klippe, Turmfuß, Laterne) | Leuchtturm | 4 (Klippe die schwächste Variante) | [Zugabe](bilder/Zugabe/leuchtturm/hintergrund-varianten.png) |
+| Glockengießerei: Gießer, Formerin, Klöppel, Gussnaht (neu) | Glockengießerei | 4 (Gussnaht knapp, Kinderhälfte klein) | [Zugabe](bilder/Zugabe/glockengiesserei/glockengiesserei-bogen.png) |
+| Die Ungetaufte (Wächter, neu) | Glockengießerei | 4 (vor dem glühenden Ofenmaul sehr gut lesbar) | [Zugabe](bilder/Zugabe/glockengiesserei/im-spiel-waechter.png) |
+| Hintergrund Glockengießerei (Gießhalle, Glockenstuhl, Formenkammer, Ofen) | Glockengießerei | 4 | [Zugabe](bilder/Zugabe/glockengiesserei/hintergrund-varianten.png) |
+| Ziegelgruben: Brennmeister, Ziegelträger, Stempel, Lehmhund (neu) | Ziegelgruben | 4 (Ziegelträger stärkste Silhouette; Körper innen wenig gegliedert) | [Zugabe](bilder/Zugabe/ziegelgruben/ziegelgruben-bogen.png) |
+| Der Brennofen, zwei Phasen (Wächter, neu) | Ziegelgruben | 4 (Weißglut-Gesicht im Feuerloch stark) | [Zugabe](bilder/Zugabe/ziegelgruben/im-spiel-waechter-weissglut.png) |
+| Hintergrund Ziegelgruben (Ringofen, Lehmgrube, Kammer, Aschewand) | Ziegelgruben | 4 (Lehmgrube die schwächste) | [Zugabe](bilder/Zugabe/ziegelgruben/hintergrund-varianten.png) |
+| Mond: Astronom, Kraterbewohner, Mondmotte, Gezogene (neu) | Mond | 4 (Mondmotte stärkste; Gezogene: Strang liest sich als Seil) | [Zugabe](bilder/Zugabe/mond/mond-bogen.png) |
+| Die Rückseite, drei Phasen (Wächter, neu) | Mond | 4 (Augen-Krater öffnen sich je Phase, auch am Boden) | [Zugabe](bilder/Zugabe/mond/im-spiel-waechter-p3.png) |
+| Hintergrund Mond (Abstieg, Ebene, Krater, Lichthof) | Mond | 4 (Krater gleichmäßig wie Höhenlinien; Kampfbild etwas unruhig) | [Zugabe](bilder/Zugabe/mond/hintergrund-varianten.png) |
 
 ## Entscheidungen unterwegs
 
 | Datum | Meilenstein | Entscheidung | Grund |
 |---|---|---|---|
+| 2026-11-05 | Zugabe | Je Akt I–IV ein weiteres Biom (Leuchtturmhof, Glockengießerei, Ziegelgruben, Mond unter dem Eis) statt neuer Systeme; Ziegelgruben bleibt bei 15/20 im biom-test | Philip: „mehr Inhalt“; vier Pakete nutzen nur vorhandene Kniffe. Ziegelgruben lag bei 82 % (49/60), der Wächter steht schon an der 80-Leben-Grenze, im Gesamtlauf passt es |
+| 2026-11-05 | Zugabe | Störkarten heißen nach dem Kniff, der sie auslöst (`kniffe:[{art:'verstopfen',karte:…}]` wirkte vorher mit dem Namen „Abschrift“) | Fehler vom Leuchtturm-Agenten gemeldet |
 | 2026-11-05 | Zugabe | Wahrsagerin bekommt ein Set aus ihren Startstücken (Teerfackel, Schleier, Kerze): 6 Karten auf der Hand („sie sieht, was kommt“); Veteran trägt den Offiziersmantel statt des Trenchcoats des Detektivs | Über 270 Runs gewann die Wahrsagerin 50 %, der Veteran 87 %, die übrigen 57–80 %. Ein Feuer-Bonus half ihr nicht (gemessen); danach Wahrsagerin 80 %, Veteran 70 % |
 | 2026-11-05 | M8 | Gerufene Gegner rufen selbst niemanden mehr | Der Lotse rief Tieflinge, die selbst Tieflinge riefen: der Tiefling war bei 21 von 30 Niederlagen am Leben, der Hafen verursachte 23 % aller Niederlagen; danach 7 % |
 | 2026-11-05 | M7 | Pforte neu als gespiegelter Hafen am Meeresgrund, Finale neu gezeichnet und leichter abgestimmt (`ruft` 280 Leben, Ø 10,3 Züge, 72 % überstanden); Boss mit Skala 0,92, damit die Krone nicht oben anstößt | Mo fand die alte Pforte zu sehr nach Science-Fiction; Auftrag: Finale lesbarer, Kampf 8–12 Züge. Die „über 40 % der Niederlagen“ ließen sich mit dem heutigen Bot nicht nachstellen (jetzt 11 %) |

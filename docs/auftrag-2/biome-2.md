@@ -15,3 +15,19 @@ Je Biom eine eigene Konzeptdatei mit Komposition, Gegnern und Noten (so können 
 | IV | Das Glasmeer | [biome/glasmeer.md](biome/glasmeer.md) |
 | V | Das Ufer unten | [biome/ufer.md](biome/ufer.md) |
 | V | Die Pforte (neu) | [biome/pforte.md](biome/pforte.md) |
+
+**Zugabe, Akt I: Der Leuchtturmhof** (`leuchtturm`), Konzept und Noten: [biome/leuchtturm.md](biome/leuchtturm.md).
+Ein Leuchtturm auf der Klippe über Saltmoor, 1925, dessen Strahl seit dem Winter 1917 nicht aufs Meer fällt, sondern in den eigenen Hof. Wahrzeichen: die Gürtellinse, groß wie ein Zimmer. Falsches Detail: Jedes Schiff draußen zeigt Rot und Grün zugleich, hält also genau auf den Turm zu, und keins kommt näher.
+Graphit-Nacht, gekalkte Wände und Pflaster hell im Strahl, rot-weißer Turm. Gegner: Lampenputzer (heiler), Rückwärtsmöwe (kopie), Der aus dem Strahl (verstopfen), Fensterzählerin (teurer); Wächter: Die Linse (takt, Phasen ab 50 % mit Ruf). Krämer: der Strandvogt (leihe).
+
+**Zugabe, Akt II: Die Glockengießerei** (`glockengiesserei`), Konzept und Noten: [biome/glockengiesserei.md](biome/glockengiesserei.md).
+Die Gießhütte von 1641 unter dem Kirchhof von St. Brendan, die Gussgruben noch warm; hier wurden die Glocken gegossen, die bei Flut läuten. Wahrzeichen: die große Glocke, so hoch wie ein Haus, halb noch im Lehmmantel. Falsches Detail: In jeder Glocke hängt statt eines Klöppels ein Mensch; unter jedem Rand hängen zwei nackte Füße.
+Ruß und Kirschglut, Licht von unten (Ofenmaul, Gussrinnen, Gruben), ein kalter Fleck aus dem Schacht. Gegner: Der Gießer (brecher), Die Formerin (abschrift), Der Klöppel (ansage), Die Gussnaht (nachlass teilt); Wächter: Die Ungetaufte (takt, ruft den Klöppel). Krämer: der Wandergießer (spiegel).
+
+**Zugabe, Akt III: Die Ziegelgruben** (`ziegelgruben`), Konzept und Noten: [biome/ziegelgruben.md](biome/ziegelgruben.md).
+Ziegelbrennereien tief unter Rom, die Öfen noch warm, die Ziegel gestempelt von einer Legion, die es nie gab (LEG XXXIX). Wahrzeichen: der Ringofen, dessen Kammern um eine Kurve laufen, die sich nie schließt. Falsches Detail: In jedem Ziegel ein Fingerabdruck, immer derselbe Finger, mit einer Narbe quer; in der Lehmgrube sind die Terrassen selbst die Linien des Abdrucks.
+Ziegelrot gegen Aschegrau, rußgraue Figuren, weißglühende Ofenmünder in Reihe. Gegner: Der Brennmeister (teurer), Der Ziegelträger (schuetzer), Der Stempel (kopie), Der Lehmhund (brecher); Wächter: Der Brennofen (loeschen, Phasen: Weißglut). Krämer: der Schreiber der Legion (tausch).
+
+**Zugabe, Akt IV: Der Mond unter dem Eis** (`mond`), Konzept und Noten: [biome/mond.md](biome/mond.md).
+Unter dem schwarzen Eis hängt ein zweiter Mond, bleich und so nah, dass die Expedition von 1890 eine Strickleiter bis auf seinen Staub hinabgelassen hat; der Horizont ist so krumm, dass man ihn in einer Stunde umrunden könnte. Wahrzeichen: die Mondscheibe, in deren Kratern Lampen brennen, denn sie sind bewohnt. Falsches Detail: Der Mond hat eine Rückseite, und sie schaut dich an; Krater auf der Nachtseite und hinter dem Horizont sind Augen.
+Silber, Asche und bleiches Gelb, das Licht kommt von jenseits des Horizonts. Gegner: Der Astronom (einfrieren), Der Kraterbewohner (ruf), Die Mondmotte (loeschen), Die Gezogene (wechsel Wasser/Salz); Wächter: Die Rückseite (teurer, Phasen mit drei Sprites, ruft Mondmotten). Krämer: der Gehilfe an der Leiter (leihe).

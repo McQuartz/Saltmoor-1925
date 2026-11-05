@@ -87,9 +87,16 @@ module.exports = {
       // Brust: Möwenweiß im Gegenlicht (k3, rechte Kante hell), feine Federreihen
       for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { if (!istG(x, y, 4)) continue; const c = P.get(x, y); if (c < 1 || c > 4) continue; P.set(x, y, !istG(x + 1, y, 4) || !istG(x + 2, y - 1, 4) ? 'r2' : !istG(x + 3, y, 4) ? 'r1' : ((x + y * 2) % 7 === 0 ? 'k2' : 'k3')); }
       // Flügel: Deckfedern als Schuppen (Reihen kleiner Bögen), Armschwingen als Linien
+      // Flügel in Federreihen entlang der Schwinge: t = Weg von der Schulter zur Spitze, d = Abstand zur Hinterkante.
+      // Deckfedern oben (Bögen, Tal dunkel, Grat hell), dann die Armschwingen mit hellem Saum (Möwenweiß an der Hinterkante)
+      const wx = ex - sx, wy = ey - sy, wlen = Math.hypot(wx, wy) || 1;
       for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { if (!istG(x, y, 8)) continue; const c = P.get(x, y); if (c < 1 || c > 4) continue;
-        const u = x - sx, w2 = y - sy; if (w2 < 14) { if (((x - lean) % 4 === 0 && (y - T) % 4 === 1) || ((x - lean) % 4 === 2 && (y - T) % 4 === 3)) P.set(x, y, 'k3'); }
-        else if ((x - lean + y - T) % 5 === 0) P.set(x, y, 'k0'); void u; }
+        const t = ((x - sx) * wx + (y - sy) * wy) / wlen, d = (x - sx) * nx + (y - sy) * ny; // d > 0 zum Körper
+        const hinterkante = !istG(r(x + nx * 2), r(y + ny * 2), 8) && istG(r(x - nx), r(y - ny), 8);
+        if (hinterkante && t < wlen * 0.7) { P.set(x, y, 'r1'); continue; }
+        const reihe = Math.floor((d + 8) / 4.5), ph = (t + reihe * 2.5) % 6;
+        if (t < wlen * 0.55) { if (ph < 1) P.set(x, y, 'k0'); else if (ph < 2) P.set(x, y, reihe % 2 ? 'k3' : 'k2'); }
+        else if (((t * 0.8 + d) % 5 + 5) % 5 < 0.9) P.set(x, y, 'k0'); }
       // Federspitzen: schwarz mit einem hellen Fleck (Spiegel), wie bei Silbermöwen
       fed.forEach((q, i) => { const [px, py] = q.v[2]; if (i % 2 === 0) P.auf(r(px + 1), r(py - 2), 'r2'); });
       // Schnabel: gelb mit rotem Fleck an der Unterseite

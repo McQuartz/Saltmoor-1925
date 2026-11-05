@@ -20,9 +20,9 @@ module.exports = {
   id: 'formerin', biom: 'glockengiesserei', zone: 'glockengiesserei', w: 96, h: 120, fuss: [50, 115], kopf: [40, 18], rimBis: 113,
   varianten: {
     // a: hoher Kern, vier Gesichter, die Spindel ragt hinter ihr auf
-    formerin_a: { kr: 25, ktop: 66, gesichter: 4, spindel: true },
+    formerin_a: { kr: 26, ktop: 66, gesichter: 3, spindel: true },
     // b: breiter, niedriger Kern, die Drehschablone lehnt rechts daran, zwei offene Augenpaare
-    formerin_b: { kr: 30, ktop: 74, gesichter: 5, schablone: true, offen2: true },
+    formerin_b: { kr: 30, ktop: 74, gesichter: 4, schablone: true, offen2: true },
   },
   // Silhouetten-Probe (verworfen): die Frau kniend neben einem freistehenden Kern; das waren zwei Dinge
   // nebeneinander (eine Gestalt und ein Hügel). Erst verwachsen liest sich der Kern als ihr Leib.
@@ -39,12 +39,12 @@ module.exports = {
     // Kern: Bienenkorb mit Ringwülsten; Profil halbe Breite über der Höhe
     const kern = []; const pts = [];
     const NP = 14;
-    for (let i = 0; i <= NP; i++) { const q = i / NP; const w = R * (0.42 + 0.58 * Math.sin(Math.min(1, q * 1.15) * Math.PI / 2)) * (q > 0.92 ? 1.02 : 1); pts.push([cx + w, kt + q * (kb - kt)]); }
+    for (let i = 0; i <= NP; i++) { const q = i / NP; const w = R * (0.34 + 0.66 * Math.pow(Math.sin(Math.min(1, q * 1.25) * Math.PI / 2), 0.55)) * (q > 0.9 ? 1.03 : 1); pts.push([cx + w, kt + q * (kb - kt)]); }
     const kontur = [...pts, ...pts.slice().reverse().map(([x, y]) => [2 * cx - x, y])];
     kern.push(Pg(kontur, null, { rd: 1.5, hz: 1.3 }));
     // Kappe oben (wo sie herauswächst), Spindel durch den Kern
     const spindel = [];
-    if (v.spindel) { spindel.push(C(cx + 10, kt + 4, cx + 13, 22, 1.3, 1.1, null), C(cx + 13, 22, cx + 21, 20, 1.1, 1, null), C(cx + 21, 20, cx + 21, 26, 1, 1.2, null)); }
+    if (v.spindel) { spindel.push(C(cx + 9, kt + 4, cx + 11, 30, 1.6, 1.3, null), C(cx + 6, 30, cx + 16, 29, 1.3, 1.3, null), E(cx + 11, 30, 2.2, 2.2, null)); }
     const schablone = [];
     if (v.schablone) { const sx = cx + R - 2; schablone.push(Pg([[sx, 112], [sx + 4, 112], [sx + 13, 70], [sx + 15, 50], [sx + 11, 50], [sx + 8, 68], [sx + 2, 92]], null, { rd: 0.5 }), C(sx + 13, 50, sx + 13, 46, 1, 1, null)); }
     // Oberkörper: wächst aus der Kappe, schmal, nach vorn gebeugt
@@ -91,9 +91,9 @@ module.exports = {
       for (let y = kt; y <= kb; y++) for (let x = 0; x < W; x++) {
         if (!ist(x, y, KERN)) continue; const c = P.get(x, y); if (c < 1 || c > 4) continue;
         const q = (y - kt) / (kb - kt), s = (x - cx) / R;
-        for (const rq of ringe) { const d = (q - rq) * (kb - kt) - s * s * 2.2; if (Math.abs(d) < 0.6) P.set(x, y, 'k0'); else if (Math.abs(d + 1.2) < 0.6) P.set(x, y, s > 0.1 ? 'r1' : 'lehm'); }
+        for (const rq of ringe) { const d = (q - rq) * (kb - kt) - s * s * 2.2; if (Math.abs(d) < 0.6) P.set(x, y, 'k0'); else if (Math.abs(d + 1.2) < 0.6) P.set(x, y, s > 0.1 ? 'r1' : 'k3'); }
         const b = LIB.bay(x, y);
-        if (s > 0.15 && s < 0.5 && b < 0.4 && P.get(x, y) <= 4) P.set(x, y, 'k3');
+        if (s > 0.12 && s < 0.55 && b < 0.45 && P.get(x, y) <= 4) P.set(x, y, 'k3');
         if (s < -0.5 && b < 0.5 && P.get(x, y) <= 4) P.set(x, y, 'k1');
         if (((x * 31 + y * 17) % 37) === 0 && P.get(x, y) <= 4) P.set(x, y, 'k3');
       }
@@ -101,13 +101,13 @@ module.exports = {
       // Gesichter in der Wölbung: helle Ovale, darin Augen und Mund als Löcher; das jüngste hat offene Augen
       const gs = v.gesichter, gy0 = kt + (kb - kt) * (v.schablone ? 0.3 : 0.25);
       for (let i = 0; i < gs; i++) {
-        const row = i % 2, s = -0.62 + (i / Math.max(1, gs - 1)) * 1.15, gx = cx + s * R * (0.7 + row * 0.1), gy = gy0 + row * 13 + Math.abs(s) * 3;
+        const row = i % 2, s = -0.55 + (i / Math.max(1, gs - 1)) * 1.05, gx = cx + s * R * (0.72 + row * 0.12), gy = gy0 + row * 14 + Math.abs(s) * 4;
         if (!ist(gx, gy, KERN)) continue;
-        for (let y = -3; y <= 3; y++) for (let x = -2; x <= 2; x++) if ((x / 2.5) ** 2 + (y / 3.3) ** 2 <= 1 && ist(gx + x, gy + y, KERN) && P.get(r(gx + x), r(gy + y)) <= 6) P.set(gx + x, gy + y, x > 0 || y < -1 ? 'lehm' : 'k3');
+        for (let y = -4; y <= 4; y++) for (let x = -3; x <= 3; x++) if ((x / 3.2) ** 2 + (y / 4.2) ** 2 <= 1 && ist(gx + x, gy + y, KERN) && P.get(r(gx + x), r(gy + y)) <= 6) P.set(gx + x, gy + y, x > 0 && y < 2 ? 'lehm' : 'k3');
         const offen = i === gs - 1 || (v.offen2 && i === 1);
         if (offen && (!p.tod || f < 1)) { P.set(gx - 1, gy - 1, 'kern'); P.set(gx + 1, gy - 1, 'glut'); P.glow(gx, gy - 1, 5, 0.6, 'glutDim', 'k3'); augen.push([r(gx - 1), r(gy - 1)]); }
         else { P.set(gx - 1, gy - 1, 'k0'); P.set(gx + 1, gy - 1, 'k0'); }
-        P.set(gx, gy + 1.5, 'k0'); P.set(gx - 2, gy + 3, 'k1');
+        P.set(gx, gy + 1, 'k1'); P.set(gx - 1, gy + 2.5, 'k0'); P.set(gx, gy + 2.5, 'k0'); P.set(gx - 3, gy, 'k1');
       }
       // Feuerloch unten vorn: Kohle trocknet den Kern von innen
       if (glut > 0) {

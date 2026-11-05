@@ -1,0 +1,786 @@
+{
+ "id": "ziegelgruben",
+ "akt": 2,
+ "biom": {
+  "n": "Die Ziegelgruben",
+  "kurz": "Ziegelgruben",
+  "zeit": "unter Rom, die Öfen noch warm",
+  "anreise": "Unter den Katakomben riecht es nach warmem Ton. Irgendwo sind die Öfen noch nicht aus, und niemand ist da, der sie füttert.",
+  "koerper": [
+   "#060505",
+   "#0d0b0a",
+   "#171312",
+   "#241d1a"
+  ],
+  "rand": [
+   "#c4582c",
+   "#ffdcae"
+  ],
+  "augen": "#fff1b0",
+  "nebel": [
+   "#2a2421",
+   "#6a5c54"
+  ],
+  "musik": "ziegelgruben",
+  "gegner": [
+   "brennmeister",
+   "ziegeltraeger",
+   "stempel",
+   "lehmhund"
+  ],
+  "waechter": "brennofen",
+  "fundpool": [
+   "probeziegel",
+   "legionsstempel",
+   "traegerreff",
+   "aschekelle",
+   "minerlamp",
+   "pick",
+   "shovel",
+   "dynamite",
+   "tartorch",
+   "legionsaxt",
+   "compass"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Schreiber der Legion",
+   "ort": "an einem Pult aus Ziegeln vor einer kalten Kammertür, zwischen Stapeln gestempelter Ziegel, Wachstafeln und einer Waage mit zwei Schalen",
+   "zeile": "Er verbucht jeden Ziegel, der gebrannt wird, seit es die Legion gibt, die es nie gab. Er nimmt kein Gold. Er wiegt auf: ein Stück von dir gegen ein Stück von ihm.",
+   "art": "tausch"
+  },
+  "uebergang": "In der letzten Kammer ist die Glut schwarz geworden. Im Boden ist ein Schacht, ausgemauert, mit einer Wendel aus Ziegeln nach unten. Von unten kommt Kälte, und die Ziegel der Wendel tragen keinen Abdruck mehr.",
+  "weg_hinweise": {
+   "kampf": [
+    "Hinter der Kurve das Geräusch von Ziegeln, die abgesetzt werden, einer nach dem anderen.",
+    "Ein Hund bellt nicht. Man hört nur Pfoten, zu viele.",
+    "Jemand klopft, gleichmäßig, wie ein Stempel auf weichen Ton."
+   ],
+   "ereignis": [
+    "Eine Kammertür steht offen, und die Zahl darüber hat zu viele Striche.",
+    "Ein Rohling liegt allein auf dem Trockenboden, noch weich."
+   ],
+   "wandbild": [
+    "Ein Fries aus Ziegelreliefs: Männer, die Ziegel tragen, und vor ihnen ein Ofen mit einem Gesicht."
+   ],
+   "kraemer": [
+    "Ein Licht, das nicht weiß ist: eine Öllampe auf einem Pult aus Ziegeln."
+   ],
+   "werkstatt": [
+    "Eine Formbank mit Ziegelformen aus Holz, alle für dieselbe Hand."
+   ],
+   "rast": [
+    "Eine Kammer, deren Glut nur noch rot ist. Darin ist es warm wie in einem Bett."
+   ],
+   "fundstelle": [
+    "Eine Ziegelform aus Holz, darin etwas, das nicht aus Lehm ist."
+   ]
+  },
+  "beute_saetze": [
+   "In der Wand gibt ein Ziegel nach, nur einen Fingerbreit.",
+   "Die Asche legt sich wieder, in Ringlinien.",
+   "Irgendwo hinter der Kurve wird eine Kammertür geöffnet. Niemand kommt heraus.",
+   "Der Boden ist warm, wo er gestanden hat.",
+   "Auf deiner Hand liegt Asche, und darin der Abdruck eines Fingers, der nicht deiner ist.",
+   "Eine Kammer weiter wird die Glut weiß.",
+   "Der Ruß über der Tür hat jetzt eine Form, die eben noch nicht da war.",
+   "Du zählst die Kammern bis hierher. Es ist eine mehr als vorhin."
+  ]
+ },
+ "musik": {
+  "n": "Ziegelgruben",
+  "root": 50,
+  "key": "d-Moll",
+  "names": [
+   "Dm",
+   "Es",
+   "Gm",
+   "A"
+  ],
+  "darkNames": [
+   "Dm",
+   "Es",
+   "Gm",
+   "A♭9"
+  ],
+  "phryg": true,
+  "amb": {
+   "stollen": 0.05,
+   "sand": 0.04,
+   "wind": 0.02
+  },
+  "rhy": "hacke",
+  "detail": "stadt",
+  "ort": "Ton, der in warmen Kammern knackt, Asche, die aus dem Gewölbe rieselt, sehr fern eine Ofentür",
+  "rhyN": "Spaten im Lehm, Ziegel auf Ziegel"
+ },
+ "foes": {
+  "brennmeister": {
+   "n": "Der Brennmeister",
+   "biom": "ziegelgruben",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "brennmeister_a",
+   "varianten": [
+    "brennmeister_a",
+    "brennmeister_b"
+   ],
+   "konzept": "Ein schwerer Mann im Lederschurz, vor dem Gesicht eine Maske aus Ton mit einem einzigen Schauloch, durch das weiße Glut sieht. Über seinem Kopf hält er eine lange Eisenstange wie eine Angel; an der Kette hängt die Brennprobe, ein Ziegel, der nicht abkühlt.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Er legt nach. Was du in der Hand hältst, wird heiß."
+   },
+   "beute": "probeziegel",
+   "beute_satz": "Die Brennprobe hängt noch an der Kette und glüht weiter, als hätte sie es nicht gemerkt.",
+   "quelle": "skript"
+  },
+  "ziegeltraeger": {
+   "n": "Der Ziegelträger",
+   "biom": "ziegelgruben",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "ziegeltraeger_a",
+   "varianten": [
+    "ziegeltraeger_a",
+    "ziegeltraeger_b"
+   ],
+   "konzept": "Ein kleiner, tief gebückter Träger unter einem schiefen Turm aus Ziegeln, doppelt so hoch wie er. Die untersten Ziegel sind in seinen Rücken gewachsen, die oberen glühen in den Fugen: Er trägt sie nicht zum Ofen, sondern aus ihm.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 4,
+    "why": "Wo er stehen bleibt, mauert er; hinter seinen Ziegeln stehen die anderen."
+   },
+   "beute": "traegerreff",
+   "beute_satz": "Der Stapel steht noch, als er schon nicht mehr steht.",
+   "quelle": "skript"
+  },
+  "stempel": {
+   "n": "Der Stempel",
+   "biom": "ziegelgruben",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "stempel_a",
+   "varianten": [
+    "stempel_a",
+    "stempel_b"
+   ],
+   "konzept": "Ein hagerer Mann ohne Hände. Seine Unterarme enden in zwei schweren Stempeln aus Bronze, einem rechteckigen, den er über den Kopf hebt wie einen Hammer, und einem halbmondförmigen. Die Stempelflächen glühen, in Spiegelschrift. Er hat keine Finger, und trotzdem ist der Abdruck in jedem Ziegel.",
+   "stimme": "salzlaeufer",
+   "kniff": {
+    "art": "kopie",
+    "why": "Er drückt ab, was du zuletzt getan hast, spiegelverkehrt."
+   },
+   "beute": null,
+   "beute_satz": "Im Boden, wo er fiel, ist ein Abdruck: LEG XXXIX, spiegelverkehrt.",
+   "quelle": "skript"
+  },
+  "lehmhund": {
+   "n": "Der Lehmhund",
+   "biom": "ziegelgruben",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "blk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 2
+    }
+   ],
+   "sprite": "lehmhund_a",
+   "varianten": [
+    "lehmhund_a",
+    "lehmhund_b"
+   ],
+   "konzept": "Ein Hund aus ungebranntem Lehm, zu lang, auf sechs Beinen. Sein Kopf ist ein gebrannter Ziegel mit dem Stempel der Legion auf der Stirn; die Augen sind zwei Fingerabdrücke, in denen Glut sitzt.",
+   "stimme": "nest",
+   "kniff": {
+    "art": "brecher",
+    "why": "Er gräbt unter jeder Mauer durch."
+   },
+   "beute": null,
+   "beute_satz": "Vom Hund bleibt ein Haufen Lehm, und darin die Pfoten, sauber, wie in einen Ziegel gedrückt.",
+   "quelle": "skript"
+  },
+  "brennofen": {
+   "n": "Der Brennofen",
+   "biom": "ziegelgruben",
+   "rang": "waechter",
+   "hp": 80,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 16
+    }
+   ],
+   "sprite": "brennofen",
+   "varianten": [
+    "brennofen"
+   ],
+   "konzept": "Ein Flaschenofen aus Ziegeln mit eisernen Bändern, krummem Schornstein und zwei Armen aus gemauerten Lagen, die in Ziegelzangen enden. Über der Feuertür zwei Schaulöcher, die dich ansehen; in der Feuertür, in der weißen Glut, ein Gesicht, das nicht verbrennt.",
+   "stimme": "wurm",
+   "kniff": {
+    "art": "loeschen",
+    "why": "Was brennt, gehört ihm. Er frisst das Feuer, bevor es wirkt."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "brennofen_glut"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 10,
+       "h": 2
+      },
+      {
+       "t": "buff",
+       "v": 3
+      },
+      {
+       "t": "atk",
+       "v": 7,
+       "h": 3
+      },
+      {
+       "t": "blk",
+       "v": 10
+      },
+      {
+       "t": "atk",
+       "v": 22
+      }
+     ]
+    ]
+   },
+   "beute": "gebrannter_finger",
+   "beute_satz": "Die Feuertür schlägt zu. Dahinter wird es still, dann kalt, und in der Asche liegt ein einzelner Finger aus gebranntem Ton.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "ziegelgruben_kammer",
+   "t": "Die nächste Kammer",
+   "d": "Über der Tür eine Zahl aus Strichen, eingeritzt. Du zählst sie zweimal und kommst zweimal auf eine andere Zahl. Hinter der Tür steht die Glut weiß, und darin, in Reihen gesetzt, Ziegel, die schon gebrannt sind.",
+   "bild": "Eine gemauerte Rundbogentür in einer langen, gekrümmten Ziegelwand, darin weiße Glut; darüber ein Rußfächer und eine lange Reihe eingeritzter Striche.",
+   "o": [
+    {
+     "l": "Einen Ziegel aus der Glut holen: Brennprobe, −7 Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "probeziegel"
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ],
+     "if": {
+      "hp_min": 8
+     }
+    },
+    {
+     "l": "Eine Karte in die Glut halten: sie kostet dauerhaft 1 weniger, −4 max. Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Die Striche weiterzählen, bis sie aufhören: +1 Kerbe an einem Item, Kampf gegen den Brennmeister",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "brennmeister"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ziegelgruben_abdruck",
+   "t": "Der Abdruck",
+   "d": "Auf dem Trockenboden liegt ein Rohling, noch weich. Der Abdruck darin ist frisch: ein linker Ringfinger mit einer Narbe quer über den Linien. Du siehst deine Hände an. Du hast keine Narbe. Noch nicht.",
+   "bild": "Ein grauer, ungebrannter Ziegel auf gestampftem Lehm, in seiner Mitte ein tiefer Fingerabdruck mit einer Narbe quer darüber; daneben die Spitzen zweier echter Finger.",
+   "o": [
+    {
+     "l": "Den eigenen Finger daneben drücken: einen Handgriff lernen, −5 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ],
+     "if": {
+      "hp_min": 6
+     }
+    },
+    {
+     "l": "Den Rohling einstecken: ein Item tauschen",
+     "fx": [
+      {
+       "op": "item_tausch"
+      }
+     ]
+    },
+    {
+     "l": "Den Abdruck glattstreichen: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ziegelgruben_stempeltisch",
+   "t": "Der Stempeltisch",
+   "d": "Ein Tisch aus Ziegeln, darauf Stempel in Reihen, Bronze und Holz, alle mit derselben Legion: LEG XXXIX. Ein Platz in der Reihe ist leer, und der Staub darin hat die Form einer Hand.",
+   "bild": "Ein langer Tisch aus Ziegeln mit Dutzenden rechteckiger und halbmondförmiger Stempel in Reihen, in der Mitte eine Lücke im Staub in Form einer Hand.",
+   "o": [
+    {
+     "l": "„Ich habe schon einmal gestempelt.“ Die Hand in die Lücke legen: eine Karte kostet dauerhaft 1 weniger, +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "event_gesehen": "fabrik_stempeluhr"
+     }
+    },
+    {
+     "l": "Den Stempel der neununddreißigsten nehmen: −12 Gold",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "legionsstempel"
+      },
+      {
+       "op": "gold",
+       "v": -12
+      }
+     ],
+     "if": {
+      "gold_min": 12
+     }
+    },
+    {
+     "l": "Alle Stempel umdrehen: Kampf gegen den Stempel, +20 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 20
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "stempel"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ziegelgruben_vermauert",
+   "t": "Die Mauer von der anderen Seite",
+   "d": "Eine Wand aus frischen Ziegeln, der Mörtel noch feucht. Von der anderen Seite klopft es, langsam, im Takt deines Herzens. In jedem Ziegel ist der Abdruck, und alle Abdrücke zeigen zu dir.",
+   "bild": "Eine frisch gemauerte Ziegelwand quer durch einen Gang, auf jedem Ziegel ein heller Fingerabdruck; davor eine Kelle im Mörtel.",
+   "o": [
+    {
+     "l": "Du kennst das Klopfen aus dem Salz. Diesmal zuerst klopfen: +6 max. Leben, +6 Leben",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 6
+      },
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ],
+     "if": {
+      "event_gesehen": "salz_mauer"
+     }
+    },
+    {
+     "l": "Einen Ziegel herausbrechen: Kampf gegen den Ziegelträger, dahinter liegt ein Tragreff",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "traegerreff"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "ziegeltraeger"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Weitergehen, bevor es aufhört: +5 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ziegelgruben_appell",
+   "t": "Der Appell",
+   "d": "In einer kalten Kammer hängt eine Wachstafel: die Mannschaftsliste der neununddreißigsten Legion. Die Namen sind ausgekratzt, einer nach dem anderen, mit demselben Finger. Der letzte steht noch. Es ist deiner, in deiner Schrift.",
+   "bild": "Eine Wachstafel an einer Ziegelwand, lange Kolonnen ausgekratzter Zeilen, nur die unterste Zeile unberührt; darunter auf dem Boden Wachsspäne.",
+   "o": [
+    {
+     "l": "„Anwesend.“ Strammstehen, wie damals: eine Reliquie, −8 max. Leben",
+     "fx": [
+      {
+       "op": "reliquie"
+      },
+      {
+       "op": "max_hp",
+       "v": -8
+      }
+     ],
+     "if": {
+      "job": "veteran"
+     }
+    },
+    {
+     "l": "Die Dolabra der Legion an die Tafel lehnen: +1 Kerbe an einem Item, +8 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ],
+     "if": {
+      "item": "legionsaxt"
+     }
+    },
+    {
+     "l": "Den Namen selbst auskratzen: einen Handgriff umritzen, −4 Leben",
+     "fx": [
+      {
+       "op": "umritzen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ]
+    },
+    {
+     "l": "Die Tafel umdrehen: +5 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ziegelgruben_ascheregen",
+   "t": "Ascheregen",
+   "d": "Aus dem Gewölbe fällt Asche, warm wie Haut, in großen grauen Flocken. Wo sie liegen bleibt, zeichnet sie Ringlinien, mit einer Narbe quer darüber. Sie fällt nur dort, wo du stehst.",
+   "bild": "Ein gewölbter Ziegelgang, aus dem Scheitel fällt Asche in einer Säule auf eine einzelne Gestalt; am Boden um ihre Füße ein Fingerabdruck aus Asche.",
+   "o": [
+    {
+     "l": "Stehen bleiben, bis sie dich bedeckt: volles Leben, eine Karte streichen",
+     "fx": [
+      {
+       "op": "full_heal"
+      },
+      {
+       "op": "strike"
+      }
+     ]
+    },
+    {
+     "l": "Die Asche mit der Kelle aufnehmen: Aschekelle, −4 Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "aschekelle"
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ],
+     "if": {
+      "hp_min": 5
+     }
+    },
+    {
+     "l": "Laufen: +10 Gold, −3 Leben",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 10
+      },
+      {
+       "op": "lose_hp",
+       "v": 3
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "probeziegel": {
+   "n": "Brennprobe",
+   "a": "waffe",
+   "st": [
+    "F"
+   ],
+   "spr": "plank",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 24,
+   "flavor": "Der Brennmeister zog sie aus dem Schauloch, um die Farbe zu prüfen. Sie ist seitdem nicht kalt geworden, und der Abdruck darin ist nicht deiner.",
+   "cards": [
+    {
+     "n": "Glühende Probe",
+     "c": 1,
+     "atk": 4,
+     "burn": 2
+    }
+   ]
+  },
+  "legionsstempel": {
+   "n": "Stempel der neununddreißigsten",
+   "a": "talisman",
+   "st": [
+    "E"
+   ],
+   "spr": "cross",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 46,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1
+   },
+   "flavor": "Bronze, in Spiegelschrift: LEG XXXIX. Es gab nie eine neununddreißigste Legion. Der Griff ist abgegriffen von tausend Händen.",
+   "cards": [
+    {
+     "n": "Abdrücken",
+     "c": 1,
+     "atk": 6,
+     "vuln": 1
+    }
+   ]
+  },
+  "traegerreff": {
+   "n": "Tragreff",
+   "a": "kleidung",
+   "st": [
+    "E"
+   ],
+   "spr": "coat",
+   "hp": 3,
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 48,
+   "eigen": {
+    "typ": "block_haelt_halb"
+   },
+   "flavor": "Ein Gestell aus Holz für den Rücken. Was man einmal aufgeladen hat, trägt man weiter. Es ist schwerer, als es aussieht, auch leer.",
+   "cards": [
+    {
+     "n": "Aufladen",
+     "c": 1,
+     "blk": 8
+    }
+   ]
+  },
+  "aschekelle": {
+   "n": "Aschekelle",
+   "a": "waffe",
+   "st": [
+    "F"
+   ],
+   "spr": "shovel",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 22,
+   "flavor": "Mit ihr holt man die Asche aus den Feuerlöchern. Die Asche ist warm, und in ihr liegen kleine, gebrannte Dinge, die man nicht ansehen will.",
+   "cards": [
+    {
+     "n": "Ausräumen",
+     "c": 1,
+     "blk": 4,
+     "sonder": {
+      "art": "fx",
+      "fx": [
+       {
+        "op": "status",
+        "to": "all",
+        "status": "burn",
+        "v": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  "gebrannter_finger": {
+   "n": "Der gebrannte Finger",
+   "a": "talisman",
+   "st": [
+    "F"
+   ],
+   "spr": "bone",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 140,
+   "nodrop": true,
+   "eigen": {
+    "typ": "kampfstart_fx",
+    "fx": [
+     {
+      "op": "status",
+      "to": "all",
+      "status": "vuln",
+      "v": 2
+     },
+     {
+      "op": "status",
+      "to": "all",
+      "status": "burn",
+      "v": 2
+     }
+    ]
+   },
+   "flavor": "Ein linker Ringfinger aus gebranntem Ton, eine Narbe quer über den Linien. Er ist warm. Drück ihn irgendwo hinein, und es gehört ihm.",
+   "cards": [
+    {
+     "n": "Abdruck",
+     "c": 0,
+     "burn": 3,
+     "vuln": 1,
+     "verbraucht": true
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/ziegelgruben.js"
+ ]
+}
