@@ -79,4 +79,40 @@ const {ladeKern}=require('./kern');
  ok(g5.a.phase==='fight'&&g5.a.hp===14&&g5.a.gold===15&&g5.phase2==='strand',`faehrgeld: tödlicher Treffer kostet 35 Gold, du stehst mit ${g5.a.hp} Leben auf (Gold ${g5.a.gold}); im selben Kampf nicht noch einmal`);
  const g6=JSON.parse(run(`(()=>{newRun('fischer',9,{dev:true});S.areas.talisman=[mk('ballaststein'),mk('leere_seiten'),null,null];const a=buildArchetyp().id;S.areas.talisman=[mk('opferstock'),mk('faehrgeld'),null,null];S.areas.kleidung[0]=mk('geldkatze');const b=buildArchetyp().id;return JSON.stringify({a,b})})()`));
  ok(g6.a==='ballast'&&g6.b==='kollekte',`buildArchetyp erkennt Ballast (${g6.a}) und Kollekte (${g6.b})`);
+ // 12. Zugabe, Kern-Wünsche der Biom-Agenten: Absicht „ruft“, unverw sichtbar, Bild der Störkarte, Szenenphase, takt mit Glocke
+ run(`globalThis.__ev=[];['ruf_ansage','unverw_zug','herzschlag','boss_phase'].forEach(n=>Bus.on(n,p=>__ev.push({n,why:p.why,klang:p.klang,gegner:p.gegner,phase:p.phase})));`);
+ // rufAnsage sagt genau die Züge und Gegner voraus, die dann wirklich kommen (Kniff ruf mit Liste, besonders.ruft, phasen.ruft mit anzahl)
+ const rufPruef=setup=>kn(null,`FAST=true;${setup};e.pat=[{t:'blk',v:1}];e.pi=0;const zuege=[];
+  for(let z=0;z<7;z++){S.hp=999;S.hand=[];const pred=rufAnsage(e);const n0=S.enemies.length;endTurn();const neu=S.enemies.slice(n0);zuege.push({pred,neu:neu.map(x=>x.id)});neu.forEach(x=>x.hp=0);}
+  FAST=false;return JSON.stringify({zuege,ok:zuege.every(z=>JSON.stringify(z.pred)===JSON.stringify(z.neu)),n:zuege.filter(z=>z.neu.length).length})`);
+ const r1=rufPruef(`e.kniff={art:'ruf',gegner:['kurgast','netzflickerin'],alle:3}`);
+ ok(r1.ok&&r1.n===2&&r1.zuege[2].pred[0]==='kurgast'&&r1.zuege[5].pred[0]==='netzflickerin',`Absicht „ruft“ (Kniff ruf): Vorhersage = echte Rufe in 7 Zügen (${r1.zuege.map(z=>z.pred.join('+')||'–').join(' ')})`);
+ const r2=rufPruef(`e.besonders={art:'ruft',gegner:'kurgast',alle:3}`);
+ ok(r2.ok&&r2.n===2,`Absicht „ruft“ (besonders.ruft): Vorhersage = echte Rufe (${r2.zuege.map(z=>z.pred.join('+')||'–').join(' ')})`);
+ const r3=rufPruef(`e.besonders={art:'phasen',bei:[.5],ruft:{gegner:'kurgast',alle:2,anzahl:2}};e.phase=1`);
+ ok(r3.ok&&r3.n>=3&&r3.zuege.some(z=>z.pred.length===2),`Absicht „ruft“ (phasen.ruft, anzahl 2): Vorhersage = echte Rufe (${r3.zuege.map(z=>z.pred.join('+')||'–').join(' ')})`);
+ const r4=kn({art:'ruf',gegner:'kurgast',alle:3},`__ev.length=0;e.turns=2;startTurn();const ev=__ev.filter(x=>x.n==='ruf_ansage');e.turns=0;__ev.length=0;startTurn();return JSON.stringify({ev,nach:__ev.filter(x=>x.n==='ruf_ansage').length})`);
+ ok(r4.ev.length===1&&/ruft im nächsten Gegnerzug/.test(r4.ev[0].why)&&r4.ev[0].gegner[0]==='kurgast'&&r4.nach===0,`Bus ruf_ansage mit why zu Zugbeginn: „${r4.ev[0]&&r4.ev[0].why}“`);
+ // unverw: unverwJetzt folgt dem angezeigten Musterschritt, Bus unverw_zug zu Zugbeginn
+ const v1=kn(null,`e.pat=[{t:'atk',v:5},{t:'blk',v:8,unverw:true,why:'Neumond'}];e.pi=0;const a=unverwJetzt(e);__ev.length=0;e.pi=1;const b=unverwJetzt(e);startTurn();const ev=__ev.filter(x=>x.n==='unverw_zug');return JSON.stringify({a,b,ev})`);
+ ok(!v1.a&&v1.b&&v1.ev.length===1&&/Neumond/.test(v1.ev[0].why),`unverw sichtbar: unverwJetzt ${v1.a}→${v1.b}, Bus unverw_zug „${v1.ev[0]&&v1.ev[0].why}“`);
+ // Störkarten-Bild: kniff.spr (Item-Icon, Handgriff-Icon oder 12×12-Sprite), Rückfall bone
+ const s1=kn({art:'abschrift',n:1,karte:'Abdruck',spr:'gipsabdruck'},`ICONS.add('gipsabdruck');HG_ICONS.add('zittern');S.discard=[];kniffGegnerzug(e);const a=S.discard[0];
+  e.kniff={art:'abschrift',n:1};e.kniffe=[{art:'verstopfen',n:1,karte:'Zittern',spr:'zittern'}];S.discard=[];S.hand=[];kniffGegnerzug(e);kniffeZugbeginn();const b=S.discard[0],c=S.hand.find(x=>x.unspielbar);
+  e.kniffe=[{art:'abschrift',n:1,spr:'candle'}];e.kniff=null;S.discard=[];kniffGegnerzug(e);const d=S.discard[0];
+  return JSON.stringify({a:[a.n,a.spr,a.img],b:[b.n,b.spr,b.img],c:[c.n,c.spr,c.img],d:[d.spr,d.img]})`);
+ ok(s1.a[1]==='gipsabdruck'&&s1.a[2]==='assets/items/gipsabdruck.png'&&s1.b[1]==='bone'&&s1.b[2]===''&&s1.c[2]==='assets/handgriffe/zittern.png'&&s1.d[0]==='candle'&&s1.d[1]==='',`Störkarte nimmt kniff.spr als Bild (${s1.a.join(' / ')}; ohne spr ${s1.b[1]}; kniffe[] ${s1.c[2]}; Sprite ${s1.d[0]})`);
+ const s2=JSON.parse(run(`JSON.stringify({f:FOES.formerin&&FOES.formerin.kniff.spr,u:FOES.ungetaufte&&FOES.ungetaufte.kniff.klang})`));
+ ok(s2.f==='gipsabdruck'&&s2.u==='glocke',`Glockengießerei: Formerin-Abdruck mit Bild ${s2.f}, Ungetaufte mit Klang ${s2.u}`);
+ // Szenenphase: Boss-Phase hebt szenenPhase (buehne.js baut die Wächter-Szene mit phase neu), normale Gegner zählen nicht
+ const p1=JSON.parse(run(`(()=>{newRun('fischer',9,{dev:true});S.route=['hafen','kapelle','salz','eis','pforte'];S.akt=0;S.depth=1;startFight(['netzflickerin'],'kampf');const n=szenenPhase();
+  FOES._t_boss={n:'T-Wächter',rang:'waechter',hp:60,weak:'F',pat:[{t:'atk',v:5}],besonders:{art:'phasen',bei:[.66,.33],muster:[[{t:'atk',v:6}],[{t:'atk',v:7}]]}};startFight(['_t_boss'],'waechter');delete FOES._t_boss;const e=S.enemies[0];e.hp=e.max=60;e.block=0;const a=szenenPhase();__ev.length=0;
+  hit(e,25,1,null,'Test');const b=szenenPhase();hit(e,20,1,null,'Test');const c=szenenPhase();return JSON.stringify({n,a,b,c,ev:__ev.filter(x=>x.n==='boss_phase').map(x=>x.phase)})})()`));
+ ok(p1.n===0&&p1.a===0&&p1.b===1&&p1.c===2&&p1.ev.join()==='1,2',`szenenPhase: Kampf ${p1.n}, Wächter ${p1.a}→${p1.b}→${p1.c} (boss_phase ${p1.ev.join(', ')})`);
+ // Vorraum-Elite: jede biom.vorraum_elite ist ein Gegner mit Sprite (sonst fehlt sie im Kontaktbogen von tools/biom-bogen.js)
+ const ve=JSON.parse(run(`JSON.stringify(Object.entries(BIOMES).filter(([k,b])=>b.vorraum_elite).map(([k,b])=>[k,b.vorraum_elite,!!(FOES[b.vorraum_elite]&&(FOES[b.vorraum_elite].sprite||FOES[b.vorraum_elite].varianten))]))`));
+ ok(ve.length>=1&&ve.every(x=>x[2]),`Vorraum-Elite mit Sprite für den Kontaktbogen: ${ve.map(x=>x[0]+'→'+x[1]).join(', ')}`);
+ // takt mit klang: Bus herzschlag trägt den Klang (glocke statt Herzschlag), sonst herz
+ const g7=kn({art:'takt',v:6,klang:'glocke'},`__ev.length=0;e.turns=0;kniffGegnerzug(e);const a=__ev.filter(x=>x.n==='herzschlag');e.kniff={art:'takt',v:6};e.turns=0;__ev.length=0;kniffGegnerzug(e);const b=__ev.filter(x=>x.n==='herzschlag');return JSON.stringify({a,b})`);
+ ok(g7.a[0]&&g7.a[0].klang==='glocke'&&/Glockenschlag/.test(g7.a[0].why)&&g7.b[0]&&g7.b[0].klang==='herz',`takt mit klang: ${g7.a[0]&&g7.a[0].klang} („${g7.a[0]&&g7.a[0].why}“), ohne klang ${g7.b[0]&&g7.b[0].klang}`);
  console.log(fehler?`${fehler} FEHLER`:'Alles gut.');process.exit(fehler?1:0);})();

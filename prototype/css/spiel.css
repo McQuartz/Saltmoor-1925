@@ -246,7 +246,7 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 @keyframes glanz{0%,100%{box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.15)}50%{box-shadow:0 0 calc(var(--u)*9) rgba(232,197,71,.45)}}
 
 .feind .nm .knf{color:#e8c070;margin-left:.3em;font-size:.8em}
-.abs .unverw{font-size:.8em;color:#d8ecff;background:rgba(20,30,45,.75);padding:0 .3em;border:1px solid rgba(200,225,255,.45);border-radius:2px}.abs .laedt{opacity:.75}.abs .laedt small{font-size:.6em;opacity:.8}
+.abs .unverw{font-size:.8em;color:#d8ecff;background:rgba(20,30,45,.75);padding:0 .3em;border:1px solid rgba(200,225,255,.45);border-radius:2px}.abs .ruft{font-size:.8em;color:#ffe2b0;background:rgba(45,28,12,.78);padding:0 .3em;border:1px solid rgba(255,205,140,.5);border-radius:2px}.abs .laedt{opacity:.75}.abs .laedt small{font-size:.6em;opacity:.8}
 .hgpick .hgimg{display:block;margin:4px auto 2px;width:calc(var(--u,3px)*32);height:auto;image-rendering:pixelated}
 /* Belohnung mit Handgriff und Reliquie: etwas dichter, damit „Nichts nehmen“ ohne Scrollen sichtbar bleibt (seit Reliquien ihren Eigenschaftstext zeigen) */
 .box.reward{max-height:calc(var(--u)*264)}.box.reward .innen{padding:calc(var(--u)*4) calc(var(--u)*8)}.box.reward h3{margin:calc(var(--u)*3) 0 calc(var(--u)*1)}.box.reward .picks{margin:calc(var(--u)*2) 0}.box.reward .hgpick .hgimg{width:calc(var(--u)*24)}.box.reward .pick img{max-height:calc(var(--u)*20)}.box.reward .pick{padding:calc(var(--u)*3)}.box.reward .pick .ps{margin-top:calc(var(--u)*1)}

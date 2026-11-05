@@ -79,7 +79,7 @@
    "sprite": "formerin_a", "varianten": ["formerin_a", "formerin_b"],
    "konzept": "Die Magd, die den Lehm trat und die Kerne formte. Ab der Hüfte ist sie selbst ein Glockenkern auf der Spindel. In ihre Wölbung drückt sie Gesichter von Leuten, die nie hier waren; das jüngste hat offene Augen.",
    "stimme": "torfstecherin",
-   "kniff": {"art": "abschrift", "n": 1, "karte": "Abdruck", "why": "Sie drückt dein Gesicht in den Lehm. Der Abdruck liegt danach in deinem Stapel und tut nichts."},
+   "kniff": {"art": "abschrift", "n": 1, "karte": "Abdruck", "spr": "gipsabdruck", "why": "Sie drückt dein Gesicht in den Lehm. Der Abdruck liegt danach in deinem Stapel und tut nichts."},
    "beute": "lehmmaske", "beute_satz": "Der Kern reißt im Kühlen. In einem der Gesichter erkennst du deines, schon trocken.",
    "quelle": "skript"
   },
@@ -109,7 +109,7 @@
    "sprite": "ungetaufte", "varianten": ["ungetaufte"],
    "konzept": "Die große Glocke für St. Brendan, so hoch wie ein Haus, nie geweiht, nie hinaufgezogen. Sie hängt am Galgen über ihrer Grube, halb noch im Lehmmantel. Aus ihrem glühenden Mund hängen zwei nackte Füße, groß wie Ruderblätter.",
    "stimme": "glockenmutter",
-   "kniff": {"art": "takt", "v": 7, "why": "Wenn sie schlägt, duckt sich alles in der Halle unter den Ton. Zwischen den Schlägen summt sie offen."},
+   "kniff": {"art": "takt", "v": 7, "klang": "glocke", "why": "Wenn sie schlägt, duckt sich alles in der Halle unter den Ton. Zwischen den Schlägen summt sie offen."},
    "besonders": {"art": "ruft", "gegner": "kloeppelmann", "alle": 3},
    "beute": "handglocke", "beute_satz": "Die Kette reißt nicht. Die Glocke hängt still, und die Füße darunter auch, zum ersten Mal seit 1641.",
    "quelle": "skript"

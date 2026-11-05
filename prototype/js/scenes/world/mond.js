@@ -261,12 +261,15 @@ function rueckseite(K, cfg) {
   staubBoden(K, P, vy - 8, { lichtX: 240, krater: 10, hell: .18 });
   for (let x = -M; x < W + M; x++) { const h = Math.round(hz(x)); for (let y = vy - 10; y <= h; y++) for (const e of [K.e[2], K.e[3], K.e[4]]) e.set(x, y, 0); }
   B.feld(K.e[2], -M, vy - 12, W + M, vy + 36, STAUB.slice(7, 13), (x, y) => { const h = hz(x); return y < h || y > h + 1.4 ? -1 : .8; });
-  // Krater mit Lidern, links und rechts (nicht hinter dem Wächter)
-  const offen = Math.min(1, .25 + fr * .9);
+  // Krater mit Lidern, links und rechts (nicht hinter dem Wächter). Mit jeder Boss-Phase (K.o.phase) öffnen sie sich weiter
+  // und neue Augen gehen im Staub auf, näher am Wächter und vorn.
+  const ph = K.o.phase || 0, offen = Math.min(1, .25 + fr * .9 + ph * .35);
   bodenKrater(K, P, -4.2, 4.6, .8, { auge: true, offen, nr: 1 });
-  bodenKrater(K, P, 4.4, 5.2, .9, { auge: true, offen: Math.max(.1, offen - .2), nr: 2 });
-  bodenKrater(K, P, -5.6, 10, 1.1, { auge: true, offen: .15 + fr * .8, nr: 4 });
-  bodenKrater(K, P, 6, 11, 1.2, { auge: true, offen: .6, nr: 5 });
+  bodenKrater(K, P, 4.4, 5.2, .9, { auge: true, offen: Math.min(1, Math.max(.1, offen - .2)), nr: 2 });
+  bodenKrater(K, P, -5.6, 10, 1.1, { auge: true, offen: Math.min(1, .15 + fr * .8 + ph * .4), nr: 4 });
+  bodenKrater(K, P, 6, 11, 1.2, { auge: true, offen: Math.min(1, .6 + ph * .3), nr: 5 });
+  if (ph >= 1) { bodenKrater(K, P, -2.3, 3.4, .55, { auge: true, offen: .9, nr: 6 }); bodenKrater(K, P, 2.6, 3.7, .6, { auge: true, offen: .8, nr: 7 }); bodenKrater(K, P, 8.4, 7.2, .8, { auge: true, offen: 1, nr: 8 }); }
+  if (ph >= 2) { bodenKrater(K, P, -8.6, 6.6, .9, { auge: true, offen: 1, nr: 9 }); bodenKrater(K, P, -3.4, 7.4, .7, { auge: true, offen: 1, nr: 10 }); bodenKrater(K, P, 3.2, 8.6, .7, { auge: true, offen: 1, nr: 11 }); bodenKrater(K, P, .9, 2.6, .45, { auge: true, offen: 1, nr: 12 }); }
   bodenKrater(K, P, -2.4, 16, 1.4, { lampe: true });
   // Vordergrund: dunkle Brocken als Rahmen
   brocken(K, 5, 8, H + 10, 64, 64, 1.2); brocken(K, 5, 478, H + 8, 58, 74, 1.3);

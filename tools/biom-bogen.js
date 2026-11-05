@@ -1,5 +1,5 @@
 // Kontaktbogen eines Bioms automatisch aus den Spieldaten (auch Pakete und Ergänzungen):
-// alle Gegner und Varianten (Idle-Bild 0 und Angriffsbild 2) neben den Favoriten Chorknabe, Hirte, Netzflickerin
+// alle Gegner, die Vorraum-Elite (biom.vorraum_elite, Akt V) und Varianten (Idle-Bild 0 und Angriffsbild 2) neben den Favoriten Chorknabe, Hirte, Netzflickerin
 // auf dem Nebel des Bioms, darunter der Silhouetten-Bogen (alle Sprites schwarz gefüllt).
 // Braucht den lokalen Server (cd prototype && python3 -m http.server 8000).
 // node tools/biom-bogen.js <biom> [ordner=docs/auftrag-2/bilder/bogen] [--alle]   (--alle: jedes Biom einzeln)
@@ -10,8 +10,8 @@ const {chromium}=require('playwright');const fs=require('fs'),path=require('path
  const biome=a.includes('--alle')?await p.evaluate(()=>Object.keys(BIOMES).filter(k=>!k.startsWith('_'))):[pos[0]];
  for(const biom of biome){
   const html=await p.evaluate(async biom=>{const B=BIOMES[biom];if(!B)return null;
-   const ids=[...new Set([...(B.gegner||[]),B.waechter])].filter(id=>FOES[id]);
-   const sprites=[];for(const id of ids){const F=FOES[id];[...new Set([...(F.varianten||[F.sprite]),...((F.besonders&&F.besonders.sprites)||[])])].filter(Boolean).forEach(s=>sprites.push({id,s,n:F.n,rang:F.rang||'normal',fav:false}));}
+   const ids=[...new Set([...(B.gegner||[]),B.vorraum_elite,B.waechter])].filter(id=>id&&FOES[id]);
+   const sprites=[];for(const id of ids){const F=FOES[id];[...new Set([...(F.varianten||[F.sprite]),...((F.besonders&&F.besonders.sprites)||[])])].filter(Boolean).forEach(s=>sprites.push({id,s,n:F.n,rang:(F.rang||'normal')+(id===B.vorraum_elite?' · Vorraum-Elite':''),fav:false}));}
    const fav=['chorknabe_a','hirte_a','netzflickerin_a'].map(s=>({s,n:s.replace('_a','')+' (Favorit)',fav:true}));
    const lade=s=>new Promise(res=>{fetch('assets/gegner/'+s+'.json').then(r=>r.ok?r.json():null).then(m=>{if(!m)return res(null);const img=new Image();img.onload=()=>res({m,img});img.onerror=()=>res(null);img.src='assets/gegner/'+s+'.png';}).catch(()=>res(null));});
    const neb=(B.nebel||['#101418','#202830']);const K=2;

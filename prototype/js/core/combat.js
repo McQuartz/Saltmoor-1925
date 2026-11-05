@@ -61,7 +61,7 @@ function startTurn(){S.rxZug=passive('kette_start').reduce((s,p)=>s+(p.v||1),0);
  const bleibt=Math.min(S.vorrat||0,passive('energie_bleibt').reduce((s,p)=>s+(p.v||1),0));S.energy=energieJeZug()+bleibt;S.vorrat=0;
  S.last=[];S.played=0;S.hochUsed=new Set();S.hochZahl=0;S.turnNo=(S.turnNo||0)+1;
  drawCards(handSize());
- kniffeZugbeginn();
+ kniffeZugbeginn();ansagenZugbeginn();
  // Falsches Detail der Pforte: Im Finale kosten zufällige Karten diese Runde 1 weniger oder 1 mehr
  if(S.kampfArt==='finale'){const r=rs('pforte');S.hand.forEach(c=>{c.mod=0;if(r.chance(.35))c.mod=r.chance(.5)?-1:1;});const m=S.hand.filter(c=>c.mod);if(m.length)Bus.emit('pforte_mod',{why:`Die Regeln biegen sich: ${m.map(c=>c.n+(c.mod>0?' +1':' −1')).join(', ')}`});}
  Bus.emit('deal');Bus.emit('turn_start',{turn:S.turnNo,why:`Zug ${S.turnNo}: ${handSize()} Karten, ${S.energy} Energie`+(S.block?`, ${S.block} Block aus dem Bannkreis`:'')});Bus.emit('changed');}
@@ -219,7 +219,10 @@ function kniffeZugbeginn(){for(const en of alive())for(const k of kniffeVon(en))
  if(k.art==='einfrieren'&&S.hand.length){const c=rs('kampf').pick(S.hand);c.frost=true;Bus.emit('toast',{a:'EINGEFROREN',b:c.n});Bus.emit('kniff',{e:en,why:`${en.n} friert „${c.n}“ für diesen Zug ein`});}
  if(k.art==='teurer'){const z=S.hand.filter(c=>!c.unspielbar&&!c.teuer);if(z.length){const c=rs('kampf').pick(z);c.teuer=k.v||1;Bus.emit('toast',{a:'TEURER',b:c.n});Bus.emit('kniff',{e:en,why:`${en.n}: „${c.n}“ kostet diesen Zug ${k.v||1} mehr${k.why?' ('+k.why+')':''}`});}}
  if(k.art==='verstopfen'){for(let n=0;n<(k.n||1);n++)S.hand.push(stoerKarte(en,k));Bus.emit('kniff',{e:en,why:`${en.n} steckt ${k.n||1} unspielbare Karte(n) in deine Hand`});}}}
-function stoerKarte(en,k){return{n:k&&k.karte||en.kniff&&en.kniff.karte||'Abschrift',c:0,unspielbar:true,st:[],src:en.n,spr:'bone',cid:'stoer'+(++uidc),verbraucht:true};}
+// Störkarte eines Gegners: Name und Bild aus dem auslösenden Kniff (k.karte, k.spr), sonst aus seinem Hauptkniff, sonst „Abschrift“ mit dem alten Knochen-Sprite
+function stoerKarte(en,k){const sp=k&&k.spr||en.kniff&&en.kniff.spr||'';return{n:k&&k.karte||en.kniff&&en.kniff.karte||'Abschrift',c:0,unspielbar:true,st:[],src:en.n,spr:sp||'bone',img:stoerBild(sp),cid:'stoer'+(++uidc),verbraucht:true};}
+// Bild-Schlüssel einer Störkarte: Item-ID mit Icon (assets/items/), Handgriff-ID mit Icon (assets/handgriffe/), sonst '' (dann zeigt die Karte das 12×12-Sprite spr aus js/sprites/items.js)
+function stoerBild(sp){if(!sp)return'';if(ICONS.has(sp))return 'assets/items/'+sp+'.png';if(HG_ICONS.has(sp))return 'assets/handgriffe/'+sp+'.png';return'';}
 // nach dem eigenen Zug eines Gegners
 function kniffGegnerzug(en){for(const k of kniffeVon(en))kniffEiner(en,k);}
 function kniffEiner(en,k){const why=k.why?` (${k.why})`:'';
@@ -233,12 +236,30 @@ function kniffEiner(en,k){const why=k.why?` (${k.why})`:'';
  if(k.art==='kopie'){const c=S.vorherKarte;if(c&&!c.unspielbar){if(c.atk){gegnerTrifft(en,(c.atk+en.str)*(c.h||1),`${en.n} schreibt „${c.n}“ ab und spielt sie gegen dich`);}else if(c.blk){en.block+=c.blk;Bus.emit('enemy_block',{e:en,why:`${en.n} schreibt „${c.n}“ ab: +${c.blk} Block`});}
    Bus.emit('toast',{a:'ABGESCHRIEBEN',b:c.n});}
    if(k.n){for(let n=0;n<k.n;n++)S.discard.push(stoerKarte(en,k));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n}× „${k.karte||(en.kniff&&en.kniff.karte)||"Abschrift"}“ in deinen Ablagestapel`});}}
- if(k.art==='takt'){const v=k.v||6;if(en.turns%2===0){alive().forEach(o=>{o.block+=v;});en.schlag=true;Bus.emit('kniff',{e:en,why:`${en.n} schlägt: alle Gegner +${v} Block${why}`});Bus.emit('herzschlag',{e:en});}
+ if(k.art==='takt'){const v=k.v||6;if(en.turns%2===0){alive().forEach(o=>{o.block+=v;});en.schlag=true;Bus.emit('kniff',{e:en,why:`${en.n} schlägt: alle Gegner +${v} Block${why}`});Bus.emit('herzschlag',{e:en,klang:k.klang||'herz',why:`${en.n} schlägt im Takt (${k.klang==='glocke'?'Glockenschlag':'Herzschlag'})`});}
    else{en.schlag=false;en.vuln=Math.max(en.vuln||0,2);Bus.emit('enemy_status',{e:en,status:'vuln',why:`Zwischen den Schlägen: ${en.n} ist verwundbar (+50 % Schaden)`});}}
  if(k.art==='voraus'){const c=S.draw[S.draw.length-1]||S.discard[0];if(c&&!c.unspielbar){if(c.atk)gegnerTrifft(en,(c.atk+en.str)*(c.h||1),`${en.n} spielt deine nächste Karte „${c.n}“ vor dir`);else{const b=c.blk||5;en.block+=b;Bus.emit('enemy_block',{e:en,why:`${en.n} spielt deine nächste Karte „${c.n}“ vor dir: +${b} Block`});}Bus.emit('toast',{a:'VORAUS',b:c.n});}
    const zahl={};deckListe().forEach(x=>(x.st||[]).forEach(t=>{if(ST[t])zahl[t]=zahl[t]||0;}));(S.chainLog||[]).forEach(l=>l.st.forEach(t=>{if(t in zahl)zahl[t]++;}));
    const ks=Object.keys(zahl);if(ks.length){const min=Math.min(...ks.map(t=>zahl[t]));const w=ks.filter(t=>zahl[t]===min).sort()[0];if(en.weak!==w){en.weak=w;Bus.emit('enemy_status',{e:en,status:'schwach',why:`${en.n} ist schwach gegen den Stoff, den du am wenigsten spielst: ${ST[w].n}`});}}}
  if(k.art==='wechsel'&&k.stoffe){en.weak=k.stoffe[(en.turns+1)%k.stoffe.length];Bus.emit('enemy_status',{e:en,status:'schwach',why:`${en.n} wechselt die Schwachstelle: jetzt ${ST[en.weak].n}`});}}
+
+// ---------- Ansagen für die Anzeige (Kern-Wünsche der Biom-Agenten) ----------
+// Wen ruft dieser Gegner im kommenden Gegnerzug? Gleiche Bedingungen wie kniffEiner (Kniff ruf, vor dem Zählerschritt)
+// und specials (besonders.ruft und phasen.ruft, nach dem Zählerschritt). Liste von Gegner-IDs, höchstens so viele, wie Platz ist.
+function rufAnsage(e){if(!e||e.hp<=0)return[];const platz=4-alive().length;if(platz<=0)return[];const out=[],t=(e.turns||0)+1;
+ for(const k of kniffeVon(e))if(k.art==='ruf'&&k.gegner!=null&&(e.turns||0)%(k.alle||3)===2){const l=[].concat(k.gegner);const id=l[Math.floor((e.turns||0)/(k.alle||3))%l.length];if(FOES[id])out.push(id);}
+ const b=e.besonders;
+ if(b&&b.art==='ruft'&&FOES[b.gegner]&&t%(b.alle||3)===0)out.push(b.gegner);
+ if(b&&b.art==='phasen'&&b.ruft){const R2=typeof b.ruft==='string'?{gegner:b.ruft,alle:3,anzahl:1}:b.ruft;if(FOES[R2.gegner]&&e.phase>=1&&t%(R2.alle||3)===0)for(let k=0;k<(R2.anzahl||1);k++)out.push(R2.gegner);}
+ return out.slice(0,platz);}
+// Ist der Gegner in diesem Zug unverwundbar (Musterschritt mit unverw, so wie hit() es prüft)?
+function unverwJetzt(e){const p=e&&e.pat&&e.pat.length?e.pat[e.pi%e.pat.length]:null;return !!(p&&p.unverw);}
+// Zu Zugbeginn: Ansagen melden, die die Absicht zeigt (ruft, unverwundbar)
+function ansagenZugbeginn(){for(const e of alive()){
+ const r=rufAnsage(e);if(r.length)Bus.emit('ruf_ansage',{e,gegner:r,why:`${e.n} ruft im nächsten Gegnerzug ${r.map(id=>FOES[id].n).join(' und ')} (Absicht „ruft“)`});
+ if(unverwJetzt(e)){const p=e.pat[e.pi%e.pat.length];Bus.emit('unverw_zug',{e,why:`${e.n} ist diesen Zug unverwundbar${p.why?' ('+p.why+')':''}; die Bühne zeigt es mit kühlem Rand`});}}}
+// Phase der Wächter-Szene: höchste Boss-Phase der Wächter und Bosse im Kampf (0 = Anfang). buehne.js baut die Szene damit neu.
+function szenenPhase(){if(S.phase!=='fight'&&S.phase!=='reward')return 0;return Math.max(0,...(S.enemies||[]).filter(e=>e.rang!=='normal').map(e=>e.phase||0));}
 
 // Ein Gegner trifft dich außerhalb seines Musters (Kniffe kopie, voraus): Block fängt zuerst
 function gegnerTrifft(en,v,why){let d=Math.max(0,Math.round(v));if(en.weak2)d=Math.floor(d/2);const ab=Math.min(S.block,d);S.block-=ab;d-=ab;S.hp=Math.max(0,S.hp-d);if(S.stats){S.stats.schadenRein=(S.stats.schadenRein||0)+d;if(d>0)S.stats.todesursache=en.n;}

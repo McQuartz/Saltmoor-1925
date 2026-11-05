@@ -502,8 +502,9 @@ B.platzhalter = function (pal, nr) {
 // ---------- Öffentliche Schnittstelle ----------
 World.BIOME = ['hafen', 'moor', 'kapelle', 'salz', 'stadt', 'eis', 'pforte'];
 World.ARTEN = ['kampf', 'waechter', 'weg', 'rast', 'werkstatt', 'kraemer', 'ereignis', 'wandbild', 'fund', 'uebergang', 'strand', 'ankunft', 'titel'];
+// opt.phase (nur Wächter-Szene): Boss-Phase 0, 1, 2 … aus buehne.js; ein Biom darf seine Wächter-Szene damit je Phase verändern
 World.build = function (biom, opt) {
-  const o = Object.assign({ variante: 0, seed: 1, fremdheit: 0, art: 'kampf' }, opt || {});
+  const o = Object.assign({ variante: 0, seed: 1, fremdheit: 0, art: 'kampf', phase: 0 }, opt || {});
   o.variante = clamp(o.variante | 0, 0, 2); o.biom = World._biome[biom] ? biom : 'hafen';
   // Ein Biom darf eine Sonderszene selbst mitbringen (z. B. World._biome.ufer.ankunft), sonst gilt die gemeinsame
   if (World._spezial[o.art] && typeof World._biome[o.biom][o.art] === 'function') return World._biome[o.biom][o.art](o);
