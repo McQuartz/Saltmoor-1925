@@ -1,0 +1,740 @@
+{
+ "id": "station",
+ "akt": 2,
+ "biom": {
+  "n": "Die Station, die nie eröffnet wurde",
+  "kurz": "Station",
+  "zeit": "1925, tief unter der Stadt",
+  "anreise": "Tief unter der Stadt liegt eine Station der Untergrundbahn, fertig gekachelt, nie eröffnet. Trotzdem fahren Züge ein. Keiner fährt ab.",
+  "koerper": [
+   "#04060a",
+   "#0a0f19",
+   "#131b2a",
+   "#1f2c41"
+  ],
+  "rand": [
+   "#a83a50",
+   "#ffb4b8"
+  ],
+  "augen": "#9ff0da",
+  "nebel": [
+   "#090c12",
+   "#262e3a"
+  ],
+  "musik": "station",
+  "szene_alt": "stadt",
+  "gegner": [
+   "sperrenschaffner",
+   "wartende",
+   "streckengaenger",
+   "kachelleger"
+  ],
+  "waechter": "einfahrt",
+  "fundpool": [
+   "bahnsteigkarte",
+   "streckenlaterne",
+   "letzte_kachel",
+   "lantern",
+   "watch",
+   "compass",
+   "minerlamp",
+   "pick",
+   "shovel",
+   "musicbox",
+   "smellingsalts",
+   "uhr_ohne_zeiger"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Beamte im Fundbüro",
+   "ort": "hinter dem Schalter des Fundbüros in der Vorhalle, zwischen Regalen voller Schirme, Hüte und Koffer von 1925, unter einer Bogenlampe",
+   "zeile": "Er verkauft nichts. Fundsachen gehören jemandem. Er verleiht sie dir gegen eine Gebühr, bis zum nächsten Abschnitt; dann kommt der Eigentümer sie abholen. Er sieht dabei auf den Tunnel, als käme der gleich.",
+   "art": "leihe"
+  },
+  "uebergang": "Hinter dem letzten Bahnsteig gehst du in den Tunnel, an den Schienen entlang, die nur in eine Richtung führen. Hinter dir fährt ein Zug ein. Du hörst die Türen aufgehen. Du hörst niemanden aussteigen.",
+  "weg_hinweise": {
+   "kampf": [
+    "An der Sperre lehnt sich jemand aus seiner Kanzel und streckt dir die Zange hin.",
+    "Ein Licht kommt an den Schienen entlang, langsam, im Takt von Schritten. Ein Hammer klopft an das Eisen.",
+    "Über dem Bahnsteig hängt ein Kopf mit Hut in der Luft, weit vor dem Körper, und sieht in den Tunnel.",
+    "Jemand verfugt eine Wand, wo keine war. Das Kratzen der Kelle kommt näher."
+   ],
+   "ereignis": [
+    "Das Emailschild. Der Name darauf ist länger als gestern.",
+    "Ein Zug steht am Bahnsteig, die Türen offen. Drinnen ist ein Platz frei.",
+    "Die Ausfahrt ist zugemauert. Von der anderen Seite klopft es.",
+    "Die Treppe nach oben. Ganz oben stehen Schuhe."
+   ],
+   "wandbild": [
+    "Zwischen den Kacheln ist eine Reihe von anderer Farbe eingesetzt, und sie erzählt etwas."
+   ],
+   "kraemer": [
+    "Ein Schalter mit der Aufschrift Fundbüro. Dahinter brennt Licht, und jemand stempelt."
+   ],
+   "werkstatt": [
+    "Die Werkbank der Streckenwärter, ein Schraubstock, ein Kanister Öl, noch warm."
+   ],
+   "rast": [
+    "Das Kohlenbecken der Streckenarbeiter in der Vorhalle. Es glüht noch."
+   ],
+   "fundstelle": [
+    "Ein Koffer steht allein am Bahnsteig, gepackt, mit einem Anhänger daran."
+   ]
+  },
+  "beute_saetze": [
+   "Auf der Bahnsteiguhr ist es noch immer kurz vor der Eröffnung.",
+   "Aus dem Tunnel kommt ein Luftzug, warm, wie von etwas, das gleich einfährt.",
+   "Eine Bogenlampe summt höher und wird wieder still. Der Name auf dem Schild hat jetzt einen Buchstaben mehr.",
+   "Auf den Kacheln ist kein Fleck. Jemand hat schon aufgewischt.",
+   "Irgendwo schlagen Türen zu. Der Zug, zu dem sie gehören, fährt nicht ab.",
+   "Hinter der vermauerten Ausfahrt klopft es zweimal, höflich, wie an einer Abteiltür.",
+   "Auf dem Bahnsteig liegt ein gelochter Fahrschein. Das Loch ist frisch.",
+   "Unter den Füßen zittert der Boden, und es kommt doch kein Zug."
+  ]
+ },
+ "musik": {
+  "n": "Die Station",
+  "root": 52,
+  "key": "e-Moll",
+  "names": [
+   "Em",
+   "C",
+   "Am",
+   "B"
+  ],
+  "darkNames": [
+   "Em",
+   "F",
+   "Am",
+   "B♭9"
+  ],
+  "amb": {
+   "gaenge": 0.06,
+   "wind": 0.03,
+   "stollen": 0.03
+  },
+  "rhy": "ketten",
+  "detail": "stadt",
+  "ort": "Zugluft aus dem Tunnel, eine Bogenlampe summt; von weit her rollt etwas heran und kommt nie an",
+  "rhyN": "Schienenstöße, ta-tamm, ta-tamm, und die Kette am Signal"
+ },
+ "foes": {
+  "sperrenschaffner": {
+   "n": "Der Sperrenschaffner",
+   "biom": "station",
+   "rang": "normal",
+   "hp": 27,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 7
+    }
+   ],
+   "sprite": "sperrenschaffner_a",
+   "varianten": [
+    "sperrenschaffner_a",
+    "sperrenschaffner_b"
+   ],
+   "konzept": "Der Schaffner an der Bahnsteigsperre, eingestellt für den Tag der Eröffnung. Er steht in seiner hölzernen Kanzel und lehnt sich heraus; die Kanzel hat keine Tür, und wo seine Beine sein müssten, laufen die Bretter in seinen Mantel hinauf. Sein Unterarm endet in der Lochzange. Wer keinen Fahrschein hat, dem knipst er ihn in die Hand.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "verstopfen",
+    "n": 1,
+    "karte": "Gelocht", "spr": "bahnsteigkarte",
+    "why": "Er knipst dir den Fahrschein in die Hand. Durch das Loch fällt, was du halten wolltest."
+   },
+   "beute": "bahnsteigkarte",
+   "beute_satz": "Die Zange klappt noch ein paarmal zu, ins Leere. Auf dem Brett der Kanzel liegt ein Fahrschein mit deinem Namen, schon gelocht.",
+   "quelle": "skript"
+  },
+  "wartende": {
+   "n": "Die Wartende",
+   "biom": "station",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "wartende_a",
+   "varianten": [
+    "wartende_a",
+    "wartende_b"
+   ],
+   "konzept": "Eine Frau im Sonntagsmantel von 1925 mit Glockenhut und Schleier, die am Tag der Eröffnung jemanden abholen wollte. Bei jedem Zug, der einfährt, hat sie den Hals gereckt, um in den Tunnel zu sehen, und der Hals ist dabei lang geworden. Ihr Kopf hängt weit vor ihr in der Luft. Den Strauß hält sie noch; die Blumen hängen mit den Köpfen nach unten.",
+   "stimme": "netzflickerin",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Hinter dem Schleier sieht man nicht, was sie vorhat. Nur, dass sie wartet."
+   },
+   "beute": null,
+   "beute_satz": "Der Kopf sinkt langsam bis auf den Bahnsteig. Der Strauß liegt daneben, und eine der Blumen hat sich geöffnet.",
+   "quelle": "skript"
+  },
+  "streckengaenger": {
+   "n": "Der Streckengänger",
+   "biom": "station",
+   "rang": "normal",
+   "hp": 28,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "streckengaenger_a",
+   "varianten": [
+    "streckengaenger_a",
+    "streckengaenger_b"
+   ],
+   "konzept": "Er ging 1925 jede Nacht die Strecke ab, mit Laterne und Hammer, und klopfte an jede Schiene, ob sie klingt. Das Gleis endet an ihm: Die beiden Schienen kommen aus dem Tunnel, laufen am Boden heran und biegen an seinen Fersen nach oben; sie sind seine Beine. Er geht voraus, und seine Laterne leuchtet auf das, was als Nächstes kommt.",
+   "stimme": "salzlaeufer",
+   "kniff": {
+    "art": "voraus",
+    "why": "Er geht die Strecke vor dir ab. Was du als Nächstes ziehst, hat er schon in der Hand."
+   },
+   "beute": "streckenlaterne",
+   "beute_satz": "Die Schienen, die seine Beine waren, liegen wieder flach am Boden. Sie führen jetzt an dir vorbei, ein Stück weiter als vorhin.",
+   "quelle": "skript"
+  },
+  "kachelleger": {
+   "n": "Der Kachelleger",
+   "biom": "station",
+   "rang": "normal",
+   "hp": 30,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    }
+   ],
+   "sprite": "kachelleger_a",
+   "varianten": [
+    "kachelleger_a",
+    "kachelleger_b"
+   ],
+   "konzept": "Er hat die Station 1925 gekachelt, Wand um Wand, bis zum Tag der Eröffnung, und er hat nicht aufgehört. Die Kacheln wachsen ihm über Rücken, Schulter und Kopf, in sauberen Reihen mit Fugen, und er drückt mit der Kelle die nächste an sich selbst. Aus den Fugen kommt ein kaltes Licht, als wäre hinter ihm noch ein Raum.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "abschrift",
+    "n": 1,
+    "karte": "Kachel", "spr": "letzte_kachel",
+    "why": "Was offen ist, verfugt er. In deinem Stapel liegt eine Kachel mehr."
+   },
+   "beute": "letzte_kachel",
+   "beute_satz": "Die Kacheln fallen nicht ab. Sie liegen in Reihen auf dem Boden, als wäre er eine Wand, die umgefallen ist. In einer Fuge brennt noch Licht.",
+   "quelle": "skript"
+  },
+  "einfahrt": {
+   "n": "Der Zug, der einfährt",
+   "biom": "station",
+   "rang": "waechter",
+   "hp": 108,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "sprite": "einfahrt",
+   "varianten": [
+    "einfahrt"
+   ],
+   "konzept": "Ein Triebwagen der Untergrundbahn von 1925, der aus dem Tunnel kommt, mit gewölbtem Dach, drei Stirnfenstern und zwei Stirnlampen. Er ist voll: In jedem Fenster stehen Gesichter, die Hände flach an der Scheibe. Der Zielanzeiger zeigt den Namen der Station, und der Name ist länger als das Schild. Züge fahren hier ein. Keiner fährt ab. Wenn die Türen aufgehen, will drinnen keiner aussteigen; es greift heraus.",
+   "stimme": "wurm",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 30,
+    "why": "Einfahrt: erst das Licht im Tunnel, dann das Rauschen in den Schienen, dann der Zug."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "einfahrt_p2"
+    ],
+    "schwach": [
+     "B"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 8,
+       "h": 3
+      },
+      {
+       "t": "blk",
+       "v": 14,
+       "unverw": true,
+       "why": "Zurückbleiben! Die Türen schließen sich, und dahinter ist nichts, was man treffen kann."
+      },
+      {
+       "t": "atk",
+       "v": 20
+      },
+      {
+       "t": "buff",
+       "v": 3
+      },
+      {
+       "t": "atk",
+       "v": 5,
+       "h": 4
+      }
+     ]
+    ],
+    "ruft": {
+     "gegner": "wartende",
+     "alle": 3,
+     "anzahl": 1
+    }
+   },
+   "beute": "stirnlampe",
+   "beute_satz": "Die Türen schließen sich, und zum ersten Mal fährt ein Zug ab. Er fährt rückwärts in den Tunnel, und die Gesichter an den Scheiben sehen dir nach, bis die Stirnlampen klein werden. Eine bleibt auf den Schienen liegen und brennt.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "station_schild",
+   "t": "Das Schild",
+   "d": "Über dem Gleis hängt das Emailschild mit dem Namen der Station, weiß auf blau, eingebrannt. Dann geht der Name weiter, mit dem Pinsel auf die Kacheln gemalt, und der letzte Buchstabe ist noch nass. Gestern war er kürzer, sagt jemand hinter dir. Als du dich umdrehst, ist der Bahnsteig leer.",
+   "bild": "Ein langes blaues Emailschild auf weißen Kacheln unter einer Bogenlampe; rechts davon geht die Schrift mit weißer Farbe auf den Kacheln weiter, ein Farbtropfen läuft herab.",
+   "o": [
+    {
+     "l": "Den Namen bis zum Ende lesen: einen seltenen Handgriff lernen, −5 max. Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "rar": "selten"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Den nassen Buchstaben abwischen: eine Karte kostet dauerhaft 1 weniger, −7 Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ],
+     "if": {
+      "hp_min": 8
+     }
+    },
+    {
+     "l": "Nicht hinsehen und weitergehen: +5 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "station_zug",
+   "t": "Der volle Zug",
+   "d": "Ein Zug steht am Bahnsteig, die Türen offen. Alle Plätze sind besetzt, nur einer ist frei, und auf dem Sitz liegt eine Fahrkarte. Die Fahrgäste sehen dich nicht an. Sie sehen alle nach vorn, zur Stirn des Zugs, und die Stirn steht an einer Mauer.",
+   "bild": "Die offene Tür eines Wagens, drinnen eine Reihe sitzender Gestalten im trüben Licht, alle mit dem Gesicht in dieselbe Richtung; in der Mitte ein leerer Sitz mit einem hellen Fahrschein.",
+   "o": [
+    {
+     "l": "Einsteigen und sitzen bleiben, bis die Türen schließen: eine zufällige Reliquie, −10 max. Leben",
+     "fx": [
+      {
+       "op": "reliquie"
+      },
+      {
+       "op": "max_hp",
+       "v": -10
+      }
+     ]
+    },
+    {
+     "l": "Die Fahrkarte aus dem Nachtzug daneben legen, sie ist dieselbe: +1 Kerbe an einem Item, eine Reaktion entdecken",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "discover"
+      }
+     ],
+     "if": {
+      "event_gesehen": "nachtzug_fahrkarte"
+     }
+    },
+    {
+     "l": "Die Fahrkarte nehmen und rückwärts aussteigen: die Bahnsteigkarte",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "bahnsteigkarte"
+      }
+     ]
+    },
+    {
+     "l": "Weitergehen: nichts",
+     "fx": []
+    }
+   ]
+  },
+  {
+   "id": "station_sperre",
+   "t": "Die Sperre",
+   "d": "Die Kanzel an der Sperre ist leer. Auf dem Brett liegt die Lochzange, und daneben, ordentlich gestapelt, Fahrscheine, jeder einmal gelocht. Das ausgestanzte Papier liegt in einer Schale, ein kleiner weißer Berg. In manchen Plättchen ist ein Muster wie von Fingerkuppen.",
+   "bild": "Eine leere hölzerne Kanzel mit einer Lampe am Schwanenhals; auf dem Brett eine Zange, ein Stapel Fahrscheine und eine Schale mit weißen Papierplättchen.",
+   "o": [
+    {
+     "l": "Dir selbst einen Fahrschein in die Hand knipsen: +1 Kerbe an einem Item, −6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 7
+     }
+    },
+    {
+     "l": "Die Fahrscheine durchsehen: +24 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 24
+      }
+     ]
+    },
+    {
+     "l": "Die Zange mitnehmen: Kampf gegen den Sperrenschaffner, ein seltenes Item",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "sperrenschaffner"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "station_mauer",
+   "t": "Die Ausfahrt",
+   "d": "Der Tunnel der Ausfahrt ist zugemauert. Der Mörtel ist aus jeder Fuge gequollen und so getrocknet, nach außen, zu dir hin: Man hat von innen gemauert. Die Gleise laufen unter der untersten Reihe weiter. Hinter den Ziegeln klopft es, zweimal, höflich.",
+   "bild": "Ein gekachelter Rundbogen, darin eine Ziegelmauer mit hervorgequollenem Mörtel in jeder Fuge; die Schienen verschwinden unter der Mauer, darüber eine einzelne Lampe.",
+   "o": [
+    {
+     "l": "Zurückklopfen, zweimal: einen seltenen Handgriff lernen, −6 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "rar": "selten"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 7
+     }
+    },
+    {
+     "l": "Mit der Spitzhacke einen Ziegel lösen und hindurchsehen: eine zufällige Reliquie, −10 max. Leben",
+     "fx": [
+      {
+       "op": "reliquie"
+      },
+      {
+       "op": "max_hp",
+       "v": -10
+      }
+     ],
+     "if": {
+      "item": "pick"
+     }
+    },
+    {
+     "l": "Den Mörtel zurück in die Fugen drücken: die letzte Kachel, −4 max. Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "letzte_kachel"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Gehen, bevor es ein drittes Mal klopft: nichts",
+     "fx": []
+    }
+   ]
+  },
+  {
+   "id": "station_bank",
+   "t": "Die Wartenden",
+   "d": "Auf der Bank sitzen drei und warten: eine Frau mit trockenen Blumen, ein Herr mit Hut, ein Kind. Sie rücken zusammen, damit du sitzen kannst. Keiner spricht. Wenn ein Zug einfährt, recken sie die Hälse zum Tunnel, und die Hälse sind zu lang.",
+   "bild": "Eine Holzbank vor der Kachelwand, darauf drei dunkle Gestalten, deren Köpfe an langen Hälsen weit nach links in die Luft ragen; links der helle Tunnelmund.",
+   "o": [
+    {
+     "l": "Dich dazusetzen und mitwarten: volle Heilung, −4 max. Leben",
+     "fx": [
+      {
+       "op": "full_heal"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Fragen, auf wen sie warten. Sie zeigen auf dich: einen Handgriff lernen",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      }
+     ]
+    },
+    {
+     "l": "Das Kind erkennen; es stand im Waisenhaus in der Reihe: +1 Kerbe an einem Item, +15 Gold",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "gold",
+       "v": 15
+      }
+     ],
+     "if": {
+      "event_gesehen": "waisenhaus_reihe"
+     }
+    }
+   ]
+  },
+  {
+   "id": "station_treppe",
+   "t": "Die Treppe nach oben",
+   "d": "Aus der Vorhalle führt eine breite Treppe nach oben, sechsundzwanzig Stufen, und endet an der Decke. Auf der obersten Stufe stehen Schuhe, viele Paare, ordentlich nebeneinander, alle mit den Spitzen zur Decke. Die Decke ist warm. Oben geht jemand.",
+   "bild": "Eine breite gekachelte Treppe, die oben an einer Betondecke endet; auf der letzten Stufe eine Reihe Schuhe im Licht einer Lampe.",
+   "o": [
+    {
+     "l": "Die Hand an die Decke legen: eine Reaktion entdecken, +1 Kerbe an einem Item, −6 max. Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ]
+    },
+    {
+     "l": "Deine Schuhe dazustellen: ein Item gegen ein anderes tauschen",
+     "fx": [
+      {
+       "op": "item_tausch"
+      }
+     ]
+    },
+    {
+     "l": "Wieder hinuntergehen: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "bahnsteigkarte": {
+   "n": "Die Bahnsteigkarte",
+   "a": "talisman",
+   "st": [
+    "G"
+   ],
+   "spr": "tarot",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 20,
+   "flavor": "Gültig zum Betreten des Bahnsteigs, nicht zur Fahrt. Gelocht am Tag der Eröffnung, den es nicht gab.",
+   "cards": [
+    {
+     "n": "Warten",
+     "c": 1,
+     "blk": 6,
+     "behalten": true
+    }
+   ]
+  },
+  "streckenlaterne": {
+   "n": "Die Streckenlaterne",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "lantern",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "hand_plus",
+    "v": 1,
+    "t": "+1 Karte auf der Hand: Du siehst ein Stück weiter, als das Gleis reicht."
+   },
+   "flavor": "Ein Blechgehäuse mit grünem und weißem Glas. Das Licht darin ist kalt, und es zeigt immer ein paar Schwellen voraus.",
+   "cards": [
+    {
+     "n": "Ableuchten",
+     "c": 1,
+     "atk": 3,
+     "vuln": 1,
+     "draw": 1
+    }
+   ]
+  },
+  "letzte_kachel": {
+   "n": "Die letzte Kachel",
+   "a": "kleidung",
+   "st": [
+    "S"
+   ],
+   "spr": "shell",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "ballast_block",
+    "v": 2,
+    "ballast_start": 2,
+    "ballast_karte": "Kachel",
+    "t": "Zu Kampfbeginn 2 Kacheln in deinen Stapel. Am Ende deines Zugs 2 Block je unspielbare Karte auf der Hand."
+   },
+   "flavor": "Weiß glasiert, auf der Rückseite noch der Mörtel. Sie passt in jede Lücke, auch in die, die du nicht hast.",
+   "cards": [
+    {
+     "n": "Verfugen",
+     "c": 1,
+     "blk": 7
+    }
+   ]
+  },
+  "stirnlampe": {
+   "n": "Die Stirnlampe",
+   "a": "talisman",
+   "st": [
+    "E"
+   ],
+   "spr": "minerlamp",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 140,
+   "eigen": {
+    "typ": "mehrfach_plus1",
+    "t": "Angriffe mit mehreren Treffern treffen einmal mehr: Schienenstoß um Schienenstoß."
+   },
+   "flavor": "Die Lampe eines Triebwagens, der zum ersten Mal abgefahren ist. Sie brennt ohne Strom, und wohin du sie richtest, kommt etwas näher.",
+   "cards": [
+    {
+     "n": "Einfahrt",
+     "c": 2,
+     "atk": 2,
+     "h": 3,
+     "all": true
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/station.js"
+ ]
+}

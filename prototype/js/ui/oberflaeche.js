@@ -78,7 +78,7 @@ function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.s
  if(self.length)rxl+=`<div class="rx in">IN SICH: ${self.map(r=>known(r)?r.n.toUpperCase():'???').join(' + ')}</div>`;
  const rot=((i*37)%5-2)*1.3+(i-(n-1)/2)*.6,dy=((i*53)%3)*1.2;
  return `<div class="karte ${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''}" data-card="${i}" style="--r:${rot.toFixed(1)}deg;--dy:${dy}px;${dealAnim?`animation-delay:${i*60}ms`:'animation:none'}">
-  <div class="kost${c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?' hoch':' tief'):''}"><span>${cost}</span></div><div class="kst">${c.st.map(k=>gi(k,KZ())).join('')}</div>
+  <div class="kost${c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?' hoch':' tief'):''}"><span>${cost>=99?'–':cost}</span></div><div class="kst">${c.st.map(k=>gi(k,KZ())).join('')}</div>
   <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen"><img src="${c.img||spr(c.spr)}" alt="">${c.hg?'<span class="hgm" title="Handgriff">✋</span>':''}${c.schliff?'<span class="schl" title="geschliffen">◇</span>':''}</div>
   <div class="kt">${esc(cardText(c))}</div>${rxl}</div>`;}
 // Stoffrad: in der Mitte der zuletzt gespielte Stoff, Linien nur zu Stoffen, die jetzt reagieren

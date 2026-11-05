@@ -16,7 +16,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M7 Biome Akt III bis V | fertig | Wald, Gezeitenwerk (Akt III), Walkathedrale, Glasmeer (Akt IV), Ufer unten, Pforte neu, Finale neu (Akt V); neue Gegner Salz, Stadt, Eis; alle Noten 4. Kern: Kniffe teurer/kopie/takt/voraus/verborgen, Pendel, Tausch-/Leih-/Spiegel-Krämer, Vorgänger, Ergänzungspakete |
 | M8 Ereignisse und Balance | fertig | ≥5 Ereignisse je Biom, 15 biomübergreifende, Test aller Wahlen; Builds 44–72 % (Ø 59 %), generischer Bot 65 %, kein Akt über 35 % der Niederlagen; Kampf Ø 4,1–4,5 Züge |
 | M9 Abschluss | fertig | Geklickter Run (40 Stationen), Galerie und Artboard erweitert, Bericht unten |
-| Zugabe | läuft | Punkte 1–4 der Liste erledigt, dazu drei weitere Biome: Waisenhaus am Deich (II), Funkstation am Pol (IV), Die Waage am Grund (V, mit Elite und Finale-Szene). Jetzt 24 Biome, alle Note 4; alle 151 Ereignisse mit Bild; 8 Builds 40–62 %; Akt V mit Ereignis-Knoten |
+| Zugabe | läuft | Punkte 1–4 der Liste erledigt, dazu drei weitere Biome: Waisenhaus am Deich (II), Funkstation am Pol (IV), Die Waage am Grund (V, mit Elite und Finale-Szene). Dazu die Station, die nie eröffnet wurde (III). Jetzt 25 Biome, alle Note 4; alle 157 Ereignisse mit Bild; 8 Builds 40–62 %; Akt V mit Ereignis-Knoten |
 
 ## Einträge je Meilenstein
 
@@ -217,6 +217,9 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Funkstation: Funker, Telegrafistin, Mastkletterer, Rauschen (neu) | Funkstation | 4 (nach Rückmeldung: kaltes Randlicht statt Sepia, im Kampf vorher 3,5) | [Zugabe](bilder/Zugabe/funkstation/im-spiel-kampf-alle-vier.png) |
 | Der Sender, zwei Phasen, Funkstille unverwundbar (Wächter, neu) | Funkstation | 4 (vor heller Fensterwand klar) | [Zugabe](bilder/Zugabe/funkstation/im-spiel-waechter-p2.png) |
 | Hintergrund Funkstation (Mast, Funkraum, Eisloch, Senderaum) + 6 Ereignisbilder | Funkstation | 4 (Funkraum jetzt karger, dafür ruhig hinter den Gegnern) | [Zugabe](bilder/Zugabe/funkstation/hintergrund-varianten.png) |
+| Station: Sperrenschaffner, Wartende, Streckengänger, Kachelleger (neu) | Station | 4 (rosa-rotes Randlicht vor kalten Kacheln, im Kampf klar) | [Zugabe](bilder/Zugabe/station/im-spiel-kampf-alle-vier-v1.png) |
+| Der Zug, der einfährt, zwei Phasen, Türen schließen = unverwundbar (Wächter, neu) | Station | 4 (vor ruhigem Tunnellicht; Phase 2 mit Armen aus den Türen stark) | [Zugabe](bilder/Zugabe/station/im-spiel-waechter-p2.png) |
+| Hintergrund Station (Gleiswand, Zug am Bahnsteig, Vorhalle, Tunnelmund) + 6 Ereignisbilder | Station | 4 (Variante 1 hinter den Köpfen am unruhigsten) | [Zugabe](bilder/Zugabe/station/hintergrund-varianten.png) |
 | Waisenhaus: Nachtschwester, Turnlehrer, Zugedecktes, Zwillinge (neu) | Waisenhaus | 4 (nach Rückmeldung: warmes rotes Randlicht statt Kalkweiß, im Kampf vorher 3,5) | [Zugabe](bilder/Zugabe/waisenhaus/im-spiel-kampf-alle-vier.png) |
 | Die Heimleiterin mit der Kinderreihe (Wächter, neu) | Waisenhaus | 4 (dunkel vor hellem Bogenfenster) | [Zugabe](bilder/Zugabe/waisenhaus/im-spiel-waechter.png) |
 | Hintergrund Waisenhaus (Schlafsaal, Flur der Nummern, Turnsaal, Halle) + 6 Ereignisbilder | Waisenhaus | 4 | [Zugabe](bilder/Zugabe/waisenhaus/hintergrund-varianten.png) |
