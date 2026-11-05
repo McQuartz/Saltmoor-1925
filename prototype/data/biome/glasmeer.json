@@ -122,20 +122,21 @@
    "n": "Der Glasschwimmer",
    "biom": "glasmeer",
    "rang": "normal",
-   "hp": 16,
+   "hp": 26,
    "weak": "W",
    "pat": [
     {
      "t": "atk",
-     "v": 5
+     "v": 8
     },
     {
      "t": "blk",
-     "v": 6
+     "v": 8
     },
     {
      "t": "atk",
-     "v": 3
+     "v": 4,
+     "h": 2
     }
    ],
    "sprite": "glasschwimmer_a",
@@ -148,7 +149,7 @@
    "kniff": {
     "art": "ansage",
     "zuege": 2,
-    "v": 12,
+    "v": 20,
     "why": "Er taucht ab, zwei Züge lang siehst du nur seine Bahn im Glas. Dann holt er Luft, direkt vor dir."
    },
    "beute": "glasscherbe",
@@ -159,20 +160,21 @@
    "n": "Der Splitterchor",
    "biom": "glasmeer",
    "rang": "normal",
-   "hp": 13,
+   "hp": 24,
    "weak": "L",
    "pat": [
     {
      "t": "atk",
-     "v": 3
+     "v": 3,
+     "h": 3
     },
     {
      "t": "blk",
-     "v": 6
+     "v": 8
     },
     {
      "t": "atk",
-     "v": 5
+     "v": 9
     }
    ],
    "sprite": "splitterchor_a",
@@ -196,20 +198,25 @@
    "n": "Der Vorhergehende",
    "biom": "glasmeer",
    "rang": "normal",
-   "hp": 15,
+   "hp": 28,
    "weak": "V",
    "pat": [
     {
      "t": "atk",
-     "v": 5
-    },
-    {
-     "t": "blk",
-     "v": 6
+     "v": 9
     },
     {
      "t": "atk",
-     "v": 3
+     "v": 5,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 9
+    },
+    {
+     "t": "buff",
+     "v": 2
     }
    ],
    "sprite": "vorhergehende_a",
@@ -231,21 +238,21 @@
    "n": "Der Leithund",
    "biom": "glasmeer",
    "rang": "normal",
-   "hp": 13,
+   "hp": 22,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 4
-    },
-    {
-     "t": "blk",
-     "v": 5
+     "v": 3,
+     "h": 3
     },
     {
      "t": "atk",
-     "v": 2,
-     "h": 2
+     "v": 8
+    },
+    {
+     "t": "blk",
+     "v": 7
     }
    ],
    "sprite": "leithund_a",
@@ -257,7 +264,7 @@
    "stimme": "nest",
    "kniff": {
     "art": "dornen",
-    "v": 2,
+    "v": 3,
     "why": "Sein Fell ist Glas und steht gegen den Strich. Wer oft zuschlägt, schneidet sich oft."
    },
    "beute": "polarlicht",
@@ -268,20 +275,20 @@
    "n": "Der Voraus",
    "biom": "glasmeer",
    "rang": "waechter",
-   "hp": 64,
+   "hp": 72,
    "weak": "L",
    "pat": [
     {
      "t": "atk",
-     "v": 7
-    },
-    {
-     "t": "blk",
      "v": 10
     },
     {
+     "t": "blk",
+     "v": 12
+    },
+    {
      "t": "atk",
-     "v": 3,
+     "v": 4,
      "h": 3
     },
     {
@@ -290,7 +297,7 @@
     },
     {
      "t": "atk",
-     "v": 10
+     "v": 14
     }
    ],
    "sprite": "voraus",
