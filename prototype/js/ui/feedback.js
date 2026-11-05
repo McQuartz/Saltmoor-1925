@@ -67,7 +67,7 @@ Bus.on('reaction',({r,k,isNew,keys,live,hoch})=>{if(FAST)return;
  if(hoch){FX.flash(ST[keys[0]].c,.35);FX.shake(8);sfx.hoch();zwischentitel(r.n.toUpperCase()+'!');}else sfx.react(k);
  toast((hoch?'HOCHREAKTION · ':'')+r.n.toUpperCase()+(isNew?' · NEU':''),keys.map(k2=>gi(k2,16)).join(' + ')+' '+esc(r.t),hoch);
  if(isNew)setTimeout(sfx.disc,150);if(typeof Music!=='undefined'&&audioOn)try{Music.reaction(hoch);}catch(x){}});
-Bus.on('boss_phase',({e})=>{FX.flash('#ff6ad8',.3);FX.shake(10);toast('DAS, WAS RUFT','verändert sich',true);});
+Bus.on('boss_phase',({e})=>{FX.flash('#ff6ad8',.3);FX.shake(10);toast(String(e.n||'').toUpperCase(),'verändert sich',true);});
 Bus.on('victory',()=>{sfx.win();if(typeof Music!=='undefined'&&audioOn)try{Music.victory();}catch(x){}});
 Bus.on('forged',({name})=>{sfx.forge();toast('VERBESSERT',name);});
 Bus.on('game_over',()=>{sfx.die();if(typeof Music!=='undefined'&&audioOn)try{Music.niederlage?Music.niederlage():Music.scene('menu');}catch(x){}});

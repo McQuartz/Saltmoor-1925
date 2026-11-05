@@ -150,6 +150,12 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Der Leithund | Glasmeer | 4 | [M7](bilder/M7/glasmeer/kontakt.png) |
 | Der Voraus (Wächter) | Glasmeer | 4 (stärkste Figur des Pakets) | [M7](bilder/M7/glasmeer/im-spiel-waechter.png) |
 | Hintergrund Glasmeer (3 Varianten, Spiegelwand) | Glasmeer | 4 (Bruchkante sehr grün) | [M7](bilder/M7/glasmeer/varianten.png) |
+| Der Holzfäller der Legion | Wald | 4 (Jahresringe im Gesicht erst nah sichtbar) | [M7](bilder/M7/wald/kontakt-neben-favoriten.png) |
+| Der Steinhirsch | Wald | 4 | [M7](bilder/M7/wald/kontakt-neben-favoriten.png) |
+| Der Harzfang | Wald | 4 | [M7](bilder/M7/wald/kontakt-neben-favoriten.png) |
+| Die Bernsteinlarve | Wald | 4 | [M7](bilder/M7/wald/kontakt-neben-favoriten.png) |
+| Der Wurzelstock (Wächter, 3 Phasen) | Wald | 4 knapp: Kopf geht oben im Geäst unter, Gesicht und Augen tragen | [M7](bilder/M7/wald/im-spiel-waechter.png) |
+| Hintergrund Wald (3 Varianten, Wurzelgewölbe) | Wald | 4 | [M7](bilder/M7/wald/hintergrund-varianten.png) |
 | Der Mann im Salz (neu) | Salz | 4 (Rumpf dunkel) | [M7](bilder/M7/alte-biome/salz-bogen.png) |
 | Der Vermesser (neu) | Stadt | 4 (Varianten ähnlich) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
 | Der aus dem Relief (neu) | Stadt | 4 (stärkstes Bild der Ergänzungen) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
