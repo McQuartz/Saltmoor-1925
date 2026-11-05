@@ -1,7 +1,8 @@
 // Auftrag 2, M4/M8: Build-Bots. Je Archetyp ein Autospieler, der dessen Items, Handgriffe und Stoffe bevorzugt.
 // Profile aus prototype/data/builds.json (erzeugt aus docs/auftrag-2/builds.md). node tools/build-bots.js [seeds=20] [startSeed=1] [build]
 const {ladeKern}=require('./kern');const fs=require('fs'),path=require('path');
-(async()=>{const a=process.argv.slice(2);const n=+(a[0]||20),s0=+(a[1]||1),nur=a[2];const K=ladeKern();await K.init();
+(async()=>{const a=process.argv.slice(2);const pos=a.filter(x=>!x.startsWith('--'));const n=+(pos[0]||20),s0=+(pos[1]||1),nur=pos[2];const K=ladeKern();await K.init();
+ for(const x of a.filter(x=>x.startsWith('--set=')))K.run(x.slice(6)); // Werte nur für diesen Lauf (wie balance.js)
  const P=JSON.parse(fs.readFileSync(path.join(__dirname,'../prototype/data/builds.json'),'utf8')).builds;
  const zeilen=[];
  for(const [id,p] of Object.entries(P)){if(nur&&nur!==id)continue;const jobs=p.figuren&&p.figuren.length?p.figuren:K.get('JOBS').slice(0,6).map(j=>j.id);

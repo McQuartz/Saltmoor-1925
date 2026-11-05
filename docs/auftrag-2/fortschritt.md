@@ -175,6 +175,7 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 
 | Datum | Meilenstein | Entscheidung | Grund |
 |---|---|---|---|
+| 2026-11-05 | M8 | Gerufene Gegner rufen selbst niemanden mehr | Der Lotse rief Tieflinge, die selbst Tieflinge riefen: der Tiefling war bei 21 von 30 Niederlagen am Leben, der Hafen verursachte 23 % aller Niederlagen; danach 7 % |
 | 2026-11-05 | M7 | Pforte neu als gespiegelter Hafen am Meeresgrund, Finale neu gezeichnet und leichter abgestimmt (`ruft` 280 Leben, Ø 10,3 Züge, 72 % überstanden); Boss mit Skala 0,92, damit die Krone nicht oben anstößt | Mo fand die alte Pforte zu sehr nach Science-Fiction; Auftrag: Finale lesbarer, Kampf 8–12 Züge. Die „über 40 % der Niederlagen“ ließen sich mit dem heutigen Bot nicht nachstellen (jetzt 11 %) |
 | 2026-11-05 | M7 | Ufer: eigene Ankunft-Szene und eigener Ankunftssatz je Biom, Elite-Größe 128 × 160 in der Prüfung, der Vorgänger trägt ohne gespeicherten Run zusätzlich einen Fund je früherem Akt | Vorschläge des Ufer-Agenten; vorher zeigte jedes Biom die Ankunft der Pforte, und im Test war die Elite zu schwach |
 | 2026-11-05 | M7 | Vorschläge der Walkathedrale (Verwundbar am Spieler, Kniff `frisst`, Szene pulsiert synchron zum Herzschlag) vorerst nicht umgesetzt; der Herzschlag ist dafür hörbar und sichtbar | Jeder Vorschlag braucht neues System (Spieler-Zustand, Bild-Haken); Kandidaten für die Zugabe |
