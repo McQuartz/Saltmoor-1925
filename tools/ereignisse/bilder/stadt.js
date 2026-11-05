@@ -14,15 +14,48 @@ const DUNKEL = ['#000000', '#030101', '#060202', '#0a0404'];
 function quader(B, zh, bw, s) {
   return (x, y) => { const row = Math.floor(y / zh), xx = x + B.hash(row, 0, s || 1) * bw; return (y % zh === 0 ? -.6 : 0) + ((Math.floor(xx) % bw) === 0 ? -.5 : 0) + (B.hash(Math.floor(xx / bw), row, 5) - .5) * .4; };
 }
-// Wand aus breiten Quadern als Feld, mit Lichtfunktion lic(x,y) 0..1
-function steinwand(K, x0, y0, x1, y1, lic, o) {
-  o = o || {}; const { B } = K, q = quader(B, o.zh || 7, o.bw || 34, K.seed);
-  K.feld(x0, y0, x1, y1, STEIN, (x, y) => (o.maske && !o.maske(x, y)) ? -1 : (o.basis === undefined ? .12 : o.basis) + lic(x, y) * .7 + q(x, y) * .12 + (B.fbm(x * .1, y * .1, K.seed, 2) - .5) * .06);
+// Ruhige Rampe: t (0..1) rastet auf Rampenstufen ein, gedithert wird nur in einem schmalen Übergang.
+// So bleiben große Flächen fast flach und das Motiv steht vorn.
+function ruhig(t, n, b) {
+  const f = Math.max(0, Math.min(.9999, t)) * n, k = Math.floor(f), fr = f - k, w = b === undefined ? .18 : b;
+  return (k + (fr < .5 - w ? 0 : fr > .5 + w ? 1 : (fr - (.5 - w)) / (2 * w))) / n;
 }
-// Sandboden in Aufsicht mit Lichtfunktion
+// Wand aus breiten Quadern als Feld, mit Lichtfunktion lic(x,y) 0..1 (ruhig gestuft, Fugen als Linien)
+function steinwand(K, x0, y0, x1, y1, lic, o) {
+  o = o || {}; const { B } = K, zh = o.zh || 7, bw = o.bw || 34;
+  K.feld(x0, y0, x1, y1, STEIN, (x, y) => {
+    if (o.maske && !o.maske(x, y)) return -1;
+    const row = Math.floor(y / zh), xx = x + B.hash(row, 0, K.seed) * bw, fuge = y % zh === 0 || Math.floor(xx) % bw === 0;
+    const t = ruhig((o.basis === undefined ? .12 : o.basis) + lic(x, y) * .7 + (B.hash(Math.floor(xx / bw), row, 5) - .5) * .05, STEIN.length - 1);
+    return fuge ? t - .5 / (STEIN.length - 1) : t;
+  });
+}
+// Sandboden in Aufsicht mit Lichtfunktion (ruhig gestuft)
 function sandboden(K, y0, y1, lic, o) {
   o = o || {}; const { B } = K;
-  K.feld(o.x0 || 0, y0, o.x1 || 160, y1, SAND, (x, y) => (o.maske && !o.maske(x, y)) ? -1 : .02 + lic(x, y) * .85 + (B.fbm(x * .05, y * .3, K.seed + 3, 2) - .5) * .12 + (o.tf ? o.tf(x, y) : 0));
+  K.feld(o.x0 || 0, y0, o.x1 || 160, y1, SAND, (x, y) => (o.maske && !o.maske(x, y)) ? -1 : ruhig(.02 + lic(x, y) * .85 + (o.tf ? o.tf(x, y) : 0), SAND.length - 1) + (B.hash(x, y, 7) > .97 ? .12 : 0));
+}
+// Kerze (Expedition): Stummel, Flamme, Lichthof; die eine helle Stelle. Fuß (x, yb)
+function kerze(K, x, yb, o) {
+  o = o || {}; const m = K.maske(); m.rect(x - 1.5, yb - 5, 3, 5); m.ell(x, yb, 3, 1);
+  K.flamme(x, yb - 5, { gross: 2, hof: o.hof || 60, hofFarbe: '#5a2a0c', staerke: o.staerke || .95, ohne: o.ohne });
+  K.form(m, 0, { k: ['#4a3a2a', '#8a7a60', '#c8b890', '#e8dcc0'], r: [], ton: 2.4, fase: 0, rand: 0, verlaufX: -1.6 });
+  K.lichtquelle(x, yb - 7);
+  return [x, yb - 7];
+}
+// Handlaterne: runder Glaskolben, dunkle Kappe, Bügel (kein Kasten). Fuß (x, yb), Größe s
+function handlampe(K, x, yb, s, o) {
+  o = o || {}; const m = K.maske();
+  m.rect(x - 2.6 * s, yb - 1.4 * s, 5.2 * s, 1.4 * s); m.poly([[x - 2.2 * s, yb - 7.4 * s], [x + 2.2 * s, yb - 7.4 * s], [x, yb - 9.4 * s]]);
+  m.kap(x - 2 * s, yb - 9 * s, x, yb - 12 * s, .5, .5); m.kap(x, yb - 12 * s, x + 2 * s, yb - 9 * s, .5, .5);
+  const gx = x, gy = yb - 4.4 * s;
+  K.licht(gx, gy, o.hof || 50 * s, '#5a2a0c', o.staerke || .9, { ohne: o.ohne });
+  K.licht(gx, gy, 7 * s, '#3a1806', 1);
+  K.form(m, 0, { k: ['#060302', '#120806', '#241410'], r: WARM, ton: 1.2, fase: 0, rand: 1, L: [0, 1] });
+  const g = K.maske(); g.ell(gx, gy, 2.3 * s, 3 * s);
+  K.feld(g.x0, g.y0, g.x1 + 1, g.y1 + 1, ['#a06a20', '#ffd27a', '#fff0c0'], (px, py) => g.has(px, py) ? 1 - Math.hypot(px - gx, (py - gy) * .8) / (2.6 * s) : -1);
+  K.lichtquelle(gx, gy);
+  return [gx, gy];
 }
 const lichtF = (lx, ly, r, ov, ex) => (x, y) => Math.pow(Math.max(0, 1 - Math.hypot(x - lx, (y - ly) * (ov || 1)) / r), ex || 1.4);
 // Kriechende Gestalt mit zu vielen Gelenken (Relief): auf allen vieren, Kopf tief vorn,
@@ -72,7 +105,7 @@ module.exports = {
       K.form(fell, 0, { k: FELL, r: [], ton: 3.2, fase: 0, rand: 0, verlaufX: -2.6, muster: (x, y) => { const d = Math.hypot((x - tx) / 4.8, (y - ty + hz)); return (d % 1.6 < .5 ? .45 : 0); } });
       // springende Sandkörner über dem bebenden Fell
       for (let i = 0; i < 14; i++) { const x = tx + K.r.f(-24, 18), y = ty - hz - K.r.f(1, 5); K.set(x, y, K.r() < .5 ? SAND[5] : SAND[4]); }
-      K.laterne(lx, ly + 6, 1, { hof: 70, staerke: .8 });
+      handlampe(K, lx, ly + 6, 1.3, { hof: 80 });
       K.vignette(.65, { cx: 84, cy: 58 });
     },
 
@@ -103,112 +136,114 @@ module.exports = {
       for (let i = 0; i < 3; i++) { K.schrift(105, 75 + i * 2, 114, '#3a2a1e', { min: 1, max: 3 }); K.schrift(117, 75 + i * 2, 126, '#3a2a1e', { min: 1, max: 3 }); }
       K.linie(118, 82, 130, 84, '#3a2a1a'); K.set(130, 84, '#8a7a60');
       // Die Lampe der Expedition
-      K.laterne(lx, ly + 12, 1.25, { hof: 64, staerke: .85 });
+      handlampe(K, lx, ly + 12, 1.4, { hof: 80 });
       K.vignette(.7, { cx: 90, cy: 52 });
     },
 
     // Eine riesige Halle, in der der Sand in langen Fahnen in einen Abgrund gezogen wird, davor eine kleine Gestalt mit flatterndem Mantel.
     stadt_wind(K) {
       const { B } = K;
-      const fx = 42, fy = 74;   // Gestalt am Rand des Abgrunds, Laterne in der Hand
-      const ax = 104, ay = 70, arx = 46, ary = 11;   // der Abgrund im Boden
-      // Halle: Rotschwarz, riesige Pfeiler bis in die Dunkelheit
-      K.fuell(['#020101', '#060202', '#0c0504', '#140806', '#1e0c08'], (x, y) => .12 + (y / 90) * .3 + (B.fbm(x * .03, y * .05, K.seed, 2) - .5) * .1);
-      // fernes Rotglühen hinter den Pfeilern, damit sie als Silhouetten stehen
-      K.licht(100, 30, 90, '#4a1c0c', 1, { oval: .7, exp: 1.2 });
-      for (const [px, w] of [[22, 22], [72, 16], [130, 20], [160, 14]]) {
-        const p = K.maske(); p.rect(px - w / 2, 0, w, 58); K.form(p, 0, { k: ['#040202', '#080303', '#0e0505', '#160807'], r: ['#4a1c10', '#6a2a18'], ton: 1.4, fase: 0, rand: 1, muster: quader(B, 7, 40, 3), L: [.2, -1] });
-      }
-      // Boden aus Sand, nach hinten dunkler, Laternenlicht um die Gestalt
-      const LF = lichtF(fx + 6, fy - 4, 80, 1.6);
-      sandboden(K, 56, 90, (x, y) => LF(x, y) * .85 + (y - 56) * .004);
-      // Abgrund: schwarzes Oval, der hintere Rand als Kante
+      const fx = 46, fy = 82;   // Gestalt vorn links, Laterne in der linken Hand
+      const ax = 110, ay = 64, arx = 44, ary = 10;   // der Abgrund im Boden
+      // Halle: ruhiges Rotschwarz, hinten ein fernes Glühen, davor riesige Pfeiler als Silhouetten
+      K.fuell(['#020101', '#060202', '#0c0504', '#160806'], (x, y) => ruhig(.1 + Math.max(0, 1 - Math.hypot(x - 104, (y - 30) * 1.3) / 80) * .55, 3));
+      for (const [px, w] of [[24, 20], [80, 14], [136, 18]]) { const p = K.maske(); p.rect(px - w / 2, 0, w, 56); K.form(p, 0, { k: ['#030101', '#070303', '#0c0505'], r: ['#3a140c', '#5a2014'], ton: 1, fase: 0, rand: 1, L: [.3, -1] }); }
+      // Boden aus Sand, Licht um die Gestalt
+      const LF = lichtF(fx - 6, fy - 8, 70, 1.5, 1.2);
+      sandboden(K, 54, 90, (x, y) => LF(x, y) * .8 + .06);
+      // Abgrund: schwarzes Oval mit hellem Vorderrand
       const ab = K.maske(); ab.ell(ax, ay, arx, ary);
-      K.feld(ax - arx - 1, ay - ary - 1, ax + arx + 2, ay + ary + 2, DUNKEL, (x, y) => ab.has(x, y) ? Math.max(0, .5 - Math.hypot((x - ax) / arx, (y - ay + 6) / ary) * .6) : -1);
-      for (let x = ax - arx; x <= ax + arx; x++) { const q = (x - ax) / arx, y = Math.round(ay + Math.sqrt(Math.max(0, 1 - q * q)) * ary); K.set(x, y, LF(x, y) > .2 ? STEIN[7] : STEIN[4]); K.set(x, y + 1, STEIN[2]); }
-      // Sandfahnen: in Spiralen über den Boden und hinab in den Abgrund
-      for (let i = 0; i < 34; i++) {
-        const a0 = K.r.f(0, 6.28), R0 = K.r.f(1.3, 2.6), lang = K.r.f(.6, 1);
-        for (let t = 0; t < lang; t += .004) {
-          const a = a0 + t * 2.2, R = B.lerp(R0, .55, t), x = ax + Math.cos(a) * arx * R, y = ay + Math.sin(a) * ary * R * (R > 1 ? 1.3 : 1) + (R < 1 ? (1 - R) * 18 : 0);
-          if (y < 50 || x < -4 || x > 164) continue;
-          if (B.bay(x, y) > .75 - t * .5) continue;
-          const l = LF(x, y), innen = R < 1;
-          K.set(x, y, innen ? (l > .2 ? SAND[2] : SAND[1]) : l > .45 ? SAND[5] : l > .2 ? SAND[4] : SAND[2]);
+      K.feld(ax - arx - 1, ay - ary - 1, ax + arx + 2, ay + ary + 2, DUNKEL, (x, y) => ab.has(x, y) ? 0 : -1);
+      for (let x = ax - arx; x <= ax + arx; x++) { const q = (x - ax) / arx, y = Math.round(ay + Math.sqrt(Math.max(0, 1 - q * q)) * ary); K.set(x, y, STEIN[6]); K.set(x, y + 1, STEIN[3]); }
+      // Sandfahnen: wenige lange, helle Bögen von hinter der Gestalt hinab in den Abgrund
+      const fahnen = [[-4, 70, 70, 40, .9], [4, 86, 80, 60, 1], [20, 62, 74, 46, .7], [30, 90, 96, 76, .85], [-6, 80, 60, 56, .8], [60, 88, 120, 84, .6]];
+      for (const [sx, sy, cx, cy, h] of fahnen) {
+        let px = null, py = null;
+        for (let t = 0; t <= 1; t += .004) {
+          const ex = ax + (sx - fx) * .12, ey = ay + 1;
+          const x = (1 - t) * (1 - t) * sx + 2 * t * (1 - t) * cx + t * t * ex, y = (1 - t) * (1 - t) * sy + 2 * t * (1 - t) * cy + t * t * ey;
+          const rx = Math.round(x), ry = Math.round(y); if (rx === px && ry === py) continue; px = rx; py = ry;
+          const l = LF(x, y), c = t > .9 ? SAND[2] : l > .35 ? SAND[5] : l > .12 ? SAND[4] : SAND[3];
+          if (t > .8 && B.bay(x, y) > (1 - t) * 5) continue;
+          K.set(rx, ry, c); if (h > .8 && t < .6) K.set(rx, ry + 1, SAND[2]);
         }
       }
-      // Die Gestalt: Mantel zum Abgrund hin gezogen, Hut, Laterne in der linken Hand
-      const fig = K.figurMaske(fx, fy, 24, { kopf: 'hut', blick: 1, neig: -1.5, arme: [[fx - 6, fy - 11], [fx + 5, fy - 9]] });
-      // Mantel: Schöße flattern in Zipfeln zum Abgrund hin
-      fig.poly([[fx + 3, fy - 18], [fx + 10, fy - 17], [fx + 18, fy - 17], [fx + 27, fy - 15], [fx + 21, fy - 13], [fx + 30, fy - 10], [fx + 22, fy - 9], [fx + 28, fy - 5], [fx + 16, fy - 6], [fx + 7, fy - 4]]);
-      fig.kap(fx - 2, fy - 21, fx + 8, fy - 23, .8, .5);   // Schal
-      K.form(fig, 0, { ton: .8, rand: 1, lichtVon: [fx - 7, fy - 10] });
-      K.laterne(fx - 7, fy - 5, .75, { hof: 46, staerke: .8, ohne: fig, buegel: false });
-      K.kante(fig, fx - 7, fy - 9, 40, WARM, { nah: .3 });
-      K.vignette(.6, { cx: 84, cy: 60 });
+      // Die Gestalt: größer, Hut, Mantel mit drei klaren Zipfeln zum Abgrund hin
+      const fig = K.figurMaske(fx, fy, 36, { kopf: 'hut', blick: 1, neig: -1.5, arme: [[fx - 10, fy - 15], [fx + 8, fy - 14]] });
+      fig.poly([[fx + 4, fy - 27], [fx + 24, fy - 26], [fx + 14, fy - 22]]);
+      fig.poly([[fx + 6, fy - 21], [fx + 30, fy - 18], [fx + 16, fy - 14]]);
+      fig.poly([[fx + 6, fy - 13], [fx + 26, fy - 9], [fx + 8, fy - 6]]);
+      fig.kap(fx + 1, fy - 31, fx + 14, fy - 34, 1, .6);   // Schal
+      K.form(fig, 0, { k: ['#030101', '#080303', '#100606'], ton: .8, rand: 0, r: [] });
+      const lp = handlampe(K, fx - 10, fy - 12, 1, { hof: 60, ohne: fig });
+      K.kante(fig, lp[0], lp[1], 46, WARM, { nah: .35 });
+      K.vignette(.5, { cx: 84, cy: 60 });
     },
 
     // Eine niedrige, viel zu breite Türöffnung im roten Stein, daran angelehnt eine geteilte Messlatte, deren obere Hälfte versetzt ist, als stünde sie im Wasser.
     stadt_messlatte(K) {
       const { B } = K;
-      const lx = 146, ly = 74;
-      const L1 = lichtF(lx - 40, ly - 10, 160, 1.2);
-      steinwand(K, 0, 0, 160, 76, L1, { zh: 9, bw: 52 });
-      sandboden(K, 76, 90, (x, y) => L1(x, y) * .9);
-      // Die Türöffnung: niedrig und viel zu breit, schwarz; Sturz und Schwelle
-      const tx0 = 26, tx1 = 130, ty0 = 46, ty1 = 76;
-      const st = K.maske(); st.rect(tx0 - 6, ty0 - 7, tx1 - tx0 + 12, 7); st.rect(tx0 - 6, ty1, tx1 - tx0 + 12, 3);
-      st.rect(tx0 - 6, ty0, 6, ty1 - ty0); st.rect(tx1, ty0, 6, ty1 - ty0);
-      K.form(st, 0, { k: STEIN.slice(1, 9), r: RAND, ton: 2.4, fase: 1, rand: 2, schatten: 2, verlaufX: 1.2, muster: quader(B, 7, 60, 9) });
-      K.feld(tx0, ty0, tx1, ty1, DUNKEL, (x, y) => Math.max(0, .45 - (y - ty0) * .03) + (x > tx1 - 22 ? (x - tx1 + 22) * .02 : 0));
-      // Die Messlatte: rot und dunkel geteilt, Messingkappen; die obere Hälfte versetzt (wie im Wasser gebrochen)
-      const fussX = 38, fussY = ty1 - 1, kopfX = 33, kopfY = 6, bruch = .5, vers = 4, seg = 10;
-      const P = (t, dx) => [B.lerp(fussX, kopfX, t) + dx, B.lerp(fussY, kopfY, t)];
-      const ROT = ['#3a0e08', '#6a1c10', '#a8341e', '#d0502c'], SCHW = ['#060303', '#0e0606', '#180a08', '#26120c'];
-      for (let i = 0; i < seg; i++) {
-        const t0 = i / seg, t1 = (i + 1) / seg, dx = t0 >= bruch ? vers : 0;
-        const m = K.maske(), a = P(t0, dx), b = P(t1, dx); m.poly([[a[0] - 2, a[1]], [a[0] + 2, a[1]], [b[0] + 2, b[1]], [b[0] - 2, b[1]]]);
-        K.form(m, 0, { k: i % 2 ? SCHW : ROT, r: RAND, ton: 2.6, fase: 0, rand: 1, lichtVon: [lx, ly] });
+      const kx = 58, ky = 79;   // Kerze auf der Schwelle
+      const L1 = lichtF(kx - 6, ky - 20, 110, 1.1, 1.3);
+      steinwand(K, 0, 0, 160, 80, L1, { zh: 10, bw: 60, basis: .06 });
+      sandboden(K, 80, 90, (x, y) => L1(x, y) * .8);
+      // Die Türöffnung: niedrig und viel zu breit, schwarz; Laibung und Sturz mit Kantenlicht zur Kerze
+      const tx0 = 44, tx1 = 158, ty0 = 42, ty1 = 80;
+      const st = K.maske(); st.rect(tx0 - 8, ty0 - 8, tx1 - tx0 + 16, 8); st.rect(tx0 - 8, ty0, 8, ty1 - ty0);
+      K.form(st, 0, { k: STEIN.slice(1, 9), r: RAND, ton: 2.2, fase: 1, rand: 2, schatten: 2, lichtVon: [kx, ky - 6], muster: (x, y) => (y === ty0 - 4 ? -.8 : 0) });
+      K.feld(tx0, ty0, tx1 + 8, ty1, DUNKEL, (x, y) => 0);
+      K.kante(st, kx, ky - 6, 90, RAND, { nah: .4 });
+      // Die Messlatte: groß, an der Laibung, rot und dunkel geteilt mit Skalenstrichen und Messingkappen;
+      // die obere Hälfte ist versetzt, wie im Wasser gebrochen, an der Bruchstelle eine Wasserlinie
+      const lx0 = 30, lyB = ty1, lyT = 6, bw = 7, bruch = 44, vers = 5;
+      const ROT = ['#3a0e08', '#6a1c10', '#a8341e', '#d0502c', '#e8805c'], SCHW = ['#060303', '#0e0606', '#1a0c08', '#2a140e'];
+      const n = 12, seg = (lyB - lyT) / n;
+      for (let i = 0; i < n; i++) {
+        const y1 = lyB - i * seg, y0 = y1 - seg, dx = y1 <= bruch ? vers : 0, m = K.maske();
+        m.rect(lx0 + dx, Math.ceil(y0), bw, Math.ceil(y1) - Math.ceil(y0));
+        K.form(m, 0, { k: i % 2 ? SCHW : ROT, r: RAND, ton: i % 2 ? 2 : 3, fase: 0, rand: 1, lichtVon: [kx, ky - 6], verlaufX: 1 });
+        // Skalenstriche: an der rechten Kante, jeder halbe Abschnitt ein kurzer, jeder ganze ein langer
+        for (let k = 1; k < 4; k++) { const yy = Math.round(y1 - seg * k / 4); K.linie(lx0 + dx + bw - (k === 2 ? 4 : 2), yy, lx0 + dx + bw - 1, yy, i % 2 ? '#a8341e' : '#060303'); }
       }
-      const kap = (t, dx, h) => { const m = K.maske(), p = P(t, dx); m.rect(p[0] - 2.5, p[1] - h / 2, 5, h); K.form(m, 0, { k: ['#3a2a10', '#6a5020', '#a8823e', '#e6c88a'], r: ['#e6c88a', '#fff0c0'], ton: 2.4, fase: 0, rand: 1, lichtVon: [lx, ly] }); };
-      kap(0, 0, 2); kap(1, vers, 2);
-      // Wasserlinie an der Bruchstelle: ein heller Strich quer, darunter ein dunkler
-      const pb = P(bruch, 0); K.linie(pb[0] - 4, pb[1], pb[0] + vers + 5, pb[1], '#e0a080'); K.linie(pb[0] - 3, pb[1] + 1, pb[0] + vers + 4, pb[1] + 1, '#3a0e08');
-      // Bleistift auf der Schwelle, frisch gespitzt
-      K.linie(74, 77, 84, 76, '#a8823e'); K.set(85, 76, '#e6c88a'); K.set(86, 76, '#241010'); K.set(73, 77, '#5a2010');
-      K.laterne(lx, ly + 12, 1.1, { hof: 60, staerke: .85 });
-      K.vignette(.65, { cx: 76, cy: 50 });
+      const kap = (y, dx) => { const m = K.maske(); m.rect(lx0 + dx - 1, y - 1.5, bw + 2, 3); K.form(m, 0, { k: ['#3a2a10', '#6a5020', '#a8823e', '#e6c88a'], r: ['#e6c88a', '#fff0c0'], ton: 2.6, fase: 0, rand: 1, lichtVon: [kx, ky - 6] }); };
+      kap(lyB - 1, 0); kap(lyT + 1, vers);
+      K.linie(lx0 - 4, bruch, lx0 + bw + vers + 4, bruch, '#e0a080'); K.linie(lx0 - 3, bruch + 1, lx0 + bw + vers + 3, bruch + 1, '#3a0e08');
+      // Bleistift auf der Schwelle neben der Kerze, frisch gespitzt
+      K.linie(66, 80, 78, 79, '#a8823e'); K.linie(66, 81, 78, 80, '#5a4020'); K.set(79, 79, '#e6c88a'); K.set(80, 79, '#241010');
+      kerze(K, kx, ky + 1, { hof: 70 });
+      K.vignette(.5, { cx: 60, cy: 50 });
     },
 
     // Ein langes Reliefband in rotem Stein mit kriechenden Gestalten, in der Mitte eine glatte, leere Fläche in Form eines Körpers, darunter Steinsplitter im Sand.
     stadt_leere_stelle(K) {
       const { B } = K;
-      // Streiflicht von links unten (Lampe außerhalb des Bildes)
-      const lx = -14, ly = 70;
-      K.lichtquelle(lx, ly);
-      const L1 = lichtF(30, 56, 170, 1.2, 1.1);
-      steinwand(K, 0, 0, 160, 74, (x, y) => L1(x, y) * .6, { zh: 8, bw: 50 });
+      const kx = 80, ky = 82;   // Kerze im Sand unter der leeren Stelle
+      const L1 = lichtF(kx, ky - 14, 120, 1.1, 1.3);
+      steinwand(K, 0, 0, 160, 74, (x, y) => L1(x, y) * .5, { zh: 9, bw: 60, basis: .04 });
       sandboden(K, 72, 90, (x, y) => L1(x, y) * .8);
-      // Reliefband mit Gesimsen
-      const y0 = 18, y1 = 64;
+      // Reliefband: ruhiger Grund, Gesimse oben und unten
+      const y0 = 16, y1 = 66;
       const grund = K.maske(); grund.rect(0, y0, 160, y1 - y0);
-      K.form(grund, 0, { k: STEIN.slice(1, 8), ton: 2.4, fase: 0, rand: 0, verlaufX: -1.8, muster: (x, y) => (B.hash(x >> 1, y >> 1, 3) - .5) * .5 });
+      K.feld(0, y0, 160, y1, STEIN, (x, y) => ruhig(.14 + L1(x, y) * .45, STEIN.length - 1));
       const ges = K.maske(); ges.rect(0, y0 - 6, 160, 6); ges.rect(0, y1, 160, 6);
-      K.form(ges, 0, { k: STEIN.slice(1, 9), r: RAND, ton: 3, fase: 1, rand: 2, schatten: 2, verlaufX: -2, muster: quader(B, 6, 60, 6), lichtVon: [lx, ly] });
-      // Kriechende Gestalten, alle nach rechts, die Szene läuft weiter; in der Mitte fehlt einer
+      K.form(ges, 0, { k: STEIN.slice(1, 9), r: RAND, ton: 2.6, fase: 1, rand: 2, schatten: 2, lichtVon: [kx, ky], muster: (x, y) => ((x + (y > 40 ? 30 : 0)) % 60 === 0 ? -1 : 0) });
+      // Zwei große kriechende Gestalten links und rechts, nach rechts gewandt; die Kante zum Licht hin
       const fig = K.maske(), r = B.rng(77);
-      [[2, 0], [110, 3]].forEach(([x, i]) => kriecher(fig, r, x, y1 - 1, 31, 1, { buckel: i % 2 }));
-      K.form(fig, 0, { k: STEIN.slice(2, 9), r: RAND, ton: 5, fase: 1, rand: 2, schatten: 2, sk: K.pk(STEIN[0]), verlaufX: -2.2, verlauf: .6, lichtVon: [lx, ly] });
-      // Die leere Stelle: dieselbe Gestalt als glatte Vertiefung (Schatten innen links, Licht innen rechts), ohne Poren, warm
-      const leer = K.maske(); kriecher(leer, B.rng(78), 56, y1 - 1, 31, 1, {});
+      kriecher(fig, r, -2, y1 - 1, 34, 1, {}); kriecher(fig, r, 116, y1 - 1, 34, 1, { buckel: 1 });
+      K.form(fig, 0, { k: STEIN.slice(2, 8), r: [], ton: 2.4, fase: 1, rand: 0, schatten: 2, sk: K.pk(STEIN[0]), verlauf: .5 });
+      K.kante(fig, kx, ky - 10, 100, RAND, { nah: .35 });
+      // Die leere Stelle: dieselbe Körperform, glatt geschliffen, deutlich heller und warm, ohne jede Pore
+      const leer = K.maske(); kriecher(leer, B.rng(78), 55, y1 - 1, 34, 1, {});
       const breit = K.maske(); breit.fn(leer.x0 - 2, leer.y0 - 2, leer.x1 + 2, leer.y1 + 2, (x, y) => { for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (leer.has(x + dx, y + dy)) return true; return false; });
-      K.form(breit, 0, { k: ['#0e0605', '#2c1610', '#3e2016', '#4c281a'], r: ['#a85a3a', '#d88a64'], ton: 2.2, fase: 1, rand: 1, L: [1, .1] });
-      K.licht(78, 46, 28, '#24100a', .6, { maske: (x, y) => breit.has(x, y) });
-      // Splitter im Sand darunter
+      K.feld(breit.x0, breit.y0, breit.x1 + 1, breit.y1 + 1, ['#6e3a26', '#9a5a3a', '#c0805a', '#e0a880', '#f4c8a0'], (x, y) => breit.has(x, y) ? ruhig(.35 + L1(x, y) * .7, 4, .3) : -1);
+      // feiner Meißelrand: oben dunkel (Schatten der Vertiefung), unten hell
+      for (let y = breit.y0 - 1; y <= breit.y1 + 1; y++) for (let x = breit.x0 - 1; x <= breit.x1 + 1; x++) if (!breit.has(x, y)) { if (breit.has(x, y + 1)) K.set(x, y, STEIN[0]); else if (breit.has(x, y - 1)) K.set(x, y, '#f4c8a0'); else if (breit.has(x + 1, y) || breit.has(x - 1, y)) K.set(x, y, STEIN[1]); }
+      // Splitter im Sand darunter, um die Kerze
       const sp = K.maske();
-      for (let i = 0; i < 16; i++) { const x = 58 + r.f(0, 40), y = 72 + r.f(0, 8), l = r.f(1.5, 3.5), a = r.f(0, 3.14); sp.poly([[x, y], [x + Math.cos(a) * l, y + Math.sin(a) * l * .5], [x + 1, y + 1.5]]); }
-      K.form(sp, 0, { k: STEIN.slice(4, 9), r: ['#e0a080', '#ffd0b0'], ton: 2.8, fase: 0, rand: 1, lichtVon: [lx, ly] });
-      K.vignette(.6, { cx: 76, cy: 48 });
+      for (let i = 0; i < 10; i++) { const x = 60 + r.f(0, 42), y = 75 + r.f(0, 9), l = r.f(2, 4), a = r.f(0, 3.14); if (Math.abs(x - kx) < 4) continue; sp.poly([[x, y], [x + Math.cos(a) * l, y + Math.sin(a) * l * .5], [x + 1.5, y + 2]]); }
+      K.form(sp, 0, { k: ['#6e3a26', '#9a5a3a', '#c0805a', '#e0a880'], r: ['#f4c8a0', '#fff0d8'], ton: 2.4, fase: 0, rand: 1, schatten: 1, lichtVon: [kx, ky - 6] });
+      kerze(K, kx, ky, { hof: 60 });
+      K.vignette(.5, { cx: 80, cy: 48 });
     },
   },
 };

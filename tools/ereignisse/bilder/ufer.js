@@ -119,7 +119,7 @@ module.exports = {
     // Eine grüne Flasche steckt kopfüber im Sand, darüber zieht sich ein Wassertropfen nach oben zurück.
     ufer_flaschenpost(K) {
       const { B } = K;
-      const hy = 46;
+      const hy = 36;
       meerDecke(K, hy, { lx: 84 });
       sand(K, hy, { lx: 84 });
       K.lichtquelle(84, 30);
@@ -133,11 +133,11 @@ module.exports = {
       // Sand um den Hals aufgeworfen
       const hg = K.maske(); hg.ell(fx, fy + 1, 6, 1.8); K.form(hg, 0, { k: SAND.slice(2, 7), r: SANDRAND, ton: 2.2, fase: 0, rand: 1, L: [0, -1] });
       // Der Tropfen über der Flasche: zieht sich nach oben zur Decke zurück, ein Faden
-      const ty = 38;
+      const ty = 43;
       // ein Zapfen Wasser von der Decke, an dem der Tropfen hängt
       const za = K.maske(); za.fn(fx - 12, 0, fx + 12, ty, (x, y) => Math.abs(x - fx) < Math.max(.8, (1 - (y - 6) / (ty - 6)) * 10) && y > 4);
       K.feld(0, 0, 160, 90, WASSER, (x, y) => za.has(x, y) ? .45 + (y / ty) * .35 - Math.abs(x - fx) / 30 : -1);
-      const tr = K.maske(); tr.ell(fx, ty + 6, 3.2, 4); tr.kap(fx, ty + 3, fx, ty - 2, 1.6, .8);
+      const tr = K.maske(); tr.ell(fx, ty + 7, 4, 4.6); tr.kap(fx, ty + 3, fx, ty - 3, 2, .8);
       K.licht(fx, ty + 6, 14, '#1c3238', 1);
       K.form(tr, 0, { k: WASSER.slice(4, 10), r: [SEE, SCHAUM[1]], ton: 2.6, verlauf: -1, fase: 0, rand: 2, L: [-.5, -.9] });
       K.set(fx - 1, ty + 4, '#ffffff'); K.set(fx - 2, ty + 5, SCHAUM[1]);

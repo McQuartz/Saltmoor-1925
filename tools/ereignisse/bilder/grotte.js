@@ -327,7 +327,9 @@ module.exports = {
       K.form(hd, 0, { k: WACHS.slice(4, 9), r: [WACHS[8], '#ffffff'], ton: 2.8, fase: 0, rand: 1, L: [0, -1] });
       K.kante(fm, fx, 66, 22, ['#6a4a20', '#d8a868'], { nah: .5, min: .1 });
       // Gesicht unter dem Tuch: nur ein Rest Licht von unten
-      K.set(fx - 2, 36, '#2a1e14'); K.set(fx + 2, 36, '#2a1e14'); K.set(fx, 38, '#24180f'); K.linie(fx - 2, 40, fx + 2, 40, '#20160e');
+      const gs = K.maske(); gs.ell(fx, 37, 3.4, 4.2);
+      K.form(gs, 0, { k: ['#0e0906', '#1e140c', '#2e2014', '#3e2c1c'], ton: 1.4, verlauf: -1.4, fase: 0, rand: 0 });
+      K.set(fx - 1, 36, '#080504'); K.set(fx + 1, 36, '#080504'); K.set(fx, 39, '#4a3420'); K.linie(fx - 1, 40, fx + 1, 40, '#140c08'); K.linie(fx - 2, 41, fx + 2, 41, '#4a3420');
       K.vignette(.6, { cx: 80, cy: 54, farbe: SCH[0] });
     },
   },
