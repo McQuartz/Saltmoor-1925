@@ -1,0 +1,745 @@
+{
+ "id": "waage",
+ "akt": 4,
+ "biom": {
+  "n": "Die Waage am Grund",
+  "kurz": "Waage",
+  "zeit": "außerhalb der Zeit, Dienstbeginn",
+  "anreise": "Am Grund vor der Pforte steht ein Zollhaus. Die Ertrunkenen warten mit Nummern in der Hand, und in der Halle hängt eine Waage, groß wie ein Schiff.",
+  "koerper": [
+   "#060504",
+   "#0f0c08",
+   "#1c170e",
+   "#2d2516"
+  ],
+  "rand": [
+   "#8a7434",
+   "#e6dcbc"
+  ],
+  "augen": "#ec4a34",
+  "nebel": [
+   "#0d0d08",
+   "#3a3824"
+  ],
+  "musik": "waage",
+  "szene_alt": "pforte",
+  "gegner": [
+   "schlagbaum",
+   "schreiber",
+   "tarierte",
+   "schlange"
+  ],
+  "waechter": "ruft",
+  "vorraum_elite": "oberzoellner",
+  "fundpool": [
+   "zollplombe",
+   "wartemarke",
+   "eichgewicht",
+   "compass",
+   "watch",
+   "lantern",
+   "tarot",
+   "laudanum",
+   "smellingsalts",
+   "officercoat",
+   "bible",
+   "divinghelm"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Asservatenverwalter",
+   "ort": "hinter dem Gitter der Asservatenkammer, zwischen Koffern mit Zollvermerk",
+   "zeile": "Hier zahlt man nicht, sagt er, hier wird gewogen. Er legt dein Stück in die eine Schale und seins in die andere. Seine Schale ist immer leichter.",
+   "art": "tausch"
+  },
+  "uebergang": "Die leere Schale sinkt bis auf den Boden. Du steigst hinein, und niemand hält dich auf. Hinter dem Schalter geht ein Licht an, und eine Stimme ruft eine Nummer, die du nicht hast.",
+  "weg_hinweise": {
+   "vorraum": [
+    "Hinter dem Schalter steht einer mit der Waage auf dem Kopf. Die leere Schale hängt auf deiner Seite."
+   ],
+   "kampf": [
+    "Ein Schlagbaum steht quer in der Halle. Dahinter ist kein Weg.",
+    "Am Schalter rückt die Schlange einen Schritt vor.",
+    "Ein Stehpult, und Papier, das nach oben treibt."
+   ],
+   "rast": [
+    "Eine Wartebank, eine Decke aus Akten. Die Nummer über dem Schalter springt nicht weiter.",
+    "Ein Kanonenofen im Dienstzimmer. Er brennt, unter Wasser."
+   ],
+   "wandbild": [
+    "Über dem Schalter ein Relief: Menschen mit Bündeln vor einer Waage.",
+    "Im Messing der Säule sind Namen geschlagen, und dazu Gewichte."
+   ],
+   "ereignis": [
+    "Ein Automat für Wartemarken. Er klackt, ohne dass jemand kurbelt.",
+    "Eine Schublade der Registratur steht offen."
+   ],
+   "kraemer": [
+    "Ein Gitter, dahinter Koffer bis unter die Decke. Jemand sitzt dazwischen und wiegt."
+   ],
+   "werkstatt": [
+    "Der Tisch des Eichamts. Gewichte, Zangen, eine Plombierzange."
+   ],
+   "fundstelle": [
+    "Unter einer Bank liegt etwas, das jemand nicht hergeben wollte."
+   ],
+   "finale": [
+    "Die Waage schwingt aus. In der leeren Schale steht etwas, und es ist schwerer als alles."
+   ]
+  },
+  "beute_saetze": [
+   "Die Waage neigt sich um einen Strich weiter zu dir.",
+   "Über dem Schalter springt die Nummer um eins. Es ist nicht deine.",
+   "Ein Blatt Papier steigt aus dem Gerangel auf und treibt nach oben, beschrieben.",
+   "Irgendwo fällt ein Stempel auf Papier, einmal, sehr laut.",
+   "Die Schlange rückt einen Schritt vor, ohne dass vorn jemand gegangen ist.",
+   "In der vollen Schale klirrt ein Ring, als hätte jemand ihn eben hineingelegt.",
+   "Das Wasser trägt Siegellack wie Laub. Alles Rot sinkt dir vor die Füße.",
+   "Du hast nichts verloren. Die Waage zeigt trotzdem weniger."
+  ],
+  "ankunft_bild": "Die Waage hängt still und gerade. Beide Schalen sind leer, und zum ersten Mal neigt sie sich nicht zu dir."
+ },
+ "musik": {
+  "n": "Waage am Grund",
+  "root": 41,
+  "key": "f-Moll",
+  "names": [
+   "Fm",
+   "D♭",
+   "B♭m",
+   "C"
+  ],
+  "darkNames": [
+   "Fm",
+   "G♭",
+   "B♭m",
+   "C♭9"
+  ],
+  "amb": {
+   "meer": 0.04,
+   "gaenge": 0.05,
+   "stollen": 0.02
+  },
+  "rhy": "holz",
+  "detail": "kapelle",
+  "ort": "eine große, gekachelte Halle unter Wasser; Schritte, die nicht näher kommen, die Glocke am Schalter, Ketten, die sich setzen",
+  "rhyN": "Stempel auf Holz, im Takt der Abfertigung"
+ },
+ "foes": {
+  "schlagbaum": {
+   "n": "Der Schlagbaum",
+   "biom": "waage",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "schlagbaum_a",
+   "varianten": [
+    "schlagbaum_a",
+    "schlagbaum_b"
+   ],
+   "konzept": "Ein Grenzaufseher vom Zollamt, Pelerine und Schirmmütze. Aus seiner Schulter wächst der Schlagbaum, rot geringelt, mit der roten Laterne. Seine Augen sind mit Siegellack verschlossen, und er sieht trotzdem, wer kommt. Die Grenze, die er bewacht, hat keinen Weg mehr.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "takt",
+    "v": 5,
+    "why": "Fällt die Schranke, steht jeder dahinter sicher. Geht sie hoch, steht er offen."
+   },
+   "beute": null,
+   "beute_satz": "Der Baum bleibt oben stehen. Zum ersten Mal ist der Weg frei, und es gibt keinen.",
+   "quelle": "skript"
+  },
+  "schreiber": {
+   "n": "Der Schreiber",
+   "biom": "waage",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "schreiber_a",
+   "varianten": [
+    "schreiber_a",
+    "schreiber_b"
+   ],
+   "konzept": "Ein Zollschreiber auf dem hohen Kontorbock, über das Stehpult gebeugt, mit Ärmelschonern und Augenschirm. Er schreibt mit dem Finger auf, was du bei dir trägst. Die Liste wird nicht kürzer: Sie wächst aus dem Buch und steigt im Wasser nach oben, Bahn um Bahn.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "verstopfen",
+    "n": 1,
+    "karte": "Aufstellung",
+    "why": "Er schreibt auf, was du trägst. Die Liste liegt dir in der Hand und lässt sich nicht ausspielen."
+   },
+   "beute": "zollplombe",
+   "beute_satz": "Das Papier steigt weiter, als er fällt. Auf der obersten Bahn steht dein Name, und dahinter ein Haken.",
+   "quelle": "skript"
+  },
+  "tarierte": {
+   "n": "Die Tarierte",
+   "biom": "waage",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    }
+   ],
+   "sprite": "tarierte_a",
+   "varianten": [
+    "tarierte_a",
+    "tarierte_b"
+   ],
+   "konzept": "Eine Frau im Sonntagskleid, mit der Personenwaage aus der Wartehalle verwachsen. Wo ihr Kopf war, sitzt das Zifferblatt, das Haar hängt noch vom Rand. Der Zeiger steht unter Null: Sie wiegt weniger als nichts und gleicht es bei den anderen aus.",
+   "stimme": "netzflickerin",
+   "kniff": {
+    "art": "heiler",
+    "v": 6,
+    "why": "Sie tariert: Wer zu leicht geworden ist, dem legt sie zu."
+   },
+   "beute": "wartemarke",
+   "beute_satz": "Der Zeiger springt auf Null und bleibt dort. Sie wiegt jetzt genau so viel, wie sie wiegt.",
+   "quelle": "skript"
+  },
+  "schlange": {
+   "n": "Die Warteschlange",
+   "biom": "waage",
+   "rang": "normal",
+   "hp": 30,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 4
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 8
+    }
+   ],
+   "sprite": "schlange_a",
+   "varianten": [
+    "schlange_a",
+    "schlange_b"
+   ],
+   "konzept": "Die Ertrunkenen stehen vor dem Schalter an, in Mänteln, mit Hut und Kopftuch, jeder die Hand auf der Schulter des Vorderen. Sie stehen so lange an, dass sie an den Schultern zusammengewachsen sind. Der Vorderste hält die Wartemarke mit der Eins, und er ist noch nicht dran.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "kleinvieh",
+    "why": "Jeder in der Reihe stößt einmal. Keiner fest, aber alle."
+   },
+   "beute": null,
+   "beute_satz": "Die Reihe löst sich nicht auf. Sie rückt nur einen Schritt vor, ohne dich.",
+   "quelle": "skript"
+  },
+  "oberzoellner": {
+   "n": "Der Oberzöllner",
+   "biom": "waage",
+   "rang": "elite",
+   "hp": 104,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "sprite": "oberzoellner",
+   "konzept": "Ein schwerer Mann im Uniformmantel mit zwei Reihen Messingknöpfen. Auf seinem Kopf sitzt die Waage, die Zunge steigt ihm aus dem Scheitel, an jedem Ende des Balkens eine Schale. In der rechten liegt, was andere hergeben mussten; die linke ist leer, auf deiner Seite, und sie hängt tiefer. Wo die Augen wären, sitzt ein Siegel aus rotem Lack.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Zoll: Was du in der Hand hältst, wird gewogen, und es wiegt mehr, als du dachtest."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": [
+      "schreiber",
+      "schlagbaum",
+      "tarierte",
+      "schlange"
+     ],
+     "alle": 3,
+     "why": "Er ruft seine Beamten an den Schalter, einen nach dem anderen."
+    }
+   ],
+   "beute": "zuenglein",
+   "beute_satz": "Die Waage auf seinem Kopf schwingt aus und steht. Die leere Schale hängt immer noch tiefer.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "waage_wartemarke",
+   "t": "Die Wartemarke",
+   "d": "An einer Säule hängt ein Automat aus Messing, mit Kurbel und Schlitz. Er klackt, ohne dass jemand kurbelt, und eine Marke schiebt sich heraus: die Eins. Auf den Bänken sitzen die Ertrunkenen mit höheren Nummern und sehen dich an, ohne die Köpfe zu drehen.",
+   "bild": "Ein Wartemarkenautomat aus Messing an einer Säule, eine helle Marke hängt aus dem Schlitz; dahinter eine Bank mit dunklen, sitzenden Gestalten.",
+   "o": [
+    {
+     "l": "Die Marke ziehen: Wartemarke Nr. 1",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "wartemarke"
+      }
+     ]
+    },
+    {
+     "l": "Dich hinten anstellen. Als du dran bist, ist es eine andere Stunde: +20 Leben, −15 Gold",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 20
+      },
+      {
+       "op": "gold",
+       "v": -15
+      }
+     ]
+    },
+    {
+     "l": "Die Marke dem Vordersten geben. Er geht an den Schalter und kommt nicht wieder: einen Handgriff lernen, −5 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "waage_schale",
+   "t": "Die leere Schale",
+   "d": "Die Waagschale auf deiner Seite liegt auf den Fliesen, groß wie ein Ruderboot, und sie ist leer. Die andere hängt hoch oben im Dunkel, voll bis zum Rand. Niemand sagt etwas. Es ist klar, dass etwas hinein muss.",
+   "bild": "Eine leere, flache Messingschale auf einem Fliesenboden; drei Ketten laufen schräg nach oben ins Dunkel, oben ein Schimmer.",
+   "o": [
+    {
+     "l": "Ein Item hineinlegen. Es wird gewogen und ausgetauscht",
+     "fx": [
+      {
+       "op": "item_tausch"
+      }
+     ]
+    },
+    {
+     "l": "Gold hineinzählen, Münze für Münze: −25 Gold, eine Karte kostet dauerhaft 1 weniger",
+     "fx": [
+      {
+       "op": "gold",
+       "v": -25
+      },
+      {
+       "op": "schleifen"
+      }
+     ],
+     "if": {
+      "gold_min": 25
+     }
+    },
+    {
+     "l": "Dich selbst hineinstellen. Die Schale sinkt nicht, sie kann nicht tiefer: +1 Kerbe an einem Item, −7 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "waage_registratur",
+   "t": "Die Registratur",
+   "d": "Die Regale gehen bis ins Wasser hinauf, Schublade über Schublade. Eine steht offen, auf dem Schild dein Name. Darin eine Karteikarte mit allem, was du bei dir trägst, in einer schönen, geduldigen Schrift. Die letzte Zeile nennt etwas, das du noch nicht hast.",
+   "bild": "Ein offener Karteikasten in einem Regal, das bis in die Dunkelheit hinaufreicht; eine Karte steht heraus und leuchtet hell.",
+   "o": [
+    {
+     "l": "Holen, was auf der letzten Zeile steht: ein seltenes Item, −8 Leben",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ]
+    },
+    {
+     "l": "Die Karte herausnehmen und zerreißen: eine Karte aus deinem Deck streichen",
+     "fx": [
+      {
+       "op": "strike"
+      }
+     ]
+    },
+    {
+     "l": "Die Schrift kennst du aus dem Kloster. Diese Abschrift ist zwei Wörter länger: einen Handgriff lernen, +1 Kerbe",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "event_gesehen": "kloster_abschriften"
+     }
+    }
+   ]
+  },
+  {
+   "id": "waage_asservaten",
+   "t": "Die Asservatenkammer",
+   "d": "Hinter einem Gitter liegt, was die Ertrunkenen hergeben mussten: Mäntel in Ballen, Koffer mit Kreidezeichen, Ringe in Einmachgläsern, nach Größe sortiert. Eine Lampe brennt über allem. Der Verwalter ist nicht da, aber sein Stuhl ist warm.",
+   "bild": "Ein Berg aus Mänteln und Koffern hinter einem Gitter unter einer Hängelampe; obenauf ein offener Koffer, darin ein heller Brief.",
+   "o": [
+    {
+     "l": "Einen Mantel vom Ballen nehmen: +8 max. Leben, dann kommt die Schlange, ihn holen (Kampf)",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 8
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "schlange"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Ein Glas Ringe einstecken: +40 Gold, der Schreiber hat es gesehen (Kampf)",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 40
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "schreiber",
+        "tarierte"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Den Koffer aus dem Nachtzug erkennen. Er hat jetzt einen Zollvermerk: ein seltenes Item, +10 Leben",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ],
+     "if": {
+      "event_gesehen": "nachtzug_koffer"
+     }
+    }
+   ]
+  },
+  {
+   "id": "waage_briefe",
+   "t": "Die Briefe in der Schale",
+   "d": "In der vollen Schale liegen Briefe, Hunderte, alle versiegelt, keiner geöffnet. Einer liegt obenauf. Die Anschrift ist deine, die Schrift kennst du, und das Siegel ist noch weich.",
+   "bild": "Ein Haufen ungeöffneter Briefe mit roten Siegeln in einer großen Messingschale; einer liegt obenauf, das Siegel glimmt.",
+   "o": [
+    {
+     "l": "Den Brief öffnen. Darin ist nur Sand vom Grund, er riecht nach Zuhause: einen seltenen Handgriff lernen, −6 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true,
+       "rar": "selten"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ]
+    },
+    {
+     "l": "Ihn ungelesen zurücklegen. Die Waage rührt sich nicht: +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ]
+    },
+    {
+     "l": "Du weißt, was drinsteht, du hast es dir gelegt. Den Brief verbrennen: eine Reliquie, −10 max. Leben",
+     "fx": [
+      {
+       "op": "reliquie"
+      },
+      {
+       "op": "max_hp",
+       "v": -10
+      }
+     ],
+     "if": {
+      "job": "wahrsagerin"
+     }
+    }
+   ]
+  },
+  {
+   "id": "waage_schalter",
+   "t": "Der Schalter",
+   "d": "Hinter dem Messinggitter sitzt ein Beamter ohne Gesicht. Vor ihm ein Stempel, ein Stempelkissen, rot. Durch den Schlitz unter dem Glas passt genau ein Arm. Auf einem Schild steht, was zu verzollen ist; das Wasser hat die Schrift bis auf das Wort »alles« abgewaschen.",
+   "bild": "Ein Schalterfenster mit Messinggitter, dahinter eine Lampe; eine Hand ohne Gesicht hält einen Stempel über den Schlitz.",
+   "o": [
+    {
+     "l": "Den Arm durch den Schlitz schieben. Er stempelt: eine Karte kostet dauerhaft 1 weniger, −9 Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 9
+      }
+     ]
+    },
+    {
+     "l": "Zoll zahlen und gehen: −30 Gold, +1 Kerbe an einem Item, +10 Leben",
+     "fx": [
+      {
+       "op": "gold",
+       "v": -30
+      },
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ],
+     "if": {
+      "gold_min": 30
+     }
+    },
+    {
+     "l": "Die Stempelkarte aus der Fabrik vorlegen. Sie ist voll, jedes Feld: +1 Energie auf Dauer, −14 max. Leben",
+     "fx": [
+      {
+       "op": "energie_dauer",
+       "v": 1
+      },
+      {
+       "op": "max_hp",
+       "v": -14
+      }
+     ],
+     "if": {
+      "event_gesehen": "fabrik_stempeluhr"
+     }
+    }
+   ]
+  }
+ ],
+ "items": {
+  "zollplombe": {
+   "n": "Die Zollplombe",
+   "a": "talisman",
+   "st": [
+    "E"
+   ],
+   "spr": "bone",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 22,
+   "flavor": "Ein Klümpchen Blei an einem Draht, mit der Zange zugekniffen. Was so verschlossen ist, wird erst drüben geöffnet. Das Prägebild ist ein Auge.",
+   "cards": [
+    {
+     "n": "Verplomben",
+     "c": 1,
+     "blk": 6,
+     "weak": 1
+    }
+   ]
+  },
+  "wartemarke": {
+   "n": "Wartemarke Nr. 1",
+   "a": "talisman",
+   "st": [
+    "G"
+   ],
+   "spr": "tarot",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 20,
+   "flavor": "Graue Pappe, die Eins mit der Hand nachgezogen. Sie ist seit 1925 nicht aufgerufen worden. Man wird es tun, sobald du sie abgibst.",
+   "cards": [
+    {
+     "n": "Aufgerufen",
+     "c": 0,
+     "draw": 2,
+     "verbraucht": true
+    }
+   ]
+  },
+  "eichgewicht": {
+   "n": "Das Eichgewicht",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "anchorchain",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 50,
+   "eigen": {
+    "typ": "ballast_werfen",
+    "fx": [
+     {
+      "op": "damage",
+      "v": 5
+     }
+    ],
+    "ballast_start": 1,
+    "ballast_karte": "Gewicht",
+    "t": "Zu Kampfbeginn 1 „Gewicht“ (Ballast) in deinem Ziehstapel. Unspielbare Karten kosten 0: Du wirfst sie über Bord, jede macht 5 Schaden am Ziel."
+   },
+   "flavor": "Fünf Kilogramm, geeicht 1925, der Stempel des Eichamts auf dem Knauf. Auf der Waage am Grund wiegt es nichts. Überall sonst mehr, als es soll.",
+   "cards": [
+    {
+     "n": "Nachwiegen",
+     "c": 1,
+     "atk": 7,
+     "sonder": {
+      "art": "fx",
+      "fx": [
+       {
+        "op": "ballast",
+        "n": 1,
+        "karte": "Gewicht"
+       }
+      ],
+      "t": "Mische 1 „Gewicht“ in deinen Ziehstapel"
+     }
+    }
+   ]
+  },
+  "zuenglein": {
+   "n": "Das Zünglein",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "compass",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 150,
+   "eigen": {
+    "typ": "kampfstart_fx",
+    "fx": [
+     {
+      "op": "status",
+      "to": "all",
+      "status": "vuln",
+      "v": 2
+     },
+     {
+      "op": "ballast",
+      "n": 2,
+      "karte": "Gewicht"
+     }
+    ],
+    "t": "Zu Kampfbeginn sind alle Gegner 2 Züge verwundbar, und 2 „Gewicht“ (Ballast) liegen in deinem Ziehstapel."
+   },
+   "flavor": "Die Zunge der großen Waage, eine Spanne lang, Messing mit einer Kerbe in der Mitte. Sie zeigt auf dich, gleich wie man sie hält.",
+   "cards": [
+    {
+     "n": "Ausschlagen",
+     "c": 1,
+     "atk": 4,
+     "h": 2,
+     "sonder": {
+      "art": "ueber_bord",
+      "max": 1,
+      "draw": 1,
+      "t": "Wirf 1 unspielbare Karte von der Hand über Bord; ziehe 1, wenn eine ging"
+     }
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/waage.js"
+ ]
+}
