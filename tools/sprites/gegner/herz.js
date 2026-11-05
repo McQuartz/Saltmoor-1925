@@ -47,7 +47,7 @@ module.exports = {
     }
     // Knochenplatten, die über das Herz wachsen (das Skelett wächst nach innen, auch hierher)
     const platte = (u, w2, n, gr, rot) => { const pts = []; for (let k = 0; k < n; k++) { const a = rot + k / n * Math.PI * 2, rr = gr * (0.75 + ((k * 7 + n) % 5) * 0.09); pts.push([cx + RX * u + Math.cos(a) * rr * 1.2, cy + RY * w2 + Math.sin(a) * rr]); } return Pg(pts, null, { rd: 1 }); };
-    const platten = v.nackt ? [] : [platte(0.42, -0.62, 7, 7 * s, 0.3), platte(0.68, -0.25, 6, 5.5 * s, 1.1), platte(0.2, -0.78, 6, 5 * s, 0.7), platte(-0.62, 0.42, 7, 6 * s, 0.2), platte(0.5, 0.42, 6, 4.5 * s, 0.9), platte(-0.15, 0.72, 6, 4 * s, 0.4)];
+    const platten = v.nackt ? [] : [platte(0.45, -0.6, 7, 10 * s, 0.3), platte(0.72, -0.18, 6, 7.5 * s, 1.1), platte(0.18, -0.8, 6, 7 * s, 0.7), platte(-0.66, 0.36, 7, 8 * s, 0.2), platte(0.52, 0.45, 6, 6.5 * s, 0.9), platte(-0.62, -0.42, 6, 6 * s, 0.4)];
     const gruppen = [
       { p: adern.slice(5), k: 1.2, tone: 0.1 },
       { p: [vorhof], k: 2, tone: 0.1 },
@@ -98,6 +98,8 @@ module.exports = {
         else { const pl = (x - tx) % 4; P.set(x, y, pl === 0 ? 'k0' : pl === 3 ? 'k3' : 'k2'); }
       }
       P.set(tx + 2, ty + r(th / 2), 'kern'); P.set(tx + 2, ty + r(th / 2) + 1, 'glut');
+      // Im Türspalt steht jemand, klein, gegen das Licht (nur wenn die Tür weit genug offen ist)
+      if (tuer >= 0.9 && glut > 0) { const gx = tx + 4, gy = ty + th - 1; for (let k = 0; k < 9; k++) { P.set(gx, gy - k, 'k0'); if (k > 1 && k < 7) P.set(gx + 1, gy - k, 'k0'); } P.set(gx, gy - 9, 'k0'); P.set(gx + 1, gy - 9, 'k0'); P.set(gx, gy - 10, 'k0'); P.set(gx + 1, gy - 10, 'k1'); }
       // Türblatt nach außen geklappt (schmal, perspektivisch), mit Beschlag
       if (!spaltZu(tuer)) for (let y = ty + 1; y < ty + th + 1; y++) { P.set(tx - 1, y, 'k3'); P.set(tx - 2, y, y % 6 === 0 ? 'bein' : 'k2'); P.set(tx - 3, y + 1, 'k1'); }
       for (let x = tx - 2; x < tx + tw; x++) { P.auf(x, ty + th, 'k0'); }
