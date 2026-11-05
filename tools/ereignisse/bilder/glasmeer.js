@@ -266,18 +266,20 @@ module.exports = {
       for (let i = 0; i <= 60; i++) { const q = i / 60, x = B.lerp(ex, gx + 4, q), y = B.lerp(ey + 1, gy + 8, q) + Math.sin(q * Math.PI) * 2; K.set(x, y, q < .5 ? '#2a2216' : '#1a2a1c'); if (B.bay(x, y) < .4) K.set(x + 1, y, NORD[2]); }
       // Die Hand im Handschuh vorn links, die Leine straff in der Faust
       const leder = ['#0c0806', '#1e140c', '#3a2616', '#5a3c22', '#7a5430'];
-      const le = K.maske(); le.kap(36, 70, ex, ey, 1.6, 1.1);
+      const le = K.maske(); le.kap(40, 66, ex, ey, 1.7, 1.1);
       K.form(le, 0, { k: leder, r: ['#9a7040', '#e0b880'], ton: 2.6, fase: 0, rand: 2, L: [.3, -1] });
+      // (Faust um den Punkt F, Maßstab f)
+      const F = [26, 72], f = 1.45, P = (x, y) => [F[0] + (x - 24) * f, F[1] + (y - 71) * f];
+      const aermel = K.maske(); aermel.poly([[-4, 96], [-4, 62], [4, 58], [P(14, 74)[0], P(14, 74)[1]], [P(12, 84)[0], 96]]);
+      K.form(aermel, 0, { k: TUCH, r: [NORD[2], NORD[3]], ton: 1.4, rand: 1, L: [.8, -.4], muster: (x, y) => (Math.sin(x * .9 + y * .3) > .7 ? -.6 : 0) });
       const hand = K.maske();
-      hand.poly([[-4, 92], [-4, 70], [8, 64], [18, 70], [12, 92]]);                       // Ärmel
-      hand.ell(24, 72, 13, 10);                                                          // Faust
-      for (let i = 0; i < 4; i++) hand.ell(34 - i * 1.2, 66 + i * 3.6, 4, 2.2);           // Finger um die Leine
-      hand.kap(18, 64, 30, 63, 3, 2.4);                                                  // Daumen oben
-      K.form(hand, 0, { k: ['#0e0907', '#1e140c', '#3a2616', '#5a3c22', '#7a5430'], r: ['#5a8a5a', '#aef2bc'], ton: 2.3, verlauf: .6, fase: 1, rand: 2, L: [.8, .4], muster: (x, y) => (x < 13 ? -.6 : 0) + (Math.abs(y - 66 - Math.round((34 - x) / 1.2) * 0) % 4 === 0 && x > 28 ? -.5 : 0) });
-      // Fingerfugen und eine Naht am Handschuh
-      for (let i = 1; i < 4; i++) for (let k = -2; k <= 1; k++) K.set(33 - i * 1.2 + k, 64.4 + i * 3.6, '#060403');
-      for (let y = 66; y < 80; y += 2) K.set(14, y, '#2a1e14');
-      for (let i = 0; i < 4; i++) K.set(36 - i * 1.2, 65 + i * 3.6, '#9a7040');
+      hand.ell(...P(24, 71), 12 * f, 9.5 * f);
+      for (let i = 0; i < 4; i++) hand.ell(...P(33 - i * 1.1, 65.5 + i * 3.4), 4.2 * f, 2 * f);
+      hand.kap(...P(17, 63.5), ...P(30, 62.5), 3 * f, 2.2 * f);
+      K.form(hand, 0, { k: ['#120b07', '#24170d', '#3a2616', '#5a3c22', '#7a5430'], r: ['#9a7040', '#d8b080'], ton: 2.6, fase: 1, rand: 2, L: [.7, -.7], muster: (x, y) => -Math.hypot(x - P(22, 74)[0], y - P(22, 74)[1]) / (14 * f) });
+      for (let i = 1; i < 4; i++) { const [x0, y0] = P(32 - i * 1.1, 63.8 + i * 3.4); for (let k = -4; k <= 1; k++) K.set(x0 + k, y0, '#120b07'); }
+      for (let i = 0; i < 4; i++) { const [x0, y0] = P(36 - i * 1.1, 65 + i * 3.4); K.set(x0, y0, '#b08a58'); K.set(x0 - 1, y0, '#7a5430'); }
+      for (let x = 16; x < 28; x += 2) { const [x0, y0] = P(x, 66); K.set(x0, y0, '#24170d'); }
       K.kante(hand, gx, gy, 140, ['#1b6a3c', '#2a9a56'], { min: .5 });
       K.vignette(.65, { cx: 96, cy: 60 });
     },

@@ -63,6 +63,11 @@ function gang(K, o) {
   }
   return res;
 }
+// Ruhige Rampe: rastet auf Stufen ein, gedithert nur im schmalen Übergang (große Flächen fast flach)
+function ruhig(t, n, b) {
+  const f = Math.max(0, Math.min(.9999, t)) * n, k = Math.floor(f), fr = f - k, w = b === undefined ? .18 : b;
+  return (k + (fr < .5 - w ? 0 : fr > .5 + w ? 1 : (fr - (.5 - w)) / (2 * w))) / n;
+}
 const lichtF = (lx, ly, r, ov, ex) => (x, y) => Math.pow(Math.max(0, 1 - Math.hypot(x - lx, (y - ly) * (ov || 1)) / r), ex || 1.4);
 
 module.exports = {
@@ -146,47 +151,46 @@ module.exports = {
     // Ein langer Tisch aus Ziegeln mit Dutzenden rechteckiger und halbmondförmiger Stempel in Reihen, in der Mitte eine Lücke im Staub in Form einer Hand.
     ziegelgruben_stempeltisch(K) {
       const { B } = K;
-      const lx = 120, ly = 22;
-      // Rückwand mit Ofentür, gedämpft
-      K.feld(0, 0, 160, 40, ZIEGEL.slice(0, 7), (x, y) => .1 + lichtF(lx, ly, 90)(x, y) * .6 + verband(B, x, y, 4, 11, 7).t);
-      ofentuer(K, lx, 38, 14, 26, 1, { hof: 70 });
-      K.feld(0, 38, 160, 90, ASCHE.slice(0, 6), (x, y) => .1 + lichtF(lx, 40, 100)(x, y) * .5);
-      // Tischplatte in Aufsicht (Trapez), Vorderkante aus Ziegeln
-      const yh = 44, yv = 76, X = (t, y) => B.lerp(B.lerp(22, 2, (y - yh) / (yv - yh)), B.lerp(138, 158, (y - yh) / (yv - yh)), t);
-      const platte = K.maske(); platte.poly([[22, yh], [138, yh], [158, yv], [2, yv]]);
-      const LT = lichtF(lx, ly + 10, 140, 1.2, 1.2);
-      // Staub auf der Platte (hell), Ziegelfugen schimmern durch
-      K.feld(0, yh, 160, yv, ASCHE, (x, y) => platte.has(x, y) ? .18 + LT(x, y) * .7 + verband(B, x, (y - yh) * 2.2, 5, 14, 9).t * .4 + (B.hash(x, y, 4) - .5) * .1 : -1);
-      const vorn = K.maske(); vorn.rect(2, yv, 156, 10);
-      K.feld(2, yv, 158, yv + 10, ZIEGEL, (x, y) => .1 + LT(x, y) * .5 + verband(B, x, y - yv, 4, 12, 2).t * 1.4);
-      const kante = K.maske(); kante.rect(2, yv - 1, 156, 2); K.form(kante, 0, { k: ASCHE.slice(2, 8), r: RAND_A, ton: 2.4, fase: 0, rand: 1, L: [0, -1] });
-      // Stempel in Reihen: Rechtecke und Halbmonde mit Griff, hinten klein; die Lücke in Handform in Reihe 2
-      const reihen = [[48, .5], [54, .62], [62, .78], [71, .95]];
+      const lx = 124, ly = 16;
+      // Rückwand ruhig, mit einer Ofentür oben rechts als einzige helle Stelle
+      K.feld(0, 0, 160, 34, ZIEGEL.slice(0, 7), (x, y) => ruhig(.08 + lichtF(lx, ly, 80)(x, y) * .55, 6) + verband(B, x, y, 4, 12, 7).t * .6);
+      ofentuer(K, lx, 32, 12, 22, 1, { hof: 70 });
+      // Tischplatte in Aufsicht (Trapez), Staub ruhig gestuft
+      const yh = 34, yv = 80, X = (t, y) => B.lerp(B.lerp(18, -6, (y - yh) / (yv - yh)), B.lerp(142, 166, (y - yh) / (yv - yh)), t);
+      const platte = K.maske(); platte.poly([[18, yh], [142, yh], [166, yv], [-6, yv]]);
+      const LT = lichtF(lx, ly + 10, 150, 1.1, 1.1);
+      const STAUB = ASCHE.slice(1, 8);
+      K.feld(0, yh, 160, yv, STAUB, (x, y) => platte.has(x, y) ? ruhig(.12 + LT(x, y) * .7, STAUB.length - 1) : -1);
+      K.feld(0, yv, 160, 90, ZIEGEL, (x, y) => ruhig(.06 + LT(x, y) * .4, ZIEGEL.length - 1) + verband(B, x, y - yv, 4, 14, 2).t * .8);
+      const kante = K.maske(); kante.rect(0, yv - 1, 160, 2); K.form(kante, 0, { k: ASCHE.slice(2, 8), r: RAND_A, ton: 2.4, fase: 0, rand: 1, L: [0, -1] });
+      // Stempel in drei Reihen, groß; Rechtecke und Halbmonde mit Griff, Bronze und Holz
+      const stempel = (x, y, s, halb, holz) => {
+        const m = K.maske(), w = 5.4 * s, h = 2.6 * s;
+        if (halb) m.fn(x - w, y - h * 1.5, x + w, y + 1, (px, py) => py <= y + .5 && ((px - x) / w) ** 2 + ((py - y) / (h * 1.5)) ** 2 <= 1);
+        else m.rect(x - w * .8, y - h, w * 1.6, h + 1);
+        m.kap(x, y - h, x, y - h - 3.6 * s, 1 * s, .8 * s); m.ell(x, y - h - 3.8 * s, 1.5 * s, 1.1 * s);
+        K.form(m, 0, { k: holz ? ['#140c08', '#24160c', '#3a2414', '#523420', '#6c4628'] : ['#0e0c08', '#2a2010', '#5a4420', '#8a6a30', '#c8a060'], r: holz ? RAND_Z : ['#e6c88a', '#fff0c0'], ton: 2.4, fase: 0, rand: 1, schatten: 2, lichtVon: [lx, ly] });
+        K.kante(m, lx, ly, 160, holz ? RAND_Z : ['#e6c88a', '#fff0c0']);
+      };
+      const reihen = [[44, .9, 7], [57, 1.15, 6], [73, 1.45, 5]];
       const hand = K.maske();
-      reihen.forEach(([y, s], ri) => {
-        const n = 9;
+      reihen.forEach(([y, s, n], ri) => {
         for (let i = 0; i < n; i++) {
           const t = (i + .5) / n, x = X(t, y);
-          if (ri === 3 && (i === 4)) {
-            // Hand im Staub: Handfläche und fünf Finger, sauberer Ziegel darunter
-            const hx = x, hy = y - 2, hs = s * 1.8;
-            hand.ell(hx, hy, 4.2 * hs, 2.6 * hs);
-            for (const [dx, l] of [[-3.6, 3.2], [-1.8, 4.6], [0, 5], [1.8, 4.4], [3.4, 3]]) hand.kap(hx + dx * hs, hy - 1.5 * hs, hx + dx * hs * 1.25, hy - (1.5 + l * .55) * hs, .7 * hs, .6 * hs);
-            hand.kap(hx + 4 * hs, hy, hx + 7 * hs, hy - 1 * hs, .8 * hs, .6 * hs);
+          if (ri === 2 && i === 2) {
+            // Hand im Staub: Handfläche und fünf Finger, sauberer roter Ziegel darunter
+            const hs = 1.9;
+            hand.ell(x, y - 3, 5 * hs, 3 * hs);
+            for (const [dx, l] of [[-4.2, 3.4], [-2.1, 5], [0, 5.6], [2.1, 5], [4, 3.6]]) hand.kap(x + dx * hs, y - 5 * hs, x + dx * hs * 1.2, y - (5 + l * .7) * hs, .8 * hs, .7 * hs);
+            hand.kap(x + 4.8 * hs, y - 2.4 * hs, x + 8 * hs, y - 4.4 * hs, .9 * hs, .7 * hs);
             continue;
           }
-          const m = K.maske(), w = 5.2 * s, h = 2.4 * s, halb = (i + ri) % 3 === 1;
-          if (halb) m.fn(x - w, y - h * 1.4, x + w, y + 1, (px, py) => py <= y && ((px - x) / w) ** 2 + ((py - y) / (h * 1.4)) ** 2 <= 1);
-          else m.rect(x - w * .8, y - h, w * 1.6, h + 1);
-          m.kap(x, y - h, x, y - h - 3.4 * s, 1 * s, .8 * s); m.ell(x, y - h - 3.6 * s, 1.4 * s, 1 * s);
-          const holz = (i * 7 + ri) % 4 === 0;
-          K.form(m, (1 - s) * .5, { k: holz ? ['#140c08', '#24160c', '#3a2414', '#523420'] : ['#0e0c08', '#2a2010', '#5a4420', '#a8823e'], r: holz ? RAND_Z : ['#c8a060', '#fff0c0'], ton: 2, fase: 0, rand: 1, schatten: 1, lichtVon: [lx, ly] });
+          stempel(x, y, s, (i + ri) % 2 === 1, (i * 3 + ri) % 4 === 0);
         }
       });
-      K.feld(0, yh, 160, yv, ZIEGEL, (x, y) => hand.has(x, y) ? .3 + LT(x, y) * .45 + verband(B, x, (y - yh) * 2.2, 5, 14, 9).t : -1);
-      // Rand der Hand: Staubkante (hell oben links, dunkel unten rechts)
-      for (let y = hand.y0 - 1; y <= hand.y1 + 1; y++) for (let x = hand.x0 - 1; x <= hand.x1 + 1; x++) if (!hand.has(x, y)) { if (hand.has(x + 1, y + 1)) K.set(x, y, ASCHE[8]); else if (hand.has(x - 1, y - 1)) K.set(x, y, ASCHE[2]); }
-      K.vignette(.6, { cx: 82, cy: 54 });
+      K.feld(0, yh, 160, yv, ZIEGEL, (x, y) => hand.has(x, y) ? ruhig(.42 + LT(x, y) * .3, ZIEGEL.length - 1) + verband(B, x, (y - yh) * 2, 6, 16, 9).t * .6 : -1);
+      for (let y = hand.y0 - 1; y <= hand.y1 + 1; y++) for (let x = hand.x0 - 1; x <= hand.x1 + 1; x++) if (!hand.has(x, y)) { if (hand.has(x + 1, y + 1) || hand.has(x, y + 1)) K.set(x, y, ASCHE[9]); else if (hand.has(x - 1, y - 1) || hand.has(x, y - 1)) K.set(x, y, ASCHE[1]); }
+      K.vignette(.5, { cx: 82, cy: 54 });
     },
 
     // Eine frisch gemauerte Ziegelwand quer durch einen Gang, auf jedem Ziegel ein heller Fingerabdruck; davor eine Kelle im Mörtel.
@@ -225,41 +229,43 @@ module.exports = {
     // Eine Wachstafel an einer Ziegelwand, lange Kolonnen ausgekratzter Zeilen, nur die unterste Zeile unberührt; darunter auf dem Boden Wachsspäne.
     ziegelgruben_appell(K) {
       const { B } = K;
-      const lx = 112, ly = 84;   // kleine Öllampe am Boden rechts unter der Tafel
-      // Kalte Kammer: Ziegelwand, kühl überzogen, nur unten im Lampenkreis rot
-      const LT = lichtF(lx, ly - 10, 120, 1, 1.3);
-      K.feld(0, 0, 160, 80, KALT.slice(0, 5), (x, y) => .12 + (1 - LT(x, y)) * .25 * (1 - y / 120) + verband(B, x, y, 4, 12, 4).t * .9 + (B.fbm(x * .06, y * .06, 2, 2) - .5) * .1);
-      K.licht(lx, ly - 6, 90, '#5a2a10', .9, { exp: 1.3 });
-      K.feld(0, 78, 160, 90, ASCHE.slice(0, 6), (x, y) => .08 + LT(x, y) * .7);
-      // Die Tafel: Holzrahmen, darin dunkles Wachs; Kolonnen ausgekratzter Zeilen, die unterste unberührt
-      const x0 = 34, y0 = 12, x1 = 126, y1 = 68;
-      const rahmen = K.maske(); rahmen.rect(x0 - 4, y0 - 4, x1 - x0 + 8, y1 - y0 + 8); rahmen.rect(x0, y0, x1 - x0, y1 - y0, 0);
-      K.form(rahmen, 0, { k: ['#0e0806', '#1c100a', '#2e1c10', '#442a18', '#5c3a22'], r: RAND_Z, ton: 2.4, fase: 1, rand: 2, schatten: 2, lichtVon: [lx, ly], muster: (x, y) => (B.rausch2(x * .5, y * .05, 3) - .5) * .8 });
-      const WACHS = ['#0a0604', '#140a06', '#1e100a', '#2a160c', '#3a1e10'];
-      K.feld(x0, y0, x1, y1, WACHS, (x, y) => .2 + LT(x, y) * .7 + (B.fbm(x * .2, y * .2, 5, 2) - .5) * .15);
-      // Kolonnen: drei Spalten, Zeilen ausgekratzt (Kratzer quer und schräg, Wachs aufgeworfen)
-      for (let c = 0; c < 3; c++) for (let z = 0; z < 15; z++) {
-        const zx0 = x0 + 4 + c * 30, zy = y0 + 4 + z * 3.3; if (zy > y1 - 9) continue;
-        const r = B.rng(c * 50 + z);
-        const ze = zx0 + 24 - r.i(0, 6);
-        K.schrift(zx0, Math.round(zy), ze, '#3a1e10', { min: 1, max: 3 });
-        // ausgekratzt: eine Zickzacklinie quer durch die Zeile, das Wachs daneben aufgeworfen
-        for (let x = zx0; x < ze; x++) { const yy = Math.round(zy + ((x - zx0) % 4 < 2 ? 0 : -1)); K.set(x, yy, '#6a3c22'); K.set(x, yy + 1, '#080403'); }
+      const lx = 80, ly = 86;   // Öllampe am Boden mittig unter der Tafel
+      // Kalte Kammer: ruhige, kühle Ziegelwand; nur unten im Lampenkreis warm
+      const LT = lichtF(lx, ly - 6, 110, 1.1, 1.3);
+      K.feld(0, 0, 160, 80, KALT.slice(0, 4), (x, y) => ruhig(.3 - LT(x, y) * .2, 3) + verband(B, x, y, 5, 14, 4).t * .7);
+      K.licht(lx, ly - 4, 100, '#6a2c10', 1, { exp: 1.4 });
+      K.feld(0, 78, 160, 90, ASCHE.slice(0, 6), (x, y) => ruhig(.05 + LT(x, y) * .8, 5));
+      // Nagel und Schnur
+      K.linie(80, 4, 40, 10, '#3a2a1a'); K.linie(80, 4, 120, 10, '#3a2a1a'); K.set(80, 3, '#7aa0c4'); K.set(80, 4, '#46688a');
+      // Die Tafel: Holzrahmen, darin dunkles Wachs
+      const x0 = 34, y0 = 12, x1 = 126, y1 = 70;
+      const rahmen = K.maske(); rahmen.rect(x0 - 5, y0 - 5, x1 - x0 + 10, y1 - y0 + 10); rahmen.rect(x0, y0, x1 - x0, y1 - y0, 0);
+      K.form(rahmen, 0, { k: ['#0e0806', '#1c100a', '#2e1c10', '#442a18', '#5c3a22', '#7a5030'], r: RAND_Z, ton: 2.2, fase: 1, rand: 2, schatten: 2, lichtVon: [lx, ly], verlauf: -1.4 });
+      K.kante(rahmen, lx, ly, 100, RAND_Z, { nah: .45 });
+      const WACHS = ['#0a0604', '#140a06', '#1e100a', '#2a160c', '#3a1e10', '#4e2a16'];
+      K.feld(x0, y0, x1, y1, WACHS, (x, y) => ruhig(.12 + LT(x, y) * .8, 5));
+      // Kolonnen: zwei Spalten, jede Zeile mit einer Zickzacklinie ausgekratzt
+      for (let c = 0; c < 2; c++) for (let z = 0; z < 11; z++) {
+        const zx0 = x0 + 6 + c * 44, zy = y0 + 5 + z * 4.2; if (zy > y1 - 12) continue;
+        const r = B.rng(c * 50 + z), ze = zx0 + 36 - r.i(0, 8);
+        K.schrift(zx0, Math.round(zy), ze, '#24120a', { min: 1, max: 3 });
+        for (let x = zx0 - 1; x < ze + 1; x++) { const yy = Math.round(zy + ((x - zx0) % 4 < 2 ? 0 : -1)); K.set(x, yy, '#7a4428'); K.set(x, yy + 1, '#050302'); }
       }
-      // die unterste Zeile: unberührt, deutlich, im Lampenlicht
+      // die unterste Zeile: unberührt, deutlich, warm im Lampenlicht
       const uy = y1 - 6;
-      K.linie(x0 + 4, uy - 2, x1 - 4, uy - 2, '#1e100a', .5);
-      K.schrift(x0 + 30, uy, x0 + 64, '#d8a070', { min: 2, max: 4, wackel: 0 });
-      K.schrift(x0 + 30, uy + 1, x0 + 64, '#6a3a1e', { min: 2, max: 4, wackel: 0, dicht: true });
-      // Wachsspäne am Boden: kleine Locken
+      K.linie(x0 + 4, uy - 3, x1 - 4, uy - 3, '#140a06');
+      K.schrift(x0 + 22, uy, x0 + 70, '#f0c090', { min: 2, max: 5, wackel: 0 });
+      K.schrift(x0 + 22, uy + 1, x0 + 70, '#8a4a26', { min: 2, max: 5, wackel: 0 });
+      // Wachsspäne am Boden: einige größere Locken im Lichtkreis
       const sp = K.maske(), r = B.rng(9);
-      for (let i = 0; i < 16; i++) { const x = r.f(46, 104), y = r.f(80, 87), a = r.f(0, 3); sp.kap(x, y, x + Math.cos(a) * 2, y + Math.sin(a) * .8, .7, .5); sp.ell(x + Math.cos(a) * 2, y + Math.sin(a), .9, .7); }
-      K.form(sp, 0, { k: WACHS, r: ['#8a4a26', '#e0a070'], ton: 2.6, fase: 0, rand: 1, lichtVon: [lx, ly] });
-      // die kleine Öllampe
-      const lm = K.maske(); lm.ell(lx, ly + 2, 5, 2); lm.kap(lx + 3, ly + 1.5, lx + 7, ly + 1, 1.2, 1);
-      K.form(lm, 0, { k: ['#1a0e08', '#2e1a0e', '#4a2c16'], r: RAND_Z, ton: 1.4, fase: 0, rand: 1, lichtVon: [lx + 7, ly - 3] });
-      K.set(lx + 7, ly, '#ffd27a'); K.set(lx + 7, ly - 1, '#fff1c0'); K.set(lx + 7, ly - 2, '#ffa848'); K.set(lx + 8, ly - 1, '#ffa848');
-      K.vignette(.6, { cx: 82, cy: 44 });
+      for (let i = 0; i < 9; i++) { const x = r.f(50, 112), y = r.f(80, 86), a = r.f(0, 3); if (Math.abs(x - lx) < 7) continue; sp.kap(x, y, x + Math.cos(a) * 3.5, y + Math.sin(a) * 1.2, 1, .7); sp.ell(x + Math.cos(a) * 3.5, y + Math.sin(a) * 1.2, 1.3, 1); }
+      K.form(sp, 0, { k: WACHS, r: ['#c07040', '#f0b080'], ton: 3, fase: 0, rand: 1, schatten: 1, lichtVon: [lx, ly - 3] });
+      // die Öllampe
+      const lm = K.maske(); lm.ell(lx, ly + 1, 6, 2.2); lm.kap(lx + 4, ly + .5, lx + 8, ly, 1.3, 1);
+      K.form(lm, 0, { k: ['#1a0e08', '#2e1a0e', '#4a2c16'], r: RAND_Z, ton: 1.4, fase: 0, rand: 1, lichtVon: [lx + 8, ly - 3] });
+      for (const [dx, dy, c] of [[8, -1, '#ffd27a'], [8, -2, '#fff1c0'], [8, -3, '#fff1c0'], [9, -2, '#ffa848'], [7, -2, '#ffa848'], [8, -4, '#ffa848'], [8, -5, '#d24c16']]) K.set(lx + dx, ly + dy, c);
+      K.lichtquelle(lx + 8, ly - 3);
+      K.vignette(.5, { cx: 80, cy: 46 });
     },
 
     // Ein gewölbter Ziegelgang, aus dem Scheitel fällt Asche in einer Säule auf eine einzelne Gestalt; am Boden um ihre Füße ein Fingerabdruck aus Asche.

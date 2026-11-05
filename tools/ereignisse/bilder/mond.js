@@ -148,26 +148,32 @@ module.exports = {
       schein(K, 40, 56, 70, 34, .85, { nurUeber: (x, y) => y < kante(x) });
       asche(K, kante, { gx: 40, gb: 60, hell: .55 });
       K.lichtquelle(40, 52);
-      // Dreibein, Messingrohr senkrecht nach unten, Objektiv im Staub
-      const cx = 80, yb = 82;
-      const bein = K.maske(); bein.kap(cx, 30, cx - 16, yb, 1, .9); bein.kap(cx + 1, 30, cx + 18, yb - 1, 1, .9); bein.kap(cx + .5, 30, cx + 6, yb + 3, 1, .9);
+      // Dreibein links, das Messingrohr schräg nach unten, die dicke Objektivfassung steckt vorn im Staub
+      const kx = 54, ky = 42, yb = 82;
+      const bein = K.maske(); bein.kap(kx, ky, kx - 18, yb, 1, .9); bein.kap(kx + 1, ky, kx + 16, yb - 1, 1, .9); bein.kap(kx, ky, kx - 2, yb + 3, 1, .9);
       K.form(bein, 0, { k: HOLZ, r: ['#8a7a5a', '#d8c8a0'], ton: 2, fase: 0, rand: 1 });
-      const kopf = K.maske(); kopf.rect(cx - 4, 26, 9, 5); K.form(kopf, 0, { k: MESS, r: ['#cdb878', GELB_K], ton: 2, fase: 0, rand: 1 });
-      const rohr = K.maske(); rohr.kap(cx, 10, cx, yb - 6, 2.2, 3.2); rohr.rect(cx - 3.4, 13, 7, 2); rohr.rect(cx - 4, 50, 8, 2); rohr.rect(cx - 4.6, yb - 10, 9.4, 11);
-      K.form(rohr, 0, { k: MESS, r: ['#9c8546', '#cdb878'], ton: .9, vx: -.5, fase: 0, rand: 1, L: [-1, 0], muster: (x, y) => (Math.abs(x - cx + 1) < .6 ? 1.8 : 0) + (x > cx ? -.6 : 0) + ((y > 12 && y < 16) || (y > 49 && y < 53) ? 1 : 0) });
-      K.set(cx - 1, 14, GELB_K); K.set(cx - 1, 51, GELB_K);
-      // Sucher neben dem Rohr
-      const su = K.maske(); su.kap(cx + 5, 16, cx + 5, 34, .9, .9); su.rect(cx + 2, 18, 3, 1); su.rect(cx + 2, 31, 3, 1);
-      K.form(su, 0, { k: MESS, r: ['#9c8546', '#cdb878'], ton: 1.4, fase: 0, rand: 1, L: [-1, 0] });
-      // Okular oben, noch warm
-      const ok = K.maske(); ok.kap(cx, 10, cx + 4, 6, 1.2, 1); K.form(ok, 0, { k: MESS, r: ['#cdb878', GELB_K], ton: 2.4, fase: 0, rand: 1 });
-      K.licht(cx + 4, 6, 10, GELB_G2, 1); K.set(cx + 5, 5, GELB_K); K.set(cx + 4, 5, GELB);
-      // Staubhügel, wo das Objektiv steckt
-      const hg = K.maske(); hg.ell(cx, yb + 2, 8, 2.4); K.form(hg, 0, { k: STAUB.slice(4, 10), r: ['#a19c8e', '#d2ccba'], ton: 2.4, fase: 1, rand: 1 });
+      const ox = 106, oy = 76, ex = 30, ey = 28;               // Objektiv / Okular
+      const rohr = K.maske(); rohr.kap(ex + 4, ey + 3, ox - 6, oy - 5, 2.2, 3.4);
+      const ring = (q, r) => { const x = B.lerp(ex + 4, ox - 6, q), y = B.lerp(ey + 3, oy - 5, q); rohr.kap(x - 1, y - .7, x + 1, y + .7, r, r); };
+      ring(.25, 3.2); ring(.62, 3.8);
+      K.form(rohr, 0, { k: MESS, r: ['#9c8546', '#cdb878'], ton: 1.4, fase: 1, rand: 2, L: [-.4, -.9], muster: (x, y) => { const d = ((x - ex) * -.68 + (y - ey) * .73); return d < -1.2 ? 1.2 : d > 1.5 ? -.7 : 0; } });
+      // dicke Objektivfassung (Taukappe), halb im Staub
+      const fa = K.maske(); fa.kap(ox - 8, oy - 6.4, ox + 1, oy + .4, 5.2, 5.6);
+      K.form(fa, 0, { k: MESS, r: ['#9c8546', '#cdb878'], ton: 1.6, fase: 1, rand: 2, L: [-.4, -.9], muster: (x, y) => (Math.abs((x - ox) * .68 - (y - oy) * .73 + 4) < .8 ? -1 : 0) });
+      const hg = K.maske(); hg.ell(ox + 2, oy + 4, 13, 4); hg.ell(ox - 4, oy + 5, 8, 3);
+      K.form(hg, 0, { k: STAUB.slice(3, 10), r: ['#a19c8e', '#d2ccba'], ton: 2.4, verlauf: 1, fase: 1, rand: 1, L: [0, -1] });
+      // Montierung auf dem Dreibein
+      const kopf = K.maske(); kopf.rect(kx - 4, ky - 2, 9, 5); kopf.kap(kx, ky - 2, kx, ky - 6, 1.6, 1.6);
+      K.form(kopf, 0, { k: MESS, r: ['#9c8546', '#cdb878'], ton: 1.4, fase: 0, rand: 1 });
+      // Sucher und Okular, das Okular noch warm
+      const su = K.maske(); su.kap(ex + 10, ey + 2, ex + 24, ey + 13, .9, .9);
+      K.form(su, 0, { k: MESS, r: ['#9c8546', '#cdb878'], ton: 1.3, fase: 0, rand: 1, L: [-.4, -.9] });
+      const ok = K.maske(); ok.kap(ex + 4, ey + 3, ex, ey - 1, 1.4, 1.1); K.form(ok, 0, { k: MESS, r: ['#cdb878', GELB_K], ton: 2.2, fase: 0, rand: 1 });
+      K.licht(ex, ey - 1, 10, GELB_G2, 1); K.set(ex, ey - 2, GELB_K); K.set(ex - 1, ey - 1, GELB);
       // Klappstuhl rechts, darauf ein Buch
-      const st = klappstuhlMaske(K, 124, 84, 24);
+      const st = klappstuhlMaske(K, 136, 84, 24);
       K.form(st, 0, { k: HOLZ, r: ['#8a7a5a', '#d8c8a0'], ton: 2, fase: 0, rand: 1 });
-      buch(K, 126, 70, 14, { ton: 3 });
+      buch(K, 138, 70, 14, { ton: 3 });
       K.vignette(.75, { cx: 84, cy: 50 });
     },
 
@@ -176,27 +182,28 @@ module.exports = {
       const { B } = K;
       const kante = horizont(K, 28, 6);
       eisdecke(K, 32, { zapfen: 8 });
-      // hinter der Grenze: grau, ohne Licht; davor hell, im Licht der Rückseite
-      const grenze = x => 54 + (x - 80) * .05;
+      // hinter der Grenze: grau, ohne Licht; davor ein schmaler, ruhiger Streifen hellen Staubs im Licht der Rückseite
+      const grenze = x => 70 + (x - 80) * .04;
       K.feld(0, 0, 160, 90, STAUB, (x, y) => {
         const k = kante(x); if (y < k) return -1;
-        if (y < grenze(x)) return .3 + (B.fbm(x * .05, y * .18, 3, 2) - .5) * .1 + (y - k) / 160;
-        return .46 + (y - grenze(x)) / 150 + (B.fbm(x * .06, y * .14, 5, 2) - .5) * .2 + (B.hash(x >> 1, y, 31) < .05 ? -.2 : 0);
+        if (y < grenze(x)) return .24 + (B.fbm(x * .05, y * .18, 3, 2) - .5) * .06 + (y - k) / 200;
+        return .5 + (y - grenze(x)) / 120 + (B.fbm(x * .04, y * .1, 5, 2) - .5) * .06;
       });
-      for (let x = 0; x < 160; x++) K.set(x, Math.round(grenze(x)), STAUB[12]);
-      // Mulden im grauen Feld, in jeder ein Glanz, wie ein Auge unter einem Lid
-      const r = B.rng(K.seed + 9);
-      for (const [x, y, w] of [[22, 44, 9], [58, 40, 7], [96, 46, 10], [132, 41, 8], [76, 36, 5], [40, 36, 4], [116, 35, 4], [148, 47, 6]]) {
-        const m = K.maske(); m.ell(x, y, w, w * .26 + .8);
-        K.form(m, 0, { k: STAUB.slice(0, 5), r: [STAUB[5], STAUB[7]], ton: .8, fase: 0, rand: 1, L: [0, 1] });
-        const g = w > 6 ? 2 : 1; for (let i = -g; i <= g; i++) K.set(x + i, y, Math.abs(i) < g ? GELB : '#9a904e');
-        if (w > 6) K.set(x, y - 1, '#5c5636');
-        void r;
+      for (let x = 0; x < 160; x++) K.set(x, Math.round(grenze(x)), STAUB[11]);
+      // Drei große Mulden im grauen Feld, flach wie Lider; in jeder glänzt etwas
+      for (const [x, y, w] of [[36, 50, 15], [96, 54, 18], [138, 44, 10]]) {
+        const m = K.maske(); m.fn(x - w - 1, y - 5, x + w + 1, y + 5, (px, py) => { const q = (px - x) / w; return Math.abs(q) < 1 && Math.abs(py - y) < (1 - q * q) * w * .2 + .6; });
+        K.form(m, 0, { k: STAUB.slice(0, 5), r: [STAUB[6], STAUB[8]], ton: .7, fase: 1, rand: 1, L: [0, 1] });
+        // Oberlid: ein dunkler Wulst, unten der helle Rand
+        for (let px = x - w + 2; px <= x + w - 2; px++) { const q = (px - x) / w, py = Math.round(y - (1 - q * q) * w * .2 - .4); K.set(px, py, STAUB[1]); }
+        const g = Math.round(w / 6); K.licht(x, y, w * .9, GELB_G, 1, { oval: 2.5, maske: (px, py) => m.has(px, py) });
+        for (let i = -g; i <= g; i++) K.set(x + i, y, Math.abs(i) < g ? GELB : '#9a904e');
+        K.set(x, y, GELB_K);
       }
-      K.licht(80, 80, 90, GELB_G, .7, { oval: 2.4, maske: (x, y) => y > grenze(x) });
-      // ein Stiefelabdruck genau an der Linie: so weit bist du gegangen
-      for (const [x, y] of [[74, 62], [82, 71]]) { const m = K.maske(); m.ell(x, y, 2.2, 1.2); m.ell(x + 2.6, y, 1.6, 1.1); K.form(m, 0, { k: STAUB.slice(6, 11), ton: 1, fase: 0, rand: 0 }); }
-      K.vignette(.7, { cx: 80, cy: 50 });
+      K.licht(80, 86, 60, GELB_G, .6, { oval: 3, maske: (x, y) => y > grenze(x) });
+      // zwei Stiefelabdrücke kurz vor der Linie: so weit bist du gegangen
+      for (const [x, y] of [[76, 76], [84, 83]]) { const m = K.maske(); m.ell(x, y, 2.4, 1.2); m.ell(x + 2.8, y, 1.7, 1.1); K.form(m, 0, { k: STAUB.slice(5, 10), ton: .8, fase: 0, rand: 0 }); }
+      K.vignette(.6, { cx: 80, cy: 62, innen: .7 });
     },
 
     // Zwölf Spuren nebeneinander bis zum gekrümmten Horizont; zurück laufen elf, eine fehlt.

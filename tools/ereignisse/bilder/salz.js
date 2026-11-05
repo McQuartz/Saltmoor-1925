@@ -18,14 +18,21 @@ function kruste(B, X, Z, s, gr) {
   for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) { const px = (cx + i + B.hash(cx + i, cz + j, s)) * gr, pz = (cz + j + B.hash(cx + i, cz + j, s + 1)) * gr; const d = Math.hypot(X - px, (Z - pz) * .8); if (d < d1) { d2 = d1; d1 = d; } else if (d < d2) d2 = d; }
   return d2 - d1;
 }
+// Ruhige Rampe: rastet auf Stufen ein, gedithert nur im schmalen Übergang (große Flächen fast flach)
+function ruhig(t, n, b) {
+  const f = Math.max(0, Math.min(.9999, t)) * n, k = Math.floor(f), fr = f - k, w = b === undefined ? .18 : b;
+  return (k + (fr < .5 - w ? 0 : fr > .5 + w ? 1 : (fr - (.5 - w)) / (2 * w))) / n;
+}
 // Salzwand im Lampenlicht: hell nahe (lx, ly), nach außen ins Dunkle; o.maske, o.gr (Zellgröße), o.st, o.basis
 function salzwand(K, x0, y0, x1, y1, lx, ly, r, o) {
   o = o || {}; const { B } = K, gr = o.gr || 7, st = o.st === undefined ? .95 : o.st, ov = o.oval || 1.2;
   K.feld(x0, y0, x1, y1, o.cols || SALZ, (x, y) => {
     if (o.maske && !o.maske(x, y)) return -1;
     const q = Math.min(1, Math.hypot(x - lx, (y - ly) * ov) / r), lic = Math.pow(1 - q, 1.5) * st;
-    const k = kruste(B, x, y, K.seed + (o.s || 0), gr), kante = k < .9 ? -.04 - lic * .16 : 0;
-    return (o.basis === undefined ? .06 : o.basis) + lic + kante + (B.fbm(x * .08, y * .08, K.seed, 2) - .5) * .1 + (o.tf ? o.tf(x, y) : 0);
+    // ruhig gestuft: die Fläche rastet auf Rampenstufen ein; Krustenkanten nur als feine Linien im Licht
+    const n = (o.cols || SALZ).length - 1, k = kruste(B, x, y, K.seed + (o.s || 0), gr * 1.4);
+    const t = ruhig((o.basis === undefined ? .06 : o.basis) + lic + (o.tf ? o.tf(x, y) : 0), n);
+    return k < .6 && lic > .12 ? t - 1 / n : t;
   });
 }
 // Grubenlampe (Öl, mit Haken): Fuß bei (x, yb); hängt am Haken oder steht.
@@ -218,36 +225,41 @@ module.exports = {
     // Ein Stapel dunkler Holztafeln auf einem Salzblock, voller Kerbstriche, daneben ein Häufchen kleiner, glatter Salzwürfel.
     salz_zweites_buch(K) {
       const { B } = K;
-      const lx = 136, ly = 40;
-      salzwand(K, 0, 0, 160, 90, lx - 40, ly + 4, 100, { gr: 11, st: .7, basis: 0 });
-      // Salzblock (Quader in leichter Aufsicht)
-      const top = K.maske(); top.poly([[24, 62], [36, 52], [130, 52], [118, 62]]);
-      const front = K.maske(); front.rect(24, 62, 94, 28);
-      const seite = K.maske(); seite.poly([[118, 62], [130, 52], [130, 80], [118, 90]]);
-      K.form(front, 0, { k: SALZ.slice(1, 7), r: SALZKANTE, ton: 1.6, fase: 1, rand: 1, verlauf: .8, verlaufX: 1.4, muster: (x, y) => (kruste(B, x, y, 2, 6) < .8 ? -.4 : 0) });
-      K.form(seite, 0, { k: SALZ.slice(3, 9), r: SALZKANTE, ton: 2.6, fase: 1, rand: 2, muster: (x, y) => (kruste(B, x, y, 3, 4) < .8 ? -.4 : 0) });
+      const lx = 138, ly = 30;
+      salzwand(K, 0, 0, 160, 90, lx - 50, ly + 14, 110, { gr: 12, st: .75, basis: 0 });
+      // Salzblock (Quader in leichter Aufsicht), unten im Bild
+      const top = K.maske(); top.poly([[14, 66], [26, 56], [146, 56], [134, 66]]);
+      const front = K.maske(); front.rect(14, 66, 120, 24);
+      const seite = K.maske(); seite.poly([[134, 66], [146, 56], [146, 80], [134, 90]]);
+      K.form(front, 0, { k: SALZ.slice(1, 7), r: SALZKANTE, ton: 1.6, fase: 1, rand: 1, verlauf: .8, verlaufX: 1.4 });
+      K.form(seite, 0, { k: SALZ.slice(3, 9), r: SALZKANTE, ton: 2.6, fase: 1, rand: 2 });
       K.form(top, 0, { k: SALZ.slice(3, 9), r: SALZKANTE, ton: 2.2, fase: 0, rand: 1, verlaufX: 1.6 });
-      // Tafelstapel: drei Tafeln, leicht gegeneinander verschoben
-      const T = ['#0a0705', '#140e0a', '#20160f', '#2e2015', '#3e2c1c', '#523b26'];
-      const tafeln = [[38, 60, 66, 3], [41, 57, 64, 3], [39, 54, 66, 3]];
-      for (const [x, y, w, h] of tafeln) { const t = K.maske(); t.rect(x, y, w, h); balken(K, t, { mat: { k: T, ton: 1.6, lichtVon: [lx, ly] } }); K.linie(x + w * .4, y, x + w - 1, y, '#6a4a30', .7); K.set(x + w - 1, y, '#a87040'); }
-      // oberste Fläche in Aufsicht: Kerbreihen, nach hinten länger, hinter jeder Reihe ein Würfel
-      const fl = K.maske(); fl.poly([[39, 54], [48, 40], [114, 40], [105, 54]]);
-      K.form(fl, 0, { k: T, r: HOLZKANTE, ton: 3.4, fase: 0, rand: 1, verlaufX: 1.2, lichtVon: [lx, ly], muster: (x, y) => (B.rausch2(x * .4, y * .05, 4) - .5) * .8 });
+      // Tafelstapel: drei dicke Tafeln, gegeneinander verschoben, Kanten im Lampenlicht
+      const T = ['#0a0705', '#140e0a', '#20160f', '#2e2015', '#3e2c1c', '#523b26', '#6a4c30'];
+      const tafeln = [[24, 63, 92, 4], [28, 59, 90, 4], [25, 55, 92, 4]];
+      for (const [x, y, w, h] of tafeln) { const t = K.maske(); t.rect(x, y, w, h); balken(K, t, { mat: { k: T, ton: 2, lichtVon: [lx, ly] } }); K.linie(x + 2, y, x + w - 1, y, '#8a6040', .8); }
+      // oberste Fläche in Aufsicht: groß, Kerbreihen, nach hinten länger, hinter jeder Reihe ein kleiner Würfel
+      const fl = K.maske(); fl.poly([[25, 55], [36, 30], [128, 30], [117, 55]]);
+      K.form(fl, 0, { k: T, r: HOLZKANTE, ton: 3.6, fase: 0, rand: 1, verlaufX: 1.4, lichtVon: [lx, ly], muster: (x, y) => (B.rausch2(x * .3, y * .04, 4) - .5) * .5 });
       for (let i = 0; i < 6; i++) {
-        const y = 51 - i * 2, sx = 44 + i * 1.3, n = 5 + i * 5;
+        const y = 51 - i * 4, sx = 34 + i * 2.2, n = 6 + i * 6;
         let x = sx;
-        for (let k = 0; k < n && x < 100; k++, x += 1.6) { K.set(Math.round(x), y, '#0a0705'); K.set(Math.round(x), y - 1, '#20160f'); }
-        const wx = Math.round(Math.min(101, x + 1.5));
-        K.set(wx, y, '#ece4dc'); K.set(wx + 1, y, '#b2a69d'); K.set(wx, y - 1, '#ffffff'); K.set(wx + 1, y - 1, '#d0c6bd');
+        for (let k = 0; k < n && x < 108; k++, x += 2.2) { K.set(Math.round(x), y, '#0a0705'); K.set(Math.round(x), y - 1, '#0a0705'); K.set(Math.round(x) + 1, y, '#8a6040'); }
+        const wx = Math.round(Math.min(110, x + 2));
+        const w = K.maske(); w.rect(wx, y - 2, 3, 3); K.form(w, 0, { k: SALZ.slice(5, 10), r: ['#ffffff', '#ffffff'], ton: 3, fase: 0, rand: 1, lichtVon: [lx, ly] });
       }
-      // Häufchen Salzwürfel daneben auf dem Block
-      const wm = K.maske();
-      for (const [x, y] of [[112, 57], [116, 57], [114, 54], [120, 56], [109, 59], [118, 59], [113, 60], [117, 53]]) wm.rect(x, y, 3, 3);
-      K.form(wm, 0, { k: SALZ.slice(4, 10), r: ['#ffffff', '#ffffff'], ton: 3, fase: 0, rand: 1, lichtVon: [lx, ly] });
-      // Lampe rechts, hinter dem Block an der Wand
-      grubenlampe(K, lx, 48, { haken: true, hof: 72 });
-      K.vignette(.55, { cx: 84, cy: 52 });
+      // Häufchen großer, glatter Salzwürfel daneben auf dem Block
+      const wuerfel = (x, y, s) => {
+        const ob = K.maske(); ob.poly([[x - s, y - s * .4], [x, y - s * .9], [x + s, y - s * .4], [x, y + s * .1]]);
+        const li = K.maske(); li.poly([[x - s, y - s * .4], [x, y + s * .1], [x, y + s * 1.1], [x - s, y + s * .6]]);
+        const re = K.maske(); re.poly([[x, y + s * .1], [x + s, y - s * .4], [x + s, y + s * .6], [x, y + s * 1.1]]);
+        K.form(li, 0, { k: SALZ.slice(3, 8), r: [], ton: 2.2, fase: 0, rand: 0 });
+        K.form(re, 0, { k: SALZ.slice(5, 10), r: [], ton: 3, fase: 0, rand: 0 });
+        K.form(ob, 0, { k: SALZ.slice(6, 10), r: ['#ffffff', '#ffffff'], ton: 3, fase: 0, rand: 1, lichtVon: [lx, ly] });
+      };
+      wuerfel(124, 58, 4); wuerfel(133, 59, 4); wuerfel(128, 52, 4);
+      grubenlampe(K, lx, 38, { haken: true, hof: 80 });
+      K.vignette(.5, { cx: 80, cy: 50 });
     },
   },
 };

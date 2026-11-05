@@ -205,23 +205,25 @@ module.exports = {
           K.set(x, yy + 2, ERDE[5]); K.set(x + 1, yy + 2, ERDE[4]);
         }
       }
-      // Schleifstein: großes Rad auf einem Bock aus zwei Böcken und Achse, darunter der Trog und die Pfütze
-      const sx = 122, sy = 56, sr = 16;
+      // Schleifstein: dicke Steinscheibe, schräg gesehen, auf einer Achse zwischen zwei Holzböcken
+      const sx = 120, sy = 58, srx = 10, sry = 17;
+      const hinten = K.maske(); hinten.ell(sx + 4, sy, srx, sry); hinten.rect(sx, sy - sry, 4, 2 * sry);
+      K.form(hinten, 0, { k: STEIN.slice(0, 6), r: RAND_K, ton: 1.6, fase: 0, rand: 1, lichtVon: [tx, ty], muster: (x, y) => ((y - sy) % 3 === 0 ? -.5 : 0) });
+      const rad = K.maske(); rad.ell(sx, sy, srx, sry);
+      K.form(rad, 0, { k: STEIN.slice(0, 9), r: RAND, ton: 3.2, fase: 1, rand: 2, schatten: 2, lichtVon: [tx, ty], verlauf: .8, muster: (x, y) => (Math.hypot((x - sx) / srx, (y - sy) / sry) % .3 < .06 ? -.6 : 0) - (y > sy + 6 ? 1.2 : 0) });
       const bock = K.maske();
-      bock.kap(sx - 16, 84, sx - 13, sy, 1.5, 1.3); bock.kap(sx - 8, 84, sx - 13, sy, 1.3, 1.2);
-      bock.kap(sx + 16, 84, sx + 13, sy, 1.5, 1.3); bock.kap(sx + 8, 84, sx + 13, sy, 1.3, 1.2);
-      bock.kap(sx - 15, sy, sx + 15, sy, 1, 1);
-      K.form(bock, 0, { k: RINDE, r: RAND, ton: 3.4, fase: 0, rand: 2, lichtVon: [tx, ty] });
-      const rad = K.maske(); rad.ell(sx, sy, sr, sr);
-      K.form(rad, 0, { k: STEIN.slice(0, 9), r: RAND, ton: 3, fase: 1, rand: 2, schatten: 2, lichtVon: [tx, ty], muster: (x, y) => (Math.hypot(x - sx, y - sy) % 3.4 < .7 ? -.5 : 0) - (y > sy + 3 ? 1.1 : 0) });
-      const nabe = K.maske(); nabe.ell(sx, sy, 2.2, 2.2); K.form(nabe, 0, { k: ['#1a1208', '#3a2a14', '#6e5228'], r: RAND, ton: 1.6, fase: 0, rand: 1, lichtVon: [tx, ty] });
-      // nass: die untere Hälfte glänzt, Tropfen fallen
-      for (let a = .3; a < 2.8; a += .35) K.set(sx + Math.cos(a) * (sr - 1), sy + Math.sin(a) * (sr - 1), '#a88c5e');
-      K.set(sx + 1, sy + sr + 3, '#e6c48a'); K.set(sx + 1, sy + sr + 7, '#a88c5e');
+      for (const bx of [sx - 16, sx + 18]) { bock.kap(bx - 6, 86, bx, sy, 1.6, 1.3); bock.kap(bx + 6, 86, bx, sy, 1.6, 1.3); bock.kap(bx - 4, 78, bx + 4, 78, 1, 1); }
+      bock.kap(sx - 18, sy, sx + 20, sy, 1.2, 1.2);   // Achse
+      bock.kap(sx + 20, sy, sx + 26, sy - 6, .9, .9); bock.kap(sx + 26, sy - 6, sx + 26, sy - 10, .9, .9);   // Kurbel
+      K.form(bock, 0, { k: RINDE, r: RAND, ton: 3.2, fase: 0, rand: 2, schatten: 1, lichtVon: [tx, ty] });
+      const nabe = K.maske(); nabe.ell(sx, sy, 2.4, 2.4); K.form(nabe, 0, { k: ['#1a1208', '#3a2a14', '#6e5228'], r: RAND, ton: 1.6, fase: 0, rand: 1, lichtVon: [tx, ty] });
+      // nass: Tropfen fallen von der unteren Kante
+      K.set(sx, sy + sry + 3, '#e6c48a'); K.set(sx, sy + sry + 7, '#a88c5e');
       // die Pfütze, in ihr die Träne gespiegelt
-      const pf = K.maske(); pf.ell(sx + 2, 85, 28, 4.2);
+      const pf = K.maske(); pf.ell(sx + 2, 82, 26, 4.5);
       K.form(pf, 0, { k: ['#050403', '#0c0a07', '#16120c', '#211b12'], r: ['#8e6a36', '#e6c48a'], ton: 1.6, fase: 0, rand: 1, L: [0, -1] });
-      K.spiegel(tx - 6, 81, 90, HARZ[7], 2.4, (x, y) => pf.has(x, y)); K.set(tx - 6, 82, HARZ[8]); K.set(tx - 5, 82, HARZ[7]);
+      for (const [dx, dy, c] of [[0, 0, 8], [1, 0, 7], [0, 1, 7], [-1, 1, 6], [1, 2, 6], [0, 3, 5], [-1, 4, 4], [1, 4, 4], [0, 5, 3]]) if (pf.has(tx + dx, 79 + dy)) K.set(tx + dx, 79 + dy, HARZ[c]);
+      K.licht(tx, 81, 12, GLUT, .8, { maske: (x, y) => pf.has(x, y) });
       for (let x = sx - 22; x < sx + 26; x += 5) K.set(x, 85 + (x % 2), '#5e4a2e');
       // Harzträne oben rechts
       const w = K.maske(); w.pfad([[tx - 10, -4], [tx - 3, 4], [tx, ty - 6]], 1.8, 1); K.form(w, 0, { k: RINDE, r: RAND, ton: 1.6, fase: 0, rand: 1 });

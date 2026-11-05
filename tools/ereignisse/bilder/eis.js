@@ -178,33 +178,38 @@ module.exports = {
     // Ein Schlitten mit Kisten, davor eine Reihe Hunde im Eis, alle mit gesenktem Kopf, einer mit hellen Augen.
     eis_schlitten(K) {
       const { B } = K;
-      const hy = 73, yb = 86;
+      const hy = 64, yb = 78;
       // tief stehender, fahler Schein am Horizont: Hunde und Schlitten stehen als Schattenrisse davor
       K.feld(0, 0, 160, hy, ['#020306', '#04070c', '#070c16', '#0b1422', '#111e32', '#1a2a44', '#26405e', '#3a5a80', '#5a80a8', '#7a9ec0'], (x, y) => {
         const v = (y + 1) / hy; return .06 + Math.pow(v, 3) * .82 + Math.exp(-(((x - 60) / 50) ** 2)) * Math.pow(v, 5) * .15 + (B.fbm(x * .03, y * .1, K.seed, 2) - .5) * .06;
       });
       K.sterne(16, 30, ['#1a2a44', '#3a5a80']);
-      nordlicht(K, [[-10, 12], [50, 5], [110, 15], [170, 7]], '#16304a', .9, 22);
+      nordlicht(K, [[-10, 10], [50, 4], [110, 12], [170, 6]], '#16304a', .9, 20);
       eisFlaeche(K, hy, { horizont: .75, basis: .1 });
       spiegeln(K, hy, 90, .5, { abfall: .5 });
       K.lichtquelle(60, 70);
       const dunkel = ['#010204', '#03050a', '#060a12', '#0b1220'];
-      // Schlitten rechts angeschnitten: Kufen, Rungen, Kisten unter steifer Plane, Griffbügel
+      // Schlitten rechts, ganz im Bild: Kufen mit hochgebogener Spitze vorn (links), Rungen, Ladung verschnürt, Griffbügel hinten
+      const sx0 = 110, sx1 = 152;
       const sl = K.maske();
-      sl.kap(128, yb, 170, yb, 1.2, 1.2); sl.kap(128, yb, 122, yb - 8, 1.2, 1);
-      for (const x of [133, 147, 160]) sl.kap(x, yb, x, yb - 9, 1, 1);
-      sl.rect(126, yb - 11, 44, 2.5);
-      sl.rect(131, yb - 28, 20, 17); sl.rect(152, yb - 33, 16, 22); sl.rect(137, yb - 40, 16, 12);
-      K.form(sl, 0, { k: ['#03050a', '#0a1018', '#121c2a', '#1c2a3e'], r: KALT, ton: 1.6, verlauf: .8, fase: 1, rand: 1, muster: (x, y) => ((x === 151 || x === 152 || y === yb - 28 || y === yb - 33 || y === yb - 40) ? -1.2 : (y - yb) % 5 === 0 ? -.5 : 0) });
-      const pl = K.maske(); pl.poly([[133, yb - 37], [141, yb - 49], [158, yb - 47], [168, yb - 38], [166, yb - 32], [135, yb - 31]]);
-      K.form(pl, 0, { k: TUCH, r: KALT, ton: 1.8, verlauf: .8, muster: (x, y) => (Math.sin(x * .8 + y * .3) > .75 ? .9 : 0) });
-      sl.poly([[133, yb - 37], [141, yb - 49], [158, yb - 47], [168, yb - 38], [166, yb - 32], [135, yb - 31]]);
-      K.kante(sl, 100, 30, 80, ['#26405e', '#5a80a8'], { min: .3 });
+      sl.kap(sx0, yb, sx1 + 2, yb, 1.1, 1.1); sl.kap(sx0, yb, sx0 - 5, yb - 4, 1.1, 1); sl.kap(sx0 - 5, yb - 4, sx0 - 4, yb - 8, 1, .9);
+      for (const x of [sx0 + 4, sx0 + 16, sx0 + 28, sx0 + 40]) sl.kap(x, yb, x, yb - 7, .8, .8);
+      sl.rect(sx0 - 4, yb - 9, sx1 - sx0 + 6, 2);
+      sl.kap(sx1 + 1, yb - 8, sx1 + 5, yb - 26, .9, .9); sl.kap(sx1 + 5, yb - 26, sx1 - 1, yb - 27, .8, .8);
+      K.form(sl, 0, { k: ['#05070b', '#0b1018', '#141c28', '#1e2a3a'], r: KALT, ton: 1.6, fase: 0, rand: 1, L: [-.6, -.8] });
+      const ki = { k: ['#04060a', '#0a1018', '#121c2a', '#1c2a3e'], r: KALT, ton: 1.6, L: [-.6, -.8] };
+      K.kiste(sx0 + 8, yb - 9, 16, 11, 0, 0, { mat: ki }); K.kiste(sx0 + 26, yb - 9, 18, 13, 0, 0, { mat: ki }); K.kiste(sx0 + 37, yb - 9, 10, 9, 0, 0, { mat: ki });
+      const pl = K.maske(); pl.poly([[sx0 + 4, yb - 20], [sx0 + 10, yb - 28], [sx0 + 30, yb - 30], [sx0 + 40, yb - 23], [sx0 + 38, yb - 20]]);
+      K.form(pl, 0, { k: TUCH, r: KALT, ton: 1.8, verlauf: .8, L: [-.6, -.8], muster: (x, y) => (Math.sin(x * .8 + y * .3) > .75 ? -.6 : 0) });
+      // Zurrleinen über der Ladung
+      for (const [a0, a1] of [[[sx0 + 2, yb - 9], [sx0 + 20, yb - 29]], [[sx0 + 22, yb - 30], [sx0 + 42, yb - 9]]]) K.linie(a0[0], a0[1], a1[0], a1[1], '#3a5a80');
+      // Reif auf der Plane
+      for (let x = sx0 + 10; x < sx0 + 30; x += 3) K.set(x, yb - 29 + Math.round(Math.sin(x) * .6), '#5a8ab0');
       // Zugleine von den Hunden zum Schlitten
-      K.linie(0, yb - 21, 124, yb - 8, '#04070c');
+      K.linie(0, yb - 21, sx0 - 5, yb - 7, '#04070c');
       // Die Hunde, im Stehen gefroren, Köpfe nach unten; der mittlere hat die Augen offen
       const hunde = [];
-      for (const [x, s, kt] of [[30, 1.9, .45], [70, 1.95, .3], [108, 1.9, .5]]) {
+      for (const [x, s, kt] of [[26, 1.7, .45], [60, 1.75, .3], [93, 1.7, .5]]) {
         const h = hundMaske(K, x, yb, s, { richtung: -1, kopfTief: kt });
         K.form(h, 0, { k: dunkel, r: KALT, ton: .7, rand: 1, muster: (px, py) => (B.hash(px, py, 2) < .05 ? .8 : 0) });
         hunde.push(h);
@@ -215,7 +220,7 @@ module.exports = {
       const [kx, ky] = hunde[1].kopf;
       K.licht(kx - 1, ky - 1, 10, '#2a4a70', 1);
       K.set(kx - 1, ky - 1, '#ffffff'); K.set(kx - 2, ky - 1, '#e8f6ff'); K.set(kx, ky - 1, '#5a8ab0');
-      K.vignette(.7, { cx: 76, cy: 60 });
+      K.vignette(.65, { cx: 80, cy: 62 });
     },
 
     // Eine einsame Fahnenstange auf spiegelndem schwarzem Eis, das Tuch gefroren und quer abstehend, im Stoff die Wölbung eines Gesichts.

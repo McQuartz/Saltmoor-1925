@@ -91,28 +91,31 @@ module.exports = {
       meerDecke(K, hy, { lx: 112 });
       sand(K, hy, { lx: 112 });
       K.lichtquelle(112, 46);
-      // Strandkorb von hinten: Korbgeflecht, die Haube oben gerundet, an den Seiten der gestreifte Stoff
+      // Strandkorb von hinten: unten der Sitzkasten, oben die gerundete Haube, etwas breiter; Geflecht im Gegenlicht
       const cx = 72, yb = 82;
-      const korb = K.maske();
-      korb.rect(cx - 22, yb - 26, 44, 26);
-      korb.fn(cx - 24, yb - 54, cx + 24, yb - 24, (x, y) => Math.abs(x - cx) < 22 + (yb - 26 - y) * .08 && Math.hypot((x - cx) / 24, (y - (yb - 34)) / 20) < 1);
-      korb.rect(cx - 24, yb - 27, 48, 3);
-      const geflecht = (x, y) => ((x + (y >> 1)) % 3 === 0 ? -.5 : 0) + ((y % 2) ? .25 : 0);
-      K.form(korb, 0, { k: KORB, r: SANDRAND, ton: 2, verlauf: .6, muster: (x, y) => geflecht(x, y) - Math.abs(x - cx) / 24 * .6 + (y === yb - 26 || y === yb - 25 ? 1.2 : 0) });
-      // gestreifter Stoff, der seitlich unter der Haube hervorschaut
-      for (const s of [-1, 1]) {
-        const st = K.maske(); st.poly([[cx + s * 22, yb - 50], [cx + s * 25, yb - 46], [cx + s * 26, yb - 28], [cx + s * 22, yb - 28]]);
-        K.form(st, 0, { k: ['#1a1410', '#4a2a22', '#7a4a3a', '#b89a80', '#d8ccb4'], r: SANDRAND, ton: 2, fase: 0, rand: 1, muster: (x, y) => (Math.floor(y / 3) % 2 ? 1.4 : -1) });
+      // Schatten nach vorn (Licht von hinten)
+      K.feld(cx - 30, yb - 1, cx + 34, 90, SAND.slice(0, 3), (x, y) => Math.abs(x - cx - (y - yb) * .3) < 24 + (y - yb) * 1.2 ? .25 : -1);
+      const kasten = K.maske(); kasten.rect(cx - 20, yb - 25, 40, 25);
+      const haube = K.maske(); haube.fn(cx - 25, yb - 58, cx + 25, yb - 24, (x, y) => { const u = (x - cx) / 23, top = yb - 40 - Math.sqrt(Math.max(0, 1 - u * u)) * 16; return Math.abs(u) <= 1 && y >= top; });
+      const geflecht = (x, y) => { const a = ((x + y) >> 1) & 1, b = ((x - y + 400) >> 1) & 1; return a && b ? .8 : !a && !b ? -.7 : 0; };
+      const WEIDE = ['#120e09', '#221a10', '#3a2e1c', '#56462c', '#76603e', '#957c52'];
+      const korbMat = (m, extra) => K.form(m, 0, Object.assign({ k: WEIDE, r: SANDRAND, ton: 1.7, vx: 1.2, fase: 1, rand: 2, L: [.8, -.6], muster: (x, y) => geflecht(x, y) }, extra || {}));
+      korbMat(kasten, { verlauf: -.4 });
+      korbMat(haube, { verlauf: .4 });
+      // Holzleiste zwischen Kasten und Haube, Füße
+      const leiste = K.maske(); leiste.rect(cx - 25, yb - 26, 50, 3); leiste.rect(cx - 22, yb - 2, 6, 3); leiste.rect(cx + 16, yb - 2, 6, 3);
+      K.form(leiste, 0, { k: KORB, r: SANDRAND, ton: 3, fase: 0, rand: 1, L: [.6, -.8] });
+      // gestreifter Stoff am Rand der Haube
+      for (let y = yb - 54; y < yb - 25; y++) for (const sd of [-1, 1]) {
+        const u = Math.sqrt(Math.max(0, 1 - ((yb - 40 - y) / 16) ** 2)), xr = Math.round(cx + sd * 23 * (y < yb - 40 ? u : 1));
+        const c = Math.floor(y / 3) % 2 ? '#c8b496' : '#8a4a3a'; K.set(xr + sd, y, c); if (y > yb - 46) K.set(xr + sd * 2, y, c);
       }
-      // Füße des Korbs im Sand, Schatten, das Schild mit der Nummer
-      const fu = K.maske(); fu.rect(cx - 22, yb, 6, 2); fu.rect(cx + 16, yb, 6, 2); K.form(fu, 0, { k: KORB, ton: 1, fase: 0, rand: 0 });
-      K.feld(cx - 30, yb + 1, cx + 30, yb + 5, SAND.slice(0, 3), (x, y) => Math.abs(x - cx + 2) < 30 - (y - yb) * 3 ? .2 : -1);
+      // Licht von hinten rechts über den Rand der Haube
+      K.kante(haube, 112, 46, 70, ['#8a806a', MORGEN], { min: .4 });
       // Schild mit der Kabinennummer (17)
-      const schild = K.maske(); schild.rect(cx - 6, yb - 47, 13, 8); K.form(schild, 0, { k: ['#2a2620', '#5a5446', '#a8a08a', '#d8d0b8'], r: [MORGEN, '#fff8e4'], ton: 2.4, fase: 0, rand: 1 });
+      const schild = K.maske(); schild.rect(cx - 6, yb - 46, 13, 8); K.form(schild, 0, { k: ['#2a2620', '#5a5446', '#a8a08a', '#d8d0b8'], r: [MORGEN, '#fff8e4'], ton: 2.2, fase: 0, rand: 1 });
       const ZI = { 1: ['01', '11', '01', '01', '01'], 7: ['111', '001', '010', '010', '010'] };
-      for (const [d, ox] of [[1, -3], [7, 1]]) ZI[d].forEach((z, j) => [...z].forEach((c, i) => { if (c === '1') K.set(cx + ox + i, yb - 45 + j, '#2a2016'); }));
-      // Haubenrand: der gestreifte Stoff schaut oben über das Geflecht
-      for (let x = cx - 21; x <= cx + 21; x++) { const y = Math.round(yb - 34 - Math.sqrt(Math.max(0, 1 - ((x - cx) / 24) ** 2)) * 20); K.set(x, y + 1, Math.floor((x - cx + 40) / 3) % 2 ? '#b89a80' : '#7a4a3a'); }
+      for (const [d, ox] of [[1, -3], [7, 1]]) ZI[d].forEach((z, j) => [...z].forEach((c, i) => { if (c === '1') K.set(cx + ox + i, yb - 44 + j, '#2a2016'); }));
       K.vignette(.7, { cx: 80, cy: 50 });
     },
 
