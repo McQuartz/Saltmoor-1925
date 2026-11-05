@@ -97,7 +97,7 @@
    "wahl": "seed",
    "ebenen": [
     "vorraum",
-    "rast",
+    "rast_v",
     "finale"
    ]
   }
@@ -203,6 +203,13 @@
   },
   "finale": {
    "fest": "finale"
+  },
+  "rast_v": {
+   "fest_wahl": [
+    "rast",
+    "ereignis"
+   ],
+   "_doc": "Akt V vor dem Finale: Rast oder ein Ereignis des Akt-V-Bioms (sonst kämen Pforte, Ufer und Waage nie zu ihren Ereignissen)"
   }
  },
  "kaempfe": {

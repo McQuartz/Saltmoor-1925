@@ -210,9 +210,9 @@ function schlafsaal(K, cfg) {
   const n = cfg.dunkel ? 0 : 2 + Math.round(fr * 5);
   for (let i = 0; i < n; i++) { const X = -1.3 + i * 0.45 + (i > 2 ? 0.95 : 0); const [x, y] = Q(P, X, 0, ze - 0.4); kind(K, 2, Math.round(x), Math.round(y), 21 + (i % 2) * 2, 0.15); }
   // Vordergrund: links das Fußteil eines Betts angeschnitten, rechts ein Stuhl mit gefalteter Wäsche
-  { const v = B.maske(); v.rect(-M, 196, 54, 5); v.rect(-M, 214, 54, 4); v.rect(46, 192, 5, H + M - 192); for (let i = 0; i < 4; i++) v.rect(4 + i * 12, 201, 3, 13); K.form(5, v, 0, { k: EISEN, r: RAND, ton: 2, fase: 1, rand: 2 }); }
-  { const v = B.maske(); v.rect(436, 226, 40, 5); v.rect(440, 231, 4, 40); v.rect(468, 231, 4, 40); v.rect(468, 176, 4, 50); v.rect(466, 176, 8, 4); K.form(5, v, 0, { k: HOLZ, r: RAND, ton: 2.6, fase: 1, rand: 2 });
-    const w = B.maske(); w.rect(440, 218, 26, 8); w.rect(442, 214, 22, 4); K.form(5, w, 0, { k: LEINEN, r: RAND, ton: 2.4, fase: 1, rand: 1 }); }
+  { const v = B.maske(); v.rect(-M, 196, 54, 5); v.rect(-M, 214, 54, 4); v.rect(46, 192, 5, H + M - 192); for (let i = 0; i < 4; i++) v.rect(4 + i * 12, 201, 3, 13); K.form(5, v, 0, { k: EISEN, r: RAND_D, ton: 2, fase: 1, rand: 2 }); }
+  { const v = B.maske(); v.rect(436, 226, 40, 5); v.rect(440, 231, 4, 40); v.rect(468, 231, 4, 40); v.rect(468, 176, 4, 50); v.rect(466, 176, 8, 4); K.form(5, v, 0, { k: HOLZ, r: RAND_D, ton: 2, fase: 1, rand: 2 });
+    const w = B.maske(); w.rect(440, 218, 26, 8); w.rect(442, 214, 22, 4); K.form(5, w, 0, { k: LEINEN, r: RAND_D, ton: 1.9, fase: 1, rand: 1 }); }
   B.nebel(K.e[1], { y0: vy - 30, y1: vy + 8, col: B.mix(pal.nebel[1], K.fern, 0.4), dichte: 0.18, xs: [-20, 500, 60], seed: 3 });
   luft(K);
   K.reihen = [{ y: 166, skala: 0.9, nebel: 0.25 }, { y: 190, skala: 1, nebel: 0.1 }, { y: 213, skala: 1, nebel: 0 }];
@@ -279,7 +279,7 @@ function flur(K, cfg) {
   // Sockelleiste
   { const l = B.maske(); l.rect(-M, vy - 4, W + 2 * M, 5); K.form(1, l, 0, { k: SOCKEL, r: RAND_D, ton: 2.6, fase: 1, rand: 1 }); }
   // Vordergrund: links eine Bank angeschnitten, rechts der Heizkörper unter dem Fenster
-  { const v = B.maske(); v.rect(-M, 232, 92, 6); v.rect(6, 238, 5, 40); v.rect(70, 238, 5, 40); K.form(5, v, 0, { k: HOLZ, r: RAND, ton: 2.6, fase: 1, rand: 2 }); }
+  { const v = B.maske(); v.rect(-M, 232, 92, 6); v.rect(6, 238, 5, 40); v.rect(70, 238, 5, 40); K.form(5, v, 0, { k: HOLZ, r: RAND_D, ton: 2, fase: 1, rand: 2 }); }
   { const v = B.maske(); for (let i = 0; i < 9; i++) v.rect(402 + i * 9, 186, 6, 40); v.rect(398, 222, 86, 4); v.rect(398, 190, 86, 3); K.form(4, v, 0, { k: EISEN, r: RAND_D, ton: 1.8, fase: 1, rand: 1, schatten: 1 }); }
   B.nebel(K.e[1], { y0: vy - 14, y1: vy + 8, col: B.mix(pal.nebel[1], K.fern, 0.4), dichte: 0.12, xs: [-20, 500, 60], seed: 5 });
   luft(K);
@@ -332,8 +332,8 @@ function turnsaal(K, cfg) {
   K.bodenStoffe(vy + 1, H + M, mats, (x, y) => { const Z = P.z(y + 0.5), X = (x + 0.5 - P.vx) * Z / P.h; if (X < xl || X > xr) return -1; for (const s of nass) { const dx = (X - s[0]) / s[2], dz = (Z - s[1]) / (s[2] * 1.9); if (dx * dx + dz * dz < 1) return 1; }
     for (const [kx, kz] of kreide) for (const s of [-0.07, 0.07]) { const dx = (X - kx - s) / 0.06, dz = (Z - kz) / 0.12; const d = dx * dx + dz * dz; if (d < 1.2 && d > 0.55) return 2; } return 0; });
   // Vordergrund: links ein Seil, das bis in den Boden hängt; unten eine Matte angeschnitten
-  { const v = B.maske(); v.rect(40, -M, 3, 210 + M); v.ell(41, 214, 5, 3); K.form(5, v, 0, { k: HOLZ, r: RAND, ton: 2.8, fase: 0, rand: 2 }); }
-  { const v = B.maske(); v.poly([[300, H + M], [318, 246], [480 + M, 244], [480 + M, H + M]]); K.form(5, v, 0, { k: DECKE, r: RAND, ton: 2.4, fase: 2, rand: 2, muster: (x, y) => ((x + y) % 7 === 0 ? -0.6 : 0) }); }
+  { const v = B.maske(); v.rect(40, -M, 3, 210 + M); v.ell(41, 214, 5, 3); K.form(5, v, 0, { k: HOLZ, r: RAND_D, ton: 2.8, fase: 0, rand: 2 }); }
+  { const v = B.maske(); v.poly([[300, H + M], [318, 246], [480 + M, 244], [480 + M, H + M]]); K.form(5, v, 0, { k: DECKE, r: RAND_D, ton: 1.9, fase: 2, rand: 2, muster: (x, y) => ((x + y) % 7 === 0 ? -0.6 : 0) }); }
   // rotes Licht: über der Tür der Umkleide links hinten
   { const [x, y] = Q(P, -3.4, 1.6, ze); nachtlicht(K, Math.round(x), Math.round(y), 0, { r: 26 }); const tm = B.maske(); tm.poly([Q(P, -3.8, 0, ze), Q(P, -3.8, 1.4, ze), Q(P, -3.0, 1.4, ze), Q(P, -3.0, 0, ze)]); K.form(0, tm, 0.2, { k: HOLZ, r: RAND_D, ton: 1.6, fase: 1, rand: 1 }); }
   B.nebel(K.e[1], { y0: vy - 24, y1: vy + 8, col: B.mix(pal.nebel[1], K.fern, 0.4), dichte: 0.15, xs: [-20, 500, 60], seed: 7 });
