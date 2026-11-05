@@ -106,5 +106,6 @@
   "_doc": "Belohnung nach Kämpfen (04-deckbau.md Abschnitt 6)",
   "item_chance": 0.25,
   "ueberspringen_gold": 10
- }
+ },
+  "elite": {"_doc": "Zugabe: Chance, dass ein schwerer Kampf eine Elite des Bioms bringt (biom.elite / elite_dazu); sie ersetzt so viele normale Gegner", "chance": 0.5, "ersetzt": 2}
 }

@@ -1,12 +1,12 @@
-// Autospieler nur in einem Biom (Abnahme je Biom-Paket): node tools/biom-test.js <biom> [seeds=10] [startSeed=1] [--waechter=<id>]  (--waechter erzwingt einen zweiten Wächter)
+// Autospieler nur in einem Biom (Abnahme je Biom-Paket): node tools/biom-test.js <biom> [seeds=10] [startSeed=1] [--waechter=<id>] [--elite=<id>]  (--waechter erzwingt einen zweiten Wächter, --elite die Elite in jedem schweren Kampf)
 // Startet je Seed einen Dev-Run, spielt die Akte davor (mit Heilung als Netz) und dann den ganzen Akt dieses Bioms
 // (alle Ebenen bis einschließlich Wächter). Meldet Siege (Akt überstanden), Leben am Ende, Gegner, Fehler.
 const {ladeKern}=require('./kern');
-(async()=>{const a0=process.argv.slice(2);const wArg=(a0.find(x=>x.startsWith('--waechter='))||'').slice(11);const a=a0.filter(x=>!x.startsWith('--'));const biom=a[0];const n=+(a[1]||10),s0=+(a[2]||1);if(!biom){console.log('Aufruf: node tools/biom-test.js <biom> [seeds] [start]');process.exit(2);}
+(async()=>{const a0=process.argv.slice(2);const wArg=(a0.find(x=>x.startsWith('--waechter='))||'').slice(11);const eArg=(a0.find(x=>x.startsWith('--elite='))||'').slice(8);const a=a0.filter(x=>!x.startsWith('--'));const biom=a[0];const n=+(a[1]||10),s0=+(a[2]||1);if(!biom){console.log('Aufruf: node tools/biom-test.js <biom> [seeds] [start]');process.exit(2);}
  const K=ladeKern();await K.init();if(!K.run(`!!BIOMES[${JSON.stringify(biom)}]`)){console.log('Biom unbekannt (in data/biome/index.json eingetragen?): '+biom);process.exit(2);}
  const r=K.run(`(()=>{const out=[];const akt=BIOMES[${JSON.stringify(biom)}].akt;const jobs=JOBS.slice(0,6).map(j=>j.id);
   for(let i=0;i<${n};i++){const seed=${s0}+i;const kf=FAST;FAST=true;let fehler=null,gegner=new Set(),kaempfe=0;
-   try{const route=RUN.akte.map((x,k)=>k===akt?${JSON.stringify(biom)}:x.biome.find(b=>BIOMES[b]));newRun(jobs[i%6],seed,{dev:true,route});S.devWaechter=${JSON.stringify(wArg)}||null;
+   try{const route=RUN.akte.map((x,k)=>k===akt?${JSON.stringify(biom)}:x.biome.find(b=>BIOMES[b]));newRun(jobs[i%6],seed,{dev:true,route});S.devWaechter=${JSON.stringify(wArg)}||null;S.devElite=${JSON.stringify(eArg)}||null;
     // Vorbereitung: die Akte davor wirklich spielen (Belohnungen, Handgriffe, Krämer wie im Run), mit Heilung als Netz,
     // damit das Deck so gewachsen ist wie im echten Run; beim Eintritt in den Akt volles Leben
     const netz=()=>{if(S.akt>=akt)return;if(S.hp<maxHp()*.6)S.hp=maxHp();if(S.turnNo>30)S.enemies.forEach(e=>{e.hp=0;});};Bus.on('turn_start',netz);

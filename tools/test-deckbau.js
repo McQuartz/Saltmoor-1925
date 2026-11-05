@@ -119,4 +119,8 @@ const {ladeKern}=require('./kern');
  const zw=JSON.parse(run(`(()=>{const B=BIOMES.hafen;const alt=B.waechter_alt;B.waechter_alt=['glockenmutter'];const ids=new Set();for(let s=1;s<=30;s++){newRun('fischer',s,{dev:true,route:['hafen','kapelle','salz','eis','pforte']});ids.add(waechterWahl(B));}
   newRun('fischer',5,{dev:true,route:['hafen','kapelle','salz','eis','pforte']});const a=waechterWahl(B),b2=waechterWahl(B);S.devWaechter='glockenmutter';const d=waechterWahl(B);B.waechter_alt=alt;return JSON.stringify({ids:[...ids],gleich:a===b2,d})})()`));
  ok(zw.ids.length===2&&zw.gleich&&zw.d==='glockenmutter',`Zweite Wächter: über 30 Seeds beide (${zw.ids.join(', ')}), je Run fest, Dev erzwingt ${zw.d}`);
+ // 14. Eliten: schwerer Kampf bringt mit BAL.elite.chance eine Elite des Bioms, sie ersetzt zwei normale Gegner
+ const el=JSON.parse(run(`(()=>{newRun('fischer',3,{dev:true,route:['hafen','kapelle','salz','eis','pforte']});S.akt=2;S.ebene=3;const B=biom();const alt=B.elite;B.elite=['oberzoellner'];let mit=0,ohne=0,n=0;for(let i=0;i<60;i++){const f=rollFoes('kampf_schwer',R('t'+i));if(f.includes('oberzoellner'))mit++;else ohne++;n=f.length;}
+  S.devElite='oberzoellner';const d=rollFoes('kampf_schwer',R('x'));const k=rollFoes('kampf',R('y'));B.elite=alt;S.devElite=null;return JSON.stringify({mit,ohne,d,k})})()`));
+ ok(el.mit>10&&el.ohne>10&&el.d[0]==='oberzoellner'&&!el.k.includes('oberzoellner'),`Eliten: in ${el.mit} von 60 schweren Kämpfen, nie im normalen Kampf, Dev erzwingt (${el.d.join(', ')})`);
  console.log(fehler?`${fehler} FEHLER`:'Alles gut.');process.exit(fehler?1:0);})();

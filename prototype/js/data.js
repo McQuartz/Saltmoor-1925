@@ -22,6 +22,7 @@ async function loadData(base='data/',fetchJson){
   if(p.ergaenzt){const b=BIOMES[p.ergaenzt];if(!b)continue;const weg=new Set(p.gegner_weg||[]);b.gegner=(b.gegner||[]).filter(g=>!weg.has(g)).concat((p.gegner_dazu||[]).filter(g=>!(b.gegner||[]).includes(g)));
    if(p.fundpool_dazu)b.fundpool=[...new Set((b.fundpool||[]).concat(p.fundpool_dazu))];
    if(p.waechter_dazu)b.waechter_alt=[...new Set((b.waechter_alt||[]).concat(p.waechter_dazu))];
+   if(p.elite_dazu)b.elite=[...new Set((b.elite||[]).concat(p.elite_dazu))];
    Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.ergaenzt,...e})));continue;}
   BIOMES[p.id]={...p.biom,akt:p.akt};Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.id,...e})));}
  EVENTS=evAll.map((e,i)=>({id:e.id||('alt_'+i),biom:e.biom||'alle',...e}));

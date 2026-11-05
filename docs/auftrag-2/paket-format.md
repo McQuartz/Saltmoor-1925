@@ -174,3 +174,7 @@ Stand 2026-11-05 (Zugabe 3). Jedes Ereignis kann ein kleines Bild **160 × 90** 
 ## Zweite Wächter (Zugabe)
 
 Ein Biom kann mehrere Wächter haben. Im eigenen Paket: `biom.waechter_alt: ["<id>", …]` neben `biom.waechter`; in einem Ergänzungspaket (`<biom>_plus.json` mit `ergaenzt`): `waechter_dazu: ["<id>", …]`. Der Seed wählt je Run und Akt einen davon (`waechterWahl(b)` in `core/run.js`), die Wächter-Szene des Bioms ist für alle gleich. Erzwingen zum Prüfen: `node tools/biom-test.js <biom> 20 --waechter=<id>`, im Spiel `S.devWaechter='<id>'` vor `Dev.springe('waechter',akt)`. `tools/biom-bogen.js` zeigt alle Wächter. Akt V (Finale) bleibt beim gemeinsamen Boss.
+
+## Eliten (Zugabe)
+
+Ein Biom kann Eliten haben: `biom.elite: ["<id>", …]` im eigenen Paket, `elite_dazu: ["<id>", …]` im Ergänzungspaket. Eine Elite hat `rang: "elite"`, Sprite bis 128 × 160, `hp` etwa 60–100 (Wächter-Faktor, keine Tiefen-Skalierung), ein Muster aus 3–5 Zügen, genau einen `kniff` und eine kleine Besonderheit (`besonders` oder ein zweiter Kniff in `kniffe`). Ein schwerer Kampf (`kampf_schwer`) bringt mit `BAL.elite.chance` (0,5) eine Elite; sie ersetzt `BAL.elite.ersetzt` (2) normale Gegner. Prüfen: `node tools/biom-test.js <biom> 20 --elite=<id>` (Elite in jedem schweren Kampf), im Spiel `S.devElite='<id>'` vor `Dev.springe('kampf_schwer',akt)`. Die Vorraum-Elite von Akt V (`vorraum_elite`) bleibt davon getrennt.

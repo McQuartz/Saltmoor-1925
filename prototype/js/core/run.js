@@ -56,7 +56,10 @@ function genWeg(){const key=ebeneKey(),E=RUN.ebenen[key];const r=R(`weg:${S.akt}
  Bus.emit('weg',{optionen:S.weg.map(o=>o.art),why:`Ebene ${S.ebene+1} von ${aktDef().ebenen.length} (${key}): ${S.weg.map(o=>RUN.knoten[o.art].n).join(', ')} nach Regel ${JSON.stringify(E.mindestens||E.einer_von||E.verschiedene||E.fest||E.fest_wahl||'frei')}`});
  save();Bus.emit('changed');}
 function rollFoes(art,r){const b=biom();const z=RUN.kaempfe.zahl[S.akt];let n=z[Math.min(S.ebene,z.length-1)];if(art==='kampf_schwer')n+=RUN.kaempfe.schwer_extra;n=Math.min(4,n);
- const pool=b.gegner.filter(id=>FOES[id]);return[...Array(n)].map(()=>r.pick(pool));}
+ const pool=b.gegner.filter(id=>FOES[id]);
+ // Eliten (Zugabe): ein schwerer Kampf bringt mit BAL.elite.chance eine Elite des Bioms (biom.elite / elite_dazu) statt zwei normaler Gegner
+ const el=(b.elite||[]).filter(id=>FOES[id]);const E=BAL.elite||{};if(art==='kampf_schwer'&&el.length&&(S.devElite||r.chance(E.chance??.5))){const e=S.devElite&&FOES[S.devElite]?S.devElite:r.pick(el);return[e,...[...Array(Math.max(0,n-(E.ersetzt??2)))].map(()=>r.pick(pool))];}
+ return[...Array(n)].map(()=>r.pick(pool));}
 
 function chooseWeg(i){if(S.phase!=='weg')return;const o=S.weg[i];if(!o)return;S.cur=o;S.depth++;S.weg=null;S.phase='knoten';
  save(); // vor dem Betreten sichern: Fortsetzen betritt denselben Knoten neu (gleicher Seed = gleicher Inhalt)

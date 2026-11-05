@@ -10,7 +10,7 @@ const {chromium}=require('playwright');const fs=require('fs'),path=require('path
  const biome=a.includes('--alle')?await p.evaluate(()=>Object.keys(BIOMES).filter(k=>!k.startsWith('_'))):[pos[0]];
  for(const biom of biome){
   const html=await p.evaluate(async biom=>{const B=BIOMES[biom];if(!B)return null;
-   const ids=[...new Set([...(B.gegner||[]),B.vorraum_elite,B.waechter,...(B.waechter_alt||[])])].filter(id=>id&&FOES[id]);
+   const ids=[...new Set([...(B.gegner||[]),B.vorraum_elite,B.waechter,...(B.waechter_alt||[]),...(B.elite||[])])].filter(id=>id&&FOES[id]);
    const sprites=[];for(const id of ids){const F=FOES[id];[...new Set([...(F.varianten||[F.sprite]),...((F.besonders&&F.besonders.sprites)||[])])].filter(Boolean).forEach(s=>sprites.push({id,s,n:F.n,rang:(F.rang||'normal')+(id===B.vorraum_elite?' · Vorraum-Elite':''),fav:false}));}
    const fav=['chorknabe_a','hirte_a','netzflickerin_a'].map(s=>({s,n:s.replace('_a','')+' (Favorit)',fav:true}));
    const lade=s=>new Promise(res=>{fetch('assets/gegner/'+s+'.json').then(r=>r.ok?r.json():null).then(m=>{if(!m)return res(null);const img=new Image();img.onload=()=>res({m,img});img.onerror=()=>res(null);img.src='assets/gegner/'+s+'.png';}).catch(()=>res(null));});
