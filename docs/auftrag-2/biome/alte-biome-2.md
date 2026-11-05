@@ -60,8 +60,8 @@ Alle Sprites per Skript (Weg A, `"quelle": "skript"`): `tools/sprites/gegner/<id
 - **Wer er war:** Der Mann der Expedition von 1903, der die Fahne tragen durfte. Er sollte sie dort einschlagen, wo es nicht mehr weiter nach unten geht.
 - **Was falsch ist:** Die Kapuze ist leer, nur Reif am Pelzrand. Sein Gesicht ist in der Fahne, durch den steif gefrorenen Stoff gedrückt wie von hinten, mit offenem Mund und roten Augen.
 - **Silhouette:** runde Kapuze mit dickem Pelzrand, glockenförmiger Parka mit Pelzsaum, Mukluks, die Stange schräg vor dem Körper und oben die Fahne quer abstehend. Verworfen: die steile Variante (Fahne direkt über der Kapuze, Kopf und Tuch verschmolzen).
-- **Kniff:** `schuetzer 4`: „Wo eine Fahne steht, ist Lager. Das Gesicht im Tuch ruft die anderen Erfrorenen darunter, und das steife Tuch deckt sie.“ Zuerst war es `ruf` (holt alle 3 Züge einen Rufer). Im Autospieler senkte das die Siegquote im Eis von 9/30 auf 4–5/30, darum der Wechsel; der Ruf bleibt im Bild und im Grund.
-- **Muster:** Block 7 → Angriff 5 → Angriff 7 (hp 20).
+- **Kniff:** `schuetzer 4`: „Wo eine Fahne steht, ist Lager. Das Gesicht im Tuch ruft die anderen Erfrorenen darunter, und das steife Tuch deckt sie.“ Zuerst war es `ruf` (holt alle 3 Züge einen Rufer). Im Autospieler (alte Fassung ohne Vorlauf) senkte das die Siegquote im Eis von 9/30 auf 4–5/30, darum der Wechsel; der Ruf bleibt im Bild und im Grund.
+- **Muster:** Block 7 → Angriff 5 → Angriff 8 (hp 22). Probiert: hp 24 mit 6/9 (Akt IV fiel auf 59 %), hp 20 mit 5/7 (zu leicht gegenüber dem Rest des Bioms).
 - **Schwachstelle:** Blut. Warmes Blut ist das Einzige hier, das den Stoff noch weich macht.
 - **Stimme:** `rufer`.
 - **Varianten:** a breite Fahne, flache Stange, tief vorgebeugt; b Stange steiler, Fahne schmaler und länger, höherer Pelzrand.
@@ -107,15 +107,15 @@ Icons: vorläufig die alten 12×12-Sprites (`salt`, `compass`, `sealskin`), die 
 
 - **Regelprüfung:** `node tools/sprites/pruefen.js salzmann_a salzmann_b vermesser_a vermesser_b relief_a relief_b fahnentraeger_a fahnentraeger_b seelilie_a seelilie_b` → 10 Sprites, **0 Verstöße**.
 - **Bilder** in [`bilder/M7/alte-biome/`](../bilder/M7/alte-biome/): Kontaktbögen mit allen Gegnern des Bioms (je Variante Idle 0 und Angriff 2) neben Chorknabe, Hirte, Netzflickerin und darunter die Silhouetten (`salz-bogen.png`, `stadt-bogen.png`, `eis-bogen.png`, gebaut mit `tools/biom-bogen.js`), die Silhouetten-Entwürfe (`silhouetten-entwurf.png`: oben die genommene, unten die verworfene Silhouette je Gegner), alle Animationen je Gegner (`animation-<id>_a.png`) und je Biom ein Kampf-Bildschirmfoto (`im-spiel-salz.png`, `im-spiel-stadt.png`, `im-spiel-eis.png`; `newRun('fischer',3,{dev:true,route:[…]})`, `Dev.springe('kampf',2|3)`, Gegner gesetzt).
-- **Autospieler** (`node tools/biom-test.js <biom> 10`, 0 Fehler in allen Läufen). Weil 10 Seeds stark streuen, zusätzlich derselbe Test mit 30 Seeds, einmal ohne und einmal mit den drei Paketen, im selben Stand des Kerns (gleiche Seeds):
+- **Autospieler** (`node tools/biom-test.js <biom> 20`, neue Fassung: spielt die Akte davor wirklich, mit Heilung als Netz; 0 Fehler in allen Läufen). Für einen sauberen Vergleich lief derselbe Test mit 40 Seeds (1–20 und 21–40) zweimal im selben Stand des Kerns: einmal ohne die drei Pakete (Kopie des Testskripts, die nur `salz_plus`, `stadt_plus`, `eis_plus` aus der Paketliste nimmt), einmal mit. Seeds, die schon im Vorlauf sterben, zählen nicht.
 
-| Biom | 10 Seeds vorher | 10 Seeds nachher | 30 Seeds ohne Paket | 30 Seeds mit Paket |
-|---|---|---|---|---|
-| Salzstollen | 2/10 | 6/10 | 5/30 | 9/30 |
-| Namenlose Stadt | 3/10 | 2/10 | 8/30 | 8/30 |
-| Schwarzes Eis | 4/10 | 2/10 | 9/30 | 9/30 |
+| Biom | Seeds 1–20 ohne → mit | Seeds 21–40 ohne → mit | zusammen ohne | zusammen mit | Ziel |
+|---|---|---|---|---|---|
+| Salzstollen (Akt III) | 13/20 → 14/20 | 14/18 → 14/18 | 27/38 = 71 % | 28/38 = **74 %** | 60–80 % ✔ |
+| Namenlose Stadt (Akt III) | 11/20 → 11/20 | 10/18 → 10/18 | 21/38 = 55 % | 21/38 = **55 %** | darunter, unverändert |
+| Schwarzes Eis (Akt IV) | 15/18 → 14/17 | 9/16 → 11/17 | 24/34 = 71 % | 25/34 = **74 %** | 60–80 % ✔ |
 
-Die neuen Gegner machen keinen Akt schwerer, den Salzstollen etwas leichter. Das Ziel 6–8 von 10 erreichen Akt III und IV **schon ohne die Pakete nicht**: Die Spieler sterben meist im ersten oder zweiten Kampf des Akts. Das liegt an der Grundabstimmung (Tiefenskalierung: auf Tiefe 21 kommen +7 auf **jeden** Treffer, Leben ×2,6), nicht an einzelnen Gegnern, und gehört in den Kern.
+Die neuen Gegner verschieben keinen Akt nennenswert. Die Stadt bleibt mit und ohne Paket bei 55 %, also knapp unter dem Ziel; die Niederlagen dort verteilen sich gleichmäßig auf alle vier Gegner (Bote 12, Mumie 15, Relief 13, Vermesser 12 Nennungen in 17 verlorenen Akten), der Abstand zum Ziel liegt also nicht an den neuen Gegnern. Ich habe sie bewusst nicht leichter gemacht als die alten, um die Stadt nicht künstlich zu schönen; ein Hebel wäre der Wächter oder die Tiefenskalierung im Kern.
 
 ## Noten (Bewertungsbogen 06-ki-bilder.md Abschnitt 5)
 

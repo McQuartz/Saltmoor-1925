@@ -138,6 +138,11 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Das Gewicht | Gezeitenwerk | 4 | [M7](bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png) |
 | Der Regulator (Wächter) | Gezeitenwerk | 4 (nach Nacharbeit: Wasserwand hinter ihm, mehr Randlicht; schwingt als Pendel zwischen zwei Reihen) | [M7](bilder/M7/gezeitenwerk/im-spiel-waechter.png) |
 | Hintergrund Gezeitenwerk (3 Varianten, Wächter-Szene) | Gezeitenwerk | 4 (V2 schwächste) | [M7](bilder/M7/gezeitenwerk/hintergrund-varianten.png) |
+| Der Mann im Salz (neu) | Salz | 4 (Rumpf dunkel) | [M7](bilder/M7/alte-biome/salz-bogen.png) |
+| Der Vermesser (neu) | Stadt | 4 (Varianten ähnlich) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
+| Der aus dem Relief (neu) | Stadt | 4 (stärkstes Bild der Ergänzungen) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
+| Der Fahnenträger (neu) | Eis | 4 | [M7](bilder/M7/alte-biome/eis-bogen.png) |
+| Die Seelilie (neu) | Eis | 4 (starke Silhouette) | [M7](bilder/M7/alte-biome/eis-bogen.png) |
 | Item-Icons (125) | alle | 112 × 4, 13 × 3 in Überarbeitung | [M5](bilder/M5/icons.png) |
 | Handgriff-Bilder (70) | alle | 48 × 4, 22 × 3 in Überarbeitung (zu dunkel, Hände verschmelzen) | [M5](bilder/M5/handgriffe.png) |
 

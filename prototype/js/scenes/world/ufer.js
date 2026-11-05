@@ -33,10 +33,10 @@ function deckeBauen(K, P, o) {
   for (let x = -M; x < W + M; x++) {
     let yTop = -M - 1;
     const Z0 = Math.max(.6, P.h * (Yc - 2.4) / (P.vy + M) * .9);
-    for (let Z = Z0, X = 0, ww = 0, ys = 0; Z < 90; Z += (.003 + Z * .0045) / (1 + ww * 2.5)) {
-      X = (x + .5 - P.vx) * Z / P.h; ww = w(X, Z); ys = P.vy - P.h * (Yc - 1 - ww) / Z;
+    for (let Z = Z0, X = 0, ww = 0, ys = 0, wv = 0, Zv = Z0 - .01; Z < 90; Z += (.003 + Z * (Z < 12 ? .0045 : .014)) / (1 + ww * 2.5)) {
+      X = (x + .5 - P.vx) * Z / P.h; wv = ww; ww = w(X, Z); ys = P.vy - P.h * (Yc - 1 - ww) / Z; const dZ = (ww - wv) / Math.max(.001, Z - Zv); Zv = Z;
       if (ys <= yTop) continue;
-      const u = frac(phase(X, Z)), dZ = (w(X, Z + .02) - w(X, Z - .02)) / .04;
+      const u = frac(phase(X, Z));
       const fern = B.clamp(1 - 5 / Z, 0, 1), licht = Math.exp(-(((x - (o.lichtX || 380)) / 150) ** 2));
       const A0 = B.clamp(amp(X, Z) * 1.3, 0, 1);
       let t = .2 + .4 * fern + .18 * licht * fern;
@@ -44,8 +44,8 @@ function deckeBauen(K, P, o) {
       if (u < .14) t += (-.08 + .42 * Math.pow(u / .14, 1.6)) * A0;
       // flacher Rücken: zum Licht hin, matt; tiefer im Tal dunkler
       else t += (.12 - .3 * Math.pow((u - .14) / .86, .7)) * A0 + Math.min(.15, Math.max(0, -dZ) * .05);
-      t += (B.fbm(X * .9, Z * .6, sd + 11, 2) - .5) * .14;
-      const fl = B.fbm(X * 1.3 + 4, Z * .9, sd + 21, 2);
+      t += (B.rausch2(X * .9, Z * .6, sd + 11) - .5) * .14;
+      const fl = B.rausch2(X * 1.3 + 4, Z * .9, sd + 21);
       const schaum = u > .12 && u < .16 + (fl - .5) * .06 && ww > .25 && Z < 13 && fl > .42;
       const y0 = Math.max(-M, Math.ceil(yTop)), y1 = Math.min(P.vy, Math.floor(ys));
       for (let y = y0; y <= y1; y++) {
@@ -267,8 +267,6 @@ function strandkorbSzene(K, o) {
   const wm = B.maske(); wm.poly([...unten, ...oben.reverse(), [W + M + 400, -M - 400], [W + M + 400, H + M]]);
   K.form(2, wm, .12, { k: FELS, ton: 2.2, fase: 2, rand: 2, schatten: 2, muster: (x, y) => { const Z = (XW * P.h) / Math.max(1, x - P.vx), Y = 1 - (y - P.vy) * Z / P.h, sY = Y * 2.1 + Math.sin(Z * .7 + Y) * .3 + B.fbm(Z * .35, Y * .5, 4, 3) * 1.6, lage = Math.floor(sY), q = frac(sY);
     return (B.hash(lage, 0, 9) - .5) * 1.2 + (q > .88 ? 1.3 : q < .12 ? -1 : 0) + (B.rausch2(Z * 3, Y * 6, 8) > .8 ? -1.2 : 0) + (B.fbm(Z * .9, Y * 3, 5, 2) - .5) * .6 - Math.max(0, 1.5 - Z) * .4; } });
-  // Wasser sickert aus den Fugen der Wand und läuft nach unten
-  for (let i = 0; i < 5; i++) { const Z = 1.7 + i * 1.37 + B.hash(i, 0, 4), [x0, y0] = P.q(XW, 1.1 + B.hash(i, 1, 4) * 1.4, Z), [, y1] = P.q(XW, 0, Z); for (let y = Math.round(y0); y < y1; y++) if (B.bay(x0, y) < .7) K.e[2].set(Math.round(x0) + (y % 5 === 0 ? 1 : 0), y, B.pk(WASSER[7])); }
   saeule(K, P, Xs, Zs, .14, Yc, { ruhig: o.ruhig, tiefe: .1, tief: 1.2 });
   const korb = strandkorb(K, P, -.7, 2.7);
   spuren(K, P, [[.9, 1.1], [.3, 2.2], [-.2, 3.0], [-.9, 4.4], [-1.5, 6.0], [Xs, Zs - .1]], { nassAb: .85 });
