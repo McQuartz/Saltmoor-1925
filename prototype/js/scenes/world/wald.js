@@ -306,6 +306,9 @@ function abgrund(K) {
   const fm = B.maske(); fm.fn(-M, 140, W + M, H + M, (x, y) => y > kante(x));
   K.form(3, fm, 0, { k: STEIN.slice(0, 8), r: RAND, ton: 0.8, fase: 2, rand: 2, muster: (x, y) => { const s2 = Math.sin(x * 0.12 + Math.sin(y * 0.2) * 2 + y * 0.05); return (s2 > 0.7 ? 0.45 : s2 < -0.75 ? -0.5 : 0) + (B.fbm(x * 0.05, y * 0.08, sd + 2, 2) - 0.5) * 0.5 - (y - 160) / 200; } });
   for (let i = 0; i < 7; i++) { const x = 30 + i * 70 + r.j(10); blattwerk(K, 3, x, kante(x) - 1, r.f(12, 22), r.f(5, 8), 0, { flach: true }); }
+  // Kronenschutt und Risse auf dem Absatz (sonst eine leere dunkle Fläche)
+  for (let i = 0; i < 9; i++) { const x = 140 + i * 40 + r.j(14), y = 192 + (i % 3) * 18 + r.j(5); blattwerk(K, 4, x, y, r.f(8, 15), r.f(3, 5), 0, { flach: true }); }
+  { const rs = B.maske(); for (let i = 0; i < 6; i++) { const x = 160 + i * 52 + r.j(10); rs.pfad([[x, 172], [x - 6 + r.j(4), 200], [x - 14 + r.j(6), 236], [x - 26, 272]], 0.7, 1.1); } B.form(K.e[4], rs, K.mat(0, { k: ['#050403', '#0b0a08'], r: RAND_K, ton: 0.5, fase: 0, rand: 1 })); }
   // die Straße der Legion auf dem Absatz: kommt von vorn rechts und biegt zum Brückenkopf links
   const P2 = B.persp(60, 150), sb2 = strasse(P2, sd, 0.7, { kurve: Z => -2.4 + Math.min(2.4, Z * 0.0) + (Z < 4 ? (4 - Z) * 1.1 : 0) });
   K.bodenStoffe(166, H + M, [{ cols: BASALT, tf: sb2 }], (x, y) => (y > kante(x) + 4 && sb2(x, y) >= 0 ? 0 : -1));

@@ -145,14 +145,14 @@ function schwarzeFlamme(K, x, y, g, p) {
 }
 // Schwarzes Feuer (Rast): dunkle Flammenzungen mit hellem Rand in einem Steinkreis
 function schwarzesFeuer(K, x, y) {
-  for (let i = 0; i < 9; i++) { const a = i / 9 * 6.28, s = B.maske(); s.ell(x + Math.cos(a) * 13, y + 1 + Math.sin(a) * 3.4, 2.4, 1.7); K.form(5, s, 0, { ton: 1.5, fase: 1 }); }
+  for (let i = 0; i < 9; i++) { const a = i / 9 * 6.28, s = B.maske(); s.ell(x + Math.cos(a) * 17, y + 1 + Math.sin(a) * 4.4, 3, 2.1); K.form(5, s, 0, { ton: 1.5, fase: 1 }); }
   const h = B.maske(); h.kap(x - 9, y - 1, x + 7, y - 3, 1.6, 1.4); h.kap(x - 7, y - 3, x + 9, y, 1.5, 1.6); K.form(5, h, 0, { ton: 1.2 });
   for (const L of [K.e[3], K.e[4]]) B.dith(L, x - 70, y - 60, x + 70, y + 30, FL.hof, (px, py) => { if (!(L.get(px, py) >>> 24)) return 0; const q = Math.hypot(px - x, (py - y) * 1.4) / 70; return q < 1 ? (1 - q) * .4 : 0; });
   const rand = B.css(FL.rand), hell = B.css(FL.hell), kern = B.css(FL.koerper);
   K.luft.push({ p: .8, f(ctx, t, ox, oy) {
     for (let k = 0; k < 5; k++) {
-      const ph = k * 1.7, fl = Math.sin(t * 4.2 + ph) + Math.sin(t * 9.1 + ph) * .5, hh = 8 + k % 3 * 3 + Math.round(fl * 1.5), bx = x - 8 + k * 4;
-      for (let j = 0; j < hh; j++) { const q = j / hh, ww = Math.max(0, Math.round(2.2 * (1 - q))), sx = Math.round(bx + Math.sin(t * 3 + j * .5 + ph) * q * 2) - ww;
+      const ph = k * 1.7, fl = Math.sin(t * 4.2 + ph) + Math.sin(t * 9.1 + ph) * .5, hh = 12 + [0, 6, 10, 5, 2][k] + Math.round(fl * 1.5), bx = x - 10 + k * 5;
+      for (let j = 0; j < hh; j++) { const q = j / hh, ww = Math.max(0, Math.round(3.2 * (1 - q))), sx = Math.round(bx + Math.sin(t * 3 + j * .5 + ph) * q * 2) - ww;
         ctx.fillStyle = kern; ctx.fillRect(sx + ox, y - 3 - j + oy, ww * 2 + 1, 1); ctx.fillStyle = q > .8 ? hell : rand; ctx.fillRect(sx - 1 + ox, y - 3 - j + oy, 1, 1); if (k === 4 || (j & 1)) ctx.fillRect(sx + ww * 2 + 1 + ox, y - 3 - j + oy, 1, 1); }
     }
   } });
@@ -393,7 +393,7 @@ function bauen(o) {
   else if (art === 'uebergang') info = ankunftUnten(K);
   else info = [kai, gasse, steg][v](K);
   if (art === 'rast') {
-    for (let i = 1; i < 4; i++) B.dith(K.e[i], -M, -M, W + M, H + M, '#000000', (px, py) => .18 + .08 * i - Math.abs(px - info.mitte[0]) / 1800);
+    for (let i = 0; i < 2; i++) B.dith(K.e[i], -M, -M, W + M, H + M, '#000000', (px, py) => .22 - Math.abs(px - info.mitte[0]) / 2400);
     schwarzesFeuer(K, info.mitte[0], info.mitte[1] + 14);
   } else if (art !== 'kampf' && art !== 'waechter' && art !== 'uebergang') B.artZusatz(K, { x: info.mitte[0], y: info.mitte[1] });
   return K.fertig();
