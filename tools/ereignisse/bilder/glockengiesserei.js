@@ -218,74 +218,62 @@ module.exports = {
     // Fünf Glocken mit dem Mund nach oben auf dem Lehmboden, in einer ein Meißel, der aufrecht steckt.
     glockengiesserei_stimmen(K) {
       const { B } = K;
-      ziegelwand(K, 0, 0, 160, 50, { tf: (x, y) => -y / 200 });
-      // Ofen hinten: ein kleiner glühender Bogen
-      const ob = K.maske(); ob.fn(70, 26, 90, 50, (x, y) => Math.abs(x - 80) < 7 && (y > 34 || Math.hypot(x - 80, y - 34) < 7));
-      K.form(ob, 0, { k: GLUT.slice(1, 6), ton: 2.4, verlauf: -1.6, fase: 0, rand: 0, muster: (x, y) => -Math.abs(x - 80) / 7 });
-      K.licht(80, 46, 80, '#4a1208', .9);
-      K.feld(0, 50, 160, 90, LEHM, (x, y) => .35 + (y - 50) / 70 + (B.hash(x, y >> 1, 3) < .1 ? .15 : 0));
-      K.rect(0, 50, 160, 1, LEHM[6]);
-      // hinten an der Wand: ein Balken mit einer hängenden, fertigen Glocke
-      const hb = K.maske(); hb.rect(-2, 5, 72, 3); K.form(hb, .15, { k: HOLZ, r: RAND_H, ton: 2.6, fase: 0, rand: 1, L: [0, 1] });
-      const hg = glocke(K, 46, 15, 22, 11, { haken: 7, tiefe: .12, ton: 2.2, L: [.8, .3] });
-      K.kante(hg.m, 80, 40, 60, RAND_B, { nah: .4, min: .1 });
-      // Bohlen quer über den Boden: Oberseite und Stirnkante
-      K.bretter(0, 72, 160, 80, HOLZ.concat(['#4a3428', '#5e4030']), { breite: 2.7, ton: .7, tf: (x) => -Math.abs(x - 80) / 260 });
-      K.feld(0, 80, 160, 85, HOLZ, (x, y) => .55 - (y - 80) / 8 + ((x % 23) === 0 ? -.4 : 0));
-      K.rect(0, 72, 160, 1, '#4a2a1c'); K.rect(0, 80, 160, 1, '#5a3424');
-      K.lichtquelle(80, 30);
-      // Glocke mit dem Mund nach oben: Mund (Schärfe, Schlagring), Flanke, Schulter, Haube, Krone unten auf der Bohle.
-      // Als Drehkörper gebaut: jede Höhe ein Kreis, von oben schräg gesehen (Ellipse, Faktor k).
-      const k = .26;
-      const glockeAuf = (cx, fb, R, weich) => {
-        const h = R * 1.62, ym = fb - h;
-        const w = yc => { const q = Math.min(1, Math.max(0, 1 - (yc - ym) / h)); let b;
-          if (q < .14) b = .66 * (.5 + .5 * Math.sqrt(Math.max(0, 1 - ((.14 - q) / .14) ** 2)));   // Schulter, rund
-          else if (q < .5) b = .66 - Math.sin((q - .14) / .36 * Math.PI) * .03;               // Flanke, leicht eingezogen
-          else b = .66 + Math.pow((q - .5) / .5, 1.7) * .4;                                     // ausgestellt bis zum Schlag
-          if (q > .84 && q < .97) b += .06 * Math.sin((q - .84) / .13 * Math.PI);              // Schlagring
-          return b * R; };
-        const m = K.maske();
-        for (let yc = ym; yc <= fb; yc += .5) m.ell(cx, yc, w(yc), w(yc) * k);
-        m.ell(cx, fb + .5, w(fb) * .95, w(fb) * k * 1.4);                   // Haube
-        const ringY = y => { let yc = y; for (let n = 0; n < 3; n++) { const ww = w(Math.min(fb, Math.max(ym, yc))), dx = 0; void dx; yc = y - Math.sqrt(Math.max(0, 1 - ((xg - cx) / ww) ** 2)) * ww * k; } return yc; };
-        let xg = cx;
-        K.form(m, 0, { k: BRONZE, r: RAND_B, ton: 2.8, fase: Math.max(1, R * .07), rand: 2, schatten: 2, verlauf: -.6, L: [(80 - cx) / 100, -1],
-          muster: (x, y) => { xg = x; const yc = ringY(y), q = 1 - (yc - ym) / h, sn = (x - cx) / (w(Math.min(fb, Math.max(ym, yc))) || 1); let t = 0;
-            for (const l of [.84, .97, .78, .16, .2]) { const d = (q - l) * h; if (Math.abs(d) < .55) t -= 1.6; else if (Math.abs(d + 1) < .55) t += .9; }
-            if (Math.abs(q - .72) * h < .6 && ((x + 2 * Math.round(y)) % 3 === 0)) t += 1.4;                // Inschriftband
-            if (q > .85 && q < .96) t += .9;                                                            // Schlagring heller
-            const g = (80 - cx) >= 0 ? sn : -sn; if (g > .18 && g < .4) t += 2.2; else if (g > .5 && g < .62) t += 1; else if (g < -.45) t -= 1;
-            return t; } });
-        // Krone unter der Haube, auf der Bohle
-        const kr = K.maske(), ky = fb + w(fb) * k * 1.25;
-        kr.rect(cx - R * .2, ky - 1, R * .4, R * .14 + 1); kr.ell(cx - R * .22, ky + R * .1, R * .1, R * .12); kr.ell(cx + R * .22, ky + R * .1, R * .1, R * .12);
-        K.form(kr, 0, { k: BRONZE.slice(0, 5), r: RAND_B, ton: 2, fase: 0, rand: 1 });
-        // Mund: die ferne Innenwand vom Ofen beleuchtet, vorne Schwarz; die fünfte innen weich und matt
-        const ix = w(ym) - Math.max(1.2, R * .1), iy = ix * k - .6;
-        K.feld(0, 0, 160, 90, weich ? ['#0a0404', '#1e0c08', '#3a1a10', '#5a2a18', '#6e3a26'] : ['#030202', '#1a0c08', '#3a1e12', '#6a3a22', '#a06040'], (x, y) => {
-          if (Math.hypot((x + .5 - cx) / ix, (y + .5 - ym) / iy) >= 1) return -1;
-          const v = (y + .5 - (ym - iy)) / (2 * iy);
-          return (v < .3 ? .95 - v * 1.6 : .12 - v * .1) + (weich ? (B.fbm(x * .4, y * .6, 3, 2) - .5) * .9 : 0);
-        });
-        // Die Schärfe: vorderer Rand des Mundes als helle Linie, darunter der dunkle Schlagring-Schatten
-        const wm = w(ym);
-        for (let x = Math.ceil(cx - wm + 1); x <= cx + wm - 1; x++) { const dy = Math.sqrt(Math.max(0, 1 - ((x - cx) / wm) ** 2)) * wm * k; K.set(x, Math.round(ym + dy), Math.abs(x - cx) < wm * .7 ? BRONZE[7] : BRONZE[5]); K.set(x, Math.round(ym + dy) + 2, BRONZE[1]); }
-        K.kante(m, 80, 30, 200, RAND_B, { nah: .2, min: .3 });
-        return { ym, ix, iy };
+      // Stark von schräg oben: Lehmboden füllt das Bild, Licht einer Lampe von links oben
+      K.feld(0, 0, 160, 90, LEHM, (x, y) => .3 + y / 300 + (B.hash(x, y >> 1, 3) < .08 ? .12 : 0) + (B.fbm(x * .05, y * .08, K.seed, 2) - .5) * .25 + Math.max(0, 1 - Math.hypot((x - 40) / 90, (y - 10) / 60)) * .35);
+      K.lichtquelle(10, -30);
+      K.licht(30, 0, 110, '#2a0c06', .8);
+      const k = .5;
+      // Glockenprofil (q 0 Schulter … 1 Schlag), Anteil am Randradius R: Schulter rund, Flanke konkav, Schlag ausgestellt
+      const prof = q => {
+        let b;
+        if (q < .15) b = .6 * (.5 + .5 * Math.sqrt(Math.max(0, 1 - ((.15 - q) / .15) ** 2)));
+        else if (q < .55) b = .6 - Math.sin((q - .15) / .4 * Math.PI) * .035;
+        else b = .6 + Math.pow((q - .55) / .45, 1.8) * .4;
+        if (q > .84 && q < .98) b += .05 * Math.sin((q - .84) / .14 * Math.PI);
+        return b;
       };
-      const reihe = [[14, 8], [38, 9.5], [65, 11.5], [97, 13.5], [134, 16]];
-      let f;
-      reihe.forEach(([cx, R], i) => { const g = glockeAuf(cx, 75 - R * .33 * k * 1.4 - R * .14, R, i === 4); if (i === 4) f = { cx, ...g }; });
-      // Der Klöppel liegt vor der Bohle
-      const kl = K.maske(); kl.kap(56, 86.5, 82, 85, 1, 1.4); kl.ell(86, 84.8, 3.6, 3); kl.ell(56, 86.2, 1.6, 1.6); kl.ell(56, 86.2, .7, .7, 0);
-      K.form(kl, 0, { k: ['#050505', '#0c0b0c', '#161416', '#242024'], r: RAND_B, ton: 1.8, fase: 0, rand: 2, schatten: 2 });
-      // Der Meißel: steckt aufrecht in der fünften, die Schneide fängt das Licht
-      const mx = f.cx - 3, my = f.ym + 1;
-      const me = K.maske(); me.rect(mx - 1, my - 15, 2.5, 16); me.rect(mx - 1.5, my - 17, 3.5, 3);
-      K.form(me, 0, { k: KALT.slice(0, 5), r: ['#c8d8e4', '#ffffff'], ton: 2.4, fase: 0, rand: 1, L: [-.6, -.8] });
-      K.set(mx, my - 15, '#ffffff');
-      K.vignette(.65, { cx: 84, cy: 56 });
+      // Glocke, Mund oben (ym), von oben gesehen; H = sichtbare Höhe
+      const glockeAuf = (cx, ym, R, o) => {
+        o = o || {}; const H = R * 1.05, w = q => prof(q) * R, yq = q => ym + (1 - q) * H;
+        // Krone: ein Bügel, der unten im Lehm steckt
+        const yb = yq(0) + w(0) * k;
+        const kr = K.maske(); kr.kap(cx - R * .16, yb - 2, cx - R * .16, yb + R * .16, R * .05 + .6, R * .05 + .6); kr.kap(cx + R * .16, yb - 2, cx + R * .16, yb + R * .16, R * .05 + .6, R * .05 + .6);
+        kr.fn(cx - R * .25, yb - 2, cx + R * .25, yb + R * .3, (x, y) => { const d = Math.hypot((x - cx) / (R * .16), (y - yb - R * .16) / (R * .12)); return d < 1.35 && d > .75 && y > yb + R * .16; });
+        K.form(kr, 0, { k: BRONZE.slice(0, 6), r: RAND_B, ton: 2.6, fase: 0, rand: 1, L: [-.5, -.8] });
+        const lehm = K.maske(); lehm.ell(cx, yb + R * .3, R * .34, R * .09); K.form(lehm, 0, { k: LEHM.slice(2), ton: 3, fase: 0, rand: 1, r: [LEHM[7]], L: [0, -1] });
+        // Körper als Drehkörper
+        const m = K.maske();
+        for (let q = 0; q <= 1; q += .01) m.ell(cx, yq(q), w(q), w(q) * k);
+        const ring = (x, y) => { let best = 0; for (let q = 1; q >= 0; q -= .02) { const ww = w(q), dx = (x - cx) / ww; if (Math.abs(dx) > 1) continue; const yf = yq(q) + Math.sqrt(1 - dx * dx) * ww * k; if (yf >= y) best = q; else break; } return best; };
+        K.form(m, 0, { k: BRONZE, r: RAND_B, ton: 3, fase: Math.max(1, R * .05), rand: 2, schatten: 2, L: [-.6, -.8],
+          muster: (x, y) => { const q = ring(x + .5, y + .5), sn = (x - cx) / (w(q) || 1); let t = 0;
+            for (const l of [.84, .97, .3, .26, .06]) { const d = (q - l) * H; if (Math.abs(d) < .55) t -= 1.7; else if (Math.abs(d - 1) < .55) t += .8; }
+            if (Math.abs(q - .5) * H < .6 && ((x + Math.round(y)) % 3 === 0)) t += 1.3;
+            if (sn < -.2 && sn > -.48) t += 2; else if (sn > .55) t -= 1.2;
+            return t; } });
+        // Mund: dicke Lippe (Schlagring oben) als heller Ring, darin die Innenwand, unten tief schwarz
+        const ro = w(1), ri = ro * .82;
+        K.feld(0, 0, 160, 90, BRONZE, (x, y) => { const a = Math.hypot((x + .5 - cx) / ro, (y + .5 - ym) / (ro * k)), b = Math.hypot((x + .5 - cx) / ri, (y + .5 - ym - ro * k * .08) / (ri * k)); return a < 1 && b >= 1 ? 5.3 / 7 + (x < cx ? .12 : -.1) + (y < ym ? .06 : -.05) : -1; });
+        const INNEN = o.weich ? ['#050203', '#140806', '#2a120c', '#4a2214', '#6a361e', '#7e4a2c'] : ['#030202', '#140a08', '#301a10', '#5a341e', '#8a5a36', '#b8875a'];
+        K.feld(0, 0, 160, 90, INNEN, (x, y) => {
+          const cyi = ym + ro * k * .08; if (Math.hypot((x + .5 - cx) / ri, (y + .5 - cyi) / (ri * k)) >= 1) return -1;
+          const v = (y + .5 - (cyi - ri * k)) / (2 * ri * k);
+          return (v < .55 ? .95 - v * 1.2 : .25 - (v - .55) * .5) + (x > cx ? -.08 : .04) + (o.weich ? (B.fbm(x * .35, y * .5, 3, 2) - .5) * .9 : 0);
+        });
+        return { cx, ym, ri };
+      };
+      // Fünf Glocken der Größe nach: hinten die kleinen, vorn in der Mitte die große mit dem Meißel
+      glockeAuf(52, 9, 9);
+      glockeAuf(112, 8, 11);
+      glockeAuf(22, 36, 14);
+      glockeAuf(140, 34, 17);
+      const g = glockeAuf(80, 36, 30, { weich: true });
+      // Der Meißel: steht aufrecht in der großen, ragt über den Rand
+      const mx = g.cx + 6, mb = g.ym + 6;
+      const me = K.maske(); me.rect(mx - 1, mb - 26, 3, 26); me.rect(mx - 1.5, mb - 28, 4, 3);
+      K.form(me, 0, { k: KALT.slice(0, 6), r: ['#c8d8e4', '#ffffff'], ton: 2.6, fase: 0, rand: 1, L: [-.7, -.7] });
+      K.set(mx, mb - 27, '#ffffff'); K.set(mx - 1, mb - 27, '#e8f0f4');
+      K.vignette(.6, { cx: 80, cy: 46 });
     },
 
     // Eine Reihe hängender Glocken im Halbdunkel, unter jeder treten zwei Füße in der Luft; durch den Boden steigt Wasser in die glühenden Rinnen.
