@@ -225,20 +225,24 @@ module.exports = {
       K.licht(80, 46, 80, '#4a1208', .9);
       K.feld(0, 50, 160, 90, LEHM, (x, y) => .35 + (y - 50) / 70 + (B.hash(x, y >> 1, 3) < .1 ? .15 : 0));
       K.rect(0, 50, 160, 1, LEHM[6]);
+      // hinten an der Wand: ein Balken mit einer hängenden, fertigen Glocke
+      const hb = K.maske(); hb.rect(-2, 5, 72, 3); K.form(hb, .15, { k: HOLZ, r: RAND_H, ton: 2.6, fase: 0, rand: 1, L: [0, 1] });
+      const hg = glocke(K, 46, 15, 22, 11, { haken: 7, tiefe: .12, ton: 2.2, L: [.8, .3] });
+      K.kante(hg.m, 80, 40, 60, RAND_B, { nah: .4, min: .1 });
       // Bohlen quer über den Boden: Oberseite und Stirnkante
-      K.bretter(0, 72, 160, 80, HOLZ.concat(['#4a3428']), { breite: 2.7, ton: .55, tf: (x) => -Math.abs(x - 80) / 300 });
+      K.bretter(0, 72, 160, 80, HOLZ.concat(['#4a3428', '#5e4030']), { breite: 2.7, ton: .7, tf: (x) => -Math.abs(x - 80) / 260 });
       K.feld(0, 80, 160, 85, HOLZ, (x, y) => .55 - (y - 80) / 8 + ((x % 23) === 0 ? -.4 : 0));
       K.rect(0, 72, 160, 1, '#4a2a1c'); K.rect(0, 80, 160, 1, '#5a3424');
       K.lichtquelle(80, 30);
       // Glocke mit dem Mund nach oben: Mund (Schärfe, Schlagring), Flanke, Schulter, Haube, Krone unten auf der Bohle.
       // Als Drehkörper gebaut: jede Höhe ein Kreis, von oben schräg gesehen (Ellipse, Faktor k).
-      const k = .3;
+      const k = .26;
       const glockeAuf = (cx, fb, R, weich) => {
-        const h = R * 1.42, ym = fb - h;
+        const h = R * 1.62, ym = fb - h;
         const w = yc => { const q = Math.min(1, Math.max(0, 1 - (yc - ym) / h)); let b;
           if (q < .14) b = .66 * (.5 + .5 * Math.sqrt(Math.max(0, 1 - ((.14 - q) / .14) ** 2)));   // Schulter, rund
-          else if (q < .45) b = .66 + (q - .14) * .1;                                           // Flanke
-          else b = .69 + Math.pow((q - .45) / .55, 1.6) * .33;                                  // ausgestellt bis zum Schlag
+          else if (q < .5) b = .66 - Math.sin((q - .14) / .36 * Math.PI) * .03;               // Flanke, leicht eingezogen
+          else b = .66 + Math.pow((q - .5) / .5, 1.7) * .4;                                     // ausgestellt bis zum Schlag
           if (q > .84 && q < .97) b += .06 * Math.sin((q - .84) / .13 * Math.PI);              // Schlagring
           return b * R; };
         const m = K.maske();
@@ -264,11 +268,15 @@ module.exports = {
           const v = (y + .5 - (ym - iy)) / (2 * iy);
           return (v < .3 ? .95 - v * 1.6 : .12 - v * .1) + (weich ? (B.fbm(x * .4, y * .6, 3, 2) - .5) * .9 : 0);
         });
+        // Die Schärfe: vorderer Rand des Mundes als helle Linie, darunter der dunkle Schlagring-Schatten
+        const wm = w(ym);
+        for (let x = Math.ceil(cx - wm + 1); x <= cx + wm - 1; x++) { const dy = Math.sqrt(Math.max(0, 1 - ((x - cx) / wm) ** 2)) * wm * k; K.set(x, Math.round(ym + dy), Math.abs(x - cx) < wm * .7 ? BRONZE[7] : BRONZE[5]); K.set(x, Math.round(ym + dy) + 2, BRONZE[1]); }
+        K.kante(m, 80, 30, 200, RAND_B, { nah: .2, min: .3 });
         return { ym, ix, iy };
       };
-      const reihe = [[13.5, 8], [37.5, 10], [65.5, 12], [98, 14.5], [136, 17]];
+      const reihe = [[14, 8], [38, 9.5], [65, 11.5], [97, 13.5], [134, 16]];
       let f;
-      reihe.forEach(([cx, R], i) => { const g = glockeAuf(cx, 76 - R * .36 * .5 * 1.25 - R * .14, R, i === 4); if (i === 4) f = { cx, ...g }; });
+      reihe.forEach(([cx, R], i) => { const g = glockeAuf(cx, 75 - R * .33 * k * 1.4 - R * .14, R, i === 4); if (i === 4) f = { cx, ...g }; });
       // Der Klöppel liegt vor der Bohle
       const kl = K.maske(); kl.kap(56, 86.5, 82, 85, 1, 1.4); kl.ell(86, 84.8, 3.6, 3); kl.ell(56, 86.2, 1.6, 1.6); kl.ell(56, 86.2, .7, .7, 0);
       K.form(kl, 0, { k: ['#050505', '#0c0b0c', '#161416', '#242024'], r: RAND_B, ton: 1.8, fase: 0, rand: 2, schatten: 2 });

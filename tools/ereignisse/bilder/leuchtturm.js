@@ -128,7 +128,7 @@ module.exports = {
         if (g > 1.1) { const h = K.maske(); h.poly([[x - sp * 1.3, yy + 1], [x + sp * 1.3, yy + 1], [x + sp * .9, yy + 1 + g * 1.6], [x - sp * .9, yy + 1 + g * 1.6]]); h.kap(x, yy, x, yy - g * 2.4, .5, .4); K.form(h, 0, { k: ['#010204', '#030509', '#05080e'], ton: 1, rand: 0, fase: 0 }); }
         K.set(xl, yy, S_GRUEN); K.set(xr, yy, S_ROT);
         if (g > 1.2) { K.set(xl - 1, yy, '#2a8a4a'); K.set(xr + 1, yy, '#a8261c'); K.set(xl, yy - 1, '#2a8a4a'); K.set(xr, yy - 1, '#a8261c'); }
-        if (g > 2) { K.set(xl, yy - 1, '#c8ffd8'); K.set(xr, yy - 1, '#ffc0b0'); K.set(Math.round(x), yy - Math.round(g * 2), '#fff6d8'); }
+        if (g > 2) { K.rect(xl - 1, yy - 1, 2, 2, S_GRUEN); K.rect(xr, yy - 1, 2, 2, S_ROT); K.set(xl, yy - 1, '#c8ffd8'); K.set(xr, yy - 1, '#ffc0b0'); K.set(Math.round(x), yy - Math.round(g * 2.6), '#fff6d8'); }
         // Spiegelung im Wasser
         for (let k = 2 + Math.round(g * 1.6); k < 4 + g * 3.5; k++) if (k % 2) { K.set(xl, yy + k, '#1a4a2a'); K.set(xr, yy + k, '#5a1a14'); }
       }
@@ -145,8 +145,9 @@ module.exports = {
       const { B } = K;
       K.himmel(50, HIMMEL, { steil: .5 });
       // Der Strahl streicht von links oben herein und trifft die Wäsche
-      K.kegel(-30, -14, .42, .15, 250, '#6e6444', .95);
-      K.kegel(-30, -14, .42, .06, 230, '#8a7a50', .8);
+      // Strahl: gedithertes Band von links oben, innen heller
+      { const ax = -20, ay = -16, wi = .4, ca = Math.cos(wi), sa = Math.sin(wi);
+        for (let y = 0; y < 90; y++) for (let x = 0; x < 160; x++) { const dx = x - ax, dy = y - ay, d = dx * ca + dy * sa, q = Math.abs(-dx * sa + dy * ca) / (d * .14 + 2); if (q > 1 || d < 0) continue; const v = (1 - q) * Math.max(0, 1 - d / 230); if (v * 1.4 > B.bay(x, y)) K.e.add(x, y, [34, 30, 18], 1); if (v > .5 + B.bay(x, y) * .3) K.e.add(x, y, [30, 28, 16], 1); } }
       // Wärterhaus-Wand rechts hinten, Pflaster
       const haus = K.maske(); haus.rect(122, 10, 38, 50); K.form(haus, .2, { k: KALK.slice(1, 7), r: RAND_D, ton: 2, rand: 1, L: [-1, 0] });
       K.pflaster(56, 90, PFL, { vx: 80, ton: .32, dichte: 2.2 });

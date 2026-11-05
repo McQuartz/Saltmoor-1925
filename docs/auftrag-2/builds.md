@@ -365,4 +365,17 @@ Fünf Karten für 3 Energie und 9 Gold, rund 55 Schaden und 16 Block. Fällt das
 
 ## 12. Build-Bots mit acht Builds (Zugabe 4)
 
-ERGEBNISSE_PLATZHALTER
+`node tools/build-bots.js 50` (Seeds 1–50), Stand 2026-11-05, nach Zugabe 4. In Klammern der Stand davor (gleiche Seeds).
+
+| Build | Siege | als Build erkannt | Niederlagen je Akt |
+|---|---|---|---|
+| Glutnest | 56 % (48) | 50 % (74) | 1/5/4/8/4 |
+| Brackwasser | 34 % (40) | 46 % (64) | 0/5/12/8/8 |
+| Bollwerk | 44 % (44) | 70 % (64) | 1/4/6/12/5 |
+| Aderlass | 48 % (50) | 46 % (38) | 1/5/6/9/5 |
+| Kettenwerk | 38 % (48) | 52 % (38) | 1/4/5/7/14 |
+| Hagel | 50 % (38) | 72 % (82) | 1/2/9/6/7 |
+| **Ballast** | **46 %** | **52 %** | 1/5/7/10/4 |
+| **Kollekte** | **56 %** | **56 %** | 1/7/6/6/2 |
+
+Generischer Bot `node tools/balance.js 100`: 61 % (vorher 62 %). Keiner der alten Builds steigt über 60 %. Brackwasser und Kettenwerk liegen leicht unter 40 %: Der Reliquien-Pool ist von 29 auf 39 gewachsen, ihre eigenen Reliquien kommen seltener. Auf 100 Seeds liegen Ballast bei 45 %, Kollekte bei 52 % (Seeds 101–200 ebenfalls 52 %); die Streuung über 50 Seeds ist etwa ±7 Punkte.

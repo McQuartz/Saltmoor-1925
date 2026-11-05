@@ -101,12 +101,20 @@ module.exports = {
       // Unterseite des Spiegels: helles, gewelltes Band
       for (let x = 0; x < 160; x++) for (let j = 0; j < 4; j++) { const y = Math.round(sy(x)) + j; const v = (1 - j / 4) * .9 + Math.sin(x * .4 + j) * .15; if (v > B.bay(x, y)) K.set(x, y, j === 0 ? '#3a4a36' : '#22281c'); }
       // Säulenbasen links und rechts im Wasser
-      for (const [cx, w] of [[16, 9], [146, 8]]) {
-        const s = K.maske(); s.rect(cx - w, 0, 2 * w, 76); s.rect(cx - w - 3, 68, 2 * w + 6, 4); s.rect(cx - w - 4, 72, 2 * w + 8, 6);
-        K.form(s, .15, { k: STEIN.slice(0, 4), ton: 1.4, verlauf: -.4, fase: 1, rand: 0, muster: (x, y) => (Math.abs(x - cx) < w - 2 && (x - cx + 40) % 4 === 0 ? -.5 : 0) });
+      const saeulen = [];
+      for (const [cx, w] of [[18, 9], [144, 8]]) {
+        const s = K.maske(); s.rect(cx - w, 0, 2 * w, 72); s.rect(cx - w - 3, 64, 2 * w + 6, 4); s.rect(cx - w - 4, 68, 2 * w + 8, 5);
+        K.form(s, .1, { k: STEIN.slice(0, 5), ton: 1.6, verlauf: -.4, fase: 1, rand: 0, muster: (x, y) => (Math.abs(x - cx) < w - 2 && (x - cx + 40) % 4 === 0 ? -.6 : 0) + (y === 64 || y === 68 ? -.8 : 0) });
+        saeulen.push(s);
       }
-      // Boden: Steinplatten in Aufsicht
-      K.pflaster(66, 90, ['#050605', '#0b0d0a', '#12150f', '#1a1e15', '#242819', '#30341f'], { vx: 80, ton: .42, dichte: 2.2 });
+      // Boden: Steinplatten in Aufsicht, deutlich gefugt
+      K.feld(0, 68, 160, 90, ['#060705', '#0c0e0a', '#141710', '#1e2218', '#2a2e20', '#383a28', '#484632'], (x, y) => {
+        const Z = 30 / (y - 58), X = (x - 80) / (y - 58) * 1.4, zi = Math.floor(Z * 1.2), xi = Math.floor(X + (zi & 1) * .5);
+        const fz = Z * 1.2 - zi, fx = X + (zi & 1) * .5 - xi;
+        let t = .42 + (B.hash(xi, zi, 5) - .5) * .18 - (90 - y) / 120;
+        if (fz < .12 * (y - 58) / 16 + .04 || fx < .05 + .02 * (y - 58) / 16) t -= .3; else if (fz < .25) t += .06;
+        return t;
+      });
       // Treibende Seiten: zwei liegen flach am Spiegel, zwei sinken schräg
       const seite = (cx, cy, w, h, a, dunkel) => {
         const c = Math.cos(a), s = Math.sin(a), P = (u, v) => [cx + u * c - v * s, cy + u * s + v * c];
@@ -125,8 +133,12 @@ module.exports = {
       K.set(80, 58, '#2a1a0a');
       // Um die Flamme ist das Wasser klar: hellerer, kühler Hof
       K.licht(80, 52, 22, '#16201a', .9);
+      // Licht der Flamme: ein Fleck auf dem Boden um den Leuchter, Streiflicht an den Säulen
+      K.licht(80, 80, 56, '#3a2810', 1, { oval: 2.6, exp: 1.2 });
+      K.licht(80, 80, 26, '#4a3414', .9, { oval: 2.6 });
+      for (const sm of saeulen) { K.licht(80, 58, 90, '#2a1c0c', .9, { maske: (x, y) => sm.has(x, y) }); K.kante(sm, 80, 56, 120, ['#6a4a20', '#c89a50'], { nah: .5, min: .2 }); }
       K.flamme(80, 58, { gross: 2, hof: 64, hofFarbe: '#5a3c14' });
-      K.vignette(.8, { cx: 80, cy: 50 });
+      K.vignette(.6, { cx: 80, cy: 52 });
     },
 
     // Ein überfluteter Kirchenraum im grünen Licht von unten, eine Glocke unter der Oberfläche und Köpfe, die sich in den Bänken erheben.
