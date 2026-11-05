@@ -30,6 +30,9 @@
    "rauschen"
   ],
   "waechter": "sender",
+  "waechter_alt": [
+   "kastendrachen"
+  ],
   "fundpool": [
    "morsetaste",
    "kopfhoerer",
@@ -349,6 +352,54 @@
    },
    "beute": "senderoehre",
    "beute_satz": "Die Türen schlagen zu. Hinter dem Gitter geht eine Röhre nach der anderen aus, und als die letzte erlischt, hörst du sie noch, sehr leise, deinen Namen buchstabieren. Dann einen anderen.",
+   "quelle": "skript"
+  },
+  "kastendrachen": {
+   "n": "Der Kastendrachen",
+   "biom": "funkstation",
+   "rang": "waechter",
+   "hp": 70,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 4
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "kastendrachen",
+   "varianten": [
+    "kastendrachen"
+   ],
+   "pendel": true,
+   "konzept": "Der Antennendrachen der Station von 1912, ein Kastendrachen mit zwei Zellen, an einem Draht statt an einer Schnur. Er fliegt, obwohl hier unten kein Wind geht. Am Draht hängt im Gurt der Funker, der ihn halten sollte, die Füße über dem Boden, den Kopfhörer noch auf. Der Draht führt in ein Loch im Eis, und der Schwanz ist der Papierstreifen des Schreibempfängers.",
+   "stimme": "nest",
+   "kniff": {
+    "art": "dornen",
+    "v": 3,
+    "why": "Auf dem Draht liegt Strom. Wer ihn anfasst, bekommt ihn."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "W",
+     "F"
+    ]
+   },
+   "beute": "kopfhoerer",
+   "beute_satz": "Der Drachen kommt herunter wie ein nasses Laken. Der Funker steht auf dem Eis, zum ersten Mal seit 1912, und fällt dann einfach um. Im Kopfhörer piept es weiter.",
    "quelle": "skript"
   }
  },

@@ -6,10 +6,47 @@
   "kirchenvogt"
  ],
  "gegner_weg": [],
+ "waechter_dazu": ["prediger"],
  "fundpool_dazu": [
   "klingelbeutel"
  ],
  "foes": {
+  "prediger": {
+   "n": "Der Prediger",
+   "biom": "kapelle",
+   "rang": "waechter",
+   "hp": 165,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 40
+    }
+   ],
+   "sprite": "prediger",
+   "varianten": [
+    "prediger"
+   ],
+   "konzept": "Der Prediger von 1634 steht noch in der Kanzel, die schief im Wasser steht, unter dem Schalldeckel ohne Wand. Er ist mit jeder Predigt länger geworden, bis sein Kopf an den Deckel stieß; die Arme liegen über der Brüstung, die Hände hängen bis unter den Korb. An der Brüstung die Kanzelsanduhr, und der Sand läuft nach oben.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 1,
+    "v": 40,
+    "why": "Die Sanduhr läuft nach oben. Wenn sie voll ist, ist die Predigt zu Ende, und dann spricht er das Urteil."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "W",
+     "F",
+     "G"
+    ]
+   },
+   "beute": "bible",
+   "beute_satz": "Die Sanduhr fällt von der Brüstung und zerbricht nicht. Der Sand darin liegt oben, still, und unten ist das Glas leer.",
+   "quelle": "skript"
+  },
   "gepruefte": {
    "n": "Die Geprüfte",
    "biom": "kapelle",

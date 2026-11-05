@@ -152,3 +152,23 @@ Je Punkt 1–5: Silhouette / Licht / Pixel / Konzept / Biom / im Spiel. Gesamt =
 | Wächter-Szene Am Hauptband | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Drei hohe Fenster im Gegenlicht, der Schornstein nah im rechten, die Schicht davor; die Wand unter den Fenstern ist ruhig bis leer. |
 
 Nichts liegt unter 4. Offene Schwächen für eine spätere Runde: Hering der Ausnehmerin größer, Arm des Dosenkinds mit sichtbarem Ellbogen, mehr Bewegung im Leib der Schicht beim Akkord, Fassadenfenster im Hof mit Kacheln innen.
+
+## Zweiter Wächter: Der Fang (`fang`), 160 × 180 (Zugabe)
+
+Der Seed wählt je Run zwischen der Schicht und dem Fang (`biom.waechter_alt`); die Wächter-Szene „Am Hauptband“ bleibt dieselbe.
+
+- **Wer:** der letzte Kabeljau der „Anna Thormählen“, so lang wie zwei Männer. Er hängt seit dem 4. November am Haken des Laufkrans über dem Hauptband, um gewogen zu werden.
+- **Das falsche Detail:** Auf der Flanke trägt er denselben Stempel wie die Dosen, das Datum von morgen. Wo die Brustflossen sein müssten, hängen zwei Arme, an der linken Hand ein Ehering. Das Auge folgt dir.
+- **Silhouette:** eine senkrechte Spindel an Kette und Rollenblock, oben das aufgerissene Maul am Haken, unten der Schwanzfächer, seitlich ein hängender Arm. Proben: liegend auf dem Band (schwarz ein Wal oder Sarg, zu nah am Liegenden und am Kanalaal), genommen: hängend.
+- **Anders als die Schicht:** Die Schicht ist eine breite, ruhige Pyramide hinter dem Band, die wächst und Dosenkinder ruft, also ein Kampf gegen die Uhr und gegen Flächenschaden. Der Fang ist eine schmale, hängende Figur, die **schwingt** (`pendel`: jeden Zug zwischen links hinten und rechts vorn) und **das Deck verstopft**: Kniff `abschrift` mit `karte: "Gräte"` (jeden Zug eine unspielbare Gräte in den Ablagestapel). Besonderheit `phasen` bei 50 %: Er ist aufgeschlitzt wie am Band (`fang_p2`, der Schnitt leuchtet von innen, Rippen und eine Hand halten ihn auf), das Muster wird härter.
+- **Werte:** 88 Leben (über der Spanne 45–80 aus dem Paket-Format; mit 70–80 Leben lag der Akt im Autospieler bei 85–90 %), Schwachstelle **Salz** (eingesalzen ist er nur noch Ware). Muster 13, 3 × 5, Block 12, Stärke +3, 18; Phase 2: 2 × 9, Block 12, 22, 4 × 5. Stimme `tiefling` (nasses Blech). Beute: Ehering einer Ertrunkenen.
+- **Licht:** eigene Zone `fabrik_fang`: Kachelgrün im Körper, Randlicht **kalt silberblau** wie Fischschuppen im Kühlhauslicht (die Szene hat nur Natriumgelb). Inneres Licht: Natriumwarm durch die Kiemen, das runde Auge, in Phase 2 der ganze Schnitt.
+- **biom-test (20 Seeds):** Schicht 14/20 (70 %), Fang 16/20 (80 %).
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Fang (`fang`) | 5 | 4 | 4 | 5 | 4 | 4 | **4** | Der hängende Fisch mit Armen ist sofort lesbar und einzigartig, Stempel und Ehering tragen das Konzept. Schwächen: Der Leib ist eine große dunkle Fläche, die Schuppen sind leise; der hintere Arm ist nur ein Stumpf. |
+| Der Fang, Phase 2 (`fang_p2`) | 5 | 4 | 4 | 4 | 4 | 4 | **4** | Der leuchtende Schnitt mit Rippen ist im Spiel die hellste Stelle und zeigt den Phasenwechsel sofort; die Hand im Schnitt sieht man erst aus der Nähe. |
+| Im Spiel (Wächter-Szene) | | | | | | 4 | **4** | Steht schmal und dunkel vor den gelben Fenstern, das kalte Randlicht trennt ihn klar; er ist schmaler als die Schicht und wirkt dadurch kleiner. |
+
+Bilder: [Spiel](../bilder/Zugabe/waechter2/fabrik-fang.png), [Kontaktbogen](../bilder/Zugabe/waechter2/bogen-a1.png).

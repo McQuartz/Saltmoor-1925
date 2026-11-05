@@ -13,6 +13,7 @@
   "musik": "glockengiesserei",
   "gegner": ["giesser", "formerin", "kloeppelmann", "gussnaht"],
   "waechter": "ungetaufte",
+  "waechter_alt": ["tretrad"],
   "fundpool": ["giesskelle", "lehmmaske", "stimmeisen", "candle", "cross", "rosary", "minerlamp", "shovel", "pick", "tartorch"],
   "ereignisse": [],
   "kraemer": {
@@ -63,6 +64,53 @@
   "amb": {"stollen": 0.05, "wind": 0.03}, "rhy": "hacke", "detail": "kapelle",
   "ort": "Gewölbe unter dem Kirchhof, Zugluft im Schacht, der Ofen atmet, ferne Glockenschläge", "rhyN": "Meißel und Hammer auf Bronze, Pauke"},
  "foes": {
+  "tretrad": {
+   "n": "Das Tretrad",
+   "biom": "glockengiesserei",
+   "rang": "waechter",
+   "hp": 108,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "blk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 19
+    }
+   ],
+   "sprite": "tretrad",
+   "varianten": [
+    "tretrad"
+   ],
+   "konzept": "Der Kran, mit dem 1641 die Glocken durch den Schacht gezogen wurden: ein Rad aus Eiche, so hoch wie zwei Männer, daneben Mast und Ausleger. Im Rad geht einer, seit 1641; die Achse geht ihm mitten durch den Leib. Am Haken hängt ein Gießtiegel, der nie leer wird, und das Seil läuft ab, nicht auf.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "waechst",
+    "v": 2,
+    "why": "Er geht, und das Rad geht schneller, und er muss schneller gehen."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "F",
+     "B"
+    ]
+   },
+   "beute": "giesskelle",
+   "beute_satz": "Das Rad läuft aus. Zum ersten Mal seit 1641 steht er still, auf der untersten Sprosse, und das Seil hängt schlaff bis in die Grube.",
+   "quelle": "skript"
+  },
   "giesser": {
    "n": "Der Gießer", "biom": "glockengiesserei", "rang": "normal", "hp": 25, "weak": "W",
    "pat": [{"t": "atk", "v": 8}, {"t": "blk", "v": 6}, {"t": "atk", "v": 4, "h": 2}],

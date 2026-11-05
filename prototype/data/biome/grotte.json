@@ -29,6 +29,7 @@
    "bittsteller"
   ],
   "waechter": "erhoerte",
+  "waechter_alt": ["ungeheilter"],
   "fundpool": [
    "votivherz",
    "pilgerstab",
@@ -111,6 +112,81 @@
   "rhyN": "Krücken auf Stein, Pauke"
  },
  "foes": {
+  "ungeheilter": {
+   "n": "Der Ungeheilte",
+   "biom": "grotte",
+   "rang": "waechter",
+   "hp": 138,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 16
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 20
+    },
+    {
+     "t": "atk",
+     "v": 25
+    }
+   ],
+   "sprite": "ungeheilter",
+   "varianten": [
+    "ungeheilter",
+    "ungeheilter_p2"
+   ],
+   "konzept": "Einer, der kam und nicht geheilt wurde. Er hat keine Beine mehr, nur zwei umwickelte Stümpfe, und er hat sich alle Krücken genommen, die die Geheilten an die Wand gehängt haben. Für jede Krücke ist ihm ein Arm gewachsen. Um den Hals das Wachsherz, das er geopfert hat; es wurde nie angenommen und ist noch warm.",
+   "stimme": "salzlaeufer",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Er nimmt dir die Stütze weg. Was du tun willst, wiegt einen Schritt mehr."
+   },
+   "pendel": true,
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "ungeheilter_p2"
+    ],
+    "schwach": [
+     "G"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 9,
+       "h": 3
+      },
+      {
+       "t": "atk",
+       "v": 23
+      },
+      {
+       "t": "buff",
+       "v": 2
+      },
+      {
+       "t": "atk",
+       "v": 31
+      }
+     ]
+    ]
+   },
+   "beute": "pilgerstab",
+   "beute_satz": "Die Krücken stehen noch, als er schon liegt, und fallen dann eine nach der anderen, langsam, wie man sie an die Wand hängt.",
+   "quelle": "skript"
+  },
   "wachshand": {
    "n": "Die Wachshände",
    "biom": "grotte",

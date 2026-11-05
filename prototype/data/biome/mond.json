@@ -30,6 +30,9 @@
    "gezogene"
   ],
   "waechter": "rueckseite",
+  "waechter_alt": [
+   "mondmann"
+  ],
   "fundpool": [
    "mondkarte",
    "stechzirkel",
@@ -372,6 +375,83 @@
    },
    "beute": "aschlicht",
    "beute_satz": "Die Sichel wird dünner, bis sie ein Strich ist, und dann ist auch der Strich weg. Nur das aschgraue Licht bleibt, und darin, sehr lange, die Augen.",
+   "quelle": "skript"
+  },
+  "mondmann": {
+   "n": "Der Mann im Mond",
+   "biom": "mond",
+   "rang": "waechter",
+   "hp": 84,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "sprite": "mondmann",
+   "varianten": [
+    "mondmann",
+    "mondmann_p2"
+   ],
+   "konzept": "Der aus dem Bauernkalender, der am Sonntag Reisig sammelte und dafür auf den Mond musste. Gebückt unter einem Bündel, größer als er selbst, mit Stock und Laterne. Das Bündel sind die Sprossen der Strickleiter von 1890, und an manchen hängen noch die Hände, die sich daran festhielten. Er geht durch Asche und hinterlässt keine Spur.",
+   "stimme": "hirte",
+   "kniff": {
+    "art": "abschrift",
+    "n": 2,
+    "karte": "Reisig",
+    "spr": "kerbholz",
+    "why": "Was er trägt, lädt er dir auf. Ein Bündel Reisig, das du nicht mehr loswirst."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "mondmann_p2"
+    ],
+    "schwach": [
+     "E"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 7,
+       "h": 2
+      },
+      {
+       "t": "atk",
+       "v": 15
+      },
+      {
+       "t": "atk",
+       "v": 4,
+       "h": 3
+      },
+      {
+       "t": "blk",
+       "v": 10
+      }
+     ]
+    ]
+   },
+   "beute": "mondstaub",
+   "beute_satz": "Er setzt sich auf sein Bündel und ist auf einmal sehr klein. Wo er gegangen ist, liegt die Asche glatt, als wäre nie jemand da gewesen. Nur deine Spuren führen zu ihm hin.",
    "quelle": "skript"
   }
  },

@@ -178,3 +178,22 @@ Nichts unter 4. Überarbeitet wurden unterwegs: Badefrau (Kastenkörper, Kragen)
 - „Heilt alle Gegner“ aus dem Steckbrief ist nicht umgesetzt (ein Kniff je Gegner); das Rufen von Genesenden in Phase 2 ersetzt es.
 - Die Kuppel wird per Vorwärtsabbildung gerastert (bis etwa 0,5 s Aufbau je Szene, einmal pro Knoten).
 - Item-Icons sind Platzhalter.
+
+## Zweiter Wächter: Der Badekarren (`badekarren`), 160 × 180 (Zugabe)
+
+Der Seed wählt je Run zwischen Oberschwester und Badekarren (`biom.waechter_alt`); die Wächter-Szene „Unter der Laterne“ bleibt dieselbe.
+
+- **Wer:** ein Badekarren von 1900, Holzhütte auf zwei hohen Rädern, vorn das Leinenverdeck, unter dem die Dame ungesehen ins Wasser steigt. Seit der Nachsaison 1900 hat ihn niemand zurückgezogen, und die Dame ist nicht ausgestiegen.
+- **Das falsche Detail:** Das Verdeck ist von innen erleuchtet, darauf ihr Schatten: Sie sitzt sehr gerade, und der Hals ist zu lang. Der Karren fährt ohne Pferd. Nach dem Krankenblatt geht es ihr jeden Tag besser.
+- **Silhouette:** eine gestreifte Hütte mit Satteldach und Wimpel auf zwei Speichenrädern, vorn die große Haube des Verdecks, davor die Deichsel auf dem Boden. Probe ohne Verdeck: schwarz ein Wohnwagen, zu nah am Gepäckstück; genommen: mit Haube.
+- **Anders als die Oberschwester:** Sie ist eine stehende Riesin, die heilt, Ruhe verschreibt und in Phase 2 Genesende aufstehen lässt. Der Karren **versteckt** sich: Kniff `verborgen` (die Absicht ist nur halb sichtbar, man sieht nur den Schatten), dazu ein Musterschritt `unverw` („Der Vorhang ist zu“, der Karren steht im Wasser, dahin kommst du nicht), und Besonderheit `ruft`: Alle 3 Züge kommt eine Badefrau, die ihn schiebt. Man spielt gegen den Takt: im Vorhangzug blocken, danach hart zuschlagen, die Badefrauen weg.
+- **Werte:** 90 Leben (über der Spanne 45–80 aus dem Paket-Format; mit 70–80 Leben lag der Akt im Autospieler bei 85–90 %), Schwachstelle **Feuer** (Holz, Teer, Leinen). Muster 13, Vorhang (Block 8, unverwundbar), 3 × 6, Stärke +3, 20. Stimme `schatten`. Beute: Glas mit Blutegeln.
+- **Licht:** eigene Zone `kurhaus_karren`: Körper wie das Kurhaus, Randlicht **altrosa** (der gestreifte Anstrich im kalten Licht; die Szene hat nur Türkis, Weiß und Messing). Inneres Licht: das Leinen von innen, das Fensterchen, die Augen im Vorhangspalt. Im Angriff öffnet sich der Vorhang und ein zu langer Arm greift heraus.
+- **biom-test (20 Seeds):** Oberschwester 15/20 (75 %), Badekarren 16/20 (80 %).
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Badekarren (`badekarren`) | 5 | 4 | 4 | 4 | 4 | 4 | **4** | Hütte, Räder und Haube sind schwarz sofort ein Badekarren und eine Silhouette, die es im Spiel nicht gibt. Schwächen: Der Schatten der Dame auf dem Leinen liest man erst beim zweiten Blick; der Arm im Angriff ist dünn. |
+| Im Spiel (Wächter-Szene) | | | | | | 4 | **4** | Steht dunkel und klar vor der hellen Kuppel, das rosa Randlicht trennt ihn vom Türkis; die Räder stehen knapp über dem Beckenrand. |
+
+Bilder: [Spiel](../bilder/Zugabe/waechter2/kurhaus-badekarren.png), [Kontaktbogen](../bilder/Zugabe/waechter2/bogen-a1.png).

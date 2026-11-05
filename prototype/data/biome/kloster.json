@@ -29,6 +29,7 @@
    "leser"
   ],
   "waechter": "abschreiber",
+  "waechter_alt": ["adlerpult"],
   "fundpool": [
    "federkiel",
    "tintenhorn",
@@ -113,6 +114,80 @@
   "rhyN": "Federkiele auf Pergament, Pauke"
  },
  "foes": {
+  "adlerpult": {
+   "n": "Der Adler vom Lesepult",
+   "biom": "kloster",
+   "rang": "waechter",
+   "hp": 95,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 16
+    },
+    {
+     "t": "blk",
+     "v": 14
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 4
+    },
+    {
+     "t": "buff",
+     "v": 2
+    }
+   ],
+   "sprite": "adlerpult",
+   "varianten": [
+    "adlerpult",
+    "adlerpult_p2"
+   ],
+   "konzept": "Der Messingadler, auf dessen Flügeln im Refektorium das Buch lag, aus dem vorgelesen wurde. Er ist von seiner Säule gestiegen und trägt das Buch weiter auf dem Rücken. Seine Federn sind Seiten, beschrieben, und jede Nacht wächst eine nach; die Federkiele der Schreiber sind alle aus ihm gerupft.",
+   "stimme": "chor",
+   "kniff": {
+    "art": "dornen",
+    "v": 3,
+    "why": "In ihm stecken noch hundert Federkiele, die Spitzen nach außen. Wer zuschlägt, greift hinein."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "adlerpult_p2"
+    ],
+    "schwach": [
+     "B"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 22
+      },
+      {
+       "t": "atk",
+       "v": 10,
+       "h": 2
+      },
+      {
+       "t": "blk",
+       "v": 18
+      },
+      {
+       "t": "atk",
+       "v": 31
+      }
+     ]
+    ]
+   },
+   "beute": "lesestein",
+   "beute_satz": "Das Buch liegt aufgeschlagen auf den Steinen. Die letzte Zeile ist ein Wort länger als vorhin, und das Wort ist eine Feder.",
+   "quelle": "skript"
+  },
   "novize": {
    "n": "Der Novize",
    "biom": "kloster",

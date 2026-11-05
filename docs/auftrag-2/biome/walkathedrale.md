@@ -157,3 +157,21 @@ Je Punkt 1–5: Silhouette / Licht / Pixel / Konzept / Biom / im Spiel. Gesamt =
 | Wächter-Szene Herzkammer | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Muskelbalken wie Säulen, Sehnenfäden wie Glockenseile, Dorne von allen Seiten zur Mitte, pulsierendes Glimmen hinter dem Herzen. Der Boden ist eine große, eher gleichförmige Fläche (dort liegen im Spiel die Karten). |
 
 Nichts liegt unter 4. Offene Schwächen für eine spätere Runde: der Mann unter dem Rippenkriecher deutlicher (Gesicht, Hände), die Leine des Echos kräftiger, Markfresser in der Krypta weiter vom Wirbel weg aufstellen oder heller rahmen, mehr Bewegung im Idle des Herzens (Schlag), Bohlenweg in V0 schmaler, Lager in V1 sichtbarer.
+
+## Zweiter Wächter: Das Kalb (`kalb`, Zugabe)
+
+Eingetragen als `biom.waechter_alt` in `prototype/data/biome/walkathedrale.json`; Sprite `tools/sprites/gegner/kalb.js` (Sheets `kalb`, `kalb_p2`), Zonenpalette `tools/sprites/zonen/walkathedrale_kalb.json` (Körper wie das Biom, Randlicht und Augen anders). Bilder: [bilder/Zugabe/waechter2/](../bilder/Zugabe/waechter2/).
+
+- **Wer/was:** Der Wal ist nicht allein gestorben. In der Herzkammer hängt an seiner Schnur das Kalb, das nie geboren wurde, eingerollt, den Kopf nach unten, so groß wie ein Fischkutter. Es ist nicht fertig: Die Haut endet am Bauch, darunter liegen die Rippen offen und wachsen nach innen zur Mitte, wo das Mark glimmt.
+- **Das falsche Detail:** Die Flossen sind Hände, mit fünf langen Fingern und bleichen Nägeln, und sie greifen nach vorn, nach dir. (Im Walskelett stecken wirklich Fingerknochen; hier sind sie nicht mehr eingewachsen.)
+- **Silhouette in einem Satz:** ein eingerolltes Walkalb am Strang, großer Schädel unten links, Fluke oben, zwei gespreizte Hände unter dem Kiefer.
+- **Warum anders als das Herz:** Das Herz sitzt in seiner Wiege, schützt im Takt die anderen und ruft Rippenkriecher. Das Kalb hängt, ruft niemanden und gibt keinen Schutz; es wird jeden Zug stärker (Kniff `waechst 3`: „Es ist nicht fertig. Jeden Zug wächst ihm ein Knochen nach.“). Man muss es schnell töten, statt auf Lücken im Takt zu warten. Besonderheit `phasen` bei 50 %: „Wach“ (`kalb_p2`), das Auge geht auf, der Kiefer klappt herunter, die Rippen spreizen sich; neues Muster (6 × 2, 13, Stärke +2, 3 × 4) und die Schwachstelle wechselt von Licht (es hat nie welches gesehen) zu Blut.
+- **Randlicht:** Korallenrosa (`#a4503e`/`#ffc6aa`), das Licht des pulsierenden Glimmens hinter dem Herzen. Die Herzkammer ist Knochenweiß und Violett; das Rosa trägt dort keine Form, darum löst sich das Kalb von Dornen und Bögen. Augen milchig bleichgelb (`glut #ffe6a0`), damit sie nicht im Rot des Marks verschwinden. Inneres Licht: das Mark in der offenen Bauchhöhle.
+- **Animation:** Leerlauf: hängt still, sinkt einen Pixel, das Auge öffnet sich kurz, die Hände zucken. Angriff: Es schaukelt am Strang zurück, die Hände ziehen sich an (Ausholen), dann schwingt es nach vorn, die Finger greifen, der Kiefer geht auf. Tod: Die Finger öffnen sich, es sackt ab und zerfällt.
+- **Kampf (92 Leben):** Biss (12), 6 × 2, Block 12, 16; dazu jeden Zug Stärke +3. Stimme `torfstecherin` (Summen mit geschlossenem Mund, das Ungeborene). Beute: Fischbein-Korsett (selten, vorhanden).
+- **Proben (Silhouette):** in einer Fruchtblase (ein Oval im Ring, zu nah an der Rückseite des Mondes, und ohne Hände nur ein Ei); ausgestreckt liegend (ein Fisch, kein Ungeborenes). Genommen: eingerollt am Strang. Gegen alle Sprites geprüft: nichts Hängendes in C-Form; die Gezogene (Mond) hängt gerade.
+- **Abstimmung** (`biom-test walkathedrale 20`, gleiche Seeds): Herz 17/20 Akte, im Wächterkampf Ø 4 Schaden, 3,4 Züge; Kalb 16/18, Ø 9 Schaden, 4,4 Züge.
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Das Kalb (`kalb`, `kalb_p2`) | 5 | 4 | 4 | 4 | 4 | 4 | **4** | Eingerolltes Kalb mit Schädel, Fluke und Händen ist schwarz gefüllt eindeutig und neu im Spiel; die offenen Rippen mit dem Mark darin geben die große Binnenform und das innere Licht. Der Schädel bleibt eine große, sehr dunkle Fläche, das geschlossene Auge ist klein; Phase 2 unterscheidet sich vor allem am Auge und am Kiefer. |

@@ -193,3 +193,22 @@ Nichts unter 4. Überarbeitet unterwegs: Astronom (Zirkel unsichtbar → als Sto
 - Der Neumond ist nur Block 20 statt „unverwundbar“ (Vorschlag 1).
 - Die Phasen-Sprites zeigen die Abnahme, die Szene selbst ändert sich beim Phasenwechsel nicht (Vorschlag 3).
 - Der Rock der Gezogenen und der Gehrock des Astronomen sind trotz Falten die dunkelsten Flächen des Bioms.
+
+## Zweiter Wächter: Der Mann im Mond (`mondmann`, Zugabe)
+
+Eingetragen als `biom.waechter_alt` in `prototype/data/biome/mond.json`; Sprite `tools/sprites/gegner/mondmann.js` (Sheets `mondmann`, `mondmann_p2`), Zonenpalette `tools/sprites/zonen/mond_erde.json` (Körper wie das Biom, Randlicht Erdschein-Blau). Bilder: [bilder/Zugabe/waechter2/](../bilder/Zugabe/waechter2/).
+
+- **Wer/was:** Der aus dem Bauernkalender, der am Sonntag Reisig gesammelt hat und dafür auf den Mond musste. Er ist immer noch unterwegs, tief gebückt unter einem Bündel, größer als er selbst, mit Hakenstock und Laterne, das Gesicht rund und vernarbt wie der Mond.
+- **Das falsche Detail:** Das Bündel ist kein Reisig. Es sind die Sprossen der Strickleiter von 1890, zusammengeschnürt, hinten hängt noch ein Stück Leiter heraus, und an manchen Sprossen hängen noch die Hände, die sich daran festhielten. Er geht durch Asche, in der jede Spur bleibt, und hinterlässt keine (der einzige Gegner ohne Bodenschatten).
+- **Silhouette in einem Satz:** ein tief gebückter Wanderer, über ihm schräg ein gespreiztes Bündel wie ein Dornenkamm, vorn der Stock mit der Laterne.
+- **Warum anders als die Rückseite:** Die Rückseite ist eine Scheibe, sie macht Karten teurer, wird unverwundbar und ruft Motten. Der Mann im Mond ist eine Figur, ruft niemanden und stört das Deck auf Dauer: Kniff `abschrift 2` mit eigener Karte „Reisig“ (Bild `kerbholz`): „Was er trägt, lädt er dir auf.“ Besonderheit `phasen` bei 50 %: „Ohne Last“ (`mondmann_p2`): Er wirft das Bündel ab und richtet sich auf, und erst jetzt sieht man, wie groß er ist, der eine Arm reicht bis unter das Knie und fegt im Angriff nach vorn. Neues Muster (7 × 2, 15, 4 × 3, Block 10), Schwachstelle wechselt von Feuer (Reisig brennt) zu Eisen.
+- **Randlicht:** Erdschein-Blau (`#5a7690`/`#c4d8ec`), das Licht, das die Nachtseite des Mondes von der Erde bekommt. Die Szene der Rückseite ist grau und bleichgelb; das kalte Blau kommt dort nicht vor. Inneres Licht: die Laterne (bleiches Gelb im Messingrahmen) und die Augen.
+- **Animation:** Leerlauf: Er wippt unter der Last, die Laterne schwingt. Angriff (Phase 1): Er stemmt das Bündel zurück und hoch (Ausholen über zwei Bilder), dann schlägt er es über sich nach vorn. Phase 2: Der lange Arm holt nach hinten aus und fegt nach vorn. Tod: Er sackt zusammen, das Bündel kippt.
+- **Kampf (84 Leben):** 11, 4 × 3, Block 9, 15; je Zug 2 „Reisig“ in dein Deck. Stimme `hirte` (hohle Holzflöte, ein Wanderer). Beute: Mondstaub im Fläschchen (vorhanden).
+- **Proben (Silhouette):** aufrecht mit dem Bündel auf der Schulter (das Bündel las sich als Gewehr oder Sense); das Bündel als runder Sack (Lumpensammler, nah am Seepockenmann). Gegen alle Sprites geprüft: kein Gebückter mit Strahlenkranz; Hirte und Astronom stehen aufrecht.
+- **Abstimmung** (`biom-test mond 20`, gleiche Seeds): Rückseite 16/19 Akte, im Wächterkampf Ø 13 Schaden, 6,3 Züge; Mann im Mond 15/20, Ø 7 Schaden, 3,5 Züge.
+- **Szene je Phase:** Die Szene der Rückseite öffnet beim Phasenwechsel weitere Krater-Augen (Kern-Wunsch „Szene je Phase“). Das gilt auch für den Mann im Mond und passt: Wenn er die Last abwirft, sehen ihn mehr an.
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Mann im Mond (`mondmann`, `mondmann_p2`) | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Gebückter Mann unter einem Strahlenbündel mit Laterne ist schwarz gefüllt eigen und liest sich als Figur aus dem Kalender; das Blau trennt ihn im Spiel klar vom bleichen Hof. Das untere Ende des Bündels verschmilzt zu einem Keil, der an einen Umhang erinnert; die Hände an den Sprossen sieht man erst bei ×2. Phase 2 ist ein klarer neuer Umriss (Riese mit langem Arm), der Mantel ist dort aber schlicht. |

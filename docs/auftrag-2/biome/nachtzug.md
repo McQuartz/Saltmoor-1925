@@ -175,3 +175,23 @@ h-Moll (Grundton 47, die Nachbarn im Akt I liegen auf d und c), `rhy: holz` als 
 | Arten (rast, krämer, übergang …) | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Abteil, Fundsachen, Koffer und offene Tür ins Wasser sind eigene Ausschnitte desselben Ortes; das Abteil ist noch schwer und grün, der Krämerstand klein. |
 
 Offene Schwächen (unter dem Maßstab der Favoriten, aber nicht unter 4): Die Figuren haben weniger inneres Licht als Chorknabe und Hirte; die Decken der Wagen sind große, ruhige Flächen; im Gepäckwagen wirkt der Boden leer, wenn wenige Gegner stehen.
+
+## Zweiter Wächter: Der Oberkellner (`oberkellner`), 160 × 180 (Zugabe)
+
+Der Seed wählt je Run zwischen Uhrmacher und Oberkellner (`biom.waechter_alt`); die Wächter-Szene im Speisewagen bleibt dieselbe.
+
+- **Wer:** der Oberkellner des Speisewagens. Er bedient, seit der Zug fährt, und hat nie aufgehört, die Rechnung zu bringen.
+- **Das falsche Detail:** Wo der Kopf sein müsste, steht auf dem Kragen ein Teller unter einer silbernen Speiseglocke, und unter ihrem Rand kommt warmes Licht heraus wie aus einer Küche. Die Rechnung ist für alle Gänge, auch die, die noch kommen. In Phase 2 hebt er die Glocke: Auf dem Teller liegt sein Gesicht und sieht zu dir herauf.
+- **Silhouette:** schmaler Mann im Frack mit langen Schößen, oben die breite Kuppel der Glocke auf dem Tellerrand, vorn der Arm mit der Rechnung, die Serviette darunter. Probe mit Kopf und Glocke auf der Hand: schwarz ein gewöhnlicher Kellner, neben der Kontrolleurin wieder eine Säule mit Arm; genommen: Glocke statt Kopf.
+- **Anders als der Uhrmacher:** Der Uhrmacher ist gebeugt und breit, zerbricht deinen Block, verteuert Karten und ruft Mitreisende. Der Oberkellner ist aufrecht und schmal und **verstopft die Hand**: Kniff `verstopfen` mit `karte: "Die Rechnung"` (jeden Zug eine unspielbare Rechnung auf die Hand, Bild der Wartemarke). Besonderheit `phasen` bei 50 %: Glocke hoch (`oberkellner_p2`), härteres Muster. Man spielt gegen eine immer vollere Hand, nicht gegen den Block.
+- **Werte:** 94 Leben (über der Spanne 45–80 aus dem Paket-Format; mit 70–80 Leben lag der Akt im Autospieler bei 85–90 %), Schwachstelle **Wasser** (ein umgestoßenes Glas, und er muss abräumen). Muster 13, Block 10, 3 × 6, Stärke +3, 21; Phase 2: 2 × 9, 23, Block 12, 4 × 6. Stimme `bote`. Beute: Pfandschein Nr. 1925.
+- **Licht:** eigene Zone `nachtzug_kellner`: Mahagoni im Körper, Randlicht **flieder** (ein Morgen, der nicht kommt; die Szene hat warmes Lampenlicht und kaltes Fensterblau). Inneres Licht: der Spalt unter der Glocke, in Phase 2 die Augen auf dem Teller und das Licht aus der leeren Glocke.
+- **biom-test (20 Seeds):** Uhrmacher 15/20 (75 %), Oberkellner 15/20 (75 %).
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Oberkellner (`oberkellner`) | 4 | 4 | 4 | 5 | 4 | 4 | **4** | Glocke statt Kopf mit dem Lichtspalt ist das stärkste Detail, der Frack mit Schößen liest sich. Schwächen: Schwarz kann die Glocke auch ein Helm sein; der Leib ist eine dunkle Fläche mit wenig Faltenlicht. |
+| Der Oberkellner, Phase 2 (`oberkellner_p2`) | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Die erhobene Glocke ändert die Silhouette deutlich, das Gesicht auf dem Teller mit zwei Augen liest sich aus der Nähe; klein im Spiel. |
+| Im Spiel (Wächter-Szene) | | | | | | 4 | **4** | Steht vor der Loklampe, die Glocke vor dem hellen Kreis; Körper und Gang sind beide warm-dunkel, das Fliederlicht trennt sie. |
+
+Bilder: [Spiel](../bilder/Zugabe/waechter2/nachtzug-oberkellner.png), [Kontaktbogen](../bilder/Zugabe/waechter2/bogen-a1.png).

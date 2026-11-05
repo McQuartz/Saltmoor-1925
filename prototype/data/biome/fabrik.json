@@ -30,6 +30,9 @@
    "kuehlhausgast"
   ],
   "waechter": "schicht",
+  "waechter_alt": [
+   "fang"
+  ],
   "fundpool": [
    "akkordmesser",
    "stempelkarte",
@@ -318,6 +321,85 @@
     "v": 2,
     "why": "Der Takt zieht an. Jede Runde ein wenig schneller, so wie jede Nacht."
    }
+  },
+  "fang": {
+   "n": "Der Fang",
+   "biom": "fabrik",
+   "rang": "waechter",
+   "hp": 88,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 18
+    }
+   ],
+   "sprite": "fang",
+   "varianten": [
+    "fang",
+    "fang_p2"
+   ],
+   "konzept": "Der letzte Kabeljau der „Anna Thormählen“, so lang wie zwei Männer, hängt am Kranhaken über dem Hauptband und wird seit dem 4. November gewogen. Auf der Flanke trägt er den Stempel mit dem Datum von morgen. Statt Brustflossen hat er Arme, an der linken Hand einen Ehering.",
+   "stimme": "tiefling",
+   "kniff": {
+    "art": "abschrift",
+    "n": 1,
+    "karte": "Gräte",
+    "spr": "bone",
+    "why": "Was vom Ausnehmen bleibt, landet in deinem Stapel: jeden Zug eine Gräte, die nichts tut."
+   },
+   "pendel": true,
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 9,
+       "h": 2
+      },
+      {
+       "t": "blk",
+       "v": 12
+      },
+      {
+       "t": "atk",
+       "v": 22
+      },
+      {
+       "t": "atk",
+       "v": 5,
+       "h": 4
+      }
+     ]
+    ],
+    "sprites": [
+     "fang_p2"
+    ]
+   },
+   "beute": "ehering",
+   "beute_satz": "Der Haken pendelt leer über dem Band. Die Waage zeigt kein Gewicht, nur das Datum von morgen.",
+   "quelle": "skript"
   }
  },
  "events": [

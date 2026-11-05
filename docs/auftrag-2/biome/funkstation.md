@@ -190,3 +190,21 @@ Nichts unter 4.
 - Anorak des Funkers und Rock der Telegrafistin bleiben die dunkelsten Flächen des Bioms.
 - `fremdheit` verändert die Szenen nur wenig (mehr Morselichter, dunklere Scheiben).
 - Die Gegner haben keine eigene Funk-Stimme (Vorschlag 4).
+
+## Zweiter Wächter: Der Kastendrachen (`kastendrachen`, Zugabe)
+
+Eingetragen als `biom.waechter_alt` in `prototype/data/biome/funkstation.json`; Sprite `tools/sprites/gegner/kastendrachen.js`, Zonenpalette des Bioms (`funkstation`, unverändert). Bilder: [bilder/Zugabe/waechter2/](../bilder/Zugabe/waechter2/).
+
+- **Wer/was:** Mit ihm hob die Station 1912 ihre Antenne in den Himmel: ein Hargrave-Kastendrachen aus Stoff und Bambus mit zwei Zellen, an einem Kupferdraht statt an einer Schnur. Am Draht hängt im Gurt der Funker, der ihn halten sollte, die Hände um den Draht, die Füße über dem Boden, den Kopfhörer noch auf den Ohren.
+- **Das falsche Detail:** Er fliegt, obwohl hier unten kein Wind geht. Der Draht führt nicht zur Winde, sondern in ein Loch im Eis, aus dem es blinkt, und der Schwanz des Drachens ist der Papierstreifen des Schreibempfängers mit Morsestrichen.
+- **Silhouette in einem Satz:** ein schräger Kasten aus zwei offenen Zellen mit Kreuzstreben hoch oben, ein Schwanz aus Papierschleifen, darunter am schrägen Draht ein hängender Mann über einem Loch.
+- **Warum anders als der Sender:** Der Sender ist ein schwerer Schrank am Boden, verbirgt seine Absicht, wird in Phase 2 unverwundbar und ruft das Rauschen, das ihn heilt. Der Drachen ist leicht, schwebt und schwingt jeden Zug zwischen links hinten und rechts vorn (`pendel`); er ruft niemanden. Kniff `dornen 3` („Auf dem Draht liegt Strom. Wer ihn anfasst, bekommt ihn.“): Jeder Treffer kostet dich 3, viele kleine Treffer werden teuer. Besonderheit `schwach_wechsel` Wasser ↔ Feuer: Über dem Eisloch ist der Stoff nass und reißt, über der Hütte ist er trocken und brennt.
+- **Randlicht:** kaltes Schneelicht wie die ganze Station (`#6a8698`/`#d6eaf4`); der Senderaum ist warm, Blau kommt dort nicht vor. Inneres Licht: Elmsfeuer auf den Ecken der Zellen (Röhrenorange, flackert nacheinander), die Augen des Funkers, das Morselicht im Loch; im Angriff läuft ein Funke den Draht hinab.
+- **Animation:** Leerlauf: Der Drachen steht still in der Luft und hebt sich um einen Pixel, der Papierschwanz und die zerrissene Hinterkante flattern, das Elmsfeuer wandert. Angriff: Er steigt nach rechts hinten (Ausholen über zwei Bilder), dann stößt er nach links unten, der Funker schwingt mit, ein Funke läuft den Draht entlang. Tod: Er stürzt und zerfällt.
+- **Kampf (70 Leben):** 9, 3 × 4, Block 10, 13. Stimme `nest` (schnarrendes Zirpen, wie Strom). Beute: Kopfhörer der Station (selten, vorhanden).
+- **Proben (Silhouette):** flacher Rautendrachen (Spielzeug, mit Schwanz ein Fisch); der Drachen ohne den Mann (nichts, was einen trifft). Gegen alle Sprites geprüft: nichts Schwebendes mit Draht; der Mastkletterer hat einen Gittermast, aber senkrecht und am Boden.
+- **Abstimmung** (`biom-test funkstation 20`, gleiche Seeds): Sender 12/18 Akte, im Wächterkampf Ø 7 Schaden, 7,3 Züge; Kastendrachen 14/19, Ø 12 Schaden, 3,6 Züge (die Dornen treffen die Bots mit vielen Treffern).
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Kastendrachen (`kastendrachen`) | 4 | 4 | 4 | 4 | 5 | 4 | **4** | Kasten mit offenen Zellen, Kreuzstreben, Papierschwanz und hängendem Mann ist ein Umriss, den es im Spiel nicht gibt, und ganz aus der Station (Draht, Papierstreifen, Kopfhörer, Elmsfeuer in Röhrenorange). Vor dem hellen Fenster steht der Kasten dunkel und klar; der Funker ist klein, der Papierschwanz verliert sich im Fensterlicht. Der Stoff der Zellen bleibt dunkle Fläche (gewollt), wirkt bei ×1 eher wie eine Kiste als wie Tuch. |

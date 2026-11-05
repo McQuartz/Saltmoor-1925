@@ -5,6 +5,9 @@
   "taucher"
  ],
  "gegner_weg": [],
+ "waechter_dazu": [
+  "galionsfigur"
+ ],
  "fundpool_dazu": [
   "sichtglas"
  ],
@@ -43,6 +46,80 @@
    },
    "beute": "sichtglas",
    "beute_satz": "Der Helm rollt bis an die Kaikante und bleibt liegen. Innen steht das Wasser still, und es ist warm.",
+   "quelle": "skript"
+  },
+  "galionsfigur": {
+   "n": "Die Galionsfigur",
+   "biom": "hafen",
+   "rang": "waechter",
+   "hp": 76,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 7,
+     "h": 2
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 18
+    }
+   ],
+   "sprite": "galionsfigur",
+   "varianten": [
+    "galionsfigur",
+    "galionsfigur_p2"
+   ],
+   "konzept": "Die Frau vom Bug der „Gesine“, 1917 an der Klippe gesunken, ist ohne ihr Schiff an Land gekommen, nur mit dem Stück Bug, an das sie genagelt ist. Das Stück macht noch Fahrt: Am Steven läuft eine Bugwelle hoch, und es gibt kein Wasser.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "brecher",
+    "why": "Ein Bug, der Fahrt macht, geht durch jeden Schutz. Dein Block zerbricht, wenn sie rammt."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 16
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 3
+      },
+      {
+       "t": "blk",
+       "v": 12
+      },
+      {
+       "t": "atk",
+       "v": 22
+      }
+     ]
+    ],
+    "sprites": [
+     "galionsfigur_p2"
+    ]
+   },
+   "beute": "heuerbeutel",
+   "beute_satz": "Das Holz liegt still auf dem Kai. Am Steven trocknet die Bugwelle, die es nie gab, und unter dem Riss ist es dunkel.",
    "quelle": "skript"
   }
  },

@@ -30,6 +30,9 @@
    "fensterzaehlerin"
   ],
   "waechter": "linse",
+  "waechter_alt": [
+   "nebelhorn"
+  ],
   "fundpool": [
    "putztuch",
    "korkring",
@@ -339,6 +342,47 @@
    },
    "beute": "ochsenauge",
    "beute_satz": "Die Linse bleibt stehen. Zum ersten Mal seit 1917 fällt der Strahl aufs Meer, und draußen drehen alle Schiffe zugleich bei.",
+   "quelle": "skript"
+  },
+  "nebelhorn": {
+   "n": "Das Nebelhorn",
+   "biom": "leuchtturm",
+   "rang": "waechter",
+   "hp": 100,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "laedt",
+     "v": 0
+    },
+    {
+     "t": "laedt",
+     "v": 0
+    },
+    {
+     "t": "atk",
+     "v": 44
+    }
+   ],
+   "sprite": "nebelhorn",
+   "varianten": [
+    "nebelhorn"
+   ],
+   "konzept": "Der Hornwärter, der in der Nacht der „Gesine“ das Horn nicht blies, weil die Küste dunkel bleiben sollte. Er trägt den Schalltrichter statt des Kopfes und den Blasebalg auf dem Rücken. Das Horn bläst nicht hinaus, es zieht ein: Nebel, Licht und Schall strömen hinein, bis es voll ist.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 44,
+    "why": "Es holt Luft, zwei Züge lang, und zieht dabei den Nebel ein. Dann kommt alles auf einmal zurück."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "rueckmoewen",
+    "alle": 3
+   },
+   "beute": "zunderbuechse",
+   "beute_satz": "Der Trichter ist leer. Zum ersten Mal seit 1917 hört man draußen die Brandung, und dann, sehr weit, ein Schiffshorn, das antwortet.",
    "quelle": "skript"
   }
  },

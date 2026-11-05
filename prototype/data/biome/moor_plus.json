@@ -5,6 +5,9 @@
   "gepfaehlter"
  ],
  "gegner_weg": [],
+ "waechter_dazu": [
+  "moorpferd"
+ ],
  "fundpool_dazu": [
   "weidenschlinge"
  ],
@@ -44,6 +47,56 @@
    },
    "beute": "weidenschlinge",
    "beute_satz": "Er legt sich zurück in den Torf, ordentlich, wie man ihn hingelegt hat. Die Pfähle stehen wieder senkrecht.",
+   "quelle": "skript"
+  },
+  "moorpferd": {
+   "n": "Das Moorpferd",
+   "biom": "moor",
+   "rang": "waechter",
+   "hp": 104,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 17
+    },
+    {
+     "t": "atk",
+     "v": 7,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "buff",
+     "v": 4
+    },
+    {
+     "t": "atk",
+     "v": 26
+    }
+   ],
+   "sprite": "moorpferd",
+   "varianten": [
+    "moorpferd"
+   ],
+   "konzept": "Der Kaltblüter der Torfstecher, 1881 mit dem vollen Wagen am Steinkreis eingebrochen. Er steht wieder, auf Beinen doppelt so lang wie die eines Pferdes, der Kopf blank bis auf den Knochen. Die Zugstränge laufen straff ins Moor: Unten fährt jemand.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Das Moor hält fest, was hineintritt: Jeden Zug steckt eine deiner Karten fest."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "F",
+     "B"
+    ]
+   },
+   "beute": "moorglas",
+   "beute_satz": "Die Stränge werden schlaff. Was unten die Leine hielt, hat losgelassen, und das Moor schließt sich über den Hufen.",
    "quelle": "skript"
   }
  },

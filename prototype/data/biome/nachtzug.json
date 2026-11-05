@@ -30,6 +30,9 @@
    "schlafwagenkind"
   ],
   "waechter": "uhrmacher",
+  "waechter_alt": [
+   "oberkellner"
+  ],
   "fundpool": [
    "fahrkartenzange",
    "schaffneruhr",
@@ -314,6 +317,84 @@
      "why": "Er stellt deine Uhr nach: eine Karte kostet diesen Zug mehr Zeit."
     }
    ]
+  },
+  "oberkellner": {
+   "n": "Der Oberkellner",
+   "biom": "nachtzug",
+   "rang": "waechter",
+   "hp": 94,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 21
+    }
+   ],
+   "sprite": "oberkellner",
+   "varianten": [
+    "oberkellner",
+    "oberkellner_p2"
+   ],
+   "konzept": "Er bedient im Speisewagen, seit der Zug fährt, Frack, Serviette, sehr gerade. Wo der Kopf sein müsste, steht auf dem Kragen ein Teller unter einer silbernen Speiseglocke, und unter ihrem Rand kommt warmes Licht heraus. Er bringt die Rechnung, für alle Gänge, auch die, die noch kommen.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "verstopfen",
+    "n": 1,
+    "karte": "Die Rechnung",
+    "spr": "wartemarke",
+    "why": "Er legt dir die Rechnung auf die Hand. Sie lässt sich nicht spielen, nur tragen."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 9,
+       "h": 2
+      },
+      {
+       "t": "atk",
+       "v": 23
+      },
+      {
+       "t": "blk",
+       "v": 12
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 4
+      }
+     ]
+    ],
+    "sprites": [
+     "oberkellner_p2"
+    ]
+   },
+   "beute": "pfandschein",
+   "beute_satz": "Die Glocke rollt unter den Tisch. Auf dem Teller liegt nur noch die Rechnung, und sie ist auf deinen Namen ausgestellt.",
+   "quelle": "skript"
   }
  },
  "items": {

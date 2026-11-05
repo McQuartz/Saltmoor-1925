@@ -29,6 +29,9 @@
    "kurgast"
   ],
   "waechter": "oberschwester",
+  "waechter_alt": [
+   "badekarren"
+  ],
   "fundpool": [
    "badethermometer",
    "waermflasche",
@@ -336,6 +339,56 @@
    },
    "beute": "stilleswasser",
    "beute_satz": "Die Wanne steht gerade auf den Kacheln. Der Patient darin hat sich nicht gerührt.",
+   "quelle": "skript"
+  },
+  "badekarren": {
+   "n": "Der Badekarren",
+   "biom": "kurhaus",
+   "rang": "waechter",
+   "hp": 90,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "blk",
+     "v": 8,
+     "unverw": true,
+     "why": "Der Vorhang ist zu. Der Karren steht im Wasser, und dahin kommst du nicht."
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 20
+    }
+   ],
+   "sprite": "badekarren",
+   "varianten": [
+    "badekarren"
+   ],
+   "konzept": "Ein Badekarren von 1900, Hütte auf hohen Rädern, vorn das Leinenverdeck. Seit der Nachsaison 1900 ist die Dame darin nicht ausgestiegen, und es geht ihr jeden Tag besser. Ihr Schatten sitzt sehr gerade auf dem erleuchteten Leinen, der Hals zu lang. Der Karren fährt ohne Pferd.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Hinter dem Vorhang sieht man nur den Schatten: Was sie vorhat, zeigt sich nur halb."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "badefrau",
+    "alle": 3
+   },
+   "beute": "egelglas",
+   "beute_satz": "Das Verdeck ist dunkel. Auf dem Krankenblatt am Haken steht für heute: „Deutlich gebessert.“",
    "quelle": "skript"
   }
  },

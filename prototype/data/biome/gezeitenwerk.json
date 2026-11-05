@@ -29,6 +29,9 @@
    "gewicht"
   ],
   "waechter": "regulator",
+  "waechter_alt": [
+   "griff"
+  ],
   "fundpool": [
    "siebenfingerschluessel",
    "bronzezahn",
@@ -312,6 +315,82 @@
    "beute_satz": "Das Pendel steht senkrecht. Irgendwo oben bleibt die Flut aus, nur dieses eine Mal.",
    "quelle": "skript",
    "pendel": true
+  },
+  "griff": {
+   "n": "Der Griff",
+   "biom": "gezeitenwerk",
+   "rang": "waechter",
+   "hp": 96,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 14
+    },
+    {
+     "t": "buff",
+     "v": 2
+    }
+   ],
+   "sprite": "griff",
+   "varianten": [
+    "griff"
+   ],
+   "konzept": "Die Hand, für die die Maschine gebaut ist. Sie steigt aus einem Kanal, der Unterarm verschwindet im Wasser. Sieben Finger: fünf oben und zwei Daumen, links und rechts, gleich lang. Um das Gelenk eine Bronzemanschette mit sieben Zapfen, in den Kuppen und in den Linien der Handfläche leuchtendes Öl.",
+   "stimme": "lotse",
+   "kniff": {
+    "art": "kopie",
+    "why": "Sieben Finger machen nach, was deine fünf tun: Sie spielt deine letzte Karte gegen dich."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "griff_p2"
+    ],
+    "schwach": [
+     "E"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 18
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 3
+      },
+      {
+       "t": "blk",
+       "v": 10
+      },
+      {
+       "t": "atk",
+       "v": 24
+      }
+     ]
+    ]
+   },
+   "beute": "siebenfingerschluessel",
+   "beute_satz": "Die Hand öffnet sich ein letztes Mal und sinkt in den Kanal zurück. Auf dem Beckenrand bleibt ein Abdruck, blank gegriffen, sieben Finger.",
+   "quelle": "skript"
   }
  },
  "events": [

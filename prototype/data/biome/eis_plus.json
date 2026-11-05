@@ -6,6 +6,9 @@
   "seelilie"
  ],
  "gegner_weg": [],
+ "waechter_dazu": [
+  "welle"
+ ],
  "fundpool_dazu": [
   "fahnentuch"
  ],
@@ -81,6 +84,77 @@
    },
    "beute": null,
    "beute_satz": "Im Eis liegen Steinscheiben wie Münzen. Eine hat ein Muttermal.",
+   "quelle": "skript"
+  },
+  "welle": {
+   "n": "Die Welle, die weiterkam",
+   "biom": "eis",
+   "rang": "waechter",
+   "hp": 96,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 22
+    }
+   ],
+   "sprite": "welle",
+   "varianten": [
+    "welle",
+    "welle_p2"
+   ],
+   "konzept": "Ein Brecher aus schwarzem Eis, so hoch wie ein Haus, mitten im Überschlagen gefroren. In seiner Wand stecken die Ersten, die zum Land hin schwammen, halb umgedreht, und ihre Augen sehen an dir vorbei. Hinter seinem Fuß liegt eine helle Narbe im Eis: Dort stand er vorhin.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 1,
+    "v": 30,
+    "why": "Jedes Mal, wenn du wegsiehst, ist sie ein Stück weiter. Dann bricht sie."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "welle_p2"
+    ],
+    "schwach": [
+     "G"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 5,
+       "h": 4
+      },
+      {
+       "t": "laedt",
+       "v": 0
+      },
+      {
+       "t": "atk",
+       "v": 30
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 3
+      }
+     ]
+    ]
+   },
+   "beute": null,
+   "beute_satz": "Die Welle ist zu Ende gebrochen. Auf dem Eis liegt eine Linie aus Gischt, gefroren, und die Ersten liegen darin mit den Gesichtern zum Land.",
    "quelle": "skript"
   }
  },

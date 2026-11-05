@@ -13,6 +13,7 @@
   "musik": "waisenhaus",
   "gegner": ["nachtschwester", "turnlehrer", "zugedeckte", "zwillinge"],
   "waechter": "heimleiterin",
+  "waechter_alt": ["fotograf"],
   "fundpool": ["trillerpfeife", "schluesselbund", "nachthemd", "musicbox", "candle", "bible", "rosary", "lantern", "laudanum", "smellingsalts"],
   "ereignisse": [],
   "kraemer": {
@@ -62,6 +63,80 @@
   "amb": {"wind": 0.08, "meer": 0.03}, "rhy": "atem", "detail": "hafen",
   "ort": "Schlafsaal bei Sturm, der Wind am Deich, Regen an hohen Fenstern, vierzig Kinder, die atmen", "rhyN": "Atem im Takt, sehr leise, wie Schlafende"},
  "foes": {
+  "fotograf": {
+   "n": "Der Fotograf von 1913",
+   "biom": "waisenhaus",
+   "rang": "waechter",
+   "hp": 116,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 15
+    },
+    {
+     "t": "blk",
+     "v": 14
+    },
+    {
+     "t": "atk",
+     "v": 7,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 21
+    }
+   ],
+   "sprite": "fotograf",
+   "varianten": [
+    "fotograf",
+    "fotograf_p2"
+   ],
+   "konzept": "Er kam nach der Sturmflut für das Gruppenbild, das im Flur hängt und auf dem zu viele Köpfe sind. Die Plattenkamera steht auf dem Dreibein, er selbst unter dem schwarzen Tuch, die Blitzlampe hoch erhoben. Unter dem Saum stehen seine Schuhe, und daneben kleine nackte Füße, nass.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Bitte stillhalten. Eine Karte rührt sich nicht, bis das Bild gemacht ist."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "fotograf_p2"
+    ],
+    "schwach": [
+     "F"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 5,
+       "h": 5
+      },
+      {
+       "t": "atk",
+       "v": 18
+      },
+      {
+       "t": "blk",
+       "v": 12
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 4
+      }
+     ]
+    ]
+   },
+   "beute": "lantern",
+   "beute_satz": "Die Platte ist belichtet. Auf dem Bild steht die Halle, leer, und in der ersten Reihe ein Platz frei, genau so breit wie du.",
+   "quelle": "skript"
+  },
   "nachtschwester": {
    "n": "Die Nachtschwester", "biom": "waisenhaus", "rang": "normal", "hp": 25, "weak": "G",
    "pat": [{"t": "atk", "v": 8}, {"t": "blk", "v": 6}, {"t": "atk", "v": 4, "h": 2}],

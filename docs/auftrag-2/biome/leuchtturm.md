@@ -177,3 +177,22 @@ Nichts unter 4. Überarbeitet wurden unterwegs: die Palette (rotes inneres Randl
 - Der Strahl ist statisch mit leichtem Atmen; er dreht sich nicht sichtbar.
 - Variante 1 hat die meiste ruhige Fläche (Wiese).
 - Im Ereignisbild gibt es keine eigenen 160 × 90-Bilder (wie bei den anderen Paketen nur `bild` als Text).
+
+## Zweiter Wächter: Das Nebelhorn (`nebelhorn`), 160 × 180 (Zugabe)
+
+Der Seed wählt je Run zwischen Linse und Nebelhorn (`biom.waechter_alt`); die Wächter-Szene „Die Laterne“ bleibt dieselbe.
+
+- **Wer:** der Hornwärter, der in der Nacht der „Gesine“ das Horn nicht blies, weil die Küste abgedunkelt bleiben sollte. Er trägt den Schalltrichter statt des Kopfes und den Blasebalg aus dem Nebelhornhaus auf dem Rücken.
+- **Das falsche Detail:** Das Horn bläst nicht hinaus, es **zieht ein**. Nebelfäden strömen in den Trichter, tief im Rohr brennt das Licht, das es aus der Laterne gesogen hat. Wenn es voll ist, kommt alles auf einmal zurück.
+- **Silhouette:** ein großer, waagerechter Trichter auf dich gerichtet, dahinter ein Mann im steifen Ölzeug mit dem Balg als Buckel. Probe mit senkrechtem Trichter: schwarz eine Glocke auf einem Mantel, zu nah an der Glockenmutter; genommen: waagerecht.
+- **Anders als die Linse:** Die Linse ist ein ruhender Bienenkorb aus Glas, die im Takt schützt (`takt`) und in Phase 2 Strahlgänger ruft. Das Nebelhorn **lädt und schlägt einmal sehr hart**: Kniff `ansage` (zwei Züge „lädt“, dann 44), und Besonderheit `ruft`: Alle 3 Züge kommt eine Rückwärtsmöwe, die das Horn gerufen hat. Man plant Block auf den einen Schlag und räumt in den Ladezügen die Möwen ab.
+- **Werte:** 100 Leben, Schwachstelle **Eisen** (ein Bolzen ins Rohr, und es ist still). Stimme `schlundtraeger`. Beute: Zunderbüchse des Leuchtturmwärters. Die Leben liegen über der Spanne 45–80 aus dem Paket-Format, weil der Wächter nur jeden dritten Zug schlägt; mit 80 Leben lag der Akt bei 85 %.
+- **Licht:** eigene Zone `leuchtturm_horn`: Graphit-Körper, Randlicht **kalt see-blau** (das Licht von draußen; die Szene ist warm, mit der Lichtellipse hinter dem Wächter). Inneres Licht: die Glut tief im Trichter, im Ladezug stärker, beim Stoß am hellsten, mit Schallringen nach vorn.
+- **biom-test (20 Seeds):** Linse 15/20 (75 %), Nebelhorn 13/20 (65 %).
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Das Nebelhorn (`nebelhorn`) | 5 | 4 | 4 | 4 | 5 | 5 | **4** | Der Trichter auf dich ist eine einmalige, sofort lesbare Silhouette, die Glut im Rohr ist das innere Licht. Schwächen: Der Mantel ist eine steife, dunkle Säule mit wenig Form; die einströmenden Nebelfäden lesen sich auch als ausgehende Strahlen. |
+| Im Spiel (Wächter-Szene) | | | | | | 5 | **4** | Steht dunkel vor der warmen Ellipse, der Trichter zeigt auf die Karten; beste Lesbarkeit der sechs. |
+
+Bilder: [Spiel](../bilder/Zugabe/waechter2/leuchtturm-nebelhorn.png), [Kontaktbogen](../bilder/Zugabe/waechter2/bogen-a1.png).

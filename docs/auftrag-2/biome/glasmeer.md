@@ -161,3 +161,23 @@ Je Punkt 1–5: Silhouette / Licht / Pixel / Konzept / Biom / im Spiel. Gesamt =
 | Wächter-Szene Spiegelwand | 5 | 4 | 4 | 5 | 5 | 5 | **4** | Die aufrechte Gestalt und du klein in der Wand, davor der Voraus: Wahrzeichen und falsches Detail zugleich. Die Wandfläche selbst ist zwischen den Glanzstreifen noch ruhig. |
 
 Nichts liegt unter 4. Offene Schwächen für eine spätere Runde: Hand des Schwimmers, Faltenwurf im Anorak des Vorhergehenden, dessen Spiegelbild im Spiel größer (oder Vorschlag 1), Schlitten in V0 als Schlitten lesbarer, Wandfläche der Wächter-Szene mit mehr gespiegelter Struktur.
+
+## Zweiter Wächter: Die Lichtqualle (`lichtqualle`, Zugabe)
+
+Eingetragen als `biom.waechter_alt` in `prototype/data/biome/glasmeer.json`; Sprite `tools/sprites/gegner/lichtqualle.js`, Zonenpalette `tools/sprites/zonen/glasmeer_licht.json` (Körper wie das Biom, Randlicht violett). Bilder: [bilder/Zugabe/waechter2/](../bilder/Zugabe/waechter2/).
+
+- **Wer/was:** Das Polarlicht unter dem Glas ist kein Licht. Es ist ein Tier, eine Qualle so groß wie ein Zelt, die durch das Glas heraufgestiegen ist; ihre Vorhänge hängen bis auf den Boden und wehen, obwohl kein Wind geht.
+- **Das falsche Detail:** In ihrer Glocke, wo ein Tier seinen Magen hätte, hängt die Expedition von 1925: ein Schlitten und drei Männer im Geschirr, klein, schon halb zu Glas verdaut. Am Schlitten brennt noch die Laterne, der hellste Punkt im Bild.
+- **Silhouette in einem Satz:** eine hohe Glocke mit gezacktem Saum, darunter sechs breite, wellige Vorhänge bis zum Boden und in der Mitte die gekräuselten Mundarme.
+- **Warum anders als der Voraus:** Der Voraus ist ein Mann im Mantel, er spielt deine Karten vor dir. Die Lichtqualle ist ein echtes Tier ohne Menschenform. Kniff `einfrieren` („Wer in ihr Licht sieht, erstarrt“): Eine Handkarte bleibt jeden Zug stehen. Besonderheit `ruft`: Alle 3 Züge gibt sie einen Vorhergehenden wieder her, einen von denen, die vorausgegangen sind. Man spielt gegen eine kleiner werdende Hand und gegen Verstärkung, nicht gegen den eigenen Stapel.
+- **Schwachstelle Salz:** Sie ist aus dem Meer vor dem Salz; Salz macht ihr Glas trüb.
+- **Randlicht:** Violett (`#664c96`/`#dccaf6`), die andere Seite des Polarlichts. Die Spiegelwand der Wächter-Szene ist ganz grün; das Violett gibt es dort nicht. Das Grün bleibt innen in der Glocke (gedithertes Leuchten, radiale Kanäle) und unten in den Vorhängen, wo das Licht aus dem Glas kommt.
+- **Animation:** Leerlauf: Die Glocke hebt sich um einen Pixel, die Spitzen der Vorhänge schwingen, die Randkörperchen am Saum blinken nacheinander. Angriff: Die Glocke zieht sich zusammen und steigt (Ausholen), dann stößt sie hinab, und die Vorhänge peitschen nach vorn. Tod: Sie sinkt, das Licht geht aus, sie zerfällt.
+- **Kampf (80 Leben):** 12, 5 × 3, Block 10, 16. Stimme `schatten`. Beute: Polarlicht im Glas (selten, vorhanden).
+- **Proben (Silhouette):** flache Glocke mit vielen dünnen Fäden (ein Wischmopp, bei Kampfgröße nur Streifen); Glocke ohne Vorhänge (Pilz oder Lampe). Gegen alle Sprites geprüft: keine Qualle, nichts Schwebendes mit hängenden Bändern; die Seelilie (Eis) steht auf einem Stiel.
+- **Verworfen:** Ein erster Entwurf „Der Lichtbildner“ (Fotograf unter dem Tuch hinter der Kamera auf dem Stativ, Blitzpfanne hoch) war fertig, aber ein paralleler Agent hat zur gleichen Zeit für das Waisenhaus denselben Fotografen gebaut. Zwei Wächter mit demselben Motiv wären Schablone; ersetzt durch die Qualle.
+- **Abstimmung** (`biom-test glasmeer 20`, gleiche Seeds): Voraus 16/19 Akte, im Wächterkampf Ø 10 Schaden, 4,3 Züge; Lichtqualle 16/20, Ø 8 Schaden, 6,8 Züge (länger, weil Vorhergehende dazukommen und Karten stehen bleiben).
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Die Lichtqualle (`lichtqualle`) | 5 | 4 | 4 | 4 | 4 | 4 | **4** | Glocke und Vorhänge sind schwarz gefüllt sofort eine Qualle, im Spiel steht sie mit violettem Rand klar vor der grünen Spiegelwand und neben der Gestalt darin. Das Glimmen in der Glocke ist schön, aber die Expedition im Magen ist bei Kampfgröße nur ein dunkler Strich mit Lichtpunkt; man muss wissen, was es ist. |

@@ -30,6 +30,9 @@
    "seepockenmann"
   ],
   "waechter": "herz",
+  "waechter_alt": [
+   "kalb"
+  ],
   "fundpool": [
    "fischbeinkorsett",
    "tranlampe",
@@ -312,6 +315,81 @@
    },
    "beute": "herztuer",
    "beute_satz": "Das Herz schlägt noch einmal, ganz leise, als hätte es sich verzählt. Dann steht die Tür offen, und drinnen ist es warm.",
+   "quelle": "skript"
+  },
+  "kalb": {
+   "n": "Das Kalb",
+   "biom": "walkathedrale",
+   "rang": "waechter",
+   "hp": 92,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 16
+    }
+   ],
+   "sprite": "kalb",
+   "varianten": [
+    "kalb",
+    "kalb_p2"
+   ],
+   "konzept": "Das Kalb des Wals, das nie geboren wurde, hängt eingerollt an seiner Schnur in der Herzkammer, den Kopf nach unten. Die Haut endet am Bauch, darunter liegen die Rippen offen und wachsen nach innen zum Mark. Seine Flossen sind Hände mit fünf langen Fingern, und sie greifen nach dir.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "waechst",
+    "v": 3,
+    "why": "Es ist nicht fertig. Jeden Zug wächst ihm ein Knochen nach."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "kalb_p2"
+    ],
+    "schwach": [
+     "B"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 2
+      },
+      {
+       "t": "atk",
+       "v": 13
+      },
+      {
+       "t": "buff",
+       "v": 2
+      },
+      {
+       "t": "atk",
+       "v": 3,
+       "h": 4
+      }
+     ]
+    ]
+   },
+   "beute": "fischbeinkorsett",
+   "beute_satz": "Die Hände öffnen sich, einer nach dem anderen die Finger. Die Schnur schaukelt noch lange, und oben im Dunkeln schlägt das Herz einmal zu viel.",
    "quelle": "skript"
   }
  },

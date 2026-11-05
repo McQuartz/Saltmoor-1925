@@ -29,6 +29,9 @@
    "leithund"
   ],
   "waechter": "voraus",
+  "waechter_alt": [
+   "lichtqualle"
+  ],
   "fundpool": [
    "glasscherbe",
    "polarlicht",
@@ -311,6 +314,50 @@
    },
    "beute": "taschenspiegel",
    "beute_satz": "Er zerspringt, und in jeder Scherbe stehst du, einen Schritt hinter ihm. Dann holst du auf.",
+   "quelle": "skript"
+  },
+  "lichtqualle": {
+   "n": "Die Lichtqualle",
+   "biom": "glasmeer",
+   "rang": "waechter",
+   "hp": 80,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 16
+    }
+   ],
+   "sprite": "lichtqualle",
+   "varianten": [
+    "lichtqualle"
+   ],
+   "konzept": "Das Polarlicht unter dem Glas ist kein Licht, sondern ein Tier: eine Qualle so groß wie ein Zelt, durch das Glas heraufgestiegen, die Vorhänge bis auf den Boden, obwohl kein Wind geht. In ihrer Glocke, wo ein Tier den Magen hätte, hängt die Expedition von 1925, ein Schlitten und drei Männer im Geschirr, schon halb zu Glas verdaut.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Wer in ihr Licht sieht, erstarrt. Eine Karte auf deiner Hand bleibt diesen Zug stehen."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "vorhergehende",
+    "alle": 3
+   },
+   "beute": "polarlicht",
+   "beute_satz": "Die Glocke sinkt ins Glas zurück, langsam, wie sie gekommen ist. Unten weht das Licht weiter, und für einen Augenblick siehst du darin den Schlitten, der weiterfährt.",
    "quelle": "skript"
   }
  },

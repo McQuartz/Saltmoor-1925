@@ -1,0 +1,49 @@
+{
+ "id": "fang",
+ "rang": "waechter",
+ "w": 160,
+ "h": 180,
+ "zone": "fabrik_fang",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  86,
+  176
+ ],
+ "kopf": [
+  88,
+  6
+ ],
+ "augen": [
+  [
+   80,
+   58
+  ],
+  [
+   68,
+   102
+  ]
+ ],
+ "augenfarbe": "#ffd27a"
+}

@@ -29,6 +29,9 @@
    "bernsteinlarve"
   ],
   "waechter": "wurzelstock",
+  "waechter_alt": [
+   "kronengaenger"
+  ],
   "fundpool": [
    "harzklumpen",
    "legionsaxt",
@@ -353,6 +356,60 @@
    },
    "beute": "harzkern",
    "beute_satz": "Die Arme hängen still bis auf den Boden. Im Mund des Gesichts ist eine Mulde, wo etwas gelegen hat.",
+   "quelle": "skript"
+  },
+  "kronengaenger": {
+   "n": "Der Kronengänger",
+   "biom": "wald",
+   "rang": "waechter",
+   "hp": 108,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 4
+    },
+    {
+     "t": "blk",
+     "v": 14
+    },
+    {
+     "t": "atk",
+     "v": 21
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 6
+    },
+    {
+     "t": "buff",
+     "v": 3
+    }
+   ],
+   "sprite": "kronengaenger",
+   "varianten": [
+    "kronengaenger"
+   ],
+   "konzept": "Ein Baum aus dem Wald, der nach unten wächst, dessen Krone den Boden erreicht hat. Er hat sich oben von der Decke gerissen, die Wurzeln stehen zerfetzt in die Luft, und jetzt geht er auf seiner Krone. In einem Astloch sitzt ein Klumpen Harz, und in dem Harz sind zwei Augen eingeschlossen, die offen sind.",
+   "stimme": "wurm",
+   "kniff": {
+    "art": "verstopfen",
+    "n": 1,
+    "karte": "Harztropfen",
+    "spr": "harzklumpen",
+    "why": "Aus seiner Krone tropft Harz auf deine Hände: Jeden Zug klebt eine unspielbare Karte in deiner Hand."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "F",
+     "E"
+    ]
+   },
+   "beute": "harzklumpen",
+   "beute_satz": "Er bleibt stehen, die Krone auf dem Boden, und wird wieder ein Baum, der falsch herum steht. Im Astloch ist das Harz kalt, die Augen darin sind zu.",
    "quelle": "skript"
   }
  },

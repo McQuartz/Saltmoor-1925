@@ -4,6 +4,9 @@
  "gegner_dazu": [
   "salzmann"
  ],
+ "waechter_dazu": [
+  "eingesalzene"
+ ],
  "gegner_weg": [],
  "fundpool_dazu": [
   "salzwuerfel"
@@ -43,6 +46,82 @@
    },
    "beute": "salzwuerfel",
    "beute_satz": "Unter dem Salz liegt ein Lederschuh, genäht, nicht genagelt. Er ist warm.",
+   "quelle": "skript"
+  },
+  "eingesalzene": {
+   "n": "Die Eingesalzene",
+   "biom": "salz",
+   "rang": "waechter",
+   "hp": 96,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 14
+    },
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 18
+    }
+   ],
+   "sprite": "eingesalzene",
+   "varianten": [
+    "eingesalzene"
+   ],
+   "konzept": "Eine Salzsiederin aus der Zeit vor den Römern. Sie hat sich in die Siedepfanne gesetzt, damit sie bleibt, und sie ist geblieben: Das Salz ist an ihr gewachsen, in Würfeln, alle gleich glatt, als Treppe bis unter die Decke. Unter der Pfanne brennt das Siedefeuer bis heute.",
+   "stimme": "opfernde",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Sie salzt ein, was sie berührt: Eine deiner Karten ist diesen Zug eingesalzen und unspielbar."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "eingesalzene_p2"
+    ],
+    "schwach": [
+     "B"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 14
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 3
+      },
+      {
+       "t": "buff",
+       "v": 3
+      },
+      {
+       "t": "atk",
+       "v": 20
+      }
+     ]
+    ]
+   },
+   "beute": "salzwuerfel",
+   "beute_satz": "Die Kruste fällt in die Pfanne, Würfel für Würfel. Darunter ist niemand mehr, nur eine Mulde in Menschenform, und die Sole darin ist warm.",
    "quelle": "skript"
   }
  },
