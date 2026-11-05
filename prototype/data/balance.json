@@ -16,7 +16,7 @@
  "enemy_scaling": {
   "_doc": "Nur normale Gegner skalieren mit der Tiefe; hp_faktor/waechter_faktor gleichen den stärkeren Deckbau aus Auftrag 2 aus.",
   "hp_per_depth": 0.05,
-  "atk_every_n_depths": 3,
+  "atk_every_n_depths": 5,
   "hp_faktor": 1.25,
   "waechter_faktor": 1.35
  },

@@ -531,7 +531,7 @@
    },
    {
     "t": "atk",
-    "v": 4,
+    "v": 3,
     "h": 3
    }
   ],
@@ -554,7 +554,7 @@
    {
     "t": "atk",
     "v": 3,
-    "h": 3
+    "h": 2
    },
    {
     "t": "blk",
@@ -562,7 +562,7 @@
    },
    {
     "t": "atk",
-    "v": 10
+    "v": 8
    }
   ],
   "biom": "stadt",
@@ -728,7 +728,7 @@
  },
  "ruft": {
   "n": "Das, was ruft",
-  "hp": 280,
+  "hp": 200,
   "weak": "S",
   "pat": [
    {
@@ -825,16 +825,16 @@
  },
  "augen": {
   "n": "Augen im Rand",
-  "hp": 8,
+  "hp": 20,
   "weak": "L",
   "pat": [
    {
     "t": "blk",
-    "v": 3
+    "v": 6
    },
    {
     "t": "atk",
-    "v": 2
+    "v": 7
    }
   ],
   "biom": "pforte",
@@ -852,6 +852,7 @@
    "v": 6,
    "why": "Die Laternen leuchten ihm schwarz: solange sie hängen, deckt jede ihn mit Block."
   },
-  "quelle": "skript"
+  "quelle": "skript",
+  "ohne_tiefe": true
  }
 }
