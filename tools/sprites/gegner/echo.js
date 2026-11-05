@@ -41,7 +41,7 @@ module.exports = {
     const dirx = Math.cos(Math.PI + ang), diry = Math.sin(Math.PI + ang);
     const spitze = v.stab ? [hand2[0] + 2, sy - 50] : [hand2[0] + dirx * 54, hand2[1] - diry * -1 + diry * 54];
     const ende = v.stab ? [hand2[0] - 1, 112] : [hand2[0] - dirx * 16, hand2[1] - diry * 16];
-    const hand1 = v.stab ? [cx - 14, sy + 16] : [hand2[0] + dirx * 34, hand2[1] + diry * 34];
+    const hand1 = v.stab ? [cx - 14, sy + 16] : [hand2[0] + dirx * 46, hand2[1] + diry * 46];
     const schaft = C(ende[0], ende[1], spitze[0], spitze[1], 1.1, 1.1, 'dunkel', { pf: 'flat' });
     const ux = dirx, uy = diry, nx = -uy, ny = ux;
     const eisen = [Pg([[spitze[0] + ux * 9, spitze[1] + uy * 9], [spitze[0] + nx * 2.6, spitze[1] + ny * 2.6], [spitze[0] - ux * 2, spitze[1] - uy * 2], [spitze[0] - nx * 2.6, spitze[1] - ny * 2.6]], null, { rd: 0.3 }),

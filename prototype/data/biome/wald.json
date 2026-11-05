@@ -262,7 +262,7 @@
    "n": "Der Wurzelstock",
    "biom": "wald",
    "rang": "waechter",
-   "hp": 86,
+   "hp": 80,
    "weak": "F",
    "pat": [
     {
@@ -296,7 +296,7 @@
    "stimme": "schlundtraeger",
    "kniff": {
     "art": "waechst",
-    "v": 1,
+    "v": 2,
     "why": "Mit jedem Zug lässt er einen Arm mehr herunter."
    },
    "besonders": {

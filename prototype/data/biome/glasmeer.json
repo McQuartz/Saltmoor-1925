@@ -274,12 +274,12 @@
    "n": "Der Voraus",
    "biom": "glasmeer",
    "rang": "waechter",
-   "hp": 72,
+   "hp": 78,
    "weak": "L",
    "pat": [
     {
      "t": "atk",
-     "v": 10
+     "v": 12
     },
     {
      "t": "blk",
@@ -287,16 +287,16 @@
     },
     {
      "t": "atk",
-     "v": 4,
+     "v": 5,
      "h": 3
     },
     {
      "t": "buff",
-     "v": 2
+     "v": 3
     },
     {
      "t": "atk",
-     "v": 14
+     "v": 16
     }
    ],
    "sprite": "voraus",
