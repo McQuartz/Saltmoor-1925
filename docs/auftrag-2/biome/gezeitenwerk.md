@@ -181,3 +181,21 @@ Nichts unter 4. Überarbeitet wurden unterwegs: Ölerin (Block mit Stock → sch
 - Der Kern zeigt die Absicht „lädt“ (Ansage des Gewichts) als „↑ +0“; das betrifft alle `ansage`-Gegner, nicht nur dieses Paket.
 - Das Hauptrad rückt im Hintergrund nicht sichtbar weiter (die Szene ist bis auf Wasser, Licht und Partikel statisch).
 - Item-Icons sind Platzhalter.
+
+## Zweiter Wächter: Der Griff (`griff`)
+
+Zugabe. Eingetragen als `biom.waechter_alt` in `prototype/data/biome/gezeitenwerk.json`; der Seed wählt je Run zwischen Regulator und Griff, die Szene bleibt dieselbe. Sprite `tools/sprites/gegner/griff.js` (Varianten `griff`, `griff_p2`), Zone `tools/sprites/zonen/gezeitenwerk_bronze.json`.
+
+- **Idee:** Die Hand, für die die Maschine gebaut ist. Sie steigt aus einem Kanal, der Unterarm verschwindet im Wasser, und niemand weiß, wie lang er ist. **Das falsche Detail:** sieben Finger, fünf oben und zwei Daumen, links und rechts, gleich lang; in den Kuppen und in den Linien der Handfläche leuchtendes Öl, wie in den Abdrücken an der Maschine. Um das Gelenk eine Bronzemanschette mit sieben Zapfen. Kein Gesicht (Zeitschicht vor dem Menschen). **Silhouette:** eine offene, aufgerichtete Hand mit sieben Fingern über einem flachen Becken. **Proben:** die Hand flach auf den Fingern laufend (schwarz eine Spinne, wie Netzflickerin und Zahnradwärter), genommen: aufrecht.
+- **Anders als der Regulator:** Der Regulator pendelt, wächst und wechselt die Schwachstelle mit dem Takt. Der Griff **macht nach**: Kniff `kopie` (deine zuletzt gespielte Karte trifft dich oder schützt ihn), Besonderheit `phasen` bei 50 %: Die Hand schließt sich zur Faust (`griff_p2`), Schwachstelle Blut → Eisen, harte Schläge. Wer große Angriffe spielt, bekommt sie zurück; Block und kleine Karten vor der Faust, dann schnell.
+- **Werte:** 96 Leben, Muster 10, Block 12, 3 × 4, 14, Stärke +2; Phase 2: 18, 3 × 6, Block 10, 24. Stimme `lotse`, Beute Siebenfinger-Schlüssel.
+- **Licht:** Randlicht **blanke Bronze** (`gezeitenwerk_bronze`), das einzige Warme der grünen Maschine: Wo die Hand greift, ist die Bronze blank. Innere Lichter: Öl in Kuppen und Handlinien, der Glanz in der Handmitte.
+- **biom-test (20 Seeds):** Regulator 19/20 (95 %), Griff 18/20 (90 %); der Griff nimmt im Mittel 20 Leben je Kampf (Regulator 4) und gewinnt zweimal. Der Akt ist für den Autospieler leicht, weil die normalen Kämpfe kaum Leben kosten.
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Griff (`griff`) | 5 | 5 | 4 | 5 | 5 | 5 | **4** | Die offene Hand mit sieben Fingern liest man in einer Sekunde, das Bronze-Randlicht trennt sie vom Grün, die glühenden Linien sind das falsche Detail. Schwäche: Die Grünspanflecken am Unterarm sind etwas fleckig. |
+| Phase 2 (`griff_p2`) | 4 | 4 | 4 | 4 | 5 | 5 | **4** | Faust von vorn mit Knöchelreihe und den zwei Daumen quer davor; erste Fassung (gekrümmte Finger) las sich als Klumpen und wurde neu gebaut. Die Fugen zwischen den Fingern sind fein. |
+| Im Spiel | | | | | | 5 | **4** | Steht vor dem hellen Zulauf in der Mitte der Szene, groß und klar. |
+
+Bilder: [Spiel](../bilder/Zugabe/waechter2/gezeitenwerk-griff.png), [Spiel Phase 2](../bilder/Zugabe/waechter2/gezeitenwerk-griff-phase2.png), [Kontaktbogen](../bilder/Zugabe/waechter2/bogen-a3.png).

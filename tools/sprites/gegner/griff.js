@@ -40,7 +40,15 @@ module.exports = {
     // Finger: fünf oben, zwei Daumen außen; jeder drei Glieder, krumm beugt sie zur Handfläche
     const fingerP = [], kuppen = [];
     const DEF = [[-15, -29, -0.26, 22], [-8, -31, -0.1, 27], [0, -32, 0, 30], [8, -31, 0.1, 27], [15, -29, 0.26, 22], [-20, -12, -1.05, 21], [20, -12, 1.05, 21]];
-    DEF.forEach(([u0, w0, wink, len], i) => {
+    if (v.faust) {
+      // Faust von vorn: oben die Reihe der Knöchel, darunter die eingeschlagenen Finger, die Kuppen nach unten,
+      // quer davor die zwei Daumen von links und rechts (sie greifen ineinander)
+      for (let i = 0; i < 5; i++) { const u = -14 + i * 7, kn = rot(u, -30 + Math.abs(i - 2) * 1.2 - krumm * 0), mi = rot(u, -21), tip = rot(u + 0.5, -13);
+        const g = [E(kn[0], kn[1], 4.2 * S, 4.6 * S, 'haut'), C(kn[0], kn[1], mi[0], mi[1], 3.8 * S, 3.6 * S, 'haut'), C(mi[0], mi[1], tip[0], tip[1], 3.4 * S, 3 * S, 'haut')];
+        fingerP.push({ i, g, pts: [kn, kn, mi, tip], daumen: false, faust: true }); kuppen.push(tip); }
+      for (const [i, sg] of [[5, -1], [6, 1]]) { const a0 = rot(sg * 20, -8), a1 = rot(sg * 10, -9), a2 = rot(sg * 1, -7);
+        fingerP.push({ i, g: glied([a0, a1, a2], 4.4 * S, 3.2 * S, 'haut'), pts: [a0, a0, a1, a2], daumen: false, vorn: true }); kuppen.push(a2); }
+    } else DEF.forEach(([u0, w0, wink, len], i) => {
       const daumen = i >= 5, seite = u0 < 0 ? -1 : 1;
       let [px, py] = rot(u0, w0); let ang = ua + wink + (daumen ? 0 : (h(i, 1) - 0.5) * 0.12); const pts = [[px, py]];
       for (let k = 0; k < 3; k++) {
@@ -64,7 +72,8 @@ module.exports = {
     const FING = [];
     fingerP.filter(x => x.daumen).forEach(x => FING.push(gruppen.push({ p: x.g, k: 1, kante: true, finger: x }) - 1));
     const HAND = gruppen.push({ p: hand, k: 0, kante: true }) - 1;
-    fingerP.filter(x => !x.daumen).forEach(x => FING.push(gruppen.push({ p: x.g, k: 1, kante: true, finger: x }) - 1));
+    fingerP.filter(x => !x.daumen && !x.vorn).forEach(x => FING.push(gruppen.push({ p: x.g, k: 1, kante: true, finger: x }) - 1));
+    fingerP.filter(x => x.vorn).forEach(x => FING.push(gruppen.push({ p: x.g, k: 1, kante: true, finger: x }) - 1));
     gruppen.forEach((g, i) => { g.anker = i <= WASSER ? [0, 0] : [0, sink]; });
     const { gid } = LIB.render(W, H, gruppen, LIB.palette('gezeitenwerk_bronze'), { rimBis: 168 });
     const augen = [];
@@ -88,7 +97,9 @@ module.exports = {
       FING.forEach(gi => { const fp = gruppen[gi].finger;
         for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { if (!ist(x, y, gi)) continue; const k = P.get(x, y); if (k < 1 || k > 4) continue;
           let nah = 1e9, seg = 0; for (let s2 = 1; s2 < 3; s2++) { const d = Math.hypot(x - fp.pts[s2][0], y - fp.pts[s2][1]); if (d < nah) { nah = d; seg = s2; } }
-          P.set(x, y, nah < 1.6 ? 1 : (B(x, y) < 0.35 ? 3 : 2)); } });
+          if (fp.faust || fp.vorn) { const l = gid[y * W + x - 1], o = gid[(y - 1) * W + x]; const naht = (l !== gi && FING.includes(l)) || (o !== gi && FING.includes(o) && fp.vorn);
+            P.set(x, y, naht ? 1 : (o !== gi ? 4 : (B(x, y) < 0.3 ? 3 : 2))); }
+          else P.set(x, y, nah < 1.6 ? 1 : (B(x, y) < 0.35 ? 3 : 2)); } });
       kuppen.forEach(([x, y], i) => { if (glueh > 0.25 && !(p.tod && f >= 2)) { P.set(x, y, i === 2 || i === 5 ? 'kern' : 'glut'); P.set(x + 1, y, 'glutDim'); if (i === 2 || i === 5) augen.push([r(x), r(y)]); } });
       if (glueh > 0.3) { const [cx, cy] = rot(-2, -16); P.glow(cx, cy, 14 * glueh, 0.45, 'glutDim', 'k3'); P.set(cx, cy, glueh > 0.9 ? 'kern' : 'glut'); augen.push([r(cx), r(cy)]); }
       // Unterarm: Sehnen, Grünspanflecken, nass am Wasser

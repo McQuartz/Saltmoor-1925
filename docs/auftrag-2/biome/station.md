@@ -182,3 +182,20 @@ Nichts unter 4.
 - Variante 1 ist hinter den Köpfen unruhiger als die anderen.
 - `fremdheit` verändert die Kampfszenen nur wenig (das Schild wird länger); die Wächter-Szene reagiert auf die Boss-Phase.
 - Die Störkarten „Gelocht“ und „Kachel“ zeigen das allgemeine Knochen-Bild (Vorschlag 1).
+
+## Zweiter Wächter: Die Menge (`menge`)
+
+Zugabe. Eingetragen als `biom.waechter_alt` in `prototype/data/biome/station.json`; der Seed wählt je Run zwischen dem Zug, der einfährt, und der Menge, die Szene am Tunnelmund bleibt dieselbe. Sprite `tools/sprites/gegner/menge.js`, Zonenpalette der Station (das rosa Randlicht hat die kalte Szene schon nicht).
+
+- **Idee:** Alle, die zur Eröffnung gekommen sind: Herren mit Zylinder und Melone, Damen mit Glockenhut, ein Schirm, der Pressefotograf mit der Blitzpfanne hoch über den Köpfen, vorn einer mit der großen Schere für das Band. **Das falsche Detail:** Das Band ist nie durchgeschnitten worden, und sie stehen so dicht, dass sie ein Leib geworden sind; alle sehen zum Tunnel, mit dem Rücken zu dir. Nur einer in der Mitte hat sich umgedreht. **Silhouette:** ein breiter Hügel aus Hüten und Schultern auf vielen Beinen, davor quer das Band, nach oben drei Spitzen: die Schere links, der Schirm, rechts der Arm mit der Blitzpfanne. **Proben:** die Menge ohne die erhobenen Arme (schwarz ein Hügel mit Buckeln, nah an Kachelleger und Salzmann), genommen: mit Schere, Schirm und Blitz.
+- **Anders als der Zug:** Der Zug kündigt einen großen Schlag an (`ansage`), schließt die Türen (`unverw`) und ruft Wartende. Die Menge **drängt**: Kniff `teurer` (jeden Zug kostet eine Handkarte 1 mehr), viele kleine Treffer (4 × 7, 6 × 5), Besonderheit `schwach_wechsel` Licht ↔ Blut (sie dreht sich mit dem Blitz: mal Gesichter, mal Rücken). Man kämpft gegen Gedränge, nicht gegen einen Schlag.
+- **Werte:** 124 Leben, Schwachstelle zu Beginn **Licht**, Muster 4 × 7, Block 14, 24, 6 × 5, Stärke +3. Stimme `glockenmutter`, Beute Bahnsteigkarte.
+- **Licht:** Randlicht rosa-rot wie das Haltesignal. Innere Lichter: die Augen des Umgedrehten (mint), die glimmende Blitzpfanne (beim Angriff zündet sie), Messingknöpfe; das Band in Emailblau.
+- **biom-test (20 Seeds):** Zug 14/19 (74 %), Menge 15/18 (83 %); die Menge gewinnt dreimal (Zug zweimal), im Mittel 25 Leben je Kampf (Zug 23).
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Die Menge (`menge`) | 5 | 4 | 4 | 5 | 5 | 5 | **4** | Hüte, Schere, Schirm und Blitzpfanne über dem Band lesen sich sofort als Eröffnungsgesellschaft, das eine Gesicht in der Mitte ist das falsche Detail. Schwächen: Die Mäntel unten sind eine große dunkle Fläche (Band und Beine gliedern sie), die Köpfe der hinteren Reihe sind klein. |
+| Im Spiel (Tunnelmund) | | | | | | 5 | **4** | Steht im hellen Tunnelbogen; die erhobenen Arme ragen in das Licht. |
+
+Bilder: [Spiel](../bilder/Zugabe/waechter2/station-menge.png), [Kontaktbogen](../bilder/Zugabe/waechter2/bogen-a3.png).

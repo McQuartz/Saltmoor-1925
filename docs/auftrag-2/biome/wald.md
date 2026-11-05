@@ -176,3 +176,20 @@ Nichts unter 4. Überarbeitet wurden unterwegs: Holzfäller (Nackenschirm las si
 - Die Absicht des Holzfällers während des Ladens zeigt der Kern als „+0“.
 - Item-Icons sind Platzhalter.
 - Viele dünne Elemente (Geweihstränge, Wurzeln, Rippen) tragen volles Randlicht; das Bild ist dadurch etwas unruhiger als bei den Favoriten.
+
+## Zweiter Wächter: Der Kronengänger (`kronengaenger`)
+
+Zugabe. Eingetragen als `biom.waechter_alt` in `prototype/data/biome/wald.json`; der Seed wählt je Run zwischen Wurzelstock und Kronengänger, die Szene im Wurzelgewölbe bleibt dieselbe. Sprite `tools/sprites/gegner/kronengaenger.js` (Hilfen `hilfe/w2a3.js`), Zone `tools/sprites/zonen/wald_tiefe.json`.
+
+- **Idee:** Ein Baum aus diesem Wald, dessen Krone den Boden erreicht hat. Er hat sich oben von der Decke gerissen (die Wurzeln stehen zerfetzt in die Luft, an der Abrissstelle die Jahresringe, der äußere hell) und geht jetzt auf seiner Krone: eine Kuppel aus Steinlaub, über die die Hauptäste vom Stamm nach unten laufen, vorn ein Ast, der greift. **Das falsche Detail:** In einem Astloch sitzt ein Klumpen Harz, und in dem Harz sind zwei Augen eingeschlossen, die offen sind. **Silhouette:** ein schräger Stamm mit Wurzelkranz oben auf einer breiten, buckligen Laubkuppel, ein Greifast vorn links. **Proben:** der Stamm auf sieben Ästen mit Knien (schwarz ein Weberknecht mit Turm, man sah keinen Baum mehr), genommen: die Kuppel. 
+- **Anders als der Wurzelstock:** Der Wurzelstock hängt, wächst jeden Zug (`waechst`) und schlägt mit jeder Phase härter. Der Kronengänger steht, **verklebt die Hand** (Kniff `verstopfen`: jeden Zug eine unspielbare Karte „Harztropfen“ mit dem Harzklumpen-Bild in der Hand) und schlägt mit vielen kleinen Treffern (4 × 6, 6 × 4). Besonderheit `schwach_wechsel` Feuer ↔ Eisen: einmal trifft man Holz, einmal Stein.
+- **Werte:** 108 Leben, Muster 4 × 6, Block 14, 21, 6 × 4, Stärke +3. Stimme `wurm`, Beute Harzklumpen.
+- **Licht:** Randlicht **moosgrün** (`wald_tiefe`): das kalte Licht aus der Tiefe, aus der er heraufkommt; die Harzhöhle hat sonst nur Bernstein. Inneres Licht: der Harzklumpen mit den Augen, Harz in einzelnen Rindenrissen.
+- **biom-test (20 Seeds):** Wurzelstock 16/17 (94 %), Kronengänger 18/19 (95 %). Der Wald-Akt bleibt für den Autospieler leicht; der Kronengänger nimmt im Mittel 13 Leben je Kampf (Wurzelstock 15), auf das Ziel 60–80 % käme er nur mit Werten weit über dem ersten Wächter.
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Kronengänger (`kronengaenger`) | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Stamm auf der Laubkuppel mit Wurzelkranz oben ist im Spiel neu und liest sich als verkehrter Baum; die Äste über der Kuppel verhindern die Wolke. Schwächen: Das Steinlaub wirkt eher wie Schuppen, der Stamm ist eine große, gleichförmige Fläche, das Gehen sieht man nur am Greifast. Mehrfach überarbeitet (Spinne, dann Kuppel ohne Äste, dann diese Form). |
+| Im Spiel (Wurzelgewölbe) | | | | | | 4 | **4** | Das grüne Randlicht steht vor dem Bernstein der Szene; der Harzklumpen ist der hellste Punkt in der Mitte. |
+
+Bilder: [Spiel](../bilder/Zugabe/waechter2/wald-kronengaenger.png), [Kontaktbogen](../bilder/Zugabe/waechter2/bogen-a3.png).

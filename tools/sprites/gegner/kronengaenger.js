@@ -27,7 +27,7 @@ function kuppel(p, v, A) {
   const zehen = [];
   for (const [x, d] of [[34, -1], [118, 1]]) { const s0 = [x + LX, 160], e = [x + LX + d * 6, FY]; zehen.push(...glied([s0, [x + LX + d * 2, 168], e], 2.6, 1.1, null), C(e[0], e[1], e[0] + d * 5, e[1], 1, 0.7, null)); }
   // Stamm: steht auf der Kuppel, leicht schräg; oben die Abrissstelle mit Wurzeln
-  const gx = 86 + lean * 0.5 + wipp, gy = 118 + fall * 0.6, sx = 96 + lean + wipp * 2 + sw, sy = 22 + fall;
+  const gx = 86 + lean * 0.5 + wipp, gy = 118 + fall * 0.6, sx = 96 + lean * 1.8 + wipp * 2 + sw, sy = 22 + fall;
   const stamm = [Pg([[gx - 16, gy + 6], [gx - 12, gy - 22], [sx - 11, sy + 12], [sx - 12, sy], [sx + 12, sy - 2], [sx + 11, sy + 14], [gx + 13, gy - 20], [gx + 19, gy + 6]], null, { rd: 2.5 })];
   const wurzeln = [];
   for (let i = 0; i < 11; i++) {
@@ -44,7 +44,7 @@ function kuppel(p, v, A) {
     aeste.push(...glied([[gx + dir * 6, gy + 2], [mx, my], [ex + LX, ey]], w, 2, null));
   }
   // Greifast vorn links: holt aus (hebe) und schlägt nach vorn (stoss)
-  const g0 = [gx - 12, gy + 4], gk = [34 + LX - stoss * 8 + hebe * 4, 112 - hebe * 30 + stoss * 10], ge = [12 + stoss * 2 + hebe * 6, 118 - hebe * 52 + stoss * 32];
+  const g0 = [gx - 12, gy + 4], gk = [34 + LX - stoss * 14 + hebe * 4, 112 - hebe * 30 - stoss * 14], ge = [12 - stoss * 8 + hebe * 6, 118 - hebe * 52 - stoss * 6];
   const greif = [...glied([g0, gk, ge], 4.4, 1.4, null)]; for (let j = 0; j < 3; j++) greif.push(C(ge[0], ge[1], ge[0] - 5 + j * 3, ge[1] + 6 - j, 1, 0.6, null));
   greif.push(E(gk[0] - 2, gk[1] - 1, 7, 5, null), E(gk[0] + 3, gk[1] - 4, 4.5, 3.5, null));
   // Harzklumpen im Stamm: ein Astloch, darin Harz mit zwei Augen

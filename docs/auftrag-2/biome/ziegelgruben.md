@@ -177,3 +177,20 @@ Nichts unter 4. Überarbeitet wurden unterwegs: Ziegelträger (Stapel zuerst aus
 - Variante b der Normalen unterscheidet sich je nur in einem Teil (Probe, Stapelform, Block, Schwanz).
 - Die Lehmgrube bleibt die schwächste Szene; der Ringofen braucht über 400 ms zum Aufbau (einmal pro Knoten).
 - Biom-Test 82 % statt Ziel 60–80 %, der Wächter hat noch keinen Run beendet.
+
+## Zweiter Wächter: Die Neununddreißigste (`neununddreissigste`)
+
+Zugabe. Eingetragen als `biom.waechter_alt` in `prototype/data/biome/ziegelgruben.json`; der Seed wählt je Run zwischen Brennofen und Neununddreißigster, die Szene vor der Feuertür bleibt dieselbe. Sprite `tools/sprites/gegner/neununddreissigste.js`, Zone `tools/sprites/zonen/ziegelgruben_lehm.json`.
+
+- **Idee:** Die Legion, die es nie gab, selbst. Sie steht in der Schildkröte: oben die Dachschilde schräg übereinander, an der Seite eine Wand aus hohen Schilden, unten nur Füße in Sandalen aus Lehm. **Das falsche Detail:** Die Schilde sind gebrannte Ziegel mit dem Stempel der Legion, und in jedem ist derselbe Fingerabdruck; durch den Spalt zwischen Dach und Wand sehen Augen, und Lanzen kommen heraus. Oben ragt das Feldzeichen mit Scheiben, an der Spitze ein kleiner Ofen, in dem die Glut nicht ausgeht. **Silhouette:** eine hohe Kuppel aus Schilden auf vielen kurzen Füßen, oben senkrecht die Stange mit dem Ofen, vorn drei Lanzen. **Proben:** als flacher, langer Kasten auf Beinen (schwarz zu nah am Getragenen und am Lehmhund), genommen: hohe Kuppel mit Feldzeichen.
+- **Anders als der Brennofen:** Der Brennofen ist ein Ofen, der Brand frisst (`loeschen`) und in Phase 2 hart zuschlägt. Die Neununddreißigste **verteidigt und ruft**: Kniff `dornen 2` (Lanzen zwischen den Schilden), ein Musterschritt `unverw` (Schildkröte: in diesem Zug nicht zu treffen, die Bühne zeigt es), Besonderheit `ruft` (alle 4 Züge tritt ein Stempel aus dem Glied). Mehrfachtreffer werden teuer; große Einzelschläge in den offenen Zügen.
+- **Werte:** 80 Leben, Schwachstelle **Eisen**, Muster 3 × 4, Block 14 (unverwundbar), 12, Stärke +2, 4 × 3. Stimme `chor`, Beute Legionsstempel.
+- **Licht:** Randlicht **kühles Lehmblau** (`ziegelgruben_lehm`), ein Ton, den die rote Ofenhalle nicht hat. Innere Lichter: der kleine Ofen im Feldzeichen, die Augen im Schildspalt; der Stempel jedes Wandschilds in Ziegelrot.
+- **biom-test (20 Seeds):** Brennofen 17/20 (85 %), Neununddreißigste 15/20 (75 %); sie gewinnt dreimal (Brennofen einmal), im Mittel 25 Leben je Kampf. Abgestimmt über Dornen und Ruftakt: Dornen 3 oder Ruf alle 3 Züge ergaben 60–65 %, Ruf alle 4 mit Dornen 2 ergibt 75 %.
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Die Neununddreißigste (`neununddreissigste`) | 4 | 4 | 4 | 4 | 5 | 5 | **4** | Kuppel aus Schilden, Augen im Spalt, Feldzeichen mit glühendem Ofen: die Schildkröte liest sich. Schwächen: Die Dachschilde sind ein dichtes Muster, die Legionäre zeigen sich nur als Füße und Augen, schwarz verwandt mit dem Getragenen. |
+| Im Spiel (vor der Feuertür) | | | | | | 5 | **4** | Das blaue Randlicht hebt die dunkle Kuppel vom grauen Torbogen und den roten Ziegeln ab; das Feldzeichen ragt in die helle Öffnung. |
+
+Bilder: [Spiel](../bilder/Zugabe/waechter2/ziegelgruben-neununddreissigste.png), [Kontaktbogen](../bilder/Zugabe/waechter2/bogen-a3.png).

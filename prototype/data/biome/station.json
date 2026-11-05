@@ -30,6 +30,7 @@
    "kachelleger"
   ],
   "waechter": "einfahrt",
+  "waechter_alt": ["menge"],
   "fundpool": [
    "bahnsteigkarte",
    "streckenlaterne",
@@ -351,6 +352,58 @@
    },
    "beute": "stirnlampe",
    "beute_satz": "Die Türen schließen sich, und zum ersten Mal fährt ein Zug ab. Er fährt rückwärts in den Tunnel, und die Gesichter an den Scheiben sehen dir nach, bis die Stirnlampen klein werden. Eine bleibt auf den Schienen liegen und brennt.",
+   "quelle": "skript"
+  },
+  "menge": {
+   "n": "Die Menge",
+   "biom": "station",
+   "rang": "waechter",
+   "hp": 124,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7,
+     "h": 4
+    },
+    {
+     "t": "blk",
+     "v": 14
+    },
+    {
+     "t": "atk",
+     "v": 24
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 6
+    },
+    {
+     "t": "buff",
+     "v": 3
+    }
+   ],
+   "sprite": "menge",
+   "varianten": [
+    "menge"
+   ],
+   "konzept": "Alle, die zur Eröffnung gekommen sind: Herren mit Zylinder und Melone, Damen mit Glockenhut, ein Schirm, der Pressefotograf mit der Blitzpfanne über den Köpfen, vorn einer mit der großen Schere für das Band, das nie durchgeschnitten wurde. Sie stehen so dicht, dass sie ein Leib geworden sind, und alle sehen zum Tunnel, mit dem Rücken zu dir. Nur einer in der Mitte hat sich umgedreht.",
+   "stimme": "glockenmutter",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Gedränge auf dem Bahnsteig: Eine deiner Karten kostet diesen Zug 1 mehr."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "L",
+     "B"
+    ]
+   },
+   "beute": "bahnsteigkarte",
+   "beute_satz": "Das Blitzlicht zündet, und für einen Augenblick ist der Bahnsteig weiß. Danach steht niemand mehr da. Das Band hängt zwischen den Ständern, ungeschnitten, und auf dem Boden liegt eine Eintrittskarte zur Eröffnung.",
    "quelle": "skript"
   }
  },
