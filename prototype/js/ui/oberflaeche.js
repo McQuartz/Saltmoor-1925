@@ -32,7 +32,7 @@ function barHtml(hp,max,block,pv,cls=''){const W=v=>Math.max(0,Math.min(100,v/ma
 
 // ---------- Gegner (Absicht über dem Kopf, Name/Balken unter den Füßen) ----------
 // Kniffe und Besonderheiten der Gegner in Spielerworten (Tooltip über dem Gegner)
-const KNIFF_TEXT={dornen:k=>`Dornen: jeder Treffer an ihm kostet dich ${k.v||2}`,loeschen:()=>'Löscht jeden Brand seiner Seite',rein:()=>'Rein: Gift wirkt nicht',brecher:()=>'Zerbricht deinen Block, bevor er zuschlägt',kleinvieh:()=>'Kommt selten allein',
+const KNIFF_TEXT={dornen:k=>`Dornen: jeder Treffer an ihm kostet dich ${k.v||2}`,loeschen:()=>'Löscht jeden Brand seiner Seite',rein:()=>'Rein: Gift wirkt nur halb',brecher:()=>'Zerbricht deinen Block, bevor er zuschlägt',kleinvieh:()=>'Kommt selten allein',
  abschrift:k=>`Mischt ${k.n||1} unspielbare Karte(n) in deinen Ablagestapel`,waechst:k=>`Wächst: jeden Zug +${k.v||2} Stärke`,schuetzer:k=>`Gibt Verbündeten ${k.v||4} Block`,ruf:k=>`Ruft alle ${k.alle||3} Züge Verstärkung: ${[].concat(k.gegner).map(g=>FOES[g]?FOES[g].n:'?').join(', dann ')}`,
  wechsel:k=>`Wechselt die Schwachstelle: ${(k.stoffe||[]).map(x=>ST[x]?ST[x].n:x).join(' → ')}`,ansage:k=>`Lädt ${k.zuege||2} Züge, dann ein großer Schlag`,nachlass:k=>k.was==='explodiert'?`Explodiert beim Tod (${k.v||0})`:k.was==='teilt'?'Teilt sich beim Tod':'Hinterlässt etwas',
  verborgen:()=>'Verborgen: du siehst nur, was, nicht wie viel',heiler:k=>`Heilt Verbündete um ${k.v||4}`,einfrieren:()=>'Friert jeden Zug eine Handkarte ein',verstopfen:k=>`Steckt ${k.n||1} unspielbare Karte(n) in deine Hand`,

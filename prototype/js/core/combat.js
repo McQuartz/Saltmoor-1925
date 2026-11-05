@@ -166,7 +166,7 @@ function applyMain(c,ctx,mult,flat,multWhy=[],kette=0){
  if(c.heal)healP(Math.round(c.heal*mult),`${c.n} heilt`);
  if(c.str){S.pstr=(S.pstr||0)+c.str;Bus.emit('player_buff',{v:c.str,why:`${c.n}: Stärke +${c.str} (jetzt ${S.pstr}) bis Kampfende`});}
  const t=ctx.tg&&ctx.tg.hp>0?ctx.tg:alive()[0];
- if(c.poison&&t){if(t.kniff&&t.kniff.art==='rein')Bus.emit('enemy_status',{e:t,status:'rein',why:`${t.n} ist rein: Gift wirkt nicht`});else{t.poison+=Math.round(c.poison*mult);Bus.emit('enemy_status',{e:t,status:'poison',why:`${c.n}: Gift ${Math.round(c.poison*mult)}`});}}
+ if(c.poison&&t){const reinH=t.kniff&&t.kniff.art==='rein';if(reinH)Bus.emit('enemy_status',{e:t,status:'rein',why:`${t.n} ist rein: Gift wirkt nur halb`});{const g=reinH?Math.floor(c.poison*mult/2):Math.round(c.poison*mult);t.poison+=g;Bus.emit('enemy_status',{e:t,status:'poison',why:`${c.n}: Gift ${g}${reinH?' (halb, rein)':''}`});}}
  if(c.burn&&t){t.burn+=Math.round(c.burn*mult);Bus.emit('enemy_status',{e:t,status:'burn',why:`${c.n}: Brand ${Math.round(c.burn*mult)}`});}
  if(c.weak&&t){t.weak2=1;Bus.emit('enemy_status',{e:t,status:'weak',why:`${c.n}: ${t.n} geschwächt`});}
  if(c.sonder)sonderWirkung(c,t,mult);
