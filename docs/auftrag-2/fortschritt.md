@@ -15,7 +15,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M6 Biome Akt I und II | fertig | Fabrik, Kurhaus, Nachtzug, Kloster, Grotte (alle Note 4); neue Gegner Hafen, Moor, Kapelle; Torfstich heller |
 | M7 Biome Akt III bis V | fertig | Wald, Gezeitenwerk (Akt III), Walkathedrale, Glasmeer (Akt IV), Ufer unten, Pforte neu, Finale neu (Akt V); neue Gegner Salz, Stadt, Eis; alle Noten 4. Kern: Kniffe teurer/kopie/takt/voraus/verborgen, Pendel, Tausch-/Leih-/Spiegel-Krämer, Vorgänger, Ergänzungspakete |
 | M8 Ereignisse und Balance | fertig | ≥5 Ereignisse je Biom, 15 biomübergreifende, Test aller Wahlen; Builds 44–72 % (Ø 59 %), generischer Bot 65 %, kein Akt über 35 % der Niederlagen; Kampf Ø 4,1–4,5 Züge |
-| M9 Abschluss | offen | |
+| M9 Abschluss | fertig | Geklickter Run (40 Stationen), Galerie und Artboard erweitert, Bericht unten |
 | Zugabe | offen | |
 
 ## Einträge je Meilenstein
@@ -227,3 +227,93 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 - 2026-11-04, M8 Vorarbeit: `tools/balance.js` las den ersten `--set=`-Schalter als Startseed (Seeds `NaN`, alle Messungen mit `--set` waren falsch). Behoben. Neuer Hebel `BAL.enemy_scaling.atk_faktor` (Standard 1). Zwischenmessung, 60 Runs, generischer Bot, noch während Biome entstehen: heute 40 %, 3,6 Züge je Kampf; mit Leben ×1,45, Wächter ×1,4, Angriff ×0,7 sind es 45 % bei 4,4 Zügen. Mehr Gegnerleben allein macht den Run deutlich schwerer, weil Kniffe wie „wächst“ und „ruft“ mit der Zahl der Züge wirken. Übernommen wird erst in M8, wenn alle Pakete fertig sind (die Agenten stimmen gegen den heutigen Stand ab).
 
 ## Bericht
+
+Stand 2026-11-05, Branch `claude/jolly-mendel-ia28ci`, Draft-PR #14 (nicht gemergt).
+
+### 1. Was gebaut wurde
+
+| Meilenstein | Status | Kurz |
+|---|---|---|
+| M0 Pipeline | fertig | Bilder auf Weg A (per Skript, kein Bild-Generator in der Sitzung), Biom-Paket-Format, Windgestalt neu |
+| M1 Gefühl und UI | fertig | Lebensbalken unten mittig, Meldungszeile, Wucht und Hitstop, Mehrfachtreffer einzeln, Übergang zum Wegklicken, Beute-Sätze, Endbildschirm, Boss-Musik baut sich auf |
+| M2 Längere Akte | fertig | 6 Ebenen + Wächter je Akt I–IV, am Aktanfang Wahl zwischen zwei Biomen, 31 Knoten je vollem Run |
+| M3 Deckbau-Kern | fertig | Kerben und Handgriffe (Handgriff nimmt die Stoffe seines Items an), 7 Schlagworte, Schleifen, Umritzen, Verkaufen, Rucksackmodus mit Grün/Rot, Hover-Vorschau |
+| M4 Inhalte Deckbau | fertig | 70 Handgriffe, 125 Items (25 Reliquien), 6 Builds mit Build-Bots |
+| M5 Pipeline und alte Schwächen | fertig | Neubauten Mumie, Nachgeher, Ertrunkener, Netzflickerin-Rücken, Tiefling, Nest; 125 Item-Icons und 70 Handgriff-Bilder (alle Note 4); Kontaktbogen je Biom automatisch (`tools/biom-bogen.js`) |
+| M6 Biome Akt I/II | fertig | Konservenfabrik, Kurhaus, Nachtzug, Kloster der Abschrift, Grotte der Gaben; neue Gegner Hafen, Moor, Kapelle; Torfstich heller |
+| M7 Biome Akt III–V | fertig | Wald nach unten, Gezeitenwerk, Walkathedrale, Glasmeer, Ufer unten; Pforte neu (Hafen unten), Finale neu gezeichnet; neue Gegner Salz, Stadt, Eis |
+| M8 Ereignisse und Balance | fertig | 108 Ereignisse (≥5 je Biom, 15 überall), Test aller Wahlen; Balance siehe 5 |
+| M9 Abschluss | fertig | geklickter Run mit 40 Stationen, Galerie und Artboard erweitert, dieser Bericht |
+
+**In Zahlen:** 17 Biome (davon 10 neu, die Pforte neu entworfen), 61 normale Gegner, 15 Wächter, 1 Elite, das Finale in drei Phasen, 143 Sprite-Sheets, 20 verschiedene Kniffe, 125 Items, 70 Handgriffe, 108 Ereignisse.
+
+**Neu im Kern (neben den Inhalten):** Kniffe `teurer`, `kopie`, `takt` (Herzschlag, hör- und sichtbar), `voraus`, `verborgen`, Zusatz-Kniffe und Pendel-Gegner; Kniffe sind über dem Gegner per Tooltip lesbar; besondere Krämer (Tausch in der Grotte, Leihe im Kloster, Spiegel im Glasmeer); „Der, der vor dir kam“ am Ufer aus deinem letzten verlorenen Run; Ergänzungspakete für alte Biome; eigene Ankunft je Akt-V-Biom.
+
+### 2. So spielt man es
+
+```bash
+cd prototype && python3 -m http.server 8000
+```
+
+Dann `http://localhost:8000/`. Taste **R** öffnet den Rucksackmodus, **D** den Dev-Modus (Reiter „Deck“: Kerben, Handgriffe, Build; „Cheats“: Biom erzwingen, Sprung). URL-Hilfen: `?seed=`, `?dev=1`, `?job=fischer&springe=kampf_schwer&akt=2`. Galerie: `gallery.html`, Artboard (alle Gegner, Items, Handgriffe, Biome, Ereignisse): `artboard.html`.
+
+Prüfungen: `node tools/test-run.js`, `test-deckbau.js` (25 Prüfungen), `test-ereignisse.js`, `test-vorschau.js`, `balance.js 50`, `build-bots.js 50`, `biom-test.js <biom> 20`, `sprites/pruefen.js`, `icons/pruefen.js`, `selbst-spielen.js <ordner>`.
+
+### 3. Bilder
+
+- **Alle neuen Gegner, Wächter, Hintergründe mit Note und Bild-Link:** Tabelle „Noten“ oben in dieser Datei. Jede Figur und jeder Hintergrund steht dort mit Note 4; nichts liegt darunter. Was nur knapp eine 4 ist, steht in Klammern dabei.
+- Geklickter Run, alle 40 Stationen: [bilder/M9/run-uebersicht.png](bilder/M9/run-uebersicht.png) (Einzelbilder in [bilder/M9/run/](bilder/M9/run/)).
+- Kontaktbögen je Biom: `bilder/M6/<biom>/`, `bilder/M7/<biom>/`, alte Biome `bilder/M6/alte-biome/`, `bilder/M7/alte-biome/`; Icons `bilder/M5/`.
+- Finale: [Phase 1](bilder/M7/pforte/nachher-finale-p1.png), [Phase 2](bilder/M7/pforte/nachher-finale-p2.png), [Phase 3 mit Augen](bilder/M7/pforte/nachher-finale-p3-augen.png).
+
+### 4. Ehrliche Einschätzung
+
+- **Stark:** Die neuen Silhouetten sind deutlich eigenständiger als in Auftrag 1. Am besten gelungen sind der Kesselmann, der Geheilte, der Kanalaal, der aus dem Relief, die Seelilie, der Voraus und der Vorgänger am Ufer. Jedes Biom hat sein Wahrzeichen und sein falsches Detail im Bild. Akt IV/V wirken wie ein anderes Spiel als Akt I, und so soll es sein. Der Deckbau trägt: Handgriffe ritzen und dabei die Stoffe des Items übernehmen gibt pro Run echte Entscheidungen.
+- **Schwach:** Viele Figuren haben noch große dunkle Flächen (Mäntel, Talare), die Favoriten bleiben handwerklich besser. Mehrere Wächter sind im Spiel nur knapp lesbar (Wurzelstock vor dem Geäst, Schicht innen dicht). Die Pforte ist einfarbig türkis. Kämpfe sind mit Ø 4,1–4,5 Zügen am unteren Rand des Ziels.
+- **Musik:** jedes neue Biom hat eine eigene Fassung (Tonart, Ortsklang, Rhythmus) aus den vorhandenen Bausteinen; neue Klänge gibt es nur für den Herzschlag.
+- **Weg A statt KI-Bilder:** In der Sitzung gab es keinen Bild-Generator und keinen Schlüssel. Alle Bilder sind per Skript gebaut und geprüft (`pruefen.js`: 143 Sheets, 0 Verstöße).
+
+### 5. Autospieler und Balance
+
+Generischer Autospieler, 100 Seeds: **65 %** Siege, Ø Tiefe 27,8, Ø 4,1–4,5 Züge je Kampf, 0 Fehler. Build-Bots je 50 Seeds:
+
+| Build | Siege | Niederlagen je Akt I/II/III/IV/V |
+|---|---|---|
+| Glutnest | 64 % | 0/0/4/4/10 |
+| Brackwasser | 44 % | 0/0/12/8/8 |
+| Bollwerk | 58 % | 0/2/2/10/7 |
+| Aderlass | 72 % | 0/1/3/8/2 |
+| Kettenwerk | 62 % | 1/1/5/4/8 |
+| Hagel | 52 % | 0/0/6/9/9 |
+
+Niederlagen je Akt über alle Builds: I 1 %, II 3 %, III 26 %, IV 35 %, V 35 %. Einzelheiten und was geändert wurde: Abschnitt „M8“ oben.
+
+### 6. Entscheidungen unterwegs (Kurzfassung)
+
+Biome als Pakete, damit viele gleichzeitig entstehen; alte Biome über Ergänzungspakete. `biom-test` spielt die Akte davor wirklich. Gerufene Gegner rufen nicht weiter. Tiefenzuschlag +1 Angriff alle 5 Tiefen. Finale 200 Leben. Neue Kniffe nur, wo ein Steckbrief sie verlangte. Die volle Liste steht unter „Entscheidungen unterwegs“.
+
+### 7. Offene Fragen und Vorschlag für die nächste Sitzung
+
+- **Fragen an Philip und Mo:**
+  - Ist der Pforte-Hafen am Meeresgrund die richtige Richtung, oder soll er wärmer und weniger einfarbig werden?
+  - Soll Aderlass (72 %) noch geschwächt werden, oder ist ein starker Build in Ordnung?
+  - Sollen Kämpfe länger werden? Dann müsste man die Kniffe zurücknehmen, die mit jedem Zug stärker werden.
+- **Vorschläge der Agenten für den Kern**, je in den Biom-Konzepten:
+  - Spieler-Verwundbar
+  - Kniff `frisst` (wächst mit jedem Treffer)
+  - Kniff `abgetaucht` (nur im Zug nach deinem Angriff verwundbar)
+  - Brand und Gift spiegeln
+  - Spiegelbilder unter den Gegnern im Glasmeer
+  - Ereignisbilder 160 × 90
+- **Nächste Sitzung (Zugabe):**
+  - je Akt ein weiteres Biom (Leuchtturmhof, Glockengießerei, Ziegelbrenner-Gruben, Mond unter dem Eis)
+  - die dunklen Flächen der Figuren aufhellen (Mäntel, Talare)
+  - die Pforte farbiger machen
+
+### Fünf Dinge, die Philip zuerst ausprobieren sollte
+
+1. **Ein Item mit zwei Kerben und ein seltener Handgriff:** Nach einem schweren Kampf den Handgriff ritzen und sehen, wie er die Stoffe des Items annimmt. Dann mit **R** im Rucksackmodus umbauen und die grün/rot markierten Karten ansehen.
+2. **Das Glasmeer (Akt IV) gegen den Voraus:** Er spielt deine nächste Karte vor dir. Der Spiegel-Krämer dort verkauft die Waren des letzten Krämers, nur andersherum.
+3. **Das Kloster der Abschrift:** Der Abschreiber schreibt deine letzte Karte ab und spielt sie gegen dich. Der Bibliothekar verleiht nur, und am Anfang des nächsten Akts ist die Leihgabe weg.
+4. **Das Ufer unten nach einem verlorenen Run:** Im Vorraum wartet „Der, der vor dir kam“ mit der Figur und den Items deines letzten Todes.
+5. **Das neue Finale:** König, Schlund, Auge; ab Phase 2 hängen die Augen als Laternen herab und decken ihn. Danach die neue Ankunft (am Ufer ein eigenes Bild und ein eigener Satz).
