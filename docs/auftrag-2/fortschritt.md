@@ -143,6 +143,7 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 
 | Datum | Meilenstein | Entscheidung | Grund |
 |---|---|---|---|
+| 2026-11-05 | M7/M8 | `tools/biom-test.js` spielt die Akte vor dem Biom wirklich (Heilung als Netz, Kämpfe im Vorlauf höchstens 30 Züge); Seeds, die im Vorlauf sterben, zählen nicht | Vorher startete jeder Akt mit dem Startdeck: Akt IV war mit 2/10 kaum schaffbar, obwohl ein echter Run dort ein gewachsenes Deck hat (Hinweis des Walkathedrale-Agenten). Neue Werte je 20 Seeds: Hafen 16, Kapelle 19, Salz 14, Stadt 11, Eis 14/17, Pforte 13/16 |
 | 2026-11-04 | M7 | Ansage zeigt die Wucht und die Züge bis zum Schlag („⚔ 14 in 2“) statt „↑ +0“ | Gezeitenwerk meldete die irreführende Anzeige; betrifft alle Gegner mit Ansage |
 | 2026-11-04 | M5 | `tools/biom-bogen.js` baut Kontakt- und Silhouetten-Bogen eines Bioms automatisch aus den Spieldaten (auch Pakete, Ergänzungen, `--alle`) | Abnahme „Kontaktbogen automatisch“; vorher schrieb jeder Agent sein eigenes Skript |
 | 2026-11-04 | M6/M7 | Besondere Krämer: Tausch (Kerzenfrau, Grotte), Leihe (Bibliothekar, Kloster), Spiegel (Glasmeer) | Die Steckbriefe beschreiben Krämer, die anders handeln; drei kleine Regeln im Kern geben jedem Biom eine eigene Handelsstelle |

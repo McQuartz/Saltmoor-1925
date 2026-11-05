@@ -9,13 +9,14 @@ const {ladeKern}=require('./kern');
    try{const route=RUN.akte.map((x,k)=>k===akt?${JSON.stringify(biom)}:x.biome.find(b=>BIOMES[b]));newRun(jobs[i%6],seed,{dev:true,route});
     // Vorbereitung: die Akte davor wirklich spielen (Belohnungen, Handgriffe, Krämer wie im Run), mit Heilung als Netz,
     // damit das Deck so gewachsen ist wie im echten Run; beim Eintritt in den Akt volles Leben
-    const netz=()=>{if(S.akt<akt&&S.hp<maxHp()*.6)S.hp=maxHp();};Bus.on('turn_start',netz);Bus.on('player_hurt',netz);
+    const netz=()=>{if(S.akt>=akt)return;if(S.hp<maxHp()*.6)S.hp=maxHp();if(S.turnNo>30)S.enemies.forEach(e=>{e.hp=0;});};Bus.on('turn_start',netz);
     let v=0;while(S.akt<akt&&!['strand','ende'].includes(S.phase)&&v++<8000){if(S.hp<maxHp()*.6)S.hp=maxHp();if(!Bot.schritt())throw new Error('Vorlauf hängt in '+S.phase);}
-    if(S.akt!==akt)throw new Error('Vorlauf erreicht Akt '+(akt+1)+' nicht ('+S.phase+')');S.hp=maxHp();
+    if(S.akt!==akt){out.push({seed,job:jobs[i%6],vorlauf:true,gegner:[],kaempfe:0});FAST=kf;continue;}S.hp=maxHp();
     Bus.on('fight_start',p=>{if(S.akt===akt){kaempfe++;S.enemies.forEach(e=>gegner.add(e.id));}});
     let g=0;while(S.akt===akt&&!['strand','ende'].includes(S.phase)&&g++<3000){if(!Bot.schritt())throw new Error('Bot hängt in '+S.phase);}
    }catch(e){fehler=String(e&&e.stack||e).split('\\n').slice(0,3).join(' | ');}finally{FAST=kf;}
    out.push({seed,job:jobs[i%6],ueberlebt:S.akt>akt||S.phase==='ankunft'||S.phase==='ende',hp:S.hp,max:maxHp(),kaempfe,gegner:[...gegner],fehler});}
   return out;})()`);
+ const vl=r.filter(x=>x.vorlauf).length;r.splice(0,r.length,...r.filter(x=>!x.vorlauf));if(vl)console.log(`(${vl} Seed(s) im Vorlauf gestorben, nicht gewertet)`);
  let ok=0;for(const x of r){if(x.ueberlebt)ok++;console.log(`${String(x.seed).padStart(3)} ${x.job.padEnd(17)} ${x.ueberlebt?'überstanden':'Strand     '} Leben ${x.hp}/${x.max} Kämpfe ${x.kaempfe} Gegner ${x.gegner.join(',')}${x.fehler?' FEHLER '+x.fehler:''}`);}
  const fe=r.filter(x=>x.fehler).length;console.log(`\n${biom}: ${ok}/${r.length} Akte überstanden, Fehler ${fe}`);process.exit(fe?1:0);})();
