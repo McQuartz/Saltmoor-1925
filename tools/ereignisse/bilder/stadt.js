@@ -91,10 +91,9 @@ module.exports = {
       const tx = 90, ty = 66;
       // Ringe im Sand um die Trommel: feine Rillen (Kamm hell zur Laterne, Tal dunkel), nach außen schwächer
       for (let y = 46; y < 90; y++) for (let x = 0; x < 160; x++) {
-        const d = Math.hypot((x - tx) / 4.8, y - ty); if (d < 8.5 || d > 30) continue;
-        const f = d % 3.2, st = 1 - (d - 8) / 24;
-        if (f < .7 && B.bay(x, y) < st) K.set(x, y, L1(x, y) > .35 ? SAND[5] : L1(x, y) > .15 ? SAND[3] : SAND[2]);
-        else if (f > 1 && f < 1.7 && B.bay(x, y) < st * .9) K.set(x, y, SAND[0]);
+        const d = Math.hypot((x - tx) / 4.8, y - ty); if (d < 8.5 || d > 24) continue;
+        const f = d % 3.4;
+        if (f < .45) K.set(x, y, L1(x, y) > .35 ? SAND[4] : L1(x, y) > .15 ? SAND[3] : SAND[2]);
       }
       // Die Trommel: flacher Zylinder, Zarge mit Schnürung, Fell oben
       const rx = 32, ry = 6.5, hz = 6;
@@ -146,8 +145,9 @@ module.exports = {
       const fx = 46, fy = 82;   // Gestalt vorn links, Laterne in der linken Hand
       const ax = 110, ay = 64, arx = 44, ary = 10;   // der Abgrund im Boden
       // Halle: ruhiges Rotschwarz, hinten ein fernes Glühen, davor riesige Pfeiler als Silhouetten
-      K.fuell(['#020101', '#060202', '#0c0504', '#160806'], (x, y) => ruhig(.1 + Math.max(0, 1 - Math.hypot(x - 104, (y - 30) * 1.3) / 80) * .55, 3));
-      for (const [px, w] of [[24, 20], [80, 14], [136, 18]]) { const p = K.maske(); p.rect(px - w / 2, 0, w, 56); K.form(p, 0, { k: ['#030101', '#070303', '#0c0505'], r: ['#3a140c', '#5a2014'], ton: 1, fase: 0, rand: 1, L: [.3, -1] }); }
+      const HALLE = ['#030101', '#080303', '#100605', '#1c0b08', '#2c120c', '#3e1a10'];
+      K.fuell(HALLE, (x, y) => ruhig(.06 + Math.pow(Math.max(0, 1 - Math.hypot(x - 108, (y - 30) * 1.2) / 90), 1.2) * .95, 5));
+      for (const [px, w] of [[22, 22], [84, 16], [140, 20]]) { const p = K.maske(); p.rect(px - w / 2, 0, w, 56); p.rect(px - w / 2 - 3, 50, w + 6, 6); K.form(p, 0, { k: ['#020101', '#050202', '#0a0404'], r: ['#4a1a10', '#7a3020'], ton: 1, fase: 0, rand: 1, L: [.3, -1] }); }
       // Boden aus Sand, Licht um die Gestalt
       const LF = lichtF(fx - 6, fy - 8, 70, 1.5, 1.2);
       sandboden(K, 54, 90, (x, y) => LF(x, y) * .8 + .06);
@@ -169,13 +169,12 @@ module.exports = {
         }
       }
       // Die Gestalt: größer, Hut, Mantel mit drei klaren Zipfeln zum Abgrund hin
-      const fig = K.figurMaske(fx, fy, 36, { kopf: 'hut', blick: 1, neig: -1.5, arme: [[fx - 10, fy - 15], [fx + 8, fy - 14]] });
-      fig.poly([[fx + 4, fy - 27], [fx + 24, fy - 26], [fx + 14, fy - 22]]);
-      fig.poly([[fx + 6, fy - 21], [fx + 30, fy - 18], [fx + 16, fy - 14]]);
-      fig.poly([[fx + 6, fy - 13], [fx + 26, fy - 9], [fx + 8, fy - 6]]);
-      fig.kap(fx + 1, fy - 31, fx + 14, fy - 34, 1, .6);   // Schal
+      const fig = K.figurMaske(fx, fy, 36, { kopf: 'hut', blick: 1, neig: -1.5, arme: [[fx - 13, fy - 23], [fx + 6, fy - 16]], ellbogen: [[fx - 10, fy - 20], null] });
+      fig.poly([[fx + 5, fy - 18], [fx + 22, fy - 16], [fx + 30, fy - 13], [fx + 18, fy - 13], [fx + 6, fy - 13]]);
+      fig.poly([[fx + 6, fy - 11], [fx + 20, fy - 8], [fx + 27, fy - 4], [fx + 14, fy - 6], [fx + 5, fy - 7]]);
+      fig.pfad([[fx + 1, fy - 31], [fx + 10, fy - 33], [fx + 18, fy - 31], [fx + 24, fy - 33]], 1.4, .6);   // Schal
       K.form(fig, 0, { k: ['#030101', '#080303', '#100606'], ton: .8, rand: 0, r: [] });
-      const lp = handlampe(K, fx - 10, fy - 12, 1, { hof: 60, ohne: fig });
+      const lp = handlampe(K, fx - 13, fy - 11, 1.3, { hof: 70, ohne: fig });
       K.kante(fig, lp[0], lp[1], 46, WARM, { nah: .35 });
       K.vignette(.5, { cx: 84, cy: 60 });
     },
@@ -235,7 +234,7 @@ module.exports = {
       // Die leere Stelle: dieselbe Körperform, glatt geschliffen, deutlich heller und warm, ohne jede Pore
       const leer = K.maske(); kriecher(leer, B.rng(78), 55, y1 - 1, 34, 1, {});
       const breit = K.maske(); breit.fn(leer.x0 - 2, leer.y0 - 2, leer.x1 + 2, leer.y1 + 2, (x, y) => { for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (leer.has(x + dx, y + dy)) return true; return false; });
-      K.feld(breit.x0, breit.y0, breit.x1 + 1, breit.y1 + 1, ['#6e3a26', '#9a5a3a', '#c0805a', '#e0a880', '#f4c8a0'], (x, y) => breit.has(x, y) ? ruhig(.35 + L1(x, y) * .7, 4, .3) : -1);
+      K.feld(breit.x0, breit.y0, breit.x1 + 1, breit.y1 + 1, ['#6e3a26', '#9a5a3a', '#c0805a', '#e0a880', '#f4c8a0'], (x, y) => breit.has(x, y) ? ruhig(.25 + L1(x, y) * .6, 4, .3) : -1);
       // feiner Meißelrand: oben dunkel (Schatten der Vertiefung), unten hell
       for (let y = breit.y0 - 1; y <= breit.y1 + 1; y++) for (let x = breit.x0 - 1; x <= breit.x1 + 1; x++) if (!breit.has(x, y)) { if (breit.has(x, y + 1)) K.set(x, y, STEIN[0]); else if (breit.has(x, y - 1)) K.set(x, y, '#f4c8a0'); else if (breit.has(x + 1, y) || breit.has(x - 1, y)) K.set(x, y, STEIN[1]); }
       // Splitter im Sand darunter, um die Kerze
