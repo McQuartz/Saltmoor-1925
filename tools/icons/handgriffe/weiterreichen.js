@@ -1,13 +1,14 @@
-// Weiterreichen: eine Hand gibt ein kleines Kästchen weiter an eine zweite, die schon danach greift.
+// Weiterreichen: eine große, offene Hand mit der Fläche nach oben reicht ein kleines Holzkästchen mit Messingschloss
+// nach rechts weiter, bevor es schwer wird.
 'use strict';
 module.exports = {
   w: 48, h: 32,
   form(A) {
     const { hand, Pg, armGruppen } = A;
-    const h1 = hand({ x: 5, y: 24, a: -0.15, s: 1.3, seite: -1, curl: [0.15, 0.2, 0.25, 0.3], spreiz: 0.05, daumen: 0.2, daumenWinkel: 0.9, arm: 8 });
-    const h2 = hand({ x: 44, y: 12, a: Math.PI - 0.3, s: 1.3, seite: 1, curl: [0.3, 0.35, 0.4, 0.45], spreiz: 0.12, daumen: 0.3, arm: 8 });
-    const kiste = [Pg([[18, 14], [27, 12], [29, 20], [19, 22]], null, { b: 1.2, rd: 0.4 })];
-    return { gruppen: [...armGruppen(h1), { p: h1.alle(), mat: 'haut', k: 1 }, { p: kiste, mat: 'holz', k: 0 }, ...armGruppen(h2, 'wolle'), { p: h2.alle(), mat: 'haut', k: 1, tone: 0.05 }],
-      details(P) { P.ritz(19, 17, 28, 15, -1); P.set(23, 16, 'messing3'); } };
+    const h = hand({ x: 2, y: 27, a: -0.08, s: 1.75, seite: -1, curl: [0.12, 0.15, 0.18, 0.22], spreiz: 0.03, daumen: 0.15, daumenWinkel: 0.8, arm: 4 });
+    const kiste = [Pg([[22, 9], [36, 7], [37, 18], [23, 20]], null, { b: 1.4, rd: 0.4 })];
+    const deckel = [Pg([[22, 9], [36, 7], [36, 10.5], [22, 12.5]], null, { b: 0.8 })];
+    return { gruppen: [...armGruppen(h), { p: h.alle(), mat: 'haut', k: 1 }, { p: kiste, mat: 'holz', k: 0, tone: 0.12 }, { p: deckel, mat: 'holz', k: 0, tone: 0.2 }, { p: [Pg([[28, 11], [31, 10.5], [31, 15], [28, 15.5]], null, { b: 0.5 })], mat: 'messing', k: 0, tone: 0.1 }],
+      details(P) { P.set(29, 13, 'kohle0'); P.set(40, 10, 'a2'); } };
   },
 };

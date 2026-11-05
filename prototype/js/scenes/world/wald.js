@@ -233,7 +233,7 @@ function strassenzug(K, cfg) {
   meilenstein(K, 3, vx - 58, 178, 1.9, 0);
   // Vordergrund: ein Wurzelstrang links oben angeschnitten, Kronenzweige unten rechts
   const v = B.maske(); v.pfad([[-M, 24], [30, 34], [52, 60], [58, 96]], 9, 3); v.pfad([[30, 34], [14, 70], [18, 104]], 3, 1.2);
-  const r2 = B.rng(sd + 77); for (let i = 0; i < 4; i++) B.baum(v, r2, 474 + i * 3, 272, 50 + i * 8, -Math.PI / 2 - 0.4 - i * 0.18, 2.4, 3, { krumm: 0.25, spreiz: 0.5 });
+  const r2 = B.rng(sd + 77); for (let i = 0; i < 3; i++) B.baum(v, r2, 478 + i * 3, 272, 34 + i * 6, -Math.PI / 2 - 0.3 - i * 0.15, 2.4, 2, { krumm: 0.25, spreiz: 0.45 });
   K.form(5, v, 0, { k: RINDE, r: RAND, ton: 0.8, fase: 2, muster: (x, y) => ((x + y * 2) % 9 === 0 ? -0.6 : 0) });
   B.partikel(K, { n: 40, farben: ['#5a4a32', '#8e6a36', '#ca7c24'], vy: 6, vx: -1, wob: 2, wf: 0.5, x0: 0, x1: 480, y0: 0, y1: 230, p: 0.8, hellSelten: 2.4 });
   K.reihen = [{ y: 168, skala: 0.9, nebel: 0.3 }, { y: 191, skala: 1, nebel: 0.12 }, { y: 214, skala: 1, nebel: 0 }];
@@ -272,7 +272,7 @@ function gefaellt(K) {
   traene(K, 1, 440, 14, 3.8, { staerke: 1.2 }); traene(K, 2, 300, 30, 1.8, { staerke: 0.5 }); traene(K, 2, 196, 40, 1.4, { staerke: 0.4 });
   for (const L2 of [K.e[1], K.e[2], K.e[3]]) B.kegel(L2, 440, 26, Math.PI * 0.7, 0.2, 320, '#2a1c0c', 0.45);
   // Vordergrund: hängende Zweige rechts oben, Stein links unten
-  const v = B.maske(); const r2 = B.rng(sd + 9); for (let i = 0; i < 5; i++) B.baum(v, r2, 440 + i * 9, -M, 60 + i * 10, Math.PI / 2 + 0.2 - i * 0.05, 2.6, 3, { krumm: 0.25, spreiz: 0.5, zug: Math.PI / 2, zugStaerke: 0.4 });
+  const v = B.maske(); const r2 = B.rng(sd + 9); for (let i = 0; i < 3; i++) B.baum(v, r2, 466 + i * 8, -M, 44 + i * 8, Math.PI / 2 + 0.15 - i * 0.04, 2.6, 2, { krumm: 0.2, spreiz: 0.4, zug: Math.PI / 2, zugStaerke: 0.6 });
   v.poly([[-M, 250], [40, 244], [70, 256], [80, 282], [-M, 282]]);
   K.form(5, v, 0, { k: RINDE, r: RAND, ton: 0.8, fase: 2 });
   B.partikel(K, { n: 34, farben: ['#5a4a32', '#8e6a36', '#ca7c24'], vy: 5, wob: 2, wf: 0.4, x0: 0, x1: 480, y0: 0, y1: 230, p: 0.8, hellSelten: 2.4 });
@@ -287,19 +287,19 @@ function abgrund(K) {
   const sd = K.o.seed, fr = K.fr, kante = x => 160 + Math.sin(x * 0.018 + sd) * 3 + (x > 400 ? (x - 400) * 0.12 : 0); K.split = [158, 170];
   decke(K, 60, { lx: 410, ly: -10, ansaetze: [[30, -6, 7], [120, -4, 5], [250, -6, 6], [380, -4, 8]], netz: 10 });
   // die Tiefe: unter den Kronen noch Kronen, kleiner, dann nur noch ein Schimmer aus Harz
-  B.feld(K.e[0], -M, 100, W + M, H + M, ['#070605', '#0c0a07', '#15100a', '#22180c', '#34230e', '#4a3210'], (x, y) => y < 100 ? -1 : 0.1 + Math.max(0, (y - 150) / 110) * 0.5 * (0.7 + fr * 0.5) + (B.fbm(x * 0.03, y * 0.05, sd, 2) - 0.5) * 0.2);
+  B.feld(K.e[0], -M, 100, W + M, H + M, ['#070605', '#0c0a07', '#15100a', '#22180c', '#34230e', '#4a3210'], (x, y) => y < 100 ? -1 : 0.08 + Math.pow(Math.max(0, (y - 104) / 58), 1.6) * 0.85 * (0.75 + fr * 0.4) + (B.fbm(x * 0.03, y * 0.05, sd, 2) - 0.5) * 0.18);
   const r = B.rng(sd * 5 + 2);
-  for (let i = 0; i < 12; i++) { const x = r.f(-10, W + 10), y = r.f(170, 230); blattwerk(K, 0, x, y, r.f(8, 14), r.f(6, 10), 0.85, {}); }
+  for (let i = 0; i < 14; i++) { const x = r.f(-10, W + 10), y = r.f(128, 156); const t = (y - 128) / 28; stamm(K, 0, x, 96 + t * 10, y, 6, 4, 0.82, {}); blattwerk(K, 0, x, y, r.f(7, 12), r.f(5, 9), 0.8, {}); }
   // Reihe der hängenden Stämme hinten, Kronen frei schwebend, nach rechts kleiner (Flucht)
   for (let i = 0; i < 8; i++) { const t = i / 7, x = 30 + t * 420 + r.j(8), d = 0.62 - t * 0.12, w = 16 - t * 6; stamm(K, 1, x, -M, 70 + r.f(0, 40) - t * 10, w * 1.5, w, d, { krone: 'luft', harz: 2, kroneS: 0.9, haenge: 4 }); }
   for (let i = 0; i < 3; i++) { const x = 90 + i * 140 + r.j(20), w = 26 + r.f(0, 8); stamm(K, 2, x, -M, 96 + r.f(0, 24), w * 1.5, w, 0.32, { krone: 'luft', harz: 3, haenge: 7 }); }
   // Hängebrücke: zwei Seile im Durchhang, Bretter dazwischen, von links vorn zum Durchgangsbaum rechts
-  const br = B.maske(), x0 = -M, x1 = 392, ya = 178, yb = 140, sag = 14;
+  const br = B.maske(), x0 = 26, x1 = 392, ya = 158, yb = 140, sag = 12;
   const yS = t => B.lerp(ya, yb, t) + Math.sin(t * Math.PI) * sag;
-  for (let t = 0; t <= 1; t += 0.003) { const x = B.lerp(x0, x1, t), y = yS(t), hh = B.lerp(12, 5, t); br.rect(x, y - hh, 1, 1); br.rect(x, y, 1, t < 0.5 ? 3 : 2); }
+  for (let t = 0; t <= 1; t += 0.003) { const x = B.lerp(x0, x1, t), y = yS(t), hh = B.lerp(12, 5, t); br.rect(x, y - hh, 1, 1); br.rect(x, y, 1, t < 0.5 ? 4 : 3); }
   for (let t = 0.01; t < 1; t += 0.035) { const x = B.lerp(x0, x1, t), y = yS(t), hh = B.lerp(12, 5, t); br.rect(x, y - hh, 1, hh); }
   for (let i = 0; i < 6; i++) { const t = 0.12 + i * 0.15, x = B.lerp(x0, x1, t), y = yS(t) - 9; br.kap(x, y, x + 6, -M, 0.6, 0.6); } // Halteseile zu den Wurzeln
-  K.form(2, br, 0.28, { k: RINDE, r: RAND_K, ton: 1.5, fase: 0, rand: 1 });
+  K.form(2, br, 0.18, { k: RINDE, r: RAND, ton: 1.6, fase: 0, rand: 1 });
   // Durchgangsbaum drüben rechts: die Brücke endet in seinem Bogen
   stamm(K, 2, 424, -M, 150, 92, 70, 0.28, { harz: 6, ph: 0.4 }); bogen(K, 2, 396, 140, 16, 22, 0.28, { steine: 9 });
   // Vorne: der Absatz aus versteinertem Laub einer liegenden Krone, auf dem wir stehen
@@ -378,6 +378,8 @@ function bauen(o) {
   if (art === 'waechter') info = gewoelbe(K, {});
   else if (art === 'uebergang') info = gewoelbe(K, { treppe: true });
   else info = [k => strassenzug(k, {}), gefaellt, abgrund][v](K);
+  // Fremdheit: mehr Harztränen erscheinen in den Wurzeln (das Licht des Waldes nimmt zu, das der Legion ab)
+  { const r = B.rng((o.seed | 0) * 41 + 9); for (let i = 0; i < Math.round(K.fr * 7); i++) traene(K, 1, r.f(20, 460), r.f(14, 70), r.f(0.9, 1.6), { staerke: 0.4 }); }
   if (art === 'rast') { for (let i = 0; i < 4; i++) B.dith(K.e[i], -M, -M, W + M, H + M, pal.koerper[0], (px) => 0.22 + 0.1 * i - Math.abs(px - 240) / 1600); B.feuer(K, 240, 222); }
   else if (art === 'kraemer') { meiler(K, 140, 214, true); B.stand(K, 330, 206); }
   else if (art === 'werkstatt') { meiler(K, 390, 214, false); B.werkbank(K, 220, 210); }

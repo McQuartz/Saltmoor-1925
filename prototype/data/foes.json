@@ -757,7 +757,7 @@
    "ruft_p2",
    "ruft_p3"
   ],
-  "konzept": "Eine Öffnung, die Formen annimmt, um verstanden zu werden: erst König, dann Schlund, zuletzt nur ein Auge.",
+  "konzept": "Eine Öffnung, die Formen annimmt, um verstanden zu werden: erst ein König mit Bootshaken, dann ein Schlund zwischen zwei Mantelflügeln, zuletzt nur ein Auge an Ankerketten.",
   "stimme": "ruft",
   "beute": null,
   "besonders": {
@@ -820,7 +820,8 @@
     "alle": 2,
     "anzahl": 1
    }
-  }
+  },
+  "quelle": "skript"
  },
  "augen": {
   "n": "Augen im Rand",
@@ -850,6 +851,7 @@
    "art": "schuetzer",
    "v": 6,
    "why": "Die Laternen leuchten ihm schwarz: solange sie hängen, deckt jede ihn mit Block."
-  }
+  },
+  "quelle": "skript"
  }
 }

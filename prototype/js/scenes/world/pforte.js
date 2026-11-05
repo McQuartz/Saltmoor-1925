@@ -33,13 +33,13 @@ function decke(K, ybis, gx) {
 }
 // Rumpf eines Bootes von unten (kieloben über uns), mit Kette, die herabhängt
 function rumpf(K, eb, x, y, len, tiefe, kette) {
-  const m = B.maske(), b = len * .2;
-  m.poly([[x - len / 2, y], [x - len * .3, y - b * .7], [x + len * .25, y - b * .8], [x + len / 2, y - b * .2], [x + len * .42, y + b * .5], [x - len * .3, y + b * .55]]);
-  K.form(eb, m, tiefe, { ton: .9, fase: 1.5, rand: 2, schatten: 1, muster: (px, py) => Math.abs(py - y + (px - x) * .02) < .8 ? -1 : (((px - x + len) | 0) % Math.max(3, Math.round(len / 7)) === 0 ? -.4 : 0) });
-  const k = B.maske(); k.kap(x - len * .48, y - 1, x + len * .48, y + 1, 1, 1); K.form(eb, k, tiefe, { ton: 2, fase: 0 });
+  const m = B.maske(), b = len * .17, L2 = len / 2;
+  // von unten gesehen: spitzer Bug rechts, breites Heck links, Kiel als Grat in der Mitte, Planken längs
+  m.fn(x - L2 - 1, y - b - 1, x + L2 + 1, y + b + 1, (px, py) => { const u = (px - x) / L2; if (u < -1 || u > 1) return false; const w = b * Math.pow(1 - Math.pow(Math.max(0, u), 2), .9) * (u < 0 ? Math.pow(1 - Math.pow(-u, 6), .5) : 1); return Math.abs(py - y) < w; });
+  K.form(eb, m, tiefe, { ton: .8, fase: 1.5, rand: 2, schatten: 1, muster: (px, py) => { const u = (py - y) / b; return Math.abs(u) < .12 ? .9 : (Math.abs(u * 4 - Math.round(u * 4)) < .12 ? -.5 : 0); } });
   if (kette) {
     const c = B.maske(), x2 = x + kette[0], y2 = y + kette[1];
-    for (let i = 0; i <= kette[1] / 3; i++) { const q = i / (kette[1] / 3), px = x + (x2 - x) * q + Math.sin(q * 3) * 1.5, py = y + b * .4 + (y2 - y) * q; if (i & 1) c.ell(px, py, .8, 1.6); else c.ell(px, py, 1.4, .9); }
+    for (let i = 0; i <= kette[1] / 3; i++) { const q = i / (kette[1] / 3), px = x + (x2 - x) * q + Math.sin(q * 3) * 1.5, py = y + b * .6 + (y2 - y) * q; if (i & 1) c.ell(px, py, .8, 1.6); else c.ell(px, py, 1.4, .9); }
     if (kette[2]) { const ax = x2 + Math.sin(3) * 1.5, ay = y2 + b * .4; c.kap(ax, ay, ax, ay + 8, .9, .9); c.pfad([[ax - 5, ay + 5], [ax - 3, ay + 9], [ax, ay + 10], [ax + 3, ay + 9], [ax + 5, ay + 5]], .9, .9); }
     K.form(eb, c, tiefe, { ton: 1.6, fase: 0, rand: 1 });
   }
@@ -79,8 +79,14 @@ function spalt(K, eb, cx, yb, hoch, breit, o) {
     // innen fern: kein Licht, aber Dunst, vor dem eine dunkle Gestalt steht (hellt hinter dem Boss auf)
     const D = ['#020606', '#061212', '#0b1e1e', '#122c2c', '#1a3c3a', '#244e4a', '#30625c'];
     B.feld(e, cx - breit - 2, yt, cx + breit + 2, yb, D, (x, y) => { if (!m.has(x, y)) return -1; const q = (y - yt) / hoch, dx = Math.abs(x - cx) / breit; return (o.ruhig ? .95 : .78) - dx * .5 - Math.abs(q - .62) * .55 + (Math.sin(y * .5 + x * .05) > .9 ? .08 : 0); });
-    // ferner Kai im Spalt: dieselbe Stelle noch einmal, klein
-    const kk = B.pk(D[1]); for (let y = yb - 18; y < yb; y++) for (let x = Math.floor(cx - breit); x <= cx + breit; x++) if (m.has(x, y) && y > yb - 18 + Math.abs(x - cx) * .12) e.set(x, y, kk);
+    // im Spalt: derselbe Kai noch einmal, klein und fern. Boden mit Fluchtlinien, schwarze Laternen, hinten wieder eine Wand mit einem Spalt
+    const vy = yb - hoch * .34, kk = B.pk(D[1]), kl = B.pk(D[3]), pf = B.pk(FL.rand), wd = B.pk(D[2]);
+    for (let y = Math.ceil(vy); y < yb; y++) for (let x = Math.floor(cx - breit); x <= cx + breit; x++) {
+      if (!m.has(x, y)) continue; const q = (y - vy) / (yb - vy), X = (x - cx) / Math.max(1, q * breit * 1.6);
+      if (Math.abs(X) > 1.05) continue; e.set(x, y, (Math.abs(Math.abs(X) - 1) < .06 || (Math.round(1 / Math.max(.02, q) * 2) % 3 === 0 && B.bay(x, y) < .5)) ? kl : kk);
+    }
+    for (let y = Math.round(vy - hoch * .22); y < vy; y++) for (let x = Math.floor(cx - breit * .3); x <= cx + breit * .3; x++) if (m.has(x, y)) e.set(x, y, Math.abs(x - cx) < 1 + (y - vy + hoch * .22) * .08 ? B.pk(D[0]) : wd);
+    for (let i = 1; i <= 5; i++) { const q = Math.pow(.62, i), y = Math.round(vy + (yb - vy) * q), hh = Math.max(2, Math.round(24 * q)); for (const sgn of [-1, 1]) { const x = Math.round(cx + sgn * q * breit * 1.6 * 1.02); if (!m.has(x, y - 1)) continue; for (let k = 0; k < hh; k++) e.set(x, y - k, kk); e.set(x, y - hh, o.ruhig ? B.pk(WARM) : pf); } }
   } else B.feld(e, cx - breit - 2, yt, cx + breit + 2, yb, LEER, (x, y) => m.has(x, y) ? (o.ruhig ? .9 - (yb - y) / hoch * .6 : .15 + Math.max(0, (y - yb + hoch * .3) / (hoch * .3)) * .45) : -1);
   const fk = B.pk('#0a1c1a'), fl = B.pk(FL.rand);
   for (let i = 0; i < 6; i++) { const y = Math.round(yb - 2 - i * i * .6), w = Math.max(1, Math.round(halb(y) * (1 - i * .14))); for (let x = -w; x <= w; x++) if (m.has(cx + x, y) && (x + i) % 2 === 0) e.set(cx + x, y, fk); }
@@ -89,7 +95,9 @@ function spalt(K, eb, cx, yb, hoch, breit, o) {
   const ra = B.pk(pal.rand[1]), rb = B.pk(pal.rand[0]), dk = B.pk(WAND[0]), pts = [];
   for (let y = yt; y <= yb; y++) for (let x = Math.floor(cx - breit - 2); x <= cx + breit + 2; x++) {
     if (!m.has(x, y)) continue; const l = !m.has(x - 1, y), r = !m.has(x + 1, y);
-    if (l) { e.set(x, y, rb); e.set(x - 1, y, dk); pts.push([x, y, 1]); } if (r) { e.set(x, y, (y & 1) ? rb : B.pk(WAND[5])); e.set(x + 1, y, ra); pts.push([x + 1, y, 0]); }
+    const dick = breit > 30 ? 2 : 1;
+    if (l) { e.set(x, y, rb); if (dick > 1) { e.set(x - 1, y, ra); e.set(x - 2, y, dk); e.set(x - 3, y, dk); } else e.set(x - 1, y, dk); pts.push([x - dick + 1, y, 1]); }
+    if (r) { e.set(x, y, (y & 1) ? rb : B.pk(WAND[5])); e.set(x + 1, y, ra); if (dick > 1) { e.set(x + 2, y, rb); e.set(x + 3, y, dk); } pts.push([x + 1, y, 0]); }
   }
   B.gluehen(e, cx, yb - hoch * .5, breit * 3, '#0a2a28', .6);
   // Wasser rinnt an den Rändern nach oben (animiert), dazu ein ruhiges Pulsieren der Kante
@@ -349,14 +357,9 @@ function finale(K, o) {
   gespiegelt(K);
   decke(K, 44, 130);
   rumpf(K, 1, 120, 16, 130, .3, [14, 36, true]); rumpf(K, 1, 396, 24, 80, .4, [-4, 22]); rumpf(K, 1, 272, 4, 50, .5, null);
-  wand(K, 1, 40, 178, { licht: [240, 120] });
-  // ein gesunkenes Schiff steht schräg in der Wand links: Maßstab
-  { const m = B.maske(); m.poly([[-M, 150], [20, 92], [120, 60], [150, 66], [136, 86], [40, 130], [10, 166]]); m.kap(70, 76, 58, 18, 1.6, 1.2); m.kap(100, 66, 92, 26, 1.4, 1); m.kap(58, 30, 100, 36, .6, .6);
-    K.form(1, m, .55, { ton: .7, fase: 1.5, muster: (x, y) => ((x + y * 2) % 9 === 0 ? -.6 : 0) }); }
-  // was in der Wand still steht: Fische, ein Ruderboot, ein Netz
-  fisch(K, 1, 70, 64, 22, .35, 1); fisch(K, 1, 98, 84, 14, .4, 1); fisch(K, 1, 404, 120, 18, .38, -1); fisch(K, 1, 64, 150, 10, .45, 1); fisch(K, 1, 446, 70, 12, .45, -1);
-  { const m = B.maske(), x = 380, y = 52; m.poly([[x - 30, y - 2], [x - 26, y + 6], [x + 24, y + 7], [x + 32, y - 4], [x + 18, y - 1], [x - 18, y - 1]]); m.kap(x - 6, y - 1, x - 14, y - 22, .8, .7); K.form(1, m, .3, { ton: 1.2, fase: 1, rand: 1 }); }
-  spalt(K, 1, 240, 177, 150, o.ruhig ? 78 : 66, { ruhig: o.ruhig, dunst: true });
+  wand(K, 1, 40, 178, { licht: [240, 60] });
+  // ein Ruderboot steht schräg in der Wand, darüber eine Ankerkette, die aus der Decke bis in die Wand reicht
+spalt(K, 1, 240, 177, 152, o.ruhig ? 104 : 90, { ruhig: o.ruhig, dunst: true });
   // Spiegelung des Spalts im nassen Stein
   K.bodenDith(180, 179, 300, 230, '#163836', (x, y) => .5 * Math.max(0, 1 - Math.abs(x - 240) / 60) * Math.max(0, 1 - (y - 179) / 50) * (Math.sin(y * 1.9) > -.2 ? 1 : 0));
   // Kai-Kante quer, Platten

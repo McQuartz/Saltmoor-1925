@@ -1,15 +1,14 @@
-// Abbinden: ein Gürtel ist um den Oberarm geschlungen, die andere Hand zieht ihn fest, bis die Finger kalt werden.
+// Abbinden: eine große Faust zieht einen Ledergürtel straff, der Gürtel läuft durch die Messingschnalle und wird
+// zur Schlinge; ein Blutstropfen am Leder. Fest, bis die Finger kalt werden.
 'use strict';
 module.exports = {
   w: 48, h: 32,
   form(A) {
-    const { faust, C, Pg, armGruppen } = A;
-    const arm = [C(0, 20, 34, 16, 4.4, 3.8)];
-    const guertel = [C(18, 12, 19, 24, 1.8, 1.8)];
-    const schnalle = [Pg([[16, 9], [21, 9], [21, 13], [16, 13]], null, { b: 0.6 })];
-    const ende = [C(20, 10, 30, 2, 1.6, 1.6)];
-    const f = faust({ x: 40, y: 2, a: 2.5, s: 1.2, seite: 1, arm: 6 });
-    return { gruppen: [{ p: arm, mat: 'haut', k: 0 }, { p: guertel, mat: 'leder', k: 0 }, { p: ende, mat: 'leder', k: 0 }, { p: schnalle, mat: 'messing', k: 0 }, ...armGruppen(f), { p: f.alle(), mat: 'haut', k: 1 }],
-      details(P) { for (let x = 22; x < 34; x += 3) P.stufe(x, 15, -1); P.line(22, 17, 32, 15, 'a1', true); } };
+    const { faust, kurve, Pg, armGruppen } = A;
+    const f = faust({ x: 32, y: 13, a: -0.2, s: 1.75, seite: -1, arm: 10 });
+    const gurt = kurve([[33, 18], [20, 22], [8, 22], [5, 14], [12, 9], [16, 16], [12, 26]], 1.7, 1.7, null, { cr: true }, 30);
+    const schnalle = [Pg([[14, 18], [20, 18], [20, 25], [14, 25]], null, { b: 0.6 })];
+    return { gruppen: [{ p: gurt, mat: 'leder', k: 0, tone: 0.1 }, { p: schnalle, mat: 'messing', k: 0, tone: 0.1 }, ...armGruppen(f), { p: f.alle(), mat: 'haut', k: 1 }, { p: f.daumen, mat: 'haut', k: 0 }],
+      details(P) { P.set(17, 21, 'kohle0'); P.line(17, 20, 17, 23, 'kohle0', true); P.tropfen(9, 25); P.tropfen(9, 28, 'a2', 'a3'); P.set(24, 22, 'a3'); } };
   },
 };

@@ -1,14 +1,15 @@
-// Kniefall: ein Knie auf dem Steinboden, daneben stützt sich eine Hand flach auf; über den Rücken geht es hinweg.
+// Kniefall: eine große Hand hält die abgenommene Schiebermütze an der Krempe gesenkt vor sich,
+// wie man sie hält, wenn man niederkniet, damit es über einen hinweggeht.
 'use strict';
 module.exports = {
   w: 48, h: 32,
   form(A) {
-    const { hand, Pg, C, armGruppen } = A;
-    const boden = [Pg([[0, 27], [48, 27], [48, 32], [0, 32]], null, { b: 0.6 })];
-    const bein = [C(6, 8, 18, 22, 4, 3.4), C(18, 22, 36, 26, 3.4, 2.8)];
-    const schuh = [Pg([[34, 22], [40, 22], [41, 27], [34, 27]], null, { b: 1 })];
-    const h = hand({ x: 4, y: 22, a: 0.15, s: 1.25, seite: 1, curl: [0, 0, 0.05, 0.08], spreiz: 0.12, daumen: 0.2, arm: 0 });
-    return { gruppen: [{ p: boden, mat: 'stein', k: 0, tone: -0.1 }, { p: bein, mat: 'stoff', k: 2 }, { p: schuh, mat: 'leder', k: 0 }, { p: h.alle(), mat: 'haut', k: 1 }],
-      details(P) { P.rauch(12, 3, 5, 'stoff1', 0.3); P.rauch(28, 6, 6, 'stoff1', 0.25); P.set(18, 25, 'a2'); } };
+    const { hand, Pg, E, armGruppen } = A;
+    const muetze = [Pg([[16, 18], [22, 9], [34, 8], [42, 14], [40, 22], [24, 24]], null, { b: 2.4, rd: 2 })];
+    const schirm = [Pg([[14, 18], [26, 23], [28, 28], [16, 27], [11, 22]], null, { b: 1, rd: 1 })];
+    const knopf = [E(30, 8.5, 1.8, 1.2, null, { pf: 'bevel', hz: 0.5 })];
+    const h = hand({ x: 2, y: 30, a: -0.55, s: 1.6, seite: -1, curl: [0.75, 0.8, 0.85, 0.9], spreiz: 0.03, daumen: 0.1, daumenWinkel: 0.6, arm: 4 });
+    return { gruppen: [{ p: [...muetze, ...knopf], mat: 'wolle', k: 0, tone: 0.1 }, { p: schirm, mat: 'wolle', k: 0, tone: 0 }, ...armGruppen(h), { p: h.alle(), mat: 'haut', k: 1 }],
+      details(P) { P.ritz(30, 10, 24, 22, -1); P.ritz(31, 10, 38, 20, -1); P.set(35, 11, 'a3'); } };
   },
 };

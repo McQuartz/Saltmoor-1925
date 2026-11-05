@@ -138,6 +138,12 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Das Gewicht | Gezeitenwerk | 4 | [M7](bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png) |
 | Der Regulator (Wächter) | Gezeitenwerk | 4 (nach Nacharbeit: Wasserwand hinter ihm, mehr Randlicht; schwingt als Pendel zwischen zwei Reihen) | [M7](bilder/M7/gezeitenwerk/im-spiel-waechter.png) |
 | Hintergrund Gezeitenwerk (3 Varianten, Wächter-Szene) | Gezeitenwerk | 4 (V2 schwächste) | [M7](bilder/M7/gezeitenwerk/hintergrund-varianten.png) |
+| Der Rippenkriecher | Walkathedrale | 4 (Mann darunter eher Masse) | [M7](bilder/M7/walkathedrale/kontaktbogen.png) |
+| Das Walfänger-Echo | Walkathedrale | 4 (Leine in die Brust kaum zu sehen) | [M7](bilder/M7/walkathedrale/kontaktbogen.png) |
+| Der Markfresser | Walkathedrale | 4 (dritter Entwurf) | [M7](bilder/M7/walkathedrale/kontaktbogen.png) |
+| Der Seepockenmann | Walkathedrale | 4 | [M7](bilder/M7/walkathedrale/kontaktbogen.png) |
+| Das Herz (Wächter) | Walkathedrale | 4 (Idle bewegt sich wenig) | [M7](bilder/M7/walkathedrale/im-spiel-waechter.png) |
+| Hintergrund Walkathedrale (3 Varianten, Herzkammer) | Walkathedrale | 4 | [M7](bilder/M7/walkathedrale/hintergrund-varianten.png) |
 | Der Mann im Salz (neu) | Salz | 4 (Rumpf dunkel) | [M7](bilder/M7/alte-biome/salz-bogen.png) |
 | Der Vermesser (neu) | Stadt | 4 (Varianten ähnlich) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
 | Der aus dem Relief (neu) | Stadt | 4 (stärkstes Bild der Ergänzungen) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
@@ -150,6 +156,7 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 
 | Datum | Meilenstein | Entscheidung | Grund |
 |---|---|---|---|
+| 2026-11-05 | M7 | Vorschläge der Walkathedrale (Verwundbar am Spieler, Kniff `frisst`, Szene pulsiert synchron zum Herzschlag) vorerst nicht umgesetzt; der Herzschlag ist dafür hörbar und sichtbar | Jeder Vorschlag braucht neues System (Spieler-Zustand, Bild-Haken); Kandidaten für die Zugabe |
 | 2026-11-05 | M7/M8 | `tools/biom-test.js` spielt die Akte vor dem Biom wirklich (Heilung als Netz, Kämpfe im Vorlauf höchstens 30 Züge); Seeds, die im Vorlauf sterben, zählen nicht | Vorher startete jeder Akt mit dem Startdeck: Akt IV war mit 2/10 kaum schaffbar, obwohl ein echter Run dort ein gewachsenes Deck hat (Hinweis des Walkathedrale-Agenten). Neue Werte je 20 Seeds: Hafen 16, Kapelle 19, Salz 14, Stadt 11, Eis 14/17, Pforte 13/16 |
 | 2026-11-04 | M7 | Ansage zeigt die Wucht und die Züge bis zum Schlag („⚔ 14 in 2“) statt „↑ +0“ | Gezeitenwerk meldete die irreführende Anzeige; betrifft alle Gegner mit Ansage |
 | 2026-11-04 | M5 | `tools/biom-bogen.js` baut Kontakt- und Silhouetten-Bogen eines Bioms automatisch aus den Spieldaten (auch Pakete, Ergänzungen, `--alle`) | Abnahme „Kontaktbogen automatisch“; vorher schrieb jeder Agent sein eigenes Skript |

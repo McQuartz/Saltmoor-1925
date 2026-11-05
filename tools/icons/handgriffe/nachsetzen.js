@@ -1,11 +1,12 @@
-// Nachsetzen: eine Faust vorn, die zweite Faust schon hinterher, versetzt dahinter.
+// Nachsetzen: eine große Faust mit einem Schlagring aus Messing schlägt nach rechts nach, solange der andere noch schwankt.
 'use strict';
 module.exports = {
   w: 48, h: 32,
   form(A) {
-    const { faust, armGruppen } = A;
-    const f1 = faust({ x: 30, y: 13, a: -0.15, s: 1.35, seite: -1, arm: 18 });
-    const f2 = faust({ x: 18, y: 22, a: -0.05, s: 1.35, seite: -1, arm: 16 });
-    return { gruppen: [...armGruppen(f1), { p: f1.alle(), mat: 'haut', k: 1 }, { p: f1.daumen, mat: 'haut', k: 0 }, ...armGruppen(f2, 'wolle'), { p: f2.alle(), mat: 'haut', k: 1, tone: 0.05 }, { p: f2.daumen, mat: 'haut', k: 0 }] };
+    const { faust, apg, armGruppen } = A;
+    const f = faust({ x: 22, y: 16, a: -0.12, s: 1.85, seite: -1, arm: 22 });
+    const ring = [apg(f.ax, [[9.2, -5], [11.6, -5], [11.6, 5], [9.2, 5]], null, { b: 0.8, rd: 0.8 })];
+    return { gruppen: [...armGruppen(f), { p: f.alle(), mat: 'haut', k: 1 }, { p: f.daumen, mat: 'haut', k: 0 }, { p: ring, mat: 'messing', k: 0, tone: 0.15 }],
+      details(P) { for (const q of [-3.4, -1.2, 1, 3.2]) { const [x, y] = f.ax.P(11.8, q); P.set(x, y, 'messing3'); } P.rauch(45, 12, 2.5, 'stoff2', 0.4); P.rauch(45, 21, 2, 'stoff1', 0.35); } };
   },
 };

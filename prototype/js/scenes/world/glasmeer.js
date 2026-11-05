@@ -137,32 +137,52 @@ function zapfen(K, eb, x, yt, h, w, tiefe) {
   const m = B.maske(); m.poly([[x - w, yt - 4], [x + w, yt - 4], [x + w * .45, yt + h * .55], [x + w * .1, yt + h], [x - w * .3, yt + h * .6]]);
   K.form(eb, m, tiefe, { k: EIS.slice(1, 8), r: [EIS[7], EIS[9]], ton: 2.6, fase: 1, verlauf: .8, muster: (px, py) => (frac((px - x) * .3) < .2 ? .5 : 0) });
 }
-// Die Gestalt, die es nur im Spiegel gibt: kopfüber, Füße an der Fußlinie yb, Höhe h (im Spiegel nach unten)
-function gestalt(K, x, yb, h, o) {
-  o = o || {}; const m = B.maske(), s = h / 100;
-  // Figur aufrecht gedacht, dann gespiegelt: Kopf unten. Lang, schmal, Arme bis zu den Knien, Kopf zu klein
-  const Y = q => yb + q * h; // q=0 Fuß, q=1 Kopf
-  m.poly([[x - 6 * s, Y(0)], [x + 7 * s, Y(0)], [x + 12 * s, Y(.25)], [x + 15 * s, Y(.62)], [x + 10 * s, Y(.82)], [x + 5 * s, Y(.86)], [x - 5 * s, Y(.86)], [x - 11 * s, Y(.8)], [x - 14 * s, Y(.6)], [x - 10 * s, Y(.25)]]);
-  m.ell(x, Y(.92), 5 * s, 7 * s);
-  m.pfad([[x - 13 * s, Y(.78)], [x - 20 * s, Y(.5)], [x - 19 * s, Y(.22)]], 3.2 * s, 1.6 * s);
-  m.pfad([[x + 13 * s, Y(.78)], [x + 21 * s, Y(.52)], [x + 22 * s, Y(.2)]], 3.2 * s, 1.6 * s);
-  const ok = o.sichtbar;
-  // dunkler als der Boden, Rand in grünem Licht (das Polarlicht dahinter zeichnet den Umriss)
-  for (let y = Math.max(m.y0 - 2, P0(yb)); y <= Math.min(m.y1 + 2, H + M - 1); y++) {
-    const e = K.e[K.eb(y)];
-    for (let x2 = m.x0 - 2; x2 <= m.x1 + 2; x2++) {
-      if (ok && !ok(x2, y)) continue; const inn = m.has(x2, y), q = (y - yb) / h, st = (o.staerke || 1) * (1 - Math.max(0, q - .75) * 1.5);
-      if (inn) { const rand = !m.has(x2 + 1, y) || !m.has(x2 - 1, y) || !m.has(x2, y + 1) || !m.has(x2 + 2, y); if (rand && st > B.bay(x2, y) * .9) e.set(x2, y, pk(st > .7 && B.bay(x2, y) < .5 ? NORD[4] : NORD[3])); else if (B.bay(x2, y) < .85) e.set(x2, y, pk(GLAS[0])); }
-      else if (m.has(x2 + 1, y) || m.has(x2 - 1, y) || m.has(x2, y - 1)) { if (st * .5 > B.bay(x2, y)) e.set(x2, y, pk(NORD[2])); }
+// Die Gestalt, die es nur im Spiegel gibt. dir = +1: kopfüber im Boden (Füße an yb, Kopf unten),
+// dir = -1: aufrecht (in der Spiegelwand). Lang, schmal, die Arme hängen bis unter die Knie, der Kopf zu klein
+// und leicht geneigt. Innen dunkel mit Faltenwurf, außen ein Kranz aus Polarlicht, das hinter ihr steht.
+function gestaltMaske(x, yb, h, dir) {
+  const m = B.maske(), s = h / 100, Y = q => yb + dir * q * h;
+  const kontur = [];
+  const li = [[0, -6], [.12, -9], [.3, -11], [.5, -13], [.66, -14], [.78, -11], [.84, -6]], re = [[.84, 6], [.78, 11], [.66, 14], [.5, 12], [.3, 10], [.12, 8], [0, 6]];
+  li.concat(re).forEach(([q, dx]) => kontur.push([x + dx * s + Math.sin(q * 9) * .8 * s, Y(q)]));
+  m.poly(kontur);
+  m.ell(x + 1.5 * s, Y(.915), 4.6 * s, 6.4 * s); m.kap(x, Y(.84), x + 1 * s, Y(.88), 2.4 * s, 2.4 * s);
+  m.pfad([[x - 13 * s, Y(.78)], [x - 19 * s, Y(.56)], [x - 20 * s, Y(.34)], [x - 18 * s, Y(.2)]], 3.2 * s, 1.4 * s);
+  m.pfad([[x + 13 * s, Y(.78)], [x + 19 * s, Y(.58)], [x + 21 * s, Y(.38)], [x + 22 * s, Y(.22)]], 3.2 * s, 1.4 * s);
+  // Finger: lang, gespreizt
+  for (const sx of [-1, 1]) for (let k = 0; k < 3; k++) { const hx = x + sx * (19 + k * .8) * s, hy = Y(sx < 0 ? .2 : .22); m.kap(hx, hy, hx + sx * (k - 1) * 1.5 * s, hy + dir * -(6 + k) * s * -1, .7 * s, .5 * s); }
+  return { m, Y, s };
+}
+function gestaltMalen(K, x, yb, h, dir, o) {
+  o = o || {}; const { m, Y, s } = gestaltMaske(x, yb, h, dir), ok = o.sichtbar, ebF = o.eb !== undefined ? () => o.eb : y => K.eb(y), st0 = o.staerke || 1;
+  for (let y = Math.max(-M, m.y0 - 4); y <= Math.min(m.y1 + 4, H + M - 1); y++) {
+    const e = K.e[ebF(y)];
+    for (let x2 = m.x0 - 4; x2 <= m.x1 + 4; x2++) {
+      if (ok && !ok(x2, y)) continue; const inn = m.has(x2, y), q = Math.abs(y - yb) / h, st = st0 * (dir > 0 ? 1 - Math.max(0, q - .8) * 2 : 1), b = B.bay(x2, y);
+      if (inn) {
+        const rand = !m.has(x2 + 1, y) || !m.has(x2 - 1, y) || !m.has(x2, y + dir) || !m.has(x2, y - dir);
+        if (rand) { if (st * (.55 + .45 * Math.sin(y * .5 + x2 * .3)) > b * .9) e.set(x2, y, pk(st > .75 && b < .45 ? NORD[5] : NORD[4])); else e.set(x2, y, pk(NORD[2])); continue; }
+        // Faltenwurf: senkrechte Bahnen, die nach unten (zum Saum) auseinanderlaufen
+        const fx = (x2 - x) / (s * (6 + q * 6)), falte = Math.sin(fx * 3.1 + Math.sin(q * 7) * .6);
+        let c = GLAS[0]; if (falte > .82 && b < .6) c = GLAS[3]; else if (falte > .55 && b < .35) c = GLAS[2]; else if (falte < -.85) c = '#000000';
+        // Licht dringt an der rechten Kante durch (Gegenlicht)
+        if (!m.has(x2 + 3, y) && b < .5) c = NORD[2];
+        e.set(x2, y, pk(c));
+      } else {
+        // Kranz: das Polarlicht hinter ihr, 1–3 px, gedithert
+        let dmin = 9; for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) if (m.has(x2 + dx, y + dy)) dmin = Math.min(dmin, Math.hypot(dx, dy));
+        if (dmin < 3.5) { const v = st * (1 - dmin / 3.5) * .9; if (v > b) e.set(x2, y, pk(v > .6 ? NORD[3] : NORD[2])); }
+      }
     }
   }
   // Augen: zwei Punkte, offen
-  const ay = Math.round(Y(.92)), e = K.e[K.eb(ay)];
-  e.set(x - 2 * s, ay, pk(NORD[6])); e.set(x + 2 * s, ay, pk(NORD[5]));
-  K.glut(x, ay, 10 * s + 4, '#0c3a20', .8, [K.eb(ay)]);
-  K.licht(x, ay, NORD[5], 30 * s, .4);
-  K.anim.push({ p: B.PAR[K.eb(ay)], f(ctx, t, ox, oy) { if (Math.sin(t * .4 + x) > .97) return; ctx.fillStyle = NORD[6]; ctx.fillRect(Math.round(x - 2 * s) + ox, ay + oy, 1, 1); ctx.fillRect(Math.round(x + 2 * s) + ox, ay + oy, 1, 1); } });
+  const ay = Math.round(Y(.915)), ax = Math.round(x + 1.5 * s), e = K.e[ebF(ay)];
+  e.set(ax - Math.round(1.6 * s), ay, pk(NORD[6])); e.set(ax + Math.round(1.6 * s), ay, pk(NORD[5]));
+  K.licht(ax, ay, NORD[5], 30 * s, .4);
+  K.anim.push({ p: B.PAR[ebF(ay)], f(ctx, t, ox, oy) { if (Math.sin(t * .4 + x) > .97) return; ctx.fillStyle = NORD[6]; ctx.fillRect(ax - Math.round(1.6 * s) + ox, ay + oy, 1, 1); ctx.fillRect(ax + Math.round(1.6 * s) + ox, ay + oy, 1, 1); } });
+  return m;
 }
+function gestalt(K, x, yb, h, o) { gestaltMalen(K, x, yb, h, 1, o); K.glut(x, yb + h * .8, 22, '#0c3a20', .7, [K.eb(Math.round(yb + h * .8))]); }
 const P0 = yb => Math.floor(yb);
 // Dein Spiegelbild: klein, kopfüber im Glas, von hinten, im Gehen (ein Bein vorn), oben ist niemand
 function deinSpiegelbild(K, x, yb, h) {
@@ -281,8 +301,8 @@ function bruch(K) {
   // Spalten: Linien in Weltkoordinaten; nahe einer Spalte ist der Boden offen (grünes Licht)
   const spalten = [[-3.2, .15], [1.1, -.08], [3.6, .22], [-6, .3]];
   const spaltD = (X, Z) => Math.min(...spalten.map(([a, d]) => Math.abs(X - (a + d * Z + Math.sin(Z * .9 + a) * .25))));
-  boden(K, P, fD, { glanzX: 430, risse: 4, sd: 5, licht: 1.3 });
-  for (let y = P.vy + 2; y < H + M; y++) { const e = K.e[K.eb(y)]; for (let x = -M; x < W + M; x++) { const Z = P.h / (y - P.vy), X = (x - P.vx) * Z / P.h, k = P.k(Z), d = spaltD(X, Z) * k; if (d < 2.2) { const v = 1 - d / 2.2; e.set(x, y, pk(ramp(NORD, .15 + v * .55, x, y))); } else if (d < 3.4) e.set(x, y, pk(GLAS[0])); } }
+  boden(K, P, fD, { glanzX: 430, risse: 4, sd: 5, licht: .85 });
+  for (let y = P.vy + 2; y < H + M; y++) { const e = K.e[K.eb(y)]; for (let x = -M; x < W + M; x++) { const Z = P.h / (y - P.vy), X = (x - P.vx) * Z / P.h, k = P.k(Z), d = spaltD(X, Z) * k; if (d < 2.2) { const v = 1 - d / 2.2; e.set(x, y, pk(ramp(NORD, .08 + v * .5, x, y))); } else if (d < 3.4) e.set(x, y, pk(GLAS[0])); } }
   // gekippte Platten: Kanten heben sich an der Spalte (Kontaktschatten), mit Randlicht
   [[40, 214, 90, 24, .3], [300, 196, 70, 16, -.2], [372, 232, 110, 30, .25], [150, 168, 46, 10, .1]].forEach(([x, y, w, h, n]) => { const m = B.maske(); m.poly([[x - w / 2, y], [x - w / 2 + n * 20, y - h], [x + w / 2 + n * 20, y - h * .7], [x + w / 2, y + 2]]); aufGlas(K, K.eb(y), m, y + 1, .1 * (y < 200), { k: OBS, ton: 1.6, fase: 1.5, muster: (px, py) => (frac((px * .9 - py) * .05) < .06 ? .9 : 0) }, { ks: .5, lang: h }); K.glut(x, y + 2, w * .5, '#0a3018', .8, [K.eb(y)]); });
   K.licht(240, 230, NORD[5], 160, .5);
@@ -303,7 +323,7 @@ function bruch(K) {
 // Wächter: Die Spiegelwand. Eine senkrechte Platte aus schwarzem Glas, so hoch wie die Halle; in ihr steht,
 // aufrecht, die Gestalt neben einem kleinen Menschen (dir), der schon einen Schritt weiter ist. Die Decke wölbt sich.
 function spiegelwand(K) {
-  const P = B.persp(240, 132); K.split = [160, 180];
+  const P = B.persp(240, 132); K.split = [169, 200];
   const fD = decke(K, P, { riss: [400, 16], sd: 7 });
   boden(K, P, fD, { glanzX: 400, risse: 7, sd: 7, licht: 1.2 });
   horizontDunst(K, P, .35);
@@ -312,21 +332,20 @@ function spiegelwand(K) {
   wm.poly([[x0, yb], [x0 + 4, 46], [x0 + 40, 30], [x0 + 70, 40], [x0 + 110, 18], [x0 + 150, 26], [x0 + 190, 12], [x0 + 230, 34], [x1 - 6, 44], [x1, yb]]);
   // Spiegelinhalt: die Decke gespiegelt, dunkler; darin die Gestalt aufrecht und du
   const innen = (x, y) => wm.has(x, y);
-  for (let y = 10; y <= yb; y++) for (let x = x0; x <= x1; x++) { if (!innen(x, y)) continue; const d = fD(480 - x, 8 + (y - 10) * .6); let c = ramp(GLAS, d.t * .9 + .02, x, y); if (d.g * .8 > .25 + B.bay(x, y) * .6) c = ramp(NORD, .08 + d.g * .4, x, y); K.e[1].set(x, y, pk(c)); }
+  for (let y = 10; y <= yb; y++) for (let x = x0; x <= x1; x++) { if (!innen(x, y)) continue; const d = fD(480 - x, 8 + (y - 10) * .6); let c = ramp(GLAS, d.t * .9 + .02, x, y); if (d.g * .8 > .25 + B.bay(x, y) * .6) c = ramp(NORD, .08 + d.g * .4, x, y); K.e[2].set(x, y, pk(c)); }
   // Facetten der Wand: Rand mit Fase und Randlicht (Form ohne Füllung drüberlegen)
   const rand = B.maske(); for (let y = 0; y <= yb; y++) for (let x = x0 - 2; x <= x1 + 2; x++) if (wm.has(x, y) && (!wm.has(x - 4, y) || !wm.has(x + 4, y) || !wm.has(x, y - 3))) rand.put(x, y, 1), rand._grow(x, y, x, y);
-  K.form(1, rand, .15, { k: OBS, ton: 2.2, fase: 1.5, rand: 2 });
+  K.form(2, rand, .15, { k: OBS, ton: 2.2, fase: 1.5, rand: 2 });
   // im Spiegel: die Gestalt aufrecht, groß, und neben ihr klein du, einen Schritt voraus (in der Wand)
-  const g = B.maske(), gx = 168, gb = yb - 2, s = 1.25;
-  g.poly([[gx - 6 * s, gb], [gx + 7 * s, gb], [gx + 12 * s, gb - 25 * s], [gx + 15 * s, gb - 62 * s], [gx + 10 * s, gb - 82 * s], [gx - 10 * s, gb - 82 * s], [gx - 14 * s, gb - 60 * s], [gx - 10 * s, gb - 25 * s]]); g.ell(gx, gb - 92 * s, 5 * s, 7 * s);
-  g.pfad([[gx - 13 * s, gb - 78 * s], [gx - 20 * s, gb - 50 * s], [gx - 19 * s, gb - 22 * s]], 3.2 * s, 1.6 * s); g.pfad([[gx + 13 * s, gb - 78 * s], [gx + 21 * s, gb - 52 * s], [gx + 22 * s, gb - 20 * s]], 3.2 * s, 1.6 * s);
-  for (let y = 0; y <= yb; y++) for (let x = x0; x <= x1; x++) { if (!g.has(x, y) || !innen(x, y)) continue; const r = !g.has(x + 1, y) || !g.has(x, y - 1) || !g.has(x - 1, y); K.e[1].set(x, y, pk(r ? (B.bay(x, y) < .6 ? NORD[4] : NORD[3]) : GLAS[0])); }
-  K.e[1].set(gx - 2, Math.round(gb - 92 * s), pk(NORD[6])); K.e[1].set(gx + 2, Math.round(gb - 92 * s), pk(NORD[6]));
+  const gx = 168, gb = yb - 2;
+  gestaltMalen(K, gx, gb, 120, -1, { eb: 2, sichtbar: (x, y) => innen(x, y), staerke: 1 });
   const du = B.maske(), dx = 318, db = yb - 2; du.pfad([[dx, db - 16], [dx - 4, db - 7], [dx - 6, db]], 1.6, 1.3); du.pfad([[dx + 1, db - 16], [dx + 3, db - 8], [dx + 3, db]], 1.6, 1.3); du.poly([[dx - 5, db - 15], [dx + 5, db - 15], [dx + 5, db - 29], [dx - 5, db - 29]]); du.ell(dx, db - 33, 3, 3.4);
-  for (let y = 0; y <= yb; y++) for (let x = x0; x <= x1; x++) { if (!du.has(x, y)) continue; const r = !du.has(x + 1, y) || !du.has(x, y - 1); K.e[1].set(x, y, pk(r ? NORD[4] : GLAS[1])); }
-  K.glut(gx, gb - 60, 90, '#06200f', .7, [1]); K.licht(gx, gb - 90, NORD[5], 80, .5);
+  for (let y = 0; y <= yb; y++) for (let x = x0; x <= x1; x++) { if (!du.has(x, y)) continue; const r = !du.has(x + 1, y) || !du.has(x, y - 1); K.e[2].set(x, y, pk(r ? NORD[4] : GLAS[1])); }
+  K.glut(gx, gb - 60, 90, '#06200f', .7, [2]);
   // Spiegelbild der Wand im Boden
-  spiegeln(K, wm, yb, { ks: .55, lang: 70, eb: 2, tiefe: .3 });
+  spiegeln(K, wm, yb, { ks: .4, lang: 24, eb: 3, tiefe: .45 });
+  // Glanz: zwei schräge Streifen über die Wand (die Eisdecke spiegelt sich in ihr)
+  for (const [sx0, br] of [[150, 7], [262, 4]]) for (let y = 30; y <= yb; y++) for (let k = -br; k <= br; k++) { const x = Math.round(sx0 + (y - 30) * .35 + k); if (!innen(x, y) || B.bay(x, y) > (1 - Math.abs(k) / br) * .55) continue; const c = K.e[2].get(x, y); if (c === pk(GLAS[0]) || c === pk('#000000')) continue; K.e[2].add(x, y, [40, 70, 60], .5); }
   // Zapfen links und rechts, nah
   [[40, 96, 14], [452, 110, 16], [16, 60, 9]].forEach(([x, h, w]) => zapfen(K, 2, x, -M, h, w, .2));
   spitze(K, 3, 60, 186, 44, 10, .2, .1, true); spitze(K, 3, 430, 190, 50, 11, -.25, .1, true);

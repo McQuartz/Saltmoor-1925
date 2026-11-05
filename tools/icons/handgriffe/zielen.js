@@ -1,14 +1,18 @@
-// Zielen: ganz nah über Kimme und Korn eines Revolvers; das Korn steht auf einer kleinen hellen Stelle in der Ferne.
+// Zielen: eine große Faust hält einen Revolver weit nach rechts ausgestreckt, Kimme und Korn in einer Linie,
+// ganz hinten ein kleines Licht, an der Stelle, an der bei Menschen das Herz sitzt.
 'use strict';
 module.exports = {
   w: 48, h: 32,
   form(A) {
-    const { Pg, faust, armGruppen } = A;
-    const lauf = [Pg([[4, 24], [44, 20], [44, 24], [6, 30]], null, { b: 1.4, rd: 0.6 })];
-    const kimme = [Pg([[4, 22], [10, 21], [10, 24], [4, 25]], null, { b: 0.6 }), Pg([[4, 20], [6, 20], [6, 23], [4, 23]], null, { b: 0.4 })];
-    const korn = [Pg([[39, 17], [41, 17], [42, 21], [38, 21]], null, { b: 0.6 })];
-    const f = faust({ x: 0, y: 32, a: -0.6, s: 1.3, seite: 1, arm: 0 });
-    return { gruppen: [{ p: lauf, mat: 'stahl', k: 0 }, { p: [...kimme, ...korn], mat: 'stahl', k: 0 }, { p: [...f.alle(), ...f.daumen], mat: 'haut', k: 1 }],
-      details(P) { P.set(40, 13, 'a3'); P.set(40, 12, 'a2'); P.set(41, 13, 'a2'); for (let x = 0; x < 48; x += 3) P.set(x, 8, 'stoff1'); } };
+    const { faust, achse, apg, E, armGruppen } = A;
+    const f = faust({ x: 4, y: 22, a: -0.1, s: 1.6, seite: -1, arm: 4 });
+    const ax = achse(...f.ax.P(5, -4), -0.1);
+    const rahmen = [apg(ax, [[-2, -3], [8, -3], [8, 2], [-2, 2]], null, { b: 1 })];
+    const trommel = [apg(ax, [[1, -3.6], [7, -3.6], [7, 1.6], [1, 1.6]], null, { b: 1.4, rd: 0.6 })];
+    const lauf = [apg(ax, [[7, -3], [26, -2.8], [26, -0.6], [7, -0.4]], null, { b: 0.8 })];
+    const korn = [apg(ax, [[24, -2.8], [25.5, -2.8], [25.5, -4.6], [24.5, -4.6]], null, { b: 0.4 })];
+    void E;
+    return { gruppen: [{ p: [...rahmen, ...lauf, ...korn], mat: 'eisen', k: 0.5, tone: 0.12 }, { p: trommel, mat: 'stahl', k: 0, tone: 0.1 }, ...armGruppen(f), { p: f.alle(), mat: 'haut', k: 1 }, { p: f.daumen, mat: 'haut', k: 0 }],
+      details(P) { P.set(44, 10, 'a3'); P.set(45, 10, 'a2'); P.set(44, 9, 'a2'); for (let x = 36; x < 44; x += 3) P.set(x, 11, 'glutDim'); for (const t of [3, 5]) { const [a, b] = ax.P(t, -3.4), [c, d] = ax.P(t, 1.4); P.ritz(a, b, c, d, -2); } } };
   },
 };
