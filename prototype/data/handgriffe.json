@@ -1,5 +1,5 @@
 {
- "_doc": "Handgriffe: Karten ohne eigenen Stoff, die in Kerben von Items stecken und deren Stoffe annehmen (04-deckbau.md Abschnitt 2). Kartenfelder wie items.json, dazu build (glutnest, brackwasser, bollwerk, aderlass, kettenwerk, hagel, neutral), rar (gewoehnlich, selten), t (Flavor), stoffe (Stoffe, zu denen der Handgriff passt: nur Gewichtung der Auswahl), start (Start-Handgriff, nicht im Beutepool), ziel (braucht ein Ziel), sonder (Sonderwirkung, Regeln in docs/auftrag-2/handgriffe.md).",
+ "_doc": "Handgriffe: Karten ohne eigenen Stoff, die in Kerben von Items stecken und deren Stoffe annehmen (04-deckbau.md Abschnitt 2). Kartenfelder wie items.json, dazu build (glutnest, brackwasser, bollwerk, aderlass, kettenwerk, hagel, ballast, kollekte, neutral), rar (gewoehnlich, selten), t (Flavor), stoffe (Stoffe, zu denen der Handgriff passt: nur Gewichtung der Auswahl), start (Start-Handgriff, nicht im Beutepool), ziel (braucht ein Ziel), sonder (Sonderwirkung, Regeln in docs/auftrag-2/handgriffe.md).",
  "handgriffe": {
   "stossen": {
    "n": "Stoßen",
@@ -931,6 +931,41 @@
     "E"
    ],
    "t": "Nicht zielen. Den Abzug halten, bis die Stille aufhört."
+  },
+  "beschweren": {
+   "n": "Beschweren",
+   "c": 0,
+   "blk": 5,
+   "sonder": {
+    "art": "fx",
+    "fx": [
+     {
+      "op": "ballast",
+      "n": 1
+     }
+    ],
+    "t": "Mische 1 Ballast in deinen Ziehstapel"
+   },
+   "build": "ballast",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "S",
+    "E"
+   ],
+   "t": "Steine in die Taschen, damit der Wind dich nicht mitnimmt. Der Wind ist hier unten nicht das Schlimmste."
+  },
+  "muenzwurf": {
+   "n": "Münzwurf",
+   "c": 1,
+   "zoll": 5,
+   "atk": 8,
+   "build": "kollekte",
+   "rar": "gewoehnlich",
+   "stoffe": [
+    "G",
+    "L"
+   ],
+   "t": "Eine Münze, hart und flach geworfen. Sie kommt nicht zurück, aber sie trifft."
   }
  }
 }

@@ -12,8 +12,11 @@ function whyRx(r,prev,cur){
  const[a,b]=[...r.k];const self=cur.includes(a)&&cur.includes(b);const pa=prev.includes(a)&&cur.includes(b)?[a,b]:[b,a];
  return{n:r.n,t:r.t,keys:self?[a,b]:pa,src:self?'beide Stoffe stecken in dieser Karte':`${ST[pa[0]].n} von der Karte davor trifft ${ST[pa[1]].n}`,kind:''};}
 // Kosten einer Karte: Grundkosten + Aufpreis für zwei Stoffe, Boni, Pforten-Verzerrung (c.mod)
+// Unspielbare Karten kosten 0, wenn sie über Bord gehen können (Ballaststein); Zoll: 0 Energie, solange das Gold reicht
 function cardCost(c){
+ if(typeof werfbar==='function'&&werfbar(c))return 0;
  if(c.unspielbar||c.frost)return 99;
+ if(c.zoll&&(S.gold||0)>=c.zoll)return 0;
  if(c.opfer)return 0; // Opfer: zahlt Leben statt Energie
  if(c.x)return S.energy||0; // X: verbraucht alle Energie
  if(bonuses('stoff_free').some(b=>c.st.includes(b.stoff)))return 0;
@@ -51,6 +54,8 @@ function runFx(list,ctx={}){for(const f of list||[]){const tg=ctx.tg&&ctx.tg.hp>
   case'schleifen':case'kerbe':case'umritzen':S.pending=S.pending||[];S.pending.push({wahl:f.op});break;
   case'item_tausch':transformRandom(why);break;
   case'reliquie':{const p=reliquienPool();if(p.length)giveItem(rs('fund').pick(p),why);break;}
+  // Zugabe 4: n Ballast-Karten (unspielbar, stofflos, verbraucht) in Ziehstapel (wohin: stapel), Hand oder Ablage; nur im Kampf
+  case'ballast':ballastMischen(f.n||1,f.wohin||'stapel',f.karte,why);break;
   case'energie_dauer':S.energiePlus=(S.energiePlus||0)+(f.v||1);Bus.emit('energy',{v:f.v||1,why:why+': dauerhaft mehr Energie'});break;
   default:console.warn('Unbekannter Effekt',f);}}}
 function condOk(c){if(!c)return true;if(c.item&&!besitz().some(b=>b.it.id===c.item))return false;if(c.job&&S.job!==c.job)return false;if(c.event_gesehen&&!(S.stats.events||[]).includes(c.event_gesehen))return false;if(c.slot_below_max&&!(S.slots[c.slot_below_max]<BAL.max_slots))return false;if(c.gold_min&&S.gold<c.gold_min)return false;if(c.hp_min&&S.hp<c.hp_min)return false;return true;}

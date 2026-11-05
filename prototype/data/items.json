@@ -243,7 +243,7 @@
    "W"
   ],
   "hp": 2,
-  "spr": "oilcoat",
+  "spr": "coat",
   "rar": "gewoehnlich",
   "kerben": 1,
   "preis": 26,
@@ -1557,5 +1557,370 @@
   },
   "flavor": "Ein Gestell mit drei runden Gläsern. Das mittlere sitzt auf der Stirn, und es ist von innen beschlagen.",
   "cards": []
+ },
+ "ballaststein": {
+  "n": "Ballaststein der Henriette",
+  "a": "talisman",
+  "st": [
+   "S"
+  ],
+  "spr": "bone",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 150,
+  "eigen": {
+   "typ": "ballast_werfen",
+   "fx": [
+    {
+     "op": "damage",
+     "to": "all",
+     "v": 3
+    }
+   ],
+   "t": "Zu Kampfbeginn 3 Ballast in deinem Ziehstapel. Unspielbare Karten kosten 0: Du wirfst sie über Bord, jede macht 3 Schaden an allen Gegnern.",
+   "ballast_start": 3
+  },
+  "biom": "hafen",
+  "flavor": "Ein runder Feldstein aus dem Kielraum der Henriette. Die Mannschaft warf alles über Bord, nur ihn nicht. Gesunken ist sie trotzdem.",
+  "cards": [
+   {
+    "n": "Ballast laden",
+    "c": 1,
+    "blk": 5,
+    "sonder": {
+     "art": "fx",
+     "fx": [
+      {
+       "op": "ballast",
+       "n": 2
+      }
+     ],
+     "t": "Mische 2 Ballast in deinen Ziehstapel"
+    }
+   }
+  ]
+ },
+ "strandbuch": {
+  "n": "Das Strandbuch des Vogts",
+  "a": "talisman",
+  "st": [
+   "W"
+  ],
+  "spr": "bible",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "ballast_ziehen",
+   "v": 1,
+   "blk": 2,
+   "t": "Zu Kampfbeginn 3 „Strandgut“ (Ballast) in deinem Ziehstapel. Ziehst du eine unspielbare Karte, ziehst du eine nach und bekommst 2 Block (höchstens 4-mal je Zug).",
+   "ballast_start": 3,
+   "ballast_karte": "Strandgut"
+  },
+  "biom": "salz",
+  "flavor": "Der Strandvogt schrieb auf, was die See hergab: Fässer, Planken, einen Schuh. Auf den letzten Seiten steht dein Name, in seiner Schrift.",
+  "cards": [
+   {
+    "n": "Eintragen",
+    "c": 0,
+    "draw": 1,
+    "sonder": {
+     "art": "fx",
+     "fx": [
+      {
+       "op": "ballast",
+       "n": 1,
+       "karte": "Strandgut"
+      }
+     ],
+     "t": "Mische 1 „Strandgut“ in deinen Ziehstapel"
+    }
+   }
+  ]
+ },
+ "radiermesser": {
+  "n": "Radiermesser des Kopisten",
+  "a": "waffe",
+  "st": [
+   "E"
+  ],
+  "spr": "knife",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "ballast_staerke",
+   "v": 1,
+   "t": "Zu Kampfbeginn 2 Ballast in deinem Ziehstapel. Geht eine unspielbare Karte über Bord, bekommst du 1 Stärke (bis Kampfende).",
+   "ballast_start": 2
+  },
+  "biom": "kloster",
+  "flavor": "Bruder Anselm schabte damit falsche Zeilen vom Pergament, vierzig Jahre lang. Was er wegschabte, war danach nicht fort. Es war nur woanders.",
+  "cards": [
+   {
+    "n": "Ausschaben",
+    "c": 1,
+    "atk": 5,
+    "sonder": {
+     "art": "ueber_bord",
+     "max": 1,
+     "t": "Wirf 1 unspielbare Karte von der Hand über Bord"
+    }
+   }
+  ]
+ },
+ "leere_seiten": {
+  "n": "Gesangbuch mit leeren Seiten",
+  "a": "talisman",
+  "st": [
+   "G"
+  ],
+  "spr": "bible",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "ballast_block",
+   "v": 4,
+   "t": "Zu Kampfbeginn 2 „Leere Seiten“ (Ballast) in deinem Ziehstapel. Am Ende deines Zugs gibt jede unspielbare Karte auf deiner Hand 4 Block.",
+   "ballast_start": 2,
+   "ballast_karte": "Leere Seite"
+  },
+  "biom": "kapelle",
+  "flavor": "Gesangbuch Nr. 112 aus der Inselkirche. Die Lieder hat das Wasser herausgewaschen, die Nummern stehen noch. Sonntags singt die Gemeinde sie trotzdem, in die Stille hinein.",
+  "cards": [
+   {
+    "n": "Aufschlagen",
+    "c": 0,
+    "draw": 1,
+    "sonder": {
+     "art": "fx",
+     "fx": [
+      {
+       "op": "ballast",
+       "n": 1,
+       "karte": "Leere Seite"
+      }
+     ],
+     "t": "Mische 1 „Leere Seite“ in deinen Ziehstapel"
+    }
+   }
+  ]
+ },
+ "bleiguertel": {
+  "n": "Bleigürtel des Tauchers",
+  "a": "kleidung",
+  "st": [
+   "E"
+  ],
+  "spr": "gloves",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 30,
+  "flavor": "Acht Bleiplatten auf Segeltuch. Man löst ihn, wenn man nach oben will. Der Haken ist verbogen, als hätte es jemand lange versucht.",
+  "cards": [
+   {
+    "n": "Gewichte lösen",
+    "c": 1,
+    "blk": 6,
+    "sonder": {
+     "art": "ueber_bord",
+     "max": 1,
+     "draw": 1,
+     "t": "Wirf 1 unspielbare Karte von der Hand über Bord und ziehe 1"
+    }
+   }
+  ]
+ },
+ "opferstock": {
+  "n": "Schlüssel zum Opferstock",
+  "a": "talisman",
+  "st": [
+   "G"
+  ],
+  "spr": "watch",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "gold_block",
+   "je": 15,
+   "max": 6,
+   "t": "Zu Beginn jedes Zugs 1 Block je 15 Gold, das du trägst (höchstens 6)."
+  },
+  "biom": "kapelle",
+  "flavor": "Der Küster trug ihn um den Hals, an einer Schnur aus Kerzenwachs. Was im Opferstock liegt, gehört dem, der aufschließt. So stand es nirgends geschrieben.",
+  "cards": [
+   {
+    "n": "Aufschließen",
+    "c": 0,
+    "gold": 6,
+    "verbraucht": true
+   }
+  ]
+ },
+ "faehrgeld": {
+  "n": "Fährgeld",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "harefoot",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 160,
+  "eigen": {
+   "typ": "faehrgeld",
+   "preis": 35,
+   "leben": 14,
+   "t": "Würdest du sterben, zahlst du 35 Gold und stehst mit 14 Leben wieder auf (einmal je Kampf)."
+  },
+  "biom": "ufer",
+  "flavor": "Zwei abgegriffene Groschen, wie man sie Toten auf die Lider legt. Der Fährmann nimmt sie jedes Mal. Und jedes Mal setzt er dich am selben Ufer wieder ab.",
+  "cards": []
+ },
+ "geldkatze": {
+  "n": "Geldkatze",
+  "a": "kleidung",
+  "st": [
+   "L"
+  ],
+  "spr": "coat",
+  "rar": "gewoehnlich",
+  "kerben": 1,
+  "preis": 30,
+  "flavor": "Ein Ledergurt mit Münzfach, unter dem Hemd getragen. Er ist warm, auch wenn du es nicht bist.",
+  "cards": [
+   {
+    "n": "Bezahlen",
+    "c": 1,
+    "zoll": 6,
+    "blk": 9
+   }
+  ]
+ },
+ "pfennigstrumpf": {
+  "n": "Strumpf voller Pfennige",
+  "a": "waffe",
+  "st": [
+   "E"
+  ],
+  "spr": "bottle",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 150,
+  "eigen": {
+   "typ": "gold_schaden",
+   "je": 20,
+   "max": 6,
+   "t": "Deine Angriffe machen +1 Schaden je 20 Gold, das du trägst (höchstens +6)."
+  },
+  "biom": "stadt",
+  "flavor": "Ein grauer Wollstrumpf, prall mit Kupferpfennigen, oben verknotet. Alle Münzen tragen dasselbe Jahr. Es ist dieses.",
+  "cards": [
+   {
+    "n": "Einkassieren",
+    "c": 1,
+    "atk": 5,
+    "gold": 3
+   }
+  ]
+ },
+ "heuerbeutel": {
+  "n": "Heuerbeutel eines Ertrunkenen",
+  "a": "talisman",
+  "st": [
+   "W"
+  ],
+  "spr": "shell",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "gold_je_tod",
+   "v": 7,
+   "t": "Fällt ein Gegner, bekommst du 7 Gold."
+  },
+  "biom": "hafen",
+  "flavor": "Ein Lederbeutel mit der Heuer für eine Fahrt, von der keiner zurückkam. Das Geld darin ist nass und wird nicht weniger.",
+  "cards": [
+   {
+    "n": "Nachzählen",
+    "c": 0,
+    "draw": 1,
+    "gold": 2
+   }
+  ]
+ },
+ "korkweste": {
+  "n": "Korkweste der Seenotretter",
+  "a": "kleidung",
+  "st": [
+   "W"
+  ],
+  "spr": "coat",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 140,
+  "eigen": {
+   "typ": "ballast_werfen",
+   "fx": [
+    {
+     "op": "block",
+     "v": 4
+    }
+   ],
+   "t": "Zu Kampfbeginn 2 Ballast in deinem Ziehstapel. Unspielbare Karten kosten 0: Du wirfst sie über Bord, jede gibt 4 Block.",
+   "ballast_start": 2
+  },
+  "biom": "leuchtturm",
+  "flavor": "Zwölf Korkblöcke in Segeltuch, mit Teer verfugt. Sie trägt jeden, sagen die Seenotretter. Sie sagen nicht, wohin.",
+  "cards": [
+   {
+    "n": "Festzurren",
+    "c": 1,
+    "blk": 7,
+    "sonder": {
+     "art": "fx",
+     "fx": [
+      {
+       "op": "ballast",
+       "n": 1
+      }
+     ],
+     "t": "Mische 1 Ballast in deinen Ziehstapel"
+    }
+   }
+  ]
+ },
+ "pfandschein": {
+  "n": "Pfandschein Nr. 1925",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "tarot",
+  "rar": "reliquie",
+  "kerben": 2,
+  "preis": 150,
+  "eigen": {
+   "typ": "gold_energie",
+   "ab": 80,
+   "v": 1,
+   "t": "Trägst du zu Beginn deines Zugs mindestens 80 Gold, hast du 1 Energie mehr."
+  },
+  "biom": "stadt",
+  "flavor": "Städtisches Leihhaus, Schein Nummer 1925. Was verpfändet wurde, steht nicht darauf. Die Frist ist lange abgelaufen, aber man hat dich nicht vergessen.",
+  "cards": [
+   {
+    "n": "Einlösen",
+    "c": 2,
+    "zoll": 12,
+    "en": 2,
+    "draw": 1,
+    "verbraucht": true
+   }
+  ]
  }
 }

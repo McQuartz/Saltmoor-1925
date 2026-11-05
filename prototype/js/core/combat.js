@@ -38,21 +38,26 @@ function aufstellen(list){const r=rs('aufstellung');const n=list.length;
 
 function startFight(ids,art='kampf'){
  S.enemies=ids.map((id,i)=>mkEnemy(id,i));aufstellen(S.enemies);
- S.kampfArt=art;S.target=0;S.phase='fight';S.chainLog=[];S.pstr=passive('start_staerke').reduce((s,p)=>s+(p.v||1),0);S.vorrat=0;S.blockVorher=0;S.frost=null;S.turnNo=0;S.draw=buildDeck();S.hand=[];S.discard=[];S.exhaust=[];S.ward=0;S.compassUsed=false;S.kampfLog=[];
+ S.kampfArt=art;S.target=0;S.phase='fight';S.chainLog=[];S.pstr=passive('start_staerke').reduce((s,p)=>s+(p.v||1),0);S.vorrat=0;S.blockVorher=0;S.frost=null;S.turnNo=0;S.draw=buildDeck();S.hand=[];S.discard=[];S.exhaust=[];S.ward=0;S.compassUsed=false;S.kampfLog=[];S.faehrgeld=false;S.ballastWeg=0;
  const pb=passive('start_block').reduce((s,p)=>s+p.v,0);
  log(`Tiefe ${S.depth}: ${S.enemies.map(e=>e.n).join(', ')}`);
  Bus.emit('fight_start',{art,ids,why:`${RUN.knoten[art==='schwer'?'kampf_schwer':art]?.n||art} auf Tiefe ${S.depth} (${biom().kurz}), Gegner aus dem Biom per Seed`});
  const vs=passive('verwundbar_start').reduce((s,p)=>s+(p.v||1),0);if(vs)S.enemies.forEach(e=>{e.vuln+=vs;});
+ // Ballast-Reliquien (eigen.ballast_start): n unspielbare Karten in den Ziehstapel, bevor die erste Hand gezogen wird
+ allActive().forEach(it=>{const e=def(it).eigen;if(e&&e.ballast_start)ballastMischen(e.ballast_start,'stapel',e.ballast_karte,def(it).n);});
  startTurn();if(pb){S.block+=pb;Bus.emit('player_block',{v:pb,why:'Eigenschaft: Block zu Kampfbeginn'});}
  passive('kampfstart_fx').forEach(p=>runFx(p.fx,{why:'Eigenschaft zu Kampfbeginn'}));}
-// Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), übrige Energie (energie_bleibt)
-function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0);}
+// Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), Pfandschein (gold_energie: ab p.ab Gold), übrige Energie (energie_bleibt)
+function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0)+passive('gold_energie').reduce((s,p)=>s+((S.gold||0)>=(p.ab||100)?(p.v||1):0),0);}
 
-function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=rs('kampf').shuffle(S.discard);S.discard=[];}S.hand.push(S.draw.pop());}}
+function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=rs('kampf').shuffle(S.discard);S.discard=[];}const c=S.draw.pop();S.hand.push(c);
+ // Eigenschaft ballast_ziehen (Strandbuch): eine unspielbare Karte gezogen → eine nach und Block, höchstens 4-mal je Zug
+ if(c.unspielbar&&S.phase==='fight'){const bz=passive('ballast_ziehen');if(bz.length&&(S.bzZug||0)<4){S.bzZug=(S.bzZug||0)+1;n+=bz.reduce((s,p)=>s+(p.v||1),0);const b=bz.reduce((s,p)=>s+(p.blk||0),0);if(b)addBlock(b,`Strandbuch: „${c.n}“ gezogen, ${b} Block und eine Karte nach`);}}}}
 function handSize(){return Math.max(BAL.hand_size,...bonuses('hand_size').map(b=>b.amount))+passive('hand_plus').reduce((s,p)=>s+(p.v||1),0)-passive('energie_plus').filter(p=>p.preis==='hand').length;}
-function startTurn(){S.rxZug=passive('kette_start').reduce((s,p)=>s+(p.v||1),0);S.joker=null;S.vorherKarte=null;if(S.stats&&!DRY)S.stats.zuege=(S.stats.zuege||0)+1;
+function startTurn(){S.rxZug=passive('kette_start').reduce((s,p)=>s+(p.v||1),0);S.bzZug=0;S.joker=null;S.vorherKarte=null;if(S.stats&&!DRY)S.stats.zuege=(S.stats.zuege||0)+1;
  // Block: verfällt, außer Bannkreis (ward) und Eigenschaft block_haelt_halb
  const halb=passive('block_haelt_halb').length?Math.floor((S.block||0)/2):0;S.block=S.ward+halb;S.ward=0;
+ const gbk=goldStufe('gold_block');if(gbk){S.block+=gbk;Bus.emit('player_block',{v:gbk,why:`Opferstock: ${gbk} Block für ${S.gold} Gold im Beutel`});}
  const bleibt=Math.min(S.vorrat||0,passive('energie_bleibt').reduce((s,p)=>s+(p.v||1),0));S.energy=energieJeZug()+bleibt;S.vorrat=0;
  S.last=[];S.played=0;S.hochUsed=new Set();S.hochZahl=0;S.turnNo=(S.turnNo||0)+1;
  drawCards(handSize());
@@ -72,6 +77,7 @@ function hit(e,dmg,k=1,col,why=''){if(!e||e.hp<=0)return 0;const pu=e.pat&&e.pat
 // Was beim Tod eines Gegners passiert: Kniff „nachlass“, Eigenschaft brand_springt
 function nachTod(e,brand){const k=e.kniff;
  if(e.wandert&&e.poison>0){const z=alive().sort((a,b)=>a.poison-b.poison)[0];if(z){z.poison+=e.poison;z.wandert=true;Bus.emit('enemy_status',{e:z,status:'poison',why:`Ansteckung: Gift ${e.poison} wandert von ${e.n} zu ${z.n}`});}}
+ passive('gold_je_tod').forEach(p=>{const v=p.v||5;S.gold+=v;if(S.stats&&!DRY)S.stats.gold=(S.stats.gold||0)+v;Bus.emit('gold',{v,why:`Lohntüte: ${e.n} fällt, +${v} Gold`});});
  if(brand>0&&passive('brand_springt').length){alive().forEach(o=>{o.burn+=brand;Bus.emit('enemy_status',{e:o,status:'burn',why:`Brand springt über: ${e.n} stirbt mit Brand ${brand}`});});}
  if(!k||k.art!=='nachlass')return;
  if(k.was==='explodiert'){const v=k.v||5;const ab=Math.min(S.block,v);S.block-=ab;S.hp=Math.max(1,S.hp-(v-ab));Bus.emit('player_hurt',{v:v-ab,e,why:`${e.n} zerplatzt (Nachlass): ${v} Schaden, Block fängt ${ab}`});}
@@ -87,20 +93,24 @@ function checkVictory(delay=900){if(DRY)return;if(!alive().length&&!busy&&S.phas
 // Gibt je Gegner {d (Lebensverlust), ab (verlorener Block)} und für den Spieler {block, heal, self} zurück. Gleiche Rechnung wie das echte Spielen.
 function previewCard(i,ei){const keep=S,kb=busy,kf=FAST,ku=uidc;let out=null;
  try{S=structuredClone(S);busy=false;FAST=true;DRY=true;Bus.muted=true;
-  const before=S.enemies.map(e=>({hp:e.hp,block:e.block,poison:e.poison,burn:e.burn,vuln:e.vuln||0,weak2:e.weak2}));const p0={hp:S.hp,block:S.block,en:S.energy,str:S.pstr||0};
+  const before=S.enemies.map(e=>({hp:e.hp,block:e.block,poison:e.poison,burn:e.burn,vuln:e.vuln||0,weak2:e.weak2}));const p0={hp:S.hp,block:S.block,en:S.energy,str:S.pstr||0,gold:S.gold||0};
   playCard(i,ei);
-  out={foes:S.enemies.map((e,k)=>({d:before[k]?before[k].hp-e.hp:0,ab:before[k]?Math.max(0,before[k].block-e.block):0,kill:!!before[k]&&before[k].hp>0&&e.hp<=0,gift:before[k]?e.poison-before[k].poison:0,brand:before[k]?e.burn-before[k].burn:0,vuln:before[k]?(e.vuln||0)-before[k].vuln:0,weak:before[k]?!!e.weak2&&!before[k].weak2:false,hp:e.hp})),block:S.block-p0.block,hp:S.hp-p0.hp,energy:S.energy-p0.en,str:(S.pstr||0)-p0.str,rx:S.chainLog.length?S.chainLog[S.chainLog.length-1].rx:[]};
+  out={foes:S.enemies.map((e,k)=>({d:before[k]?before[k].hp-e.hp:0,ab:before[k]?Math.max(0,before[k].block-e.block):0,kill:!!before[k]&&before[k].hp>0&&e.hp<=0,gift:before[k]?e.poison-before[k].poison:0,brand:before[k]?e.burn-before[k].burn:0,vuln:before[k]?(e.vuln||0)-before[k].vuln:0,weak:before[k]?!!e.weak2&&!before[k].weak2:false,hp:e.hp})),block:S.block-p0.block,hp:S.hp-p0.hp,energy:S.energy-p0.en,str:(S.pstr||0)-p0.str,gold:(S.gold||0)-p0.gold,rx:S.chainLog.length?S.chainLog[S.chainLog.length-1].rx:[]};
  }catch(err){console.warn('Vorschau',err);}
  finally{S=keep;busy=kb;FAST=kf;DRY=false;Bus.muted=false;uidc=ku;}return out;}
 
 function playCard(i,ei){
  if(S.phase!=='fight'||busy)return false;const c=S.hand[i];if(!c)return false;const cost=cardCost(c);
+ // Ballaststein (ballast_werfen): unspielbare Karten gehen für 0 über Bord und lösen die fx der Eigenschaft aus. Kein Stoff, keine Reaktion, zählt nicht als gespielte Karte.
+ if(werfbar(c)){if(ei!=null&&S.enemies[ei]&&S.enemies[ei].hp>0)S.target=ei;ueberBord(c,'geworfen');passive('ballast_werfen').forEach(p=>runFx(p.fx,{tg:tgt(),why:`Ballaststein: „${c.n}“ über Bord`}));Bus.emit('changed');checkVictory();return true;}
  if(c.unspielbar||c.frost){Bus.emit('bad',{a:'UNSPIELBAR',b:c.frost?'Eingefroren für diesen Zug':c.n});return false;}
  if(S.energy<cost){Bus.emit('no_energy');Bus.emit('changed');return false;}
  if(ei!=null&&S.enemies[ei]&&S.enemies[ei].hp>0)S.target=ei;
  const first=S.played===0;if(first&&S.turnNo===1&&passive('erste_karte_billiger').length)S.compassUsed=true;
+ const zoll=c.zoll&&S.gold>=c.zoll?c.zoll:0; // Zoll: zahlt Gold statt Energie
  const xMal=c.x?S.energy:0;S.energy-=cost;S.hand.splice(i,1);if(c.verbraucht)S.exhaust.push(c);else S.discard.push(c);S.played++;
  if(c.opfer){zahleLeben(c.opfer,`${c.n}: Opfer ${c.opfer} statt Energie`);}
+ if(zoll){S.gold-=zoll;if(S.stats&&!DRY)S.stats.zoll=(S.stats.zoll||0)+zoll;Bus.emit('gold',{v:-zoll,why:`${c.n}: Zoll ${zoll} Gold statt Energie`});}
  const e=tgt();const vorher=S.joker?[...new Set([...S.last,...S.joker])]:S.last;const rx=reactionsFor(vorher,c.st);const ctx={tg:e,card:c};
  Bus.emit('card_played',{c,e,why:`${c.n} (${c.src}) gespielt, kostet ${cost}`+(c.st.length?`, Stoff ${c.st.map(k=>ST[k].n).join(' + ')}`:', ohne Stoff')});
  let mult=1;const multWhy=[];rx.forEach(r=>{if(r.pre&&r.pre.mult){mult*=r.pre.mult;multWhy.push(`${r.n} ×${r.pre.mult}`);}});
@@ -138,10 +148,10 @@ function applyMain(c,ctx,mult,flat,multWhy=[],kette=0){
  if(c.strip&&t0){t0.block=0;Bus.emit('enemy_status',{e:t0,status:'block_weg',why:`${c.n}: Block von ${t0.n} zerbricht`});} // vor dem Schaden
  if(c.self){zahleLeben(c.self,`${c.n} kostet ${c.self} Leben`);}
  if(c.vuln&&t0){t0.vuln=(t0.vuln||0)+c.vuln;Bus.emit('enemy_status',{e:t0,status:'vuln',why:`${c.n}: ${t0.n} verwundbar ${c.vuln} Züge (+50 % Schaden)`});}
- const sb=c.sonder&&c.sonder.art==='schaden_gleich_block';const atk=c.atk||sb?(c.atk||0)+(c.atk?kette:0)+sonderAtk(c,t0):0;
+ const sb=c.sonder&&(c.sonder.art==='schaden_gleich_block'||c.sonder.art==='ueber_bord'&&c.sonder.je);const atk=c.atk||sb?(c.atk||0)+(c.atk?kette:0)+sonderAtk(c,t0):0;
  if(atk){let hits=c.h||1;if(hits>1&&passive('mehrfach_plus1').length){hits++;multWhy=[...multWhy,'Patronengurt: ein Treffer mehr'];}
   for(let h=0;h<hits;h++){const targets=c.all?alive():[ctx.tg&&ctx.tg.hp>0?ctx.tg:alive()[0]];
-   const go=()=>targets.forEach(en=>{if(!en||en.hp<=0)return;const pstr=S.pstr||0;let d=(atk+flat+pstr)*mult;const parts=[`${c.n} ${c.atk}`];if(kette)parts.push(`Kette +${kette}`);if(flat)parts.push(`Fischer-Bonus +${flat}`);if(pstr)parts.push(`Stärke +${pstr}`);if(mult!==1)parts.push(multWhy.join(', ')||`×${mult}`);
+   const go=()=>targets.forEach(en=>{if(!en||en.hp<=0)return;const pstr=S.pstr||0,gb=goldStufe('gold_schaden');let d=(atk+flat+pstr+gb)*mult;const parts=[`${c.n} ${c.atk||atk}`];if(kette)parts.push(`Kette +${kette}`);if(gb)parts.push(`Klingelbeutel +${gb} (${S.gold} Gold)`);if(flat)parts.push(`Fischer-Bonus +${flat}`);if(pstr)parts.push(`Stärke +${pstr}`);if(mult!==1)parts.push(multWhy.join(', ')||`×${mult}`);
      if(en.weak&&c.st.includes(en.weak)){d*=1.5;parts.push(`Schwachstelle ${ST[en.weak].n} ×1,5`);Bus.emit('weakspot',{e:en});}
      else if(en.weak)parts.push(`keine Schwachstelle (${en.n} ist schwach gegen ${ST[en.weak].n})`);
      if(en.vuln>0){d*=1.5;parts.push('verwundbar ×1,5');}
@@ -161,13 +171,15 @@ function applyMain(c,ctx,mult,flat,multWhy=[],kette=0){
  if(c.weak&&t){t.weak2=1;Bus.emit('enemy_status',{e:t,status:'weak',why:`${c.n}: ${t.n} geschwächt`});}
  if(c.sonder)sonderWirkung(c,t,mult);
  if(c.draw)drawCards(c.draw);
- if(c.en){S.energy+=c.en;Bus.emit('energy',{v:c.en,why:c.n});}}
+ if(c.en){S.energy+=c.en;Bus.emit('energy',{v:c.en,why:c.n});}
+ if(c.gold){S.gold+=c.gold;if(S.stats&&!DRY)S.stats.gold=(S.stats.gold||0)+c.gold;Bus.emit('gold',{v:c.gold,why:`${c.n}: +${c.gold} Gold`});}}
 // Leben zahlen (Opfer, Karten mit self, Reaktion Opfer); Eigenschaft opfer_staerke gibt dafür Stärke
 function zahleLeben(v,why){S.hp=Math.max(1,S.hp-v);Bus.emit('self_damage',{v,why});if(passive('opfer_staerke').length){S.pstr=(S.pstr||0)+1;Bus.emit('player_buff',{v:1,why:'Herz im Glas: Leben gezahlt, Stärke +1'});}}
 // Sonderwirkungen der Handgriffe (docs/auftrag-2/handgriffe.md, 12 Arten)
 function sonderAtk(c,t){const s=c.sonder;if(!s)return 0;
  if(s.art==='schaden_gleich_block')return Math.floor((S.block||0)*(s.anteil||1));
  if(s.art==='schaden_je_fehlleben')return Math.floor((maxHp()-S.hp)/(s.je||5));
+ if(s.art==='ueber_bord'&&s.je)return s.je*Math.min(s.max||99,S.hand.filter(x=>x.unspielbar).length);
  return 0;}
 function sonderWirkung(c,t,mult){const s=c.sonder;if(!s)return;const why=`${c.n}: Sonderwirkung`;
  if(s.art==='fx')runFx(s.fx,{tg:t,why:`${c.n}`});
@@ -176,7 +188,27 @@ function sonderWirkung(c,t,mult){const s=c.sonder;if(!s)return;const why=`${c.n}
  if(s.art==='block_verdoppeln'){const v=S.block;S.block*=2;Bus.emit('player_block',{v,why:`${c.n}: Block verdoppelt auf ${S.block}`});}
  if(s.art==='gift_wandert'&&t){t.wandert=true;Bus.emit('enemy_status',{e:t,status:'poison',why:`${c.n}: stirbt ${t.n}, wandert das Gift weiter`});}
  if(s.art==='stoff_joker'){S.jokerNaechste=true;Bus.emit('toast',{a:'GEGENLAUF',b:'Die nächste Karte reagiert auch mit der Karte davor'});}
+ if(s.art==='ueber_bord'){const l=S.hand.filter(x=>x.unspielbar).slice(0,s.max||99);l.forEach(x=>ueberBord(x,c.n));if(s.draw&&l.length)drawCards(s.draw);}
  if(s.art==='wiederholen'&&S.vorherKarte&&!S.wiederholt){const v=S.vorherKarte;S.wiederholt=true;Bus.emit('toast',{a:'NOCH EINMAL',b:v.n});applyMain(v,{tg:t},1,0,[`${c.n}: wiederholt`]);S.wiederholt=false;}}
+
+// ---------- Zugabe 4: Ballast und Kollekte (docs/auftrag-2/builds.md Abschnitt 7 und 8) ----------
+// Ballast: unspielbare Karten (eigener Ballast, Abschriften und Störkarten der Gegner, Zittern) als Treibstoff
+function ballastKarte(name,quelle){const n=name||'Ballast';return{n,c:0,unspielbar:true,ballast:true,st:[],src:quelle||n,spr:'bone',img:typeof itemBild==='function'?itemBild(({'Leere Seite':'leere_seiten','Strandgut':'strandbuch'})[n]||'ballaststein'):'',cid:'stoer'+(++uidc),verbraucht:true};}
+// n Ballast-Karten in Ziehstapel (an zufällige Stelle per Seed), Hand oder Ablage
+function ballastMischen(n,wohin,name,why){if(S.phase!=='fight')return;for(let i=0;i<n;i++){const k=ballastKarte(name,why);if(wohin==='hand')S.hand.push(k);else if(wohin==='ablage')S.discard.push(k);else S.draw.splice(rs('kampf').int(0,S.draw.length),0,k);}
+ Bus.emit('ballast',{n,wohin,why:`${why?why+': ':''}${n}× „${name||'Ballast'}“ in ${wohin==='hand'?'die Hand':wohin==='ablage'?'den Ablagestapel':'den Ziehstapel'}`});}
+// Lässt sich diese Karte über Bord werfen (Eigenschaft ballast_werfen)? Eingefrorene nicht.
+function werfbar(c){return !!(c&&c.unspielbar&&!c.frost&&S.phase==='fight'&&passive('ballast_werfen').length);}
+// Eine unspielbare Karte von der Hand über Bord: für den Rest des Kampfes weg; Radiermesser (ballast_staerke) gibt Stärke
+function ueberBord(c,why){const i=S.hand.indexOf(c);if(i<0)return false;S.hand.splice(i,1);S.exhaust.push(c);S.ballastWeg=(S.ballastWeg||0)+1;if(S.stats&&!DRY)S.stats.ballast=(S.stats.ballast||0)+1;
+ Bus.emit('ueber_bord',{c,why:`„${c.n}“ geht über Bord${why?' ('+why+')':''}`});
+ passive('ballast_staerke').forEach(p=>{const v=p.v||1;S.pstr=(S.pstr||0)+v;Bus.emit('player_buff',{v,why:`Radiermesser: „${c.n}“ über Bord, Stärke +${v} (jetzt ${S.pstr})`});});return true;}
+// Kollekte: Stufe einer Gold-Eigenschaft (gold_schaden, gold_block) = 1 je p.je Gold, höchstens p.max
+function goldStufe(typ){return passive(typ).reduce((s,p)=>s+Math.min(p.max||5,Math.floor(Math.max(0,S.gold||0)/(p.je||25))),0);}
+// Fährgeld: Würdest du sterben, zahlst du p.preis Gold und stehst mit p.leben Leben wieder auf (einmal je Kampf). true = gerettet.
+function faehrgeld(){if(S.hp>0||S.faehrgeld||S.phase!=='fight')return false;const p=passive('faehrgeld')[0];if(!p)return false;const preis=p.preis||40;if((S.gold||0)<preis)return false;
+ S.gold-=preis;S.faehrgeld=true;S.hp=Math.min(maxHp(),p.leben||8);if(S.stats&&!DRY)S.stats.faehrgeld=(S.stats.faehrgeld||0)+1;
+ Bus.emit('gold',{v:-preis,why:`Fährgeld: ${preis} Gold für den Fährmann`});Bus.emit('player_heal',{v:S.hp,why:`Fährgeld: Der Fährmann nimmt ${preis} Gold und bringt dich mit ${S.hp} Leben zurück (einmal je Kampf)`});Bus.emit('toast',{a:'FÄHRGELD',b:`${preis} Gold · ${S.hp} Leben`});return true;}
 
 // Kniffe der Gegner (paket-format.md): beim Treffer, zu Zugbeginn des Spielers, im Gegnerzug
 function kniffBeimTreffer(en){const k=en.kniff;if(!k)return;
@@ -219,12 +251,13 @@ function incoming(){let tot=0;for(const en of alive()){if(en.kniff&&en.kniff.art
 
 function endTurn(){
  if(S.phase!=='fight'||busy)return;busy=true;S.vorrat=S.energy;
+ const bb=passive('ballast_block').reduce((s,p)=>s+(p.v||2),0),bz=S.hand.filter(c=>c.unspielbar).length;if(bb&&bz)addBlock(bb*bz,`Gesangbuch: ${bz} unspielbare Karte(n) auf der Hand, je ${bb} Block`);
  let bleib=S.hand.filter(c=>c.behalten&&!c.unspielbar);
  if(passive('behalten_eine').length){const rest=S.hand.filter(c=>!bleib.includes(c)&&!c.unspielbar).sort((a,b)=>cardCost(b)-cardCost(a));if(rest[0])bleib=[...bleib,rest[0]];}
  bleib.forEach(c=>{if(c.sonder&&c.sonder.art==='zugende_hand')runFx(c.sonder.fx,{tg:alive()[0],why:`${c.n} am Zugende auf der Hand`});});S.discard.push(...S.hand.filter(c=>!bleib.includes(c)).filter(c=>!(c.unspielbar&&c.verbraucht&&c.cid&&String(c.cid).startsWith('stoer')&&c.hand)));S.hand=bleib;S.hand.forEach(c=>{c.frost=false;c.teuer=0;});S.discard.forEach(c=>{c.frost=false;c.teuer=0;});S.behaltenNaechster=bleib.length;Bus.emit('changed');
  const list=alive();let i=0;
  const step=()=>{
-  if(S.hp<=0){busy=false;return runLost();}
+  if(S.hp<=0&&!faehrgeld()){busy=false;return runLost();}
   if(i>=list.length){S.enemies.forEach(en=>{en.pi++;en.turns++;});specials();busy=false;if(!alive().length){checkVictory(700);return;}startTurn();return;}
   const en=list[i++];if(en.hp<=0){step();return;}
   // Brand tickt und halbiert sich (Eigenschaft brand_haelt: nur −1); Gift tickt und sinkt um 1 (gift_doppelt: tickt zweimal)
@@ -237,7 +270,7 @@ function endTurn(){
    const einer=()=>{nr++;let d=it.v+en.str;if(halb)d=Math.floor(d/2);const ab=Math.min(S.block,d);S.block-=ab;abs+=ab;d-=ab;S.hp=Math.max(0,S.hp-d);tot+=d;S.stats.schadenRein=(S.stats.schadenRein||0)+d;
     const letzter=nr>=hits;const why=`${en.n} greift an${hits>1?` (Treffer ${nr} von ${hits})`:''}: ${it.v}${en.str?' +'+en.str+' Stärke':''}${halb?', geschwächt halbiert':''}; Block fängt ${ab}; du verlierst ${d}`;
     Bus.emit(d>0?'player_hurt':'player_blocked',{v:d,e:en,nr,von:hits,letzter,why});Bus.emit('changed');
-    if(S.hp<=0){busy=false;return runLost();}
+    if(S.hp<=0&&!faehrgeld()){busy=false;return runLost();}
     if(!letzter){wait(W.mehrfach_abstand_ms||120,einer);return;}
     if(en.weak2)en.weak2=0;log(`${en.n} trifft: ${tot}`);kniffNachAngriff(en,tot);kniffGegnerzug(en);if(en.vuln>0)en.vuln--;Bus.emit('changed');wait(560,step);};
    wait(W.anlauf_gegner_ms||330,einer);return;}

@@ -226,13 +226,17 @@ function loadRun(){let o;try{o=JSON.parse(localStorage.getItem(SAVE_KEY));}catch
  if(S.phase==='knoten'&&S.cur)enterNode(S.cur);else genWeg();
  Bus.emit('load',{why:`Run fortgesetzt (Seed ${S.seed}, Tiefe ${S.depth})`});return true;}
 
-// Welcher der sechs Builds (04-deckbau.md Abschnitt 7) passt am ehesten zum Deck? Grobe Zählung über Stoffe und Wirkungen.
-function buildArchetyp(){const z={glutnest:0,brackwasser:0,bollwerk:0,aderlass:0,kettenwerk:0,hagel:0};const st=new Set();
+// Welcher der acht Builds (04-deckbau.md Abschnitt 7, builds.md Abschnitt 7–8) passt am ehesten zum Deck? Grobe Zählung über Stoffe und Wirkungen.
+function buildArchetyp(){const z={glutnest:0,brackwasser:0,bollwerk:0,aderlass:0,kettenwerk:0,hagel:0,ballast:0,kollekte:0};const st=new Set();
+ // Ballast und Kollekte (Zugabe 4) zählen nur über eigene Merkmale: Ballast erzeugen oder abwerfen, Zoll und Gold, und ihre Reliquien
+ const BALLAST=c=>c.sonder&&(c.sonder.art==='ueber_bord'||(c.sonder.fx||[]).some(f=>f.op==='ballast'));
  for(const it of allActive()){const D=def(it);D.st.forEach(k=>st.add(k));const ks=[...D.cards,...((it.hg||[]).map(id=>HANDGRIFFE[id]).filter(Boolean))];
+  const e=D.eigen&&D.eigen.typ;if(e&&/^ballast_/.test(e))z.ballast+=8;if(e&&['gold_schaden','gold_block','gold_je_tod','faehrgeld','gold_energie'].includes(e))z.kollekte+=8;
+  for(const c of ks){if(c.unspielbar)z.ballast+=1;if(BALLAST(c))z.ballast+=3.5;if(c.zoll)z.kollekte+=3.5;if(c.gold)z.kollekte+=3;}
   for(const c of ks){const s=D.st;if(c.burn||s.includes('F'))z.glutnest+=1+(c.burn||0)/2;if(c.poison||s.includes('V'))z.brackwasser+=1+(c.poison||0)/2;
    if(c.blk&&(s.includes('G')||s.includes('S')))z.bollwerk+=1+c.blk/6;if(c.self||c.opfer||s.includes('B'))z.aderlass+=1.2;if(c.funke||c.kette)z.kettenwerk+=1.5;if((c.h||1)>1||c.str||c.vuln||s.includes('E'))z.hagel+=1+((c.h||1)-1)*.6;}}
  z.kettenwerk+=Math.max(0,st.size-3)*1.5;const best=Object.entries(z).sort((a,b)=>b[1]-a[1])[0];
- const N={glutnest:'Glutnest',brackwasser:'Brackwasser',bollwerk:'Bollwerk',aderlass:'Aderlass',kettenwerk:'Kettenwerk',hagel:'Hagel'};return{id:best[0],n:N[best[0]],werte:z};}
+ const N={glutnest:'Glutnest',brackwasser:'Brackwasser',bollwerk:'Bollwerk',aderlass:'Aderlass',kettenwerk:'Kettenwerk',hagel:'Hagel',ballast:'Ballast',kollekte:'Kollekte'};return{id:best[0],n:N[best[0]],werte:z};}
 
 // ---------- Handgriffe und Kerben (04-deckbau.md Abschnitt 2, 6, 8) ----------
 function handgriffPool(rar){return Object.keys(HANDGRIFFE).filter(id=>{const H=HANDGRIFFE[id];return !H.unspielbar&&!H.start&&(!rar||rar==='mix'||(H.rar||'gewoehnlich')===rar);});}

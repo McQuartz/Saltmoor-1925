@@ -35,7 +35,9 @@
    "poker",
    "boardaxe",
    "sealskin",
-   "deepscale"
+   "deepscale",
+   "bleiguertel",
+   "geldkatze"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -177,7 +179,8 @@
    "robe",
    "cross",
    "holywater",
-   "cultmask"
+   "cultmask",
+   "geldkatze"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -249,7 +252,8 @@
    "silverknife",
    "saltgun",
    "dynamite",
-   "smellingsalts"
+   "smellingsalts",
+   "bleiguertel"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -318,7 +322,8 @@
    "watch",
    "tartorch",
    "bloodrosary",
-   "swordcane"
+   "swordcane",
+   "geldkatze"
   ],
   "ereignisse": [],
   "kraemer": {

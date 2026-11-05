@@ -206,6 +206,74 @@
     "E",
     "F"
    ]
+  },
+  "ballast": {
+   "items": [
+    "ballaststein",
+    "radiermesser",
+    "strandbuch",
+    "leere_seiten",
+    "korkweste",
+    "bleiguertel",
+    "anchorchain",
+    "holywater",
+    "divinghelm",
+    "salt",
+    "knife",
+    "collar",
+    "bible",
+    "cultmask"
+   ],
+   "handgriffe": [
+    "beschweren",
+    "standhalten",
+    "gegenstemmen",
+    "kanzelschlag",
+    "nachladen",
+    "rundumschlag",
+    "atemholen",
+    "umsehen",
+    "nachsetzen"
+   ],
+   "stoffe": [
+    "S",
+    "E",
+    "G",
+    "W"
+   ]
+  },
+  "kollekte": {
+   "items": [
+    "pfennigstrumpf",
+    "opferstock",
+    "faehrgeld",
+    "heuerbeutel",
+    "pfandschein",
+    "geldkatze",
+    "harefoot",
+    "collar",
+    "lantern",
+    "cross",
+    "bible",
+    "minerlamp",
+    "officercoat"
+   ],
+   "handgriffe": [
+    "muenzwurf",
+    "nachsetzen",
+    "atemholen",
+    "finte",
+    "umsehen",
+    "kanzelschlag",
+    "standhalten",
+    "sich_sammeln"
+   ],
+   "stoffe": [
+    "G",
+    "L",
+    "E"
+   ],
+   "gold_rest": 50
   }
  }
 }

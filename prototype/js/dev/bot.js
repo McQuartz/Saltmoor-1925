@@ -5,7 +5,7 @@ const Bot={
  // Bewertung einer Karte aus der Vorschau
  // Wert einer Karte aus der Vorschau: sofortiger Schaden plus erwarteter Schaden von Gift/Brand (über die Züge), Verwundbar, Schwächung, Stärke, Block nach Bedarf
  wert(p,inc){if(!p)return-1;let v=0;p.foes.forEach(f=>{if(f.hp<=0&&!f.kill)return;v+=f.d+f.ab*.4+(f.kill?12:0);const g=Math.max(0,f.gift),b=Math.max(0,f.brand);v+=Math.min(f.hp,g*(g+1)/2)*.7+Math.min(f.hp,b*1.8)*.7+(f.vuln>0?f.vuln*3:0)+(f.weak?4:0);});
-  v+=(p.str||0)*4;const offen=Math.max(0,inc-S.block);v+=Math.min(p.block,offen)*1.3+p.block*.1;v+=Math.max(0,p.hp)*.8;if(p.hp<0)v+=p.hp*(S.hp<15?2:.6);v+=p.energy*3;return v;},
+  v+=(p.str||0)*4;const offen=Math.max(0,inc-S.block);v+=Math.min(p.block,offen)*1.3+p.block*.1;v+=Math.max(0,p.hp)*.8;if(p.hp<0)v+=p.hp*(S.hp<15?2:.6);v+=p.energy*3;v+=(p.gold||0)*(this.profil&&this.profil.gold_rest?.3:.15);return v;},
  // beste Karte jetzt (für den geklickten Run in tools/selbst-spielen.js): {i,t} oder null
  besteKarte(){const inc=incoming();let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
  kampfZug(){let guard=0;while(S.phase==='fight'&&!busy&&guard++<30){const inc=incoming();let best=null;
@@ -31,7 +31,9 @@ const Bot={
  // Wert eines Handgriffs (grob, für Wahl und Kauf)
  profil:null, // Build-Bot: {build, items:[], handgriffe:[], stoffe:[]} aus data/builds.json
  hgWert(id){const c=HANDGRIFFE[id];if(!c||c.unspielbar)return -9;const P=this.profil;const bonus=P?((P.handgriffe||[]).includes(id)?5:0)+(c.build===P.build?2:0):0;return bonus+this.hgWertRoh(c);},
- hgWertRoh(c){const atk=(c.atk||0)*(c.x?3:(c.h||1))*(c.all?1.6:1);return atk+(c.blk||0)*.9+(c.heal||0)+(c.poison||0)*1.6+(c.burn||0)*1.6+(c.draw||0)*3+(c.en||0)*4+(c.str||0)*4+(c.vuln||0)*2.5+(c.weak?3:0)+(c.funke?2:0)+(c.kette||0)*2+(c.behalten?1:0)+(c.sonder?4:0)-(c.opfer?c.opfer*.6:(c.c||0)*2.5);},
+ hgWertRoh(c){const atk=(c.atk||0)*(c.x?3:(c.h||1))*(c.all?1.6:1)+(c.sonder&&c.sonder.art==='ueber_bord'&&c.sonder.je?c.sonder.je:0);return atk+(c.blk||0)*.9+(c.heal||0)+(c.poison||0)*1.6+(c.burn||0)*1.6+(c.draw||0)*3+(c.en||0)*4+(c.str||0)*4+(c.vuln||0)*2.5+(c.weak?3:0)+(c.funke?2:0)+(c.kette||0)*2+(c.behalten?1:0)+(c.sonder?(this.ballastFx(c)&&!allActive().some(it=>/^ballast_/.test((def(it).eigen||{}).typ||''))?-3:4):0)-(c.opfer?c.opfer*.6:c.zoll?1+c.zoll*.2:(c.c||0)*2.5)+(c.gold||0)*.5;},
+ // Erzeugt die Karte Ballast? Ohne Ballast-Reliquie ist das für den Bot nur eine tote Karte mehr
+ ballastFx(c){return !!(c.sonder&&(c.sonder.fx||[]).some(f=>f.op==='ballast'));},
  // Bestes Item zum Ritzen: angelegt, freie Kerbe, Stoffe mit möglichst vielen Reaktionen im Deck; sonst schwächsten Handgriff überschreiben
  ritzen(){const id=S.hgPending;if(!id)return false;const st=allActive().flatMap(it=>def(it).st);
   const rx=D=>REACT.filter(r=>{const[a,b]=[...r.k];return(D.st.includes(a)&&st.includes(b))||(D.st.includes(b)&&st.includes(a));}).length;
@@ -54,8 +56,9 @@ const Bot={
   case'event':{const ev=curEvent();let k=ev.o.findIndex(o=>condOk(o.if)&&!(o.fx||[]).some(f=>f.op==='lose_hp'&&S.hp<f.v+10||f.op==='fight'&&S.hp<maxHp()*.5));if(k<0)k=ev.o.findIndex(o=>condOk(o.if));chooseEvent(Math.max(0,k));break;}
   case'streichen':{const t=strikeTargets();const w=t.find(it=>def(it).cards.every(c=>!c.atk&&!c.blk));if(w)strikeItem(w.uid);else skipStrike();break;}
   case'kraemer':{if(S.shop.art==='tausch'){S.shop.items.forEach((o,i)=>{if(o.sold)return;let wl=null,wv=1e9;S.bag.forEach((it,b)=>{if(it){const w=this.wertItem(it);if(w<wv){wv=w;wl='bag:'+b;}}});if(wl&&this.wertItem({id:o.id,uid:-1})>wv+3){S.sel=wl;buy(i);}});S.sel=null;}
+   const rest=this.profil&&this.profil.gold_rest&&['gold_schaden','gold_block','faehrgeld','gold_energie'].some(t=>passive(t).length)?this.profil.gold_rest:0; // Goldreserve des Profils, sobald Gold im Kampf zählt (Kollekte)
    if(S.hp<maxHp()*.75&&!S.shop.heal&&S.gold>=BAL.shop.heal.price)buy('heal');
-   {const i=(S.shop.hg||[]).findIndex(o=>!o.sold&&S.gold>=o.price+15&&this.hgWert(o.id)>4);if(i>=0){kaufeHandgriff(i);break;}}S.shop.items.map((o,i)=>[o,i]).sort((a,b)=>(ITEMS[b[0].id].rare?1:0)-(ITEMS[a[0].id].rare?1:0)).forEach(([o,i])=>{if(!o.sold&&S.gold>=o.price&&S.bag.includes(null))buy(i);});this.ausruesten();leaveNode();break;}
+   {const i=(S.shop.hg||[]).findIndex(o=>!o.sold&&S.gold>=o.price+15+rest&&this.hgWert(o.id)>4);if(i>=0){kaufeHandgriff(i);break;}}S.shop.items.map((o,i)=>[o,i]).sort((a,b)=>(ITEMS[b[0].id].rare?1:0)-(ITEMS[a[0].id].rare?1:0)).forEach(([o,i])=>{const eigen=this.profil&&(this.profil.items||[]).includes(o.id);if(!o.sold&&S.gold>=o.price+(eigen?0:rest)&&S.bag.includes(null))buy(i);});this.ausruesten();leaveNode();break;}
   case'kraemer_streichen':kraemerStrike(null);break;
   case'werkstatt':{const cand=[...S.bag.map((it,i)=>it?'bag:'+i:null),...AREAS.flatMap(a=>S.areas[a].map((it,i)=>it?a+':'+i:null))].filter(Boolean);let done=false;
    for(let i=0;i<cand.length&&!done;i++)for(let j=0;j<cand.length&&!done;j++){if(i===j)continue;const A=getAt(cand[i]),B=getAt(cand[j]);if(!A||!B||def(A).a!==def(B).a)continue;
