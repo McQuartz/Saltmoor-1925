@@ -120,19 +120,19 @@ function bett(K, P, xw, z0, bz, o) {
   ma.poly(quad(P, [[xf, 0.18, z0], [xf, 0.36, z0], [xf, 0.36, zf], [xf, 0.18, zf]]));
   const kz = (z0 + zf) / 2;
   const fl = o.leer ? 0 : 1;
-  K.form(eb, ma, td, { k: DECKE, r: RAND, ton: 3.2, fase: 1, rand: 1, schatten: 1,
+  K.form(eb, ma, td, { k: DECKE, r: RAND_D, ton: 2.4, fase: 1, rand: 1, schatten: 1,
     muster: (x, y) => { const Z = Math.min(Math.max(P.z(y), z0), zf); let t = 0; const [, ys] = Q(P, xf, 0.33, Z); if (Math.abs(y - ys) < 0.6) t -= 1; const [, ys2] = Q(P, xf, 0.24, Z); if (Math.abs(y - ys2) < 0.7) t += 1.6; const [, ys3] = Q(P, xf, 0.21, Z); if (Math.abs(y - ys3) < 0.6) t += 1.2; return t; } });
   // Umschlag des Lakens (hell) und Kissen
   const ki = B.maske();
   ki.poly(quad(P, [[xk - s * 0.04, 0.37, z0 + 0.05], [xk - s * 0.3, 0.37, z0 + 0.05], [xk - s * 0.3, 0.37, zf - 0.05], [xk - s * 0.04, 0.37, zf - 0.05]]));
   ki.poly(quad(P, [[xk - s * 0.05, 0.36, z0 + 0.05], [xk - s * 0.05, 0.52, z0 + 0.07], [xk - s * 0.3, 0.5, z0 + 0.07], [xk - s * 0.3, 0.36, z0 + 0.05]]));
   ki.poly(quad(P, [[xk - s * 0.05, 0.52, z0 + 0.07], [xk - s * 0.3, 0.5, z0 + 0.07], [xk - s * 0.3, 0.5, zf - 0.07], [xk - s * 0.05, 0.52, zf - 0.07]]));
-  if (!o.leer) K.form(eb, ki, td, { k: LEINEN, r: RAND, ton: 5 + (o.hell || 0), fase: 1, rand: 1, schatten: 1 });
+  if (!o.leer) K.form(eb, ki, td, { k: LEINEN, r: RAND_D, ton: 3.4 + (o.hell || 0), fase: 1, rand: 1, schatten: 1 });
   const um = B.maske(); um.poly(quad(P, [[xk - s * 0.32, 0.37, z0], [xk - s * 0.42, 0.37, z0], [xk - s * 0.42, 0.37, zf], [xk - s * 0.32, 0.37, zf]]));
-  if (!o.leer) K.form(eb, um, td, { k: LEINEN, r: RAND, ton: 3, fase: 0, rand: 1 });
+  if (!o.leer) K.form(eb, um, td, { k: LEINEN, r: RAND_D, ton: 2.2, fase: 0, rand: 1 });
   // der nasse Fleck auf dem Kissen (falsches Detail)
   if (!o.leer && fl) { const [cx, cy] = Q(P, xk - s * 0.17, 0.5, kz); const k = P.k(kz); const nm = B.maske(); nm.ell(cx, cy, Math.max(1, k * 0.08), Math.max(1, k * 0.05)); for (let y = nm.y0; y <= nm.y1; y++) for (let x = nm.x0; x <= nm.x1; x++) if (nm.has(x, y) && ki.has(x, y)) K.e[eb].set(x, y, B.pk((x + y) & 1 ? NASS : NASS2)); }
-  K.form(eb, st, td, { k: EISEN, r: RAND, ton: 2.6, fase: 0, rand: 1 });
+  K.form(eb, st, td, { k: EISEN, r: o.rand || [EISEN[5], RAND_D[0]], ton: 1.8, fase: 0, rand: 1 });
   // Nummer über dem Bett an der Wand (Email, hell, mit dunklem Zeichen)
   if (o.nummer !== false) nummer(K, P, o.nEb !== undefined ? o.nEb : 0, xw, 1.3, kz, o.nTiefe || 0);
   return { eb, st };
@@ -185,13 +185,13 @@ function luft(K) {
 function schlafsaal(K, cfg) {
   cfg = cfg || {}; const fr = K.fr, vx = 252, vy = 128, P = B.persp(vx, vy); K.split = [150, 166];
   const xl = -2.25, xr = 2.25, yc = 2.6, ze = 11.6;
-  raum(K, P, { xl, xr, yc, ze, sockel: 0.82, hell: cfg.dunkel ? -0.8 : 0, wandFlecken: cfg.dunkel ? [] : [1.9, 3.3, 4.7, 6.1, 7.5, 8.9].map(Z => [Z + 1.1, Z + 1.6, 0.9, 1.8]) });
+  raum(K, P, { xl, xr, yc, ze, sockel: 0.82, hell: cfg.dunkel ? -0.8 : 0, wandFlecken: cfg.dunkel ? [] : [1.9, 3.3, 4.7, 6.1, 7.5, 8.9].map(Z => [Z + 1.1, Z + 1.6, 1.55, 2.3]) });
   // Deckenbalken und Lampen
   for (const Z of [2.4, 4.4, 6.4, 8.4, 10.4]) balkenQuer(K, P, Z > 7 ? 0 : 1, Z, yc, xl, xr, Z > 7 ? 0.3 : 0.1);
   for (const Z of [3.4, 7.4]) haengelampe(K, P, Z > 7 ? 0 : 1, 0, Z, yc, 0.1);
   // Fenster rechts zwischen den Betten
   const fen = [], fl = [];
-  for (const Z of [1.9, 3.3, 4.7, 6.1, 7.5, 8.9, 10.2]) { const eb = Z > 6 ? 0 : 1; fenster(K, P, eb, xr, Z + 0.3, Z + 0.95, 1.15, 2.2, { hell: cfg.dunkel ? -0.3 : 0, deich: Z < 5 }); if (Z < 9) fl.push(lichtFleck(xr, Z + 0.3, Z + 0.95, 1.15, 2.2, 1.0, 0.2)); }
+  for (const Z of [1.9, 3.3, 4.7, 6.1, 7.5, 8.9, 10.2]) { const eb = Z > 6 ? 0 : 1; fenster(K, P, eb, xr, Z + 0.3, Z + 0.95, 1.5, 2.45, { hell: cfg.dunkel ? -0.3 : 0, deich: Z < 5 }); if (Z < 9) fl.push(lichtFleck(xr, Z + 0.3, Z + 0.95, 1.15, 2.2, 1.0, 0.2)); }
   // Stirnwand: Tür mit Nachtlicht, Nummern ohne Betten bis unter die Decke
   { const tm = B.maske(); tm.poly([Q(P, -0.45, 0, ze), Q(P, -0.45, 1.35, ze), Q(P, 0.45, 1.35, ze), Q(P, 0.45, 0, ze)]); K.form(0, tm, 0.15, { k: HOLZ, r: RAND_D, ton: 1.6, fase: 1, rand: 1, muster: (x, y) => (Math.abs(x - vx) < 0.6 ? -1 : 0) });
     const [nx, ny] = Q(P, 0, 1.5, ze); if (!cfg.dunkel || true) nachtlicht(K, Math.round(nx), Math.round(ny), 0, { r: 30 });
@@ -267,7 +267,7 @@ function flur(K, cfg) {
     const hk = B.maske(); hk.rect(x, hy + 3, 1, 3); K.form(1, hk, 0, { k: EISEN, r: RAND, ton: 2, fase: 0, rand: 1 });
     if (fehlt) continue;
     const m = B.maske(); const l = 40 + (i % 3) * 2; m.poly([[x - 3, hy + 5], [x + 3, hy + 5], [x + 6, hy + 12], [x + 4, hy + 12], [x + 7, hy + l], [x - 7, hy + l], [x - 4, hy + 12], [x - 6, hy + 12]]);
-    K.form(1, m, 0, { k: LEINEN, r: RAND, ton: 3.2, fase: 1, rand: 2, schatten: 2, muster: (px, py) => (Math.abs(px - x + (py - hy) * 0.05) < 0.6 ? -1 : 0) + (py > hy + l - 4 ? -0.6 : 0) });
+    K.form(1, m, 0, { k: LEINEN, r: RAND_D, ton: 1.9, fase: 1, rand: 1, schatten: 2, muster: (px, py) => (Math.abs(px - x + (py - hy) * 0.05) < 0.6 ? -1 : 0) + (py > hy + l - 4 ? -0.6 : 0) });
     for (let k = 0; k < 3; k++) K.e[1].set(x - 4 + k * 4, hy + l + 1 + ((k + i) % 3) * 3, B.pk(NASS2));
   }
   // Boden: Linoleum, unter jedem Nachthemd ein Paar nasser Fußabdrücke (stehen still, darüber niemand)
@@ -280,7 +280,7 @@ function flur(K, cfg) {
   { const l = B.maske(); l.rect(-M, vy - 4, W + 2 * M, 5); K.form(1, l, 0, { k: SOCKEL, r: RAND_D, ton: 2.6, fase: 1, rand: 1 }); }
   // Vordergrund: links eine Bank angeschnitten, rechts der Heizkörper unter dem Fenster
   { const v = B.maske(); v.rect(-M, 232, 92, 6); v.rect(6, 238, 5, 40); v.rect(70, 238, 5, 40); K.form(5, v, 0, { k: HOLZ, r: RAND, ton: 2.6, fase: 1, rand: 2 }); }
-  { const v = B.maske(); for (let i = 0; i < 9; i++) v.rect(402 + i * 9, 186, 6, 40); v.rect(398, 222, 86, 4); v.rect(398, 190, 86, 3); K.form(4, v, 0, { k: EISEN, r: RAND, ton: 2.4, fase: 1, rand: 2, schatten: 1 }); }
+  { const v = B.maske(); for (let i = 0; i < 9; i++) v.rect(402 + i * 9, 186, 6, 40); v.rect(398, 222, 86, 4); v.rect(398, 190, 86, 3); K.form(4, v, 0, { k: EISEN, r: RAND_D, ton: 1.8, fase: 1, rand: 1, schatten: 1 }); }
   B.nebel(K.e[1], { y0: vy - 14, y1: vy + 8, col: B.mix(pal.nebel[1], K.fern, 0.4), dichte: 0.12, xs: [-20, 500, 60], seed: 5 });
   luft(K);
   K.reihen = [{ y: 172, skala: 0.9, nebel: 0.22 }, { y: 194, skala: 1, nebel: 0.1 }, { y: 215, skala: 1, nebel: 0 }];
@@ -295,11 +295,11 @@ function turnsaal(K, cfg) {
   const xl = -4.2, xr = 2.6, yc = 3.4, ze = 11;
   raum(K, P, { xl, xr, yc, ze, sockel: 1.3, hell: cfg.dunkel ? -0.4 : 0.3 });
   // Oberlichter rechts oben (rechte Wand), hoch
-  for (const Z of [2.5, 4.5, 6.5, 8.5]) fenster(K, P, Z > 5 ? 0 : 1, xr, Z, Z + 1.3, 2.2, 3.1, { hell: 0.05 });
+  for (const Z of [2.5, 4.5, 6.5, 8.5]) fenster(K, P, Z > 5 ? 0 : 1, xr, Z, Z + 1.3, 2.45, 3.2, { hell: 0.05 });
   // Sprossenwand links: senkrechte Holme, waagerechte Sprossen
   { const sw = B.maske(); for (let i = 0; i < 9; i++) { const Z = 2.6 + i * 0.42; sw.poly(quad(P, [[xl + 0.16, 0, Z - 0.05], [xl + 0.16, 2.7, Z - 0.05], [xl + 0.16, 2.7, Z + 0.05], [xl + 0.16, 0, Z + 0.05]])); }
     for (let j = 0; j < 16; j++) { const Y = 0.12 + j * 0.16; sw.poly(quad(P, [[xl + 0.18, Y - 0.022, 2.55], [xl + 0.18, Y + 0.022, 2.55], [xl + 0.18, Y + 0.022, 6.05], [xl + 0.18, Y - 0.022, 6.05]])); }
-    K.form(1, sw, 0.04, { k: HOLZ, r: RAND, ton: 3.6, fase: 0, rand: 1, schatten: 1 }); }
+    K.form(1, sw, 0.04, { k: HOLZ, r: [HOLZ[5], RAND_D[0]], ton: 2.2, fase: 0, rand: 1, schatten: 1 }); }
   // Haken mit Pfeife an der Stirnwand, Nummernschilder der Riegen
   { const [x, y] = Q(P, -1.2, 1.8, ze); const m = B.maske(); m.rect(x, y, 1, 3); m.rect(x - 1, y + 6, 3, 2); K.form(0, m, 0.1, { k: EISEN, r: RAND, ton: 2, fase: 0, rand: 1 }); K.e[0].set(x, y + 4, B.pk('#4a3a20')); K.e[0].set(x, y + 5, B.pk('#4a3a20')); K.e[0].set(x + 1, y + 6, B.pk('#8a6a34'));
     for (let c = -4; c <= 3; c++) nummer(K, P, 0, ze, 2.4, c * 0.55 + 0.2, 0.15, true); }
@@ -310,11 +310,11 @@ function turnsaal(K, cfg) {
     const [x, yu] = Q(P, X, Yu, Z), [, yt] = Q(P, X, yc, Z), k = P.k(Z); const eb = Z < 4 ? 2 : 1;
     const m = B.maske(); m.rect(x, yt, Math.max(2, Math.round(k * 0.035)), yu - yt);
     if (ring) { const rr = k * 0.1; m.ell(x + 1, yu + rr, rr, rr); m.ell(x + 1, yu + rr, rr - 2.2, rr - 2.2, 0); }
-    K.form(eb, m, Z * 0.03, { k: HOLZ, r: RAND, ton: 3.4, fase: 0, rand: 2 });
+    K.form(eb, m, Z * 0.03, { k: HOLZ, r: RAND_D, ton: 2.4, fase: 0, rand: 1 });
   }
   // Bock und Bank hinten
   { const [x, y] = Q(P, 1.3, 0, 3.9), k = P.k(3.9); const m = B.maske(); m.ell(x, y - k * 0.7, k * 0.62, k * 0.13); m.rect(x - k * 0.62, y - k * 0.7, k * 1.24, k * 0.1); for (const dx of [-0.48, -0.36, 0.36, 0.48]) m.poly([[x + dx * k - 1, y - k * 0.6], [x + dx * k + 1, y - k * 0.6], [x + dx * k * 1.2 + 1.5, y], [x + dx * k * 1.2 - 1, y]]); for (const dx of [-0.16, 0.12]) { m.rect(x + dx * k, y - k * 0.86, k * 0.06, k * 0.08); m.rect(x + dx * k - k * 0.03, y - k * 0.88, k * 0.12, k * 0.03); }
-    K.form(K.eb(y), m, 0.1, { k: HOLZ, r: RAND, ton: 3, fase: 1, rand: 2, schatten: 2, muster: (px, py) => (py < y - k * 0.6 && (px + py) % 9 === 0 ? -0.8 : 0) }); }
+    K.form(K.eb(y), m, 0.1, { k: HOLZ, r: RAND_D, ton: 2.2, fase: 1, rand: 1, schatten: 2, muster: (px, py) => (py < y - k * 0.6 && (px + py) % 9 === 0 ? -0.8 : 0) }); }
   { const [x0, y0] = Q(P, 0.6, 0.25, 8.2), [x1] = Q(P, 2.4, 0.25, 8.2), [, yb] = Q(P, 0.6, 0, 8.2); const m = B.maske(); m.rect(x0, y0, x1 - x0, 3); m.rect(x0 + 2, y0 + 3, 2, yb - y0 - 3); m.rect(x1 - 4, y0 + 3, 2, yb - y0 - 3); K.form(0, m, 0.2, { k: HOLZ, r: RAND_D, ton: 2.6, fase: 0, rand: 1 }); }
   // Boden: Dielen (Holz, ockergelb, Fluchtlinien), vorgezeichnete Fußpaare in Reihen, nasse Abdrücke darauf
   const kreide = [];

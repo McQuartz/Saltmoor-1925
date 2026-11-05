@@ -119,6 +119,7 @@ module.exports = {
         const u = (y - hy) / (115 - hy);
         if (y > sy + 4) for (const fx of [cx + 2, cx + 6, cx + 9, cx - 14]) { const uu = Math.max(0, (y - sy) / (115 - sy)); const lx = fx + (fx - cx) * uu * 0.55; if (Math.abs(x - lx) < 0.6) P.set(x, y, 'k0'); else if (Math.abs(x - lx - 1) < 0.6 && b(x, y) < 0.3 + uu * 0.5) P.set(x, y, 'k3'); else if (Math.abs(x - lx - 2) < 0.6 && b(x, y) < uu * 0.35) P.set(x, y, 'k2'); }
         if (y > 112) P.set(x, y, 'k0');
+        else if (y === 109 || y === 110) P.set(x, y, y === 109 ? 'k0' : (b(x, y) < 0.6 ? 'k3' : 'k2'));
       }
       // Gürtel mit Schnalle (Messing)
       for (let x = cx - 12; x <= cx + 10; x++) { if (ist(x, hy - 1, KLEID) || ist(x, hy - 1, SCHUERZE)) { P.set(x, hy - 1, 'k0'); if (P.get(x, hy - 2) && P.get(x, hy - 2) <= 4) P.set(x, hy - 2, x > cx - 2 ? 'r1' : 'k2'); } }
@@ -133,7 +134,7 @@ module.exports = {
         if (Math.abs(y - (hy + 14)) < 0.6 && b(x, y) < 0.5) P.set(x, y, 'k1');
       }
       // Kragen: Saum unten dunkel, Kante hell gesäumt
-      for (let y = sy - 6; y < sy + 7; y++) for (let x = cx - 12; x < cx + 13; x++) { if (!ist(x, y, KRAGEN)) continue; const c = P.get(x, y); if (c < 1 || c > 4) continue; if (!ist(x, y + 1, KRAGEN)) P.set(x, y, 'k0'); else if (!ist(x, y + 2, KRAGEN) && b(x, y) < 0.5) P.set(x, y, 'kalk'); else P.set(x, y, b(x, y) < 0.4 ? 'r1' : 'k3'); }
+      for (let y = sy - 6; y < sy + 7; y++) for (let x = cx - 12; x < cx + 13; x++) { if (!ist(x, y, KRAGEN)) continue; const c = P.get(x, y); if (c < 1 || c > 4) continue; if (!ist(x, y + 1, KRAGEN)) P.set(x, y, 'k0'); else if (!ist(x, y + 2, KRAGEN) && b(x, y) < 0.5) P.set(x, y, 'kalk'); else P.set(x, y, b(x, y) < 0.2 ? 'kalk' : 'k3'); }
       // Tasche der Schürze mit einem Zettel (die Liste)
       for (let x = cx - 10; x <= cx - 4; x++) P.auf(x, hy + 9, 'k1');
       P.auf(cx - 8, hy + 8, 'kalk'); P.auf(cx - 7, hy + 8, 'kalk');
@@ -145,7 +146,7 @@ module.exports = {
         else if (Math.abs(x - (kx + 5 + (y - ky) * 0.25)) < 0.6 && y > ky - 9) P.set(x, y, 'k1');
         else if (x > kx + 6 && y > ky - 9 && y < ky + 7 && b(x, y) < 0.45) P.set(x, y, 'k3');
         // gestärktes Leinen: hell gedithert (Licht von hinten oben scheint durch den Stoff)
-        else if (x < kx + 5 + (y - ky) * 0.25 && y < ky + 6) P.set(x, y, b(x, y) < 0.5 ? 'r1' : 'k3');
+        else if (x < kx + 5 + (y - ky) * 0.25 && y < ky + 6) P.set(x, y, b(x, y) < 0.22 ? 'kalk' : 'k3');
       }
       for (let i = 0; i < 6; i++) { P.auf(kx + 7, ky + 7 + i, i % 2 ? 'nass' : 'k0'); }
       P.set(kx + 7, ky + 13, 'nass'); P.set(kx + 7, ky + 15 + (f % 2), 'nass');

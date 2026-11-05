@@ -97,6 +97,8 @@ module.exports = {
           else if (Math.abs(x - (K.cx + 4 + u * 3)) < 0.6 && b(x, y) < 0.5) P.set(x, y, 'k3');
           else if (!ist(x + 1, y, HEMD[i]) && (y & 1)) P.set(x, y, 'kalk');
           if (y === r(K.top + 17) && Math.abs(x - K.cx) < 4) P.set(x, y, (x & 1) ? 'kalk' : 'k3');
+          if (y === FY - 9) P.set(x, y, 'k0'); else if (y === FY - 8 && b(x, y) < 0.7) P.set(x, y, 'k3');
+          if (Math.abs(x - (K.cx - 0.5)) < 0.6 && y > K.top + 18 && y < K.top + 30) P.set(x, y, (y % 3) ? 'k1' : 'kalk');
         }
         // Haar nass: dunkel mit glänzenden Strähnen
         for (let y = r(K.top - 2); y < r(K.top + 40); y++) for (let x = r(K.cx - 8); x < r(K.cx + 12); x++) {
