@@ -15,7 +15,7 @@ const STEIN = ['#030606', '#060d0d', '#0a1515', '#101f1f', '#172b2a', '#20393a']
 const BECKEN = ['#020505', '#040b0b', '#071313', '#0b1d1c', '#112a28', '#1a3c38'];
 const LEER = ['#000101', '#010303', '#020606', '#040a0a', '#071010'];
 // schwarze Flamme: Körper fast schwarz, Rand blasses Magenta (die einzigen „Lichter“ der Menschen hier)
-const FL = { kern: '#000000', koerper: '#020404', rand: '#ff8ae0', hell: '#ffd8f4', hof: '#000303' };
+const FL = { kern: '#000000', koerper: '#000000', innen: '#2a0a24', rand: '#ff8ae0', hell: '#ffd8f4', hof: '#000303' };
 const WARM = '#ffd27a', WARMK = '#fff0c0', WARMG = '#6a4416';
 
 function gespiegelt(K) { const m0 = K.mat; K.mat = (t, x) => m0(t, Object.assign({ L: LL }, x || {})); }
@@ -148,12 +148,12 @@ function schwarzesFeuer(K, x, y) {
   for (let i = 0; i < 9; i++) { const a = i / 9 * 6.28, s = B.maske(); s.ell(x + Math.cos(a) * 17, y + 1 + Math.sin(a) * 4.4, 3, 2.1); K.form(5, s, 0, { ton: 1.5, fase: 1 }); }
   const h = B.maske(); h.kap(x - 9, y - 1, x + 7, y - 3, 1.6, 1.4); h.kap(x - 7, y - 3, x + 9, y, 1.5, 1.6); K.form(5, h, 0, { ton: 1.2 });
   for (const L of [K.e[3], K.e[4]]) B.dith(L, x - 70, y - 60, x + 70, y + 30, FL.hof, (px, py) => { if (!(L.get(px, py) >>> 24)) return 0; const q = Math.hypot(px - x, (py - y) * 1.4) / 70; return q < 1 ? (1 - q) * .4 : 0; });
-  const rand = B.css(FL.rand), hell = B.css(FL.hell), kern = B.css(FL.koerper);
+  const rand = B.css(FL.rand), hell = B.css(FL.hell), kern = B.css(FL.koerper), innen = B.css(FL.innen);
   K.luft.push({ p: .8, f(ctx, t, ox, oy) {
     for (let k = 0; k < 5; k++) {
       const ph = k * 1.7, fl = Math.sin(t * 4.2 + ph) + Math.sin(t * 9.1 + ph) * .5, hh = 12 + [0, 6, 10, 5, 2][k] + Math.round(fl * 1.5), bx = x - 10 + k * 5;
       for (let j = 0; j < hh; j++) { const q = j / hh, ww = Math.max(0, Math.round(3.2 * (1 - q))), sx = Math.round(bx + Math.sin(t * 3 + j * .5 + ph) * q * 2) - ww;
-        ctx.fillStyle = kern; ctx.fillRect(sx + ox, y - 3 - j + oy, ww * 2 + 1, 1); ctx.fillStyle = q > .8 ? hell : rand; ctx.fillRect(sx - 1 + ox, y - 3 - j + oy, 1, 1); if (k === 4 || (j & 1)) ctx.fillRect(sx + ww * 2 + 1 + ox, y - 3 - j + oy, 1, 1); }
+        ctx.fillStyle = kern; ctx.fillRect(sx + ox, y - 3 - j + oy, ww * 2 + 1, 1); if (ww > 1 && (j + k) % 3 === 0) { ctx.fillStyle = innen; ctx.fillRect(sx + ww + ox, y - 3 - j + oy, 1, 1); } ctx.fillStyle = q > .8 ? hell : rand; ctx.fillRect(sx - 1 + ox, y - 3 - j + oy, 1, 1); if (k === 4 || (j & 1)) ctx.fillRect(sx + ww * 2 + 1 + ox, y - 3 - j + oy, 1, 1); }
     }
   } });
   B.partikel(K, { n: 12, farben: [FL.rand, FL.hell], x0: x - 10, x1: x + 10, y0: y - 50, y1: y - 8, vy: -8, wob: 3, wf: 2, blink: 2, p: .8 });

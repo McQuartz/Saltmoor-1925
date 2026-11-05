@@ -244,3 +244,4 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 
 .feind .nm .knf{color:#e8c070;margin-left:.3em;font-size:.8em}
 .abs .laedt{opacity:.75}.abs .laedt small{font-size:.6em;opacity:.8}
+.hgpick .hgimg{display:block;margin:4px auto 2px;width:calc(var(--u,3px)*32);height:auto;image-rendering:pixelated}

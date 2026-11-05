@@ -11,7 +11,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M2 Längere Akte | fertig | 6 Ebenen + Wächter je Akt I–IV, Biom-Wahl am Aktanfang, 31 Knoten je vollem Run |
 | M3 Deckbau-Kern | fertig | Kerben, Handgriffe, 7 Schlagworte, Belohnung, Ritzen, Schleifen, Umritzen, Verkaufen, Rucksackmodus, Hover-Vorschau, Dev-Reiter Deck |
 | M4 Items, Handgriffe, Builds | fertig | 70 Handgriffe, 74 Items (18 Reliquien), 6 Builds mit Beispieldeck und Build-Bot; Builds 30–40 % (Feinabstimmung M8) |
-| M5 Pipeline und alte Schwächen | läuft | Neubauten fertig (Mumie, Nachgeher, Ertrunkener, Netzflickerin-Rücken, Tiefling, Nest, alle Note 4); Icons in Arbeit |
+| M5 Pipeline und alte Schwächen | fertig | Neubauten fertig (Mumie, Nachgeher, Ertrunkener, Netzflickerin-Rücken, Tiefling, Nest, alle Note 4); Icons in Arbeit |
 | M6 Biome Akt I und II | läuft | Fabrik, Kurhaus, Nachtzug, Kloster, Grotte fertig (alle Note 4); neue Gegner Hafen/Moor/Kapelle in Arbeit |
 | M7 Biome Akt III bis V | läuft | Wald, Gezeitenwerk, Walkathedrale, Glasmeer, Ufer, Pforte neu, Finale neu, Gegner Salz/Stadt/Eis in Arbeit; Kern: Kniffe teurer/kopie/takt/voraus, Ergänzungspakete, Vorgänger |
 | M8 Ereignisse und Balance | läuft | 15 biomübergreifende Ereignisse, Ereignis-Test (alle Wahlen); Balance folgt, wenn alle Biome stehen |
@@ -149,8 +149,8 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Der aus dem Relief (neu) | Stadt | 4 (stärkstes Bild der Ergänzungen) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
 | Der Fahnenträger (neu) | Eis | 4 | [M7](bilder/M7/alte-biome/eis-bogen.png) |
 | Die Seelilie (neu) | Eis | 4 (starke Silhouette) | [M7](bilder/M7/alte-biome/eis-bogen.png) |
-| Item-Icons (125) | alle | 112 × 4, 13 × 3 in Überarbeitung | [M5](bilder/M5/icons.png) |
-| Handgriff-Bilder (70) | alle | 48 × 4, 22 × 3 in Überarbeitung (zu dunkel, Hände verschmelzen) | [M5](bilder/M5/handgriffe.png) |
+| Item-Icons (125) | alle | 4 (alle; zweite Runde für 13, knapp: Trauerschleier, Knotenschnur bei 32 px) | [M5](bilder/M5/icons.png) |
+| Handgriff-Bilder (70) | alle | 4 (alle; zweite Runde: große Hand plus Gegenstand, mehr Licht; jetzt auch in der Handgriff-Wahl zu sehen) | [M5](bilder/M5/handgriffe.png) |
 
 ## Entscheidungen unterwegs
 
