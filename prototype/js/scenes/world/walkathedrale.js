@@ -147,7 +147,7 @@ function flanke(K, cfg) {
   B.gluehen(K.e[1], 62, 118, 16, MARK_G, 1); K.e[1].set(62, 118, B.pk(MARK)); K.licht(62, 118, MARK, 30, .4);
   // Eisrücken, in dem das Gerippe steckt: davor, bis über die Rippenansätze
   const er = B.maske(); er.fn(-M, 100, W + M, 160, (x, y) => y > 136 - Math.sin(x * .03) * 6 - B.fbm(x * .02, 1, 5, 2) * 14);
-  K.form(2, er, .32, { k: EIS.slice(1), ton: 2, fase: 1.5, rand: 2, verlauf: -.6 });
+  K.form(2, er, .32, { k: EIS.slice(1), ton: 2, fase: 1.5, rand: 2, verlauf: -.6, muster: (x, y) => (Math.abs(frac((x * .35 + y * 1.2 + B.fbm(x * .05, y * .1, 3, 2) * 18) / 9) - .5) < .06 ? -.7 : 0) + (B.hash(x >> 1, y >> 1, 12) < .03 ? .8 : 0) });
   // Eis, das an den Rippen hochgeworfen ist (Schollen), dahinter Dunst
   B.nebel(K.e[2], { y0: P.vy - 30, y1: P.vy + 12, col: B.mix(pal.nebel[1], K.fern, .3), dichte: .22, xs: [100, 480, 80], seed: 7 });
   boden(K, P, P.vy, [-3.2, .3, 6]);
@@ -198,7 +198,7 @@ function krypta(K, cfg) {
     B.gluehen(e, cx, cy - k * 1.02, k * .45, MARK_G2, gl); e.set(cx, cy - k * 1.02, B.pk(i < 4 ? MARK : MARK_D)); if (k > 40) { e.set(cx + 1, cy - k * 1.02, B.pk(MARK)); e.set(cx, cy - k * 1.02 + 1, B.pk(MARK_K)); }
     K.licht(cx, cy - k * 1.02, MARK, k * .9, .45);
     // Rippenansatz rechts als Strebepfeiler, haken nach innen
-    if (i % 2 === 0) rippe3(K, P, eb, [[3.6, 0, Z], [3.4, 1.6, Z], [3.2, 3.2, Z], [2.4, 4.4, Z], [1.6, 4.1, Z], [1.3, 3.6, Z]], .16, tiefe, 1.2 + tiefe * 1.7, i === 4 ? 1 : 0);
+    if (i < 8) rippe3(K, P, eb, [[3.6, 0, Z], [3.4, 1.6, Z], [3.2, 3.2, Z], [2.4, 4.4, Z], [1.6, 4.1, Z], [1.3, 3.6, Z]], .16, tiefe, 1.2 + tiefe * 1.7, i === 4 ? 1 : 0);
   }
   // Decke: Eis mit Zapfen, die nach innen (zur Wirbelreihe) gebogen sind
   for (let i = 0; i < 14; i++) { const x = 20 + i * 34 + (i % 3) * 7, l = 14 + (i * 13 % 17), m = B.maske(); m.poly([[x - 5, -M], [x + 5, -M], [x + 1, l], [x - 3, l + 6]]); K.form(2, m, .3, { k: EIS.slice(2), ton: 2, fase: 1, rand: 2 }); }
