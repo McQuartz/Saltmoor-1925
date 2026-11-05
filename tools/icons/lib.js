@@ -60,13 +60,15 @@ const LICHT = {
 };
 
 // Palette eines Bildes: 0 leer; je Material 6 Farben (k0..k3, r1, r2); dann Lichter; dann Akzente a/b (4 Stufen + hell)
-function palette(st = [], rar = 'gewoehnlich') {
+// opt.hg: Handgriff-Bilder sind Szenen auf dunklem Grund: wärmere, hellere Haut und kräftigeres Randlicht in der Familienfarbe
+const HAUT_HG = { body: ['#160d08', '#2b190e', '#45291a', '#653f26'], hell: '#ffd4a4' };
+function palette(st = [], rar = 'gewoehnlich', opt = {}) {
   const glanzA = stoffFarbe(st[0]), glanzB = stoffFarbe(st[1] || st[0]);
-  const rimStaerke = rar === 'selten' ? 0.72 : rar === 'reliquie' ? 0.55 : 0.6;
+  const rimStaerke = opt.hg ? 0.72 : rar === 'selten' ? 0.72 : rar === 'reliquie' ? 0.55 : 0.6;
   const farben = [null], namen = [''], idx = {}, matBase = {};
   const add = (n, c) => { idx[n] = farben.length; namen.push(n); farben.push(c); };
   for (const m of MAT_NAMEN) {
-    const M = MAT[m]; matBase[m] = farben.length;
+    const M = opt.hg && m === 'haut' ? HAUT_HG : MAT[m]; matBase[m] = farben.length;
     let r2 = mix(M.hell, glanzA, rimStaerke);
     if (rar === 'reliquie') r2 = mix(r2, '#ffd890', 0.3);
     const r1 = mix(M.body[3], mix(M.hell, glanzA, 0.75), 0.42);
@@ -342,7 +344,7 @@ function reliquieGlanz(buf, W, H, pal) {
 function bauen(def, o = {}) {
   const W = def.w || 48, H = def.h || 48;
   const st = o.st ?? def.st ?? [], rar = o.rar ?? def.rar ?? 'gewoehnlich';
-  const pal = palette(st, rar);
+  const pal = palette(st, rar, { hg: H === 32 });
   const A = { gewehr, glutHaufen, armGruppen, pfad, E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
   AUTO.length = 0;
   const res = def.form(A, { st, rar });

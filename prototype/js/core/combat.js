@@ -12,7 +12,7 @@ function mkEnemy(id,i){const f0=FOES[id];if(!f0)throw new Error('Unbekannter Geg
  const tief=(f.rang||'normal')==='normal';const sc=(tief?1+BAL.enemy_scaling.hp_per_depth*(d-1):1)*(1+ST2.hp_je_stufe*st),as=(tief?Math.floor((d-1)/BAL.enemy_scaling.atk_every_n_depths):0)+(st>=2?Math.floor(st/ST2.atk_alle_n_stufen):0);const hp=Math.round(f.hp*sc*(tief?(BAL.enemy_scaling.hp_faktor||1):(BAL.enemy_scaling.waechter_faktor||1)));
  const r=rs('kampf');
  return{uid:++uidc,id,n:f.n,spr:f.spr||f.sprite||id,variant:f.variant,sprite:f.rang==='boss'?(f.sprite||null):f.varianten?r.pick(f.varianten):(f.sprite||null),rang:f.rang||'normal',weak:f.weak,hp,max:hp,block:0,str:0,burn:0,poison:0,weak2:0,
-  pi:f.rang==='boss'||f.rang==='waechter'?0:Math.floor(r.next()*f.pat.length),as,pat:f.pat.map(p=>({...p,v:p.t==='atk'?Math.max(1,Math.round(p.v*(BAL.enemy_scaling.atk_faktor||1)))+as:p.v})),besonders:f.besonders||null,kniff:f.kniff||null,kniffe:f.kniffe||null,vuln:0,phase:0,turns:0,...kniffMuster(f,as)};}
+  pi:f.rang==='boss'||f.rang==='waechter'?0:Math.floor(r.next()*f.pat.length),as,pat:f.pat.map(p=>({...p,v:p.t==='atk'?Math.max(1,Math.round(p.v*(BAL.enemy_scaling.atk_faktor||1)))+as:p.v})),besonders:f.besonders||null,kniff:f.kniff||null,kniffe:f.kniffe||null,pendel:!!f.pendel,vuln:0,phase:0,turns:0,...kniffMuster(f,as)};}
 // „Der, der vor dir kam“ (Ufer unten): Figur und Items deines letzten verlorenen Runs (Meta), sonst eine Figur per Seed.
 // Sein Muster sind seine besten Karten, verstärkt (f.atk_faktor); die Beute ist eines seiner Items.
 function vorgaengerDef(f){const r=rs('kampf');let v=typeof Meta!=='undefined'&&!S.dev?Meta.get().vorgaenger:null;
@@ -244,7 +244,10 @@ function endTurn(){
   Bus.emit('changed');wait(680,step);
  };wait(300,step);}
 // Besonderheiten der Wächter und des Bosses nach dem Gegnerzug
-function specials(){for(const en of alive()){const b=en.besonders;if(!b)continue;
+function specials(){for(const en of alive()){
+ // Pendel (Regulator): schwingt jeden Zug auf die andere Seite und zwischen zwei Tiefenreihen
+ if(en.pendel){const l=en.turns%2===1;en.x=l?.3:.7;en.reihe=l?1:2;Bus.emit('kniff',{e:en,why:`${en.n} schwingt nach ${l?'links hinten':'rechts vorn'}`});}
+ const b=en.besonders;if(!b)continue;
  if(b.art==='ruft'&&FOES[b.gegner]&&en.turns%(b.alle||3)===0&&alive().length<4){const add=mkEnemy(b.gegner);add.x=rs('aufstellung').pick([.16,.84,.3,.7]);add.reihe=rs('aufstellung').pick([0,1]);S.enemies.push(add);Bus.emit('enemy_spawn',{e:add,why:`${en.n} ruft ${add.n} (alle ${b.alle||3} Züge)`});}
  if(b.art==='schwach_wechsel'&&b.stoffe){en.weak=b.stoffe[en.turns%b.stoffe.length];Bus.emit('enemy_status',{e:en,status:'schwach',why:`${en.n} wechselt die Schwachstelle: jetzt ${ST[en.weak].n}`});}
  if(b.art==='phasen'&&b.ruft){const R2=typeof b.ruft==='string'?{gegner:b.ruft,alle:3,anzahl:1}:b.ruft;if(FOES[R2.gegner]&&en.phase>=1&&en.turns%(R2.alle||3)===0){for(let k=0;k<(R2.anzahl||1)&&alive().length<4;k++){const add=mkEnemy(R2.gegner);add.x=rs('aufstellung').pick([.14,.86,.28,.72]);add.reihe=0;S.enemies.push(add);Bus.emit('enemy_spawn',{e:add,why:`${en.n} ruft ${add.n} (Phase ${en.phase+1}, alle ${R2.alle||3} Züge)`});}}}}}

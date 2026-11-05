@@ -116,7 +116,7 @@
    "n": "Der Holzfäller der Legion",
    "biom": "wald",
    "rang": "normal",
-   "hp": 22,
+   "hp": 26,
    "weak": "G",
    "pat": [
     {
@@ -129,7 +129,7 @@
     },
     {
      "t": "atk",
-     "v": 14
+     "v": 16
     }
    ],
    "sprite": "holzfaeller_a",
@@ -142,7 +142,7 @@
    "kniff": {
     "art": "ansage",
     "zuege": 2,
-    "v": 14,
+    "v": 16,
     "why": "Er holt aus, wie er seit neunzehnhundert Jahren ausholt. Zwei Züge lang hebt sich die Dolabra, dann fällt sie."
    },
    "beute": "legionsaxt",
@@ -153,7 +153,7 @@
    "n": "Der Steinhirsch",
    "biom": "wald",
    "rang": "normal",
-   "hp": 18,
+   "hp": 22,
    "weak": "E",
    "pat": [
     {
@@ -162,11 +162,11 @@
     },
     {
      "t": "atk",
-     "v": 5
+     "v": 7
     },
     {
      "t": "atk",
-     "v": 2,
+     "v": 3,
      "h": 2
     }
    ],
@@ -190,7 +190,7 @@
    "n": "Der Harzfang",
    "biom": "wald",
    "rang": "normal",
-   "hp": 14,
+   "hp": 16,
    "weak": "L",
    "pat": [
     {
@@ -199,11 +199,11 @@
     },
     {
      "t": "atk",
-     "v": 4
+     "v": 5
     },
     {
      "t": "atk",
-     "v": 1,
+     "v": 2,
      "h": 2
     }
    ],
@@ -226,7 +226,7 @@
    "n": "Die Bernsteinlarve",
    "biom": "wald",
    "rang": "normal",
-   "hp": 20,
+   "hp": 24,
    "weak": "W",
    "pat": [
     {
@@ -235,11 +235,11 @@
     },
     {
      "t": "atk",
-     "v": 5
+     "v": 7
     },
     {
      "t": "atk",
-     "v": 2,
+     "v": 3,
      "h": 2
     }
    ],
@@ -262,12 +262,12 @@
    "n": "Der Wurzelstock",
    "biom": "wald",
    "rang": "waechter",
-   "hp": 70,
+   "hp": 78,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 5,
+     "v": 6,
      "h": 2
     },
     {
@@ -276,7 +276,7 @@
     },
     {
      "t": "atk",
-     "v": 11
+     "v": 13
     },
     {
      "t": "buff",

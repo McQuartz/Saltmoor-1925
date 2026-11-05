@@ -122,7 +122,7 @@
    "n": "Der Glasschwimmer",
    "biom": "glasmeer",
    "rang": "normal",
-   "hp": 26,
+   "hp": 24,
    "weak": "W",
    "pat": [
     {
@@ -149,7 +149,7 @@
    "kniff": {
     "art": "ansage",
     "zuege": 2,
-    "v": 20,
+    "v": 18,
     "why": "Er taucht ab, zwei Züge lang siehst du nur seine Bahn im Glas. Dann holt er Luft, direkt vor dir."
    },
    "beute": "glasscherbe",
@@ -160,13 +160,13 @@
    "n": "Der Splitterchor",
    "biom": "glasmeer",
    "rang": "normal",
-   "hp": 24,
+   "hp": 20,
    "weak": "L",
    "pat": [
     {
      "t": "atk",
      "v": 3,
-     "h": 3
+     "h": 2
     },
     {
      "t": "blk",
@@ -174,7 +174,7 @@
     },
     {
      "t": "atk",
-     "v": 9
+     "v": 8
     }
    ],
    "sprite": "splitterchor_a",
@@ -198,25 +198,25 @@
    "n": "Der Vorhergehende",
    "biom": "glasmeer",
    "rang": "normal",
-   "hp": 28,
+   "hp": 24,
    "weak": "V",
    "pat": [
     {
      "t": "atk",
-     "v": 9
-    },
-    {
-     "t": "atk",
-     "v": 5,
-     "h": 2
+     "v": 8
     },
     {
      "t": "blk",
      "v": 9
     },
     {
-     "t": "buff",
-     "v": 2
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 6
     }
    ],
    "sprite": "vorhergehende_a",
@@ -238,21 +238,21 @@
    "n": "Der Leithund",
    "biom": "glasmeer",
    "rang": "normal",
-   "hp": 22,
+   "hp": 20,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 3,
-     "h": 3
-    },
-    {
-     "t": "atk",
-     "v": 8
+     "v": 7
     },
     {
      "t": "blk",
      "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
     }
    ],
    "sprite": "leithund_a",

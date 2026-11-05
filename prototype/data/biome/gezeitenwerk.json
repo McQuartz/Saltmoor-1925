@@ -310,7 +310,8 @@
    },
    "beute": "gezeitenrad",
    "beute_satz": "Das Pendel steht senkrecht. Irgendwo oben bleibt die Flut aus, nur dieses eine Mal.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "pendel": true
   }
  },
  "events": [

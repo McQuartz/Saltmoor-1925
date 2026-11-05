@@ -121,16 +121,16 @@
    "n": "Der Rippenkriecher",
    "biom": "walkathedrale",
    "rang": "normal",
-   "hp": 15,
+   "hp": 20,
    "weak": "E",
    "pat": [
     {
      "t": "atk",
-     "v": 4
+     "v": 5
     },
     {
      "t": "blk",
-     "v": 5
+     "v": 6
     },
     {
      "t": "atk",
@@ -157,7 +157,7 @@
    "n": "Das Walfänger-Echo",
    "biom": "walkathedrale",
    "rang": "normal",
-   "hp": 15,
+   "hp": 18,
    "weak": "G",
    "pat": [
     {
@@ -170,7 +170,7 @@
     },
     {
      "t": "atk",
-     "v": 12
+     "v": 14
     }
    ],
    "sprite": "echo_a",
@@ -183,7 +183,7 @@
    "kniff": {
     "art": "ansage",
     "zuege": 2,
-    "v": 12,
+    "v": 14,
     "why": "Er zielt, wie er damals gezielt hat. Zwei Atemzüge lang. Dann wirft er."
    },
    "beute": "echoharpune",
@@ -194,7 +194,7 @@
    "n": "Der Markfresser",
    "biom": "walkathedrale",
    "rang": "normal",
-   "hp": 15,
+   "hp": 20,
    "weak": "F",
    "pat": [
     {
@@ -231,20 +231,21 @@
    "n": "Der Seepockenmann",
    "biom": "walkathedrale",
    "rang": "normal",
-   "hp": 17,
+   "hp": 22,
    "weak": "W",
    "pat": [
     {
      "t": "atk",
-     "v": 4
+     "v": 5
     },
     {
      "t": "blk",
-     "v": 7
+     "v": 8
     },
     {
      "t": "atk",
-     "v": 3
+     "v": 3,
+     "h": 2
     }
    ],
    "sprite": "seepockenmann_a",
