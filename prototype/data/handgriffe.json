@@ -957,8 +957,8 @@
   "muenzwurf": {
    "n": "Münzwurf",
    "c": 1,
-   "zoll": 5,
-   "atk": 8,
+   "zoll": 4,
+   "atk": 9,
    "build": "kollekte",
    "rar": "gewoehnlich",
    "stoffe": [

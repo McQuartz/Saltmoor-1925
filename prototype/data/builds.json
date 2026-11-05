@@ -210,19 +210,11 @@
   "ballast": {
    "items": [
     "ballaststein",
-    "radiermesser",
     "strandbuch",
-    "leere_seiten",
+    "radiermesser",
     "korkweste",
-    "bleiguertel",
-    "anchorchain",
-    "holywater",
-    "divinghelm",
-    "salt",
-    "knife",
-    "collar",
-    "bible",
-    "cultmask"
+    "leere_seiten",
+    "bleiguertel"
    ],
    "handgriffe": [
     "beschweren",
@@ -247,32 +239,14 @@
     "pfennigstrumpf",
     "opferstock",
     "faehrgeld",
-    "heuerbeutel",
     "pfandschein",
-    "geldkatze",
-    "harefoot",
-    "collar",
-    "lantern",
-    "cross",
-    "bible",
-    "minerlamp",
-    "officercoat"
+    "heuerbeutel",
+    "geldkatze"
    ],
    "handgriffe": [
-    "muenzwurf",
-    "nachsetzen",
-    "atemholen",
-    "finte",
-    "umsehen",
-    "kanzelschlag",
-    "standhalten",
-    "sich_sammeln"
+    "muenzwurf"
    ],
-   "stoffe": [
-    "G",
-    "L",
-    "E"
-   ],
+   "stoffe": [],
    "gold_rest": 50
   }
  }

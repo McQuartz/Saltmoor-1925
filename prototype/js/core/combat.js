@@ -205,8 +205,8 @@ function ueberBord(c,why){const i=S.hand.indexOf(c);if(i<0)return false;S.hand.s
  passive('ballast_staerke').forEach(p=>{const v=p.v||1;S.pstr=(S.pstr||0)+v;Bus.emit('player_buff',{v,why:`Radiermesser: „${c.n}“ über Bord, Stärke +${v} (jetzt ${S.pstr})`});});return true;}
 // Kollekte: Stufe einer Gold-Eigenschaft (gold_schaden, gold_block) = 1 je p.je Gold, höchstens p.max
 function goldStufe(typ){return passive(typ).reduce((s,p)=>s+Math.min(p.max||5,Math.floor(Math.max(0,S.gold||0)/(p.je||25))),0);}
-// Fährgeld: Würdest du sterben, zahlst du p.preis Gold und stehst mit p.leben Leben wieder auf (einmal je Kampf). true = gerettet.
-function faehrgeld(){if(S.hp>0||S.faehrgeld||S.phase!=='fight')return false;const p=passive('faehrgeld')[0];if(!p)return false;const preis=p.preis||40;if((S.gold||0)<preis)return false;
+// Fährgeld: Würdest du sterben, zahlst du p.kosten Gold und stehst mit p.leben Leben wieder auf (einmal je Kampf). true = gerettet.
+function faehrgeld(){if(S.hp>0||S.faehrgeld||S.phase!=='fight')return false;const p=passive('faehrgeld')[0];if(!p)return false;const preis=p.kosten||40;if((S.gold||0)<preis)return false;
  S.gold-=preis;S.faehrgeld=true;S.hp=Math.min(maxHp(),p.leben||8);if(S.stats&&!DRY)S.stats.faehrgeld=(S.stats.faehrgeld||0)+1;
  Bus.emit('gold',{v:-preis,why:`Fährgeld: ${preis} Gold für den Fährmann`});Bus.emit('player_heal',{v:S.hp,why:`Fährgeld: Der Fährmann nimmt ${preis} Gold und bringt dich mit ${S.hp} Leben zurück (einmal je Kampf)`});Bus.emit('toast',{a:'FÄHRGELD',b:`${preis} Gold · ${S.hp} Leben`});return true;}
 

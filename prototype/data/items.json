@@ -1772,9 +1772,9 @@
   "preis": 160,
   "eigen": {
    "typ": "faehrgeld",
-   "preis": 35,
    "leben": 14,
-   "t": "Würdest du sterben, zahlst du 35 Gold und stehst mit 14 Leben wieder auf (einmal je Kampf)."
+   "t": "Würdest du sterben, zahlst du 35 Gold und stehst mit 14 Leben wieder auf (einmal je Kampf).",
+   "kosten": 35
   },
   "biom": "ufer",
   "flavor": "Zwei abgegriffene Groschen, wie man sie Toten auf die Lider legt. Der Fährmann nimmt sie jedes Mal. Und jedes Mal setzt er dich am selben Ufer wieder ab.",
@@ -1795,8 +1795,8 @@
    {
     "n": "Bezahlen",
     "c": 1,
-    "zoll": 6,
-    "blk": 9
+    "zoll": 5,
+    "blk": 10
    }
   ]
  },
@@ -1849,7 +1849,7 @@
     "n": "Nachzählen",
     "c": 0,
     "draw": 1,
-    "gold": 2
+    "gold": 3
    }
   ]
  },
@@ -1906,9 +1906,9 @@
   "preis": 150,
   "eigen": {
    "typ": "gold_energie",
-   "ab": 80,
+   "ab": 60,
    "v": 1,
-   "t": "Trägst du zu Beginn deines Zugs mindestens 80 Gold, hast du 1 Energie mehr."
+   "t": "Trägst du zu Beginn deines Zugs mindestens 60 Gold, hast du 1 Energie mehr."
   },
   "biom": "stadt",
   "flavor": "Städtisches Leihhaus, Schein Nummer 1925. Was verpfändet wurde, steht nicht darauf. Die Frist ist lange abgelaufen, aber man hat dich nicht vergessen.",

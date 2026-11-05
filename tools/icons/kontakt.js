@@ -3,7 +3,7 @@
 //   docs/auftrag-2/bilder/M5/icons-silhouetten.png   alle Item-Icons schwarz gefüllt bei 32 px (Unterscheidbarkeit)
 //   docs/auftrag-2/bilder/M5/icons-vorher-nachher.png  20 bekannte Items: altes 12×12 ×4 neben dem neuen 48er
 //   docs/auftrag-2/bilder/M5/handgriffe.png          alle Handgriff-Bilder bei 48×32 (und ×2), nach Familie
-// node tools/icons/kontakt.js [--nur=icons|silhouetten|vorher|handgriffe]
+// node tools/icons/kontakt.js [--nur=icons|silhouetten|vorher|handgriffe|auswahl]   (auswahl: --ids=a,b --hg=x,y --ziel=docs/… --titel=…)
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -56,6 +56,16 @@ async function foto(page, html, datei, breite = 1400) {
     const reihe = ['neutral', 'glutnest', 'brackwasser', 'bollwerk', 'aderlass', 'kettenwerk', 'hagel'].filter(f => fam[f]).concat(Object.keys(fam).filter(f => !['neutral', 'glutnest', 'brackwasser', 'bollwerk', 'aderlass', 'kettenwerk', 'hagel'].includes(f)));
     const html = reihe.map(f => `<h2>${esc(f)} · ${fam[f].length}</h2><div class="raster">${fam[f].map(id => { const u = url('handgriffe', id); return `<div class="z" style="width:150px"><div class="b"><img src="${u}" width="96" height="64"><img src="${u}" width="48" height="32"></div><div class="n">${esc(hg[id]?.n || id)}</div></div>`; }).join('')}</div>`).join('');
     await foto(page, `${KOPF}<h1>Handgriff-Bilder · ${hi.length} Stück · 48×32 (×2 und ×1)</h1><p>Hände, Werkzeug, Geste. Gleiche Lichtregeln, Haut dunkel im Randlicht, Akzent in der Farbe der Build-Familie.</p>${html}`, path.join(ZIEL, 'handgriffe.png'));
+  }
+  // Auswahl (Zugabe-Pakete): --nur=auswahl --ids=a,b --hg=x,y --ziel=docs/… [--titel=…]
+  // Bogen mit ×4, 48 und 32 px, Silhouette, Eigenschaft und Flavor; dazu die Handgriff-Bilder ×2/×1
+  if (nur === 'auswahl') {
+    const arg = k => (process.argv.find(a => a.startsWith('--' + k + '=')) || '').slice(k.length + 3);
+    const ids = arg('ids').split(',').filter(id => ii.includes(id)), hgs = arg('hg').split(',').filter(id => hi.includes(id));
+    const ziel = path.join(W, arg('ziel') || 'docs/auftrag-2/bilder/Zugabe'); fs.mkdirSync(ziel, { recursive: true });
+    const zellen = ids.map(id => { const d = it[id] || {}; const u = url('items', id); return `<div class="z" style="width:300px;align-items:flex-start"><div class="b"><img src="${u}" width="192" height="192"><div style="display:flex;flex-direction:column;gap:6px"><img src="${u}" width="48" height="48"><img src="${u}" width="32" height="32"><span style="background:#d8d4cc;display:inline-block;width:32px;height:32px"><img src="${u}" width="32" height="32" style="filter:brightness(0)"></span></div></div><div class="n" style="height:auto;text-align:left">${esc(d.n || id)}</div><div class="r ${d.rar === 'reliquie' ? 'rel' : d.rar === 'selten' ? 'sel' : ''}">${esc(id)} · ${(d.st || []).join('') || '–'} · ${esc(d.rar || '')}</div>${d.eigen && d.eigen.t ? `<div style="color:#e0c080">${esc(d.eigen.t)}</div>` : ''}<div style="color:#8f8672"><i>${esc(d.flavor || '')}</i></div></div>`; }).join('');
+    const hz = hgs.map(id => { const u = url('handgriffe', id); return `<div class="z" style="width:300px"><div class="b"><img src="${u}" width="192" height="128"><img src="${u}" width="48" height="32"></div><div class="n">${esc(hg[id]?.n || id)} · ${esc(hg[id]?.build || '')}</div></div>`; }).join('');
+    await foto(page, `${KOPF}<h1>${esc(arg('titel') || 'Auswahl')} · ${ids.length} Icons${hgs.length ? ', ' + hgs.length + ' Handgriffe' : ''}</h1><p>×4, 48 px, 32 px und Silhouette bei 32 px. Feldton #0a0806 wie im Spiel.</p><div class="raster">${zellen}</div>${hz ? `<h2>Handgriffe</h2><div class="raster">${hz}</div>` : ''}`, path.join(ziel, 'kontaktbogen.png'), 1600);
   }
   await browser.close();
 })();
