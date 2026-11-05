@@ -30,7 +30,7 @@ module.exports = {
     // Mantel: Schultern, gerade fallend, unten etwas weiter; Saum in der Wade
     const sx = 54 + L, sy = 46 + T;
     const mantel = Pg([[sx - 5, sy - 1], [sx + 5, sy - 1], [sx + 10, sy + 5], [sx + 11, sy + 24], [sx + 17, sy + 52], [sx + 16, sy + 56], [sx - 17, sy + 56], [sx - 16, sy + 50], [sx - 10, sy + 24], [sx - 10, sy + 5]], null, { rd: 1.6 });
-    const pelz = [E(sx - 6, sy + 1, 4.5, 3.4, null), E(sx, sy - 1, 5, 3.4, null), E(sx + 6, sy + 1, 4.5, 3.4, null)];
+    const pelz = [E(sx - 7, sy + 2, 5, 4, null), E(sx, sy, 6, 4, null), E(sx + 7, sy + 2, 5, 4, null)];
     const beine = [C(sx - 5, sy + 52, sx - 6, 111, 2.2, 1.8, null), C(sx + 4, sy + 52, sx + 5, 111, 2.2, 1.8, null)];
     const schuhe = [E(sx - 8, 113, 3.4, 1.8, 'dunkel'), E(sx + 3, 113, 3.4, 1.8, 'dunkel')];
     // Kopf und Hals: Ruhelage weit links vor dem Körper
@@ -57,8 +57,8 @@ module.exports = {
     if (!v.schirm) {
       // Tüte aus Papier, Spitze nach unten, unter den Händen; oben hängen die trockenen Köpfe über den Rand
       const bx = hV[0] + 1, by = hV[1] - 2;
-      strauss.push(Pg([[bx - 7, by - 1], [bx + 6, by - 2], [bx + 1, by + 16], [bx - 1, by + 16]], null, { rd: 0.6 }));
-      for (let i = 0; i < 5; i++) { const tx = bx - 6 + i * 3, ty = by - 4 - (i % 2) * 2; strauss.push(C(tx, by - 1, tx - 1, ty, 0.6, 0.6, null), C(tx - 1, ty, tx - 3 + i * 0.3, ty + 3, 0.6, 0.6, null), E(tx - 3 + i * 0.3, ty + 4, 1.7, 1.8, null)); }
+      strauss.push(Pg([[bx - 8, by - 1], [bx + 7, by - 3], [bx + 1, by + 18], [bx - 1, by + 18]], null, { rd: 0.8 }));
+      for (let i = 0; i < 5; i++) { const tx = bx - 6 + i * 3, ty = by - 4 - (i % 2) * 2; strauss.push(C(tx, by - 1, tx - 1, ty - 1, 0.7, 0.6, null), C(tx - 1, ty - 1, tx - 4 + i * 0.4, ty + 3, 0.6, 0.6, null), E(tx - 4 + i * 0.4, ty + 5, 2.3, 2.4, null)); }
     }
     const tasche = v.schirm ? [Pg([[sx - 12, sy + 26], [sx - 4, sy + 26], [sx - 3, sy + 34], [sx - 13, sy + 34]], null, { rd: 1 }), C(sx - 11, sy + 26, sx - 8, sy + 21, 0.6, 0.6, null)] : [];
     const schirm = v.schirm ? [C(hH[0] + 1, hH[1] - 4, hH[0] + 3, 113, 1, 0.9, null), C(hH[0] + 1, hH[1] - 4, hH[0] - 3, hH[1] - 6, 0.9, 0.9, null), Pg([[hH[0] + 1, hH[1] + 6], [hH[0] + 4, hH[1] + 6], [hH[0] + 4.5, hH[1] + 28], [hH[0] + 2.5, hH[1] + 34], [hH[0] + 1, hH[1] + 28]], null, { rd: 0.6 })] : [];
@@ -68,7 +68,7 @@ module.exports = {
       { p: armH, k: 1, kante: true, anker: [L, T] },                       // 2 hinterer Arm
       { p: schirm, k: 0.3, kante: true },                                  // 3 Schirm
       { p: [mantel], k: 1.5, kante: true, anker: [L, T], tone: 0.05 },     // 4 Mantel
-      { p: pelz, k: 1.5, kante: true },                                    // 5 Pelzkragen
+      { p: pelz, k: 1.5, kante: true, tone: 0.2 },                         // 5 Pelzkragen
       { p: hals, k: 1, kante: true },                                      // 6 Hals
       { p: kopf, k: 1, kante: true },                                      // 7 Kopf
       { p: hut, k: 0.6, kante: true },                                     // 8 Hut
@@ -95,7 +95,7 @@ module.exports = {
       for (let i = 0; i < 3; i++) { P.auf(X + 2, Y + 7 + i * 6, 'k3'); P.auf(X + 3, Y + 7 + i * 6, 'k0'); }
       P.line(X + 1, Y + 3, X + 1, Y + 24, 'k0', true);
       // Pelz: Büschel mit hellen Spitzen
-      for (let i = 0; i < 10; i++) P.auf(X - 9 + i * 2, Y - 2 + ((i * 3) % 2), i % 2 ? 'r1' : 'k3');
+      for (let i = 0; i < 12; i++) { const xx = X - 12 + i * 2; const yy = Y - 1 + Math.abs(i - 6) * 0.4 + ((i * 3) % 2); P.auf(xx, r(yy), i % 3 ? 'k3' : 'r1'); P.auf(xx + 1, r(yy) + 3, 'k0'); }
       // Medaillon an der Kette: das innere Licht, ein Bild von jemandem, der nicht kommt
       if (!aus) { P.glow(X - 1.5, Y + 11, 7, 0.75); P.set(X - 2, Y + 11, 'glut'); P.set(X - 1, Y + 11, 'messing'); P.set(X - 2, Y + 12, 'messing'); }
       P.line(X - 6, Y + 2, X - 2, Y + 10, 'messing', true);
@@ -104,10 +104,11 @@ module.exports = {
       for (let x = KX - 5; x <= KX + 6; x++) P.auf(x, KY - 2, 'k0');
       P.auf(KX + 4, KY - 3, 'email'); P.auf(KX + 5, KY - 3, 'email'); P.auf(KX + 5, KY - 4, 'k3');
       // Schleier: feines Netz über dem Gesicht, dahinter die Augen
-      if (!aus) { P.set(KX - 3, KY + 2, 'kern'); P.set(KX - 4, KY + 2, 'glut'); P.set(KX, KY + 2, 'glut'); P.glow(KX - 2, KY + 2.5, 4, 0.5); augen.push([KX - 3, KY + 2]); }
-      for (let y = KY; y <= KY + 8; y++) for (let x = KX - 7; x <= KX + 2; x++) { if (P.get(x, y) >= 7 && P.get(x, y) <= 9) { if ((x + y) % 4 === 0) P.set(x, y, 'glutDim'); continue; } if ((x + y) % 2 === 0 && (x % 2 === 0)) P.set(x, y, P.get(x, y) ? 'k3' : 0); else if (!P.get(x, y) && (x + y) % 3 === 0 && y > KY + 1 && x < KX + 1 && x > KX - 7) P.set(x, y, 'k1'); }
+      for (let y = KY + 1; y <= KY + 8; y += 2) for (let x = KX - 7; x <= KX + 2; x += 2) { const c = P.get(x, y); if (c >= 1 && c <= 4) P.set(x, y, c >= 3 ? 'k1' : 'k3'); else if (!c && x < KX - 4 && y > KY + 2) P.set(x, y, 'k2'); }
+      P.auf(KX + 2, KY + 4, 'k3'); P.auf(KX + 3, KY + 3, 'r1'); P.auf(KX - 5, KY + 6, 'k3');
+      if (!aus) { P.set(KX - 3, KY + 2, 'kern'); P.set(KX - 4, KY + 2, 'glut'); P.set(KX, KY + 2, 'kern'); P.set(KX + 1, KY + 2, 'glut'); P.glow(KX - 1.5, KY + 2.5, 6, 0.7); P.set(KX - 3, KY + 2, 'kern'); P.set(KX, KY + 2, 'kern'); augen.push([KX - 3, KY + 2], [KX, KY + 2]); }
       // Strauß: trockene Köpfe, einer hat noch Farbe
-      if (strauss.length) { const bx = r(hV[0]) + 1, by = r(hV[1]) - 2; for (let y = by; y < by + 15; y++) { P.auf(bx + 3 - r((y - by) * 0.3), y, 'blass'); if (y % 3 === 0) P.auf(bx - 2, y, 'k3'); } P.line(bx - 6, by, bx + 5, by - 1, 'k3', true); P.auf(bx - 5, by - 1, 'email'); P.auf(bx + 1, by - 3, 'r1'); }
+      if (strauss.length) { const bx = r(hV[0]) + 1, by = r(hV[1]) - 2; for (let y = by; y < by + 15; y++) { P.auf(bx + 3 - r((y - by) * 0.3), y, 'blass'); if (y % 3 === 0) P.auf(bx - 2, y, 'k3'); } P.line(bx - 7, by, bx + 6, by - 2, 'k3', true); for (let i = 0; i < 5; i++) { const fx = r(bx - 10 + i * 3.4), fy = r(by + 1 - (i % 2) * 2); P.auf(fx, fy, i === 2 ? 'email' : 'r1'); P.auf(fx + 1, fy - 1, 'k3'); P.auf(fx, fy + 1, 'k0'); } }
       // Tasche: Bügel in Messing
       if (tasche.length) { P.line(X - 12, Y + 27, X - 4, Y + 27, 'messing', true); P.auf(X - 8, Y + 30, 'k3'); }
     };

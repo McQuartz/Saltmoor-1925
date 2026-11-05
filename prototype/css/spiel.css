@@ -250,3 +250,6 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .hgpick .hgimg{display:block;margin:4px auto 2px;width:calc(var(--u,3px)*32);height:auto;image-rendering:pixelated}
 /* Belohnung mit Handgriff und Reliquie: etwas dichter, damit „Nichts nehmen“ ohne Scrollen sichtbar bleibt (seit Reliquien ihren Eigenschaftstext zeigen) */
 .box.reward{max-height:calc(var(--u)*264)}.box.reward .innen{padding:calc(var(--u)*4) calc(var(--u)*8)}.box.reward h3{margin:calc(var(--u)*3) 0 calc(var(--u)*1)}.box.reward .picks{margin:calc(var(--u)*2) 0}.box.reward .hgpick .hgimg{width:calc(var(--u)*24)}.box.reward .pick img{max-height:calc(var(--u)*20)}.box.reward .pick{padding:calc(var(--u)*3)}.box.reward .pick .ps{margin-top:calc(var(--u)*1)}
+
+/* Mehr als 6 Handkarten (Ballast, Strandbuch, Wahrsagerin): Karten überlappen, damit die Hand nie aus dem Bild läuft; die Karte unter der Maus liegt oben */
+#hand .karte+.karte{margin-left:calc(var(--u)*-1*var(--ov,0))}#hand .karte:hover{z-index:5}
