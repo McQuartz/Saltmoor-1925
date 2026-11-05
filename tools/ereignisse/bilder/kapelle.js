@@ -109,10 +109,10 @@ module.exports = {
       }
       // Boden: Steinplatten in Aufsicht, deutlich gefugt
       K.feld(0, 68, 160, 90, ['#060705', '#0c0e0a', '#141710', '#1e2218', '#2a2e20', '#383a28', '#484632'], (x, y) => {
-        const Z = 30 / (y - 58), X = (x - 80) / (y - 58) * 1.4, zi = Math.floor(Z * 1.2), xi = Math.floor(X + (zi & 1) * .5);
-        const fz = Z * 1.2 - zi, fx = X + (zi & 1) * .5 - xi;
-        let t = .42 + (B.hash(xi, zi, 5) - .5) * .18 - (90 - y) / 120;
-        if (fz < .12 * (y - 58) / 16 + .04 || fx < .05 + .02 * (y - 58) / 16) t -= .3; else if (fz < .25) t += .06;
+        const Z = 30 / (y - 58), X = (x - 80) / (y - 58) * 2, zi = Math.floor(Z * 2.6), xi = Math.floor(X + (zi & 1) * .5);
+        const fz = Z * 2.6 - zi, fx = X + (zi & 1) * .5 - xi;
+        let t = .55 + (B.hash(xi, zi, 5) - .5) * .2 - (90 - y) / 140;
+        if (fz < .16 || fx < .07) t -= .4; else if (fz < .3) t += .08;
         return t;
       });
       // Treibende Seiten: zwei liegen flach am Spiegel, zwei sinken schräg
@@ -137,8 +137,9 @@ module.exports = {
       K.licht(80, 80, 56, '#3a2810', 1, { oval: 2.6, exp: 1.2 });
       K.licht(80, 80, 26, '#4a3414', .9, { oval: 2.6 });
       for (const sm of saeulen) { K.licht(80, 58, 90, '#2a1c0c', .9, { maske: (x, y) => sm.has(x, y) }); K.kante(sm, 80, 56, 120, ['#6a4a20', '#c89a50'], { nah: .5, min: .2 }); }
+      K.kante(l, 80, 56, 40, ['#6a4a20', '#c89a50'], { nah: .4, min: .1 });
       K.flamme(80, 58, { gross: 2, hof: 64, hofFarbe: '#5a3c14' });
-      K.vignette(.6, { cx: 80, cy: 52 });
+      K.vignette(.5, { cx: 80, cy: 56 });
     },
 
     // Ein überfluteter Kirchenraum im grünen Licht von unten, eine Glocke unter der Oberfläche und Köpfe, die sich in den Bänken erheben.
@@ -210,7 +211,7 @@ module.exports = {
       K.mauer(0, 0, 160, 90, ['#0a0604', '#140c08', '#1e120c', '#2a1a10'], { hoehe: 4, breite: 8, ton: .5, maske: ab });
       for (let y = 0; y < 90; y++) for (let x = 0; x < 160; x++) if (!ab(x, y) && (ab(x + 1, y) || ab(x, y + 1))) K.set(x, y, '#4a3826');
       // Taufbecken: Schale, Schaft, Sockel
-      const cx = 80, cy = 58, rx = 36, ry = 12;
+      const cx = 80, cy = 58, rx = 37, ry = 14;
       const fuss = K.maske(); fuss.poly([[60, 90], [65, 85], [95, 85], [100, 90]]); fuss.rect(71, 70, 18, 16);
       K.form(fuss, 0, { k: STEIN.slice(0, 4), ton: 1.4, verlauf: -.5, rand: 1, r: [STEIN[4]], muster: (x) => ((x - 71) % 6 === 0 ? -.6 : 0) });
       const schale = K.maske(); schale.fn(cx - rx, cy, cx + rx, cy + 20, (x, y) => { const q = (x - cx) / rx; return Math.abs(q) <= 1 && y <= cy + 3 + Math.sqrt(Math.max(0, 1 - q * q)) * 13; });
@@ -221,24 +222,37 @@ module.exports = {
       const ix = rx - 4, iy = ry - 3;
       const innen = (x, y) => Math.hypot((x + .5 - cx) / ix, (y + .5 - cy) / iy) < 1;
       K.feld(0, 0, 160, 90, ['#000000', '#020302', '#050705', '#0a0d0a'], (x, y) => innen(x, y) ? .4 - (y - cy) / 24 : -1);
-      // Das Gesicht im Wasser: blass, älter als du, zufrieden. Unten verliert es sich im Dunkel.
-      const fx = 80, fy = 57;
-      const HAUT = ['#22201a', '#4a4436', '#7a7060', '#aea088', '#d8ccb0', '#f0e6cc'];
+      // Das Gesicht im Wasser: blass, älter als du, zufrieden. Länglich, mit Kinn und gelichtetem Haar,
+      // jede Zeile vom Wellengang ein wenig verschoben.
+      const fx = 80, fy = 58, off = 2;
+      const wv = y => (y === 53 || y === 54 ? 1 : y === 61 || y === 62 ? -1 : 0);          // Versatz der Zeile durch die Wellen
+      const S = (x, y, c) => { y += off; if (innen(x + wv(y), y)) K.set(x + wv(y), y, c); };
+      const HAUT = ['#22201a', '#4a4436', '#7a7060', '#aea088', '#d8ccb0', '#ece2c8'];
+      const breiteF = y => y < fy ? 7.2 * Math.sqrt(Math.max(0, 1 - ((fy - y) / 8.5) ** 2)) + .3 : 7.2 - (y - fy) * .55;
       K.feld(0, 0, 160, 90, HAUT, (x, y) => {
         if (!innen(x, y)) return -1;
-        const q = Math.hypot((x + .5 - fx) / (10 - Math.max(0, y - fy) * .45), (y + .5 - fy) / 8.5); if (q >= 1) return -1;
-        return .95 - q * .55 - Math.max(0, (y - fy - 3)) * .09 + (x < fx - 3 ? -.12 : 0);
+        const xx = x - wv(y), w = breiteF(y); if (y < fy - 8 || y > fy + 8 || Math.abs(xx - fx) > w) return -1;
+        const q = Math.abs(xx - fx) / Math.max(1, w);
+        return .92 - q * .45 - Math.max(0, y - fy - 3) * .08 + (xx < fx - 2 ? -.1 : 0);
       });
+      // Ohren
+      for (const sx of [-1, 1]) { S(fx + sx * 8, fy - 1, HAUT[2]); S(fx + sx * 8, fy, HAUT[2]); S(fx + sx * 8, fy + 1, HAUT[1]); }
+      // gelichtetes graues Haar: kahle Stirn, ein dünner Kranz an den Seiten
+      for (let y = 47; y <= 55; y++) for (const sx of [-1, 1]) { const w = breiteF(y + off); for (let d = 0; d < 2; d++) S(Math.round(fx + sx * (w - d)), y, d ? '#5a5648' : '#8a8678'); }
+      for (let x = fx - 3; x <= fx + 3; x++) S(x, 47 + (Math.abs(x - fx) > 1 ? 0 : -1), '#9a968a');
       const D = '#2a261e', F = '#6a6250';
-      // Brauen, Augen (halb zu), Krähenfüße, Nase, Lächeln, Stirnfalten
-      K.linie(73, 53, 77, 52, F); K.linie(83, 52, 87, 53, F);
-      K.linie(74, 55, 77, 55, D); K.linie(83, 55, 86, 55, D); K.set(74, 54, F); K.set(86, 54, F);
-      K.set(72, 56, F); K.set(71, 55, F); K.set(88, 56, F); K.set(89, 55, F);
-      K.linie(80, 56, 80, 58, F); K.set(79, 59, F);
-      K.linie(77, 61, 83, 61, D); K.set(76, 60, D); K.set(84, 60, D); K.set(75, 59, F); K.set(85, 59, F); K.linie(78, 63, 82, 63, F, .6);
-      K.linie(76, 50, 84, 50, F, .7);
+      // Brauen, Augen halb zu, Krähenfüße, lange Nase, Nasolabialfalten, schmaler Mund, Kinnfalte
+      for (const [x0, x1, y] of [[74, 77, 52], [83, 86, 52]]) for (let x = x0; x <= x1; x++) S(x, y, F);
+      for (const [x0, x1] of [[75, 77], [83, 85]]) for (let x = x0; x <= x1; x++) S(x, 54, D);
+      S(74, 53, F); S(86, 53, F); S(73, 55, F); S(87, 55, F);
+      for (let y = 54; y <= 58; y++) S(80, y, F); S(79, 59, D); S(81, 59, D);
+      S(77, 59, F); S(76, 60, F); S(83, 59, F); S(84, 60, F);
+      for (let x = 78; x <= 82; x++) S(x, 61, D); S(77, 60, D); S(83, 60, D);
+      for (let x = 79; x <= 81; x++) S(x, 63, F);
+      // Wellenlinien quer durchs Wasser und übers Gesicht
+      for (const wy of [49, 53, 60, 64, 67]) for (let x = 40; x < 122; x++) { const y = wy + Math.round(Math.sin(x * .3 + wy) * .7); if (innen(x, y) && Math.sin(x * .55 + wy * 2) > .35) { const p = K.get(x, y); K.set(x, y, B.mix(p >>> 24 ? B.unpk(p) : [0, 0, 0], '#9aa290', .35)); } }
       // Blasen im Takt eines Atems
-      for (const [x, y] of [[93, 56], [95, 53], [92, 51]]) K.set(x, y, '#9aa290');
+      for (const [x, y] of [[93, 57], [95, 54], [92, 52]]) K.set(x, y, '#9aa290');
       K.licht(fx, fy, 34, '#2a2416', .8, { ohne: schale });
       K.vignette(.7, { cx: 80, cy: 48 });
     },

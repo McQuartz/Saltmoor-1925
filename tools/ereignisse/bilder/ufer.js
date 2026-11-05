@@ -15,20 +15,20 @@ const DUNKEL = ['#040607', '#0b1214', '#162024', '#25333a'];
 // Die Decke: das Meer von unten. Wellenbänder von fern (tief am Horizont, hell) nach nah (oben, dunkel);
 // jede hängende Front ist an der Lippe durchscheinend, an der Kante Schaum. lx: Morgenlicht hinten.
 function meerDecke(K, hy, o) {
-  o = o || {}; const { B } = K, lx = o.lx === undefined ? 130 : o.lx, n = o.baender || 7;
-  K.feld(0, 0, 160, hy + 1, WASSER, (x, y) => .25 + (y / hy) * .4 + Math.exp(-(((x - lx) / 40) ** 2)) * (y / hy) * .3);
+  o = o || {}; const { B } = K, lx = o.lx === undefined ? 130 : o.lx, n = o.baender || 5;
+  K.feld(0, 0, 160, hy + 1, WASSER, (x, y) => .15 + (y / hy) * .35 + Math.exp(-(((x - lx) / 40) ** 2)) * (y / hy) * .35);
   for (let i = n - 1; i >= 0; i--) {
-    const q = i / (n - 1), basis = B.lerp(o.oben === undefined ? 10 : o.oben, hy - 2, Math.pow(q, .8)), amp = B.lerp(5, 1.2, q), fq = B.lerp(.06, .16, q);
+    const q = i / (n - 1), basis = B.lerp(o.oben === undefined ? 10 : o.oben, hy - 2, Math.pow(q, .8)), amp = B.lerp(4, 1, q), fq = B.lerp(.05, .12, q);
     const kante = x => basis + Math.sin(x * fq + i * 2.1) * amp + (B.rausch2(x * fq * 2, i, K.seed) - .5) * amp * 1.4 + (o.haenge ? o.haenge(x, i) : 0);
     K.feld(0, 0, 160, 90, WASSER, (x, y) => {
       const k = kante(x); if (y > k) return -1;
       const lippe = Math.max(0, 1 - (k - y) / (4 + amp * 2)), licht = Math.exp(-(((x - lx) / 46) ** 2));
-      return .14 + q * .32 + lippe * (.25 + licht * .25) + licht * q * .2 + (B.rausch2(x * .2, y * .3, K.seed + i) - .5) * .08 - (k - y) / 120;
+      return .06 + q * .26 + lippe * (.12 + licht * .3) + licht * q * .22 + (B.rausch2(x * .2, y * .3, K.seed + i) - .5) * .06 - (k - y) / 100;
     });
-    // Schaum an der Kante, in Fäden nach unten
+    // Schaum an der Kante: nur in Flocken, hell nur nahe am Licht
     for (let x = 0; x < 160; x++) {
-      const k = Math.round(kante(x)), v = B.rausch2(x * .25, i * 3, K.seed + 7);
-      if (v > .45 - q * .1) { K.set(x, k, v > .62 ? SCHAUM[1] : SCHAUM[0]); if (v > .7 && q < .7 && B.hash(x, i, 3) < .4) K.set(x, k + 1, SCHAUM[0]); }
+      const k = Math.round(kante(x)), v = B.rausch2(x * .3, i * 3, K.seed + 7), licht = Math.exp(-(((x - lx) / 40) ** 2));
+      if (v > .66) K.set(x, k, licht > .5 && v > .74 ? SCHAUM[1] : licht > .2 ? SCHAUM[0] : WASSER[6 + Math.round(q * 2)]);
     }
   }
 }
@@ -36,21 +36,22 @@ function meerDecke(K, hy, o) {
 function sand(K, hy, o) {
   o = o || {}; const { B } = K, lx = o.lx === undefined ? 130 : o.lx;
   K.feld(0, hy, 160, 90, SAND, (x, y) => {
-    const q = (y - hy) / (90 - hy), rip = Math.sin(y * (1.2 + q * .4) + Math.sin(x * .05) * 3) > .75 ? .1 : 0;
-    return .2 + Math.pow(1 - q, 2.5) * .55 * (.5 + .5 * Math.exp(-(((x - lx) / 70) ** 2))) + q * .1 + rip + (B.hash(x, y, 2) < .04 ? .12 : 0);
+    const q = (y - hy) / (90 - hy), rip = Math.sin(y * (1.1 + q * .3) + Math.sin(x * .05) * 3) > .82 ? .07 : 0;
+    return .1 + Math.pow(1 - q, 3) * .5 * (.35 + .65 * Math.exp(-(((x - lx) / 60) ** 2))) + rip;
   });
   // Horizont: heller Streifen, wo Meer und Sand sich treffen
   for (let x = 0; x < 160; x++) { const v = Math.exp(-(((x - lx) / 60) ** 2)); K.set(x, hy, v > .4 ? MORGEN : SAND[6]); if (v > .7) K.set(x, hy - 1, SEE); }
 }
 // Fußabdruck nackter Fuß im Sand (Aufsicht schräg): Ferse, Ballen, Zehen; s = Größe
 function fuss(K, x, y, s, links) {
-  const m = K.maske(), d = links ? -1 : 1;
-  m.ell(x, y + 1.6 * s, 1.1 * s, .9 * s); m.ell(x + d * .25 * s, y - .2 * s, 1.3 * s, 1.1 * s); m.kap(x, y + 1.4 * s, x + d * .2 * s, y, .9 * s, 1 * s);
-  for (let i = 0; i < 4; i++) m.ell(x + d * (-.6 + i * .5) * s, y - 1.6 * s + Math.abs(i - .5) * .15 * s, .32 * s, .3 * s);
-  K.form(m, 0, { k: SAND.slice(0, 5), r: [SAND[6], MORGEN], ton: 1.5, fase: 0, rand: 1, L: [0, 1], rimF: .4 });
-  return m;
+  const { B } = K, d = links ? -1 : 1, m = K.maske();
+  m.ell(x, y + 1.3 * s, .9 * s, .75 * s); m.ell(x + d * .2 * s, y - .2 * s, 1.1 * s, .9 * s); m.kap(x, y + 1.2 * s, x + d * .15 * s, y, .7 * s, .85 * s);
+  for (let i = 0; i < 4; i++) m.ell(x + d * (-.55 + i * .45) * s, y - 1.55 * s + Math.abs(i - .8) * .12 * s, .26 * s + .2, .24 * s + .2);
+  for (let j = m.y0; j <= m.y1; j++) for (let i = m.x0; i <= m.x1; i++) if (m.has(i, j)) K.set(i, j, m.has(i, j - 1) ? SAND[1] : SAND[0]);
+  // der vordere Rand jeder Mulde fängt das Licht von hinten
+  for (let j = m.y0; j <= m.y1 + 1; j++) for (let i = m.x0; i <= m.x1; i++) if (!m.has(i, j) && m.has(i, j - 1)) K.set(i, j, SAND[6]);
+  void B; return m;
 }
-
 module.exports = {
   biom: 'ufer',
   bilder: {
@@ -58,23 +59,29 @@ module.exports = {
     ufer_spuren(K) {
       const { B } = K;
       const hy = 46, wx = 110;
-      // Eine Welle hängt tief herab, fast bis auf den Sand: dort enden die Spuren
-      meerDecke(K, hy, { lx: wx + 10, haenge: (x, i) => i === 1 ? Math.max(0, 1 - Math.abs(x - wx) / 22) ** 1.5 * 34 : 0 });
-      sand(K, hy, { lx: wx + 10 });
+      meerDecke(K, hy, { lx: wx + 14 });
+      sand(K, hy, { lx: wx + 14 });
+      // Eine Welle hängt tief herab, fast bis auf den Sand: breite Front, durchscheinend im Morgenlicht, an der Lippe Schaum
+      const lip = x => 56 - Math.pow(Math.abs(x - wx) / 40, 2) * 22 + Math.sin(x * .45) * 1.2;
+      const we = K.maske(); we.fn(wx - 46, 0, wx + 50, 60, (x, y) => y < lip(x) && y > 8 + Math.abs(x - wx) * .1);
+      K.feld(0, 0, 160, 90, WASSER, (x, y) => { if (!we.has(x, y)) return -1; const d = lip(x) - y; return .32 + Math.max(0, 1 - d / 20) * .62 * Math.exp(-(((x - wx - 6) / 30) ** 2)) + (Math.sin(x * .35 - y * .5) > .85 ? .08 : 0) - d / 140; });
+      for (let x = wx - 46; x <= wx + 50; x++) { const y = Math.round(lip(x) - 1); if (!we.has(x, y)) continue; const nah = Math.abs(x - wx) < 26; K.set(x, y, nah && B.hash(x, 1, 2) < .7 ? SCHAUM[1] : SCHAUM[0]); if (nah && B.hash(x, 2, 2) < .25) K.set(x, y + 1, SCHAUM[0]); }
       // Licht durch die hängende Welle auf den Sand darunter
-      K.licht(wx, 62, 30, MORGEN_G2, 1, { oval: 2.4, maske: (x, y) => y > hy });
+      K.licht(wx, 62, 36, MORGEN_G2, 1, { oval: 2.4, maske: (x, y) => y > hy });
+      K.licht(wx, 60, 16, '#4a4630', 1, { oval: 2.4, maske: (x, y) => y > hy });
       // Spur: von vorn links bis unter die Welle, die Abdrücke werden kleiner
       const pfad = [];
-      for (let i = 0; i < 9; i++) { const q = i / 8, x = B.lerp(22, wx - 4, Math.pow(q, .8)) + ((i & 1) ? 3 : -3) * (1 - q * .6), y = B.lerp(86, 58, Math.pow(q, .7)); pfad.push([x, y, B.lerp(2.8, 1, q), i & 1]); }
+      for (let i = 0; i < 8; i++) { const q = i / 7, x = B.lerp(26, wx - 6, Math.pow(q, .85)) + ((i & 1) ? 3.5 : -3.5) * (1 - q * .5), y = B.lerp(86, 61, Math.pow(q, .75)); pfad.push([x, y, B.lerp(3.4, 1.5, q), i & 1]); }
+      K.licht(70, 72, 56, MORGEN_G2, 1, { oval: 2, maske: (x, y) => y > hy });
       for (const [x, y, s, l] of pfad) fuss(K, x, y, s, l);
       // Im vordersten Abdruck unter der Welle steht ein Schuh, ordentlich, als hätte ihn jemand hineingestellt
       const [sx, sy] = pfad[pfad.length - 1];
-      const schuh = K.maske(); schuh.ell(sx + 3, sy + 1, 3.6, 1.4); schuh.rect(sx - 1, sy - 2, 4, 3); schuh.kap(sx + 1, sy - 1.6, sx + 6, sy, 1.2, 1);
-      K.form(schuh, 0, { k: DUNKEL, r: [SANDRAND[0], MORGEN], ton: 1.4, fase: 0, rand: 1, L: [.6, -.8], schatten: 1 });
-      K.set(sx + 2, sy - 1, '#3e382e');
+      const schuh = K.maske(); schuh.ell(sx + 4, sy + 1, 4.6, 1.8); schuh.rect(sx - 1, sy - 3, 5, 4); schuh.kap(sx + 1, sy - 2, sx + 7, sy, 1.4, 1.2);
+      K.form(schuh, 0, { k: KORB, r: [SANDRAND[0], MORGEN], ton: 2.2, fase: 0, rand: 2, L: [.3, -1], schatten: 1 });
+      K.set(sx + 1, sy - 2, '#3e382e'); K.set(sx + 2, sy - 2, '#3e382e');
       // Tropfen aus der Lippe der Welle
-      for (const [x, y] of [[wx - 6, 50], [wx + 4, 54], [wx + 12, 47]]) { K.set(x, y, SCHAUM[0]); K.set(x, y + 2, SEE); }
-      K.vignette(.7, { cx: 90, cy: 52 });
+      for (const [x, y] of [[wx - 8, 57], [wx + 5, 59], [wx + 14, 56]]) { K.set(x, y, SCHAUM[0]); K.set(x, y + 2, SEE); }
+      K.vignette(.6, { cx: 96, cy: 56 });
     },
 
     // Ein Strandkorb von hinten im Sand, gestreifter Stoff in der Haube, darüber hängt das Meer.
@@ -100,8 +107,12 @@ module.exports = {
       // Füße des Korbs im Sand, Schatten, das Schild mit der Nummer
       const fu = K.maske(); fu.rect(cx - 22, yb, 6, 2); fu.rect(cx + 16, yb, 6, 2); K.form(fu, 0, { k: KORB, ton: 1, fase: 0, rand: 0 });
       K.feld(cx - 30, yb + 1, cx + 30, yb + 5, SAND.slice(0, 3), (x, y) => Math.abs(x - cx + 2) < 30 - (y - yb) * 3 ? .2 : -1);
-      const schild = K.maske(); schild.rect(cx - 6, yb - 46, 12, 6); K.form(schild, 0, { k: ['#2a2620', '#5a5446', '#a8a08a', '#d8d0b8'], r: [MORGEN, '#fff8e4'], ton: 2.4, fase: 0, rand: 1 });
-      K.rect(cx - 3, yb - 44, 2, 2, '#1a1814'); K.rect(cx + 1, yb - 44, 2, 2, '#1a1814');
+      // Schild mit der Kabinennummer (17)
+      const schild = K.maske(); schild.rect(cx - 6, yb - 47, 13, 8); K.form(schild, 0, { k: ['#2a2620', '#5a5446', '#a8a08a', '#d8d0b8'], r: [MORGEN, '#fff8e4'], ton: 2.4, fase: 0, rand: 1 });
+      const ZI = { 1: ['01', '11', '01', '01', '01'], 7: ['111', '001', '010', '010', '010'] };
+      for (const [d, ox] of [[1, -3], [7, 1]]) ZI[d].forEach((z, j) => [...z].forEach((c, i) => { if (c === '1') K.set(cx + ox + i, yb - 45 + j, '#2a2016'); }));
+      // Haubenrand: der gestreifte Stoff schaut oben über das Geflecht
+      for (let x = cx - 21; x <= cx + 21; x++) { const y = Math.round(yb - 34 - Math.sqrt(Math.max(0, 1 - ((x - cx) / 24) ** 2)) * 20); K.set(x, y + 1, Math.floor((x - cx + 40) / 3) % 2 ? '#b89a80' : '#7a4a3a'); }
       K.vignette(.7, { cx: 80, cy: 50 });
     },
 
