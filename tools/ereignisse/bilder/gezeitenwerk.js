@@ -173,41 +173,53 @@ module.exports = {
     // Ein schräger Kanal, in dem das Wasser nach oben fließt, ein Schleusentor aus Bronze mit großem Handrad, ein dunkler Leib im Wasser.
     gezeitenwerk_schleuse(K) {
       const { B } = K;
-      K.fuell(NASS, (x, y) => .2 + (B.fbm(x * .04, y * .04, K.seed, 2) - .5) * .2 + (x % 28 < 1 ? -.1 : 0));
-      // Kanal: von links unten schräg hinauf nach rechts zum Tor; Mauern links/rechts
-      const kan = K.maske(); kan.poly([[0, 90], [0, 74], [110, 34], [124, 40], [124, 52], [44, 90]]);
-      const tor = { x: 112, y0: 14, y1: 58 };
-      // Seitenwände des Kanals
-      const wand = K.maske(); wand.poly([[0, 66], [108, 26], [112, 34], [0, 76]]);
-      K.form(wand, 0, { k: BRONZE.slice(0, 6), r: RAND, ton: 1.8, fase: 1, rand: 1, L: [0, -1], muster: (x, y) => ((x + Math.round(y * 2.7)) % 14 < 1 ? -.8 : 0) });
-      // Wasser im Kanal: leuchtende Schlieren laufen bergauf (zum Tor hin heller)
-      const LW = (x, y) => Math.max(0, x / 124);
-      K.feld(0, 30, 130, 90, WASSER, (x, y) => kan.has(x, y) ? .15 + LW(x, y) * .55 + (Math.sin((x * .9 + y * 2.4) * .35 + Math.sin(y * .7) * 2) > .7 ? .2 : 0) : -1);
-      for (let i = 0; i < 22; i++) {
-        let x = K.r.f(4, 110), y = 0; const y0 = 74 - x * .37 + K.r.f(2, 14);
-        const len = K.r.f(4, 10);
-        for (let k = 0; k < len; k++) { const px = x + k * 1.6, py = y0 - k * .6; if (!kan.has(px, py)) break; K.set(px, py, k > len - 2 ? PHOS : PHOS_M); }
+      const gx = 102, gy = 60;   // Leuchten am Fuß des Tors, wo das Wasser in die Kammer drückt (die helle Stelle)
+      // Hintergrund: ruhiges, nasses Schwarzgrün
+      K.fuell(NASS, (x, y) => ruhig(.15 + Math.max(0, 1 - Math.hypot(x - gx, y - gy) / 110) * .35, NASS.length - 1));
+      // Kanal: von links unten schräg hinauf nach rechts zum Tor; obere Kanalmauer als Bronzeband
+      const steig = .27, oben = x => 58 - x * steig, unten = x => 92 - x * steig * .3;
+      const wand = K.maske(); wand.fn(0, 0, 104, 90, (x, y) => y < oben(x) && y >= oben(x) - 9);
+      K.form(wand, 0, { k: BRONZE.slice(0, 6), r: RAND, ton: 2, fase: 1, rand: 1, L: [0, -1], lichtVon: [gx, gy], muster: (x, y) => ((x % 18) < 1 ? -.9 : 0) });
+      const kan = K.maske(); kan.fn(0, 0, 104, 92, (x, y) => y >= oben(x) && y < unten(x));
+      // Wasser: ruhig, zum Tor hin heller
+      const LW = (x, y) => Math.pow(Math.max(0, 1 - Math.hypot(x - gx, (y - gy) * 1.3) / 120), 1.2);
+      K.feld(0, 0, 104, 92, WASSER, (x, y) => kan.has(x, y) ? ruhig(.12 + LW(x, y) * .75, WASSER.length - 1, .12) : -1);
+      // Zwei, drei lange Leuchtschlieren laufen bergauf, zum Tor hin heller
+      for (const [x0, dy, len] of [[4, 6, 92], [20, 20, 78], [0, 28, 60]]) {
+        for (let x = x0; x < x0 + len && x < 103; x++) {
+          const y = Math.round(oben(x) + dy + Math.sin(x * .12 + dy) * 1.2);
+          if (!kan.has(x, y)) continue;
+          const q = (x - x0) / len; if (B.bay(x, y) > .35 + q) continue;
+          K.set(x, y, q > .85 ? PHOS_K : q > .5 ? PHOS : PHOS_M);
+        }
       }
-      // Der dunkle Leib im Wasser: lang, regungslos, schräg im Strom vor dem Tor
-      const leib = K.maske(); leib.pfad([[38, 74], [52, 67], [68, 60], [84, 54], [98, 49]], 5.5, 3); leib.ell(101, 47, 5, 3.6);
-      leib.poly([[34, 76], [24, 72], [28, 80]]);   // Schwanzflosse
-      K.form(leib, 0, { k: ['#000000', '#010202', '#030505', '#060a08'], ton: 1, fase: 0, rand: 0, verlauf: -1 });
-      // Wasser schäumt leuchtend um den Leib, Kante zum Tor hin hell
-      for (let y = leib.y0 - 2; y <= leib.y1 + 2; y++) for (let x = leib.x0 - 2; x <= leib.x1 + 2; x++) if (!leib.has(x, y) && kan.has(x, y) && (leib.has(x, y + 2) || leib.has(x - 2, y)) && K.r() < .5) K.set(x, y, PHOS_M);
-      K.kante(leib, 118, 40, 110, [PHOS_M, PHOS_K], { min: -.2, nah: .5 });
-      // Das Schleusentor: Bronzeplatte, Nieten, das Handrad mit sieben Speichen und Fingermulden
-      const t = K.maske(); t.rect(tor.x, tor.y0, 48, tor.y1 - tor.y0); t.rect(tor.x - 4, tor.y0 - 4, 52, 5);
-      K.form(t, 0, { k: BRONZE, r: RAND, ton: 2.4, fase: 1, rand: 2, schatten: 2, L: [-.8, -.6], muster: (x, y) => ((y - tor.y0) % 11 < 1 ? -.8 : 0) + (B.fbm(x * .1, y * .1, 4, 2) - .5) * .8 });
-      const hx = 136, hy = 32, hr = 12;
-      const hrad = K.maske(); hrad.ell(hx, hy, hr, hr); hrad.ell(hx, hy, hr - 2.2, hr - 2.2, 0);
-      for (let i = 0; i < 7; i++) { const a = i / 7 * TAU - .3; hrad.kap(hx, hy, hx + Math.cos(a) * (hr - 1), hy + Math.sin(a) * (hr - 1), 1, .8); }
-      hrad.ell(hx, hy, 2.6, 2.6);
-      K.form(hrad, 0, { k: BRONZE.slice(1), r: MESS, ton: 3, fase: 1, rand: 2, schatten: 2, L: [-.8, -.6] });
-      for (let i = 0; i < 7; i++) { const a = (i + .5) / 7 * TAU - .3; K.set(hx + Math.cos(a) * (hr - 1), hy + Math.sin(a) * (hr - 1), BLANK[3]); }
-      // Leuchten vor dem Tor, wo das Wasser in die Kammer drückt
-      K.licht(112, 44, 40, PHOS_G, .9);
-      leuchten(K, 96, 34, 124, 54, (x, y) => kan.has(x, y) ? 3 : 0);
-      K.vignette(.6, { cx: 90, cy: 46 });
+      // Der dunkle Leib: lang, regungslos, im Strom vor dem Tor; Rückenkamm bricht die Oberfläche
+      const leib = K.maske();
+      leib.pfad([[12, 80], [30, 74], [50, 68], [70, 62], [88, 57]], 7, 5); leib.ell(92, 56, 6, 4.6);
+      leib.poly([[14, 80], [2, 72], [6, 82], [2, 90]]);   // Schwanzflosse
+      for (let i = 0; i < 9; i++) { const x = 24 + i * 7.4, y = oben(x) + 15 - (x - 12) * .03; leib.poly([[x - 3, y + 3], [x + 1.5, y - 5 - (i % 2) * 2], [x + 4, y + 3]]); }
+      K.form(leib, 0, { k: ['#000000', '#010202', '#030605', '#071009'], ton: 1.2, fase: 0, rand: 0, verlauf: -1.4 });
+      K.kante(leib, gx + 4, gy - 30, 140, [PHOS_M, PHOS_K], { min: .1, nah: .45 });
+      // Wasserlinie: heller Saum, wo der Leib die Oberfläche bricht
+      for (let x = leib.x0; x <= leib.x1; x++) for (let y = leib.y1; y >= leib.y0; y--) if (leib.has(x, y) && !leib.has(x, y + 1) && kan.has(x, y + 1)) { if (B.bay(x, y) < .6) K.set(x, y + 1, PHOS_M); break; }
+      // Das Schleusentor: große Bronzefläche mit Nietreihen, rechts im Bild
+      const tx0 = 102;
+      const tor = K.maske(); tor.rect(tx0, 4, 58, 82);
+      K.form(tor, 0, { k: BRONZE.slice(1).concat(['#4c7a5c']), r: RAND, ton: 5, fase: 1, rand: 2, schatten: 2, lichtVon: [gx - 10, gy], verlauf: -.5, verlaufX: -1.2, muster: (x, y) => ((y - 4) % 20 < 1 ? -1 : 0) + ((x - tx0) % 29 < 1 ? -.8 : 0) });
+      for (let y = 8; y < 86; y += 20) for (let x = tx0 + 4; x < 160; x += 6) { K.set(x, y, BRONZE[7]); K.set(x + 1, y + 1, BRONZE[0]); }
+      K.licht(gx, gy, 60, PHOS_G, 1, { oval: .8, exp: 1.2 });
+      // Das Handrad: groß vor dem Tor, sieben Speichen und sieben Fingermulden am Kranz
+      const hx = 130, hy = 38, hr = 21;
+      const achse = K.maske(); achse.ell(hx + 2, hy + 2, 5, 5); K.form(achse, 0, { k: BRONZE.slice(0, 4), r: [], ton: 1, fase: 0, rand: 0 });
+      const hrad = K.maske(); hrad.ell(hx, hy, hr, hr); hrad.ell(hx, hy, hr - 3.4, hr - 3.4, 0);
+      for (let i = 0; i < 7; i++) { const a = i / 7 * TAU - .3; hrad.kap(hx, hy, hx + Math.cos(a) * (hr - 2), hy + Math.sin(a) * (hr - 2), 1.6, 1.1); }
+      hrad.ell(hx, hy, 4, 4);
+      K.form(hrad, 0, { k: BLANK, r: MESS, ton: 2.2, fase: 1, rand: 2, schatten: 2, lichtVon: [gx - 10, gy] });
+      K.kante(hrad, gx - 6, gy, 70, [PHOS_M, PHOS], { nah: .4 });
+      for (let i = 0; i < 7; i++) { const a = (i + .5) / 7 * TAU - .3, m = K.maske(); m.ell(hx + Math.cos(a) * (hr - 1.7), hy + Math.sin(a) * (hr - 1.7), 1.4, 1.4); K.form(m, 0, { k: ['#0e0b05', '#2a2210'], r: [], ton: 1, fase: 0, rand: 0 }); }
+      // Leuchten am Fuß des Tors, wo das Wasser hineindrückt
+      const kern = K.maske(); kern.ell(gx - 2, gy + 6, 5, 2.2); K.form(kern, 0, { k: [PHOS_M, PHOS, PHOS_K], r: [], ton: 2, fase: 0, rand: 0 });
+      K.vignette(.35, { cx: 96, cy: 50, innen: .65 });
     },
 
     // Ein Gewölbe mit Reihen großer Tonkrüge, deren Inhalt grünlich glimmt, lange Ölkannen an Haken an der Wand.
