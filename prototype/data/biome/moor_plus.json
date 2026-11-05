@@ -53,16 +53,16 @@
    "n": "Das Moorpferd",
    "biom": "moor",
    "rang": "waechter",
-   "hp": 104,
+   "hp": 72,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 17
+     "v": 12
     },
     {
      "t": "atk",
-     "v": 7,
+     "v": 5,
      "h": 3
     },
     {
@@ -75,7 +75,7 @@
     },
     {
      "t": "atk",
-     "v": 26
+     "v": 19
     }
    ],
    "sprite": "moorpferd",

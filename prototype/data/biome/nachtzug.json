@@ -322,12 +322,12 @@
    "n": "Der Oberkellner",
    "biom": "nachtzug",
    "rang": "waechter",
-   "hp": 94,
+   "hp": 84,
    "weak": "W",
    "pat": [
     {
      "t": "atk",
-     "v": 13
+     "v": 12
     },
     {
      "t": "blk",
@@ -344,7 +344,7 @@
     },
     {
      "t": "atk",
-     "v": 21
+     "v": 20
     }
    ],
    "sprite": "oberkellner",
@@ -375,7 +375,7 @@
       },
       {
        "t": "atk",
-       "v": 23
+       "v": 22
       },
       {
        "t": "blk",

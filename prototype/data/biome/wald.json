@@ -362,12 +362,12 @@
    "n": "Der Kronengänger",
    "biom": "wald",
    "rang": "waechter",
-   "hp": 108,
+   "hp": 96,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 6,
+     "v": 4,
      "h": 4
     },
     {
@@ -376,11 +376,11 @@
     },
     {
      "t": "atk",
-     "v": 21
+     "v": 14
     },
     {
      "t": "atk",
-     "v": 4,
+     "v": 3,
      "h": 6
     },
     {

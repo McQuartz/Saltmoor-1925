@@ -29,7 +29,9 @@
    "bittsteller"
   ],
   "waechter": "erhoerte",
-  "waechter_alt": ["ungeheilter"],
+  "waechter_alt": [
+   "ungeheilter"
+  ],
   "fundpool": [
    "votivherz",
    "pilgerstab",
@@ -116,16 +118,16 @@
    "n": "Der Ungeheilte",
    "biom": "grotte",
    "rang": "waechter",
-   "hp": 138,
+   "hp": 72,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 16
+     "v": 10
     },
     {
      "t": "atk",
-     "v": 6,
+     "v": 4,
      "h": 3
     },
     {
@@ -134,7 +136,7 @@
     },
     {
      "t": "atk",
-     "v": 25
+     "v": 15
     }
    ],
    "sprite": "ungeheilter",
@@ -165,12 +167,12 @@
      [
       {
        "t": "atk",
-       "v": 9,
+       "v": 5,
        "h": 3
       },
       {
        "t": "atk",
-       "v": 23
+       "v": 14
       },
       {
        "t": "buff",
@@ -178,7 +180,7 @@
       },
       {
        "t": "atk",
-       "v": 31
+       "v": 19
       }
      ]
     ]

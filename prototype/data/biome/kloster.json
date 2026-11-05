@@ -29,7 +29,9 @@
    "leser"
   ],
   "waechter": "abschreiber",
-  "waechter_alt": ["adlerpult"],
+  "waechter_alt": [
+   "adlerpult"
+  ],
   "fundpool": [
    "federkiel",
    "tintenhorn",
@@ -118,12 +120,12 @@
    "n": "Der Adler vom Lesepult",
    "biom": "kloster",
    "rang": "waechter",
-   "hp": 95,
+   "hp": 74,
    "weak": "E",
    "pat": [
     {
      "t": "atk",
-     "v": 16
+     "v": 12
     },
     {
      "t": "blk",
@@ -131,7 +133,7 @@
     },
     {
      "t": "atk",
-     "v": 5,
+     "v": 4,
      "h": 4
     },
     {
@@ -166,11 +168,11 @@
      [
       {
        "t": "atk",
-       "v": 22
+       "v": 17
       },
       {
        "t": "atk",
-       "v": 10,
+       "v": 8,
        "h": 2
       },
       {
@@ -179,7 +181,7 @@
       },
       {
        "t": "atk",
-       "v": 31
+       "v": 23
       }
      ]
     ]

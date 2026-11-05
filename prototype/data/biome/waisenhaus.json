@@ -67,12 +67,12 @@
    "n": "Der Fotograf von 1913",
    "biom": "waisenhaus",
    "rang": "waechter",
-   "hp": 116,
+   "hp": 96,
    "weak": "L",
    "pat": [
     {
      "t": "atk",
-     "v": 15
+     "v": 14
     },
     {
      "t": "blk",
@@ -85,7 +85,7 @@
     },
     {
      "t": "atk",
-     "v": 21
+     "v": 20
     }
    ],
    "sprite": "fotograf",
@@ -119,7 +119,7 @@
       },
       {
        "t": "atk",
-       "v": 18
+       "v": 17
       },
       {
        "t": "blk",

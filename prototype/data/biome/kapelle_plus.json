@@ -6,7 +6,9 @@
   "kirchenvogt"
  ],
  "gegner_weg": [],
- "waechter_dazu": ["prediger"],
+ "waechter_dazu": [
+  "prediger"
+ ],
  "fundpool_dazu": [
   "klingelbeutel"
  ],
@@ -15,12 +17,12 @@
    "n": "Der Prediger",
    "biom": "kapelle",
    "rang": "waechter",
-   "hp": 165,
+   "hp": 66,
    "weak": "W",
    "pat": [
     {
      "t": "atk",
-     "v": 40
+     "v": 16
     }
    ],
    "sprite": "prediger",
@@ -32,7 +34,7 @@
    "kniff": {
     "art": "ansage",
     "zuege": 1,
-    "v": 40,
+    "v": 16,
     "why": "Die Sanduhr läuft nach oben. Wenn sie voll ist, ist die Predigt zu Ende, und dann spricht er das Urteil."
    },
    "besonders": {

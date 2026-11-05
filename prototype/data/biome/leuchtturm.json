@@ -348,7 +348,7 @@
    "n": "Das Nebelhorn",
    "biom": "leuchtturm",
    "rang": "waechter",
-   "hp": 100,
+   "hp": 98,
    "weak": "E",
    "pat": [
     {
@@ -361,7 +361,7 @@
     },
     {
      "t": "atk",
-     "v": 44
+     "v": 19
     }
    ],
    "sprite": "nebelhorn",
@@ -373,7 +373,7 @@
    "kniff": {
     "art": "ansage",
     "zuege": 2,
-    "v": 44,
+    "v": 19,
     "why": "Es holt Luft, zwei Züge lang, und zieht dabei den Nebel ein. Dann kommt alles auf einmal zurück."
    },
    "besonders": {

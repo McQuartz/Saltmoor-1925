@@ -30,7 +30,9 @@
    "kachelleger"
   ],
   "waechter": "einfahrt",
-  "waechter_alt": ["menge"],
+  "waechter_alt": [
+   "menge"
+  ],
   "fundpool": [
    "bahnsteigkarte",
    "streckenlaterne",
@@ -151,7 +153,8 @@
    "kniff": {
     "art": "verstopfen",
     "n": 1,
-    "karte": "Gelocht", "spr": "bahnsteigkarte",
+    "karte": "Gelocht",
+    "spr": "bahnsteigkarte",
     "why": "Er knipst dir den Fahrschein in die Hand. Durch das Loch fällt, was du halten wolltest."
    },
    "beute": "bahnsteigkarte",
@@ -261,7 +264,8 @@
    "kniff": {
     "art": "abschrift",
     "n": 1,
-    "karte": "Kachel", "spr": "letzte_kachel",
+    "karte": "Kachel",
+    "spr": "letzte_kachel",
     "why": "Was offen ist, verfugt er. In deinem Stapel liegt eine Kachel mehr."
    },
    "beute": "letzte_kachel",
@@ -363,7 +367,7 @@
    "pat": [
     {
      "t": "atk",
-     "v": 7,
+     "v": 4,
      "h": 4
     },
     {
@@ -372,11 +376,11 @@
     },
     {
      "t": "atk",
-     "v": 24
+     "v": 14
     },
     {
      "t": "atk",
-     "v": 5,
+     "v": 3,
      "h": 6
     },
     {

@@ -52,7 +52,7 @@
    "n": "Die Galionsfigur",
    "biom": "hafen",
    "rang": "waechter",
-   "hp": 76,
+   "hp": 61,
    "weak": "F",
    "pat": [
     {
@@ -74,7 +74,7 @@
     },
     {
      "t": "atk",
-     "v": 18
+     "v": 17
     }
    ],
    "sprite": "galionsfigur",
@@ -110,7 +110,7 @@
       },
       {
        "t": "atk",
-       "v": 22
+       "v": 21
       }
      ]
     ],
