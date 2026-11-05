@@ -189,3 +189,20 @@ Nichts unter 4. Überarbeitet wurden unterwegs: Gießer (Stange ragte aus dem Bi
 - Die Ungetaufte hat im Autospieler keinen Run beendet; der Akt wird in den normalen Kämpfen entschieden.
 - Die Szenen sind bis auf Funken, Ruß und Flammen statisch; die Füße schwingen nicht mit dem Schlag (siehe Vorschläge).
 - Musik nur über `Music.addBiome` (a-Moll, Grundton 45); `tools/musik-pruefen.js` (6 Minuten Echtzeit) wurde nicht vollständig durchlaufen.
+
+## Zweiter Wächter: Das Tretrad (`tretrad`), 160 × 180
+
+- **Idee:** Der Kran, mit dem 1641 die Glocken aus den Gruben und durch den Schacht gezogen wurden: ein Rad aus Eiche, so hoch wie zwei Männer, daneben Mast und Ausleger. Im Rad geht einer, seit 1641. **Das falsche Detail:** Die Achse geht ihm mitten durch den Leib, seine Beine sind vom Gehen zu lang geworden, und am Haken hängt ein Gießtiegel, der nie leer wird; das Seil läuft ab, nicht auf. **Silhouette:** links ein Galgenmast mit schrägem Ausleger und hängendem Tiegel, rechts ein großes Speichenrad, darin ein gebeugter, magerer Mann. **Unterschied zur Ungetauften:** Sie ist eine geschlossene Glockenform, er ein offenes Gerüst aus Linien; sie schlägt im Takt und ruft Klöppel, das Tretrad ruft niemanden, wird jeden Zug stärker (ein Wettlauf) und wechselt die Schwachstelle mit der Drehung.
+- **Kniff:** `waechst 2` („Er geht, und das Rad geht schneller, und er muss schneller gehen.“).
+- **Besonderheit:** `schwach_wechsel` Feuer ↔ Blut: Mal zeigt das Rad dir das trockene Eichenholz, mal den, der darin geht.
+- **Werte:** 108 Leben; Muster 13, Block 13, 6 × 3, 19. Stimme `grabwaechter`. Beute `giesskelle`. Zone `glockengiesserei_w2` (Körper Ruß wie die Gießerei, **Randlicht kalt** `#56688a`/`#bccbe6`, das Licht aus dem Schacht, durch den er die Glocken zog): Die Wächter-Szene ist ganz Ofenglut und Kirschrot.
+- **Sprite:** `tools/sprites/gegner/tretrad.js`. Silhouetten-Probe `probe_nurRad` (nur das Rad mit dem Gehenden) verworfen: in Schwarz ein Wagen- oder Mühlrad ohne Bezug zur Gießerei. Kranz aus Felgenstücken mit Fugen und Beschlägen, Trittlatten innen, Nabe aus Eisen vor dem Bauch des Gehenden, Mast mit Eisenbändern; inneres Licht: die Speise im Tiegel, unten der Glutschein der Grube auf dem Kranz. Angriff: Das Rad zieht den Tiegel hoch an den Ausleger (2 Bilder), dann fällt er, kippt nach vorn und spritzt Speise.
+- **biom-test** (37 gewertete Seeds): Ungetaufte 17/20, **Tretrad 29/37 (78 %)**.
+
+Bilder: im Spiel [glockengiesserei-tretrad.png](../bilder/Zugabe/waechter2/glockengiesserei-tretrad.png), Kontaktbogen aller zweiten Wächter von Akt II (Idle, Angriff ×2, Silhouetten) [bogen-a2.png](../bilder/Zugabe/waechter2/bogen-a2.png), Silhouetten gegen alle Sprites (eigene rot) [silhouetten-gegen-alle-a2.png](../bilder/Zugabe/waechter2/silhouetten-gegen-alle-a2.png).
+
+**Note** (Bewertungsbogen 06-ki-bilder.md Abschnitt 5; Silhouette, Licht, Pixel, Konzept, Biom, im Spiel):
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Das Tretrad | 5 | 4 | 4 | 4 | 5 | 4 | **4** | Mast, Ausleger und Rad sind eine Form, die es sonst nicht gibt, und sie steht als kaltes Gerüst vor dem glühenden Ofen; der Gehende mit der Nabe im Bauch erzählt das Falsche. Speichen laufen durch seine Beine, der Tiegel ist klein und hängt am Rand, das Gerüst lässt viel leere Fläche. |

@@ -22,18 +22,18 @@ module.exports = {
     if (p.angriff) { lean = [3, 6, -8, -3][f]; dy = [0, -2, 1, 0][f]; stoss = [0, -0.4, 1, 0.4][f]; schritt = [0.5, 1, -1, 0][f]; glueh = [1, 1.1, 1.3, 1][f]; }
     if (p.treffer) { lean = [3, 1][f]; }
     if (p.tod) { fall = p.q; }
-    const cx = 86 + lean, cy = 150 + dy, rx = v.kasten ? 72 : 64, ry = v.kasten ? 40 : 62;
+    const cx = 84 + lean, cy = 156 + dy, rx = v.kasten ? 72 : 70, ry = v.kasten ? 40 : 80;
     const kTop = v.kasten ? 92 : cy - ry;
     // Schilde: Reihen über die Kuppel, oben zuerst (hinten), unten zuletzt (vorn); jede Reihe versetzt
     const schilde = [];
     // Dach: drei Reihen, schräg gestellt und überlappend; unten die Seitenwand aus hohen Schilden, senkrecht
-    const reihen = v.kasten ? [[100, 13], [114, 13], [128, 13], [142, 13]] : [[cy - ry + 10, 16], [cy - ry + 24, 18], [cy - ry + 39, 19]];
+    const reihen = v.kasten ? [[100, 13], [114, 13], [128, 13], [142, 13]] : [[cy - ry + 8, 15], [cy - ry + 20, 17], [cy - ry + 33, 18], [cy - ry + 46, 18]];
     reihen.forEach(([yy, sh], j) => {
-      const halb = v.kasten ? rx : rx * Math.sqrt(Math.max(0, 1 - ((yy - cy) / ry) ** 2)) + 4;
+      const halb = v.kasten ? rx : rx * Math.sqrt(Math.max(0, 1 - ((yy - cy + 8) / ry) ** 2)) + 6;
       const n = Math.max(2, Math.round(halb * 2 / 17)), sbw = halb * 2 / n;
       for (let i = 0; i < n; i++) {
         const x = cx - halb + sbw * (i + 0.5) + (j % 2 ? sbw * 0.25 : -sbw * 0.25);
-        const u = (x - cx) / rx, tilt = v.kasten ? 0 : u * 0.35;
+        const u = (x - cx) / rx, tilt = v.kasten ? 0 : u * 0.55;
         // Tod: die Schilde fallen von oben einzeln herab
         const fq = p.tod ? Math.max(0, fall * 1.8 - (1 - j / reihen.length) * 0.6 - h(i, j) * 0.3) : 0;
         const ox = fq * (h(i, j, 2) - 0.5) * 30, oy = fq * fq * (FY - yy) * 0.9;
@@ -51,12 +51,12 @@ module.exports = {
     const fuesse = [];
     if (!(p.tod && fall > 0.6)) for (let i = 0; i < 9; i++) {
       const x = cx - rx + 14 + i * ((rx * 2 - 22) / 8), hint = i % 2, phase = (i % 2 ? 1 : -1) * schritt;
-      const y0 = cy - 4, k = [x + phase * 2 - 2, 166 + (hint ? -2 : 0)], e = [x + phase * 3 - 3, FY - (hint ? 3 : 0) - (phase > 0 ? 1 : 0)];
+      const y0 = cy - 4, k = [x + phase * 2 - 2, 167 + (hint ? -2 : 0)], e = [x + phase * 3 - 3, FY - (hint ? 3 : 0) - (phase > 0 ? 1 : 0)];
       fuesse.push({ hint, g: [...glied([[x, y0], k, e], 3.2, 2.2, hint ? 'dunkel' : null), Pg([[e[0] - 5, e[1] - 2], [e[0] + 2, e[1] - 2], [e[0] + 2, e[1] + 1], [e[0] - 6, e[1] + 1]], hint ? 'dunkel' : null, { rd: 0.6 })] });
     }
     // Lanzen: drei aus den Lücken vorn, beim Stoß weit heraus
     const lanzen = [];
-    if (!(p.tod && fall > 0.4)) for (const [yy, l0] of [[cy - 31, 30], [cy - 18, 26], [cy - 44, 22]]) { const x0 = cx - rx + 10, L = l0 + stoss * 18, x1 = x0 - L, y1 = yy - 2 - stoss * 2;
+    if (!(p.tod && fall > 0.4)) for (const [yy, l0] of [[cy - 33, 30], [cy - 18, 26], [cy - 33, 18]]) { const x0 = cx - rx + 10, L = l0 + stoss * 18, x1 = x0 - L, y1 = yy - 2 - stoss * 2;
       lanzen.push(C(x0, yy, x1, y1, 1.1, 1.1, null, { pf: 'flat' }), Pg([[x1 + 1, y1 - 2.6], [x1 - 7, y1], [x1 + 1, y1 + 2.6]], null, { rd: 0.3 })); }
     // Feldzeichen: Stange, Querholz mit Bändern, drei Scheiben, oben der kleine Ofen
     const zx = cx + 6 + sw * 0.5, zTop = 8 + (p.tod ? r(fall * 60) : 0) + dy, zx2 = zx + (p.tod ? fall * 20 : 0);
@@ -72,6 +72,7 @@ module.exports = {
     const OFEN = gruppen.push({ p: ofen, k: 0.5, kante: true }) - 1;
     const DUNKEL = gruppen.push({ p: [Pg([[cx - rx + 8, cy - 2], [cx - rx + 10, cy - 40], [cx - 20, cy - ry + 8], [cx + 30, cy - ry + 8], [cx + rx - 10, cy - 40], [cx + rx - 8, cy - 2]], 'dunkel', { rd: 4, pf: 'flat' })], k: 0, noRim: true }) - 1;
     const SCH = []; schilde.forEach(s2 => SCH.push(gruppen.push({ p: s2.p, k: 0, kante: true, schild: s2 }) - 1));
+    const SPALT = v.kasten ? -9 : gruppen.push({ p: [Pg([[cx - rx + 6, cy - 37], [cx + rx - 6, cy - 37], [cx + rx - 6, cy - 29], [cx - rx + 6, cy - 29]], 'dunkel', { rd: 0.5, pf: 'flat' })], k: 0, noRim: true }) - 1;
     const LANZE = gruppen.push({ p: lanzen, k: 0, kante: true }) - 1;
     wand.forEach(s2 => SCH.push(gruppen.push({ p: s2.p, k: 0, kante: true, schild: s2 }) - 1));
     fuesse.filter(q => !q.hint).forEach(q => FUH.push(gruppen.push({ p: q.g, k: 0.8, kante: true }) - 1));
@@ -98,8 +99,8 @@ module.exports = {
         } });
       // Dunkel zwischen den Schilden, darin Augen
       for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (ist(x, y, DUNKEL)) P.set(x, y, 1);
-      if (!(p.tod && f >= 1)) for (const [ex, ey] of [[cx - rx + 14, cy - 33], [cx - rx + 34, cy - 32], [cx - 4, cy - 31], [cx - rx + 22, cy - 46]]) {
-        const X = r(ex), Y = r(ey); if (gid[Y * W + X] === DUNKEL || gid[Y * W + X + 3] === DUNKEL) { P.set(X, Y, 'glut'); P.set(X + 3, Y, 'glut'); augen.push([X, Y]); } }
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (ist(x, y, SPALT)) P.set(x, y, 1);
+      if (!(p.tod && f >= 1)) [[14, 0], [34, 1], [56, 0], [80, 1], [104, 0]].forEach(([ox, z], i) => { const X = r(cx - rx + ox), Y = r(cy - 34 + z); if (ist(X, Y, SPALT) && ist(X + 3, Y, SPALT)) { P.set(X, Y, i === 0 ? 'kern' : 'glut'); P.set(X + 3, Y, 'glut'); if (i < 2) augen.push([X, Y]); } });
       // Feldzeichen: Bronze? hier gebrannter Ton, Scheiben mit Buckel, Bänder aus Leinen
       for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
         if (ist(x, y, SCHEIB) && P.get(x, y) <= 4) P.set(x, y, Math.hypot(x - zx2 - (zx - zx2) * 0.35, (y - zTop - 52) % 12) < 1.5 ? 4 : (B(x, y) < 0.4 ? 3 : 2));

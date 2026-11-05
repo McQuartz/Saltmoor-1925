@@ -151,3 +151,20 @@ Gesamturteil: Das Biom erreicht überall 4, nicht 5. Es ist dunkler als Kapelle 
 - `nachlass` (Bittsteller) ist im Kern noch nicht umgesetzt; der Bittsteller kämpft bis dahin ohne Kniff.
 - Ein Tausch-Krämer („Gabe gegen Gabe“) fehlt im Kern; bis dahin gibt es das Ereignis `grotte_tausch`.
 - `pruefen.js` erlaubt Wächter nur bis 128 × 160, das Paket-Format bis 160 × 180.
+
+## Zweiter Wächter: Der Ungeheilte (`ungeheilter`), 160 × 180
+
+- **Idee:** Einer, der kam und nicht geheilt wurde. Er hat keine Beine mehr, nur zwei umwickelte Stümpfe, und er hat sich alle Krücken genommen, die die Geheilten an die Wand gehängt haben. **Das falsche Detail:** Für jede Krücke ist ihm ein Arm gewachsen, und um den Hals trägt er das Wachsherz, das er geopfert hat; es wurde nie angenommen und ist noch warm. **Silhouette:** ein hängender, gebeugter Rumpf mit tief hängendem Kopf zwischen sechs gespreizten Krücken wie eine Spinne auf Stelzen; in Phase 2 nur noch drei heile Krücken, er hängt tiefer und schief. **Unterschied zur Erhörten:** Sie ist eine aufrechte Betende mit Flamme über dem Kopf, er ein breites Gestell auf vielen dünnen Beinen; sie wächst und ruft Wachshände, er ruft niemanden, wandert zwischen den Reihen (`pendel`) und verteuert deine Karten.
+- **Kniff:** `teurer 1` („Er nimmt dir die Stütze weg. Was du tun willst, wiegt einen Schritt mehr.“), dazu `pendel: true` (er schwingt jeden Zug zwischen links hinten und rechts vorn).
+- **Besonderheit:** `phasen` bei 50 %: Krücken brechen (Sprite `ungeheilter_p2`), Schwachstelle wechselt von Feuer (die Krücken sind trockenes Holz) zu Glaube (jetzt, wo er fällt, betet er), Muster 9 × 3, 23, Stärke +2, 31.
+- **Werte:** 138 Leben; Muster 16, 6 × 3, Block 20, 25. Stimme `salzlaeufer` (Klicken wie Krücken auf Stein). Beute `pilgerstab`. Zone `grotte_w2` (Körper Schiefer wie die Grotte, **Randlicht kalt** `#4e6a82`/`#b4cee2` wie das Nachtlicht aus dem Spalt, Augen Kerzenrot): Die Wächter-Szene ist ganz Kerzengold.
+- **Sprite:** `tools/sprites/gegner/ungeheilter.js`, Varianten `ungeheilter`, `ungeheilter_p2`. Silhouetten-Probe `probe_vier` (vier Krücken, er hängt dazwischen) verworfen: in Schwarz ein Gestell mit Puppe, zu nah an den Stelzen des Geheilten; acht Krücken (erster Entwurf) waren ein Gitter, genommen sind sechs. Rumpf mit Wirbeln und Rippen, Stümpfe in Binden, unten Kerzenschein; inneres Licht: das Wachsherz. Angriff: Er hebt die vordere Krücke hoch über sich (2 Bilder) und schlägt sie nach links unten.
+- **biom-test** (40 Seeds): Erhörte 20/20, **Ungeheilter 31/40 (78 %)**.
+
+Bilder: im Spiel [grotte-ungeheilter.png](../bilder/Zugabe/waechter2/grotte-ungeheilter.png), Kontaktbogen aller zweiten Wächter von Akt II (Idle, Angriff ×2, Silhouetten) [bogen-a2.png](../bilder/Zugabe/waechter2/bogen-a2.png), Silhouetten gegen alle Sprites (eigene rot) [silhouetten-gegen-alle-a2.png](../bilder/Zugabe/waechter2/silhouetten-gegen-alle-a2.png). Phase 2 im Spiel: [grotte-ungeheilter-phase2.png](../bilder/Zugabe/waechter2/grotte-ungeheilter-phase2.png).
+
+**Note** (Bewertungsbogen 06-ki-bilder.md Abschnitt 5; Silhouette, Licht, Pixel, Konzept, Biom, im Spiel):
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Ungeheilte | 5 | 4 | 4 | 4 | 4 | 4 | **4** | Die Spinne aus Krücken ist die eigenständigste Silhouette des Bioms, das kalte Randlicht steht hart vor dem Kerzenberg, die gebrochenen Krücken in Phase 2 sind sofort zu sehen. Der Rumpf bleibt eine große dunkle Fläche, und dass es ein Mensch ohne Beine ist, liest man erst am hängenden Kopf und den Binden. |

@@ -200,3 +200,20 @@ Nichts unter 4. Überarbeitet wurden unterwegs: Nachtschwester (Haube dunkel wie
 - Die großen Kleider (Nachtschwester, Heimleiterin) bleiben die dunkelsten Flächen des Bioms; gegliedert, aber nicht reich.
 - Die Böden aller Varianten sind ruhig; die Gegner stehen davor gut lesbar, aber unten bleibt viel Ocker.
 - Musik nur über `Music.addBiome`; `tools/musik-pruefen.js` (Echtzeit) nicht durchlaufen.
+
+## Zweiter Wächter: Der Fotograf von 1913 (`fotograf`), 160 × 180
+
+- **Idee:** Er kam nach der Sturmflut für das Gruppenbild, das im Flur hängt und auf dem zu viele Köpfe sind. Die Plattenkamera steht auf dem Dreibein, der Balg ausgezogen, er selbst unter dem schwarzen Tuch, die Blitzlampe hoch erhoben. **Das falsche Detail:** Unter dem Saum des Tuchs stehen seine Schuhe, und daneben kleine nackte Füße, nass, mehr, als unter ein Tuch passen. In Phase 2 fällt das Tuch: Es war nie einer darunter, die Kinder halten die Lampe. **Silhouette:** eine Kamera mit Balg auf drei dünnen Beinen, dahinter ein verhüllter Buckel bis zum Boden, darüber der Arm mit der Lampe. **Unterschied zur Heimleiterin:** Sie ist eine hohe Frau mit Buch und Reihe, er ein Gerät mit Tuch; sie ruft und schreibt dich ins Buch, er ruft niemanden, friert jeden Zug eine Karte ein („stillhalten“) und schlägt nach dem Tuch mit vielen kleinen Händen.
+- **Kniff:** `einfrieren` („Bitte stillhalten. Eine Karte rührt sich nicht, bis das Bild gemacht ist.“).
+- **Besonderheit:** `phasen` bei 50 %: Das Tuch fällt (Sprite `fotograf_p2`), Schwachstelle wechselt von Licht (er hat das Licht immer selbst gemacht, fremdes verbrennt die Platte) zu Feuer (das Tuch und die Platten sind Zelluloid und Samt), Muster 5 × 5, 18, Block 12, 6 × 4.
+- **Werte:** 116 Leben; Muster 15, Block 14, 7 × 2, 21. Stimme `schatten`. Beute `lantern`. Palette `waisenhaus` (das warme Rot-Ocker-Randlicht kommt in der grauen Halle nicht vor).
+- **Sprite:** `tools/sprites/gegner/fotograf.js`, Varianten `fotograf`, `fotograf_p2`. Silhouetten-Probe `probe_ohne_tuch` (Kamera und Fotograf nebeneinander) verworfen: in Schwarz ein Mann neben einem Gestell, zwei Dinge statt eines. Balg mit Falten, Kasten mit Messingecken, Tuch mit Falten und Fase; inneres Licht: das Objektiv (das Auge) und das Blitzpulver. Angriff: Er hebt die Lampe (Ausholen), dann zündet der Blitz und der Balg schnellt nach vorn, das Objektiv wie eine Schnauze.
+- **biom-test** (40 Seeds): Heimleiterin 17/19, **Fotograf 32/40 (80 %)**.
+
+Bilder: im Spiel [waisenhaus-fotograf.png](../bilder/Zugabe/waechter2/waisenhaus-fotograf.png), Kontaktbogen aller zweiten Wächter von Akt II (Idle, Angriff ×2, Silhouetten) [bogen-a2.png](../bilder/Zugabe/waechter2/bogen-a2.png), Silhouetten gegen alle Sprites (eigene rot) [silhouetten-gegen-alle-a2.png](../bilder/Zugabe/waechter2/silhouetten-gegen-alle-a2.png). Phase 2 im Spiel: [waisenhaus-fotograf-phase2.png](../bilder/Zugabe/waechter2/waisenhaus-fotograf-phase2.png).
+
+**Note** (Bewertungsbogen 06-ki-bilder.md Abschnitt 5; Silhouette, Licht, Pixel, Konzept, Biom, im Spiel):
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Fotograf von 1913 | 5 | 4 | 4 | 4 | 5 | 5 | **4** | Kamera, Tuch und Lampe sind vor dem hellen Bogenfenster die klarste Gestalt des Bioms, der Angriff mit Blitz und vorschnellendem Balg hat Wucht. Das Tuch ist eine große dunkle Fläche, die Kinderfüße unter dem Saum sind sehr klein, die Kinder in Phase 2 lesen sich, bleiben aber dunkel. |

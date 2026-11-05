@@ -1,0 +1,53 @@
+{
+ "id": "neununddreissigste",
+ "rang": "waechter",
+ "w": 160,
+ "h": 180,
+ "zone": "ziegelgruben_lehm",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  84,
+  176
+ ],
+ "kopf": [
+  92,
+  4
+ ],
+ "augen": [
+  [
+   28,
+   122
+  ],
+  [
+   48,
+   123
+  ],
+  [
+   90,
+   26
+  ]
+ ],
+ "augenfarbe": "#fff1b0"
+}

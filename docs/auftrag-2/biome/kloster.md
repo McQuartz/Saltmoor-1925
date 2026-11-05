@@ -154,3 +154,20 @@ Bewertungsbogen [06-ki-bilder.md](../06-ki-bilder.md) Abschnitt 5, je Punkt 1–
 
 - `kniff` und neue Ereignis-Ops (`handgriff`, `schleifen`, `kerbe`) sind eingetragen; „kopiert deine letzte Karte“ für den Abschreiber braucht neues System im Kern (Vorschlag `besonders: {art: "kopiert"}`).
 - Item-Icons nutzen vorhandene Platzhalter (`knife`, `bottle`, `collar`, `shell`, `cross`), eigene 48 × 48-Icons kommen mit M5.
+
+## Zweiter Wächter: Der Adler vom Lesepult (`adlerpult`), 160 × 180
+
+- **Idee:** Der Messingadler, auf dessen ausgebreiteten Flügeln im Refektorium das Buch lag, aus dem beim Essen vorgelesen wurde. Er ist von seiner Säule gestiegen, steht auf eigenen Krallen und trägt das Buch weiter auf dem Rücken. **Das falsche Detail:** Seine Federn sind Seiten, beschrieben, und jede Nacht wächst eine nach; die Federkiele der Schreiber sind alle aus ihm gerupft, und wo einer fehlt, tropft Tinte. **Silhouette:** ein Adler mit waagerecht ausgebreiteten Flügeln aus Seiten-Federn, das offene Buch auf dem Rücken, der Hakenschnabel nach links; in Phase 2 die Flügel hoch wie im Wappen, das Buch am Boden. **Unterschied zum Abschreiber:** kein Mensch am Pult, sondern ein Tier aus Messing, breit statt hoch; der Abschreiber stört das Deck (Kopie, Abschriften) und ruft Novizen, der Adler ruft niemanden und schlägt hart, und er straft Hagel-Spieler mit Dornen.
+- **Kniff:** `dornen 3` („In ihm stecken noch hundert Federkiele, die Spitzen nach außen. Wer zuschlägt, greift hinein.“).
+- **Besonderheit:** `phasen` bei 50 %: Das Buch fällt, er steigt auf (Sprite `adlerpult_p2`), Schwachstelle wechselt von Eisen (eine Klinge schneidet Seiten aus dem Flügel) zu Blut (Blut auf den Seiten macht sie unlesbar), Muster härter: 22, 10 × 2, Block 18, 31.
+- **Werte:** 95 Leben; Muster 16, Block 14, 5 × 4, Stärke +2. Stimme `chor`. Beute `lesestein`. Zone `kloster_w2` (Körper wie Kloster, **Randlicht Messing** `#9a6a2a`/`#f0c472`, Augen kaltblau): Die Wächter-Szene ist Pergament und Silbergrau, Messing gibt es dort nicht.
+- **Sprite:** `tools/sprites/gegner/adlerpult.js`, Varianten `adlerpult`, `adlerpult_p2`. Silhouetten-Probe `probe_saeule` (der Adler noch auf seiner Säule) verworfen: in Schwarz ein Kapitell mit Flügeln auf einem Schaft, zu nah am Kreuzgangwächter. Federn als Seiten mit Zeilen, Kiel dunkel, Messing an der Lichtseite; Brust mit Federschuppen; inneres Licht: eine glimmende Initiale im Buch und das Auge. Angriff: Flügel hoch und zurück (2 Bilder), dann Stoß mit dem Schnabel nach vorn unten, die Flügel schlagen mit.
+- **biom-test** (40 Seeds, 1–20 und 21–40): Abschreiber 19/19, **Adler 29/39 (74 %)**.
+
+Bilder: im Spiel [kloster-adlerpult.png](../bilder/Zugabe/waechter2/kloster-adlerpult.png), Kontaktbogen aller zweiten Wächter von Akt II (Idle, Angriff ×2, Silhouetten) [bogen-a2.png](../bilder/Zugabe/waechter2/bogen-a2.png), Silhouetten gegen alle Sprites (eigene rot) [silhouetten-gegen-alle-a2.png](../bilder/Zugabe/waechter2/silhouetten-gegen-alle-a2.png). Phase 2 im Spiel: [kloster-adlerpult-phase2.png](../bilder/Zugabe/waechter2/kloster-adlerpult-phase2.png).
+
+**Note** (Bewertungsbogen 06-ki-bilder.md Abschnitt 5; Silhouette, Licht, Pixel, Konzept, Biom, im Spiel):
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der Adler vom Lesepult | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Ein Messingadler mit Buch auf dem Rücken ist sofort lesbar und im Spiel einzigartig, die warmen Kanten stehen vor dem grauen Pergament; Phase 2 mit erhobenen Flügeln und Buch am Boden ist ein klarer Wechsel. Dass die Federn Seiten sind, sieht man erst beim zweiten Blick an den Zeilen, der Hals ist eine lange dunkle Röhre und der Körper unten etwas schematisch. |
