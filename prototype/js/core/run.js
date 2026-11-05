@@ -115,7 +115,7 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  const RW=BAL.belohnung||{};const glueck=passive('glueck').length?1:0;
  const hg=handgriffAngebot(r,art==='waechter'?'selten':art==='schwer'?'mix':'gewoehnlich',3);
  let items=[];
- if(art==='waechter'){items=r.sample(reliquienPool(),3+glueck);}
+ if(art==='waechter'){items=reliquienAngebot(r,3+glueck);}
  else if(art==='schwer'){items=r.sample(dropPool(),2+glueck);const rp=rarePool();if(rp.length)items.push(r.pick(rp));}
  else if(r.chance(RW.item_chance??.25)){items=r.sample(dropPool(),2+glueck);}
  // Gegner-Beute: kleine Chance auf das eigene Stück eines Gegners (Kniff „nachlass: item“ sicher)
@@ -251,6 +251,9 @@ function handgriffAngebot(r,rar,n){let pool=handgriffPool(rar);if(pool.length<n)
  const passt=pool.filter(id=>{const H=HANDGRIFFE[id];return H.build===b||(H.stoffe||[]).some(k=>st.has(k));});
  const o=[];const a=r.sample(passt.length>=2?passt:pool,Math.min(2,n));o.push(...a);const rest=pool.filter(id=>!o.includes(id));o.push(...r.sample(rest,n-o.length));
  if(rar==='mix'){const sel=handgriffPool('selten').filter(id=>!o.includes(id));if(sel.length)o[o.length-1]=r.pick(sel);}return o.slice(0,n);}
+// Wächter-Reliquien: eine passt zum erkannten Build (über ihre Eigenschaft), die übrigen frei. Hält bei 39 Reliquien die Builds erreichbar (Zugabe, Balance).
+function reliquienAngebot(r,n){const pool=reliquienPool();const b=buildArchetyp().id;const passt=pool.filter(k=>eigenBuild(ITEMS[k].eigen)===b);
+ const o=passt.length?[r.pick(passt)]:[];o.push(...r.sample(pool.filter(k=>!o.includes(k)),n-o.length));return r.shuffle(o).slice(0,n);}
 function reliquienPool(){const p=Object.keys(ITEMS).filter(k=>rarOf(ITEMS[k])==='reliquie'&&!ITEMS[k].nodrop&&!ITEMS[k].bases);return p.length?p:rarePool();}
 // Alle Items im Besitz (angelegt und Rucksack) mit Ort
 function besitz(){const o=[];AREAS.forEach(a=>S.areas[a].forEach((it,i)=>{if(it)o.push({it,loc:a+':'+i,an:i<S.slots[a]});}));S.bag.forEach((it,i)=>{if(it)o.push({it,loc:'bag:'+i,an:false});});return o;}
