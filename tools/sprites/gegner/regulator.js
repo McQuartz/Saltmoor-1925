@@ -72,12 +72,12 @@ module.exports = {
       { p: wirbel, k: 0.8, kante: true },
       { p: spitze, k: 0 },
       { p: linse, k: 0, kante: true },
-      { p: ruecken, k: 1.5, kante: true, tone: 0.22 },
+      { p: ruecken, k: 1.5, kante: true, tone: 0.4 },
       { p: wirbelR, k: 0, noRim: true, tone: 0.1 },
-      { p: knie, k: 1.2, kante: true, tone: 0.18 },
+      { p: knie, k: 1.2, kante: true, tone: 0.34 },
       { p: kopf, k: 0, kante: true },
       { p: schaedelnaht, k: 0, noRim: true },
-      { p: arm, k: 0.6, kante: true, tone: 0.15 },
+      { p: arm, k: 0.6, kante: true, tone: 0.3 },
       { p: finger, k: 0, kante: true },
     ];
     const LINSE = 7, KOERPER0 = 8;
@@ -105,6 +105,20 @@ module.exports = {
         for (const [x, y, c] of z) P.set(x, y, c);
       }
       innenKanten(P, gid, gruppen, W, H, 'r1');
+      // Kräftiges Randlicht außen an Anker, Krallen und Linse: zur Lichtseite zwei Pixel (außen hell, innen die
+      // dunklere Stufe), ringsum eine Linie der dunkleren Stufe, weil hinter ihm die leuchtende Wasserwand steht.
+      {
+        const RAND = new Set([2, 3, LINSE]), leer = (x, y) => x < 0 || y < 0 || x >= W || y >= H || !P.get(x, y), z = [];
+        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+          if (!RAND.has(gid[y * W + x])) continue; const c = P.get(x, y); if (c < 1 || c > 5) continue;
+          if (leer(x + 1, y - 1) || leer(x + 1, y) || leer(x, y - 1)) z.push([x, y, (leer(x + 1, y - 1) || leer(x + 1, y)) ? 'r2' : 'r1']);
+          else if (leer(x + 2, y - 1) || leer(x + 2, y) || leer(x + 1, y - 2)) z.push([x, y, 'r1']);
+          else if (leer(x - 1, y) || leer(x, y + 1) || leer(x - 1, y + 1)) z.push([x, y, 'r1']);
+        }
+        for (const [x, y, c] of z) P.set(x, y, c);
+      }
+      // Phosphor-Schimmer auf dem Zusammengerollten: das Öl in der Linse leuchtet ihn von innen an
+      if (!fall) { const [bx, by] = rot(6 * 1.55, L - 4 * 1.55); P.glow(bx, by, 17, 0.75, 'glutDim', 'k3'); const [hx2, hy2] = rot(-11 * 1.55, L - 11 * 1.55); P.glow(hx2, hy2, 9, 0.55, 'glutDim', 'k3'); }
       // Rücken des Zusammengerollten: Rippen als Bögen (Grat hell, Tal dunkel), Spalt zwischen Schenkel und Leib
       if (!fall) {
         for (let i = 0; i < 4; i++) for (let t = -0.9; t <= 0.5; t += 0.06) {

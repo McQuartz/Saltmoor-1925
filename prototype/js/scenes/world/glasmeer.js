@@ -81,14 +81,16 @@ function boden(K, P, fD, o) {
     for (let x = -M; x < W + M; x++) {
       const dy = Math.max(.5, y - P.vy), Z = P.h / dy, X = (x - P.vx) * Z / P.h, k = P.k(Z);
       if (o.nur && !o.nur(x, y, X, Z)) continue;
-      const nah = B.clamp(5 / Z, 0, 1), spiegel = 1 - nah * .5; // Fresnel grob: fern Spiegel, nah durchsichtig
+      const nah = B.clamp(3 / Z, 0, 1), spiegel = 1 - nah * .45; // Fresnel grob: fern Spiegel, nah durchsichtig
       const yc = P.vy - dy / 1.4, d = fD(x, yc);
-      let t = d.t * .82 * spiegel + .03 + (B.fbm(X * .3, Z * .3, sd + 9, 2) - .5) * .04;
+      let t = d.t * .95 * spiegel + .04 + (B.fbm(X * .3, Z * .3, sd + 9, 2) - .5) * .04;
       // Fließbänder im Glas (wie in Obsidian): feine Linien in der Tiefe, nah sichtbar
       const fl = Math.sin(X * 2.2 + B.fbm(X * .2, Z * .25, sd + 4, 3) * 9 + Z * .15);
       if (fl > .93 && nah > .2) t += .12 * nah; else if (fl < -.96 && nah > .2) t -= .05;
       // Glanzbahn vom Riss oben rechts im Spiegel
       t += Math.max(0, 1 - Math.abs(x - (o.glanzX || 400) + (y - P.vy) * .25) / 22) * .2 * spiegel;
+      // Schimmer hinter den Gegnern: das Glas im Mittelgrund fängt den Widerschein der ganzen Decke
+      t += Math.max(0, 1 - Math.abs(y - (P.vy + 50)) / 60) * .1;
       let gr = d.g * spiegel * .45;
       // Polarlicht tief unter dem Glas: schmale Bänder, nur nah sichtbar
       const tv = vorhang(X * .9 + Math.sin(Z * .7 + X * .1) * 1.6 + 2, Z * .5 + 3, sd + 5, 0), tief = Math.max(0, tv - .3) / .7 * Math.min(1, nah * 1.6) * (o.licht || 1);
@@ -280,7 +282,7 @@ function bruch(K) {
   const spalten = [[-3.2, .15], [1.1, -.08], [3.6, .22], [-6, .3]];
   const spaltD = (X, Z) => Math.min(...spalten.map(([a, d]) => Math.abs(X - (a + d * Z + Math.sin(Z * .9 + a) * .25))));
   boden(K, P, fD, { glanzX: 430, risse: 4, sd: 5, licht: 1.3 });
-  for (let y = P.vy + 2; y < H + M; y++) { const e = K.e[K.eb(y)]; for (let x = -M; x < W + M; x++) { const Z = P.h / (y - P.vy), X = (x - P.vx) * Z / P.h, k = P.k(Z), d = spaltD(X, Z) * k; if (d < 2.2) { const v = 1 - d / 2.2; e.set(x, y, pk(ramp(NORD, .35 + v * .6, x, y))); } else if (d < 3.4) e.set(x, y, pk(GLAS[0])); } }
+  for (let y = P.vy + 2; y < H + M; y++) { const e = K.e[K.eb(y)]; for (let x = -M; x < W + M; x++) { const Z = P.h / (y - P.vy), X = (x - P.vx) * Z / P.h, k = P.k(Z), d = spaltD(X, Z) * k; if (d < 2.2) { const v = 1 - d / 2.2; e.set(x, y, pk(ramp(NORD, .15 + v * .55, x, y))); } else if (d < 3.4) e.set(x, y, pk(GLAS[0])); } }
   // gekippte Platten: Kanten heben sich an der Spalte (Kontaktschatten), mit Randlicht
   [[40, 214, 90, 24, .3], [300, 196, 70, 16, -.2], [372, 232, 110, 30, .25], [150, 168, 46, 10, .1]].forEach(([x, y, w, h, n]) => { const m = B.maske(); m.poly([[x - w / 2, y], [x - w / 2 + n * 20, y - h], [x + w / 2 + n * 20, y - h * .7], [x + w / 2, y + 2]]); aufGlas(K, K.eb(y), m, y + 1, .1 * (y < 200), { k: OBS, ton: 1.6, fase: 1.5, muster: (px, py) => (frac((px * .9 - py) * .05) < .06 ? .9 : 0) }, { ks: .5, lang: h }); K.glut(x, y + 2, w * .5, '#0a3018', .8, [K.eb(y)]); });
   K.licht(240, 230, NORD[5], 160, .5);

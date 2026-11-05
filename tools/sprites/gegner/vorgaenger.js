@@ -99,7 +99,8 @@ module.exports = {
     const H = (x, y, s) => { const q = Math.sin(x * 12.9898 + y * 78.233 + s * 37.719) * 43758.5453; return q - Math.floor(q); };
     const details = P => {
       // Nasses Haar: Strähnen kleben schräg nach unten, Glanz oben (Licht von oben aus dem Wasser)
-      for (let i = -5; i <= 5; i += 3) { P.line(kx + i, ky - 5 + Math.abs(i) * 0.3, kx + i * 0.8 - 1, ky + 3, 'k2', true); P.line(kx + i + 1, ky - 4, kx + i * 0.8, ky + 4, 'k0', true); }
+      // drei, vier Strähnen, schräg, nicht als Gitter
+      [[-4, -7, -6, 1], [1, -8, 0, 0], [5, -6, 6, 2]].forEach(([a, b, c, d], i) => { P.line(kx + a, ky + b, kx + c, ky + d, 'k0', true); P.line(kx + a + 1, ky + b, kx + c + 1, ky + d - 1, i === 2 ? 'k3' : 'k2', true); });
       for (let i = -5; i <= 6; i += 2) P.auf(kx + i, ky - 10 + Math.abs(i) * 0.3, i > 0 ? 'r1' : 'k3');
       P.auf(kx + 3, ky - 10, 'r2'); P.auf(kx + 4, ky - 10, 'r2');
       // nasse Haarspitzen kleben im Nacken

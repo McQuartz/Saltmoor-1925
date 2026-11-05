@@ -348,9 +348,9 @@ function gewoelbe(K, cfg) {
     // Loch im Boden: ein hohler Stamm, innen eine Wendeltreppe, deren Stufen numeriert sind und abwärts zählen
     const e = K.e[4], lx = 240, ly = 226, rx = 92, ry = 26, lm = B.maske(); lm.ell(lx, ly, rx, ry);
     for (let yy = ly - ry; yy <= ly + ry; yy++) for (let xx = lx - rx; xx <= lx + rx; xx++) if (lm.has(xx, yy)) e.set(xx, yy, B.pk('#030201'));
-    for (let i = 0; i < 9; i++) { const a = 3.6 + i * 0.42, rr = 1 - i * 0.075, x = lx + Math.cos(a) * rx * 0.86 * rr, y = ly + Math.sin(a) * ry * 0.7 * rr + i * 2.2; const st = B.maske(); st.poly([[x - 10 * rr, y], [x + 10 * rr, y - 2], [x + 8 * rr, y + 3], [x - 9 * rr, y + 4]]); B.form(e, st, K.mat(Math.min(0.85, i * 0.1), { k: STEIN.slice(1, 7), ton: 1.4, fase: 1, rand: 1 })); if (i < 6) zahl(e, x - 2, y - 1, ROEM[8 - i], B.pk('#0a0806'), B.pk(STEIN[6])); }
+    for (let i = 0; i < 9; i++) { const a = 3.6 + i * 0.42, rr = 1 - i * 0.075, x = lx + Math.cos(a) * rx * 0.86 * rr, y = ly + Math.sin(a) * ry * 0.7 * rr + i * 2.2; const st = B.maske(); st.poly([[x - 10 * rr, y], [x + 10 * rr, y - 2], [x + 8 * rr, y + 3], [x - 9 * rr, y + 4]]); B.form(e, st, K.mat(Math.min(0.7, i * 0.08), { k: STEIN.slice(2, 9), r: RAND, ton: 1.8, fase: 1, rand: 1 })); if (i < 6) zahl(e, x - 2, y - 1, ROEM[8 - i], B.pk(RAND[1]), B.pk('#0a0806')); }
     const rd = B.maske(); rd.ell(lx, ly, rx + 5, ry + 3); rd.ell(lx, ly, rx, ry, 0); K.form(4, rd, 0, { k: STEIN.slice(1, 8), r: RAND, ton: 1.6, fase: 1, rand: 2 });
-    B.gluehen(e, lx, ly + 20, 60, GLUT, 0.6);
+    B.gluehen(e, lx, ly + 20, 70, '#5a3410', 0.9); K.licht(lx, ly + 10, LICHT, 90, 0.6);
   }
   band(K, vy - 50, vy + 6, 0.4);
   const v = B.maske(); v.pfad([[-M, 130], [10, 160], [6, 220], [-M, 250]], 10, 6); v.pfad([[W + M, 120], [470, 170], [476, 240]], 9, 5);
@@ -362,9 +362,11 @@ function gewoelbe(K, cfg) {
 
 // Köhler: ein Meiler aus Steinholz, der nicht brennen will; daneben der Köhler-Stand
 function meiler(K, x, y, glimmt) {
-  const m = B.maske(); m.ell(x, y - 2, 34, 22); m.rect(x - 34, y - 2, 68, 4);
+  const m = B.maske(); m.fn(x - 36, y - 30, x + 36, y + 2, (px, py) => py <= y && ((px - x) / 34) ** 2 + ((py - y) / 26) ** 2 <= 1);
   const e = K.e[4];
-  K.form(4, m, 0, { k: STEIN.slice(0, 7), r: RAND, ton: 0.9, fase: 2, schatten: 2, muster: (px, py) => (((px * 2 + py * 3) >> 2) % 3 === 0 ? -0.4 : 0) + (B.hash(px >> 1, py >> 1, 8) - 0.5) * 0.4 });
+  // Erdhaut über geschichteten Scheiten: Schollen, nach oben rechts heller (Harzlicht)
+  K.form(4, m, 0, { k: STEIN.slice(0, 9), r: RAND, ton: 1.6, fase: 2, rand: 2, schatten: 2, muster: (px, py) => { const a = Math.atan2(py - y, px - x), rr = Math.hypot((px - x) / 34, (py - y) / 26); return (Math.floor(a * 6 + rr * 5) % 2 ? -0.35 : 0.2) + (B.hash(px >> 2, py >> 1, 8) - 0.5) * 0.5 + (px - x) / 60; } });
+  const sch = B.maske(); sch.ell(x + 2, y + 1, 40, 3); B.form(e, sch, K.mat(0, { ton: 0, rand: 0, fase: 0 }));
   for (let i = 0; i < 6; i++) { const a = Math.PI + 0.3 + i * 0.45; const px = x + Math.cos(a) * 26, py = y - 2 + Math.sin(a) * 16; e.set(px, py, B.pk(HARZ[glimmt ? 5 : 3])); }
   if (glimmt) { B.gluehen(e, x, y - 14, 30, GLUT, 0.8); K.anim.push({ p: 0.5, f(ctx, t, ox, oy) { for (let k = 0; k < 3; k++) { const z = (t * 0.2 + k / 3) % 1; ctx.fillStyle = z < 0.5 ? '#5a4a32' : '#3a3024'; ctx.fillRect(Math.round(x - 2 + Math.sin(t + k * 2) * 3 * z) + ox, Math.round(y - 24 - z * 40) + oy, 2, 1); } } }); }
 }
@@ -377,8 +379,8 @@ function bauen(o) {
   else if (art === 'uebergang') info = gewoelbe(K, { treppe: true });
   else info = [k => strassenzug(k, {}), gefaellt, abgrund][v](K);
   if (art === 'rast') { for (let i = 0; i < 4; i++) B.dith(K.e[i], -M, -M, W + M, H + M, pal.koerper[0], (px) => 0.22 + 0.1 * i - Math.abs(px - 240) / 1600); B.feuer(K, 240, 222); }
-  else if (art === 'kraemer') { meiler(K, 330, 206, true); B.stand(K, 180, 204); }
-  else if (art === 'werkstatt') { meiler(K, 380, 200, false); B.werkbank(K, 220, 210); }
+  else if (art === 'kraemer') { meiler(K, 140, 214, true); B.stand(K, 330, 206); }
+  else if (art === 'werkstatt') { meiler(K, 390, 214, false); B.werkbank(K, 220, 210); }
   else if (art !== 'uebergang') B.artZusatz(K, { x: info.mitte[0], y: info.mitte[1] });
   return K.fertig();
 }

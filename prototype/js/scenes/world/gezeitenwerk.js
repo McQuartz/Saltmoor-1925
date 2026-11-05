@@ -231,17 +231,29 @@ function hemmung(K, cfg) {
   const fr = K.fr, sd = K.o.seed, vy = cfg.ebbe ? 150 : 162, P = B.persp(240, vy); K.split = [vy + 18, vy + 30];
   B.feld(K.e[0], -M, -M, W + M, H + M, HIMMEL, (x, y) => 0.12 + 0.4 * Math.pow((x + M) / (W + 2 * M), 1.8) * (1 - y / 220) + (B.fbm(x * 0.015, y * 0.02, sd + 4, 3) - 0.5) * 0.18);
   zulauf(K, 456, -M, vy - 10, 14);
-  // das Hauptrad, riesig, füllt die obere Hälfte
-  zahnrad(K, 1, 120, -60, 230, { n: 52, th: 22, sp: 7, kranz: 30, nabe: 44, tiefe: 0.55, rot: 0.2, speiche: 9 });
-  // Hemmungsrad mit Sägezähnen, Mitte über der Kammer
-  const hx = 240, hy = 40, hr = 92, hz = B.maske();
+  // das Hauptrad, riesig, oben links; abgedunkelt, damit es hinter dem Pendel nicht mitspricht
+  zahnrad(K, 1, 96, -70, 220, { n: 52, th: 22, sp: 7, kranz: 30, nabe: 44, tiefe: cfg.ebbe ? 0.55 : 0.3, ton: cfg.ebbe ? 2.2 : 1.1, rot: 0.2, speiche: 9 });
+  // Hemmungsrad mit Sägezähnen, hoch über der Kammer: nur seine unteren Zähne ragen herein, der Anker greift hinein
+  const hx = 240, hy = cfg.ebbe ? 40 : -22, hr = cfg.ebbe ? 92 : 70, hz = B.maske();
   hz.fn(hx - hr - 20, hy - hr - 20, hx + hr + 20, hy + hr + 20, (x, y) => { const u = x - hx, v = y - hy, rr = Math.hypot(u, v), a = Math.atan2(v, u); const f = ((a / TAU * 21) % 1 + 1) % 1; const R = hr + 16 * f; if (rr > R) return false; if (rr > hr - 14 || rr < 16) return true; const s = ((a / TAU * 5) % 1 + 1) % 1; return Math.min(s, 1 - s) * TAU / 5 * rr < 5; });
   K.form(2, hz, 0.14, { k: BRONZE.slice(1), r: pal.rand, ton: 2.2, fase: 2, rand: 2, schatten: 2, verlauf: 0.5 });
-  K.e[2].set(hx, hy, B.pk(PHOS_K)); B.gluehen(K.e[2], hx, hy, 14, PHOS_G, 0.8);
+  if (cfg.ebbe) { K.e[2].set(hx, hy, B.pk(PHOS_K)); B.gluehen(K.e[2], hx, hy, 14, PHOS_G, 0.8); }
   // Rückwand mit Nischen: in jeder ein Abdruck; Pfeiler links und rechts
   const wand = B.maske(); wand.fn(-M, 120, W + M, vy + 2, (x, y) => y > 120 + Math.abs(x - 240) * 0.05); K.form(2, wand, 0.1, { k: BRONZE.slice(0, 6), r: pal.rand, ton: 1.5, fase: 1, rand: 1, muster: (x, y) => ((x % 30) === 0 ? -0.7 : 0) + ((y % 10) === 0 ? -0.4 : 0) });
-  for (let i = 0; i < 6; i++) abdruck(K, 2, 40 + i * 80, vy - 16, 1.6, (i - 2.5) * 0.08, i === 1 || i === 4 || fr > 0.5);
+  for (let i = 0; i < 6; i++) { if (!cfg.ebbe && (i === 2 || i === 3)) continue; abdruck(K, 2, 40 + i * 80, vy - 16, 1.6, (i - 2.5) * 0.08, i === 1 || i === 4 || fr > 0.5); }
   for (const x of [26, 454]) { const m = B.maske(); m.rect(x - 16, -M, 32, vy + 30); m.rect(x - 22, vy + 18, 44, 14); K.form(3, m, 0, { k: BRONZE.slice(0, 6), r: pal.rand, ton: 1.6, fase: 3, schatten: 2, muster: (px, py) => (((py >> 3) & 1) && Math.abs(px - x) < 12 ? -0.3 : 0) }); }
+  // Wasserwand hinter dem Pendel: Meerwasser fällt als glatte, leuchtende Fläche senkrecht herab (ruhige helle
+  // Zone, vor der der Regulator als Silhouette steht); die Kanten fransen gedithert aus
+  if (!cfg.ebbe) {
+    const ww = 62, w0 = 26;
+    B.feld(K.e[2], 240 - ww - 8, w0, 240 + ww + 8, vy + 3, HIMMEL, (x, y) => { const q = Math.abs(x - 240) / ww; if (q > 1.12) return -1;
+      const rand = q > 0.86 ? (q - 0.86) / 0.26 : 0; if (rand > B.bay(x, y) + 0.05) return -1;
+      return 0.74 + 0.2 * (1 - q) - (y - w0) / (vy - w0) * 0.14 + (B.rausch2(x * 0.35, y * 0.012, sd + 21) - 0.5) * 0.22 - fr * 0.1; });
+    const kant = B.maske(); kant.rect(240 - ww - 10, w0 - 4, 2 * ww + 20, 5); K.form(2, kant, 0.1, { k: BRONZE.slice(1, 7), r: pal.rand, ton: 2, fase: 1, rand: 2, schatten: 2 });
+    for (const L of [K.e[2], K.e[3]]) B.gluehen(L, 240, vy - 20, 110, PHOS_G, 0.55);
+    K.licht(240, 110, '#9ad8b4', 140, 0.7);
+    B.partikel(K, { n: 40, farben: [HIMMEL[9], PHOS], vy: 60, x0: 240 - ww + 4, x1: 240 + ww - 4, y0: w0, y1: vy, laenge: 3, p: 0.15, hellSelten: 2 });
+  }
   // Boden: Platten; der Gradbogen ist eine Rinne mit Teilstrichen, die beiden Enden leuchten (zwei Reihen)
   const kan = cfg.ebbe ? [{ X: 0, w: 1.2 }] : [];
   bodenWerk(K, P, vy + 1, kan, { glanzX: 360 });

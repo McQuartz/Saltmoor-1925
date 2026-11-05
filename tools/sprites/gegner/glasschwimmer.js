@@ -62,8 +62,8 @@ const A_bay = (x, y) => [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5][(
 module.exports = {
   id: 'glasschwimmer', biom: 'glasmeer', zone: 'glasmeer', w: 96, h: 120, fuss: [50, 110], kopf: [30, 50], rimBis: 112,
   varianten: {
-    glasschwimmer_a: { bogen: 1, kappe: 'leder', perlen: 7, fuss: true },
-    glasschwimmer_b: { bogen: 0.9, kappe: 'streifen', perlen: 5, fuss: true, breit: 3, reich: true },
+    glasschwimmer_a: { bogen: 1, kappe: 'leder', perlen: 7, beinHoch: true },
+    glasschwimmer_b: { bogen: 0.9, kappe: 'streifen', perlen: 5, beinHoch: true, breit: 3, reich: true },
   },
   skizzen: { skizze_kopfsprung: { kopfsprung: true } },
   glas,
@@ -106,7 +106,7 @@ module.exports = {
     const unterArm = glied([[sx - 4, sy + 5], [kopfX - 9, WY - 4], [kopfX - 13, WY + 1]], 3.4, 2.8, null);
     // Fuß hinten: ein Schlag mit dem Bein, Ferse aus dem Glas
     const fussX = 86 + (p.idle ? [0, 1, 1, 0][f] : 0), fussY = WY - 13 + (p.angriff ? [0, -2, -5, -3][f] : 0) + S * 1.3;
-    const bein = v.fuss ? [C(sx + 42, WY, fussX - 2, fussY + 6, 3.6, 2.6, null), Pg([[fussX - 4, fussY + 5], [fussX - 1, fussY - 2], [fussX + 2, fussY - 4], [fussX + 4, fussY + 1], [fussX + 1, fussY + 7]], null, { rd: 0.8 })] : [];
+    const bein = v.beinHoch ? [C(sx + 42, WY, fussX - 2, fussY + 6, 3.6, 2.6, null), Pg([[fussX - 4, fussY + 5], [fussX - 1, fussY - 2], [fussX + 2, fussY - 4], [fussX + 4, fussY + 1], [fussX + 1, fussY + 7]], null, { rd: 0.8 })] : [];
     // Bugwelle aus Glas vor dem Kopf (Kamm nach links gerollt); um den Körper wirft das Glas einen Rand auf
     const bw = v.breit || 0;
     const welle = Pg([[2, 106], [4, 100], [8, 94 - bw], [5, 91 - bw], [8, 87 - bw], [14, 88], [18, 94], [22, 99], [28, 102], [24, 106]], null, { rd: 0.8 });

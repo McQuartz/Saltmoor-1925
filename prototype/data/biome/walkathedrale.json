@@ -121,21 +121,21 @@
    "n": "Der Rippenkriecher",
    "biom": "walkathedrale",
    "rang": "normal",
-   "hp": 24,
+   "hp": 15,
    "weak": "E",
    "pat": [
     {
      "t": "atk",
-     "v": 6
-    },
-    {
-     "t": "atk",
-     "v": 3,
-     "h": 2
+     "v": 4
     },
     {
      "t": "blk",
-     "v": 7
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 2
     }
    ],
    "sprite": "rippenkriecher_a",
@@ -157,21 +157,20 @@
    "n": "Das Walfänger-Echo",
    "biom": "walkathedrale",
    "rang": "normal",
-   "hp": 22,
+   "hp": 15,
    "weak": "G",
    "pat": [
     {
-     "t": "atk",
-     "v": 10
+     "t": "laedt",
+     "v": 0
     },
     {
-     "t": "blk",
-     "v": 6
+     "t": "laedt",
+     "v": 0
     },
     {
      "t": "atk",
-     "v": 5,
-     "h": 2
+     "v": 12
     }
    ],
    "sprite": "echo_a",
@@ -184,7 +183,7 @@
    "kniff": {
     "art": "ansage",
     "zuege": 2,
-    "v": 16,
+    "v": 12,
     "why": "Er zielt, wie er damals gezielt hat. Zwei Atemzüge lang. Dann wirft er."
    },
    "beute": "echoharpune",
@@ -195,12 +194,12 @@
    "n": "Der Markfresser",
    "biom": "walkathedrale",
    "rang": "normal",
-   "hp": 24,
+   "hp": 15,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 5
+     "v": 4
     },
     {
      "t": "blk",
@@ -208,7 +207,7 @@
     },
     {
      "t": "atk",
-     "v": 3,
+     "v": 2,
      "h": 2
     }
    ],
@@ -232,21 +231,20 @@
    "n": "Der Seepockenmann",
    "biom": "walkathedrale",
    "rang": "normal",
-   "hp": 26,
+   "hp": 17,
    "weak": "W",
    "pat": [
     {
      "t": "atk",
-     "v": 6
+     "v": 4
     },
     {
      "t": "blk",
-     "v": 8
+     "v": 7
     },
     {
      "t": "atk",
-     "v": 3,
-     "h": 2
+     "v": 3
     }
    ],
    "sprite": "seepockenmann_a",
@@ -269,30 +267,30 @@
    "n": "Das Herz",
    "biom": "walkathedrale",
    "rang": "waechter",
-   "hp": 80,
+   "hp": 78,
    "weak": "B",
    "pat": [
     {
      "t": "atk",
-     "v": 12
+     "v": 7
     },
     {
      "t": "atk",
-     "v": 5,
+     "v": 3,
      "h": 3
     },
     {
      "t": "buff",
-     "v": 3
+     "v": 2
     },
     {
      "t": "atk",
-     "v": 16
+     "v": 11
     },
     {
      "t": "atk",
-     "v": 4,
-     "h": 4
+     "v": 3,
+     "h": 2
     }
    ],
    "sprite": "herz",
@@ -303,7 +301,7 @@
    "stimme": "wurm",
    "kniff": {
     "art": "takt",
-    "v": 8,
+    "v": 7,
     "why": "Es schlägt sehr langsam. Jeder Schlag hüllt die anderen ein. Zwischen zwei Schlägen ist die Kammer offen."
    },
    "besonders": {

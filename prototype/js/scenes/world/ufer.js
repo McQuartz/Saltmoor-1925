@@ -328,7 +328,7 @@ function bauen(o) {
   else if (art === 'ankunft') info = flutlinie(K, { ruhig: true, ohneSaeule: true });
   else info = [k => flutlinie(k, { ohneRand: art === 'uebergang' }), brecher, strandkorbSzene][v](K);
   if (art === 'uebergang') strandtreppe(K);
-  else if (art === 'rast' && info.korb) { for (let i = 0; i < 3; i++) B.dith(K.e[i], -M, -M, W + M, H + M, pal.koerper[0], (px) => .22 + .1 * i - Math.abs(px - 330) / 1800); B.feuer(K, 330, 222); }
+  else if (art === 'rast' && info.korb) B.feuer(K, 214, 226); // ein kleines Feuer aus Treibholz vor dem Strandkorb
   else if (art !== 'ankunft') B.artZusatz(K, { x: info.mitte[0], y: info.mitte[1] });
   return K.fertig();
 }

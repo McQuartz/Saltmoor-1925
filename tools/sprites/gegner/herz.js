@@ -45,11 +45,15 @@ module.exports = {
         adern.push(C(x, y0, x + (i - 1.5) * 1.5, top, (6 - i * 0.7) * s, (5.5 - i * 0.7) * s, null));
       }
     }
+    // Knochenplatten, die über das Herz wachsen (das Skelett wächst nach innen, auch hierher)
+    const platte = (u, w2, n, gr, rot) => { const pts = []; for (let k = 0; k < n; k++) { const a = rot + k / n * Math.PI * 2, rr = gr * (0.75 + ((k * 7 + n) % 5) * 0.09); pts.push([cx + RX * u + Math.cos(a) * rr * 1.2, cy + RY * w2 + Math.sin(a) * rr]); } return Pg(pts, null, { rd: 1 }); };
+    const platten = v.nackt ? [] : [platte(0.42, -0.62, 7, 7 * s, 0.3), platte(0.68, -0.25, 6, 5.5 * s, 1.1), platte(0.2, -0.78, 6, 5 * s, 0.7), platte(-0.62, 0.42, 7, 6 * s, 0.2), platte(0.5, 0.42, 6, 4.5 * s, 0.9), platte(-0.15, 0.72, 6, 4 * s, 0.4)];
     const gruppen = [
       { p: adern.slice(5), k: 1.2, tone: 0.1 },
       { p: [vorhof], k: 2, tone: 0.1 },
       { p: adern.slice(0, 5), k: 1.5 },
       { p: herz, k: 3, tone: 0.18 },
+      ...platten.map(pl => ({ p: [pl], k: 0.5, tone: 0.55 })),
       { p: wiege, k: 1.5, tone: 0.45 },
     ];
     const augen = [];
@@ -59,7 +63,7 @@ module.exports = {
         const c = P.get(x, y); if (!c || c > 4) continue;
         const u = (x - cx) * 0.55 + (y - cy) * 0.8, band = ((u % 7) + 7) % 7;
         if (band < 1) P.set(x, y, Math.max(1, c - 1));
-        else if (band < 1.6 && c < 4 && (x + y) % 2) P.set(x, y, c + 1);
+        else if (band > 3 && band < 4.4 && c < 4 && (c < 3 || (x + y) % 2)) P.set(x, y, c + 1);
       }
       // Gegenlicht von hinten rechts oben: die Wölbung zum Licht hin gedithert heller (Fase in die Fläche)
       for (let y = r(cy - RY); y <= cy + RY; y++) for (let x = r(cx - RX); x <= cx + RX; x++) {
@@ -78,6 +82,8 @@ module.exports = {
       if (glut > 0) { riss([[cx + RX * 0.35, cy - RY * 0.2], [cx + RX * 0.42, cy], [cx + RX * 0.36, cy + RY * 0.12], [cx + RX * 0.45, cy + RY * 0.3]]); riss([[cx + RX * 0.62, cy + RY * 0.05], [cx + RX * 0.7, cy + RY * 0.2]]); riss([[cx - RX * 0.75, cy + RY * 0.2], [cx - RX * 0.66, cy + RY * 0.38], [cx - RX * 0.7, cy + RY * 0.5]]); P.glow(cx + RX * 0.4, cy + RY * 0.05, 12 * glut, 0.5, 'glutDim', 'k3'); }
       ader([[cx - RX * 0.27, cy - RY * 0.1], [cx - RX * 0.65, cy + RY * 0.2], [cx - RX * 0.7, cy + RY * 0.45]], 'k3');
       ader([[cx + RX * 0.3, cy - RY * 0.55], [cx + RX * 0.55, cy - RY * 0.1], [cx + RX * 0.5, cy + RY * 0.4]], 'r1');
+      // Knochenplatten: Poren und eine helle Kante oben rechts (Fase)
+      for (let y = 0; y < 180; y++) for (let x = 0; x < 160; x++) { const c = P.get(x, y); if (c < 2 || c > 4) continue; if ((x * 13 + y * 7) % 17 === 0 && A.bay(x, y) < 0.3 && x > cx - RX && y > cy - RY && y < cy + RY) { /* Poren nur auf hellen Flächen */ if (c >= 3) P.set(x, y, 1); } }
       // Pfeifen: offene Mündungen (dunkel) mit Kalkrand
       if (!v.nackt) for (let i = 0; i < v.pfeifen; i++) { const x = cx + RX * (0.05 + i * 0.2) + (i - 1.5) * 1.5, top = 8 + [10, 0, 16, 28][i] + (p.idle ? [0, 2, -1, 0][f] : 0) * (i % 2), w = (5.5 - i * 0.7) * s; for (let k = -w + 1; k <= w - 1; k++) { P.auf(r(x + k), r(top), 'k0'); P.auf(r(x + k), r(top) + 1, k > 0 ? 'bein' : 'k1'); if (Math.abs(k) < w - 2 && glut > 1.2) P.auf(r(x + k), r(top) + 2, 'glutDim'); } }
       // Die Tür: Schiffsplanken, eingesetzt in die Herzwand, angelehnt; dahinter Licht
