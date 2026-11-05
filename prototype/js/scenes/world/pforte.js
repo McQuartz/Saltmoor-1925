@@ -11,7 +11,7 @@ const LL = [-.75, -.66];
 // Decke: Unterseite der See (hell, gewellt); Wand: stehendes Wasser; Stein: Kai
 const DECKE = ['#030808', '#061212', '#0a1c1c', '#0f2828', '#163836', '#1e4a46', '#2a605a', '#3a7c74', '#5aa69a'];
 const WAND = ['#020606', '#040c0c', '#071414', '#0b1e1e', '#102a2a', '#163836', '#204a46', '#2e625c'];
-const STEIN = ['#030606', '#060d0d', '#0a1515', '#101f1f', '#172b2a', '#20393a'];
+const STEIN = ['#030606', '#060d0d', '#0a1515', '#101f1f', '#172b2a', '#20393a', '#2c4c4a', '#3e6862'];
 const BECKEN = ['#020505', '#040b0b', '#071313', '#0b1d1c', '#112a28', '#1a3c38'];
 const LEER = ['#000101', '#010303', '#020606', '#040a0a', '#071010'];
 // schwarze Flamme: Körper fast schwarz, Rand blasses Magenta (die einzigen „Lichter“ der Menschen hier)
@@ -195,7 +195,8 @@ function pflaster(K, P, istKai, o) {
     const k = P.k(Z), cz = .2, cx = .28, row = Math.floor(Z / cz), off = (row & 1) * .5, col = Math.floor(X / cx + off);
     const fx = X / cx + off - col, fz = Z / cz - row, pxw = k * cx, pzh = k * cz * k / P.h, fern = 1 - (y - P.vy) / P.h;
     let t = .2 + .12 * B.hash(col, row, s) + Math.pow(fern, 5) * .6 - (1 - fern) * .1;
-    const nass = B.fbm(X * .9, Z * 1.4, s + 3, 3); if (nass > .72) return .4 + fern * .3 + (Math.sin(y * 2.1 + X * 3) > .6 ? .12 : 0);
+    // Pfützen spiegeln die helle Decke aus See
+    const nass = B.fbm(X * .9, Z * 1.4, s + 3, 3); if (nass > .66) return .5 + (nass - .66) * 2 + fern * .2 + (Math.sin(y * 2.1 + X * 3) > .6 ? .12 : 0);
     if (pxw > 3) { if (fx * pxw < .9 || fz * Math.max(1, pzh) < .7) t -= .2; else if ((1 - fz) * Math.max(1, pzh) < 1.2 && fx < .6) t += .13; }
     if (o.schiene) for (const sx of o.schiene) if (Math.abs(X - sx) * k < .55 + k * .004) t = .62 + Math.pow(fern, 3) * .3;
     if (o.rinne !== undefined && Math.abs(X - o.rinne) * k < 1.2 + k * .02) t = .14;
@@ -275,6 +276,14 @@ function kai(K, o) {
   for (const [X, Z, h] of [[-2.4, 3.6, 66], [-2.5, 8.5, 0]]) { const [x, y] = P.q(X, 0, Z); laterne(K, K.eb(y), x, y, h || 66 * 3.6 / Z, o.ruhig); }
   const [lx, ly] = P.q(13.4, 0, 6.2); laterne(K, K.eb(ly), lx, ly, 54, o.ruhig);
   const [kx, ky] = P.q(14.2, 0, 7.6); const ke = K.eb(ky + 2); kiste(K, ke, kx - 4, ky + 1, 16, 13); kiste(K, ke, kx - 18, ky + 2, 13, 11); kiste(K, ke, kx - 8, ky - 12, 12, 10);
+  // vorne: ein Poller mit aufgeschossenem Tau, daneben eine umgefallene Laterne, die noch schwarz brennt
+  if (!o.uebergang) {
+    poller(K, 4, 300, 238, 2.6, 0);
+    const tau = B.maske(); for (let i = 0; i < 4; i++) tau.ell(330, 236 - i * 2.2, 14 - i * 2, 4 - i * .4); tau.ell(330, 230, 5, 2, 0); K.form(4, tau, 0, { ton: 1.6, fase: 1, schatten: 1, muster: (x, y) => ((x + y * 2) % 4 === 0 ? -.5 : 0) });
+    const lt = B.maske(); lt.poly([[188, 232], [200, 222], [206, 228], [194, 238]]); lt.kap(186, 234, 180, 240, 1.2, 1.2); K.form(4, lt, 0, { ton: 1.3, fase: 1 });
+    B.dith(K.e[4], 150, 214, 240, 250, FL.hof, (x, y) => { const q = Math.hypot(x - 197, (y - 230) * 1.6) / 40; return q < 1 ? (1 - q) * .5 : 0; });
+    schwarzeFlamme(K, 198, 229, 1.2, B.PAR[4]);
+  }
   // Netzgestell links vorn: die Netze hängen nach oben
   const a = P.q(-2.15, 0, 3.15), a2 = P.q(-2.15, 1.75, 3.15), b = P.q(-2.15, 0, 4.6), b2 = P.q(-2.15, 1.7, 4.6);
   netzNachOben(K, K.eb(b[1]), [b[0], b[1], b2[1]], [a[0], a[1], a2[1]], 30, 0);

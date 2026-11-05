@@ -144,6 +144,12 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Der Seepockenmann | Walkathedrale | 4 | [M7](bilder/M7/walkathedrale/kontaktbogen.png) |
 | Das Herz (Wächter) | Walkathedrale | 4 (Idle bewegt sich wenig) | [M7](bilder/M7/walkathedrale/im-spiel-waechter.png) |
 | Hintergrund Walkathedrale (3 Varianten, Herzkammer) | Walkathedrale | 4 | [M7](bilder/M7/walkathedrale/hintergrund-varianten.png) |
+| Der Glasschwimmer | Glasmeer | 4 (einziger liegender Gegner) | [M7](bilder/M7/glasmeer/kontakt.png) |
+| Der Splitterchor | Glasmeer | 4 | [M7](bilder/M7/glasmeer/kontakt.png) |
+| Der Vorhergehende | Glasmeer | 4 (Anorak dunkel, Spiegelbild klein) | [M7](bilder/M7/glasmeer/kontakt.png) |
+| Der Leithund | Glasmeer | 4 | [M7](bilder/M7/glasmeer/kontakt.png) |
+| Der Voraus (Wächter) | Glasmeer | 4 (stärkste Figur des Pakets) | [M7](bilder/M7/glasmeer/im-spiel-waechter.png) |
+| Hintergrund Glasmeer (3 Varianten, Spiegelwand) | Glasmeer | 4 (Bruchkante sehr grün) | [M7](bilder/M7/glasmeer/varianten.png) |
 | Der Mann im Salz (neu) | Salz | 4 (Rumpf dunkel) | [M7](bilder/M7/alte-biome/salz-bogen.png) |
 | Der Vermesser (neu) | Stadt | 4 (Varianten ähnlich) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
 | Der aus dem Relief (neu) | Stadt | 4 (stärkstes Bild der Ergänzungen) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |

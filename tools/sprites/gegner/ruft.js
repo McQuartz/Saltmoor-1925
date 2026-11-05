@@ -182,29 +182,29 @@ function schlund(p, v, A) {
   if (p.treffer) { auf = 0.9; mw = 11; }
   if (p.tod) { auf = 1 - p.q * 0.3; mw = Math.max(3, 15 - p.q * 14); }
   if (v.fluegelZu) auf = 0.45;
-  const y0 = 70 + T, y1 = 208;
+  const y0 = 100 + T, y1 = 208;
   const kante = (y, s) => cx + lean * (1 - (y - y0) / (y1 - y0)) + s * (Math.sin(Math.min(1, (y - y0) / (y1 - y0) * 1.15) * Math.PI) * mw + 4);
   // ein Flügel: s = -1 links, +1 rechts; außen klappt er hoch und weit auf
   const fluegel = s => {
     const g = s > 0 ? 1.08 : 1, o = x => cx + lean * 0.5 + s * (x * auf * g);
     const innen = []; for (let y = y0; y <= y1; y += 12) innen.push([kante(y, s), y]);
-    const top = q => 78 + T - (q - 16) * 1.15 * (0.6 + 0.4 * auf);
-    const aussen = [[o(16), top(16)], [o(26), top(26) + 4], [o(34), top(34) + 3], [o(42), top(42) + 6], [o(50), top(50) + 2], [o(58), top(58) + 3], [o(64), top(64)], [o(72), top(64) + 12], [o(70), 92], [o(62), 128], [o(66), 166], [o(62), 204]];
-    const sm = saum(o(62), kante(y1, s), y1 + 2, 5, 6, s > 0 ? 7 : 4, hem); if (s < 0) sm.reverse();
+    const top = q => y0 + 2 - (q - 16) * 1.3 * (0.6 + 0.4 * auf);
+    const aussen = [[o(16), top(16)], [o(26), top(26) + 4], [o(34), top(34) + 3], [o(42), top(42) + 6], [o(50), top(50) + 2], [o(58), top(58) + 3], [o(64), top(64)], [o(71), top(64) + 12], [o(66), 100], [o(54), 134], [o(62), 170], [o(72), 204]];
+    const sm = saum(o(72), kante(y1, s), y1 + 2, 5, 6, s > 0 ? 7 : 4, hem); if (s < 0) sm.reverse();
     const pts = s < 0 ? [...innen, ...sm.reverse(), ...aussen.slice().reverse()] : [...innen, ...sm, ...aussen.slice().reverse()];
     return Pg(pts, null, { rd: 2 });
   };
   const fl = [fluegel(-1), fluegel(1)];
   // Fetzen: an den Außenkanten hängen Streifen herab, die sich im Takt bewegen
   const fetzen = [];
-  for (const s of [-1, 1]) for (const [q, y, l] of [[71, 96, 30], [64, 132, 26], [68, 168, 22]]) {
+  for (const s of [-1, 1]) for (const [q, y, l] of [[68, 84, 26], [56, 134, 24], [68, 178, 20]]) {
     const g = s > 0 ? 1.08 : 1, x = cx + lean * 0.5 + s * q * auf * g, sw = (p.idle ? [0, 1, 1, 0][f] : p.angriff ? [1, 2, -2, 0][f] : 0) * s;
     fetzen.push(...glied([[x - s * 2, y], [x + s * 5 + sw, y + l * 0.5], [x + s * 4 + sw * 2, y + l]], 3.2, 0.8, null));
   }
   // Falten im Flügel: Bahnen, die sich zur Mitte oben verjüngen (wie ein Fächer, der aufgeht)
   const bahnen = [];
   for (const s of [-1, 1]) for (const [a, b, w] of [[28, 30, 6], [44, 44, 7], [58, 54, 5]]) {
-    const g = s > 0 ? 1.08 : 1, X = q => cx + lean * 0.5 + s * q * auf * g, ty = 88 + T - (a - 16) * 1.15 * (0.6 + 0.4 * auf);
+    const g = s > 0 ? 1.08 : 1, X = q => cx + lean * 0.5 + s * q * auf * g, ty = y0 + 12 - (a - 16) * 1.3 * (0.6 + 0.4 * auf);
     bahnen.push(Pg([[X(a), ty], [X(a + w * 0.6), ty + 2], [X(b + w), 196], [X(b + w / 2), 202], [X(b), 196]], null, { rd: 1 }));
   }
   // Rachen hinter den Flügeln (dunkel), Zähne aus Pollern und Planken an den Kanten
@@ -218,7 +218,7 @@ function schlund(p, v, A) {
     zaehne.push(spitze(Pg, x + s * 1, y, ang + s * 0.25, l + (gross ? 6 : 3), gross ? 10 : 7, 0, 'haut'));
   }
   // Krone schwebt schief darüber, zwei Zacken abgebrochen
-  const kx = cx + 8 + lean * 0.7, ky = 40 + T + (p.idle ? [0, 1, 2, 1][f] : 0) + (p.angriff ? [2, 4, -6, -2][f] : 0), kw = 0.32;
+  const kx = cx + 6 + lean * 0.7, ky = 66 + T + (p.idle ? [0, 1, 2, 1][f] : 0) + (p.angriff ? [2, 4, -6, -2][f] : 0), kw = 0.32;
   const zack = [[-10, 12], [-6, 20], [-2, 6], [2, 24], [6, 7], [10, 16]];
   const rot = (dx, dy) => [kx + dx * Math.cos(kw) - dy * Math.sin(kw), ky + dx * Math.sin(kw) + dy * Math.cos(kw)];
   const krone = [Pg([rot(-13, 5), rot(13, 5), rot(12, -1), rot(-12, -1)], null, { rd: 0.6 }), ...zack.map(([dx, l]) => { const [x, y] = rot(dx, 0); return spitze(Pg, x, y, -Math.PI / 2 + kw + dx * 0.02, l, 4, 0.1); })];
@@ -262,10 +262,10 @@ function schlund(p, v, A) {
       P.auf(sx, sy - 2, 'magenta2'); P.auf(sx - 1, sy, 'magenta2'); P.auf(sx + 1, sy - 1, 'magenta2'); P.auf(sx - 1, sy + 2, 'magenta2'); P.auf(sx + 1, sy + 1, 'magenta2'); P.auf(sx, sy + 3, 'magenta2'); P.auf(sx, sy, 'k0'); P.auf(sx, sy + 1, 'k0');
       augen.push([sx, sy]);
       // Augen tief im Schlund, versetzt, blinzeln nacheinander
-      [[-1, 60], [1, 88], [-1, 150], [1, 176]].forEach(([s, yy], i) => { const y = r(yy + T), x = r((kante(y, -1) + kante(y, 1)) / 2 + s * Math.max(2, mw * 0.4)); if (p.idle && f === i) return; P.auf(x, y, 'kern'); P.auf(x + 1, y, 'glut'); augen.push([x, y]); });
+      [[-1, 118], [1, 140], [-1, 170], [1, 188]].forEach(([s, yy], i) => { const y = r(yy + T), x = r((kante(y, -1) + kante(y, 1)) / 2 + s * Math.max(2, mw * 0.4)); if (p.idle && f === i) return; P.auf(x, y, 'kern'); P.auf(x + 1, y, 'glut'); augen.push([x, y]); });
       spitzen.forEach(([x, y], i) => { if (i !== 2 && i !== 4) P.auf(r(x), r(y) + 1, i === 3 ? 'kern' : 'magenta2'); });
       // Bullaugen auf den Flügeln, wie im Saum des Königs
-      for (const [s, q, yy] of [[-1, 40, 176], [-1, 52, 120], [1, 42, 172], [1, 54, 116]]) {
+      for (const [s, q, yy] of [[-1, 44, 180], [-1, 46, 110], [1, 46, 176], [1, 48, 106]]) {
         const bx = r(cx + lean * 0.5 + s * q * auf * (s > 0 ? 1.08 : 1)), by = yy;
         P.el(bx + 0.5, by + 0.5, 4.6, 4.6, 'k3', true); P.el(bx + 0.5, by + 0.5, 3.6, 3.6, 'k0', true); P.el(bx + 0.5, by + 0.5, 2.4, 2.4, 'magenta1', true);
         P.auf(bx, by, 'glut'); P.auf(bx, by - 1, 'kern');

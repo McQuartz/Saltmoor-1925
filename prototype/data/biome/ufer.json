@@ -120,10 +120,10 @@
    "n": "Der, der vor dir kam",
    "biom": "ufer",
    "rang": "elite",
-   "hp": 80,
+   "hp": 110,
    "weak": "L",
    "vorgaenger": true,
-   "atk_faktor": 1.8,
+   "atk_faktor": 2.0,
    "pat": [
     {
      "t": "atk",
