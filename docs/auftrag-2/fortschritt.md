@@ -14,7 +14,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M5 Pipeline und alte Schwächen | fertig | Neubauten fertig (Mumie, Nachgeher, Ertrunkener, Netzflickerin-Rücken, Tiefling, Nest, alle Note 4); Icons in Arbeit |
 | M6 Biome Akt I und II | fertig | Fabrik, Kurhaus, Nachtzug, Kloster, Grotte (alle Note 4); neue Gegner Hafen, Moor, Kapelle; Torfstich heller |
 | M7 Biome Akt III bis V | fertig | Wald, Gezeitenwerk (Akt III), Walkathedrale, Glasmeer (Akt IV), Ufer unten, Pforte neu, Finale neu (Akt V); neue Gegner Salz, Stadt, Eis; alle Noten 4. Kern: Kniffe teurer/kopie/takt/voraus/verborgen, Pendel, Tausch-/Leih-/Spiegel-Krämer, Vorgänger, Ergänzungspakete |
-| M8 Ereignisse und Balance | läuft | 15 biomübergreifende Ereignisse, Ereignis-Test (alle Wahlen); Balance folgt, wenn alle Biome stehen |
+| M8 Ereignisse und Balance | fertig | ≥5 Ereignisse je Biom, 15 biomübergreifende, Test aller Wahlen; Builds 44–72 % (Ø 59 %), generischer Bot 65 %, kein Akt über 35 % der Niederlagen; Kampf Ø 4,1–4,5 Züge |
 | M9 Abschluss | offen | |
 | Zugabe | offen | |
 
@@ -51,6 +51,38 @@ Neu gebaut (Subagent, Weg A, gleiche IDs): Erbauer-Mumie (hockender Echsenleib i
 **Abnahme:** `node tools/test-deckbau.js` 13/13 (Start-Handgriffe, Kerben-Grenze, Stoffübernahme, Überschreiben, Kerbe dazu, Schleifen, Funke, Kette, Opfer, X, Stärke, Verwundbar, Behalten). Autospieler-Decks am Ende 19–24 Karten (Ziel ≥ 20 im Schnitt erreicht bei vier von sechs Builds, Rest 19,0–19,6). Bilder `bilder/M3/`: Handgriff-Wahl, Hover am Handgriff, Ritzen, Hover am Item, Rucksackmodus mit Grün/Rot. Vorschau weiter exakt (240 Karten, 0 Abweichungen).
 
 **Einschätzung:** Das Deck wächst jetzt spürbar mit jedem Kampf, und dieselben Handgriffe ergeben je nach Item andere Reaktionen; das trägt den Item-Ansatz. Schwach: Die Ritzen-Liste ist textlastig; das Überschreiben braucht zwei Klicks.
+
+### M8 Ereignisse und Balance (fertig)
+
+**Ereignisse:** jedes Biom hat mindestens 5 (alte Biome 5–6 mit den Ergänzungspaketen, neue 6–7), dazu 15 biomübergreifende; ein Viertel der Ereignisknoten zieht aus dem allgemeinen Pool. Ein gutes Drittel bezieht sich über `if` auf Früheres (Figur, Item, gesehenes Ereignis). `node tools/test-ereignisse.js` spielt jede Wahl jedes Ereignisses einmal: 0 Fehler.
+
+**Balance, je 50 Seeds (Build-Bots) bzw. 100 Seeds (generischer Bot), Stand nach M8:**
+
+| Build | Siege | Ø Tiefe | Ø Deck am Ende | Reaktionen/Zug | Niederlagen je Akt I/II/III/IV/V |
+|---|---|---|---|---|---|
+| Glutnest | 64 % | 29,4 | 22,7 | 2,83 | 0/0/4/4/10 |
+| Brackwasser | 44 % | 27,1 | 22,1 | 2,20 | 0/0/12/8/8 |
+| Bollwerk | 58 % | 28,9 | 23,0 | 2,28 | 0/2/2/10/7 |
+| Aderlass | 72 % | 29,0 | 23,3 | 2,53 | 0/1/3/8/2 |
+| Kettenwerk | 62 % | 28,2 | 22,4 | 2,89 | 1/1/5/4/8 |
+| Hagel | 52 % | 28,3 | 22,6 | 2,27 | 0/0/6/9/9 |
+| **Generischer Bot (100 Seeds)** | **65 %** | 27,8 | – | – | 3/3/9/10/10 |
+
+- Niederlagen über alle Builds je Akt: I 1 %, II 3 %, III 26 %, IV 35 %, V 35 % (124 Niederlagen). Generischer Bot: I 9 %, II 9 %, III 26 %, IV 29 %, V 29 %.
+- Niederlagen je Biom (generischer Bot, 100 Seeds): Ufer 8, Wald 3, Stadt 4, Walkathedrale 4, Glasmeer 3, Eis 3, Pforte 2, Hafen 2, Kloster 2, je 1 Salz, Moor, Grotte, Gezeitenwerk.
+- Ø Züge je Kampf 4,1–4,5 (vorher 3,4–3,6), Finale Ø etwa 10 Züge.
+
+**Was geändert wurde (der Reihe nach, jeweils gemessen):**
+1. Gerufene Gegner rufen nicht weiter (Tiefling-Kette beim Lotsen; Hafen 23 % → 7 % der Niederlagen).
+2. Tiefenzuschlag +1 Angriff alle **5** statt 3 Tiefen. Mit dem neuen Akt-Inhalt bekam in Akt IV jeder einzelne Treffer +7, das bestrafte Mehrfachangriffe und hielt die Builds bei 16–34 %. Gemessen: alle 3 → Ø 20 %, alle 4 → 33 %, alle 5 → 42 % (20 Seeds je Build).
+3. Finale `ruft` 280 → 200 Leben, Augen ohne Tiefenzuschlag (`ohne_tiefe`, eigens ausgelegt mit 20 Leben) und Schutz 6 → 3: Akt V verursachte 45 % der Niederlagen, alle im Finale bei fast vollem Leben.
+4. Mumie (3×2, 8) und Bote (3×3) leicht entschärft: Akt III lag bei 39 %.
+
+**Ziele und Begründung, wo nicht ganz erreicht:**
+- Builds 40–60 %: vier von sechs im Ziel, Kettenwerk mit 62 % knapp darüber, **Aderlass 72 %** darüber. Aderlass wird nur in der Hälfte der Runs als Build erkannt; sein Bot gewinnt eher über allgemein gute Karten als über den Blut-Plan. Lebensraub und Abbinden zu senken änderte nichts (gemessen), darum bleibt es so; bei 50 Seeds schwankt eine Rate um etwa ±7 Punkte.
+- Kein Akt über 35 %: Akt IV und V liegen über alle Builds genau an der Grenze (35 %), beim generischen Bot bei 29 %. Das Finale ist absichtlich der härteste Einzelkampf.
+- Kampf 4–8 Züge: Ø 4,1–4,5, also am unteren Rand. Mehr Gegnerleben machte den Run sofort deutlich schwerer (Kniffe wirken je Zug); ich habe die Länge darum nicht weiter gestreckt.
+- Die Wahrsagerin gewinnt am seltensten (5 von 10), der Veteran am häufigsten (10 von 10); beide bleiben vorerst so.
 
 ### M4 Items, Handgriffe, Reliquien, Builds (fertig)
 
