@@ -30,7 +30,8 @@
     "kapelle",
     "kloster",
     "grotte",
-    "glockengiesserei"
+    "glockengiesserei",
+    "waisenhaus"
    ],
    "wahl": "seed",
    "ebenen": [
@@ -71,7 +72,8 @@
     "eis",
     "walkathedrale",
     "glasmeer",
-    "mond"
+    "mond",
+    "funkstation"
    ],
    "wahl": "seed",
    "ebenen": [
@@ -89,7 +91,8 @@
    "titel": "Die Pforte",
    "biome": [
     "pforte",
-    "ufer"
+    "ufer",
+    "waage"
    ],
    "wahl": "seed",
    "ebenen": [

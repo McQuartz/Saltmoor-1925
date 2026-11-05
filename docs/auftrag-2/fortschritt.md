@@ -16,7 +16,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M7 Biome Akt III bis V | fertig | Wald, Gezeitenwerk (Akt III), Walkathedrale, Glasmeer (Akt IV), Ufer unten, Pforte neu, Finale neu (Akt V); neue Gegner Salz, Stadt, Eis; alle Noten 4. Kern: Kniffe teurer/kopie/takt/voraus/verborgen, Pendel, Tausch-/Leih-/Spiegel-Krämer, Vorgänger, Ergänzungspakete |
 | M8 Ereignisse und Balance | fertig | ≥5 Ereignisse je Biom, 15 biomübergreifende, Test aller Wahlen; Builds 44–72 % (Ø 59 %), generischer Bot 65 %, kein Akt über 35 % der Niederlagen; Kampf Ø 4,1–4,5 Züge |
 | M9 Abschluss | fertig | Geklickter Run (40 Stationen), Galerie und Artboard erweitert, Bericht unten |
-| Zugabe | läuft | Vier neue Biome: Leuchtturmhof (I), Glockengießerei (II), Ziegelgruben (III), Mond unter dem Eis (IV), alle Note 4, biom-test 14–17/20, 0 Fehler. Kern: Störkarten-Name aus dem Kniff, unverwundbarer Zug (`unverw`), `ruf` mit Liste, Tooltip zeigt nächste Schwachstelle. Balance neu gemessen (siehe Entscheidungen) |
+| Zugabe | läuft | Punkte 1–4 der Liste erledigt: vier neue Biome (Leuchtturmhof, Glockengießerei, Ziegelgruben, Mond), Varianten b vollständig, alle 133 Ereignisse mit Bild (Note 4), zwei neue Builds Ballast und Kollekte mit 10 Reliquien. Kern: `unverw`, `ruf` mit Liste, nächste Schwachstelle, Störkarten-Name. Weiter: drei Biome Waisenhaus (II), Funkstation (IV), Waage am Grund (V) |
 
 ## Einträge je Meilenstein
 
