@@ -14,7 +14,7 @@
    "n": "Der Fahnenträger",
    "biom": "eis",
    "rang": "normal",
-   "hp": 20,
+   "hp": 22,
    "weak": "B",
    "pat": [
     {
@@ -27,7 +27,7 @@
     },
     {
      "t": "atk",
-     "v": 7
+     "v": 8
     }
    ],
    "sprite": "fahnentraeger_a",

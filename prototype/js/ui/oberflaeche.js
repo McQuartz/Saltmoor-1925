@@ -45,7 +45,7 @@ function absicht(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art===
  // Ansage: lädt, dann großer Schlag; zeigt die Wucht und wie viele Züge noch
  if(it.t==='laedt'){let n=1,j=e.pi+1;while(n<9&&e.pat[j%e.pat.length].t==='laedt'){n++;j++;}const s=e.pat[j%e.pat.length];const v=(s.v||0)+e.str;return{k:'atk',html:`<span class="laedt">${gi('atk',GZ())}${v} <small>in ${n}</small></span>`};}
  return{k:'buff',html:`${gi('buff',GZ())}+${it.v}`};}
-function gegnerHtml(f){return S.enemies.map((e,i)=>{if(e.hp<=0)return'';const b=enemyBox(e);const pv=vorschau&&vorschau.foes[i];const tg=f&&i===S.target;
+function gegnerHtml(f){return S.enemies.map((e,i)=>{if(e.hp<=0)return'';const b={...enemyBox(e)};if(e.pendel)b.x=Math.round(e.x*SW);const pv=vorschau&&vorschau.foes[i];const tg=f&&i===S.target;
   const st=[e.burn&&['burn',e.burn],e.poison&&['poison',e.poison],e.weak2&&['weak',1],e.str&&['buff',e.str]].filter(Boolean);
   return `<div class="feind ${tg?'ziel':''} ${e.rang}" data-ei="${i}" style="left:${(b.x/SW*100).toFixed(2)}%;top:${(b.kopf/SH*100).toFixed(2)}%;--fh:${(b.y-b.kopf)/SH*100}">
    ${f?`<div class="abs">${absicht(e).html}</div>`:''}<div class="treffer" style="height:calc(var(--u)*${b.y-b.kopf})"></div>

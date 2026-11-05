@@ -728,16 +728,16 @@
  },
  "ruft": {
   "n": "Das, was ruft",
-  "hp": 180,
+  "hp": 250,
   "weak": "S",
   "pat": [
    {
-    "t": "buff",
-    "v": 2
+    "t": "atk",
+    "v": 11
    },
    {
-    "t": "atk",
-    "v": 12
+    "t": "blk",
+    "v": 14
    },
    {
     "t": "atk",
@@ -745,8 +745,8 @@
     "h": 3
    },
    {
-    "t": "blk",
-    "v": 15
+    "t": "buff",
+    "v": 3
    }
   ],
   "biom": "pforte",
@@ -770,7 +770,7 @@
     [
      {
       "t": "atk",
-      "v": 8,
+      "v": 9,
       "h": 2
      },
      {
@@ -779,7 +779,7 @@
      },
      {
       "t": "atk",
-      "v": 12
+      "v": 17
      },
      {
       "t": "buff",
@@ -794,11 +794,11 @@
      },
      {
       "t": "atk",
-      "v": 15
+      "v": 19
      },
      {
-      "t": "buff",
-      "v": 4
+      "t": "blk",
+      "v": 10
      },
      {
       "t": "atk",
@@ -828,13 +828,12 @@
   "weak": "L",
   "pat": [
    {
-    "t": "atk",
+    "t": "blk",
     "v": 3
    },
    {
     "t": "atk",
-    "v": 2,
-    "h": 2
+    "v": 2
    }
   ],
   "biom": "pforte",
@@ -844,8 +843,13 @@
    "augen_a",
    "augen_b"
   ],
-  "konzept": "Augen ohne Körper mit einem Lid aus Randlicht; der Boss ruft sie herbei.",
+  "konzept": "Eine Laterne vom Kai, die aus der See-Decke an ihrer Kette herabhängt; statt einer Flamme sitzt im Glas ein Auge. Das, was ruft, holt sie herbei.",
   "stimme": "augen",
-  "beute": null
+  "beute": null,
+  "kniff": {
+   "art": "schuetzer",
+   "v": 6,
+   "why": "Die Laternen leuchten ihm schwarz: solange sie hängen, deckt jede ihn mit Block."
+  }
  }
 }

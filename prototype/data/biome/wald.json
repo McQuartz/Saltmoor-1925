@@ -116,7 +116,7 @@
    "n": "Der Holzfäller der Legion",
    "biom": "wald",
    "rang": "normal",
-   "hp": 26,
+   "hp": 28,
    "weak": "G",
    "pat": [
     {
@@ -153,7 +153,7 @@
    "n": "Der Steinhirsch",
    "biom": "wald",
    "rang": "normal",
-   "hp": 22,
+   "hp": 25,
    "weak": "E",
    "pat": [
     {
@@ -190,7 +190,7 @@
    "n": "Der Harzfang",
    "biom": "wald",
    "rang": "normal",
-   "hp": 16,
+   "hp": 18,
    "weak": "L",
    "pat": [
     {
@@ -226,7 +226,7 @@
    "n": "Die Bernsteinlarve",
    "biom": "wald",
    "rang": "normal",
-   "hp": 24,
+   "hp": 27,
    "weak": "W",
    "pat": [
     {
@@ -262,7 +262,7 @@
    "n": "Der Wurzelstock",
    "biom": "wald",
    "rang": "waechter",
-   "hp": 78,
+   "hp": 80,
    "weak": "F",
    "pat": [
     {
@@ -309,39 +309,40 @@
      [
       {
        "t": "atk",
-       "v": 4,
+       "v": 5,
        "h": 3
       },
       {
        "t": "blk",
-       "v": 12
+       "v": 14
       },
       {
        "t": "atk",
-       "v": 13
+       "v": 16
       },
       {
        "t": "buff",
-       "v": 1
+       "v": 2
       }
      ],
      [
       {
        "t": "atk",
-       "v": 5,
+       "v": 6,
        "h": 3
       },
       {
        "t": "atk",
-       "v": 14
+       "v": 18
       },
       {
        "t": "buff",
-       "v": 2
+       "v": 3
       },
       {
-       "t": "blk",
-       "v": 10
+       "t": "atk",
+       "v": 4,
+       "h": 4
       }
      ]
     ],

@@ -82,8 +82,11 @@ module.exports = {
       if (glut > 0) { riss([[cx + RX * 0.35, cy - RY * 0.2], [cx + RX * 0.42, cy], [cx + RX * 0.36, cy + RY * 0.12], [cx + RX * 0.45, cy + RY * 0.3]]); riss([[cx + RX * 0.62, cy + RY * 0.05], [cx + RX * 0.7, cy + RY * 0.2]]); riss([[cx - RX * 0.75, cy + RY * 0.2], [cx - RX * 0.66, cy + RY * 0.38], [cx - RX * 0.7, cy + RY * 0.5]]); P.glow(cx + RX * 0.4, cy + RY * 0.05, 12 * glut, 0.5, 'glutDim', 'k3'); }
       ader([[cx - RX * 0.27, cy - RY * 0.1], [cx - RX * 0.65, cy + RY * 0.2], [cx - RX * 0.7, cy + RY * 0.45]], 'k3');
       ader([[cx + RX * 0.3, cy - RY * 0.55], [cx + RX * 0.55, cy - RY * 0.1], [cx + RX * 0.5, cy + RY * 0.4]], 'r1');
-      // Knochenplatten: Poren und eine helle Kante oben rechts (Fase)
-      for (let y = 0; y < 180; y++) for (let x = 0; x < 160; x++) { const c = P.get(x, y); if (c < 2 || c > 4) continue; if ((x * 13 + y * 7) % 17 === 0 && A.bay(x, y) < 0.3 && x > cx - RX && y > cy - RY && y < cy + RY) { /* Poren nur auf hellen Flächen */ if (c >= 3) P.set(x, y, 1); } }
+      // Knochenplatten: Kalk gedithert (bein), Kante zum Licht hell (r1), Poren dunkel
+      platten.forEach(pl => { const xs = pl.v.map(q => q[0]), ys = pl.v.map(q => q[1]), mx = (Math.min(...xs) + Math.max(...xs)) / 2, my = (Math.min(...ys) + Math.max(...ys)) / 2, rx = (Math.max(...xs) - Math.min(...xs)) / 2, ry = (Math.max(...ys) - Math.min(...ys)) / 2;
+        for (let y = r(my - ry); y <= my + ry; y++) for (let x = r(mx - rx); x <= mx + rx; x++) { const q = Math.hypot((x + 0.5 - mx) / rx, (y + 0.5 - my) / ry); if (q > 0.95 || !P.get(x, y) || P.get(x, y) > 4) continue;
+          const u = (x - mx) / rx * 0.7 - (y - my) / ry * 0.7;
+          if (q > 0.62 && u > 0.35) P.set(x, y, 'r1'); else if (u + A.bay(x, y) * 0.9 > 0.55) P.set(x, y, 'bein'); else if ((x * 5 + y * 3) % 11 === 0) P.set(x, y, 'k0'); } });
       // Pfeifen: offene Mündungen (dunkel) mit Kalkrand
       if (!v.nackt) for (let i = 0; i < v.pfeifen; i++) { const x = cx + RX * (0.05 + i * 0.2) + (i - 1.5) * 1.5, top = 8 + [10, 0, 16, 28][i] + (p.idle ? [0, 2, -1, 0][f] : 0) * (i % 2), w = (5.5 - i * 0.7) * s; for (let k = -w + 1; k <= w - 1; k++) { P.auf(r(x + k), r(top), 'k0'); P.auf(r(x + k), r(top) + 1, k > 0 ? 'bein' : 'k1'); if (Math.abs(k) < w - 2 && glut > 1.2) P.auf(r(x + k), r(top) + 2, 'glutDim'); } }
       // Die Tür: Schiffsplanken, eingesetzt in die Herzwand, angelehnt; dahinter Licht

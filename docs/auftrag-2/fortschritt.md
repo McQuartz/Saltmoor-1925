@@ -136,7 +136,7 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Kanalaal | Gezeitenwerk | 4 (starke Silhouette) | [M7](bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png) |
 | Die Ölerin | Gezeitenwerk | 4 | [M7](bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png) |
 | Das Gewicht | Gezeitenwerk | 4 | [M7](bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png) |
-| Der Regulator (Wächter) | Gezeitenwerk | im Spiel 3 (dunkel vor dem Hauptrad), in Nacharbeit | [M7](bilder/M7/gezeitenwerk/im-spiel-waechter.png) |
+| Der Regulator (Wächter) | Gezeitenwerk | 4 (nach Nacharbeit: Wasserwand hinter ihm, mehr Randlicht; schwingt als Pendel zwischen zwei Reihen) | [M7](bilder/M7/gezeitenwerk/im-spiel-waechter.png) |
 | Hintergrund Gezeitenwerk (3 Varianten, Wächter-Szene) | Gezeitenwerk | 4 (V2 schwächste) | [M7](bilder/M7/gezeitenwerk/hintergrund-varianten.png) |
 | Item-Icons (125) | alle | 112 × 4, 13 × 3 in Überarbeitung | [M5](bilder/M5/icons.png) |
 | Handgriff-Bilder (70) | alle | 48 × 4, 22 × 3 in Überarbeitung (zu dunkel, Hände verschmelzen) | [M5](bilder/M5/handgriffe.png) |

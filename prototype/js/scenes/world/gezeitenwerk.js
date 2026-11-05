@@ -245,7 +245,7 @@ function hemmung(K, cfg) {
   // Wasserwand hinter dem Pendel: Meerwasser fällt als glatte, leuchtende Fläche senkrecht herab (ruhige helle
   // Zone, vor der der Regulator als Silhouette steht); die Kanten fransen gedithert aus
   if (!cfg.ebbe) {
-    const ww = 62, w0 = 26;
+    const ww = 104, w0 = 26; // breit genug für beide Stellungen des Pendels (x 0,3 hinten und 0,7 vorn)
     B.feld(K.e[2], 240 - ww - 8, w0, 240 + ww + 8, vy + 3, HIMMEL, (x, y) => { const q = Math.abs(x - 240) / ww; if (q > 1.12) return -1;
       const rand = q > 0.86 ? (q - 0.86) / 0.26 : 0; if (rand > B.bay(x, y) + 0.05) return -1;
       return 0.74 + 0.2 * (1 - q) - (y - w0) / (vy - w0) * 0.14 + (B.rausch2(x * 0.35, y * 0.012, sd + 21) - 0.5) * 0.22 - fr * 0.1; });

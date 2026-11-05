@@ -43,7 +43,7 @@ Grundform: **der Eingriff**. Große Kreisbögen (angeschnittene Räder) schneide
 - **Falsches Detail:** Abdrücke auf beiden Kränzen, dort wo man ein Rad mit der Hand drehen würde, wenn man so groß wäre.
 
 ### Wächter-Szene: Die Hemmung
-- **Horizont** y 162, Untersicht. Direkt hinter dem Pendel fällt Meerwasser als glatte, leuchtende Wand senkrecht herab: die ruhige helle Zone, vor der der Regulator als dunkle Silhouette steht. Darüber ragen nur die unteren Sägezähne des Hemmungsrads herein (der Anker greift hinein). Das Hauptrad links oben ist abgedunkelt und sitzt nicht mehr hinter dem Wächter. Eine niedrige Wand mit vier Abdrücken links und rechts der Wasserwand, zwei Pfeiler, oben eine Zahnstange.
+- **Horizont** y 162, Untersicht. Hinter dem Pendel fällt Meerwasser als glatte, leuchtende Wand senkrecht herab, breit genug für beide Stellungen des Pendels: die ruhige helle Zone, vor der der Regulator als dunkle Silhouette steht. Darüber ragen nur die unteren Sägezähne des Hemmungsrads herein (der Anker greift hinein). Das Hauptrad links oben ist abgedunkelt und sitzt nicht mehr hinter dem Wächter. Eine niedrige Wand mit vier Abdrücken links und rechts der Wasserwand, zwei Pfeiler, oben eine Zahnstange.
 - **Am Boden** der Gradbogen: eine Rinne mit Teilstrichen, über die die Spitze des Pendels streicht. Seine beiden Enden leuchten; das sind die zwei Reihen, zwischen denen der Regulator schwingt.
 
 ### Die anderen Arten
@@ -117,7 +117,7 @@ Arbeitsweise: Silhouette zuerst als schwarze Fläche, je Gegner mindestens zwei 
 - **Animation:** Leerlauf: Pendeln um einen Pixel nach links und rechts (ganzzahlig, damit kein Dither kriecht). Angriff: Ausholen nach hinten, dann der Durchschwung nach vorn auf dich, die Augen weit. Tod: Die Linse sinkt ab, der Anker zerfällt zuletzt. Der Gradbogen am Boden ist Teil des Sprites und bewegt sich nicht.
 - **Kniff:** `waechst 1`: Mit jedem Schlag rückt das Hauptrad einen Zahn weiter, und er schwingt ein wenig weiter aus.
 - **Besonders:** `schwach_wechsel` Wasser ↔ Eisen, mit dem Takt: Am einen Ende des Ausschlags streift die Linse durch den Kanal (Wasser), am anderen schlägt sie gegen einen eisernen Anschlag, den irgendwer viel später eingebaut hat (Eisen).
-- **Muster (wechselt die Seite):** nah: Doppelschlag (2 × 6), fern: Block 12, nah: Durchschwung (15), fern: Hagel (3 × 4), Block 9. „Zwischen zwei Tiefenreihen“ ist über die wechselnden Absichten und den Gradbogen erzählt; der Kern stellt den Wächter immer vorne auf (kein Reihenwechsel im Kern).
+- **Muster (wechselt die Seite):** nah: Doppelschlag (2 × 6), fern: Block 12, nah: Durchschwung (15), fern: Hagel (3 × 4), Block 9. Dazu `"pendel": true`: Nach jedem Gegnerzug schwingt er auf die andere Seite, x 0,3 in der hinteren Reihe, dann x 0,7 vorn, und gleitet im Bild dorthin. Der Gradbogen am Boden zeigt den Weg.
 - **Stimme:** `windgestalt` (Röhren mit Echo, Oktave tiefer).
 - **Beute:** Reliquie *Das Gezeitenrad* (`gezeitenrad`, schon in `items.json`, nicht neu angelegt, nicht im Fundpool).
 
@@ -154,7 +154,7 @@ g-Moll, Grundton 43 (Salzstollen 53, Namenlose Stadt 46). Ort: Stollen-Hall, fer
 - `node tools/sprites/pruefen.js zahnradwaerter_a zahnradwaerter_b kanalaal_a kanalaal_b oelerin_a oelerin_b gewicht_a gewicht_b regulator`: 9 Sprites, **0 Verstöße**.
 - Kontaktbogen neben Chorknabe, Hirte, Netzflickerin: [kontakt-neben-favoriten.png](../bilder/M7/gezeitenwerk/kontakt-neben-favoriten.png). Silhouetten gegen alle 143 vorhandenen Sprites (Gezeitenwerk schwarz, andere grau): [silhouetten-gegen-alle.png](../bilder/M7/gezeitenwerk/silhouetten-gegen-alle.png). Alle Animationen: [animationen.png](../bilder/M7/gezeitenwerk/animationen.png).
 - Hintergrund: [hintergrund-varianten.png](../bilder/M7/gezeitenwerk/hintergrund-varianten.png) (V0, V1, V2, Wächter, mit den echten Sprites), [hintergrund-arten.png](../bilder/M7/gezeitenwerk/hintergrund-arten.png), [hintergrund-fremdheit.png](../bilder/M7/gezeitenwerk/hintergrund-fremdheit.png) (fremdheit 1).
-- Im Spiel (`newRun('fischer',3,{dev:true,route:['hafen','kapelle','gezeitenwerk','eis','pforte']})`, `Dev.springe(…, 2)`): [im-spiel-kampf.png](../bilder/M7/gezeitenwerk/im-spiel-kampf.png), [im-spiel-kampf-7.png](../bilder/M7/gezeitenwerk/im-spiel-kampf-7.png), [im-spiel-kampf-alle-vier.png](../bilder/M7/gezeitenwerk/im-spiel-kampf-alle-vier.png) (alle vier Gegner gesetzt), [im-spiel-waechter.png](../bilder/M7/gezeitenwerk/im-spiel-waechter.png). Keine Konsolenfehler.
+- Im Spiel (`newRun('fischer',3,{dev:true,route:['hafen','kapelle','gezeitenwerk','eis','pforte']})`, `Dev.springe(…, 2)`): [im-spiel-kampf.png](../bilder/M7/gezeitenwerk/im-spiel-kampf.png), [im-spiel-kampf-7.png](../bilder/M7/gezeitenwerk/im-spiel-kampf-7.png), [im-spiel-kampf-alle-vier.png](../bilder/M7/gezeitenwerk/im-spiel-kampf-alle-vier.png) (alle vier Gegner gesetzt), [im-spiel-waechter.png](../bilder/M7/gezeitenwerk/im-spiel-waechter.png), dazu beide Pendel-Stellungen: [im-spiel-waechter-links-hinten.png](../bilder/M7/gezeitenwerk/im-spiel-waechter-links-hinten.png), [im-spiel-waechter-rechts-vorn.png](../bilder/M7/gezeitenwerk/im-spiel-waechter-rechts-vorn.png) (Absicht und Name bleiben im Bild, der Wechsel nach einem echten Gegnerzug ist geprüft: 0,5/vorn → 0,3/hinten). Keine Konsolenfehler.
 - `node tools/biom-test.js gezeitenwerk 10`: **8/10** überstanden, 0 Fehler; mit Startseed 11: **7/10**, 0 Fehler. Die ersten Werte waren zu hart (5/10, die Niederlagen fast immer mit dem Kanalaal im ersten Kampf); gesenkt wurden Leben und Schaden von Kanalaal, Gewicht und Ölerin. Zum Vergleich mit demselben Test: Salzstollen 2/10, Namenlose Stadt 3/10. Der Regulator hat in 20 Seeds keinen Run beendet; alle Niederlagen kommen aus normalen Kämpfen.
 
 ## Noten (Bewertungsbogen 06-ki-bilder.md Abschnitt 5)
@@ -179,6 +179,5 @@ Nichts unter 4. Überarbeitet wurden unterwegs: Ölerin (Block mit Stock → sch
 ## Offene Schwächen
 
 - Der Kern zeigt die Absicht „lädt“ (Ansage des Gewichts) als „↑ +0“; das betrifft alle `ansage`-Gegner, nicht nur dieses Paket.
-- Der Reihenwechsel des Regulators ist nicht im Kern (Wächter stehen immer vorne); erzählt wird er über das Muster, den Gradbogen und die Schwachstelle.
 - Das Hauptrad rückt im Hintergrund nicht sichtbar weiter (die Szene ist bis auf Wasser, Licht und Partikel statisch).
 - Item-Icons sind Platzhalter.

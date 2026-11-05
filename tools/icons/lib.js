@@ -71,7 +71,7 @@ function palette(st = [], rar = 'gewoehnlich', opt = {}) {
     const M = opt.hg && m === 'haut' ? HAUT_HG : MAT[m]; matBase[m] = farben.length;
     let r2 = mix(M.hell, glanzA, rimStaerke);
     if (rar === 'reliquie') r2 = mix(r2, '#ffd890', 0.3);
-    const r1 = mix(M.body[3], mix(M.hell, glanzA, 0.75), 0.42);
+    const r1 = mix(M.body[3], mix(M.hell, glanzA, 0.75), opt.hg ? 0.55 : 0.42);
     M.body.forEach((c, i) => add(m + i, c)); add(m + 'R1', r1); add(m + 'R2', r2);
   }
   for (const [k, v] of Object.entries(LICHT)) add(k, v);
@@ -241,10 +241,10 @@ function gewehr(x, y, a = 0, laenge = 40) {
 // Arm und Ärmel einer Hand als Gruppen (Haut, darüber der Ärmel bis kurz vor das Handgelenk)
 function armGruppen(h, aermelMat = 'stoff') { return [{ p: h.arm, mat: 'haut', k: 0 }, { p: h.aermel, mat: aermelMat, k: 0 }]; }
 // Rendern: gruppen (hinten -> vorne), jede mit mat. Rückgabe Index-Puffer in die Bild-Palette.
-function rendern(W, H, gruppen, pal) {
+function rendern(W, H, gruppen, pal, tonPlus = 0) {
   const gs = gruppen.filter(g => g && g.p && (g.p.flat ? g.p.flat(3) : g.p).length);
   // Grundton: flache Flächen landen ohne Dither auf Stufe k2 (TON_FLACH), nur Fasen bekommen Übergänge
-  const { buf, gid } = S.render(W, H, gs.map(g => ({ ...g, tone: (g.tone ?? 0) + TON_FLACH, p: g.p.flat ? g.p.flat(3) : g.p })), null, { rimBis: H + 10 });
+  const { buf, gid } = S.render(W, H, gs.map(g => ({ ...g, tone: (g.tone ?? 0) + TON_FLACH + tonPlus, p: g.p.flat ? g.p.flat(3) : g.p })), null, { rimBis: H + 10 });
   const out = new Uint8Array(W * H);
   for (let i = 0; i < out.length; i++) {
     if (!buf[i]) continue; const g = gs[gid[i]]; const m = g.mat || 'eisen';
@@ -348,7 +348,7 @@ function bauen(def, o = {}) {
   const A = { gewehr, glutHaufen, armGruppen, pfad, E, C, Pg, chain, glied, saum, achse, apg, acap, ring, kurve, hand, faust, perlen, kettenglieder, zahnrad, mantel, rad, r: Math.round, PI: Math.PI, sin: Math.sin, cos: Math.cos, mix, st, rar, W, H };
   AUTO.length = 0;
   const res = def.form(A, { st, rar });
-  const { buf } = rendern(W, H, res.gruppen, pal);
+  const { buf } = rendern(W, H, res.gruppen, pal, H === 32 ? 0.07 : 0);
   const P = pinsel(buf, W, H, pal);
   for (const f of AUTO) f(P);
   if (res.details) res.details(P);
