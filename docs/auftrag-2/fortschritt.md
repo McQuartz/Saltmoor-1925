@@ -217,6 +217,7 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Reliquien Ballast und Kollekte (10), Bleigürtel, Geldkatze, Handgriffe Beschweren, Münzwurf (neu) | alle | 4 (knapp: Ballaststein schlichtes Oval, Fährgeld erinnert an Mond, Hand bei Beschweren krallig) | [Zugabe](bilder/Zugabe/reliquien/kontaktbogen.png) |
 | Ereignisbilder Charge 1: 15 biomübergreifende, 6 Hafen (neu) | alle, Hafen | 4 (Kreidezeichen eher grafisch; Hafen etwas gleichförmig nachtblau) | [Zugabe](bilder/Zugabe/ereignisse/kontakt-1.png) |
 | Ereignisbilder Akt I: Moor 5, Fabrik 7, Kurhaus 6, Nachtzug 7, Leuchtturm 7 (neu) | Akt I | 4 (selbst geprüft; stark: Kühlhaus, Kontrolle, Gedeck; knapp: Kurve, Lupe) | [Zugabe](bilder/Zugabe/ereignisse/kontakt-2-fabrik.png) |
+| Ereignisbilder Akt II: Kapelle 6, Kloster 6, Grotte 7, Glockengießerei 6 (neu) | Akt II | 4 (selbst geprüft; 7 Bilder in zwei Runden überarbeitet; knapp: Stimmen, Taufe) | [Zugabe](bilder/Zugabe/ereignisse/kontakt-3-glockengiesserei.png) |
 
 ## Entscheidungen unterwegs
 

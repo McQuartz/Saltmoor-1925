@@ -295,43 +295,51 @@ module.exports = {
     // Ein Klingelbeutel an einer langen Stange über einer überfluteten Kirchenbank, das Glöckchen glänzt, der Halter ist nur ein Kragen im Dunkel.
     kapelle_kollekte(K) {
       const { B } = K;
-      K.fuell(WAND, (x, y) => .3 + (B.fbm(x * .05, y * .05, K.seed, 2) - .5) * .2 - y / 280 + x / 700);
-      K.mauer(134, 0, 160, 62, WAND.slice(1, 6), { hoehe: 6, breite: 10, ton: .42 });
-      // Unter der Empore: nur Dunkel, oben der Balken der Brüstung
-      K.feld(0, 0, 160, 90, ['#000000', '#020101', '#040302', '#070504'], (x, y) => x < 58 - y * .12 ? .15 + (x / 58) * .55 : -1);
-      const em = K.maske(); em.rect(-2, -2, 66, 12); em.rect(-2, 10, 62, 3);
-      K.lichtquelle(150, 20);
-      K.form(em, 0, { k: HOLZ, ton: 1.3, fase: 0, rand: 1, L: [0, 1], r: ['#3a2a18'], muster: (x, y) => (y === 9 ? -.8 : 0) + ((x % 12) === 0 && y < 9 ? -.6 : 0) });
-      // Überflutete Bänke: hinten eine, vorn eine; das Wasser steht bis an die Lehne
-      const wl = 70;
-      const bank2 = K.maske(); bank2.rect(60, 52, 74, 3); bank2.rect(62, 55, 72, 6);
-      K.form(bank2, .25, { k: HOLZ, ton: 1.2, fase: 1, rand: 1 });
-      const bank = K.maske(); bank.rect(40, 62, 120, 4); bank.rect(42, 66, 118, 8);
-      K.form(bank, 0, { k: HOLZ, ton: 1.6, fase: 1, rand: 1, r: ['#4a3018'], muster: (x, y) => (y === 66 ? -.8 : 0) });
-      K.feld(0, wl, 160, 90, WASSER, (x, y) => .12 + (y - wl) / 120 + (Math.sin(y * 2 + B.rausch2(x * .06, y * .3, K.seed) * 6) > .85 ? .2 : 0));
-      // Der Kragen: ein gestärkter Mühlsteinkragen, darüber kein Kopf, nur Dunkel
-      const kx = 24, ky = 38;
-      const kr = K.maske(); kr.ell(kx, ky, 10, 3.6); kr.ell(kx, ky - .8, 3.6, 1.4, 0);
-      const KRAGEN = ['#1e1c18', '#3a3630', '#5e584e', '#847c6e'];
-      K.form(kr, 0, { k: KRAGEN, ton: 2.4, fase: 0, rand: 1, r: ['#a89e8a'], L: [1, -.4], muster: (x, y) => (Math.round(Math.atan2((y - ky) * 2.6, x - kx) * 5) % 2 ? -.9 : 0) - (x < kx - 4 ? .6 : 0) });
-      K.rect(kx - 3, ky - 1, 7, 1, '#000000');
-      // Lange Stange vom Dunkel bis über die Bank
-      const sg = K.maske(); sg.kap(30, 46, 110, 33, 1.3, 1);
-      K.form(sg, 0, { k: HOLZ, ton: 2.6, fase: 0, rand: 2, r: ['#6a4a24', '#b08040'], L: [.3, -1] });
-      // Klingelbeutel: Ring, nasser Samt, Tropfen
-      const ring = K.maske(); ring.ell(113, 35, 6.5, 2.2); ring.ell(113, 35, 5, 1.1, 0);
-      K.form(ring, 0, { k: MESSING.slice(0, 3), ton: 1.6, fase: 0, rand: 1, r: ['#c09040'] });
-      const beutel = K.maske(); beutel.poly([[107, 36], [119, 36], [120, 43], [117, 50], [113, 52], [109, 50], [106, 43]]);
-      K.form(beutel, 0, { k: SAMT, r: ['#7a2a1a', '#c0604a'], ton: 1.8, verlauf: .6, muster: (x, y) => (Math.sin(x * 1.1 + y * .2) > .6 ? -.8 : 0) });
+      // Kirchenraum im Dunkel, rechts eine Wand mit Pfeiler; links unter der Empore Schwarz
+      K.fuell(WAND, (x, y) => .22 + (B.fbm(x * .05, y * .05, K.seed, 2) - .5) * .2 + x / 600 - y / 400);
+      K.mauer(124, 0, 160, 70, WAND.slice(1, 6), { hoehe: 6, breite: 10, ton: .4 });
+      K.feld(0, 0, 160, 90, ['#000000', '#020101', '#040302'], (x, y) => x + y * .6 < 44 ? .2 + (x + y * .6) / 88 : -1);
+      // Der Kragen: ein weißer, gestärkter Strich oben links im Dunkel, darüber nichts
+      K.linie(8, 21, 13, 23, '#c8c0b0'); K.linie(13, 23, 19, 23, '#e8e2d4'); K.linie(19, 23, 23, 21, '#c8c0b0');
+      K.linie(10, 22, 21, 22, '#3a3630'); K.set(16, 24, '#8a8478');
+      // Überflutete Bank: die Kante der Rückenlehne knapp über dem Wasser, das Wasser darunter
+      const wl = 81;
+      const bank = K.maske(); bank.rect(-2, 73, 164, 3); bank.rect(-2, 76, 164, 5);
+      K.lichtquelle(130, 10);
+      K.form(bank, 0, { k: HOLZ, r: ['#6a4422', '#c08a48'], ton: 2.4, fase: 1, rand: 1, L: [0, -1], muster: (x, y) => (y === 76 ? -1 : 0) + ((x % 31) === 0 ? -.6 : 0) });
+      K.feld(0, wl, 160, 90, WASSER, (x, y) => .14 + (y - wl) / 110 + (Math.sin(y * 2.1 + B.rausch2(x * .06, y * .3, K.seed) * 6) > .82 ? .2 : 0));
+      // Spiegelung der Bankkante
+      for (let x = 0; x < 160; x++) if (Math.sin(x * .7) > -.2) K.set(x, wl + 1 + (x % 5 === 0 ? 1 : 0), '#2e2014');
+      // Die lange Stange: diagonal aus dem Dunkel
+      const bx = 88, by = 24;
+      const sg = K.maske(); sg.kap(-4, 2, bx - 9, by - 1, 1.6, 2.2);
+      K.form(sg, 0, { k: HOLZ.concat(['#4a3420']), r: ['#6a4a24', '#c89a58'], ton: 3.4, verlauf: .5, fase: 0, rand: 2, L: [.4, -1] });
+      K.linie(-4, .2, bx - 9, by - 3, '#7a5428'); K.linie(10, 3.6, bx - 12, by - 3.2, '#a07840', .7);
+      // Messingring, an dem der Beutel hängt (Ellipse, hinten und vorn)
+      const rx = 14, ry = 4;
+      const rh = K.maske(); rh.ell(bx, by, rx, ry); rh.ell(bx, by, rx - 2, ry - 1.4, 0); rh.fn(bx - rx - 1, by - ry - 1, bx + rx + 1, by + ry + 1, (x, y) => y > by, 0);
+      K.form(rh, 0, { k: MESSING.slice(0, 3), r: ['#c09040'], ton: 1.6, fase: 0, rand: 1 });
+      // Der Samtbeutel: nass, schwer, in Falten, unten spitz zum Glöckchen
+      K.licht(104, 46, 70, '#3a2410', .8);
+      const bt = K.maske(); bt.fn(bx - rx - 2, by, bx + rx + 2, by + 34, (x, y) => { const q = (y - by) / 32; if (q < 0 || q > 1) return false; const w = rx * (1 + Math.sin(q * 2.6) * .18) * Math.pow(1 - q, .55); return Math.abs(x - bx - q * 1.5) <= w; });
+      bt.ell(bx, by + 1, rx, ry);
+      K.form(bt, 0, { k: ['#0e0303', '#1e0806', '#36100a', '#521c12', '#6e2a1a', '#8a3a24'], r: ['#9a4a30', '#e09070'], ton: 2.6, fase: 1, rand: 2, verlauf: .6, schatten: 2, L: [.6, -.8],
+        muster: (x, y) => { const f = Math.sin((x - bx) * .75 + (y - by) * .12); return (f > .55 ? -1.2 : f < -.6 ? .6 : 0) + (B.hash(x, y, 3) < .05 ? .9 : 0); } });
+      // Vorderer Ringbogen über dem Samt
+      const rv = K.maske(); rv.ell(bx, by, rx, ry); rv.ell(bx, by, rx - 2, ry - 1.4, 0); rv.fn(bx - rx - 1, by - ry - 1, bx + rx + 1, by + ry + 1, (x, y) => y <= by, 0);
+      K.form(rv, 0, { k: MESSING, r: WARMKANTE, ton: 2.4, fase: 0, rand: 2, L: [.6, -.8] });
+      // Tropfen vom Samt ins Wasser
+      for (const [x, y] of [[80, 56], [98, 60], [84, 66]]) K.set(x, y, '#5a2a1a');
       // Das Glöckchen am Zipfel: der Glanz im Bild
-      K.licht(113, 56, 34, '#5a3a12', .9);
-      const gl = K.maske(); gl.poly([[110.5, 51], [115.5, 51], [117, 56], [119, 59], [107, 59], [109, 56]]); gl.ell(113, 60, 1.2, 1.2);
-      K.form(gl, 0, { k: MESSING, r: WARMKANTE, ton: 2.2, fase: 0, rand: 2, L: [.7, -.7] });
-      K.set(115, 53, '#fff0c0'); K.set(115, 54, '#fff0c0'); K.set(116, 55, '#ffd27a'); K.set(117, 57, '#ffd27a');
-      for (const [x, y] of [[109, 62], [118, 60]]) K.set(x, y, '#c08040');
-      K.spiegel(113, wl + 1, 88, '#6a4416', 1.5);
-      wasserlinie(K, () => wl, 36, 160, ['#2a2418', '#6a5028'], { glanz: .06 });
-      K.vignette(.8, { cx: 96, cy: 46 });
+      const gx = bx + 1.5, gy = by + 33;
+      K.licht(gx, gy + 3, 30, '#5a3a12', .9);
+      const gl = K.maske(); gl.kap(gx, gy - 1, gx, gy + 1, .6, .6); gl.poly([[gx - 2.5, gy + 1], [gx + 2.5, gy + 1], [gx + 3.5, gy + 6], [gx + 5, gy + 8], [gx - 5, gy + 8], [gx - 3.5, gy + 6]]); gl.ell(gx, gy + 9, 1.2, 1.2);
+      K.form(gl, 0, { k: MESSING, r: WARMKANTE, ton: 2.3, fase: 0, rand: 2, L: [.7, -.7] });
+      K.set(gx + 2, gy + 2, '#fff0c0'); K.set(gx + 2, gy + 3, '#fff0c0'); K.set(gx + 3, gy + 5, '#ffd27a'); K.set(gx + 4, gy + 7, '#ffd27a');
+      // Spiegelung von Glöckchen und Beutel im Wasser
+      K.spiegel(gx, wl + 2, 89, '#6a4416', 2);
+      K.spiegel(bx, wl + 3, 88, '#3a140c', 6);
+      K.vignette(.65, { cx: 92, cy: 50 });
     },
   },
 };

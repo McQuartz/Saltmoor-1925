@@ -40,9 +40,9 @@ function abdruck(K, x, y, s, winkel, st) {
   const m = K.maske(), kuppen = [];
   m.fn(x - 8 * s, y - 12 * s, x + 8 * s, y + 6 * s, (px, py) => { const dx = px - x, dy = py - y, u = dx * ca + dy * sa, v = -dx * sa + dy * ca; return (u / (3.6 * s)) ** 2 + (v / (2.8 * s)) ** 2 <= 1; });
   for (let i = 0; i < 7; i++) {
-    const u0 = (-3.3 + i * 1.1) * s, l = [2.6, 3.8, 4.8, 5.4, 4.8, 3.8, 2.6][i] * s;
+    const u0 = (-3.6 + i * 1.2) * s, l = [2.6, 3.8, 4.8, 5.4, 4.8, 3.8, 2.6][i] * s;
     const a = T(u0, -2 * s), b = T(u0 + (i - 3) * l * .07, -2 * s - l);
-    m.kap(a[0], a[1], b[0], b[1], Math.max(.5, .5 * s), Math.max(.5, .45 * s)); kuppen.push(b);
+    m.kap(a[0], a[1], b[0], b[1], Math.max(.5, .36 * s), Math.max(.5, .32 * s)); kuppen.push(b);
   }
   const C = [B.mix('#000000', PHOS_G, .6 + st * .4), B.mix(PHOS_G, PHOS_M, st), B.mix(PHOS_G, PHOS, st)];
   for (let py = m.y0; py <= m.y1; py++) for (let px = m.x0; px <= m.x1; px++) if (m.has(px, py)) {
@@ -63,6 +63,11 @@ function leuchten(K, x0, y0, x1, y1, d, o) {
   o = o || {}; const { B } = K;
   for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) { const v = d(x, y); if (v <= 0) continue; const h = B.hash(x, y, K.seed + 11); if (h < v * .12) K.set(x, y, h < v * .03 ? PHOS_K : h < v * .07 ? PHOS : PHOS_M); }
 }
+// Ruhige Rampe: rastet auf Stufen ein, gedithert nur im schmalen Übergang (große Flächen fast flach)
+function ruhig(t, n, b) {
+  const f = Math.max(0, Math.min(.9999, t)) * n, k = Math.floor(f), fr = f - k, w = b === undefined ? .18 : b;
+  return (k + (fr < .5 - w ? 0 : fr > .5 + w ? 1 : (fr - (.5 - w)) / (2 * w))) / n;
+}
 const lichtF = (lx, ly, r, ov, ex) => (x, y) => Math.pow(Math.max(0, 1 - Math.hypot(x - lx, (y - ly) * (ov || 1)) / r), ex || 1.4);
 
 module.exports = {
@@ -71,25 +76,24 @@ module.exports = {
     // Ein riesiger Bronzehebel vor dunkler Wand, darunter grün verkrustete Fläche voller leuchtender Handabdrücke mit sieben Fingern.
     gezeitenwerk_abdruecke(K) {
       const { B } = K;
-      // Wand: Bronzeplatten mit Nieten, dunkel
-      K.fuell(BRONZE.slice(0, 6), (x, y) => .12 + (y / 90) * .15 + (x % 32 < 1 || y % 24 < 1 ? -.12 : 0) + (B.fbm(x * .05, y * .05, K.seed, 2) - .5) * .12);
-      for (let y = 4; y < 46; y += 24) for (let x = 4; x < 160; x += 8) if (B.hash(x, y, 2) > .2) { K.set(x, y, BRONZE[6]); K.set(x + 1, y + 1, BRONZE[0]); }
-      // Kruste unten, schräg in Aufsicht
-      gruenspan(K, 0, 44, 160, 90, (x, y) => (y - 44) / 70 * .4);
-      const kante = K.maske(); kante.rect(0, 43, 160, 2); K.form(kante, 0, { k: BRONZE.slice(2, 8), r: RAND, ton: 2, fase: 0, rand: 1, L: [0, -1] });
+      // Wand: ruhige Bronzeplatten, wenige Nieten
+      K.fuell(BRONZE.slice(0, 4), (x, y) => ruhig(.25 + (x % 40 < 1 || y % 22 < 1 ? -.25 : 0), 3));
+      for (let y = 4; y < 40; y += 22) for (let x = 6; x < 160; x += 10) { K.set(x, y, BRONZE[5]); K.set(x + 1, y + 1, BRONZE[0]); }
+      // Kruste unten, ruhig gestuft, nach vorn heller
+      K.feld(0, 42, 160, 90, SPAN, (x, y) => ruhig(.12 + (y - 42) / 48 * .35 + (B.fbm(x * .06, y * .1, K.seed + 2, 2) - .5) * .2, SPAN.length - 1, .1));
+      const kante = K.maske(); kante.rect(0, 41, 160, 2); K.form(kante, 0, { k: BRONZE.slice(2, 8), r: RAND, ton: 2, fase: 0, rand: 1, L: [0, -1] });
       // Der Hebel: Drehlager links, Stange schräg nach oben rechts, Griff blank gegriffen
-      const lager = K.maske(); lager.ell(24, 46, 11, 8); lager.rect(10, 46, 28, 7);
+      const lager = K.maske(); lager.ell(20, 44, 11, 8); lager.rect(6, 44, 28, 6);
       K.form(lager, 0, { k: BRONZE.slice(1, 8), r: RAND, ton: 2.2, fase: 1, rand: 2, schatten: 2, L: [.6, -.8] });
-      const hebel = K.maske(); hebel.kap(26, 44, 120, 4, 4.2, 3);
-      K.form(hebel, 0, { k: BRONZE.slice(1, 8), r: RAND, ton: 2.4, fase: 1, rand: 2, schatten: 2, L: [.6, -.8], muster: (x, y) => (B.fbm(x * .1, y * .1, 3, 2) - .5) * .8 });
-      const griff = K.maske(); griff.kap(108, 9, 130, 0, 3.6, 3.6);
+      const hebel = K.maske(); hebel.kap(22, 42, 116, 4, 4.2, 3);
+      K.form(hebel, 0, { k: BRONZE.slice(1, 8), r: RAND, ton: 2.4, fase: 1, rand: 2, schatten: 2, L: [.6, -.8] });
+      const griff = K.maske(); griff.kap(104, 9, 128, 0, 3.6, 3.6);
       K.form(griff, 0, { k: BLANK, r: MESS, ton: 3, fase: 1, rand: 2, L: [.6, -.8], muster: (x, y) => ((x + y) % 4 === 0 ? -.6 : 0) });
-      const nabe = K.maske(); nabe.ell(26, 44, 4, 4); K.form(nabe, 0, { k: BLANK, r: MESS, ton: 2, fase: 0, rand: 1 });
-      // Abdrücke: groß, deutlich sieben Finger, in alle Richtungen gedrückt; der letzte vorn kleiner und hell
-      const plaetze = [[16, 70, 1.5, .5, .35], [44, 60, 1.25, -.3, .3], [70, 74, 1.7, .2, .4], [100, 58, 1.2, .6, .3], [126, 70, 1.6, -.5, .35], [150, 56, 1.1, .1, .25], [56, 86, 1.8, -.1, .3], [138, 88, 1.7, .3, .3], [84, 52, .95, -.7, .22]];
-      for (const [x, y, s, w, st] of plaetze) abdruck(K, x, y, s, w, st);
-      abdruck(K, 102, 84, 1.05, -.12, 1);
-      K.vignette(.6, { cx: 84, cy: 56 });
+      const nabe = K.maske(); nabe.ell(22, 42, 4, 4); K.form(nabe, 0, { k: BLANK, r: MESS, ton: 2, fase: 0, rand: 1 });
+      // Wenige große Abdrücke, sieben Finger zählbar; der letzte vorn kleiner und hell leuchtend
+      for (const [x, y, s, w, st] of [[28, 72, 3, .35, .4], [64, 58, 2.6, -.2, .3], [128, 60, 2.8, .25, .35], [142, 86, 3.2, -.3, .3]]) abdruck(K, x, y, s, w, st);
+      abdruck(K, 96, 82, 2.1, -.1, 1);
+      K.vignette(.5, { cx: 84, cy: 60 });
     },
 
     // Ein Mann von 1880 mit Backenbart an einem Messinstrument auf einer kleinen Eisenbühne, dahinter Zähne eines Rades, groß wie Häuser.
@@ -129,35 +133,41 @@ module.exports = {
     // Ein Zahnrad, dessen Zähne höher sind als Häuser, ein bronzener Zeiger, eine winzige Gestalt in einer Zahnlücke voll Wasser.
     gezeitenwerk_hauptrad(K) {
       const { B } = K;
-      // heller Dunst hinter dem Rad (Gischt vom Zulauf), damit Zähne und Gestalt als Silhouetten stehen
-      K.fuell(DUNST.concat(['#335f45', '#437556']), (x, y) => .2 + Math.max(0, 1 - Math.hypot(x - 84, (y - 40) * 1.3) / 100) * .65 + (B.fbm(x * .02, y * .04, K.seed, 2) - .5) * .15);
-      // Kranz des Hauptrads als Bogen unten, wenige riesige Zähne ragen hoch auf
-      const cx = 80, cy = 300, R = 236, n = 64, th = 44, lx = 80;
-      const rot = -(Math.atan2(-1, 0)) - (.29 / n) * TAU;   // eine Lücke genau unter dem Zeiger
-      const winkelF = (x, y) => ((((Math.atan2(y - cy, x - cx) + rot) / TAU * n) % 1) + 1) % 1;
-      const rad = K.maske(), luecken = K.maske();
-      rad.fn(-2, 10, 162, 90, (x, y) => {
-        const rr = Math.hypot(x - cx, y - cy); if (rr > R + th) return false; if (rr <= R) return true;
-        const f = winkelF(x, y), z = f < .06 ? f / .06 : f < .5 ? 1 : f < .56 ? 1 - (f - .5) / .06 : 0; return rr < R + th * z;
+      // heller Dunst hinter dem Rad (Gischt vom Zulauf), damit das Rad als Silhouette steht
+      const HELL = DUNST.concat(['#335f45', '#437556']);
+      K.fuell(HELL, (x, y) => ruhig(.1 + Math.pow(Math.max(0, 1 - Math.hypot(x - 80, (y - 40) * 1.1) / 120), 1) * .95, HELL.length - 1, .08));
+      // Das Rad: Kreis mit Zähnen am Rand, Speichen zur Nabe (unter dem Bildrand), Löcher dazwischen
+      const cx = 80, cy = 150, R = 112, th = 16, n = 32, sp = 9, kr = 18;
+      const lx = 80, gapC = .775;
+      const rot = ((gapC * TAU / n) - Math.atan2(-1, 0)) % TAU;
+      const fA = (x, y) => ((((Math.atan2(y - cy, x - cx) + rot) / TAU * n) % 1) + 1) % 1;
+      const rad = K.maske(), wasser = K.maske();
+      rad.fn(-2, 0, 162, 92, (x, y) => {
+        const rr = Math.hypot(x - cx, y - cy); if (rr > R + th) return false;
+        if (rr > R) { const f = fA(x, y), z = f < .1 ? f / .1 : f < .45 ? 1 : f < .55 ? 1 - (f - .45) / .1 : 0; return rr < R + th * z; }
+        if (rr > R - kr) return true;
+        const a = Math.atan2(y - cy, x - cx) + .17, s2 = ((a / TAU * sp) % 1 + 1) % 1, d = Math.min(s2, 1 - s2) * TAU / sp * rr; return d < 6 + (R - rr) * .04;
       });
-      luecken.fn(-2, 10, 162, 90, (x, y) => { const rr = Math.hypot(x - cx, y - cy); return rr > R && rr < R + th * .5 && !rad.has(x, y); });
-      // Wasser in den Lücken, dunkel; in der Lücke unter dem Zeiger leuchtet es
-      const nah = (x, y) => Math.max(0, 1 - Math.abs(x - lx) / 16);
-      K.feld(-2, 10, 162, 90, WASSER, (x, y) => luecken.has(x, y) ? .2 + nah(x, y) * .75 + (Math.sin(x * .8 + y * 2) > .8 ? .1 : 0) : -1);
-      leuchten(K, 0, 10, 160, 90, (x, y) => luecken.has(x, y) ? .4 + nah(x, y) * 7 : 0);
-      for (let x = 0; x < 160; x++) for (let y = 10; y < 90; y++) if (luecken.has(x, y) && !luecken.has(x, y - 1)) { K.set(x, y, nah(x, y) > .2 ? PHOS_K : WASSER[6]); break; }
-      K.licht(lx, 58, 40, PHOS_G, 1, { oval: .9 });
-      K.form(rad, 0, { k: BRONZE.slice(0, 6), r: RAND, ton: 1.6, fase: 1.5, rand: 2, schatten: 2, verlauf: .9, lichtVon: [lx, 30], muster: (x, y) => (B.fbm(x * .06, y * .06, 7, 2) - .5) * .9 + (Math.abs(Math.hypot(x - cx, y - cy) - (R - 7)) < 1 ? -1 : 0) });
+      // Wasser in den Zahnlücken oben (die Lücken öffnen sich nach oben wie Becken): Fläche bis knapp unter die Zahnspitzen
+      wasser.fn(-2, 0, 162, 70, (x, y) => { const rr = Math.hypot(x - cx, y - cy); return !rad.has(x, y) && rr > R - 1 && rr < R + th * .6 && Math.abs(x - cx) < 74; });
+      const nah = x => Math.max(0, 1 - Math.abs(x - lx) / 12);
+      K.feld(-2, 0, 162, 60, WASSER, (x, y) => wasser.has(x, y) ? ruhig(.25 + nah(x) * .75, WASSER.length - 1) : -1);
+      for (let x = 0; x < 160; x++) for (let y = 0; y < 60; y++) if (wasser.has(x, y)) { K.set(x, y, nah(x) > .1 ? PHOS_K : WASSER[6]); break; }
+      leuchten(K, 0, 0, 160, 60, (x, y) => wasser.has(x, y) ? nah(x) * 8 + .3 : 0);
+      K.licht(lx, cy - R - 6, 40, PHOS_G, 1, { ohne: wasser });
+      K.form(rad, 0, { k: BRONZE.slice(0, 5), r: RAND, ton: 1.2, fase: 1.5, rand: 2, schatten: 2, verlauf: 1, lichtVon: [lx, 10],
+        muster: (x, y) => { const rr = Math.hypot(x - cx, y - cy); return (Math.abs(rr - (R - kr)) < 1 ? -1.2 : 0) + (rr > R ? .4 : 0); } });
+      K.kante(rad, lx, cy - R - 6, 40, [PHOS_M, PHOS], { nah: .3 });
       // Der Zeiger aus Bronze: hängt von oben herab und zeigt auf die Lücke
-      const z = K.maske(); z.poly([[lx - 4, -2], [lx + 4, -2], [lx + 1.6, 32], [lx, 40], [lx - 1.6, 32]]); z.ell(lx, 6, 5, 5);
-      K.form(z, 0, { k: BRONZE.slice(0, 5), r: MESS, ton: 1.4, fase: 1, rand: 2, lichtVon: [lx + 20, 60] });
-      const zn = K.maske(); zn.ell(lx, 6, 2, 2); K.form(zn, 0, { k: BLANK, r: MESS, ton: 2.4, fase: 0, rand: 1 });
-      // Die winzige Gestalt am Rand der Lücke, gegen das Leuchten
-      const wy = Math.round(cy - Math.sqrt((R + th * .5) ** 2 - (lx - cx) ** 2));
-      const fig = K.figurMaske(lx - 2, wy + 3, 12, { kopf: 'hut', blick: 1 });
+      const z = K.maske(); z.poly([[lx - 4, -2], [lx + 4, -2], [lx + 1.6, 20], [lx, 26], [lx - 1.6, 20]]); z.ell(lx, 4, 5, 5);
+      K.form(z, 0, { k: BRONZE.slice(0, 5), r: MESS, ton: 1.6, fase: 1, rand: 2, lichtVon: [lx + 30, 30] });
+      const zn = K.maske(); zn.ell(lx, 4, 2, 2); K.form(zn, 0, { k: BLANK, r: MESS, ton: 2.4, fase: 0, rand: 1 });
+      // Die winzige Gestalt steht bis zu den Knien im Wasser der Lücke
+      const wy = cy - R - 2;
+      const fig = K.figurMaske(lx + 1, wy, 12, { kopf: 'hut', blick: -1 });
       K.form(fig, 0, { k: ['#000000', '#020403', '#040907'], ton: .6, rand: 0 });
-      K.kante(fig, lx + 2, wy + 2, 12, [PHOS_M, PHOS]);
-      K.vignette(.55, { cx: 82, cy: 54 });
+      K.kante(fig, lx, wy + 2, 14, [PHOS_M, PHOS]);
+      K.vignette(.45, { cx: 82, cy: 40 });
     },
 
     // Ein schräger Kanal, in dem das Wasser nach oben fließt, ein Schleusentor aus Bronze mit großem Handrad, ein dunkler Leib im Wasser.
@@ -173,15 +183,18 @@ module.exports = {
       // Wasser im Kanal: leuchtende Schlieren laufen bergauf (zum Tor hin heller)
       const LW = (x, y) => Math.max(0, x / 124);
       K.feld(0, 30, 130, 90, WASSER, (x, y) => kan.has(x, y) ? .15 + LW(x, y) * .55 + (Math.sin((x * .9 + y * 2.4) * .35 + Math.sin(y * .7) * 2) > .7 ? .2 : 0) : -1);
-      for (let i = 0; i < 40; i++) {
+      for (let i = 0; i < 22; i++) {
         let x = K.r.f(4, 110), y = 0; const y0 = 74 - x * .37 + K.r.f(2, 14);
         const len = K.r.f(4, 10);
         for (let k = 0; k < len; k++) { const px = x + k * 1.6, py = y0 - k * .6; if (!kan.has(px, py)) break; K.set(px, py, k > len - 2 ? PHOS : PHOS_M); }
       }
       // Der dunkle Leib im Wasser: lang, regungslos, schräg im Strom vor dem Tor
-      const leib = K.maske(); leib.pfad([[54, 66], [70, 58], [86, 52], [100, 47]], 3.2, 2); leib.ell(102, 46, 3, 2.4);
-      K.form(leib, 0, { k: ['#000000', '#010202', '#030505'], ton: .8, fase: 0, rand: 0 });
-      K.kante(leib, 116, 44, 70, [PHOS_M, PHOS], { min: -.3 });
+      const leib = K.maske(); leib.pfad([[38, 74], [52, 67], [68, 60], [84, 54], [98, 49]], 5.5, 3); leib.ell(101, 47, 5, 3.6);
+      leib.poly([[34, 76], [24, 72], [28, 80]]);   // Schwanzflosse
+      K.form(leib, 0, { k: ['#000000', '#010202', '#030505', '#060a08'], ton: 1, fase: 0, rand: 0, verlauf: -1 });
+      // Wasser schäumt leuchtend um den Leib, Kante zum Tor hin hell
+      for (let y = leib.y0 - 2; y <= leib.y1 + 2; y++) for (let x = leib.x0 - 2; x <= leib.x1 + 2; x++) if (!leib.has(x, y) && kan.has(x, y) && (leib.has(x, y + 2) || leib.has(x - 2, y)) && K.r() < .5) K.set(x, y, PHOS_M);
+      K.kante(leib, 118, 40, 110, [PHOS_M, PHOS_K], { min: -.2, nah: .5 });
       // Das Schleusentor: Bronzeplatte, Nieten, das Handrad mit sieben Speichen und Fingermulden
       const t = K.maske(); t.rect(tor.x, tor.y0, 48, tor.y1 - tor.y0); t.rect(tor.x - 4, tor.y0 - 4, 52, 5);
       K.form(t, 0, { k: BRONZE, r: RAND, ton: 2.4, fase: 1, rand: 2, schatten: 2, L: [-.8, -.6], muster: (x, y) => ((y - tor.y0) % 11 < 1 ? -.8 : 0) + (B.fbm(x * .1, y * .1, 4, 2) - .5) * .8 });

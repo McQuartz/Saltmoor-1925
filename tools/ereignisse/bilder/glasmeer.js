@@ -22,17 +22,15 @@ function zellen(B, x, y, s) {
   }
   return d2 - d1;
 }
-// Eisdecke oben (0..y1): Platten in Flucht, Zapfen, rechts oben ein Riss mit grünem Licht
+// Eisdecke oben (0..y1): ruhige Platten in Flucht, Zapfen, ein schwacher grüner Schein
 function decke(K, y1, o) {
   o = o || {}; const { B } = K, rx = o.rx === undefined ? 134 : o.rx;
   K.feld(0, 0, 160, y1, EIS.slice(0, 8), (x, y) => {
     const dy = Math.max(.8, y1 + 4 - y), Z = 30 / dy, X = (x - 80) * Z / 30;
     const z = zellen(B, X * .5 + 3, Z * .5, K.seed), kw = .05 * Math.max(1, Z / 4);
     const rq = Math.max(0, 1 - Math.hypot((x - rx) / 60, (y - 4) / 16));
-    return .12 + (z < kw ? .2 : 0) + B.fbm(X * .3, Z * .3, K.seed, 2) * .1 + rq * rq * .35 - Math.min(.1, (1 - y / y1) * .05);
+    return .1 + (z < kw ? .12 : 0) + B.fbm(X * .3, Z * .3, K.seed, 2) * .08 + rq * rq * .18 - Math.min(.1, (1 - y / y1) * .05);
   });
-  // Riss: grüne Linie
-  if (o.riss !== false) for (let x = rx - 26; x < rx + 26; x++) { const y = Math.round(4 + (x - rx) * .14 + Math.sin(x * .7) * .8); if (B.hash(x, 2, 3) < .85) { K.set(x, y, Math.abs(x - rx) < 10 ? NORD[6] : NORD[4]); K.set(x, y + 1, NORD[2]); } }
   // Zapfen
   const r = B.rng(K.seed + 4);
   for (let i = 0; i < (o.zapfen || 9); i++) { const x = r.f(0, 160), l = r.f(3, 9) * (y1 / 30), m = K.maske(); m.poly([[x - 1.6, y1 - 1], [x + 1.6, y1 - 1], [x, y1 - 1 + l]]); K.form(m, .3, { k: EIS.slice(2, 6), r: [EIS[6], EIS[8]], ton: 1.5, fase: 0, rand: 1 }); }
@@ -45,6 +43,8 @@ function glas(K, y0, glow) {
     const z = zellen(B, X * .5 + 9, Z * .4, K.seed + 5), kw = .04 * Math.max(1, Z / 4);
     return .1 + Math.pow(1 - q, 4) * .3 + (z < kw ? .12 : 0) + (glow ? glow(x, y) * .5 : 0);
   });
+  // feine, gerade Horizontlinie
+  for (let x = 0; x < 160; x++) K.set(x, y0, B.bay(x, 0) < .5 ? EIS[6] : EIS[5]);
 }
 // Polarlicht unter dem Glas: additiv in Stufen
 function tiefenlicht(K, x, y, rx, ry, col, st, o) {
@@ -122,42 +122,42 @@ module.exports = {
     // Spiegelglattes Glas, darin das Spiegelbild einer riesigen Gestalt neben einem kleinen Menschen; unter der Oberfläche schwach ein langer, liegender Umriss.
     glasmeer_gestalt(K) {
       const { B } = K;
-      const hy = 24;
-      decke(K, hy - 4, { rx: 40, zapfen: 7 });
-      K.feld(0, hy - 6, 160, hy + 1, EIS.slice(2, 8), (x, y) => .3 + (y - hy + 6) / 7 * .5);
-      K.licht(56, 18, 34, NORD[1], 1, { oval: 1.4 });
-      glas(K, hy, (x, y) => Math.max(0, 1 - Math.hypot((x - 80) / 80, (y - 76) / 16)) * .4);
-      spiegeln(K, hy, 90, .3);
-      // Unter dem Glas: lang, liegend, auf dem Rücken, mit offenen Augen
-      const lu = K.maske(); lu.pfad([[14, 80], [40, 77], [80, 76], [118, 77], [136, 79]], 3.5, 4.5); lu.ell(145, 79, 6, 4.4);
-      K.licht(80, 78, 80, NORD[1], 1, { oval: 4 });
-      for (let y = lu.y0; y <= lu.y1; y++) for (let x = lu.x0; x <= lu.x1; x++) if (lu.has(x, y) && B.bay(x, y) < .45) K.set(x, y, GLAS[1]);
-      umriss(K, lu, NORD[2], .8);
-      K.set(144, 78, NORD[6]); K.set(147, 78, NORD[6]);
-      // Der kleine Mensch und sein Spiegelbild
-      const x = 62, yb = 38;
-      const g = K.figurMaske(x, yb, 20, { kopf: 'muetze', blick: 1 });
-      K.form(g, 0, { k: DUNKEL, r: [NORD[2], NORD[3]], ton: .6, rand: 1, L: [0, -1] });
-      const gs = spiegelMaske(K, g, yb, 0);
-      spiegelGestalt(K, gs, { r: [GLAS[5], GLAS[7]] });
-      // Daneben im Spiegel: eine riesige Gestalt, kopfüber; darüber auf dem Glas steht nichts. Der Kopf ragt unten aus dem Bild.
-      // (gleich gespiegelt gebaut: y wächst vom Fuß nach unten zum Kopf)
-      const gm = K.maske(), gx = 92;
-      gm.kap(gx - 5, yb + 2, gx - 5.5, yb + 32, 3, 3.8); gm.kap(gx + 5, yb + 2, gx + 5.5, yb + 32, 3, 3.8);
-      gm.kap(gx - 7, yb + 1.2, gx - 1, yb + 1.2, 1.6, 1.6); gm.kap(gx + 3, yb + 1.2, gx + 10, yb + 1.2, 1.6, 1.6);
-      gm.poly([[gx - 11, yb + 30], [gx + 11, yb + 30], [gx + 14, yb + 46], [gx + 17, yb + 60], [gx - 17, yb + 60], [gx - 14, yb + 46]]);
-      gm.kap(gx - 18, yb + 60, gx - 16, yb + 34, 3, 2.6); gm.kap(gx + 18, yb + 60, gx + 16, yb + 34, 3, 2.6);
-      gm.ell(gx - 16, yb + 33, 2.6, 3); gm.ell(gx + 16, yb + 33, 2.6, 3);
-      K.licht(92, 66, 44, NORD[1], 1, { oval: .8 });
-      K.licht(62, 44, 18, NORD[1], 1);
-      spiegelGestalt(K, gm, { k: ['#000102', '#010304', '#02060a', '#050c10'], ton: 1 });
+      const hy = 22;
+      decke(K, hy - 3, { rx: 40, zapfen: 6 });
+      K.feld(0, hy - 5, 160, hy + 1, EIS.slice(2, 8), (x, y) => .3 + (y - hy + 5) / 6 * .5);
+      K.licht(58, 16, 30, NORD[1], 1, { oval: 1.3 });
+      glas(K, hy, (x, y) => Math.max(0, 1 - Math.hypot((x - 96) / 70, (y - 90) / 30)) * .45);
+      spiegeln(K, hy, 60, .25);
+      // Unter dem Glas, ganz unten, nur angedeutet: lang, liegend, mit zwei offenen Augen
+      const lu = K.maske(); lu.pfad([[60, 86], [40, 84], [22, 84], [10, 85]], 3, 3.5); lu.ell(6, 85, 5, 3.6);
+      K.licht(30, 86, 40, NORD[1], .8, { oval: 3 });
+      umriss(K, lu, NORD[2], .45);
+      K.set(4, 84, NORD[4]); K.set(8, 84, NORD[4]);
+      // Der kleine Mensch: klarer Schattenriss vor dem hellen Streifen am Horizont, darunter sein kleines Spiegelbild
+      const x = 60, yb = 30;
+      const g = K.figurMaske(x, yb, 18, { kopf: 'muetze', blick: 1 });
+      K.form(g, 0, { k: ['#000101', '#010203', '#020406', '#04080a'], r: [NORD[2], NORD[3]], ton: .5, rand: 1, L: [0, -1] });
+      spiegelGestalt(K, spiegelMaske(K, g, yb, 0), { r: [GLAS[5], GLAS[7]] });
+      // Daneben im Glas: das Spiegelbild einer riesigen Gestalt, kopfüber, die Füße an derselben Linie wie seine.
+      // Gebaut gleich gespiegelt: y wächst von den Füßen nach unten zu Schultern und Kopf.
+      const gx = 106, gm = K.maske();
+      gm.kap(gx - 3, yb + 1, gx - 6, yb + 14, 1.4, 3); gm.kap(gx + 3, yb + 1, gx + 6, yb + 14, 1.4, 3);
+      gm.kap(gx - 5, yb + .6, gx - 1, yb + .6, .9, .9); gm.kap(gx + 2, yb + .6, gx + 6, yb + .6, .9, .9);
+      gm.poly([[gx - 9, yb + 13], [gx + 9, yb + 13], [gx + 20, yb + 26], [gx + 32, yb + 34], [gx - 32, yb + 34], [gx - 20, yb + 26]]);
+      gm.ell(gx, yb + 34, 33, 5);
+      gm.kap(gx - 32, yb + 33, gx - 21, yb + 12, 5, 2.4); gm.kap(gx + 32, yb + 33, gx + 21, yb + 12, 5, 2.4);
+      gm.ell(gx - 21, yb + 11, 2.4, 2.8); gm.ell(gx + 21, yb + 11, 2.4, 2.8);
+      gm.kap(gx, yb + 36, gx, yb + 42, 6, 6);
+      gm.ell(gx, yb + 50, 12, 13);
+      K.licht(gx, yb + 44, 60, NORD[1], 1, { oval: .9 });
+      K.licht(gx, yb + 52, 28, NORD[2], 1);
+      K.form(gm, 0, { k: ['#000101', '#010304', '#03080a', '#06100e'], ton: 1, verlauf: -.6, fase: 0, rand: 0 });
+      K.kante(gm, gx, 96, 90, [NORD[3], NORD[5]], { min: -.3, nah: .5 });
       umriss(K, gm, NORD[3]);
-      K.kante(gm, 92, 40, 70, [NORD[4], NORD[5]], { min: .5 });
-      for (let i = gx - 11; i <= gx + 11; i++) if (B.bay(i, 3) < .6) K.set(i, yb + 31, NORD[2]);
-      for (const dx of [-5, 5]) { K.set(gx + dx - 1, yb + 17, NORD[2]); K.set(gx + dx, yb + 17, NORD[2]); }
-      // die Fußlinie: wo der Riese stehen müsste, ist das Glas leer
-      for (let i = 50; i <= 112; i++) if (B.bay(i, 1) < .5) K.set(i, yb, GLAS[5]);
-      K.vignette(.7, { cx: 76, cy: 50 });
+      // das Gesicht kopfüber: Augen unten, Mund oben, nur als grüne Funken und dunkle Kerbe
+      K.set(gx - 4, yb + 54, NORD[5]); K.set(gx + 4, yb + 54, NORD[5]);
+      for (let i = -3; i <= 3; i++) K.set(gx + i, yb + 45, NORD[1]);
+      K.vignette(.7, { cx: 84, cy: 50 });
     },
 
     // Ein schräges Segeltuchzelt, bis zur Mitte in schwarzem Glas, davor ein Schlitten mit gerissener Plane und ein aufgeschlagenes Buch.
@@ -239,26 +239,43 @@ module.exports = {
       const hy = 16;
       decke(K, hy - 2, { rx: 120, zapfen: 6 });
       K.feld(0, hy - 3, 160, hy + 1, EIS.slice(2, 8), (x, y) => .4 + (y - hy + 3) / 4 * .4);
-      // Tiefe unter dem Glas: grünes Licht ganz unten rechts
-      const gx = 118, gy = 86;
-      glas(K, hy, (x, y) => Math.max(0, 1 - Math.hypot((x - gx) / 70, (y - gy) / 40)) * .9);
-      spiegeln(K, hy, 50, .3);
-      tiefenlicht(K, gx, gy, 70, 36, NORD[2], 1);
-      tiefenlicht(K, gx, gy, 34, 18, NORD[3], 1);
-      tiefenlicht(K, gx, gy, 14, 8, NORD[4], 1);
-      // Die Leine: aus dem Vordergrund links über das Glas, Eintauchpunkt, unter dem Glas weiter schräg nach unten
-      const ex = 70, ey = 50;
+      // Tiefe unter dem Glas: grünes Licht unten rechts, darin ein Hundekopf
+      const gx = 124, gy = 74;
+      glas(K, hy, (x, y) => Math.max(0, 1 - Math.hypot((x - gx) / 70, (y - gy) / 40)) * .7);
+      spiegeln(K, hy, 44, .25);
+      tiefenlicht(K, gx, gy, 64, 34, NORD[2], 1);
+      tiefenlicht(K, gx, gy, 30, 18, NORD[3], 1);
+      // Hundekopf unter dem Glas, nur als Umriss im grünen Licht, die Schnauze zur Leine gereckt
+      const hk = K.maske();
+      hk.ell(gx, gy, 8, 7); hk.kap(gx - 5, gy - 1, gx - 16, gy - 6, 4.2, 2.6); hk.ell(gx - 17, gy - 6.5, 2, 1.8);
+      hk.poly([[gx - 1, gy - 5], [gx + 3, gy - 17], [gx + 6, gy - 4]]); hk.poly([[gx + 4, gy - 4], [gx + 10, gy - 14], [gx + 10, gy - 1]]);
+      hk.kap(gx + 2, gy + 4, gx + 8, gy + 18, 6, 8);
+      for (let y = hk.y0; y <= hk.y1; y++) for (let x = hk.x0; x <= hk.x1; x++) if (hk.has(x, y)) K.set(x, y, y > gy + 8 ? GLAS[1] : GLAS[2]);
+      umriss(K, hk, NORD[4]);
+      for (let i = 0; i < 7; i++) K.set(gx - 16 + i * 1.3, gy - 4 + i * .5, GLAS[0]);   // Maul
+      K.set(gx - 5, gy - 3, NORD[6]); K.set(gx - 4, gy - 3, NORD[5]);
+      // Halsband, an dem die Leine unten ankommt
+      for (let i = -6; i <= 6; i++) K.set(gx + 4 + i * .3, gy + 9 + i * .5, NORD[5]);
+      // Eintauchpunkt mit Ringen, als wäre das Glas Wasser
+      const ex = 92, ey = 46;
+      for (const [r, c, d] of [[5, GLAS[8], 1], [10, GLAS[7], .8], [16, GLAS[5], .6]]) for (let a = 0; a < Math.PI * 2; a += .04) { const x = ex + Math.cos(a) * r, y = ey + Math.sin(a) * r * .24; if (B.bay(x, y) < d) K.set(x, y, c); }
+      // unter dem Glas: die Leine weiter zum Halsband, dunkler, grün umspielt
+      for (let i = 0; i <= 60; i++) { const q = i / 60, x = B.lerp(ex, gx + 4, q), y = B.lerp(ey + 1, gy + 8, q) + Math.sin(q * Math.PI) * 2; K.set(x, y, q < .5 ? '#2a2216' : '#1a2a1c'); if (B.bay(x, y) < .4) K.set(x + 1, y, NORD[2]); }
+      // Die Hand im Handschuh vorn links, die Leine straff in der Faust
       const leder = ['#0c0806', '#1e140c', '#3a2616', '#5a3c22', '#7a5430'];
-      const auf = K.maske(); auf.kap(-4, 90, ex, ey, 2.2, 1.4);
-      K.form(auf, 0, { k: leder, r: ['#9a7040', '#e0b880'], ton: 2.6, fase: 0, rand: 2, L: [.3, -1] });
-      // Naht/Prägung auf dem Leder
-      for (let i = 0; i < 20; i++) { const q = i / 20, x = B.lerp(-2, ex - 3, q), y = B.lerp(89, ey + 2, q); if (i % 2) K.set(x, y, leder[1]); }
-      // Wellenring um den Eintauchpunkt, als wäre das Glas Wasser
-      for (let a = 0; a < Math.PI * 2; a += .08) { const x = ex + Math.cos(a) * 7, y = ey + Math.sin(a) * 1.6; if (Math.sin(a) > -.2 || Math.cos(a) > .3) K.set(x, y, GLAS[7]); }
-      for (let a = 0; a < Math.PI * 2; a += .06) { const x = ex + Math.cos(a) * 13, y = ey + Math.sin(a) * 2.8; if (B.bay(x, y) < .5) K.set(x, y, GLAS[5]); }
-      // unter dem Glas: dunkler, grün umspielt, in die Tiefe
-      for (let i = 0; i < 80; i++) { const q = i / 80, x = B.lerp(ex, gx - 6, q), y = B.lerp(ey + 1, gy - 6, q); const c = q < .7 ? '#1a2a1c' : NORD[1]; K.set(x, y, c); if (q < .5) K.set(x + 1, y, '#0e1a12'); if (B.bay(x, y) < .3) K.set(x - 1, y, NORD[2]); }
-      K.vignette(.7, { cx: 90, cy: 56 });
+      const le = K.maske(); le.kap(36, 70, ex, ey, 1.6, 1.1);
+      K.form(le, 0, { k: leder, r: ['#9a7040', '#e0b880'], ton: 2.6, fase: 0, rand: 2, L: [.3, -1] });
+      const hand = K.maske();
+      hand.poly([[-4, 92], [-4, 70], [8, 64], [18, 70], [12, 92]]);                       // Ärmel
+      hand.ell(24, 72, 13, 10);                                                          // Faust
+      for (let i = 0; i < 4; i++) hand.ell(34 - i * 1.2, 66 + i * 3.6, 4, 2.2);           // Finger um die Leine
+      hand.kap(18, 64, 30, 63, 3, 2.4);                                                  // Daumen oben
+      K.form(hand, 0, { k: ['#0e0907', '#1e140c', '#3a2616', '#5a3c22', '#7a5430'], r: ['#5a8a5a', '#aef2bc'], ton: 2.3, verlauf: .6, fase: 1, rand: 2, L: [.8, .4], muster: (x, y) => (x < 13 ? -.6 : 0) + (Math.abs(y - 66 - Math.round((34 - x) / 1.2) * 0) % 4 === 0 && x > 28 ? -.5 : 0) });
+      // Fingerfugen und eine Naht am Handschuh
+      for (let i = 1; i < 4; i++) for (let k = -2; k <= 1; k++) K.set(33 - i * 1.2 + k, 64.4 + i * 3.6, '#060403');
+      for (let y = 66; y < 80; y += 2) K.set(14, y, '#2a1e14');
+      K.kante(hand, gx, gy, 140, ['#1b6a3c', '#2a9a56'], { min: .5 });
+      K.vignette(.65, { cx: 96, cy: 60 });
     },
 
     // Ein Spiegelbild im schwarzen Glas, das einen Gegenstand nach oben reicht, die Hand dicht unter der Oberfläche.

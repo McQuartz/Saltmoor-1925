@@ -16,13 +16,12 @@ const FRISCH = ['#2a1c0e', '#4a3218', '#6e4c26', '#946838', '#b88a4c', '#d8ac6c'
 // Hintergrund: dunkler versteinerter Wald, hängende Stämme als Silhouetten, Licht von (lx, ly)
 function waldgrund(K, lx, ly, r, o) {
   o = o || {}; const { B } = K;
-  K.fuell(STEIN.slice(0, 7), (x, y) => .06 + Math.pow(Math.max(0, 1 - Math.hypot(x - lx, (y - ly) * 1.2) / r), 1.6) * (o.st || .6) + (B.fbm(x * .04, y * .05, K.seed, 2) - .5) * .12);
-  // ferne hängende Stämme: von der Decke herab, unten spitz oder als Krone
-  for (const [x, w, t] of (o.staemme || [])) {
+  K.fuell(STEIN.slice(0, 7), (x, y) => ruhig(.04 + Math.pow(Math.max(0, 1 - Math.hypot(x - lx, (y - ly) * 1.2) / r), 1.4) * (o.st || .6), 6, .12));
+  // hängende Stämme: von der Decke herab, nach unten spitz zulaufend, ruhige dunkle Silhouetten
+  for (const [x, w] of (o.staemme || [])) {
     const m = K.maske(), yb = o.stammUnten || 60;
-    m.poly([[x - w * .9, -2], [x + w * .9, -2], [x + w * .55, yb * .3], [x + w * .5, yb], [x - w * .5, yb], [x - w * .55, yb * .3]]);
-    m.ell(x, yb, w * 1.3, w * .6);
-    K.form(m, t, { k: RINDE, r: RAND_K, ton: 1.4, fase: 1, rand: 1, lichtVon: [lx, ly], muster: (px, py) => (Math.sin((px - x) * 1.1 + Math.sin(py * .05) * 2) > .6 ? -.5 : 0) });
+    m.poly([[x - w * 1.1, -2], [x + w * 1.1, -2], [x + w * .6, yb * .35], [x + w * .45, yb * .8], [x, yb], [x - w * .45, yb * .8], [x - w * .6, yb * .35]]);
+    K.form(m, 0, { k: ['#060605', '#0b0a09', '#100f0c'], r: RAND_K, ton: 1, fase: 0, rand: 1, lichtVon: [lx, ly] });
   }
 }
 // Wurzelstränge an der Decke (Baumregel aus basis.js)
@@ -81,6 +80,11 @@ function strasse(K, y0, y1, lic, o) {
     return .12 + lic(x, y) * .8 + (d2 - d1 < .35 ? -.14 : 0) + (B.hash(cx, cz, 9) - .5) * .08;
   });
 }
+// Ruhige Rampe: rastet auf Stufen ein, gedithert nur im schmalen Übergang (große Flächen fast flach)
+function ruhig(t, n, b) {
+  const f = Math.max(0, Math.min(.9999, t)) * n, k = Math.floor(f), fr = f - k, w = b === undefined ? .18 : b;
+  return (k + (fr < .5 - w ? 0 : fr > .5 + w ? 1 : (fr - (.5 - w)) / (2 * w))) / n;
+}
 const lichtF = (lx, ly, r, ov, ex) => (x, y) => Math.pow(Math.max(0, 1 - Math.hypot(x - lx, (y - ly) * (ov || 1)) / r), ex || 1.4);
 
 module.exports = {
@@ -90,11 +94,11 @@ module.exports = {
     wald_meilenstein(K) {
       const { B } = K;
       const cx = 72, lx = cx + 6, ly = 80;
-      waldgrund(K, lx, ly - 30, 110, { st: .45, staemme: [[18, 9, .55], [136, 12, .5], [154, 6, .7]], stammUnten: 52 });
+      waldgrund(K, cx, 18, 95, { st: .42, staemme: [[20, 8], [134, 10]], stammUnten: 50 });
       strasse(K, 64, 90, lichtF(lx, ly, 70, 2), { vx: 120 });
       for (let x = 0; x < 160; x += 9) { const b = K.maske(); b.rect(x, 63, 8, 3); K.form(b, 0, { k: BASALT, r: RAND_K, ton: 2, fase: 0, rand: 1, lichtVon: [lx, ly] }); }
       // Die Säule: Zylinder mit Fuß und gerundetem Kopf, von unten angeleuchtet
-      const y0 = 12, y1 = 76, rw = 15;
+      const y0 = 8, y1 = 78, rw = 19;
       const s = K.maske(); s.rect(cx - rw, y0 + 4, 2 * rw, y1 - y0 - 4); s.ell(cx, y0 + 4, rw, 4); s.rect(cx - rw - 2, y1 - 4, 2 * rw + 4, 4);
       const LS = lichtF(lx, ly + 4, 84, .8, 1.1);
       K.feld(cx - rw - 2, y0, cx + rw + 3, y1, STEIN, (x, y) => s.has(x, y) ? .12 + LS(x, y) * .9 - Math.pow(Math.abs(x - cx - 2) / rw, 3) * .25 + (B.fbm(x * .3, y * .2, 3, 2) - .5) * .1 : -1);
@@ -111,9 +115,9 @@ module.exports = {
         K.linie(x - 2, y + h / 2 + 1, x + w, y + h / 2 - 1, '#0b0a09'); K.linie(x - 2, y + h / 2 + 2, x + w, y + h / 2, '#6d665a', .7);
       }
       // die letzte: winzig, mit dem Fingernagel geritzt, frischer heller Staub darin
-      const fx = cx - 3, fy = 61; K.linie(fx, fy, fx, fy + 2, '#e6dcc0'); K.linie(fx + 2, fy, fx + 2, fy + 2, '#e6dcc0'); K.linie(fx + 4, fy, fx + 5, fy + 2, '#e6dcc0'); K.linie(fx + 6, fy, fx + 5, fy + 2, '#e6dcc0');
+      const fx = cx - 3, fy = 66; K.linie(fx, fy, fx, fy + 2, '#e6dcc0'); K.linie(fx + 2, fy, fx + 2, fy + 2, '#e6dcc0'); K.linie(fx + 4, fy, fx + 5, fy + 2, '#e6dcc0'); K.linie(fx + 6, fy, fx + 5, fy + 2, '#e6dcc0');
       // Öllampe vor der Säule
-      oellampe(K, lx - 9, ly + 4, { hof: 70 });
+      oellampe(K, lx - 9, ly + 5, { hof: 80 });
       K.vignette(.7, { cx: 76, cy: 50 });
     },
 
@@ -185,9 +189,9 @@ module.exports = {
     wald_meiler(K) {
       const { B } = K;
       const tx = 140, ty = 16;
-      waldgrund(K, tx, ty + 20, 120, { st: .5, staemme: [[96, 8, .55], [20, 11, .5]], stammUnten: 44 });
+      waldgrund(K, tx, ty + 20, 120, { st: .45, staemme: [[96, 7], [12, 9]], stammUnten: 42 });
       const LB = lichtF(tx - 14, 74, 90, 2);
-      K.feld(0, 60, 160, 90, ['#0e0c08', '#17140e', '#221d15', '#2e271c', '#3c3324', '#4a3f2c'], (x, y) => .08 + LB(x, y) * .9 + (B.fbm(x * .08, y * .3, 4, 2) - .5) * .15);
+      K.feld(0, 60, 160, 90, ['#0e0c08', '#17140e', '#221d15', '#2e271c', '#3c3324', '#4a3f2c'], (x, y) => ruhig(.06 + LB(x, y) * .9, 5));
       // Der Meiler: Kuppel aus Erde, Luftlöcher in Reihen, kein Rauch
       const mx = 54, my = 78, mr = 44, mh = 34;
       const mei = K.maske(); mei.fn(mx - mr, my - mh, mx + mr, my + 2, (x, y) => ((x - mx) / mr) ** 2 + ((y - my) / mh) ** 2 <= 1 && y <= my + 1);
@@ -202,12 +206,12 @@ module.exports = {
         }
       }
       // Schleifstein: großes Rad auf einem Bock aus zwei Böcken und Achse, darunter der Trog und die Pfütze
-      const sx = 124, sy = 60, sr = 13;
+      const sx = 122, sy = 56, sr = 16;
       const bock = K.maske();
       bock.kap(sx - 16, 84, sx - 13, sy, 1.5, 1.3); bock.kap(sx - 8, 84, sx - 13, sy, 1.3, 1.2);
       bock.kap(sx + 16, 84, sx + 13, sy, 1.5, 1.3); bock.kap(sx + 8, 84, sx + 13, sy, 1.3, 1.2);
       bock.kap(sx - 15, sy, sx + 15, sy, 1, 1);
-      K.form(bock, 0, { k: RINDE, r: RAND, ton: 2.2, fase: 0, rand: 1, lichtVon: [tx, ty] });
+      K.form(bock, 0, { k: RINDE, r: RAND, ton: 3.4, fase: 0, rand: 2, lichtVon: [tx, ty] });
       const rad = K.maske(); rad.ell(sx, sy, sr, sr);
       K.form(rad, 0, { k: STEIN.slice(0, 9), r: RAND, ton: 3, fase: 1, rand: 2, schatten: 2, lichtVon: [tx, ty], muster: (x, y) => (Math.hypot(x - sx, y - sy) % 3.4 < .7 ? -.5 : 0) - (y > sy + 3 ? 1.1 : 0) });
       const nabe = K.maske(); nabe.ell(sx, sy, 2.2, 2.2); K.form(nabe, 0, { k: ['#1a1208', '#3a2a14', '#6e5228'], r: RAND, ton: 1.6, fase: 0, rand: 1, lichtVon: [tx, ty] });
@@ -215,9 +219,10 @@ module.exports = {
       for (let a = .3; a < 2.8; a += .35) K.set(sx + Math.cos(a) * (sr - 1), sy + Math.sin(a) * (sr - 1), '#a88c5e');
       K.set(sx + 1, sy + sr + 3, '#e6c48a'); K.set(sx + 1, sy + sr + 7, '#a88c5e');
       // die Pfütze, in ihr die Träne gespiegelt
-      const pf = K.maske(); pf.ell(sx, 84, 18, 3);
+      const pf = K.maske(); pf.ell(sx + 2, 85, 28, 4.2);
       K.form(pf, 0, { k: ['#050403', '#0c0a07', '#16120c', '#211b12'], r: ['#8e6a36', '#e6c48a'], ton: 1.6, fase: 0, rand: 1, L: [0, -1] });
-      K.spiegel(sx + 8, 82, 88, HARZ[6], 1.4, (x, y) => pf.has(x, y));
+      K.spiegel(tx - 6, 81, 90, HARZ[7], 2.4, (x, y) => pf.has(x, y)); K.set(tx - 6, 82, HARZ[8]); K.set(tx - 5, 82, HARZ[7]);
+      for (let x = sx - 22; x < sx + 26; x += 5) K.set(x, 85 + (x % 2), '#5e4a2e');
       // Harzträne oben rechts
       const w = K.maske(); w.pfad([[tx - 10, -4], [tx - 3, 4], [tx, ty - 6]], 1.8, 1); K.form(w, 0, { k: RINDE, r: RAND, ton: 1.6, fase: 0, rand: 1 });
       harztraene(K, tx, ty, 3.8, { hof: 64 });
@@ -267,35 +272,34 @@ module.exports = {
     // Ein Soldat mit Helm im Halbdunkel eines Tunnels aus Holz, ein beschriebenes Brett in der ausgestreckten Hand, hinter ihm die Straße.
     wald_brief(K) {
       const { B } = K;
-      const ox = 86, oy = 46;   // Öffnung des Tunnels hinten, dort Harzlicht
-      // Tunnel im Stamm: Holzfasern laufen in Ringen um die Öffnung
-      K.feld(0, 0, 160, 90, ['#060503', '#0c0a06', '#14100a', '#1e180e', '#2a2014', '#3a2d1c'], (x, y) => { const d = Math.hypot((x - ox) / 1.25, y - oy), f = (d * .4) % 1; return .06 + Math.pow(Math.max(0, 1 - d / 80), 1.6) * .75 + (f < .2 ? -.1 : 0) + (B.hash(x >> 2, y >> 1, 4) - .5) * .05; });
-      // Öffnung: Bogen, dahinter die Straße im Harzlicht
-      const off = K.maske(); off.ell(ox, oy, 14, 16); off.rect(ox - 14, oy, 28, 15);
-      K.feld(ox - 15, oy - 17, ox + 15, oy + 16, ['#3a2810', '#6a4818', '#a06820', '#d8902c', '#ffc160'], (x, y) => off.has(x, y) ? .2 + Math.max(0, 1 - Math.hypot(x - ox - 4, y - oy + 2) / 17) * .85 : -1);
-      // die Straße dahinter: helle Fluchtlinien im Licht
-      K.feld(ox - 14, oy + 8, ox + 15, oy + 16, ['#3a2810', '#6a4818', '#a06820'], (x, y) => off.has(x, y) ? .3 + (Math.abs((x - ox) / (y - oy - 6)) % 1.6 < .25 ? .4 : 0) : -1);
-      K.licht(ox, oy, 80, HARZG, .8, { exp: 1.5, ohne: off });
-      strasse(K, 60, 90, lichtF(ox, 58, 70, 1.4), { vx: ox });
+      const ox = 94, oy = 42;   // Öffnung des Tunnels hinten, dort Harzlicht
+      // Tunnel im Stamm: ruhige Ringe im Holz um die Öffnung
+      const HOLZW = ['#060503', '#0c0a06', '#14100a', '#1e180e', '#2a2014', '#3a2d1c'];
+      K.feld(0, 0, 160, 90, HOLZW, (x, y) => { const d = Math.hypot((x - ox) / 1.25, y - oy), f = (d * .3) % 1; return ruhig(.04 + Math.pow(Math.max(0, 1 - d / 90), 1.5) * .8, 5) + (f < .12 ? -.2 : 0); });
+      // Öffnung: Bogen, dahinter die Straße im Harzlicht (die helle Stelle)
+      const off = K.maske(); off.ell(ox, oy, 20, 22); off.rect(ox - 20, oy, 40, 22);
+      K.feld(ox - 21, oy - 23, ox + 21, oy + 23, ['#3a2810', '#6a4818', '#a06820', '#d8902c', '#ffc160', '#ffe3a4'], (x, y) => off.has(x, y) ? ruhig(.25 + Math.max(0, 1 - Math.hypot(x - ox - 4, y - oy + 4) / 24) * .8, 5, .25) : -1);
+      // die Straße dahinter: Fluchtlinien
+      for (let y = oy + 10; y < oy + 22; y++) for (let x = ox - 20; x < ox + 20; x++) if (off.has(x, y) && Math.abs((x - ox) / (y - oy - 8)) % 2.2 < .3) K.set(x, y, '#6a4818');
+      K.licht(ox, oy, 90, HARZG, .8, { exp: 1.5, ohne: off });
+      // Boden im Tunnel
+      K.feld(0, 64, 160, 90, BASALT, (x, y) => off.has(x, y) ? -1 : ruhig(.08 + lichtF(ox, 60, 80, 1.6)(x, y) * .6, BASALT.length - 1));
       K.lichtquelle(ox, oy);
-      // Der Legionär sitzt links vor der Öffnung, sein Helm steht gegen das Licht; er streckt das Brett zum Betrachter
-      const fx = 78, fy = 84;
-      const fig = K.figurMaske(fx, fy, 44, { kopf: 'kahl', haltung: 'sitzen', blick: 1, arme: [[fx + 27, fy - 19], [fx + 9, fy - 12]], ellbogen: [[fx + 16, fy - 21], [fx + 11, fy - 17]] });
-      const kx = fig.kopf[0], ky = fig.kopf[1];
-      // Helm: Kalotte, Nackenschirm, Wangenklappe, Kamm
-      fig.ell(kx, ky - 1.6, 4.2, 3.9); fig.poly([[kx - 4, ky - .5], [kx - 7.5, ky + 2.6], [kx - 2.5, ky + 2.4]]); fig.rect(kx + 1.4, ky, 2.4, 4.4);
-      fig.kap(kx - 3, ky - 5.8, kx + 2.5, ky - 6.2, 1, .9);
-      // Schild an der Wand hinter ihm
-      const sch = K.maske(); sch.rect(fx - 24, fy - 34, 15, 28);
-      K.form(sch, 0, { k: ['#1a0c08', '#2a140c', '#3c1e10', '#502814'], r: RAND_K, ton: 1.2, fase: 1, rand: 1, verlaufX: 1, lichtVon: [ox, oy], muster: (x, y) => (Math.abs(x - (fx - 16)) < 1 ? .8 : 0) });
-      K.form(fig, 0, { ton: .9, rand: 1, k: RINDE.slice(0, 4), r: RAND });
-      K.kante(fig, ox, oy, 60, RAND, { nah: .5 });
-      // das Brett in der Hand, mit Kohle beschrieben
-      const bx = fx + 24, by = fy - 26;
-      const brett = K.maske(); brett.poly([[bx, by], [bx + 16, by - 2], [bx + 17, by + 10], [bx + 1, by + 12]]);
-      K.form(brett, 0, { k: FRISCH, r: ['#d8ac6c', '#ffe3a4'], ton: 3.2, fase: 0, rand: 1, lichtVon: [ox, oy - 10] });
-      for (let i = 0; i < 4; i++) K.schrift(bx + 2, by + 2 + i * 2, bx + 14, '#1a1208', { min: 1, max: 3 });
-      K.vignette(.6, { cx: 84, cy: 50 });
+      // Der Legionär sitzt vor der Öffnung, Helm und Schultern gegen das Licht; er streckt das Brett zum Betrachter
+      const fx = 80, fy = 88;
+      const fig = K.figurMaske(fx, fy, 56, { kopf: 'kahl', haltung: 'sitzen', blick: 1, kopfDreh: 1, arme: [[fx + 31, fy - 17], [fx + 12, fy - 14]], ellbogen: [[fx + 20, fy - 24], [fx + 15, fy - 20]] });
+      const kx = fig.kopf[0], ky = fig.kopf[1], s = 1.4;
+      // Helm: Kalotte, Nackenschirm, Wangenklappe, Querkamm
+      fig.ell(kx, ky - 1.6 * s, 4.2 * s, 3.9 * s); fig.poly([[kx - 4 * s, ky - .5 * s], [kx - 7.5 * s, ky + 2.6 * s], [kx - 2.5 * s, ky + 2.4 * s]]); fig.rect(kx + 1.4 * s, ky, 2.4 * s, 4.4 * s);
+      fig.kap(kx - 3 * s, ky - 6 * s, kx + 2.5 * s, ky - 6.4 * s, 1.2 * s, 1 * s);
+      K.form(fig, 0, { ton: .9, rand: 0, k: ['#030302', '#080706', '#0e0c0a'], r: [] });
+      K.kante(fig, ox, oy, 80, RAND, { nah: .45 });
+      // das Brett in der Hand, mit Kohle beschrieben, unter der Öffnung im Licht
+      const bx = fx + 28, by = fy - 24;
+      const brett = K.maske(); brett.poly([[bx, by], [bx + 20, by - 2], [bx + 21, by + 12], [bx + 1, by + 14]]);
+      K.form(brett, 0, { k: FRISCH, r: ['#d8ac6c', '#ffe3a4'], ton: 3.4, fase: 0, rand: 1, lichtVon: [ox, oy - 10], schatten: 1 });
+      for (let i = 0; i < 5; i++) K.schrift(bx + 2, by + 2 + i * 2, bx + 18, '#1a1208', { min: 1, max: 3 });
+      K.vignette(.5, { cx: 88, cy: 48 });
     },
   },
 };

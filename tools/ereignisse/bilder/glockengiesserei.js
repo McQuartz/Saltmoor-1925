@@ -226,48 +226,48 @@ module.exports = {
       // Glockenprofil (q 0 Schulter … 1 Schlag), Anteil am Randradius R: Schulter rund, Flanke konkav, Schlag ausgestellt
       const prof = q => {
         let b;
-        if (q < .15) b = .6 * (.5 + .5 * Math.sqrt(Math.max(0, 1 - ((.15 - q) / .15) ** 2)));
-        else if (q < .55) b = .6 - Math.sin((q - .15) / .4 * Math.PI) * .035;
-        else b = .6 + Math.pow((q - .55) / .45, 1.8) * .4;
-        if (q > .84 && q < .98) b += .05 * Math.sin((q - .84) / .14 * Math.PI);
+        if (q < .14) b = .46 * (.45 + .55 * Math.sqrt(Math.max(0, 1 - ((.14 - q) / .14) ** 2)));   // Schulter, rund
+        else if (q < .55) b = .46 + (q - .14) * .08 - Math.sin((q - .14) / .41 * Math.PI) * .03;   // Flanke, konkav
+        else b = .493 + Math.pow((q - .55) / .45, 2.4) * .5;                                       // Schlag, ausgestellt
+        if (q > .86 && q < .99) b += .05 * Math.sin((q - .86) / .13 * Math.PI);                    // Schlagring
         return b;
       };
       // Glocke, Mund oben (ym), von oben gesehen; H = sichtbare Höhe
       const glockeAuf = (cx, ym, R, o) => {
-        o = o || {}; const H = R * 1.05, w = q => prof(q) * R, yq = q => ym + (1 - q) * H;
+        o = o || {}; const H = R * 1.3, w = q => prof(q) * R, yq = q => ym + (1 - q) * H;
         // Krone: ein Bügel, der unten im Lehm steckt
         const yb = yq(0) + w(0) * k;
         const kr = K.maske(); kr.kap(cx - R * .16, yb - 2, cx - R * .16, yb + R * .16, R * .05 + .6, R * .05 + .6); kr.kap(cx + R * .16, yb - 2, cx + R * .16, yb + R * .16, R * .05 + .6, R * .05 + .6);
-        kr.fn(cx - R * .25, yb - 2, cx + R * .25, yb + R * .3, (x, y) => { const d = Math.hypot((x - cx) / (R * .16), (y - yb - R * .16) / (R * .12)); return d < 1.35 && d > .75 && y > yb + R * .16; });
-        K.form(kr, 0, { k: BRONZE.slice(0, 6), r: RAND_B, ton: 2.6, fase: 0, rand: 1, L: [-.5, -.8] });
+        kr.fn(cx - R * .3, yb - 2, cx + R * .3, yb + R * .35, (x, y) => { const d = Math.hypot((x - cx) / (R * .16), (y - yb - R * .16) / (R * .14)); return d < 1.45 && d > .7 && y > yb + R * .16; });
+        K.form(kr, 0, { k: BRONZE.slice(1, 8), r: ['#c89060', '#f0c090'], ton: 3.4, fase: 0, rand: 1, L: [-.5, -.8] });
         const lehm = K.maske(); lehm.ell(cx, yb + R * .3, R * .34, R * .09); K.form(lehm, 0, { k: LEHM.slice(2), ton: 3, fase: 0, rand: 1, r: [LEHM[7]], L: [0, -1] });
         // Körper als Drehkörper
         const m = K.maske();
         for (let q = 0; q <= 1; q += .01) m.ell(cx, yq(q), w(q), w(q) * k);
-        const ring = (x, y) => { let best = 0; for (let q = 1; q >= 0; q -= .02) { const ww = w(q), dx = (x - cx) / ww; if (Math.abs(dx) > 1) continue; const yf = yq(q) + Math.sqrt(1 - dx * dx) * ww * k; if (yf >= y) best = q; else break; } return best; };
-        K.form(m, 0, { k: BRONZE, r: RAND_B, ton: 3, fase: Math.max(1, R * .05), rand: 2, schatten: 2, L: [-.6, -.8],
-          muster: (x, y) => { const q = ring(x + .5, y + .5), sn = (x - cx) / (w(q) || 1); let t = 0;
-            for (const l of [.84, .97, .3, .26, .06]) { const d = (q - l) * H; if (Math.abs(d) < .55) t -= 1.7; else if (Math.abs(d - 1) < .55) t += .8; }
-            if (Math.abs(q - .5) * H < .6 && ((x + Math.round(y)) % 3 === 0)) t += 1.3;
-            if (sn < -.2 && sn > -.48) t += 2; else if (sn > .55) t -= 1.2;
+        const ext = {}; for (let y = m.y0; y <= m.y1; y++) { let a = 1e9, b = -1e9; for (let x = m.x0; x <= m.x1; x++) if (m.has(x, y)) { a = Math.min(a, x); b = Math.max(b, x); } ext[y] = [a, b]; }
+        K.form(m, 0, { k: BRONZE, r: ['#8a5e3e', '#d8a070'], ton: 3.1, fase: Math.max(1, R * .05), rand: 1, schatten: 2, L: [-.6, -.8], verlauf: .4,
+          muster: (x, y) => { const [a, b] = ext[y] || [cx - 1, cx + 1], sn = (x - (a + b) / 2) / Math.max(1, (b - a) / 2); let t = 0;
+            if (sn < -.25 && sn > -.55) t += 2.2; else if (sn < -.62) t += .6; else if (sn > .5) t -= 1.3;
+            // Rippen: Bögen parallel zum Mund
+            for (const yy of [.12, .2, .62]) { const ry = ym + yy * H + Math.sqrt(Math.max(0, 1 - sn * sn)) * (b - a) / 2 * k; if (Math.abs(y - ry) < .6) t -= 1.6; else if (Math.abs(y - ry - 1) < .6) t += .7; }
             return t; } });
         // Mund: dicke Lippe (Schlagring oben) als heller Ring, darin die Innenwand, unten tief schwarz
-        const ro = w(1), ri = ro * .82;
+        const ro = w(1), ri = ro * .84;
         K.feld(0, 0, 160, 90, BRONZE, (x, y) => { const a = Math.hypot((x + .5 - cx) / ro, (y + .5 - ym) / (ro * k)), b = Math.hypot((x + .5 - cx) / ri, (y + .5 - ym - ro * k * .08) / (ri * k)); return a < 1 && b >= 1 ? 5.3 / 7 + (x < cx ? .12 : -.1) + (y < ym ? .06 : -.05) : -1; });
-        const INNEN = o.weich ? ['#050203', '#140806', '#2a120c', '#4a2214', '#6a361e', '#7e4a2c'] : ['#030202', '#140a08', '#301a10', '#5a341e', '#8a5a36', '#b8875a'];
+        const INNEN = o.weich ? ['#050203', '#140806', '#2e140c', '#542818', '#7e4428', '#aa7048'] : ['#030202', '#140a08', '#301a10', '#5a341e', '#8a5a36', '#c8986a'];
         K.feld(0, 0, 160, 90, INNEN, (x, y) => {
           const cyi = ym + ro * k * .08; if (Math.hypot((x + .5 - cx) / ri, (y + .5 - cyi) / (ri * k)) >= 1) return -1;
           const v = (y + .5 - (cyi - ri * k)) / (2 * ri * k);
-          return (v < .55 ? .95 - v * 1.2 : .25 - (v - .55) * .5) + (x > cx ? -.08 : .04) + (o.weich ? (B.fbm(x * .35, y * .5, 3, 2) - .5) * .9 : 0);
+          return (v < .5 ? 1 - v * 1.5 : .2 - (v - .5) * .4) + (x > cx ? -.08 : .04) + (o.weich ? (B.fbm(x * .35, y * .5, 3, 2) - .5) * .45 : 0);
         });
         return { cx, ym, ri };
       };
       // Fünf Glocken der Größe nach: hinten die kleinen, vorn in der Mitte die große mit dem Meißel
-      glockeAuf(52, 9, 9);
-      glockeAuf(112, 8, 11);
-      glockeAuf(22, 36, 14);
-      glockeAuf(140, 34, 17);
-      const g = glockeAuf(80, 36, 30, { weich: true });
+      glockeAuf(50, 6, 9);
+      glockeAuf(114, 5, 11);
+      glockeAuf(22, 34, 14);
+      glockeAuf(139, 30, 17);
+      const g = glockeAuf(80, 30, 30, { weich: true });
       // Der Meißel: steht aufrecht in der großen, ragt über den Rand
       const mx = g.cx + 6, mb = g.ym + 6;
       const me = K.maske(); me.rect(mx - 1, mb - 26, 3, 26); me.rect(mx - 1.5, mb - 28, 4, 3);
