@@ -110,7 +110,11 @@ module.exports = {
       if (!mantel) for (let x = rx - 14; x < rx + 22; x++) { const y = ry + 43 + ((x * 7) % 3); if (P.get(x, y) && P.get(x, y) <= 4 && (x & 1)) P.set(x, y - 1, 'k3'); }
       // Knopfreihe (Messing) und Koppelschloss
       for (let i = 0; i < 4; i++) P.auf(rx - 1, ry + 6 + i * 6, i % 2 ? 'k3' : 'messing');
-      if (mantel) { P.auf(rx - 2, ry + 30, 'messing'); P.auf(rx - 1, ry + 30, 'messing'); P.auf(rx - 2, ry + 29, 'r1'); }
+      if (mantel) { P.auf(rx - 2, ry + 30, 'messing'); P.auf(rx - 1, ry + 30, 'messing'); P.auf(rx - 2, ry + 29, 'r1');
+        // Kreuzriemen von der hinteren Schulter zur Hüfte, Messingbeschlag; Taschenklappen; Schulterstück
+        P.line(rx + 9, ry + 1, rx - 9, ry + 29, 'k0', true); P.line(rx + 10, ry + 1, rx - 8, ry + 29, 'r1', true); P.auf(rx, ry + 15, 'messing');
+        for (const dx of [-10, 6]) { P.line(rx + dx, ry + 38, rx + dx + 6, ry + 38, 'k0', true); P.line(rx + dx, ry + 37, rx + dx + 6, ry + 37, 'k3', true); }
+        for (let i = 0; i < 5; i++) P.auf(rx + 4 + i * 2, ry - 1 + (i % 2), i % 2 ? 'r1' : 'messing'); }
       // Mützenabzeichen, Kragenspiegel
       P.auf(r(kopfX + 1), r(kopfY - 8 - (v.muetze === 'tschako' ? 6 : 0)), 'messing');
       P.auf(rx - 6, ry - 3, 'siegel'); P.auf(rx - 5, ry - 3, 'siegel');

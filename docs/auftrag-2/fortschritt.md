@@ -214,6 +214,9 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Mond: Astronom, Kraterbewohner, Mondmotte, Gezogene (neu) | Mond | 4 (Mondmotte stärkste; Gezogene: Strang liest sich als Seil) | [Zugabe](bilder/Zugabe/mond/mond-bogen.png) |
 | Die Rückseite, drei Phasen (Wächter, neu) | Mond | 4 (Augen-Krater öffnen sich je Phase, auch am Boden) | [Zugabe](bilder/Zugabe/mond/im-spiel-waechter-p3.png) |
 | Hintergrund Mond (Abstieg, Ebene, Krater, Lichthof) | Mond | 4 (Krater gleichmäßig wie Höhenlinien; Kampfbild etwas unruhig) | [Zugabe](bilder/Zugabe/mond/hintergrund-varianten.png) |
+| Funkstation: Funker, Telegrafistin, Mastkletterer, Rauschen (neu) | Funkstation | 4 (nach Rückmeldung: kaltes Randlicht statt Sepia, im Kampf vorher 3,5) | [Zugabe](bilder/Zugabe/funkstation/im-spiel-kampf-alle-vier.png) |
+| Der Sender, zwei Phasen, Funkstille unverwundbar (Wächter, neu) | Funkstation | 4 (vor heller Fensterwand klar) | [Zugabe](bilder/Zugabe/funkstation/im-spiel-waechter-p2.png) |
+| Hintergrund Funkstation (Mast, Funkraum, Eisloch, Senderaum) + 6 Ereignisbilder | Funkstation | 4 (Funkraum jetzt karger, dafür ruhig hinter den Gegnern) | [Zugabe](bilder/Zugabe/funkstation/hintergrund-varianten.png) |
 | Reliquien Ballast und Kollekte (10), Bleigürtel, Geldkatze, Handgriffe Beschweren, Münzwurf (neu) | alle | 4 (knapp: Ballaststein schlichtes Oval, Fährgeld erinnert an Mond, Hand bei Beschweren krallig) | [Zugabe](bilder/Zugabe/reliquien/kontaktbogen.png) |
 | Ereignisbilder Charge 1: 15 biomübergreifende, 6 Hafen (neu) | alle, Hafen | 4 (Kreidezeichen eher grafisch; Hafen etwas gleichförmig nachtblau) | [Zugabe](bilder/Zugabe/ereignisse/kontakt-1.png) |
 | Ereignisbilder Akt I: Moor 5, Fabrik 7, Kurhaus 6, Nachtzug 7, Leuchtturm 7 (neu) | Akt I | 4 (selbst geprüft; stark: Kühlhaus, Kontrolle, Gedeck; knapp: Kurve, Lupe) | [Zugabe](bilder/Zugabe/ereignisse/kontakt-2-fabrik.png) |

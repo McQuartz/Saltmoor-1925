@@ -101,7 +101,8 @@ module.exports = {
       for (const [x0, y0, x1, y1] of [[X - 4, Y + 1, X - 5, Y + 13], [X + 2, Y, X + 4, Y + 13], [X + 5, Y + 2, X + 7, Y + 12]]) { P.line(x0, y0, x1, y1, 'k1', true); P.line(x0 + 1, y0, x1 + 1, y1, 'k3', true); }
       for (let i = 0; i < 4; i++) { P.auf(X - 1, Y + 15 + i * 2, 'kupfer'); P.auf(X - 2, Y + 16 + i * 2, 'k3'); }
       // Rock: Bahnen, Saumband, eine Lichtfalte
-      for (const [x0, x1] of [[X - 4, X - 7], [X + 1, X + 1], [X + 6, X + 9]]) { P.line(x0, Y + 26, x1, 111, 'k0', true); P.line(x0 + 1, Y + 27, x1 + 1, 111, 'k2', true); }
+      for (const [x0, x1] of [[X - 6, X - 11], [X - 2, X - 4], [X + 2, X + 3], [X + 6, X + 10], [X + 10, X + 16]]) { P.line(x0, Y + 26, x1, 110, 'k0', true); P.line(x0 + 1, Y + 27, x1 + 1, 110, 'k3', true); for (let y = Y + 30; y < 108; y += 3) { const q = (y - Y - 26) / (110 - Y - 26); P.auf(r(x0 + 2 + (x1 - x0) * q), y, 'r1'); } }
+      for (let x = r(wx - 13); x <= wx + 18; x++) { P.auf(x, 106, x % 2 ? 'k3' : 'r1'); P.auf(x, 107, 'k0'); }
       P.line(r(wx - 12), 109, r(wx + 13), 109, 'k3', true);
       // Taste: Kupferhebel, am Kontakt springt ein Funke, wenn sie drückt
       const TX = r(tx), TY = r(ty);

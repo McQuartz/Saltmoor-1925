@@ -192,10 +192,10 @@
    "konzept": "Ein Zollschreiber auf dem hohen Kontorbock, über das Stehpult gebeugt, mit Ärmelschonern und Augenschirm. Er schreibt mit dem Finger auf, was du bei dir trägst. Die Liste wird nicht kürzer: Sie wächst aus dem Buch und steigt im Wasser nach oben, Bahn um Bahn.",
    "stimme": "kultist",
    "kniff": {
-    "art": "verstopfen",
+    "art": "abschrift",
     "n": 1,
     "karte": "Aufstellung",
-    "why": "Er schreibt auf, was du trägst. Die Liste liegt dir in der Hand und lässt sich nicht ausspielen."
+    "why": "Er schreibt auf, was du trägst. Die Aufstellung landet in deinem Stapel und lässt sich nicht ausspielen."
    },
    "beute": "zollplombe",
    "beute_satz": "Das Papier steigt weiter, als er fällt. Auf der obersten Bahn steht dein Name, und dahinter ein Haken.",

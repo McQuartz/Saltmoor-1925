@@ -107,6 +107,11 @@ module.exports = {
       // Anorak: Fellsaum hell gefleckt, Nähte (Tal und Grat), Falten vom Gürtel nach unten
       for (let x = X - 18; x <= X + 19; x += 2) { const yy = Y + 50 + ((x * 7) % 3); P.auf(x, yy, (x % 4) ? 'k3' : 'r1'); P.auf(x + 1, yy + 2, 'k1'); }
       for (const [x0, y0, x1, y1] of [[X + 6, Y - 2, X + 9, Y + 30], [X - 4, Y + 36, X - 7, Y + 50], [X + 5, Y + 36, X + 7, Y + 51], [X + 13, Y + 36, X + 16, Y + 50]]) { P.line(x0, y0, x1, y1, 'k0', true); P.line(x0 + 1, y0 + 1, x1 + 1, y1, 'k3', true); }
+      // Anorak in Bahnen: jede Bahn hat eine helle Kante (Fase) zum Licht und eine dunkle Naht; unten ein Flicken
+      for (const bx of [X - 11, X + 4, X + 11]) for (let y = Y + 36; y < Y + 50; y++) { P.auf(bx, y, 'k0'); if ((y + bx) % 2 === 0) P.auf(bx + 1, y, 'r1'); else P.auf(bx + 1, y, 'k3'); }
+      for (let y = Y + 4; y < Y + 30; y++) { P.auf(X + 12 + ((y - Y) > 16 ? 1 : 0), y, 'k0'); if (y % 2) P.auf(X + 13 + ((y - Y) > 16 ? 1 : 0), y, 'k3'); }
+      for (let y = Y + 40; y < Y + 46; y++) for (let x = X - 8; x < X - 3; x++) P.auf(x, y, (x === X - 8 || y === Y + 40) ? 'k3' : (x + y) % 3 ? 'k2' : 'k1');
+      P.glow(r(X - 2), r(Y + 6), 8, 0.35);
       // Brustlatz mit Knebelknöpfen aus Holz, Fellkante entlang der Öffnung
       for (let y = Y + 4; y < Y + 30; y += 2) { P.auf(X - 1, y, 'k3'); P.auf(X - 2, y + 1, (y >> 1) % 2 ? 'r1' : 'k2'); }
       for (let i = 0; i < 3; i++) { P.auf(X - 6, Y + 8 + i * 7, 'k3'); P.auf(X - 5, Y + 8 + i * 7, 'r1'); }

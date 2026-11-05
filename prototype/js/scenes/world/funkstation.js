@@ -13,6 +13,7 @@ const EIS = ['#020101', '#060404', '#0b0807', '#110c0a', '#18110d', '#201712', '
 const HIMMEL = ['#040303', '#080606', '#0d0a08', '#130e0c', '#1a1410', '#231a15', '#2e221b', '#3b2c22'];
 const HOLZ = ['#070504', '#0f0a07', '#18100b', '#231710', '#301f15', '#3f291b', '#523524'];
 const KUPFER = ['#2a150b', '#4e2a16', '#7a4222', '#a85c30', '#c0703e', '#e2a070'];
+const KALT = ['#0c1014', '#141b22', '#1e2832', '#2a3846', '#3a4a5a', '#4e6070', '#647686'];
 const OR = '#ff8a2a', OR_K = '#fff2d6', OR_G = '#3a1a08', OR_G2 = '#5c2a0e', PAPIER = '#cbb8a2';
 const frac = v => v - Math.floor(v);
 const schneeMat = (ton, x) => Object.assign({ k: SCHNEE.slice(1, 9), r: ['#a48a74', '#ece0d2'], ton, fase: 1.5, rand: 2, schatten: 2, muster: (px, py) => (B.fbm(px * .07, py * .2, 5, 2) - .5) * .9 }, x || {});
@@ -88,7 +89,7 @@ function mast(K, eb, x, yb, yt, wb, tiefe, o) {
   // Abspannseile mit Eishaar
   (o.seile || []).forEach(([fy, ax, ay]) => {
     const sx = (L(fy) + R(fy)) / 2, sy = fy, n = Math.ceil(Math.hypot(ax - sx, ay - sy));
-    const e = K.e[o.seilEbene || eb], c = B.pk(B.mix('#16110d', K.fern, tiefe)), cl = B.pk(B.mix(SCHNEE[9], K.fern, tiefe * .8)), cd = B.pk(B.mix(SCHNEE[5], K.fern, tiefe));
+    const e = K.e[o.seilEbene || eb], c = B.pk(B.mix('#16110d', K.fern, tiefe)), cl = B.pk(B.mix(o.hell ? SCHNEE[9] : SCHNEE[7], K.fern, tiefe * .8)), cd = B.pk(B.mix(SCHNEE[4], K.fern, tiefe));
     const r = B.rng(Math.round(ax * 13 + ay));
     for (let i = 0; i <= n; i++) { const q = i / n, px = sx + (ax - sx) * q, py = sy + (ay - sy) * q + Math.sin(q * Math.PI) * n * .03; e.set(px, py, c);
       if (i % 2 === 0 && r() < .75 && q > .04 && q < .96) { const len = Math.round((2 + r() * 10) * (o.haar || 1) * (1 - Math.abs(q - .45))); for (let j = 1; j <= len; j++) e.set(px + Math.sin(j * .5 + i) * .4, py + j, j < len * .4 ? cl : (j % 2 || j < len * .7) ? cd : 0); } }
@@ -185,11 +186,11 @@ function morsetisch(K, x, y, s) {
   return { ex, ey, ew, eh };
 }
 // Regal mit Glasakkus (Kupferplatten in Säure)
-function akkuregal(K, eb, x, y, w, h, tiefe) {
-  const m = B.maske(); for (let i = 0; i < 4; i++) m.rect(x, y - h + i * h / 3.2, w, 3); m.rect(x, y - h, 3, h); m.rect(x + w - 3, y - h, 3, h); K.form(eb, m, tiefe, holzMat(1.4));
+function akkuregal(K, eb, x, y, w, h, tiefe, still) {
+  const m = B.maske(); for (let i = 0; i < 4; i++) m.rect(x, y - h + i * h / 3.2, w, 3); m.rect(x, y - h, 3, h); m.rect(x + w - 3, y - h, 3, h); K.form(eb, m, tiefe, holzMat(1.4, still ? { rand: 0 } : {}));
   for (let r = 0; r < 3; r++) for (let i = 0; i < Math.floor(w / 13); i++) { const ax = x + 6 + i * 13, ay = y - h + (r + 1) * h / 3.2 - 1, ah = h / 3.2 - 5; const a = B.maske(); a.rect(ax, ay - ah, 9, ah);
-    K.form(eb, a, tiefe, { k: ['#0a0807', '#16110d', '#241b15', '#3a2c22'], r: ['#8a7262', '#e0cdb8'], ton: 1.2, fase: 0, rand: 1, muster: (px, py) => ((Math.round(px - ax) === 3 || Math.round(px - ax) === 6) && py > ay - ah + 2 ? 1.6 : 0) });
-    for (let j = 2; j < ah; j++) { K.e[eb].set(ax + 3, ay - ah + j, B.pk(B.mix(KUPFER[3], K.fern, tiefe))); K.e[eb].set(ax + 6, ay - ah + j, B.pk(B.mix(KUPFER[2], K.fern, tiefe))); } }
+    K.form(eb, a, tiefe, { k: ['#0a0807', '#16110d', '#241b15', '#3a2c22'], r: ['#8a7262', '#e0cdb8'], ton: 1.2, fase: 0, rand: still ? 0 : 1, muster: (px, py) => ((Math.round(px - ax) === 3 || Math.round(px - ax) === 6) && py > ay - ah + 2 ? 1.6 : 0) });
+    for (let j = 2; j < ah; j++) { K.e[eb].set(ax + 3, ay - ah + j, B.pk(B.mix(KUPFER[still ? 1 : 3], K.fern, tiefe))); K.e[eb].set(ax + 6, ay - ah + j, B.pk(B.mix(KUPFER[still ? 0 : 2], K.fern, tiefe))); } }
 }
 function kabelDecke(K, eb, n, x0, x1, y1) { const r = B.rng(K.o.seed * 5 + 3); for (let i = 0; i < n; i++) { const a = r.f(x0, x1), b = a + r.f(-60, 60); draht(K, eb, a, -M, b, -M, r.f(20, y1), '#0a0705'); } }
 
@@ -202,7 +203,7 @@ function amMast(K) {
   // Ferne: niedrige Presseisrücken
   const fern = B.maske(); fern.fn(-M, vy - 20, W + M, vy + 2, (x, y) => y > vy - 2 - B.rausch1(x * .05, K.o.seed) * 7 - Math.max(0, Math.sin(x * .013) * 5)); K.form(1, fern, .6, schneeMat(1.2));
   // Hütte links im Mittelgrund
-  const hu = huette(K, 2, 34, vy + 14, 92, 42, .05, { offen: true });
+  const hu = huette(K, 2, -14, vy + 12, 70, 34, .12, { offen: true });
   // Mast rechts, steigt aus dem Bild
   const ms = mast(K, 2, 356, vy + 24, -M - 4, 34, 0, { seile: [[30, 236, vy + 18], [30, 488, vy + 30], [92, 282, vy + 20], [92, 452, vy + 26], [4, 196, vy + 14]], haar: 1.8 });
   void ms;
@@ -228,27 +229,26 @@ function amMast(K) {
 // rechts das Akkuregal. Der Papierstreifen läuft über die Dielen in eine Ritze, aus der es orange blinkt.
 function funkraum(K) {
   const fr = K.fr, vy = 150, P = B.persp(250, vy); K.split = [158, 172];
-  wand(K, vy, { lichter: [{ x: 110, y: 110, r: 170, s: .6 }, { x: 380, y: 60, r: 120, s: .25 }] });
-  fenster(K, 1, 196, 30, 92, 64, { mastX: 262, hell: .5 });
-  // Kalender, Karte an der Wand
-  const ka = B.maske(); ka.rect(310, 46, 30, 40); K.form(1, ka, .1, { k: ['#2a2018', '#3e3024', '#54443a', '#6e5c4c'], r: ['#a48a74', '#d8c4ac'], ton: 1.2, fase: 0, rand: 1, muster: (px, py) => (Math.round(py) % 6 === 0 ? -1 : 0) + (B.hash(px, py, 3) < .1 ? -.8 : 0) });
-  const kk = B.maske(); kk.rect(352, 40, 46, 32); K.form(1, kk, .15, { k: ['#2a2018', '#3e3024', '#54443a', '#6e5c4c'], r: ['#a48a74', '#d8c4ac'], ton: 1.6, fase: 0, rand: 1, muster: (px, py) => (Math.abs(B.fbm(px * .1, py * .1, 2, 2) - .5) < .03 ? -1.2 : 0) });
-  kabelDecke(K, 1, 5, 20, 460, 40);
-  dielen(K, P, vy, { lichter: [{ x: 120, y: vy + 10, r: 160, s: .7 }] });
-  const mt = morsetisch(K, 2, vy + 30, 1.8);
-  akkuregal(K, 2, 400, vy + 2, 80, 76, .05);
+  // Wand: in der Mitte, wo die Gegner stehen, dunkel und ruhig; Licht nur an den Rändern (Lampe links)
+  wand(K, vy, { lichter: [{ x: 10, y: 120, r: 120, s: .55 }] });
+  B.dith(K.e[1], 110, -M, 430, vy + 2, HOLZ[0], (x, y) => .55 * Math.min(1, Math.min(x - 110, 430 - x) / 50) * Math.min(1, (vy + 2 - y) / 30));
+  // Fenster hoch über den Köpfen: kaltes Schneelicht, ruhig; der Mast als dünne Senkrechte
+  fenster(K, 1, 196, 6, 92, 34, { mastX: 262, hell: .55 - fr * .2, aussen: KALT });
+  kabelDecke(K, 1, 3, 20, 140, 26);
+  dielen(K, P, vy, { lichter: [{ x: 30, y: vy + 20, r: 140, s: .55 }] });
+  // Morsetisch ganz links, angeschnitten; Röhren klein und warm am Rand
+  const mt = morsetisch(K, -62, vy + 30, 1.6);
+  // Akkuregal rechts am Rand, ohne helle Kanten
+  akkuregal(K, 2, 432, vy + 2, 70, 70, .25, true);
   // Streifen vom Tisch über die Dielen in die Ritze; dort blinkt es
-  const [rx, ry] = P.q(.8, 0, 3.4);
-  streifen(K, [[mt.ex + 10, vy + 28], [mt.ex + 40, vy + 34], [rx - 40, ry - 6], [rx - 6, ry]], 2);
+  const [rx, ry] = P.q(1.4, 0, 2.6);
+  streifen(K, [[mt.ex + 40, vy + 30], [mt.ex + 70, vy + 44], [rx - 40, ry - 4], [rx - 6, ry]], 2);
   const ri = B.maske(); ri.poly([[rx - 10, ry - 1], [rx + 24, ry - 3], [rx + 26, ry + 1], [rx - 8, ry + 3]]); B.form(K.e[K.eb(ry)], ri, { k: [B.pk('#000000'), B.pk('#120805')], ton: 0, fase: 0, rand: 0 });
   K.anim.push({ p: B.PAR[K.eb(ry)], f(ctx, t, ox, oy) { const bit = MORSE[Math.floor(t * 3.2) % MORSE.length]; ctx.fillStyle = bit ? OR : '#3a1a08'; ctx.fillRect(Math.round(rx - 6) + ox, Math.round(ry) + oy, 28, 1); } });
   B.gluehen(K.e[K.eb(ry)], rx + 8, ry, 24, OR_G, .6 + fr * .3);
-  // Ofen rechts hinten (kalt), Stuhl
-  const of = B.maske(); of.ell(366, vy - 18, 13, 15); of.rect(356, vy - 6, 20, 4); of.rect(357, vy - 2, 2, 4); of.rect(373, vy - 2, 2, 4); of.rect(363, -M, 6, vy - 30 + M); of.rect(354, vy - 34, 24, 3); K.form(2, of, .05, eisenMat(1.3, { rand: 2, fase: 1.5, muster: (px, py) => (Math.abs(py - (vy - 22)) < .6 ? .8 : 0) }));
-  const st = B.maske(); st.rect(160, vy - 10, 22, 3); st.rect(162, vy - 10, 2, 16); st.rect(178, vy - 10, 2, 16); st.rect(178, vy - 34, 2, 26); K.form(3, st, 0, holzMat(1.5));
   // Vordergrund: Tischkante unten links, Kabelbündel rechts
   const v = B.maske(); v.rect(-M, 246, 120, 40); v.kap(400, H + M, 470, 224, 6, 4); v.kap(430, H + M, 492, 236, 5, 4); K.form(5, v, 0, holzMat(1.1));
-  B.partikel(K, { n: 18, farben: [HOLZ[5], SCHNEE[8]], vx: 1, vy: .5, wob: 1.5, wf: .2, x0: 0, x1: 480, y0: 0, y1: 240, p: .8 });
+  B.partikel(K, { n: 14, farben: [HOLZ[5], KALT[3]], vx: 1, vy: .5, wob: 1.5, wf: .2, x0: 0, x1: 480, y0: 0, y1: 240, p: .8 });
   K.reihen = [{ y: 168, skala: .9, nebel: .15 }, { y: 192, skala: 1, nebel: .05 }, { y: 214, skala: 1, nebel: 0 }];
   return { mitte: [250, 208], P };
 }

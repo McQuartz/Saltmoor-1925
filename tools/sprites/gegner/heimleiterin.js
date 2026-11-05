@@ -100,6 +100,8 @@ module.exports = {
         if (!ist(x, y, ROCK)) continue; const c = P.get(x, y); if (c < 1 || c > 4) continue;
         const u = (y - wy) / (FY - wy);
         for (const o of [-14, -6, 3, 12, 22]) { const lx = cx + o * u * 1.1 + (o > 0 ? o * 0.15 : 0); if (Math.abs(x - lx) < 0.6) P.set(x, y, 'k0'); else if (Math.abs(x - lx - 1) < 0.6 && b(x, y) < 0.3 + u * 0.5) P.set(x, y, 'k3'); }
+        // Licht vom Fenster hinten rechts: die rechte Seite des Rocks fängt einen breiten, gedämpften Schein (Fase)
+        { let rr = x; while (ist(rr + 1, y, ROCK)) rr++; const d = rr - x; if (d < 7 && d > 1 && b(x, y) < 0.55 - d * 0.07) P.set(x, y, d < 3 ? 'k3' : 'k2'); }
         if (y > FY - 8 && y < FY - 5) P.set(x, y, y === FY - 7 ? 'k0' : (b(x, y) < 0.5 ? 'k3' : c));
         if (y >= FY - 1) P.set(x, y, 'k0');
       }

@@ -17,9 +17,9 @@ Auf dem schwarzen Eis steht eine Hütte aus Teerpappe und Planken, bis zu den Fe
 
 - **Wahrzeichen:** der **Antennenmast** mit dem Eishaar an den Seilen (V0 riesig in der Mitte, in der Hütte durch das Fenster, im Wächter-Raum hinter der Scheibe) und der **Morsetisch** mit Taste, Kopfhörer, Röhrenempfänger und Lampe (V1 im Funkraum, Ereignis, Krämer).
 - **Falsches Detail:** Die Morsezeichen kommen **von unter dem Eis**, und sie buchstabieren deinen Namen, bevor du ihn gesagt hast. Im Bild: Unter dem schwarzen Eis blinken Lichter in Kurz und Lang, in einer Reihe, die genau auf dich zuläuft (animiert, nie erklärt). Der Antennendraht führt nicht von Mast zu Mast, sondern vom Mast **in ein Loch im Eis**. Der Papierstreifen des Schreibempfängers läuft aus der Tür, über den Schnee, in dasselbe Loch.
-- **Palette:** Bakelit-Braun nahe Schwarz (`#060403 … #311d14`), Randlicht Schneeweiß im Lampenlicht (`#a48a74` / `#f4ebe0`), Augen und Röhren warmes Röhrenorange (`#ff8a2a`, Kern `#fff2d6`), Zusatzfarbe Kupfer (`#c0703e`) für Spulen, Drähte, Kopfhörer. Der Schnee in den Szenen ist warm-weiß im Lampenlicht und braungrau im Schatten, das Eis darunter schwarzbraun.
+- **Palette:** Bakelit-Braun nahe Schwarz (`#060403 … #311d14`), Randlicht der Figuren **kaltes Schneelicht** aus Fenstern und Polarhimmel (`#6a8698` / `#d6eaf4`), ein Ton, der im warmen Hintergrund nicht vorkommt, Augen und Röhren warmes Röhrenorange (`#ff8a2a`, Kern `#fff2d6`), Zusatzfarbe Kupfer (`#c0703e`) für Spulen, Drähte, Kopfhörer. Der Schnee in den Szenen ist warm-weiß im Lampenlicht und braungrau im Schatten, das Eis darunter schwarzbraun.
 - **Abgrenzung im Akt:** Schwarzes Eis ist blau mit roten Augen, die Walkathedrale Knochenweiß in Blauschwarz, das Glasmeer Schwarzglas und Polarlicht-Grün, der Mond Asche und Silber. Die Funkstation ist das einzige **warme** Biom des Akts: Röhrenorange und Bakelit gegen Schnee. Bildaufbau sind **Senkrechte und Drähte** (Mast, Seile, Antennen, Kabel, Papierstreifen), Menschenwerk von 1912, kein Knochen, kein Glas, kein Mond, kein Nordlicht.
-- **Licht:** Gegenlicht oben rechts ist der Schein der Röhren und Lampen auf Schnee (warmweiß). Dazu das Orange der Röhren als Innenlicht und, von unten, die Morselichter unter dem Eis.
+- **Licht:** Die Szenen sind warm (Bakelit, Röhren, Lampen nur an den Rändern), die Figuren tragen kaltes Randlicht vom Schnee draußen; so lösen sie sich vom Sepia des Raums. Dazu das Orange der Röhren als Innenlicht und, von unten, die Morselichter unter dem Eis.
 - **Krämer:** **Der Proviantmeister** (`art: tausch`). Er führt seit 1912 Inventur und gibt nichts heraus, was nicht von der Liste gestrichen wird: Für jedes Stück, das du nimmst, kommt eins von dir auf die Liste. Die Liste muss stimmen, sagt er, sonst merkt man unten, dass einer fehlt.
 
 ## Hintergrund: Kompositionen
@@ -34,9 +34,9 @@ Grundform **die Senkrechte mit Drähten**: Mast, Seile, Antennenlitzen, Kabel, P
 - **Hinter den Gegnern:** die beleuchtete Schneefläche zwischen Hütte und Mast mit Spuren, Wehen und dem Papierstreifen.
 
 ### Variante 1: Der Funkraum
-- **Innen.** Plankenwand hinten, ein Fenster mit Eisblumen, dahinter der Mast als dunkle Senkrechte. Horizont (Bodenkante) y 150, Dielenboden mit Fluchtlinien.
-- **Aufbau:** Links der **Morsetisch**: Röhrenempfänger mit vier glühenden Röhren, Morsetaste, Kopfhörer am Haken, Petroleumlampe, Logbuch. Rechts Regale mit Glasakkus und Kupferspulen. Von der Decke hängen Kabel. Der Papierstreifen des Schreibers läuft vom Tisch über die Dielen und verschwindet in einer Ritze, durch die von unten orange Licht blinkt.
-- **Hinter den Gegnern:** die Plankenwand im Lampenlicht, mit Kalender, Karte, Kabelbündeln.
+- **Innen.** Plankenwand hinten, hoch über den Köpfen ein schmales Fenster mit kaltem Schneelicht, dahinter der Mast als dunkle Senkrechte. Horizont (Bodenkante) y 150, Dielenboden mit Fluchtlinien.
+- **Aufbau:** Am linken Rand, angeschnitten, der **Morsetisch**: Röhrenempfänger mit vier glühenden Röhren, Morsetaste, Kopfhörer, Petroleumlampe (das warme Licht nur am Rand). Am rechten Rand ein Akkuregal ohne helle Kanten. Der Papierstreifen läuft über die Dielen in eine Ritze, durch die von unten orange Licht blinkt.
+- **Hinter den Gegnern:** die Plankenwand, in der Mitte dunkel und ruhig gedithert (keine hellen Strichkanten), damit die Figuren mit ihrem kalten Randlicht stehen.
 
 ### Variante 2: Das Eisloch
 - **Horizont** y 140. Weit draußen auf dem blank gefegten schwarzen Eis, die Station klein in der Ferne links mit einem Licht, der Mast als Strich.
@@ -147,7 +147,14 @@ d-Moll, Grundton 50 (Schwarzes Eis 54, Walkathedrale 45, Glasmeer 56, Mond 48). 
 - `node tools/test-ereignisse.js` und `node tools/test-run.js`: „Alles gut.“
 
 ### Abstimmung
-Erste Werte (normale Gegner 18–26 Leben, Wächter 78): `biom-test funkstation 20` 17/19 überstanden (89 %, zu leicht; ein Seed starb schon im Vorlauf). Erhöht: alle normalen Gegner +3 Leben und +1 Schaden, Rauschen heilt 5, Wächter 86 Leben und je Schlag +1. Danach **13/19 (68 %)**, 0 Fehler. Die Niederlagen verteilen sich auf den schweren Kampf (Telegrafistin verstopft die Hand, Funker spielt große Karten zurück) und den Wächter in Phase 2, wenn das gerufene Rauschen ihn heilt.
+Erste Werte (normale Gegner 18–26 Leben, Wächter 78): `biom-test funkstation 20` 17/19 überstanden (89 %, zu leicht; ein Seed starb schon im Vorlauf). Erhöht: alle normalen Gegner +3 Leben und +1 Schaden, Rauschen heilt 5, Wächter 86 Leben und je Schlag +1. Danach 13/19 (68 %); letzter Lauf nach der Überarbeitung der Bilder (Werte unverändert, die anderen Akte haben sich durch parallele Pakete verschoben) **12/19 (63 %)**, 0 Fehler. Die Niederlagen verteilen sich auf den schweren Kampf (Telegrafistin verstopft die Hand, Funker spielt große Karten zurück) und den Wächter in Phase 2, wenn das gerufene Rauschen ihn heilt.
+
+### Überarbeitung nach Rückmeldung (Lesbarkeit im Kampf)
+Im ersten Kampf-Foto mit allen vier Gegnern gingen die Figuren im Funkraum unter (3,5): gleiche Sepia-Töne, Tisch, Fenster und Regale direkt hinter Funker und Mastkletterer, viele helle Kanten im Mittelgrund in derselben Farbe wie das Randlicht. Geändert:
+- **Randlicht der Figuren kalt** (Schneelicht `#6a8698`/`#d6eaf4`), ein Ton, den der warme Hintergrund nicht hat.
+- **Binnenform:** Anorak des Funkers in Bahnen mit Lichtkante und Naht, Flicken, Glut der Muschel auf der Brust; Rock der Telegrafistin in fünf Falten mit Lichtgraten und Saumband.
+- **Funkraum:** Morsetisch an den linken Rand, Fenster hoch über die Köpfe und kalt, Regal an den rechten Rand ohne Randlicht, Ofen und Wandbilder entfernt, die Wandmitte dunkel gedithert. **Mast:** Hütte nach links aus der Gegner-Zone, Eishaar an den Seilen dunkler.
+- Neue Fotos aller drei Varianten mit allen vier Gegnern: [V0](../bilder/Zugabe/funkstation/im-spiel-kampf-alle-vier-v0.png), [V1](../bilder/Zugabe/funkstation/im-spiel-kampf-alle-vier.png), [V2](../bilder/Zugabe/funkstation/im-spiel-kampf-alle-vier-v2.png). Die übrigen Fotos und Bögen sind neu erzeugt.
 
 ## Vorschläge an den Kern
 
@@ -162,14 +169,14 @@ Je Punkt 1–5: Silhouette / Licht / Pixel / Konzept / Biom / Im Spiel. Gesamt =
 
 | Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
 |---|---|---|---|---|---|---|---|---|
-| Funker | 4 | 4 | 4 | 4 | 5 | 4 | **4** | Ellbogen-Flügel über dem Kopf, glühende Muschel als inneres Licht, Kabel als Schwanz bis in den Schnee: eigen und lesbar; b mit Tornister und Stabantenne. Der Anorak bleibt trotz Latz, Fellsaum, Gürtel und Nähten die größte dunkle Fläche, und das Profil (Nase, Kiefer) wirkt etwas schnabelartig. Erst nach Umbau (Kopf war ein Klumpen, Kabel kreuzte die Brust). |
-| Telegrafistin | 5 | 4 | 4 | 5 | 5 | 4 | **4** | Der Papierstreifen aus dem Mund in Schleifen bis zum Boden ist das falsche Detail und die Silhouette zugleich; b trägt ihn als Schleppe. Im Spiel liegt dazu „Dein Name“ in der Hand. Der Rock ist eine dunkle Fläche mit nur drei Bahnen; die Finger lesen sich erst im Angriff. Vorher war der Streifen eine gedithert rauschende Kette (zu unruhig), jetzt ein flaches Band. |
+| Funker | 4 | 5 | 4 | 4 | 5 | 4 | **4** | Ellbogen-Flügel über dem Kopf, glühende Muschel als inneres Licht, Kabel als Schwanz bis in den Schnee: eigen und lesbar; b mit Tornister und Stabantenne. Der Anorak ist jetzt in Bahnen mit kalten Lichtkanten gegliedert, bleibt aber die dunkelste Fläche, und das Profil (Nase, Kiefer) wirkt etwas schnabelartig. Erst nach Umbau (Kopf war ein Klumpen, Kabel kreuzte die Brust). |
+| Telegrafistin | 5 | 5 | 4 | 5 | 5 | 4 | **4** | Der Papierstreifen aus dem Mund in Schleifen bis zum Boden ist das falsche Detail und die Silhouette zugleich; b trägt ihn als Schleppe. Im Spiel liegt dazu „Dein Name“ in der Hand. Der Rock hat jetzt fünf Falten mit Lichtgraten; die Finger lesen sich erst im Angriff. Vorher war der Streifen eine gedithert rauschende Kette (zu unruhig), jetzt ein flaches Band. |
 | Mastkletterer | 5 | 4 | 4 | 4 | 5 | 4 | **4** | Der Gittermast ist eine Silhouette, die es im Spiel nicht gibt, der Isolator oben glüht; das Eishaar hängt wie ein Vorhang. Der Mann selbst wird vom Haar halb verdeckt und ist kleiner als die anderen Figuren. Umbau: Streben ohne Randlicht (vorher war der Mast heller als die Figur), Mann größer. |
 | Rauschen | 5 | 4 | 4 | 4 | 4 | 5 | **4** | Die in Bänder geschnittene Gestalt mit der Röhre als Herz liest sich sofort, jede Schnittkante fängt Licht; vor Schnee und Eis im Spiel sehr klar. Etwas frontal und steif; b ist nicht so gebückt, wie es heißen soll (breiter, Bänder weiter). Die Wolken-Probe war unlesbar. |
 | Der Sender (Wächter) | 5 | 4 | 4 | 5 | 5 | 5 | **4** | Schrank mit Spulenkrone, Trichter wie ein Kopf am Hals, Kabelwurzeln; Phase 2 mit Kupfer-Brustkorb und Gesicht hinter Glas. Das Gesicht ist schlicht (wirkt wie ein Totenkopf) und der Trichter reicht im Angriff bis an den Bildrand. Erster Entwurf las sich wie ein Spielzeugroboter (zwei Skalen als Augen, Spule als Hut) und ist ersetzt. |
 | Wächter im Spiel-Foto | 5 | 5 | 4 | 5 | 5 | 5 | **4** | Die helle, ruhige Fensterwand steht genau hinter dem dunklen Schrank, die Röhren glühen dagegen; Absicht „?“ und Name lesbar. Der Mast draußen geht hinter der Spule etwas unter. |
-| Hintergrund V0 Der Mast | 5 | 4 | 4 | 5 | 5 | 4 | **4** | Hütte mit glühendem Fenster, riesiger Mast mit Eishaar-Seilen, blankes Eis mit Morselichtern, die auf dich zulaufen. Das Loch im Eis liegt oft hinter einem Gegner, nur Draht und Streifen zeigen hin. |
-| Hintergrund V1 Der Funkraum | 4 | 4 | 4 | 5 | 5 | 4 | **4** | Morsetisch mit Röhren, Kopfhörer, Lampe; Streifen in die Ritze, aus der es blinkt; Fenster mit Mast. Die vier Röhren sind groß und hell und konkurrieren im Spiel mit Köpfen davor; der Dielenboden vorn ist ruhig (dort liegt die UI). |
+| Hintergrund V0 Der Mast | 5 | 4 | 4 | 5 | 5 | 4 | **4** | Hütte (jetzt am linken Rand) mit glühendem Fenster, riesiger Mast mit Eishaar-Seilen, blankes Eis mit Morselichtern, die auf dich zulaufen. Das Loch im Eis liegt oft hinter einem Gegner, nur Draht und Streifen zeigen hin. |
+| Hintergrund V1 Der Funkraum | 4 | 4 | 4 | 4 | 5 | 4 | **4** | Nach der Rückmeldung (vorher 3,5 im Spiel) umgebaut: Morsetisch mit Röhren und Lampe am linken Rand, kaltes Fenster über den Köpfen, Wandmitte dunkel und ruhig; alle vier Gegner stehen jetzt mit kaltem Rand klar. Der Raum ist dafür karger, der Tisch steht noch hinter dem Funker, wenn er ganz links steht. |
 | Hintergrund V2 Das Eisloch | 4 | 4 | 4 | 5 | 5 | 4 | **4** | Station klein in der Ferne, Litze auf Stangen ins Loch, blankes Eis mit zwei Lichterreihen, Zelt, Schlitten. Die Schneewehen sind etwas gleichförmig gestreift. |
 | Hintergrund Wächter Der Senderaum | 5 | 5 | 4 | 4 | 5 | 5 | **4** | Siehe oben; Akkuregale, Kabel zum blinkenden Loch im Boden. `fremdheit` verdunkelt nur die Scheiben, mehr ändert sich nicht. |
 | **Hintergrund gesamt** | | | | | | | **4** | |

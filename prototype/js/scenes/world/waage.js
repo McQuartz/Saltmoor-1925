@@ -187,7 +187,7 @@ function registratur(K, P, X, Z0, Z1, o) {
   for (let Z = Z0; Z <= Z1; Z *= 1.03) { unten.push(P.q(X, 0, Z)); oben.push(P.q(X, hoehe + Math.sin(Z) * .4, Z)); }
   const m = B.maske(); m.poly([...unten, ...oben.reverse()]);
   const seite = X < 0 ? -1 : 1;
-  K.form(eb, m, o.tiefe || .05, holzMat(2.2, { muster: (x, y) => { const Z = (X * P.h) / Math.max(1, Math.abs(x - P.vx)) * Math.sign(X * (x - P.vx) || 1), Y = 1 - (y - P.vy) * Z / P.h; const fz = frac(Z / .35), fy = frac(Y / .28);
+  K.form(eb, m, o.tiefe || .05, holzMat(3.4, { k: KACHEL.slice(2, 10), r: [KACHEL[11], '#e6dcbc'], muster: (x, y) => { const Z = (X * P.h) / Math.max(1, Math.abs(x - P.vx)) * Math.sign(X * (x - P.vx) || 1), Y = 1 - (y - P.vy) * Z / P.h; const fz = frac(Z / .35), fy = frac(Y / .28);
     if (fz < .08 || fy < .1) return -1.4; const id = Math.floor(Z / .35) * 31 + Math.floor(Y / .28); return (B.hash(id, 1, 5) < .05 ? -2 : 0) + (fy > .4 && fy < .55 && fz > .4 && fz < .6 ? 2.2 : 0) + (B.hash(id, 2, 5) - .5) * .5 - Y * .07; } }));
   void seite;
   return m;
@@ -242,7 +242,7 @@ function halle(K, o) {
   bahnen(K, [[430, .07, .5], [330, .05, .45], [520, .09, .4]], [1, 2]);
   // Schalter in der Rückwand
   for (const X of [-3.6, -1, 3.4]) { const [x, y] = P.q(X, 0, 10.8), k = P.k(10.8); schalter(K, x - k * .7, y, k * 1.4, k * 1.25, 1, { tiefe: .22 }); }
-  const wg = waage(K, P, { X: -1.2, Z: 7.4, Yb: 7.6, L: 8.4, kipp: .1 + fr * .05, tiefL: 6.2, tiefR: 2.6, zunge: 1.8, schale: 1.5, ebene: 2, tiefe: .06 });
+  const wg = waage(K, P, { X: -3.6, Z: 7.4, Yb: 7.6, L: 8.4, kipp: .1 + fr * .05, tiefL: 6.2, tiefR: 2.6, zunge: 1.8, schale: 1.5, ebene: 2, tiefe: .06 });
   bank(K, P, -6.2, -4.3, 3.1, { leer: .2 });
   bank(K, P, -6.3, -4.6, 5.6, { leer: .3, tiefe: .1 });
   if (fr > .5) bank(K, P, 4.6, 6.2, 4.4, { leer: .35, tiefe: .05 });
@@ -280,13 +280,13 @@ function schalterhalle(K, o) {
     if (an) { K.glut((a[0] + b[0]) / 2, a[1] - h * .66, h * 1.1, LAMPE_G, .8, [2, 3]); K.licht((a[0] + b[0]) / 2, a[1] - h * .66, LAMPE, h, .6); }
   }
   // Registratur links, bis ins Wasser
-  registratur(K, P, -3.4, 1.1, 22, { hoehe: 9, ebene: 2 });
+  registratur(K, P, -4.4, 1.1, 22, { hoehe: 9, ebene: 2 });
   // Leiter an der Registratur
-  const lm = B.maske(), l0 = P.q(-3.1, 0, 3.2), l1 = P.q(-3.3, 5.5, 3.6); lm.kap(l0[0], l0[1], l1[0], l1[1], 1.4, 1.2); lm.kap(l0[0] + 12, l0[1], l1[0] + 10, l1[1], 1.4, 1.2);
+  const lm = B.maske(), l0 = P.q(-4.1, 0, 3.2), l1 = P.q(-4.3, 5.5, 3.6); lm.kap(l0[0], l0[1], l1[0], l1[1], 1.4, 1.2); lm.kap(l0[0] + 12, l0[1], l1[0] + 10, l1[1], 1.4, 1.2);
   for (let i = 1; i < 12; i++) { const q = i / 12; lm.kap(l0[0] + (l1[0] - l0[0]) * q, l0[1] + (l1[1] - l0[1]) * q, l0[0] + 12 + (l1[0] - l0[0] - 2) * q, l0[1] + (l1[1] - l0[1]) * q, .8, .8); }
   K.form(3, lm, 0, holzMat(2));
   // Papierbahnen aus einer offenen Schublade, steigen ins Wasser
-  const pb = B.maske(), s0 = P.q(-3.3, 2.2, 5.2); for (let j = 0; j < 3; j++) { const pts = []; for (let i = 0; i <= 12; i++) pts.push([s0[0] + j * 4 + Math.sin(i * .6 + j) * (2 + i * .5), s0[1] - i * 8]); pb.pfad(pts, 1.6, 1.2); }
+  const pb = B.maske(), s0 = P.q(-4.3, 2.2, 5.2); for (let j = 0; j < 3; j++) { const pts = []; for (let i = 0; i <= 12; i++) pts.push([s0[0] + j * 4 + Math.sin(i * .6 + j) * (2 + i * .5), s0[1] - i * 8]); pb.pfad(pts, 1.6, 1.2); }
   K.form(2, pb, .05, { k: KACHEL.slice(6, 11), r: ['#e6dcbc'], ton: 2.2, fase: 0, rand: 1 });
   papier(K, 30, { x0: 0, x1: 300 });
   B.partikel(K, { n: 30, farben: [WASSER[8], LICHTNETZ[0]], vx: 0, vy: -5, wob: 2, wf: .5, p: .5 });

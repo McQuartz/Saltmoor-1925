@@ -19,9 +19,9 @@ module.exports = {
   id: 'zwillinge', biom: 'waisenhaus', zone: 'waisenhaus', w: 96, h: 120, fuss: [52, 115], kopf: [50, 46], rimBis: 113,
   varianten: {
     // a: nebeneinander, offenes Haar; den Schatten wirft die vordere (linke)
-    zwillinge_a: { xs: [40, 64], schatten: 0, zoepfe: false },
+    zwillinge_a: { xs: [38, 64], schatten: 0, zoepfe: false },
     // b: Zöpfe; den Schatten wirft die hintere (rechte), er läuft unter der vorderen hindurch
-    zwillinge_b: { xs: [38, 62], schatten: 1, zoepfe: true },
+    zwillinge_b: { xs: [37, 63], schatten: 1, zoepfe: true },
   },
   // Silhouetten-Probe (verworfen): die beiden eng hintereinander, fast deckungsgleich; schwarz ein einzelnes Kind
   // mit breitem Rock (zu nah am Schlafwagenkind). Erst der Abstand und die gefassten Hände zeigen zwei.
@@ -37,9 +37,9 @@ module.exports = {
     if (p.tod) { fall = r(p.q * 20); }
     const kinder = v.xs.map((x0, i) => {
       const cx = x0 + dx + (i === 0 ? 0 : -dx * 0.2), T = atem[i] + fall * (i === 0 ? 1 : 1.2);
-      const top = FY - 58 + T;
-      const hemd = Pg([[cx - 5 + lean, top + 15], [cx + 5 + lean, top + 15], [cx + 7, top + 22], [cx + 11, FY - 7], [cx + 11, FY - 5], [cx - 11, FY - 5], [cx - 10, FY - 7], [cx - 7, top + 22]], 'haut', { rd: 1.4, tone: 0.18 });
-      const kopf = E(cx - 1 + lean, top + 7, 7, 7.6, 'haut', { pf: 'bevel', tone: 0.1 });
+      const top = FY - 66 + T;
+      const hemd = Pg([[cx - 5.5 + lean, top + 16], [cx + 5.5 + lean, top + 16], [cx + 7.5, top + 24], [cx + 12, FY - 7], [cx + 12, FY - 5], [cx - 12, FY - 5], [cx - 11, FY - 7], [cx - 7.5, top + 24]], 'haut', { rd: 1.4, tone: 0.18 });
+      const kopf = E(cx - 1 + lean, top + 7.5, 7.6, 8.2, 'haut', { pf: 'bevel', tone: 0.1 });
       // Haar: offen bis zur Hüfte (a) oder zwei Zöpfe (b), hinten
       const haar = [];
       if (!v.zoepfe) haar.push(Pg([[cx + 1 + lean, top - 0.5], [cx + 7 + lean, top + 3], [cx + 8 + lean * 0.5, top + 18], [cx + 8, top + 32], [cx + 4, top + 34], [cx + 2, top + 16]], null, { rd: 1 }));
@@ -104,7 +104,7 @@ module.exports = {
           P.set(x, y, (x * 3 + y) % 9 === 0 ? 'nass' : (x - K.cx) % 3 === 0 ? 'k0' : c > 2 ? 'k2' : 'k1');
         }
         // Gesicht: Scheitel nass, Pony über der Stirn; Augen rot; das Kind ohne Schatten hat die helleren
-        const kx = K.cx - 1 + lean, ky = K.top + 8;
+        const kx = K.cx - 1 + lean, ky = K.top + 8.5;
         for (let y = r(ky - 8); y <= r(ky + 8); y++) for (let x = r(kx - 8); x <= r(kx + 8); x++) {
           if (!ist(x, y, KOPF[i])) continue; const c = P.get(x, y); if (c < 1 || c > 4) continue;
           const ddx = x + 0.5 - kx, ddy = y + 0.5 - ky;

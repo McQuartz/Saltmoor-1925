@@ -376,7 +376,7 @@ function halle(K, cfg) {
     const g = B.maske(); g.poly([[372, 128], [480 + M, 30], [480 + M, 34], [372, 132]]); for (let i = 0; i < 9; i++) { const x = 378 + i * 12, y0 = 128 - (x - 372) * 0.9; g.rect(x, y0, 2, 164 - (x - 372) * 0.92 - y0); } g.rect(370, 126, 6, 46); K.form(2, g, 0.05, { k: HOLZ, r: RAND, ton: 3, fase: 0, rand: 1 }); }
   // Boden: Linoleum, ein Lichtfleck des Fensters fällt nach vorn, eine lange Reihe nasser Füße quer (der Appell)
   const spuren = [];
-  if (!cfg.leer) for (let i = 0; i < 9 + Math.round(fr * 6); i++) { const X = -2.6 + i * 0.36, Z = 4.4; spuren.push([X - 0.05, Z, 0.03], [X + 0.05, Z, 0.03]); }
+  if (!cfg.leer) for (let i = 0; i < 9 + Math.round(fr * 6); i++) { const X = -2.9 + i * 0.42 + (i > 6 ? 0.5 : 0), Z = 3.6; spuren.push([X - 0.08, Z, 0.055], [X + 0.08, Z + 0.04, 0.055]); }
   boden(K, P, vy + 1, { flecken: [[[-0.9, 9], [0.9, 9], [1.6, 2.6], [-1.6, 2.6]]], spuren });
   if (cfg.leer) {
     // Übergang: ein Bett beiseitegeschoben, eine Luke im Boden, Leiter nach unten, kaltes Licht von unten
