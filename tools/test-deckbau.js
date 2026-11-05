@@ -115,4 +115,8 @@ const {ladeKern}=require('./kern');
  // takt mit klang: Bus herzschlag trägt den Klang (glocke statt Herzschlag), sonst herz
  const g7=kn({art:'takt',v:6,klang:'glocke'},`__ev.length=0;e.turns=0;kniffGegnerzug(e);const a=__ev.filter(x=>x.n==='herzschlag');e.kniff={art:'takt',v:6};e.turns=0;__ev.length=0;kniffGegnerzug(e);const b=__ev.filter(x=>x.n==='herzschlag');return JSON.stringify({a,b})`);
  ok(g7.a[0]&&g7.a[0].klang==='glocke'&&/Glockenschlag/.test(g7.a[0].why)&&g7.b[0]&&g7.b[0].klang==='herz',`takt mit klang: ${g7.a[0]&&g7.a[0].klang} („${g7.a[0]&&g7.a[0].why}“), ohne klang ${g7.b[0]&&g7.b[0].klang}`);
+ // 13. Zweite Wächter: der Seed wählt je Run zwischen waechter und waechter_alt, Dev kann erzwingen
+ const zw=JSON.parse(run(`(()=>{const B=BIOMES.hafen;const alt=B.waechter_alt;B.waechter_alt=['glockenmutter'];const ids=new Set();for(let s=1;s<=30;s++){newRun('fischer',s,{dev:true,route:['hafen','kapelle','salz','eis','pforte']});ids.add(waechterWahl(B));}
+  newRun('fischer',5,{dev:true,route:['hafen','kapelle','salz','eis','pforte']});const a=waechterWahl(B),b2=waechterWahl(B);S.devWaechter='glockenmutter';const d=waechterWahl(B);B.waechter_alt=alt;return JSON.stringify({ids:[...ids],gleich:a===b2,d})})()`));
+ ok(zw.ids.length===2&&zw.gleich&&zw.d==='glockenmutter',`Zweite Wächter: über 30 Seeds beide (${zw.ids.join(', ')}), je Run fest, Dev erzwingt ${zw.d}`);
  console.log(fehler?`${fehler} FEHLER`:'Alles gut.');process.exit(fehler?1:0);})();

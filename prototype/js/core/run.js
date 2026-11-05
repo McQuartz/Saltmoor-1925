@@ -51,7 +51,7 @@ function genWeg(){const key=ebeneKey(),E=RUN.ebenen[key];const r=R(`weg:${S.akt}
  // Ufer unten: im Vorraum wartet „Der, der vor dir kam“ (Elite, Pflicht)
  if(key==='vorraum'&&b.vorraum_elite&&FOES[b.vorraum_elite])arten=['kampf_schwer'];
  S.weg=arten.map((art,i)=>{const hs=(b.weg_hinweise&&b.weg_hinweise[art==='kampf_schwer'?'kampf':art])||[RUN.knoten[art].n];used[art]=(used[art]||0);const hint=hs[(r.int(0,hs.length-1)+used[art]++)%hs.length];
-  const o={art,hint,i};if(art==='kampf'||art==='kampf_schwer')o.foes=key==='vorraum'&&b.vorraum_elite?[b.vorraum_elite]:rollFoes(art,r);if(key==='vorraum'&&b.vorraum_elite&&b.weg_hinweise&&b.weg_hinweise.vorraum)o.hint=b.weg_hinweise.vorraum[0];if(art==='waechter')o.foes=[b.waechter];if(art==='finale')o.foes=[b.waechter];return o;});
+  const o={art,hint,i};if(art==='kampf'||art==='kampf_schwer')o.foes=key==='vorraum'&&b.vorraum_elite?[b.vorraum_elite]:rollFoes(art,r);if(key==='vorraum'&&b.vorraum_elite&&b.weg_hinweise&&b.weg_hinweise.vorraum)o.hint=b.weg_hinweise.vorraum[0];if(art==='waechter')o.foes=[waechterWahl(b)];if(art==='finale')o.foes=[b.waechter];return o;});
  S.phase='weg';
  Bus.emit('weg',{optionen:S.weg.map(o=>o.art),why:`Ebene ${S.ebene+1} von ${aktDef().ebenen.length} (${key}): ${S.weg.map(o=>RUN.knoten[o.art].n).join(', ')} nach Regel ${JSON.stringify(E.mindestens||E.einer_von||E.verschiedene||E.fest||E.fest_wahl||'frei')}`});
  save();Bus.emit('changed');}
@@ -252,6 +252,9 @@ function handgriffAngebot(r,rar,n){let pool=handgriffPool(rar);if(pool.length<n)
  const o=[];const a=r.sample(passt.length>=2?passt:pool,Math.min(2,n));o.push(...a);const rest=pool.filter(id=>!o.includes(id));o.push(...r.sample(rest,n-o.length));
  if(rar==='mix'){const sel=handgriffPool('selten').filter(id=>!o.includes(id));if(sel.length)o[o.length-1]=r.pick(sel);}return o.slice(0,n);}
 // Wächter-Reliquien: eine passt zum erkannten Build (über ihre Eigenschaft), die übrigen frei. Hält bei 39 Reliquien die Builds erreichbar (Zugabe, Balance).
+// Zweite Wächter (Zugabe): biom.waechter_alt (oder waechter_dazu im Ergänzungspaket) – der Seed entscheidet je Run und Akt, wer kommt.
+function waechterAlle(b){return [b.waechter,...(b.waechter_alt||[])].filter(id=>id&&FOES[id]);}
+function waechterWahl(b){if(S.devWaechter&&FOES[S.devWaechter])return S.devWaechter;const a=waechterAlle(b);return a.length>1?R(`waechter:${S.akt}:${S.route[S.akt]}`).pick(a):b.waechter;}
 function reliquienAngebot(r,n){const pool=reliquienPool();const b=buildArchetyp().id;const passt=pool.filter(k=>eigenBuild(ITEMS[k].eigen)===b);
  const o=passt.length?[r.pick(passt)]:[];o.push(...r.sample(pool.filter(k=>!o.includes(k)),n-o.length));return r.shuffle(o).slice(0,n);}
 function reliquienPool(){const p=Object.keys(ITEMS).filter(k=>rarOf(ITEMS[k])==='reliquie'&&!ITEMS[k].nodrop&&!ITEMS[k].bases);return p.length?p:rarePool();}

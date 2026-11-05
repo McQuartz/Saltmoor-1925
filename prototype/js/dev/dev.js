@@ -102,7 +102,7 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   for(let i=0;i<=S.akt;i++)if(!S.route[i])S.route[i]=(S.angebote[i]&&S.angebote[i][0])||RUN.akte[i].biome.find(b=>BIOMES[b]);
   if(art==='weg'){BU.key='';genWeg();return;}if(art==='fight')art='kampf';
   const b=biom();if(art==='waechter'||art==='finale'){if(art==='finale'){S.akt=4;S.ebene=RUN.akte[4].ebenen.length-1;S.depth=31;for(let i=0;i<=4;i++)if(!S.route[i])S.route[i]=RUN.akte[i].biome.find(b=>BIOMES[b]);}else S.ebene=RUN.akte[S.akt].ebenen.length-1;}
-  const o={art,hint:'Dev',i:0};if(art.startsWith('kampf'))o.foes=rollFoes(art,R('dev'+Date.now()));if(art==='waechter'||art==='finale')o.foes=[BIOMES[S.route[S.akt]].waechter];
+  const o={art,hint:'Dev',i:0};if(art.startsWith('kampf'))o.foes=rollFoes(art,R('dev'+Date.now()));if(art==='waechter')o.foes=[S.devWaechter||waechterWahl(BIOMES[S.route[S.akt]])];if(art==='finale')o.foes=[BIOMES[S.route[S.akt]].waechter];
   S.cur=o;if(S.depth<1)S.depth=1;BU.key='';enterNode(o);render();},
  // Autospieler, schnell. Tabelle als Ergebnis (auch für Playwright: window.BOT_ERGEBNIS)
  botLauf(n,s0,imPanel){const jobs=JOBS.map(j=>j.id);const out=[];const t0=performance.now();const keep=S;

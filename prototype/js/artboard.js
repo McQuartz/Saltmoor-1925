@@ -217,7 +217,7 @@ function bauBiome(){const box=$('biomBox');const tf=aktTiefen();
    <div class="etiketten">${A?et(`${A.n} · ${A.titel}`,'gold')+et(`Tiefe ${tf[ai][0]}–${tf[ai][1]}`):''}${A&&A.biome.length>1?et(A.wahl==='figur'?`Wahl über die Vorliebe der Figur`:'Wahl per Seed 50/50','blau'):''}</div>
    <div class="tx">Zeitschicht: <i>${esc(B.zeit)}</i></div>
    ${farbfelder(B)}
-   <div class="ref">Gegner: <i>${(B.gegner||[]).map(fname).map(esc).join(', ')||'–'}</i> · Wächter: <i style="color:#ff8a7a">${esc(fname(B.waechter))}</i></div>
+   <div class="ref">Gegner: <i>${(B.gegner||[]).map(fname).map(esc).join(', ')||'–'}</i> · Wächter: <i style="color:#ff8a7a">${[B.waechter,...(B.waechter_alt||[])].map(fname).map(esc).join(' oder ')}</i></div>
    <div class="ref">Fundpool (${(B.fundpool||[]).length}): ${(B.fundpool||[]).map(id=>icon(id,24,'bild k')).join('')||'leer'}${(()=>{const extra=frs.filter(f=>f.schaltet&&f.schaltet.art==='item');return extra.length?` · nach Fragmenten dazu: ${extra.map(f=>icon(f.schaltet.id,24,'bild k')).join('')}`:'';})()}</div>
    ${kr.n&&kr.n!=='Niemand'?`<div class="kzeile" style="--kb:var(--gold)"><b>Krämer: ${esc(kr.n)}</b>, ${esc(kr.ort)}. <span class="zitat">${esc(kr.zeile)}</span></div>`:'<div class="ref">Kein Krämer.</div>'}
    ${B.uebergang?`<div class="ref">Übergang nach unten: <span class="zitat">„${esc(B.uebergang)}“</span></div>`:''}
