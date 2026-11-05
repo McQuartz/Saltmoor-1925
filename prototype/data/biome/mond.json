@@ -186,9 +186,12 @@
    "stimme": "tiefling",
    "kniff": {
     "art": "ruf",
-    "gegner": "kraterbewohner",
+    "gegner": [
+     "kraterbewohner",
+     "mondmotte"
+    ],
     "alle": 3,
-    "why": "Er klopft an den Rand seines Kraters, und nebenan geht ein Licht an."
+    "why": "Er klopft an den Rand seines Kraters, und nebenan geht ein Licht an. Beim nächsten Mal kommt die Motte zum Licht."
    },
    "beute": null,
    "beute_satz": "Die Lampe in seinem Krater brennt weiter. Niemand stützt sich mehr auf den Rand. Auf dem Wall steht eine Tasse, halb voll.",
@@ -337,12 +340,14 @@
      ],
      [
       {
-       "t": "blk",
-       "v": 20
-      },
-      {
        "t": "atk",
        "v": 17
+      },
+      {
+       "t": "blk",
+       "v": 8,
+       "unverw": true,
+       "why": "Neumond: die Scheibe ist ganz dunkel, nichts trifft sie"
       },
       {
        "t": "atk",

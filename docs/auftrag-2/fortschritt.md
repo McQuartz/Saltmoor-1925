@@ -16,7 +16,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M7 Biome Akt III bis V | fertig | Wald, Gezeitenwerk (Akt III), Walkathedrale, Glasmeer (Akt IV), Ufer unten, Pforte neu, Finale neu (Akt V); neue Gegner Salz, Stadt, Eis; alle Noten 4. Kern: Kniffe teurer/kopie/takt/voraus/verborgen, Pendel, Tausch-/Leih-/Spiegel-Krämer, Vorgänger, Ergänzungspakete |
 | M8 Ereignisse und Balance | fertig | ≥5 Ereignisse je Biom, 15 biomübergreifende, Test aller Wahlen; Builds 44–72 % (Ø 59 %), generischer Bot 65 %, kein Akt über 35 % der Niederlagen; Kampf Ø 4,1–4,5 Züge |
 | M9 Abschluss | fertig | Geklickter Run (40 Stationen), Galerie und Artboard erweitert, Bericht unten |
-| Zugabe | läuft | Vier neue Biome: Leuchtturmhof (I), Glockengießerei (II), Ziegelgruben (III), Mond unter dem Eis (IV), alle Note 4, biom-test 14–17/20, 0 Fehler. Kern: Störkarten-Name aus dem auslösenden Kniff |
+| Zugabe | läuft | Vier neue Biome: Leuchtturmhof (I), Glockengießerei (II), Ziegelgruben (III), Mond unter dem Eis (IV), alle Note 4, biom-test 14–17/20, 0 Fehler. Kern: Störkarten-Name aus dem Kniff, unverwundbarer Zug (`unverw`), `ruf` mit Liste, Tooltip zeigt nächste Schwachstelle. Balance neu gemessen (siehe Entscheidungen) |
 
 ## Einträge je Meilenstein
 
@@ -219,6 +219,8 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 
 | Datum | Meilenstein | Entscheidung | Grund |
 |---|---|---|---|
+| 2026-11-05 | Zugabe | Balance nach den vier neuen Biomen nicht nachgezogen: Build-Bots je 50 Seeds Glutnest 46 %, Brackwasser 42 %, Bollwerk 44 %, Aderlass 52 %, Kettenwerk 48 %, Hagel 38 % (vorher 44–72 %); generischer Bot 63 % (100 Seeds, vorher 65 %); Niederlagen aller Builds je Akt 1/30/45/43/46, kein Akt über 28 % | Zielwerte 04-deckbau §9 sind 40–60 % je Build; jetzt liegen fünf von sechs darin, Hagel knapp darunter, Aderlass nicht mehr darüber. Die neuen Biome machen Akt II etwas härter, das war gewollt (vorher fast keine Niederlagen in Akt II) |
+| 2026-11-05 | Zugabe | Neumond der Rückseite (Mond, Phase 3) jetzt echt unverwundbar: Musterschritt `{t:'blk',v:8,unverw:true}`, steht an zweiter Stelle, damit man ihn kommen sieht; Kraterbewohner ruft abwechselnd Kraterbewohner und Mondmotte | Vorschläge des Mond-Agenten; neuer Kernbaustein im Paketformat dokumentiert |
 | 2026-11-05 | Zugabe | Je Akt I–IV ein weiteres Biom (Leuchtturmhof, Glockengießerei, Ziegelgruben, Mond unter dem Eis) statt neuer Systeme; Ziegelgruben bleibt bei 15/20 im biom-test | Philip: „mehr Inhalt“; vier Pakete nutzen nur vorhandene Kniffe. Ziegelgruben lag bei 82 % (49/60), der Wächter steht schon an der 80-Leben-Grenze, im Gesamtlauf passt es |
 | 2026-11-05 | Zugabe | Störkarten heißen nach dem Kniff, der sie auslöst (`kniffe:[{art:'verstopfen',karte:…}]` wirkte vorher mit dem Namen „Abschrift“) | Fehler vom Leuchtturm-Agenten gemeldet |
 | 2026-11-05 | Zugabe | Wahrsagerin bekommt ein Set aus ihren Startstücken (Teerfackel, Schleier, Kerze): 6 Karten auf der Hand („sie sieht, was kommt“); Veteran trägt den Offiziersmantel statt des Trenchcoats des Detektivs | Über 270 Runs gewann die Wahrsagerin 50 %, der Veteran 87 %, die übrigen 57–80 %. Ein Feuer-Bonus half ihr nicht (gemessen); danach Wahrsagerin 80 %, Veteran 70 % |

@@ -47,4 +47,8 @@ const {ladeKern}=require('./kern');
  const ta=kr('tausch');ok(ta.sold&&ta.gold===0&&ta.nach===ta.vor,`Tausch-Krämer: Item gegen Item, kein Gold (${ta.vor}→${ta.nach} Items)`);
  const le=kr('leihe');ok(le.sold&&le.gold>0&&le.zurueck,`Leih-Krämer: billig (${le.gold} Gold), im nächsten Akt zurück`);
  const sp=kr('spiegel');ok(sp.ids[0]==='sp_knife'&&sp.ids[1]==='sp_lantern',`Spiegel-Krämer: Waren des letzten Krämers gespiegelt (${sp.ids.join(', ')}; Stoffe ${JSON.stringify(sp.st)})`);
+ // 10. Zugabe: unverwundbarer Zug (Neumond), ruf mit Liste, Störkarten-Name aus dem Kniff
+ const u1=kn(null,`e.pat=[{t:'blk',v:8,unverw:true},{t:'atk',v:5}];e.pi=0;S.hand=[{...HANDGRIFFE._t_schlag,st:[]}];const vor=e.hp;playCard(0,0);const a=vor-e.hp;e.pi=1;S.hand=[{...HANDGRIFFE._t_schlag,st:[]}];const v2=e.hp;playCard(0,0);return JSON.stringify({a,b:v2-e.hp})`);ok(u1.a===0&&u1.b===5,`unverw: im Neumond-Zug 0 Schaden (${u1.a}), danach wieder ${u1.b}`);
+ const u2=kn({art:'ruf',gegner:['kurgast','netzflickerin'],alle:3},`const ids=[];for(const t of [2,5]){e.turns=t;S.enemies=S.enemies.slice(0,1);kniffGegnerzug(e);ids.push(S.enemies[1]&&S.enemies[1].id);}return JSON.stringify({ids})`);ok(u2.ids[0]==='kurgast'&&u2.ids[1]==='netzflickerin',`ruf mit Liste: ruft der Reihe nach ${u2.ids.join(', dann ')}`);
+ const u3=kn({art:'waechst',v:1},`e.kniffe=[{art:'abschrift',n:1,karte:'Seewasser'}];S.discard=[];kniffGegnerzug(e);return JSON.stringify({n:S.discard.map(c=>c.n)})`);ok(u3.n[0]==='Seewasser',`Störkarte aus kniffe[] heißt nach ihrem Kniff (${u3.n[0]})`);
  console.log(fehler?`${fehler} FEHLER`:'Alles gut.');process.exit(fehler?1:0);})();

@@ -65,7 +65,7 @@ function addBlock(v,why=''){S.block+=v;Bus.emit('player_block',{v,why});}
 function addSlot(a){if(S.slots[a]<BAL.max_slots){S.slots[a]++;log(`Neuer Slot: ${AREA_N[a]}`);Bus.emit('slot',{a,why:'Ereignis'});}}
 function tgt(){let e=S.enemies[S.target];if(!e||e.hp<=0){e=alive()[0];S.target=S.enemies.indexOf(e);}return e;}
 // Schaden an einem Gegner. Block fängt zuerst. Gibt den echten Schaden zurück.
-function hit(e,dmg,k=1,col,why=''){if(!e||e.hp<=0)return 0;let d=Math.max(0,Math.round(dmg));const brandVorher=e.burn;let ab=0;if(e.block>0){ab=Math.min(e.block,d);e.block-=ab;d-=ab;}
+function hit(e,dmg,k=1,col,why=''){if(!e||e.hp<=0)return 0;const pu=e.pat&&e.pat[e.pi%e.pat.length];if(pu&&pu.unverw){Bus.emit('enemy_hit',{e,d:0,ab:0,col,why:`${e.n} ist diesen Zug unverwundbar${pu.why?' ('+pu.why+')':''}`});return 0;}let d=Math.max(0,Math.round(dmg));const brandVorher=e.burn;let ab=0;if(e.block>0){ab=Math.min(e.block,d);e.block-=ab;d-=ab;}
  e.hp=Math.max(0,e.hp-d);if(S.stats&&!DRY){S.stats.schadenRaus=(S.stats.schadenRaus||0)+d;if(d>(S.stats.maxTreffer||0))S.stats.maxTreffer=d;}Bus.emit('enemy_hit',{e,d,ab,col,why});
  if(e.hp<=0){log(`${e.n} fällt.`);Bus.emit('enemy_die',{e,why:`${e.n} hat kein Leben mehr`});nachTod(e,brandVorher);}
  else checkPhase(e);return d;}
@@ -196,7 +196,8 @@ function kniffEiner(en,k){const why=k.why?` (${k.why})`:'';
  if(k.art==='heiler'){const o=alive().filter(x=>x!==en&&x.hp<x.max).sort((a,b)=>a.hp/a.max-b.hp/b.max)[0];if(o){o.hp=Math.min(o.max,o.hp+(k.v||4));Bus.emit('enemy_heal',{e:o,why:`${en.n} heilt ${o.n} um ${k.v||4}`});}}
  if(k.art==='loeschen'){alive().forEach(o=>{if(o.burn){o.burn=0;Bus.emit('enemy_status',{e:o,status:'geloescht',why:`${en.n} löscht den Brand${why}`});}});}
  if(k.art==='abschrift'){for(let n=0;n<(k.n||1);n++)S.discard.push(stoerKarte(en,k));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n||1}× „${k.karte||(en.kniff&&en.kniff.karte)||"Abschrift"}“ in deinen Ablagestapel`});}
- if(k.art==='ruf'&&FOES[k.gegner]&&en.turns%(k.alle||3)===2&&alive().length<4){const a=mkEnemy(k.gegner);a.gerufen=true;if(a.kniff&&a.kniff.art==='ruf')a.kniff=null;a.x=rs('aufstellung').pick([.16,.84,.3,.7]);a.reihe=rs('aufstellung').pick([0,1]);S.enemies.push(a);Bus.emit('enemy_spawn',{e:a,why:`${en.n} ruft ${a.n}`});}
+ const rufId=k.art==='ruf'?[].concat(k.gegner)[Math.floor(en.turns/(k.alle||3))%[].concat(k.gegner).length]:null;
+ if(k.art==='ruf'&&FOES[rufId]&&en.turns%(k.alle||3)===2&&alive().length<4){const a=mkEnemy(rufId);a.gerufen=true;if(a.kniff&&a.kniff.art==='ruf')a.kniff=null;a.x=rs('aufstellung').pick([.16,.84,.3,.7]);a.reihe=rs('aufstellung').pick([0,1]);S.enemies.push(a);Bus.emit('enemy_spawn',{e:a,why:`${en.n} ruft ${a.n}`});}
  if(k.art==='kopie'){const c=S.vorherKarte;if(c&&!c.unspielbar){if(c.atk){gegnerTrifft(en,(c.atk+en.str)*(c.h||1),`${en.n} schreibt „${c.n}“ ab und spielt sie gegen dich`);}else if(c.blk){en.block+=c.blk;Bus.emit('enemy_block',{e:en,why:`${en.n} schreibt „${c.n}“ ab: +${c.blk} Block`});}
    Bus.emit('toast',{a:'ABGESCHRIEBEN',b:c.n});}
    if(k.n){for(let n=0;n<k.n;n++)S.discard.push(stoerKarte(en,k));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n}× „${k.karte||(en.kniff&&en.kniff.karte)||"Abschrift"}“ in deinen Ablagestapel`});}}
