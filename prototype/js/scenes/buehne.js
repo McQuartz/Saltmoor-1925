@@ -34,7 +34,7 @@ function visOf(e){let v=BU.vis.get(e.uid);if(!v){v={hit:0,kx:0,lunge:0,dying:0,g
 // Position eines Gegners in der Szene (Fußpunkt, Größe), aus Aufstellung und Reihen der Szene
 function enemyBox(e){const sz=BU.sz||szeneHolen();const rh=sz.reihen[e.reihe??2]||sz.reihen[2];const sp=e.sprite&&SPRITES[e.sprite];
  let w=96,h=120;if(sp&&sp.meta){w=sp.meta.w;h=sp.meta.h;}else if(e.spr==='boss'){w=160;h=140;}else{w=64;h=80;}
- const sk=e.rang==='normal'||e.pendel?rh.skala:1;if(e.pendel&&!FAST){e.xa=e.xa==null?e.x:e.xa+(e.x-e.xa)*.06;}const ex=e.pendel&&e.xa!=null?e.xa:e.x;return{x:Math.round(ex*SW),y:rh.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel:rh.nebel,kopf:sp&&sp.meta&&sp.meta.kopf!=null?rh.y-Math.round((sp.meta.fuss[1]-(Array.isArray(sp.meta.kopf)?sp.meta.kopf[1]:sp.meta.kopf))*sk):rh.y-Math.round(h*sk*.92)};}
+ const sk=e.rang==='normal'||e.pendel?rh.skala:e.rang==='boss'?.92:1;if(e.pendel&&!FAST){e.xa=e.xa==null?e.x:e.xa+(e.x-e.xa)*.06;}const ex=e.pendel&&e.xa!=null?e.xa:e.x;return{x:Math.round(ex*SW),y:rh.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel:rh.nebel,kopf:sp&&sp.meta&&sp.meta.kopf!=null?rh.y-Math.round((sp.meta.fuss[1]-(Array.isArray(sp.meta.kopf)?sp.meta.kopf[1]:sp.meta.kopf))*sk):rh.y-Math.round(h*sk*.92)};}
 const FX={
  pos(e){return enemyBox(e);},
  hit(e,d,col,wer){if(!e)return;const W=BAL.wucht||{},k=wer==='eigen'?(W.eigen||1):(W.gegner||1);const v=visOf(e);const p=enemyBox(e);v.hit=.11;v.kx=Math.min(10,(W.rueckstoss||4)*k+d/4);v.anim='treffer';v.at=0;burst(p.x,p.y-p.h*.55,col||'#c8483a',Math.min(28,4+d)*k|0,1.5*k);

@@ -12,7 +12,7 @@ const {ladeKern}=require('./kern');
     const netz=()=>{if(S.akt>=akt)return;if(S.hp<maxHp()*.6)S.hp=maxHp();if(S.turnNo>30)S.enemies.forEach(e=>{e.hp=0;});};Bus.on('turn_start',netz);
     let v=0;while(S.akt<akt&&!['strand','ende'].includes(S.phase)&&v++<8000){if(S.hp<maxHp()*.6)S.hp=maxHp();if(!Bot.schritt())throw new Error('Vorlauf hängt in '+S.phase);}
     if(S.akt!==akt){out.push({seed,job:jobs[i%6],vorlauf:true,gegner:[],kaempfe:0});FAST=kf;continue;}S.hp=maxHp();
-    Bus.on('fight_start',p=>{if(S.akt===akt){kaempfe++;S.enemies.forEach(e=>gegner.add(e.id));}});
+    Bus.on('fight_start',p=>{if(S.akt===akt){kaempfe++;S.enemies.forEach(e=>gegner.add(e.id));}});Bus.on('enemy_spawn',p=>{if(S.akt===akt&&p&&p.e)gegner.add(p.e.id);});
     let g=0;while(S.akt===akt&&!['strand','ende'].includes(S.phase)&&g++<3000){if(!Bot.schritt())throw new Error('Bot hängt in '+S.phase);}
    }catch(e){fehler=String(e&&e.stack||e).split('\\n').slice(0,3).join(' | ');}finally{FAST=kf;}
    out.push({seed,job:jobs[i%6],ueberlebt:S.akt>akt||S.phase==='ankunft'||S.phase==='ende',hp:S.hp,max:maxHp(),kaempfe,gegner:[...gegner],fehler});}

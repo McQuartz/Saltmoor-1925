@@ -12,8 +12,8 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M3 Deckbau-Kern | fertig | Kerben, Handgriffe, 7 Schlagworte, Belohnung, Ritzen, Schleifen, Umritzen, Verkaufen, Rucksackmodus, Hover-Vorschau, Dev-Reiter Deck |
 | M4 Items, Handgriffe, Builds | fertig | 70 Handgriffe, 74 Items (18 Reliquien), 6 Builds mit Beispieldeck und Build-Bot; Builds 30–40 % (Feinabstimmung M8) |
 | M5 Pipeline und alte Schwächen | fertig | Neubauten fertig (Mumie, Nachgeher, Ertrunkener, Netzflickerin-Rücken, Tiefling, Nest, alle Note 4); Icons in Arbeit |
-| M6 Biome Akt I und II | läuft | Fabrik, Kurhaus, Nachtzug, Kloster, Grotte fertig (alle Note 4); neue Gegner Hafen/Moor/Kapelle in Arbeit |
-| M7 Biome Akt III bis V | läuft | Wald, Gezeitenwerk, Walkathedrale, Glasmeer, Ufer, Pforte neu, Finale neu, Gegner Salz/Stadt/Eis in Arbeit; Kern: Kniffe teurer/kopie/takt/voraus, Ergänzungspakete, Vorgänger |
+| M6 Biome Akt I und II | fertig | Fabrik, Kurhaus, Nachtzug, Kloster, Grotte (alle Note 4); neue Gegner Hafen, Moor, Kapelle; Torfstich heller |
+| M7 Biome Akt III bis V | fertig | Wald, Gezeitenwerk (Akt III), Walkathedrale, Glasmeer (Akt IV), Ufer unten, Pforte neu, Finale neu (Akt V); neue Gegner Salz, Stadt, Eis; alle Noten 4. Kern: Kniffe teurer/kopie/takt/voraus/verborgen, Pendel, Tausch-/Leih-/Spiegel-Krämer, Vorgänger, Ergänzungspakete |
 | M8 Ereignisse und Balance | läuft | 15 biomübergreifende Ereignisse, Ereignis-Test (alle Wahlen); Balance folgt, wenn alle Biome stehen |
 | M9 Abschluss | offen | |
 | Zugabe | offen | |
@@ -158,6 +158,11 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 | Hintergrund Wald (3 Varianten, Wurzelgewölbe) | Wald | 4 | [M7](bilder/M7/wald/hintergrund-varianten.png) |
 | Der, der vor dir kam (Elite) | Ufer | 4 (unterer Mantel dunkel) | [M7](bilder/M7/ufer/im-spiel-vorraum-elite.png) |
 | Hintergrund Ufer (3 Varianten, Finale, Rast, Ankunft) | Ufer | 4 | [M7](bilder/M7/ufer/varianten.png) |
+| Das, was ruft: König (Phase 1, neu) | Pforte | 4 | [M7](bilder/M7/pforte/nachher-finale-p1.png) |
+| Das, was ruft: Schlund (Phase 2, neu) | Pforte | 4 knapp (Flügelfalten regelmäßig, weniger Kontrast) | [M7](bilder/M7/pforte/nachher-finale-p2.png) |
+| Das, was ruft: Auge (Phase 3, neu) | Pforte | 4 | [M7](bilder/M7/pforte/nachher-finale-p3-augen.png) |
+| Augen im Rand (Laternen, neu) | Pforte | 4 | [M7](bilder/M7/pforte/nachher-finale-p3-augen.png) |
+| Hintergrund Pforte neu (Hafen unten, Finale, Ankunft) | Pforte | 4 knapp (einfarbig, Fassaden flach) | [M7](bilder/M7/pforte/nachher-szenen.png) |
 | Der Mann im Salz (neu) | Salz | 4 (Rumpf dunkel) | [M7](bilder/M7/alte-biome/salz-bogen.png) |
 | Der Vermesser (neu) | Stadt | 4 (Varianten ähnlich) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
 | Der aus dem Relief (neu) | Stadt | 4 (stärkstes Bild der Ergänzungen) | [M7](bilder/M7/alte-biome/stadt-bogen.png) |
@@ -170,6 +175,7 @@ Allgemeiner Autospieler 30 Seeds: 47 %. **Korrigierte Ausreißer:** Brackwasser 
 
 | Datum | Meilenstein | Entscheidung | Grund |
 |---|---|---|---|
+| 2026-11-05 | M7 | Pforte neu als gespiegelter Hafen am Meeresgrund, Finale neu gezeichnet und leichter abgestimmt (`ruft` 280 Leben, Ø 10,3 Züge, 72 % überstanden); Boss mit Skala 0,92, damit die Krone nicht oben anstößt | Mo fand die alte Pforte zu sehr nach Science-Fiction; Auftrag: Finale lesbarer, Kampf 8–12 Züge. Die „über 40 % der Niederlagen“ ließen sich mit dem heutigen Bot nicht nachstellen (jetzt 11 %) |
 | 2026-11-05 | M7 | Ufer: eigene Ankunft-Szene und eigener Ankunftssatz je Biom, Elite-Größe 128 × 160 in der Prüfung, der Vorgänger trägt ohne gespeicherten Run zusätzlich einen Fund je früherem Akt | Vorschläge des Ufer-Agenten; vorher zeigte jedes Biom die Ankunft der Pforte, und im Test war die Elite zu schwach |
 | 2026-11-05 | M7 | Vorschläge der Walkathedrale (Verwundbar am Spieler, Kniff `frisst`, Szene pulsiert synchron zum Herzschlag) vorerst nicht umgesetzt; der Herzschlag ist dafür hörbar und sichtbar | Jeder Vorschlag braucht neues System (Spieler-Zustand, Bild-Haken); Kandidaten für die Zugabe |
 | 2026-11-05 | M7/M8 | `tools/biom-test.js` spielt die Akte vor dem Biom wirklich (Heilung als Netz, Kämpfe im Vorlauf höchstens 30 Züge); Seeds, die im Vorlauf sterben, zählen nicht | Vorher startete jeder Akt mit dem Startdeck: Akt IV war mit 2/10 kaum schaffbar, obwohl ein echter Run dort ein gewachsenes Deck hat (Hinweis des Walkathedrale-Agenten). Neue Werte je 20 Seeds: Hafen 16, Kapelle 19, Salz 14, Stadt 11, Eis 14/17, Pforte 13/16 |
