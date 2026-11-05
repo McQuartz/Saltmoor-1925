@@ -1,19 +1,19 @@
-// Trauerschleier: ein schwarzer Damenhut von der Seite, flacher Kopf mit Stoffblume, breite Krempe;
-// von der Krempe fällt ein Tüllschleier wie ein Vorhang bis tief herab, mit gewelltem Saum. Durch den Tüll sieht man hindurch.
+// Trauerschleier: ein schwarzer Damenhut schräg von vorn, breite runde Krempe, hoher Kopf mit Stoffblume; von der
+// vorderen Krempe hängt ein halbrunder Tüllschleier herab, ein lichtes Netz mit hellem Saum. Durch den Tüll sieht man hindurch.
 'use strict';
 module.exports = {
   form(A) {
-    const { Pg, E, saum } = A;
-    const kopf = [Pg([[14, 13], [16, 5], [32, 4], [35, 13]], null, { b: 1.6, rd: 1.5 })];
-    const krempe = [E(24, 14, 20, 3.6, null, { pf: 'bevel', hz: 0.3 })];
-    const blume = [E(33, 8, 3.6, 3.2, null, { pf: 'bevel', hz: 0.5 })];
-    const schleier = [Pg([[6, 15], [42, 15], [44, 42], ...saum(44, 4, 44, 6, 3, 4), [4, 42]], null, { b: 1, rd: 0.6 })];
+    const { E, Pg } = A;
+    const krempe = [E(24, 17, 22, 7, null, { pf: 'bevel', hz: 0.3 })];
+    const kopf = [Pg([[13, 15], [15, 4], [33, 4], [35, 15]], null, { b: 1.8, rd: 2 })];
+    const blume = [E(32, 7, 4, 3.4, null, { pf: 'bevel', hz: 0.5 })];
+    const schleier = [Pg([[6, 19], [42, 19], [41, 32], [34, 40], [24, 43], [14, 40], [7, 32]], null, { b: 1, rd: 1 })];
     return {
-      gruppen: [{ p: schleier, mat: 'tuch', k: 0, tone: 0.16 }, { p: krempe, mat: 'tuch', k: 0, tone: 0.12 }, { p: kopf, mat: 'tuch', k: 0, tone: 0.16 }, { p: blume, mat: 'tuch', k: 0, tone: 0.26 }],
+      gruppen: [{ p: schleier, mat: 'tuch', k: 0, tone: 0.1 }, { p: krempe, mat: 'tuch', k: 0, tone: 0.18 }, { p: kopf, mat: 'tuch', k: 0, tone: 0.2 }, { p: blume, mat: 'tuch', k: 0, tone: 0.3 }],
       details(P) {
-        // Tüll: Netz aus Rauten, nur jedes dritte Pixel bleibt stehen; Ränder bleiben geschlossen (Randlicht)
-        for (let y = 19; y < 47; y++) for (let x = 6; x < 43; x++) { const i = P.info(x, y); if (!i || i.mat !== 'tuch' || i.stufe >= 4) continue; if ((x + y) % 4 === 0 || (x - y + 64) % 4 === 0) continue; let rand = false; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (!P.get(x + dx, y + dy)) rand = true; if (!rand && x > 7 && x < 41) P.set(x, y, 'tuch0'); }
-        P.set(33, 7, 'a3'); P.set(32, 8, 'a2'); P.ritz(15, 11, 34, 11, -1);
+        for (let y = 21; y < 44; y++) for (let x = 6; x < 43; x++) { const i = P.info(x, y); if (!i || i.mat !== 'tuch' || i.stufe >= 4) continue; let rand = false; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (!P.get(x + dx, y + dy)) rand = true; if (rand) continue; P.set(x, y, (x + y) % 3 === 0 || (x - y + 99) % 3 === 0 ? 'tuch3' : 'tuch0'); }
+        for (let x = 8; x < 41; x++) for (let y = 30; y < 44; y++) { if (P.info(x, y) && !P.get(x, y + 1)) { P.set(x, y, x % 2 ? 'tuchR1' : 'a2'); break; } }
+        P.ritz(14, 13, 34, 13, -2); P.set(32, 6, 'a3'); P.set(31, 7, 'a2');
       },
     };
   },

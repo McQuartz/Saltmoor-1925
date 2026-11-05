@@ -165,15 +165,15 @@
    "pat": [
     {
      "t": "atk",
-     "v": 5
+     "v": 4
     },
     {
      "t": "blk",
-     "v": 7
+     "v": 6
     },
     {
      "t": "atk",
-     "v": 7
+     "v": 6
     }
    ],
    "sprite": "splitterchor_a",
@@ -197,7 +197,7 @@
    "n": "Der Vorhergehende",
    "biom": "glasmeer",
    "rang": "normal",
-   "hp": 22,
+   "hp": 21,
    "weak": "V",
    "pat": [
     {

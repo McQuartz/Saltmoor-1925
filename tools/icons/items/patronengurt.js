@@ -1,19 +1,22 @@
-// Patronengurt des Lotsen: ein breiter Lederriemen als schräge Schlaufe (so, wie er über der Schulter hing),
-// außen ringsum die Messingpatronen in Schlaufen, alle nach außen; eine Schlaufe ist leer. Messingschnalle unten.
+// Patronengurt des Lotsen: ein breiter Ledergurt quer durchs Bild, darauf in einer Reihe die Messingpatronen in Schlaufen,
+// alle gleich ausgerichtet, die letzte Schlaufe leer; am einen Ende die große Messingschnalle mit Dorn.
 'use strict';
 module.exports = {
   form(A) {
-    const { ring, achse, acap, Pg } = A;
-    const cx = 24, cy = 25, rx = 13, ry = 18, dreh = -0.5;
-    const P0 = (a, k = 1) => { const x = Math.cos(a) * rx * k, y = Math.sin(a) * ry * k; return [cx + x * Math.cos(dreh) - y * Math.sin(dreh), cy + x * Math.sin(dreh) + y * Math.cos(dreh)]; };
-    const gurt = []; for (let i = 0; i < 28; i++) { const a0 = i / 28 * Math.PI * 2, a1 = (i + 1) / 28 * Math.PI * 2; gurt.push(A.C(...P0(a0), ...P0(a1), 2.6, 2.6)); }
-    const pat = []; const leer = 7;
-    for (let i = 0; i < 14; i++) { if (i === leer) continue; const a = i / 14 * Math.PI * 2; const [x0, y0] = P0(a, 1.0), [x1, y1] = P0(a, 1.4); pat.push(A.C(x0, y0, x1, y1, 1.6, 1.3)); }
-    const [sx, sy] = P0(Math.PI * 0.5); const schnalle = [Pg([[sx - 3.5, sy - 3], [sx + 3.5, sy - 3], [sx + 3.5, sy + 3], [sx - 3.5, sy + 3]], null, { b: 0.6 })];
-    void ring; void achse; void acap;
+    const { achse, apg, acap } = A;
+    const ax = achse(3, 34, -0.42);
+    const gurt = [apg(ax, [[0, -3.6], [46, -3.6], [46, 3.6], [0, 3.6]], null, { b: 1.2, rd: 0.4 })];
+    const schlaufen = [], patronen = [], spitzen = [];
+    for (let i = 0; i < 9; i++) { const t = 9 + i * 4.2; schlaufen.push(apg(ax, [[t - 1.6, -4], [t + 1.6, -4], [t + 1.6, 1.5], [t - 1.6, 1.5]], null, { b: 0.6 })); if (i < 8) { patronen.push(acap(ax, t, -4, t, -11, 1.5, 1.5)); spitzen.push(acap(ax, t, -11, t, -13.5, 1.3, 0.7)); } }
+    const schnalle = [apg(ax, [[-1, -5.2], [6, -5.2], [6, 5.2], [-1, 5.2]], null, { b: 1, rd: 0.6 })];
     return {
-      gruppen: [{ p: pat, mat: 'messing', k: 0 }, { p: gurt, mat: 'leder', k: 0 }, { p: schnalle, mat: 'messing', k: 0 }],
-      details(P) { const [x, y] = P0(leer / 14 * Math.PI * 2, 1.08); P.set(x, y, 'kohle0'); P.set(sx, sy, 'kohle0'); P.set(sx - 1, sy, 'kohle0'); for (let i = 0; i < 14; i++) { if (i === leer) continue; const [px, py] = P0(i / 14 * Math.PI * 2, 1.42); P.auf(px, py, "kupfer1"); } },
+      gruppen: [{ p: gurt, mat: 'leder', k: 0 }, { p: patronen, mat: 'messing', k: 0 }, { p: spitzen, mat: 'kupfer', k: 0 }, { p: schlaufen, mat: 'leder', k: 0, tone: 0.08 }, { p: schnalle, mat: 'messing', k: 0 }],
+      details(P) {
+        { const [a, b] = ax.P(0.8, -3.8), [c, d] = ax.P(0.8, 3.8); P.line(a, b, c, d, 'kohle0', true); const [e, f] = ax.P(0.8, 0), [g, h] = ax.P(5, 0); P.line(e, f, g, h, 'messing3', true); }
+        for (let i = 0; i < 9; i++) { const [x, y] = ax.P(9 + i * 4.2, -2); P.stufe(x, y, -1); }
+        const [lx, ly] = ax.P(9 + 8 * 4.2, -1.5); P.set(lx, ly, 'kohle0');
+        const [kx, ky] = ax.P(9 + 3 * 4.2, -12); P.set(kx, ky, 'a3');
+      },
     };
   },
 };

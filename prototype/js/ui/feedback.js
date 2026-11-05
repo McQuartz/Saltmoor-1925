@@ -80,3 +80,5 @@ setInterval(()=>{if(!S.route||S.scares||document.hidden||!Einst.get('jumpscare')
 // Belohnung aufdecken: kurzer Ton je Karte, tiefer Glockenschlag bei Reliquien (Wächter)
 Bus.on('reward',({items,hg})=>{if(FAST)return;const n=(hg||[]).length+(items||[]).length;for(let i=0;i<n;i++)setTimeout(()=>sfx.card(),180*i+80);
  if((items||[]).some(id=>ITEMS[id]&&rarOf(ITEMS[id])==='reliquie')&&typeof Music!=='undefined'&&audioOn)setTimeout(()=>{try{Music.uebergang();}catch(e){}},600);});
+// Herzschlag (Kniff „takt“, Walkathedrale): doppelter tiefer Schlag, kurzes Pulsieren, der Gegner bekommt Block
+Bus.on('herzschlag',({e})=>{if(FAST)return;if(typeof thump==='function'){thump(70,34,.35,.5,0,true);thump(64,30,.3,.38,.24,true);}FX.shake(3);FX.flash('#5a0a0a',.18);setTimeout(()=>FX.shake(2),240);});

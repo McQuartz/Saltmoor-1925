@@ -1,15 +1,16 @@
-// Die Knotenschnur: eine Lotschnur, die in einer großen Schlaufe von links oben herabfällt, mit einem dicken Knoten
-// je Faden Tiefe (unten immer dichter), am Ende das schwere, kegelige Bleilot. Unten mehr Knoten, als die Schnur lang ist.
+// Die Knotenschnur: eine Lotschnur, die in einem Zickzack herabhängt, mit großen, hellen Knoten (einer je Faden Tiefe,
+// unten immer dichter) und unten dem schweren, kegeligen Bleilot. Unten sind mehr Knoten, als die Schnur lang ist.
 'use strict';
 module.exports = {
   form(A) {
-    const { kurve, E, Pg } = A;
-    const schnur = kurve([[6, 4], [18, 2], [26, 12], [14, 20], [20, 28], [30, 30], [34, 34]], 1, 1, null, { cr: true }, 40);
-    const knoten = []; const qs = [0.12, 0.26, 0.38, 0.49, 0.58, 0.66, 0.73, 0.79, 0.84, 0.88, 0.92]; for (const q of qs) { const [x, y] = schnur.B(q); knoten.push(E(x, y, 2, 2, null, { pf: 'bevel', hz: 0.6 })); }
-    const lot = [Pg([[31, 33], [38, 32], [44, 42], [40, 46], [33, 44]], null, { b: 2, rd: 1 })];
+    const { kurve, E, Pg, ring } = A;
+    const oese = ring(10, 4, 2.4, 2.4, 0.9, null, {}, 10);
+    const schnur = kurve([[10, 6], [30, 10], [14, 18], [32, 24], [20, 30], [26, 34]], 0.9, 0.9, null, { cr: true }, 40);
+    const qs = [0.1, 0.25, 0.4, 0.53, 0.64, 0.73, 0.8, 0.86, 0.91]; const knoten = qs.map(q => { const [x, y] = schnur.B(q); return E(x, y, 2.8, 2.6, null, { pf: 'bevel', hz: 0.6 }); });
+    const lot = [Pg([[21, 34], [31, 34], [32, 38], [26, 47], [20, 38]], null, { b: 2, rd: 0.8 })];
     return {
-      gruppen: [{ p: [...schnur, ...knoten], mat: 'wolle', k: 0.4 }, { p: lot, mat: 'eisen', k: 0 }],
-      details(P) { P.set(40, 44, 'a3'); P.set(39, 43, 'a2'); P.set(36, 35, 'eisen3'); },
+      gruppen: [{ p: oese, mat: 'eisen', k: 0 }, { p: schnur, mat: 'wolle', k: 0, tone: 0.1 }, { p: knoten, mat: 'wolle', k: 0, tone: 0.2 }, { p: lot, mat: 'eisen', k: 0, tone: 0.05 }],
+      details(P) { for (const q of qs) { const [x, y] = schnur.B(q); P.stufe(x - 1, y + 1, -2); P.stufe(x + 1, y - 1, -1); } P.set(26, 45, 'a3'); P.set(25, 44, 'a2'); },
     };
   },
 };

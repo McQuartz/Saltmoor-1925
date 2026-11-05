@@ -179,7 +179,7 @@
    "stimme": "hirte",
    "kniff": {
     "art": "dornen",
-    "v": 2,
+    "v": 3,
     "why": "Sein Geweih hängt wie ein Vorhang vor ihm. Wer zuschlägt, greift hinein."
    },
    "beute": null,
@@ -190,7 +190,7 @@
    "n": "Der Harzfang",
    "biom": "wald",
    "rang": "normal",
-   "hp": 18,
+   "hp": 20,
    "weak": "L",
    "pat": [
     {
@@ -235,7 +235,7 @@
     },
     {
      "t": "atk",
-     "v": 7
+     "v": 8
     },
     {
      "t": "atk",
@@ -262,7 +262,7 @@
    "n": "Der Wurzelstock",
    "biom": "wald",
    "rang": "waechter",
-   "hp": 80,
+   "hp": 86,
    "weak": "F",
    "pat": [
     {
