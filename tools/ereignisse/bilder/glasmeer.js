@@ -240,22 +240,25 @@ module.exports = {
       decke(K, hy - 2, { rx: 120, zapfen: 6 });
       K.feld(0, hy - 3, 160, hy + 1, EIS.slice(2, 8), (x, y) => .4 + (y - hy + 3) / 4 * .4);
       // Tiefe unter dem Glas: grünes Licht unten rechts, darin ein Hundekopf
-      const gx = 124, gy = 74;
+      const gx = 126, gy = 70;
       glas(K, hy, (x, y) => Math.max(0, 1 - Math.hypot((x - gx) / 70, (y - gy) / 40)) * .7);
       spiegeln(K, hy, 44, .25);
       tiefenlicht(K, gx, gy, 64, 34, NORD[2], 1);
       tiefenlicht(K, gx, gy, 30, 18, NORD[3], 1);
       // Hundekopf unter dem Glas, nur als Umriss im grünen Licht, die Schnauze zur Leine gereckt
-      const hk = K.maske();
-      hk.ell(gx, gy, 8, 7); hk.kap(gx - 5, gy - 1, gx - 16, gy - 6, 4.2, 2.6); hk.ell(gx - 17, gy - 6.5, 2, 1.8);
-      hk.poly([[gx - 1, gy - 5], [gx + 3, gy - 17], [gx + 6, gy - 4]]); hk.poly([[gx + 4, gy - 4], [gx + 10, gy - 14], [gx + 10, gy - 1]]);
-      hk.kap(gx + 2, gy + 4, gx + 8, gy + 18, 6, 8);
-      for (let y = hk.y0; y <= hk.y1; y++) for (let x = hk.x0; x <= hk.x1; x++) if (hk.has(x, y)) K.set(x, y, y > gy + 8 ? GLAS[1] : GLAS[2]);
-      umriss(K, hk, NORD[4]);
-      for (let i = 0; i < 7; i++) K.set(gx - 16 + i * 1.3, gy - 4 + i * .5, GLAS[0]);   // Maul
-      K.set(gx - 5, gy - 3, NORD[6]); K.set(gx - 4, gy - 3, NORD[5]);
-      // Halsband, an dem die Leine unten ankommt
-      for (let i = -6; i <= 6; i++) K.set(gx + 4 + i * .3, gy + 9 + i * .5, NORD[5]);
+      // er zieht weg, nach unten rechts: Kopf von hinten links gesehen, Schnauze nach rechts
+      const hk = K.maske(), k = 1.4;
+      hk.ell(gx, gy, 8 * k, 7 * k); hk.kap(gx + 5 * k, gy + 1 * k, gx + 16 * k, gy + 5 * k, 4.2 * k, 2.6 * k); hk.ell(gx + 17 * k, gy + 5.5 * k, 2 * k, 1.8 * k);
+      hk.poly([[gx - 6 * k, gy - 4 * k], [gx - 4 * k, gy - 16 * k], [gx + 1 * k, gy - 5 * k]]); hk.poly([[gx - 1 * k, gy - 5 * k], [gx + 3 * k, gy - 15 * k], [gx + 6 * k, gy - 3 * k]]);
+      hk.kap(gx - 4 * k, gy + 3 * k, gx - 9 * k, gy + 14 * k, 6 * k, 8 * k);
+      for (let y = hk.y0; y <= hk.y1; y++) for (let x = hk.x0; x <= hk.x1; x++) if (hk.has(x, y)) K.set(x, y, GLAS[0]);
+      umriss(K, hk, NORD[5]);
+      K.kante(hk, gx + 10, gy + 30, 50, [NORD[4], NORD[6]], { min: .3 });
+      for (let i = 0; i < 9; i++) K.set(gx + 9 * k + i * 1.4, gy + 4 * k + i * .3, NORD[2]);   // Maul
+      K.set(gx + 6 * k, gy - 1 * k, NORD[6]);
+      // Halsband im Nacken, dort kommt die Leine an
+      const hb = [gx - 7 * k, gy + 2 * k];
+      for (let i = -5; i <= 5; i++) K.set(hb[0] + i * .5 + 3, hb[1] + i * .9 + 2, NORD[5]);
       // Eintauchpunkt mit Ringen, als wäre das Glas Wasser
       const ex = 92, ey = 46;
       for (const [r, c, d] of [[5, GLAS[8], 1], [10, GLAS[7], .8], [16, GLAS[5], .6]]) for (let a = 0; a < Math.PI * 2; a += .04) { const x = ex + Math.cos(a) * r, y = ey + Math.sin(a) * r * .24; if (B.bay(x, y) < d) K.set(x, y, c); }
@@ -274,6 +277,7 @@ module.exports = {
       // Fingerfugen und eine Naht am Handschuh
       for (let i = 1; i < 4; i++) for (let k = -2; k <= 1; k++) K.set(33 - i * 1.2 + k, 64.4 + i * 3.6, '#060403');
       for (let y = 66; y < 80; y += 2) K.set(14, y, '#2a1e14');
+      for (let i = 0; i < 4; i++) K.set(36 - i * 1.2, 65 + i * 3.6, '#9a7040');
       K.kante(hand, gx, gy, 140, ['#1b6a3c', '#2a9a56'], { min: .5 });
       K.vignette(.65, { cx: 96, cy: 60 });
     },
