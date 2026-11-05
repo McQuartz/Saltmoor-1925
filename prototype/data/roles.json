@@ -79,5 +79,18 @@
    "n": 3,
    "mult": 2
   }
+ },
+ {
+  "n": "Wahrsagerin",
+  "i": [
+   "torch",
+   "veil",
+   "candle"
+  ],
+  "t": "Sie sieht, was kommt: 6 statt 5 Karten auf der Hand.",
+  "bonus": {
+   "type": "hand_size",
+   "amount": 6
+  }
  }
 ]

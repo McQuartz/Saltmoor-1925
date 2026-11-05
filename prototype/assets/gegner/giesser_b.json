@@ -1,0 +1,53 @@
+{
+ "id": "giesser",
+ "rang": "normal",
+ "w": 96,
+ "h": 120,
+ "zone": "glockengiesserei",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  56,
+  115
+ ],
+ "kopf": [
+  44,
+  24
+ ],
+ "augen": [
+  [
+   38,
+   49
+  ],
+  [
+   42,
+   49
+  ],
+  [
+   15,
+   79
+  ]
+ ],
+ "augenfarbe": "#ffd36a"
+}

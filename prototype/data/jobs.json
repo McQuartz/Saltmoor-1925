@@ -275,7 +275,7 @@
   "id": "wahrsagerin",
   "n": "Wahrsagerin",
   "d": "Liest Karten auf dem Jahrmarkt. Diesmal liest sie die richtigen.",
-  "set": null,
+  "set": "Wahrsagerin",
   "ausrede": "Die Karten zeigen seit Wochen dasselbe Bild. Ich will wissen, was es bedeutet.",
   "wahrheit": "Das Bild war ein Spiegel.",
   "vorliebe": "hafen",
@@ -329,7 +329,7 @@
    "poker"
   ],
   "k": [
-   "trench"
+   "officercoat"
   ],
   "t": [
    "salt"
@@ -341,14 +341,14 @@
    "poker": [
     "stossen"
    ],
-   "trench": [
-    "ausweichen"
-   ],
    "salt": [
     "abwarten"
    ],
    "boots": [
     "durchatmen"
+   ],
+   "officercoat": [
+    "ausweichen"
    ]
   }
  }
