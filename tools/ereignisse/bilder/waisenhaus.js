@@ -16,7 +16,7 @@ const ROT = '#ff3b2b', ROTG = '#4a1210', NASS = '#2c3c48', NASS2 = '#3f5868';
 // Kind im Nachthemd, von vorn oder seitlich: Kopf groß, nasses Haar, zwei rote Punkte
 function kind(K, x, yb, h, o) {
   o = o || {}; const m = K.maske(), k = h / 30;
-  m.poly([[x - 4 * k, yb], [x - 2.6 * k, yb - 15 * k], [x - 1.6 * k, yb - 19 * k], [x + 1.6 * k, yb - 19 * k], [x + 2.6 * k, yb - 15 * k], [x + 4 * k, yb]]);
+  m.poly([[x - 5.5 * k, yb - 1.5 * k], [x - 3.2 * k, yb - 15 * k], [x - 2.4 * k, yb - 19 * k], [x + 2.4 * k, yb - 19 * k], [x + 3.2 * k, yb - 15 * k], [x + 5.5 * k, yb - 1.5 * k]]); m.rect(x - 2.4 * k, yb - 2 * k, 1.4 * k, 2 * k); m.rect(x + 1 * k, yb - 2 * k, 1.4 * k, 2 * k);
   m.ell(x, yb - 23.5 * k, 3.8 * k, 4.2 * k);
   m.poly([[x - 3.8 * k, yb - 24 * k], [x + 3.8 * k, yb - 24 * k], [x + 4 * k, yb - 13 * k], [x - 4 * k, yb - 13 * k]]);
   K.form(m, o.tiefe || 0, { k: KIND, r: o.rand || RAND, ton: 1.3, fase: .8, rand: 1 });
@@ -71,9 +71,9 @@ module.exports = {
       const l = K.maske(); l.rect(29, 0, 1, 9); l.poly([[24, 13], [27, 9], [33, 9], [36, 13]]); K.form(l, 0, { k: EISEN, r: RAND, ton: 2, fase: 0, rand: 1 });
       K.rect(28, 13, 4, 2, '#ffe8b0'); K.set(30, 15, '#fff6e0');
       // die Reihe: Kinder nach rechts hinten kleiner, am Ende eine Lücke mit nassen Füßen
-      const reihe = [[58, 74, 22], [72, 72, 20], [85, 70, 18], [97, 69, 17], [108, 68, 15], [118, 67, 14], [136, 65, 12]];
+      const reihe = [[60, 82, 34], [78, 78, 30], [94, 75, 27], [108, 72, 24], [120, 70, 21]];
       reihe.forEach(([x, yb, h]) => kind(K, x, yb, h, { tiefe: (74 - yb) * .03 }));
-      fuesse(K, 127, 66.5, 1);
+      fuesse(K, 132, 69, 1.4); fuesse(K, 143, 67.5, 1.2);
       // Schwester mit Liste, im Lampenlicht
       const s = K.figurMaske(30, 80, 46, { kopf: 'tuch', arme: [[22, 52], [24, 56]], ellbogen: [[24, 48], [27, 50]] });
       K.form(s, 0, { k: KIND, r: ['#8a7a5a', '#ffe0a8'], ton: 1.2, fase: 1, rand: 2 });
