@@ -1,0 +1,26 @@
+{
+ "_doc": "Ereignisbilder 160×90 (tools/ereignisse/bauen.js). Datei: assets/ereignisse/<id>.png. Liste aller vorhandenen IDs; ohne Eintrag zeigt der Ereignis-Zettel kein Bild.",
+ "ereignisse": [
+  "alle_brief",
+  "alle_brunnen",
+  "alle_fischer_netz",
+  "alle_kirchenbuch",
+  "alle_kistenjob",
+  "alle_kreide",
+  "alle_laterne_spricht",
+  "alle_nachtwaechter",
+  "alle_pfandleihe",
+  "alle_pfarrerin_beichte",
+  "alle_photograph",
+  "alle_schleifstein",
+  "alle_stummfilm_zug",
+  "alle_taucher",
+  "alle_wiederkehr",
+  "hafen_kutter",
+  "hafen_leiter",
+  "hafen_lichtkegel",
+  "hafen_logbuch",
+  "hafen_netze",
+  "hafen_steg"
+ ]
+}

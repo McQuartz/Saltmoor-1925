@@ -123,3 +123,29 @@ Neue Gegner, Ereignisse und Items für ein Biom, das es schon gibt (Hafen, Moor,
 - Ein Biom in Akt V kann im Block `biom` den Schlüssel `"vorraum_elite": "<gegner-id>"` setzen. Dann ist der Vorraum ein Pflichtkampf (Art `kampf_schwer`, Belohnung wie schwerer Kampf) gegen genau diesen Gegner; der Weg-Hinweis kommt aus `weg_hinweise.vorraum[0]`.
 - Ein Gegner mit `"vorgaenger": true` wird beim Kampfbeginn aus deinem **letzten verlorenen Run** gebaut (gespeichert in `Meta` beim Tod: Figur und angelegte Items; ohne gespeicherten Run eine andere Figur per Seed): Name `<n> (<Figur>)`, Muster = seine drei stärksten Angriffskarten und seine beste Blockkarte, Werte × `atk_faktor` (Standard 1,6), Schwachstelle = ein Stoff, den keines seiner Items hat, Beute sicher eines seiner Items. `hp`, `pat` (Rückfall, falls er kaum Angriffe hat), `sprite`, `kniff` kommen aus dem Eintrag.
 - Akt V: `biom.ankunft_bild` ersetzt den Satz über der Wahl Bleiben/Umkehren; `World._biome.<id>.ankunft(o)` (Funktion) ersetzt die Ankunft-Szene der Pforte. Elite-Sprites (`rang: elite`) dürfen bis 128 × 160 groß sein.
+
+## Ereignisbilder
+
+Stand 2026-11-05 (Zugabe 3). Jedes Ereignis kann ein kleines Bild **160 × 90** bekommen, das oben im Ereignis-Zettel steht (`eventHtml()` in `prototype/js/ui/oberflaeche.js`, ganzzahlig über `--u` skaliert, `image-rendering: pixelated`). Es zeigt genau die Szene aus dem Feld `bild` des Ereignisses. Ein Ereignis ohne Bild zeigt den Zettel wie bisher.
+
+**Weg:** Die Bilder werden vorab als PNG gebaut, mit denselben Bausteinen wie die Hintergründe (`prototype/js/scenes/world/basis.js`: Masken, `B.form` mit Fase und Randlicht, Bayer-Dither), die `tools/ereignisse/lib.js` in Node lädt. Die Palette ist die des Bioms (`World._biome.<biom>.pal` aus `js/scenes/world/<biom>.js`), für `biom: "alle"` eine neutrale Schieferpalette.
+
+| Datei | Inhalt |
+|---|---|
+| `tools/ereignisse/bilder/<biom>.js` | **eine Datei je Biom**, darin eine Funktion je Ereignis: `module.exports = { biom: '<biom>', bilder: { <ereignis-id>(K, ev) { … } } }`. Muster: `hafen.js`, `alle.js`. |
+| `tools/ereignisse/lib.js` | Kontext `K` und Bausteine (unten) |
+| `tools/ereignisse/bauen.js` | baut die PNGs, schreibt `index.json`, meldet Abdeckung je Biom |
+| `tools/ereignisse/kontakt.js` | Kontaktbogen ×3 mit Titel und Bildbeschreibung |
+| `tools/ereignisse-fotos.js` | öffnet im Spiel jedes Ereignis mit Bild, prüft auf Seitenfehler, macht auf Wunsch Bildschirmfotos |
+| `prototype/assets/ereignisse/<id>.png`, `index.json` | gebaut, nicht von Hand (`index.json` = Liste aller vorhandenen PNGs; das Spiel zeigt nur Bilder, die dort stehen) |
+
+**Ein Biom-Agent ergänzt seine Bilder so** (ohne anderen in die Quere zu kommen, er fasst nur seine eigene Datei an):
+
+1. `tools/ereignisse/bilder/<biom>.js` anlegen (Ergänzungspakete wie `hafen_plus` gehören in die Datei des alten Bioms, also `hafen.js`; die ID ist die Ereignis-ID).
+2. `node tools/ereignisse/bauen.js <biom>` (oder einzelne IDs). Vorschauen ×3 liegen in `tools/ereignisse/vorschau/` (nicht im Repo). `index.json` entsteht jedes Mal neu aus dem Ordner; bei einem Konflikt einfach neu bauen.
+3. `node tools/ereignisse/kontakt.js <charge> <biom>` → `docs/auftrag-2/bilder/Zugabe/ereignisse/kontakt-<charge>.png`; jedes Bild selbst ansehen und benoten (unter 4: überarbeiten).
+4. `node tools/ereignisse-fotos.js` (Server auf Port 8000): 0 Fehler. Mit `--fotos=<id>:<biom>,…` Bildschirmfotos 1280×720.
+
+**Bausteine in `K`** (Koordinaten 0..159 × 0..89): `K.himmel`, `K.wasser`, `K.mauer`, `K.pflaster`, `K.bretter`, `K.fuell`/`K.feld` (Rampe mit Dither), `K.sterne`, `K.mond`, `K.nebel`; `K.maske()` + `K.form(m, tiefe, {k, r, ton, verlauf, muster, L, rand})`; `K.figur`/`K.figurMaske(x, fuss, h, {kopf, buckel, neig, haltung: stehen|knien|sitzen, arme, ellbogen, wulst})`; Licht: `K.lichtquelle(x, y)` (Randlicht zeigt dorthin), `K.licht(x, y, r, farbe, stärke, {ohne: maske})` (gestuftes Licht auf Flächen), `K.kante(maske, lx, ly, r, [außen, nah])` (Kantenlicht für Silhouetten vor einer Lampe), `K.flamme`, `K.laterne`, `K.gaslaterne`; Requisiten `K.kiste`, `K.kutter`, `K.netz`, `K.schrift`; zum Schluss `K.vignette(stärke)`. Zufall nur über `K.r` (gesät aus der ID).
+
+**Regeln für das Bild:** ein klares Motiv, das man in einer Sekunde liest; **eine** helle Stelle (Lampe, Kerze, Mond, Papier); viel ruhige dunkle Fläche; Figuren als dunkle Silhouette vor hellerem Grund oder mit `K.kante` gegen die Lampe abgesetzt; nie Splatter, leise unheimlich. Keine fremden Bilder, kein Weichzeichner, kein `Math.random()`.

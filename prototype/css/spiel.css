@@ -164,6 +164,9 @@ button.deco small{font-family:var(--ft);font-size:.75em;letter-spacing:0}
 .zettel button.opt:hover:not(:disabled){color:#7a1a10}.zettel button.opt.gew{color:#7a1a10;font-weight:bold}
 .evd{font-size:calc(var(--u)*6.5)!important;max-width:calc(var(--u)*300);margin-inline:auto!important}
 .ereignis .innen{text-align:left}
+/* Ereignisbild (Zugabe 3): 160×90 Szenenpixel, ganzzahlig über --u skaliert, harte Pixel; dunkler Rand wie ein aufgeklebter Abzug */
+.evbild{width:calc(var(--u)*160);height:calc(var(--u)*90);margin:0 auto calc(var(--u)*4);background:#05060a;box-shadow:0 0 0 calc(var(--u)*1) #2a1c10,calc(var(--u)*1) calc(var(--u)*1.5) 0 calc(var(--u)*1) rgba(20,12,6,.55)}
+.evbild img{display:block;width:100%;height:100%;image-rendering:pixelated}
 .bench{display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);margin:calc(var(--u)*4) 0;flex-wrap:wrap}.bench .plus{font-size:calc(var(--u)*8)}
 .preview{width:calc(var(--u)*150);font-size:calc(var(--u)*5);text-align:left}.err{color:#e8584a}
 .wahl{display:flex;gap:calc(var(--u)*6);align-items:center;justify-content:center}.oder{font-style:italic;width:calc(var(--u)*110);font-size:calc(var(--u)*5.5);color:#bfb49a}
