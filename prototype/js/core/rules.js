@@ -13,7 +13,7 @@ function whyRx(r,prev,cur){
  return{n:r.n,t:r.t,keys:self?[a,b]:pa,src:self?'beide Stoffe stecken in dieser Karte':`${ST[pa[0]].n} von der Karte davor trifft ${ST[pa[1]].n}`,kind:''};}
 // Kosten einer Karte: Grundkosten + Aufpreis für zwei Stoffe, Boni, Pforten-Verzerrung (c.mod)
 function cardCost(c){
- if(c.unspielbar)return 99;
+ if(c.unspielbar||c.frost)return 99;
  if(c.opfer)return 0; // Opfer: zahlt Leben statt Energie
  if(c.x)return S.energy||0; // X: verbraucht alle Energie
  if(bonuses('stoff_free').some(b=>c.st.includes(b.stoff)))return 0;
