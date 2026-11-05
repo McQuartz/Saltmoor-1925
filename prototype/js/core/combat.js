@@ -191,7 +191,7 @@ function sonderWirkung(c,t,mult){const s=c.sonder;if(!s)return;const why=`${c.n}
  if(s.art==='ueber_bord'){const l=S.hand.filter(x=>x.unspielbar).slice(0,s.max||99);l.forEach(x=>ueberBord(x,c.n));if(s.draw&&l.length)drawCards(s.draw);}
  if(s.art==='wiederholen'&&S.vorherKarte&&!S.wiederholt){const v=S.vorherKarte;S.wiederholt=true;Bus.emit('toast',{a:'NOCH EINMAL',b:v.n});applyMain(v,{tg:t},1,0,[`${c.n}: wiederholt`]);S.wiederholt=false;}}
 
-// ---------- Zugabe 4: Ballast und Kollekte (docs/auftrag-2/builds.md Abschnitt 7 und 8) ----------
+// ---------- Zugabe 4: Ballast und Kollekte (docs/auftrag-2/builds.md Abschnitt 10 und 11) ----------
 // Ballast: unspielbare Karten (eigener Ballast, Abschriften und Störkarten der Gegner, Zittern) als Treibstoff
 function ballastKarte(name,quelle){const n=name||'Ballast';return{n,c:0,unspielbar:true,ballast:true,st:[],src:quelle||n,spr:'bone',img:typeof itemBild==='function'?itemBild(({'Leere Seite':'leere_seiten','Strandgut':'strandbuch'})[n]||'ballaststein'):'',cid:'stoer'+(++uidc),verbraucht:true};}
 // n Ballast-Karten in Ziehstapel (an zufällige Stelle per Seed), Hand oder Ablage

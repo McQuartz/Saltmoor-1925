@@ -231,7 +231,7 @@ const EIGEN_BUILD={brand_haelt:'glutnest',brand_springt:'glutnest',gift_doppelt:
  hoch_zweimal:'kettenwerk',kette_start:'kettenwerk',reaktion_schaden:'kettenwerk',mehrfach_plus1:'hagel',start_staerke:'hagel',verwundbar_start:'hagel',
  ballast_werfen:'ballast',ballast_ziehen:'ballast',ballast_staerke:'ballast',ballast_block:'ballast',gold_schaden:'kollekte',gold_block:'kollekte',gold_je_tod:'kollekte',faehrgeld:'kollekte',gold_energie:'kollekte'};
 function eigenBuild(e){if(!e)return null;if(e.typ==='kampfstart_fx'){const f=e.fx||[];return f.some(x=>x.status==='burn')?'glutnest':f.some(x=>x.status==='poison')?'brackwasser':f.some(x=>x.op==='ward'||x.op==='block')?'bollwerk':f.some(x=>x.status==='vuln')?'hagel':null;}return EIGEN_BUILD[e.typ]||null;}
-// Welcher der acht Builds (04-deckbau.md Abschnitt 7, builds.md Abschnitt 7–8) passt am ehesten zum Deck? Grobe Zählung über Stoffe und Wirkungen.
+// Welcher der acht Builds (04-deckbau.md Abschnitt 7, builds.md Abschnitt 10–11) passt am ehesten zum Deck? Grobe Zählung über Stoffe und Wirkungen.
 function buildArchetyp(){const z={glutnest:0,brackwasser:0,bollwerk:0,aderlass:0,kettenwerk:0,hagel:0,ballast:0,kollekte:0};const st=new Set();
  // Ballast und Kollekte (Zugabe 4) zählen über eigene Merkmale: Ballast erzeugen oder abwerfen, Zoll und Gold. Eigenschaften (eigen) zählen für ihren Build, bei Reliquien stärker.
  const BALLAST=c=>c.sonder&&(c.sonder.art==='ueber_bord'||(c.sonder.fx||[]).some(f=>f.op==='ballast'));

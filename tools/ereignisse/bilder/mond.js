@@ -153,11 +153,15 @@ module.exports = {
       const bein = K.maske(); bein.kap(cx, 30, cx - 16, yb, 1, .9); bein.kap(cx + 1, 30, cx + 18, yb - 1, 1, .9); bein.kap(cx + .5, 30, cx + 6, yb + 3, 1, .9);
       K.form(bein, 0, { k: HOLZ, r: ['#8a7a5a', '#d8c8a0'], ton: 2, fase: 0, rand: 1 });
       const kopf = K.maske(); kopf.rect(cx - 4, 26, 9, 5); K.form(kopf, 0, { k: MESS, r: ['#cdb878', GELB_K], ton: 2, fase: 0, rand: 1 });
-      const rohr = K.maske(); rohr.kap(cx, 10, cx, yb + 1, 2, 3); rohr.rect(cx - 3, 13, 6, 2); rohr.rect(cx - 3.6, 50, 7.2, 2);
-      K.form(rohr, 0, { k: MESS, r: ['#9c8546', '#cdb878'], ton: 1.3, vx: -.6, fase: 0, rand: 1, L: [-1, 0], muster: (x, y) => (Math.abs(x - cx + 1) < .6 ? 1.6 : 0) + (x > cx ? -.6 : 0) });
+      const rohr = K.maske(); rohr.kap(cx, 10, cx, yb - 6, 2.2, 3.2); rohr.rect(cx - 3.4, 13, 7, 2); rohr.rect(cx - 4, 50, 8, 2); rohr.rect(cx - 4.6, yb - 10, 9.4, 11);
+      K.form(rohr, 0, { k: MESS, r: ['#9c8546', '#cdb878'], ton: .9, vx: -.5, fase: 0, rand: 1, L: [-1, 0], muster: (x, y) => (Math.abs(x - cx + 1) < .6 ? 1.8 : 0) + (x > cx ? -.6 : 0) + ((y > 12 && y < 16) || (y > 49 && y < 53) ? 1 : 0) });
       K.set(cx - 1, 14, GELB_K); K.set(cx - 1, 51, GELB_K);
-      // Okular oben, warm
+      // Sucher neben dem Rohr
+      const su = K.maske(); su.kap(cx + 5, 16, cx + 5, 34, .9, .9); su.rect(cx + 2, 18, 3, 1); su.rect(cx + 2, 31, 3, 1);
+      K.form(su, 0, { k: MESS, r: ['#9c8546', '#cdb878'], ton: 1.4, fase: 0, rand: 1, L: [-1, 0] });
+      // Okular oben, noch warm
       const ok = K.maske(); ok.kap(cx, 10, cx + 4, 6, 1.2, 1); K.form(ok, 0, { k: MESS, r: ['#cdb878', GELB_K], ton: 2.4, fase: 0, rand: 1 });
+      K.licht(cx + 4, 6, 10, GELB_G2, 1); K.set(cx + 5, 5, GELB_K); K.set(cx + 4, 5, GELB);
       // Staubhügel, wo das Objektiv steckt
       const hg = K.maske(); hg.ell(cx, yb + 2, 8, 2.4); K.form(hg, 0, { k: STAUB.slice(4, 10), r: ['#a19c8e', '#d2ccba'], ton: 2.4, fase: 1, rand: 1 });
       // Klappstuhl rechts, darauf ein Buch
@@ -177,7 +181,7 @@ module.exports = {
       K.feld(0, 0, 160, 90, STAUB, (x, y) => {
         const k = kante(x); if (y < k) return -1;
         if (y < grenze(x)) return .3 + (B.fbm(x * .05, y * .18, 3, 2) - .5) * .1 + (y - k) / 160;
-        return .52 + (y - grenze(x)) / 110 + (B.fbm(x * .06, y * .14, 5, 2) - .5) * .2 + (B.hash(x >> 1, y, 31) < .05 ? -.2 : 0);
+        return .46 + (y - grenze(x)) / 150 + (B.fbm(x * .06, y * .14, 5, 2) - .5) * .2 + (B.hash(x >> 1, y, 31) < .05 ? -.2 : 0);
       });
       for (let x = 0; x < 160; x++) K.set(x, Math.round(grenze(x)), STAUB[12]);
       // Mulden im grauen Feld, in jeder ein Glanz, wie ein Auge unter einem Lid
@@ -201,24 +205,31 @@ module.exports = {
       const kante = horizont(K, 34, 16);
       eisdecke(K, 40, { zapfen: 7 });
       schein(K, 80, 34, 70, 22, .75, { nurUeber: (x, y) => y < kante(x) });
-      asche(K, kante, { gx: 80, gb: 70, hell: .5, abfall: 14, bis: 10 });
-      // Spuren: zwölf hinaus (links), elf zurück (rechts, eine Lücke); Fluchtpunkt am Horizont
-      const vx = 80, vy = kante(80);
-      const abdruck = (x, y, s, links) => {
-        const w = .6 + s * 1.1, h = .5 + s * .8, ox = links ? -s * .7 : s * .7;
-        for (let j = -Math.ceil(h); j <= h; j++) for (let i = -Math.ceil(w); i <= w; i++) if ((i / w) ** 2 + (j / h) ** 2 <= 1) K.set(x + i + ox, y + j, j < 0 ? STAUB[1] : STAUB[3]);
-        if (s > .8) K.set(x + ox, y + Math.ceil(h), STAUB[10]);
-      };
-      const spur = (bx) => {
-        for (let i = 0; i < 16; i++) {
-          const q = Math.pow((i + .5) / 16, 1.8), x = B.lerp(vx + (bx - vx) * .04, bx, q), y = B.lerp(vy + 1, 94, q), s = .25 + q * 2.4;
-          abdruck(x, y, s, i & 1);
+      asche(K, kante, { gx: 80, gb: 90, hell: .5, abfall: 40, bis: 10 });
+      // ruhiger, im Gegenlicht heller Staub, damit die Spuren sich abheben
+      K.feld(0, 0, 160, 90, STAUB.slice(2, 11), (x, y) => { const k = kante(x); if (y <= k) return -1; const q = (y - k) / (90 - k); return .62 - q * .4 - Math.abs(x - 80) / 160 * .25 + (B.fbm(x * .05, y * .1, 5, 2) - .5) * .06; });
+      // Spuren: zwölf hinaus (links), elf zurück (rechts, eine Lücke); Fluchtpunkt am Horizont.
+      // Jede Spur: festgetretener, dunkler Streifen, darin die Abdrücke, deren vorderer Rand das Licht fängt.
+      const vx = 80, vy = Math.round(kante(80)) + 1;
+      const spur = (bx, ph) => {
+        for (let y = vy + 1; y < 90; y++) {
+          const q = (y - vy) / (90 - vy), x = B.lerp(vx + (bx - vx) * .03, bx, q), w = .4 + q * 1.6;
+          for (let i = Math.floor(x - w); i <= x + w; i++) K.set(i, y, q < .3 ? STAUB[4] : STAUB[3]);
+        }
+        for (let i = 0; i < 20; i++) {
+          const t = (i + ph) / 20, q = t * t, y = B.lerp(vy + 1, 92, q); if (y > 89) break;
+          const x = B.lerp(vx + (bx - vx) * .03, bx, (y - vy) / (90 - vy)) + ((i & 1) ? -1 : 1) * q * 1.4, s = q * 2.6;
+          if (s < .5) continue;
+          const w = s * .8, h = s * .55;
+          for (let j = -Math.ceil(h); j <= Math.ceil(h) + 1; j++) for (let k = -Math.ceil(w); k <= Math.ceil(w); k++) {
+            const d = (k / w) ** 2 + (j / h) ** 2; if (d <= 1) K.set(x + k, y + j, STAUB[1]); else if (j > 0 && d < 1.9 && s > 1.3) K.set(x + k, y + j, STAUB[8]);
+          }
         }
       };
-      for (let i = 0; i < 12; i++) spur(-48 + i * 10);
-      for (let i = 0; i < 12; i++) if (i !== 3) spur(92 + i * 10.5);
-      // die Lücke: ungestörter, heller Staub, wo die zwölfte Spur zurück sein müsste
-      K.licht(92 + 3 * 10.5, 86, 14, GELB_G, .8, { oval: .5 });
+      for (let i = 0; i < 12; i++) spur(-66 + i * 12, (i * .37) % 1);
+      for (let i = 0; i < 12; i++) if (i !== 2) spur(90 + i * 12, (i * .61) % 1);
+      // wo die zwölfte zurück sein müsste: unberührter, heller Staub
+      for (let y = vy + 4; y < 90; y++) { const q = (y - vy) / (90 - vy), x = B.lerp(vx + (114 - vx) * .03, 114, q), w = .3 + q * 2.6; for (let i = Math.floor(x - w); i <= x + w; i++) if (B.bay(i, y) < .5 + q * .3) K.set(i, y, STAUB[8 + (q > .5 ? 1 : 0)]); }
       K.vignette(.7, { cx: 80, cy: 50 });
     },
 
@@ -244,12 +255,13 @@ module.exports = {
       K.licht(bx + 10, by, 40, GELB_G, .9, { maske: (x, y) => m.has(x, y) });
       for (let i = 0; i < 4; i++) { K.schrift(bx - 25, by - 9 + i * 3, bx - 3, '#2a2620', { min: 1, max: 3 }); K.schrift(bx + 3, by - 10 + i * 3, bx + 25, '#2a2620', { min: 1, max: 3 }); }
       // Datum unten, unterstrichen
-      K.schrift(bx + 8, by + 5, bx + 20, '#2a2620', { min: 2, max: 3 }); K.linie(bx + 8, by + 7, bx + 21, by + 7, '#7a2a1a');
-      // Sicheln als Reihe am unteren Rand, von fast voll bis zum Strich
+      K.schrift(bx + 14, by + 2, bx + 25, '#2a2620', { min: 2, max: 3 }); K.linie(bx + 14, by + 4, bx + 26, by + 4, '#7a2a1a');
+      // Sicheln als Reihe am unteren Rand, abnehmend bis zum Strich
       for (let i = 0; i < 6; i++) {
-        const x = bx - 22 + i * 6, y = by + 7, off = i * .5;
-        if (i === 5) { K.set(x, y - 1, '#2a2620'); K.set(x, y, '#2a2620'); K.set(x, y + 1, '#2a2620'); continue; }
-        for (let j = -2; j <= 2; j++) for (let k = -2; k <= 2; k++) if (Math.hypot(j, k) <= 2.2 && Math.hypot(j, k - off * 2 + 3.2) > 2.2 + (i ? 0 : 1.5)) K.set(x + k, y + j, '#2a2620');
+        const x = bx - 23 + i * 7, y = by + 7;
+        if (i === 5) { for (let j = -3; j <= 3; j++) K.set(x - 1, y + j, '#2a2620'); continue; }
+        const off = 1 + (4 - i) * .6;
+        for (let j = -3; j <= 3; j++) for (let k = -4; k <= 4; k++) if (Math.hypot(j, k) <= 3.4 && Math.hypot(j, k + off) > 3.4) K.set(x + k, y + j, '#2a2620');
       }
       K.vignette(.8, { cx: 80, cy: 52 });
     },

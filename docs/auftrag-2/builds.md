@@ -1,4 +1,4 @@
-# Sechs Builds mit Beispieldecks (M4)
+# Acht Builds mit Beispieldecks (M4, Zugabe 4)
 
 Konzept: [04-deckbau.md](04-deckbau.md) Abschnitt 7. Daten: `prototype/data/items.json`, `prototype/data/handgriffe.json`, Sonderwirkungen und neue Eigenschaften: [handgriffe.md](handgriffe.md). Reaktionen: `prototype/data/reactions.json`.
 
@@ -282,6 +282,17 @@ Reihenfolge = Vorrang. `neutral` gilt für alle Bots als zweite Wahl.
    "handgriffe": ["trommelfeuer", "nachladen", "salve", "anschlagen", "kurze_stoesse", "zweimal", "zielen", "durchladen", "abrollen", "rundumschlag"],
    "stoffe": ["E", "F"]
   },
+  "ballast": {
+   "items": ["ballaststein", "strandbuch", "radiermesser", "korkweste", "leere_seiten", "bleiguertel"],
+   "handgriffe": ["beschweren", "standhalten", "gegenstemmen", "kanzelschlag", "nachladen", "rundumschlag", "atemholen", "umsehen", "nachsetzen"],
+   "stoffe": ["S", "E", "G", "W"]
+  },
+  "kollekte": {
+   "items": ["pfennigstrumpf", "opferstock", "faehrgeld", "pfandschein", "heuerbeutel", "geldkatze"],
+   "handgriffe": ["muenzwurf"],
+   "stoffe": [],
+   "gold_rest": 50
+  },
   "neutral": {
    "items": ["uhr_ohne_zeiger", "ewiges_licht", "dreiglas", "kerbholz", "watch", "compass", "harefoot", "smellingsalts", "rum"],
    "handgriffe": ["atemholen", "umsehen", "nachsetzen", "aufhebeln", "rundumschlag", "finte", "sich_sammeln", "durchatmen", "kratzen"],
@@ -290,3 +301,68 @@ Reihenfolge = Vorrang. `neutral` gilt für alle Bots als zweite Wahl.
  }
 }
 ```
+
+`gold_rest` (nur Kollekte): Sobald der Bot eine Gold-Reliquie angelegt hat, behält er beim Krämer so viel Gold im Beutel (Items aus seiner Liste kauft er trotzdem). Die Profile von Ballast und Kollekte enthalten nur ihre eigenen Stücke: Mit schwachen Allerweltsitems in der Liste (Laterne, Kreuz, Bibel …) fiel Kollekte auf 34–40 %, weil der Bot sie stärkeren Funden vorzog.
+
+---
+
+## 10. Ballast (unspielbare Karten als Treibstoff) – Zugabe 4
+
+**Idee:** Was dich beschwert, wirfst du über Bord. Abschriften der Gegner, Zittern und eigener „Ballast“ sind sonst tote Karten. Dieser Build mischt sie sich selbst ins Deck und macht aus jeder einen Schlag, einen Schild, eine Karte nach oder Stärke. Er dreht die Schwäche von Kettenwerk um: Kloster und Abschreiber füttern ihn.
+
+- **Kern:** Ballast erzeugen (Reliquien zu Kampfbeginn, *Beschweren*, *Ballast laden*, *Festzurren*, *Aufschlagen*, *Eintragen*) und loswerden.
+- **Stütze:** *Bleigürtel des Tauchers* (gewöhnlich, Hafen/Salz: 1 Energie, 6 Block, wirf 1 unspielbare Karte über Bord und ziehe 1), *Beschweren* (Handgriff, 0: 5 Block, 1 Ballast in den Ziehstapel).
+- **Höhepunkt:** Ballaststein + Radiermesser: jeder Ballast macht 3 Schaden an allen und gibt 1 Stärke; mit dem Strandbuch zieht jeder gezogene Ballast eine Karte nach und gibt 2 Block.
+- **Schwäche:** Einfrieren (eingefrorene Karten gehen nicht über Bord), kurze Kämpfe (der Ballast kommt erst nach und nach), ohne Reliquie sind die Ballast-Erzeuger nur tote Karten (der Bot nimmt sie dann nicht).
+
+| Reliquie | Stoff | Eigenschaft (`eigen`) | Stammkarte |
+|---|---|---|---|
+| Ballaststein der Henriette (`ballaststein`, Talisman) | S | `ballast_werfen` (3 Schaden an allen), `ballast_start 3` | Ballast laden (1: 5 Block, 2 Ballast in den Ziehstapel) |
+| Korkweste der Seenotretter (`korkweste`, Kleidung) | W | `ballast_werfen` (4 Block), `ballast_start 2` | Festzurren (1: 7 Block, 1 Ballast) |
+| Das Strandbuch des Vogts (`strandbuch`, Talisman) | W | `ballast_ziehen {v 1, blk 2}`, `ballast_start 3` („Strandgut“) | Eintragen (0: ziehe 1, 1 Strandgut) |
+| Radiermesser des Kopisten (`radiermesser`, Waffe) | E | `ballast_staerke 1`, `ballast_start 2` | Ausschaben (1: 5 Schaden, wirf 1 unspielbare Karte über Bord) |
+| Gesangbuch mit leeren Seiten (`leere_seiten`, Talisman) | G | `ballast_block 4`, `ballast_start 2` („Leere Seite“) | Aufschlagen (0: ziehe 1, 1 Leere Seite) |
+
+**Beispieldeck, Ende Akt IV (23 Karten + 5 Ballast zu Kampfbeginn):** Ballaststein (2 × Ballast laden, Beschweren, Standhalten), Radiermesser (2 × Ausschaben, Nachladen, Rundumschlag), Strandbuch (Beschweren, Atemholen), Bleigürtel (2 × Gewichte lösen, Gegenstemmen), Ankerkette (2 × Kette schwingen, Kurze Stöße), Weihwasser (2 × Besprengen, Kanzelschlag).
+
+**Ein typischer Zug** (3 Energie, Stärke 2 aus dem letzten Zug, Hand: Ballast, Strandgut, Ausschaben, Kette schwingen, Standhalten):
+
+1. Gezogen wurden Ballast und Strandgut: Strandbuch zieht zweimal nach (*Gewichte lösen*, *Ballast*) und gibt 4 Block.
+2. *Ballast* (0, über Bord): 3 Schaden an allen, Stärke 3. Das zweite *Ballast* ebenso: Stärke 4.
+3. *Gewichte lösen* (1): 6 Block, wirft *Strandgut* über Bord (3 an allen, Stärke 5), zieht 1.
+4. *Kette schwingen* (2): 4 Treffer zu je 4 + 5. Zusammen etwa 45 Schaden auf ein Ziel, 9 an allen, 10 Block.
+
+## 11. Kollekte (Gold als Treibstoff) – Zugabe 4
+
+**Idee:** Wer zahlt, schafft an. Gold ist hier nicht nur für den Krämer: Karten mit **Zoll** kosten Gold statt Energie, der Beutel wird zu Hammer, Schild, Energie und sogar zu einem zweiten Leben. Der Preis: Was du im Kampf ausgibst oder im Beutel hältst, kaufst du nicht.
+
+- **Kern:** Gold tragen (Pfennigstrumpf, Opferstock, Pfandschein zahlen nach Menge) und ausgeben (Zoll).
+- **Stütze:** *Geldkatze* (gewöhnlich, Hafen/Kapelle/Stadt: Bezahlen, Zoll 5, 10 Block), *Münzwurf* (Handgriff: Zoll 4, 9 Schaden; ohne Gold 1 Energie), Gold im Kampf durch Einkassieren, Aufschließen, Nachzählen und den Heuerbeutel.
+- **Höhepunkt:** Mit 120 Gold: Pfennigstrumpf +6 Schaden je Treffer, Opferstock 6 Block je Zug, Pfandschein +1 Energie; Münzwurf und Bezahlen kosten keine Energie. Stirbst du, zahlt das Fährgeld.
+- **Schwäche:** Krämer, Ereignisse, die Gold kosten, lange Kämpfe ohne Gold-Nachschub (Zoll leert den Beutel, dann sinkt alles mit), früh im Run fast nichts (Gold kommt erst mit den Kämpfen).
+
+| Reliquie | Stoff | Eigenschaft (`eigen`) | Stammkarte |
+|---|---|---|---|
+| Strumpf voller Pfennige (`pfennigstrumpf`, Waffe) | E | `gold_schaden {je 20, max 6}` | Einkassieren (1: 5 Schaden, +3 Gold) |
+| Schlüssel zum Opferstock (`opferstock`, Talisman) | G | `gold_block {je 15, max 6}` | Aufschließen (0: +6 Gold, verbraucht) |
+| Fährgeld (`faehrgeld`, Talisman) | L | `faehrgeld {kosten 35, leben 14}` | – |
+| Pfandschein Nr. 1925 (`pfandschein`, Talisman) | L | `gold_energie {ab 60, v 1}` | Einlösen (2, Zoll 12: +2 Energie, ziehe 1, verbraucht) |
+| Heuerbeutel eines Ertrunkenen (`heuerbeutel`, Talisman) | W | `gold_je_tod 7` | Nachzählen (0: ziehe 1, +3 Gold) |
+
+Der alte Klingelbeutel (`klingelbeutel`, selten, Kapelle, `gold_bonus`) bleibt, wie er ist; die neue Waffe heißt deshalb Pfennigstrumpf.
+
+**Beispieldeck, Ende Akt IV (22 Karten, 110 Gold im Beutel):** Pfennigstrumpf (2 × Einkassieren, Münzwurf, Zweimal), Enterbeil (2 × Entern, Münzwurf), Geldkatze (2 × Bezahlen, Standhalten), Opferstock (2 × Aufschließen, Atemholen), Pfandschein (2 × Einlösen, Nachsetzen), Priesterkragen (2 × Segnen, Durchatmen).
+
+**Ein typischer Zug** (110 Gold: 4 Energie durch den Pfandschein, 6 Block vom Opferstock, +5 Schaden je Treffer):
+
+1. *Münzwurf* (Zoll 4): 9 + 5 = 14 Schaden, Gold 106.
+2. *Entern* (1): 2 × (4 + 5) = 18.
+3. *Bezahlen* (Zoll 5): 10 Block, Gold 101.
+4. *Einkassieren* (1): 5 + 5 = 10 Schaden, Gold 104.
+5. *Zweimal* (1): zwei Treffer mit je +5.
+
+Fünf Karten für 3 Energie und 9 Gold, rund 55 Schaden und 16 Block. Fällt das Gold unter 100, verliert der Strumpf +1, unter 60 fehlt die vierte Energie.
+
+## 12. Build-Bots mit acht Builds (Zugabe 4)
+
+ERGEBNISSE_PLATZHALTER

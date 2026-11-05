@@ -55,12 +55,13 @@ module.exports = {
       // Tiefe der Halle unter der Platte: Dunkel, gedrungene Pfeilerstümpfe
       // Boden: Sand, unter der Platte nach hinten ins Schwarze
       sandboden(K, 36, 90, (x, y) => L1(x, y) * Math.pow(Math.max(0, Math.min(1, (y - 36) / 46)), 1.3), { tf: (x, y) => y < 42 ? -.2 : 0 });
-      // Ringe im Sand um die Trommel: fein, nur nahe der Trommel
       const tx = 90, ty = 66;
+      // Ringe im Sand um die Trommel: feine Rillen (Kamm hell zur Laterne, Tal dunkel), nach außen schwächer
       for (let y = 46; y < 90; y++) for (let x = 0; x < 160; x++) {
-        const d = Math.hypot((x - tx) / 4.8, y - ty); if (d < 8.5 || d > 22) continue;
-        if (d % 2.6 < .6 && B.bay(x, y) < 1 - (d - 8) / 16) K.set(x, y, L1(x, y) > .3 ? SAND[4] : SAND[2]);
-        else if (d % 2.6 > 1.3 && d % 2.6 < 1.9 && B.bay(x, y) < .5) K.set(x, y, SAND[0]);
+        const d = Math.hypot((x - tx) / 4.8, y - ty); if (d < 8.5 || d > 30) continue;
+        const f = d % 3.2, st = 1 - (d - 8) / 24;
+        if (f < .7 && B.bay(x, y) < st) K.set(x, y, L1(x, y) > .35 ? SAND[5] : L1(x, y) > .15 ? SAND[3] : SAND[2]);
+        else if (f > 1 && f < 1.7 && B.bay(x, y) < st * .9) K.set(x, y, SAND[0]);
       }
       // Die Trommel: flacher Zylinder, Zarge mit Schnürung, Fell oben
       const rx = 32, ry = 6.5, hz = 6;
@@ -138,10 +139,12 @@ module.exports = {
       }
       // Die Gestalt: Mantel zum Abgrund hin gezogen, Hut, Laterne in der linken Hand
       const fig = K.figurMaske(fx, fy, 24, { kopf: 'hut', blick: 1, neig: -1.5, arme: [[fx - 6, fy - 11], [fx + 5, fy - 9]] });
-      fig.poly([[fx + 2, fy - 19], [fx + 8, fy - 17], [fx + 20, fy - 15], [fx + 28, fy - 11], [fx + 19, fy - 10], [fx + 25, fy - 6], [fx + 13, fy - 6], [fx + 6, fy - 4]]);
+      // Mantel: Schöße flattern in Zipfeln zum Abgrund hin
+      fig.poly([[fx + 3, fy - 18], [fx + 10, fy - 17], [fx + 18, fy - 17], [fx + 27, fy - 15], [fx + 21, fy - 13], [fx + 30, fy - 10], [fx + 22, fy - 9], [fx + 28, fy - 5], [fx + 16, fy - 6], [fx + 7, fy - 4]]);
+      fig.kap(fx - 2, fy - 21, fx + 8, fy - 23, .8, .5);   // Schal
       K.form(fig, 0, { ton: .8, rand: 1, lichtVon: [fx - 7, fy - 10] });
       K.laterne(fx - 7, fy - 5, .75, { hof: 46, staerke: .8, ohne: fig, buegel: false });
-      K.kante(fig, fx - 7, fy - 9, 22, WARM);
+      K.kante(fig, fx - 7, fy - 9, 40, WARM, { nah: .3 });
       K.vignette(.6, { cx: 84, cy: 60 });
     },
 

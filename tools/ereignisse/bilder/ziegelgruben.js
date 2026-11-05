@@ -169,7 +169,7 @@ module.exports = {
           const t = (i + .5) / n, x = X(t, y);
           if (ri === 3 && (i === 4)) {
             // Hand im Staub: Handfläche und fünf Finger, sauberer Ziegel darunter
-            const hx = x, hy = y - 2, hs = s * 1.5;
+            const hx = x, hy = y - 2, hs = s * 1.8;
             hand.ell(hx, hy, 4.2 * hs, 2.6 * hs);
             for (const [dx, l] of [[-3.6, 3.2], [-1.8, 4.6], [0, 5], [1.8, 4.4], [3.4, 3]]) hand.kap(hx + dx * hs, hy - 1.5 * hs, hx + dx * hs * 1.25, hy - (1.5 + l * .55) * hs, .7 * hs, .6 * hs);
             hand.kap(hx + 4 * hs, hy, hx + 7 * hs, hy - 1 * hs, .8 * hs, .6 * hs);

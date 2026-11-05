@@ -108,7 +108,7 @@ module.exports = {
       salzwand(K, 0, 0, 160, 90, lx - 6, ly, 70, { gr: 10, st: .85, basis: .03 });
       // Türstock: zwei Stempel, Kappe; ein Querbalken als Bank, darauf Lampe und Buch
       const ts = K.maske(); ts.rect(34, 0, 7, 90); ts.rect(126, 0, 7, 90); ts.rect(26, 8, 116, 6);
-      balken(K, ts, { mat: { ton: 2.2, lichtVon: [lx, ly] } });
+      balken(K, ts, { mat: { ton: 3.2, rand: 0, lichtVon: [lx, ly], verlauf: -.6 } });
       const bank = K.maske(); bank.rect(41, 56, 85, 5); bank.rect(50, 61, 4, 29); bank.rect(112, 61, 4, 29);
       balken(K, bank, { mat: { ton: 2.4, L: [0, -1] } });
       // Joppe am Haken am rechten Stempel: Schultern, hängende Ärmel, Falten
@@ -121,8 +121,12 @@ module.exports = {
       K.kante(jo, lx, ly - 4, 40, ['#8a5a30', '#ffb060']);
       const kragen = K.maske(); kragen.poly([[hx - 5, hy + 3], [hx, hy + 1], [hx + 5, hy + 3], [hx + 2, hy + 9], [hx, hy + 6], [hx - 2, hy + 9]]);
       K.form(kragen, 0, { k: ['#0e0a08', '#1c1410', '#2c2018', '#3e2e22'], r: ['#6a4a30', '#c08a50'], ton: 1.2, fase: 1, rand: 1, lichtVon: [lx, ly] });
-      // Knöpfe
-      for (let i = 0; i < 3; i++) K.set(hx + 1, hy + 10 + i * 6, '#5c4430');
+      // Revers, Taschen, Knöpfe, Ärmelfalten
+      K.linie(hx - 4, hy + 4, hx, hy + 13, '#6a4a30'); K.linie(hx + 4, hy + 4, hx + 1, hy + 13, '#0e0a08');
+      K.linie(hx - 7, hy + 24, hx - 2, hy + 24, '#0e0a08'); K.linie(hx + 3, hy + 24, hx + 8, hy + 24, '#0e0a08');
+      K.linie(hx - 7, hy + 23, hx - 2, hy + 23, '#524032', .6);
+      K.linie(hx - 9, hy + 9, hx - 9, hy + 30, '#0e0a08'); K.linie(hx + 9, hy + 9, hx + 9, hy + 30, '#0e0a08');
+      for (let i = 0; i < 3; i++) K.set(hx + 1, hy + 14 + i * 6, '#8a6a4a');
       // Aufgeschlagenes Schichtbuch auf der Bank, im Lichtkreis
       const PAPIER = ['#2a221c', '#5a4a3e', '#9a8672', '#d6c4a8', '#f0e2c8'];
       const bx = 58, buch = K.maske(); buch.poly([[bx, 56], [bx + 3, 48], [bx + 14, 47], [bx + 16, 49], [bx + 18, 47], [bx + 29, 48], [bx + 32, 56], [bx + 16, 56]]);

@@ -266,15 +266,17 @@ Handgriffe sind Karten **ohne eigenen Stoff**: Sie stecken in einer Kerbe eines 
 | `kette` | +n Wirkung (Schaden, sonst Block) je Reaktion, die in diesem Zug schon ausgelöst wurde |
 | `behalten` | bleibt am Zugende auf der Hand |
 | `opfer` | zahle n Leben statt Energie |
+| `zoll` | zahle n Gold statt Energie, solange das Gold reicht (sonst die Energiekosten `c`); Kollekte |
+| `gold` | +n Gold, auch mitten im Kampf; Kollekte |
 | `x` | verbraucht alle Energie, wirkt X-mal |
-| `unspielbar` | kann nicht gespielt werden (z. B. „Zittern“, „Abschrift“) |
+| `unspielbar` | kann nicht gespielt werden (z. B. „Zittern“, „Abschrift“, „Ballast“); mit einer Eigenschaft `ballast_werfen` geht sie für 0 über Bord |
 | `sonder` | Sonderwirkung, Liste in `docs/auftrag-2/handgriffe.md` |
 
 Dazu `build` (Archetyp), `rar`, `t` (Flavor), `start` (Start-Handgriff, kommt nicht als Belohnung).
 
 ### items.json (neue Felder)
 
-`rar` (`gewoehnlich`/`selten`/`reliquie`), `kerben` (Plätze für Handgriffe; ohne Angabe 1 bzw. 2), `eigen` (Eigenschaft, `{typ, v}`), `flavor`, `preis` (Verkauf 40 %), optional `fest_hg` (fest eingeritzte Handgriffe). Eigenschaften (`eigen.typ`): `brand_haelt`, `energie_bleibt`, `block_haelt_halb`, `reaktion_block`, `reaktion_heil`, `hoch_zweimal`, `gift_doppelt`, `opfer_staerke`, `mehrfach_plus1`, `brand_springt`, `start_staerke`, `start_block`, `verwundbar_start`, `gold_bonus`, `heil_nach_sieg`, `erste_karte_billiger`, `glueck`, `energie_plus {v, preis: hand|heil}`. Umsetzung: `passive(typ)` in `js/core/state.js`, Wirkung in `combat.js`.
+`rar` (`gewoehnlich`/`selten`/`reliquie`), `kerben` (Plätze für Handgriffe; ohne Angabe 1 bzw. 2), `eigen` (Eigenschaft, `{typ, v}`), `flavor`, `preis` (Verkauf 40 %), optional `fest_hg` (fest eingeritzte Handgriffe). Eigenschaften (`eigen.typ`): `brand_haelt`, `energie_bleibt`, `block_haelt_halb`, `reaktion_block`, `reaktion_heil`, `hoch_zweimal`, `gift_doppelt`, `opfer_staerke`, `mehrfach_plus1`, `brand_springt`, `start_staerke`, `start_block`, `verwundbar_start`, `gold_bonus`, `heil_nach_sieg`, `erste_karte_billiger`, `glueck`, `energie_plus {v, preis: hand|heil}`, Ballast: `ballast_werfen {fx}`, `ballast_ziehen {v, blk}`, `ballast_staerke {v}`, `ballast_block {v}` (alle mit optional `ballast_start`, `ballast_karte`), Kollekte: `gold_schaden {je, max}`, `gold_block {je, max}`, `gold_je_tod {v}`, `gold_energie {ab, v}`, `faehrgeld {kosten, leben}` (Regeln in `docs/auftrag-2/paket-format.md`). Optional `eigen.t`: Satz, den Spiel und Artboard als Eigenschaft zeigen. Umsetzung: `passive(typ)` in `js/core/state.js`, Wirkung in `combat.js`.
 
 ### jobs.json (neu)
 
