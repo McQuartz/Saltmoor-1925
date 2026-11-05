@@ -58,7 +58,7 @@ function deckeBauen(K, P, o) {
       yTop = ys; if (yTop >= P.vy) break;
     }
     // bis zum Horizont: der helle, flache Streifen, wo Meer und Sand sich hinten treffen
-    for (let y = Math.max(-M, Math.ceil(yTop)); y <= P.vy; y++) { const tt = B.clamp(.75 + .2 * Math.exp(-(((x - (o.lichtX || 380)) / 140) ** 2)), 0, .9999) * n, k = Math.floor(tt); e.set(x, y, PW[Math.min(n, (tt - k) > B.bay(x, y) ? k + 1 : k)]); }
+    for (let y = Math.max(-M, Math.ceil(yTop)); y <= P.vy + 4; y++) { const tt = B.clamp(.75 + .2 * Math.exp(-(((x - (o.lichtX || 380)) / 140) ** 2)), 0, .9999) * n, k = Math.floor(tt); e.set(x, y, PW[Math.min(n, (tt - k) > B.bay(x, y) ? k + 1 : k)]); }
   }
   // unter den Schaumkronen hängen Fäden aus Wasser, wie bei einer Welle, die gleich nach unten bricht
   for (let i = 0; i < schaumPx.length; i += 2) { const x = schaumPx[i], y = schaumPx[i + 1]; if (B.hash(x, y, 9) > .78) { const l = 1 + Math.floor(B.hash(x, y, 10) * (y < 60 ? 6 : 3)); for (let j = 1; j <= l; j++) e.set(x, y + j, PW[j < l ? 8 : 6]); } }
@@ -116,7 +116,7 @@ function saeule(K, P, Xc, Zc, rc, Yc, o) {
 // ---------- Sand vom Anfang ----------
 function sandBoden(K, P, o) {
   o = o || {}; const sd = (K.o.seed | 0) % 89, lx = o.lichtX || 380, nass = o.nass || [];
-  K.boden(P.vy, H + M, SAND, (x, y) => {
+  const tf = (x, y) => {
     const Z = P.z(y + .5), X = (x + .5 - P.vx) * Z / P.h, k = P.k(Z);
     let t = .42 + .3 * B.clamp(1 - 3 / Z, 0, 1) - .2 * B.clamp(1 - Z / 1.9, 0, 1) + (B.fbm(X * .7, Z * .7, sd, 3) - .5) * .16;
     t += .12 * Math.exp(-(((x - lx) / 130) ** 2)) * B.clamp(1 - 3 / Z, 0, 1);
@@ -126,7 +126,10 @@ function sandBoden(K, P, o) {
     // nasse Stellen (unter der Säule, unter der Gischt): dunkler, Rand mit Flutlinie
     for (const [nx, nz, nr] of nass) { const d = Math.hypot(X - nx, (Z - nz) * .8) / nr; if (d < 1) t -= .22 * (1 - d * d); else if (d < 1.12) t += .1; }
     return t;
-  });
+  };
+  // Unterlage: der ganze nahe Boden auch auf Ebene 2, damit beim Ruck der Kamera keine Fuge zwischen den Bodenebenen aufgeht
+  B.feld(K.e[2], -M, K.split[0], W + M, H + M, SAND, tf);
+  K.boden(P.vy, H + M, SAND, tf);
 }
 // Flutlinie aus Tang und Muscheln quer über den Sand (wie am Strand vom Anfang), dazu einzelne Steine
 function flutlinie2(K, P, Z0, o) {

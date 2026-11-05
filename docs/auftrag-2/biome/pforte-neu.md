@@ -42,12 +42,57 @@ Konzept unverändert: eine Öffnung, die Formen annimmt, um verstanden zu werden
 | **P2 Schlund** | Der König reißt auf: Der Mantel klappt wie zwei Türflügel nach außen. | Breites „M“: zwei gefaltete Mantelflügel nach außen, dazwischen ein hoher Schlund mit Zahnreihen, die Krone schief darüber, zwei Hände krallen in den Boden. | Die Zähne sind Poller und Planken; im Schlund hängt eine Laterne, die schwarz brennt. | Die Flügel ziehen zurück, der Schlund reißt weit auf und stößt nach vorn. |
 | **P3 Auge** | Nichts mehr, nur noch das, was hinsieht. | Ein großes Auge zwischen zwei Lidern, um es ein Kranz aus Spitzen, darunter hängen Ketten und Fäden bis zum Boden. | Die Ketten sind Ankerketten; an einer hängt noch der Anker. Die Krone liegt am Boden. | Die Lider ziehen sich zurück, das Auge wird weit, die Spitzen richten sich nach vorn. |
 
-**Augen im Rand** (`augen_a`, `augen_b`, 96 × 120): Was der Boss herbeiruft. Neu passend zum Hafen: **ein Auge in einer schwarzen Laterne** – die Laterne hängt an ihrer Kette von oben herab (aus der See-Decke), statt einer Flamme sitzt darin ein Auge. `augen_a`: Sturmlaterne mit Bügel; `augen_b`: kleine Positionslaterne, die Kette länger, zwei Fäden. Silhouette: hängendes Gehäuse an einem senkrechten Strich, klar anders als jeder Bodengegner.
+**Augen im Rand** (`augen_a`, `augen_b`, 96 × 120, Kniff `schuetzer` 6: jede hängende Laterne gibt ihm Block, darum lohnt es, sie zuerst zu löschen): Was der Boss herbeiruft. Neu passend zum Hafen: **ein Auge in einer schwarzen Laterne** – die Laterne hängt an ihrer Kette von oben herab (aus der See-Decke), statt einer Flamme sitzt darin ein Auge. `augen_a`: Sturmlaterne mit Bügel; `augen_b`: kleine Positionslaterne, die Kette länger, zwei Fäden. Silhouette: hängendes Gehäuse an einem senkrechten Strich, klar anders als jeder Bodengegner.
+
+## Silhouetten
+
+Je Figur zwei Varianten als schwarze Fläche verglichen ([silhouetten.png](../bilder/M7/pforte/silhouetten.png), Skizzen in `tools/sprites/gegner/ruft.js` → `skizzen`):
+
+- **P1:** mit Fächerkragen und Bootshaken (gewählt) gegen ohne Kragen und mit gerader Stange (verworfen: liest sich als gewöhnlicher König mit Speer, der Kragen macht den Kopf erst fremd).
+- **P2:** Flügel offen, tiefes V mit schwebender Krone (gewählt) gegen Flügel zu (verworfen: eine schmale Säule, zu nah am König). Eine erste offene Fassung mit flacher Oberkante las sich als Katzenkopf; das V reicht jetzt bis zum Schlund hinunter.
+- **P3:** Wimpernkranz oben lang, unten kurz (gewählt) gegen gleichmäßigen Strahlenkranz (verworfen: Sonne/Seeigel).
+- **Augen:** hängende Laterne (gewählt) gegen bloße Kugel an der Kette (verworfen: zu klein, liest sich als Christbaumkugel).
 
 ## Werte und Abstimmung
 
-Siehe Abschnitt „Abstimmung“ unten (wird beim Messen ausgefüllt).
+Gemessen mit `node tools/biom-test.js pforte 20` (seit dem 2026-11-05 spielt das Werkzeug die Akte davor wirklich; frühere Zahlen sind nicht vergleichbar) und einer Kopie mit Zugzähler (40 + 40 Seeds) für die Kampflänge.
 
-## Noten
+| Stand | `ruft` | biom-test 20 | Kampflänge Finale |
+|---|---|---|---|
+| vorher (altes Werkzeug, Startdeck) | hp 180, P1 buff 2 · 12 · 5×3 · Block 15 | 2/20 | – |
+| vorher (neues Werkzeug) | wie oben | 13/16 (81 %) | 4–11 Züge, meist 6; Niederlagen schon in Zug 4 |
+| **nachher** | hp 275 → **280**, P1 12 · Block 14 · 6×3 · buff 3; P2 (66 %) 9×2 · Block 12 · 17 · buff 4; P3 (33 %) 6×3 · 22 · Block 10 · 12×2; ruft Augen ab P2 alle 2 Züge | **12/16 (75 %)**; mit 61 Seeds 44/61 (72 %) | **Ø 10,3 Züge**, 69 % der Kämpfe in 8–12 Zügen; Niederlagen meist spät (Zug 8–15) |
 
-(wird nach dem Bauen ehrlich ausgefüllt)
+Absicht: weniger Spitzen (der König schlägt nicht mehr in Zug 2 mit Stärke zu), dafür mehr Leben, damit alle drei Phasen wirklich zu sehen sind. Die Stärke wächst über die Phasen (+3, +4), das Finale wird also gegen Ende gefährlich, nicht am Anfang. Augen im Rand: `hp` 8, Muster Block 3 / Angriff 2 (+ Tiefenzuschlag), Kniff `schuetzer` 6.
+
+Ganzer Run (`node tools/bot.js 100`): Niederlagen in der Pforte 7 von 63 (11 %); das Ziel „höchstens 35 % der Niederlagen“ ist erfüllt (vorher 2 von 66 mit dem alten Bot-Stand – die „über 40 %“ aus Mos Bericht ließen sich mit dem heutigen Bot nicht nachstellen).
+
+## Noten (Bewertungsbogen 06-ki-bilder.md Abschnitt 5)
+
+Punkte: Silhouette / Licht / Pixel / Konzept / Biom / Im Spiel. Gesamt = schwächster Punkt. Bilder: [kontakt.png](../bilder/M7/pforte/kontakt.png), [animation.png](../bilder/M7/pforte/animation.png), [silhouetten.png](../bilder/M7/pforte/silhouetten.png), [nachher-finale-p1.png](../bilder/M7/pforte/nachher-finale-p1.png), [-p2](../bilder/M7/pforte/nachher-finale-p2.png), [-p3](../bilder/M7/pforte/nachher-finale-p3.png), [-p3-augen](../bilder/M7/pforte/nachher-finale-p3-augen.png), [nachher-szenen.png](../bilder/M7/pforte/nachher-szenen.png) gegen [vorher-szenen.png](../bilder/M7/pforte/vorher-szenen.png).
+
+| Bild | S | L | P | K | B | Sp | Note | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| `ruft_p1` König | 5 | 4 | 4 | 4 | 4 | 4 | **4** | Krone, Fächerkragen, Bootshaken und Glocke sind schwarz sofort lesbar. Randlicht rechts voll, links gestrichelt (Spalt), Faltenbahnen und Pelerine mit Lichtkante, Bullaugen im Saum. Schwächer: Pelerine oben noch eine ruhige Fläche, die Bullaugen wirken klein fast wie Knöpfe; die Hakenspitze reicht im Spiel bis an den oberen Rand. |
+| `ruft_p2` Schlund | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Tiefes V, schwebende Krone, Zahnreihen, vier Krallenarme: deutlich anders als P1 und P3. Faltenbahnen der Flügel sind noch etwas regelmäßig (Streifen), der Schlund innen ist klein gegen die Flügel; vor dem Dunst im Spalt steht er etwas weniger kontrastreich als P1. |
+| `ruft_p3` Auge | 5 | 4 | 4 | 4 | 4 | 5 | **4** | Klarste Silhouette der drei (Auge, Kranz, Ankerketten, Anker). Iris mit Glutring ist der Blickfang. Der Ring wirkt etwas glatt/„grafisch“; die Krone am Boden liest sich klein eher als Gestrüpp. |
+| `augen_a` / `augen_b` | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Hängende Laterne mit Auge statt Flamme, Glas mit gedithertem Schein und Glanzstrich, Tang darunter. Klein gegen den Boss; im Spiel stehen sie nah an den Kai-Laternen (x 0,14/0,86), lesbar, aber dicht. |
+| Hintergrund Finale (`waechter`) | 4 | 4 | 4 | 5 | 4 | 4 | **4** | Wasserwand mit Schichten, Fischen, Boot; der Spalt als Spitzbogen rahmt den Boss, innen Dunst und noch einmal der Kai (Rekursion). Schwarze Laternen mit dunklem Hof links und rechts. Keine leere Fläche hinter dem Boss, Nebel nur als Band. Die Wellenschichten sind etwas gleichförmig. |
+| `ankunft` / `ende` | 4 | 4 | 4 | 5 | 4 | – | **4** | Dieselbe Stelle, Spalt weiter, Laternen warm. Ruhig, ohne Sog. |
+| Kampf V0 / `weg` / `uebergang` | 4 | 4 | 4 | 4 | 4 | – | **4** | Spiegel des Hafens: Speicher rechts, Leuchtturm links, Wand mit Spalt am Ende, Pfützen spiegeln die helle Decke, umgefallene Laterne brennt schwarz. Die Speicherfassaden sind (wie im Hafen) eher flach. |
+| Kampf V1 (`wandbild`) | 4 | 4 | 4 | 4 | 4 | – | **4** (knapp) | Gasse mit Wand am Ende, Rumpf hängt kieloben hinein. Die Hauswände sind große dunkle Flächen; im Spiel liegt das Relief darüber. |
+| Kampf V2 (`rast`) | 4 | 4 | 4 | 4 | 4 | – | **4** (knapp) | Steg zur Wand, Rümpfe über dem Steg, schwarzes Feuer mit hellem Rand. Das Feuer ist klein für die Fläche. |
+| Wandbild-Relief | 4 | 4 | 4 | 5 | 4 | – | **4** | Figur mit Laterne vor der Wasserwand mit Auge; dasselbe Magenta in Laterne und Auge. |
+
+## Vorschläge an den Kern
+
+- **Relief je Biom:** `World.relief` kennt nur Stil-Parameter. Die Pforte hängt ihr eigenes Relief heute an, indem `pforte.js` `World.relief` umhüllt. Sauberer wäre ein Haken `World._biome.<id>.relief(seed)`, den `World.relief` zuerst fragt.
+- **Boss-Reihe:** Bei 240 × 220 und Fußpunkt y 214 steht die Krone von P1 am oberen Bildrand. Ein eigener `reihen`-Eintrag für den Boss (etwa y 220) oder eine Skalierung 0,95 für `rang: boss` gäbe Luft.
+- **Herbeigerufene Gegner im biom-test zählen:** Das Werkzeug zählt nur Gegner beim Kampfbeginn; die Augen tauchen in der Ausgabe nie auf.
+- **Augen bei Tiefe:** Herbeigerufene normale Gegner bekommen den vollen Tiefenzuschlag (+10 Angriff in Akt V). Darum greifen die Augen nur jeden zweiten Zug an. Ein Feld „skaliert nicht“ je Gegner wäre einfacher.
+
+## Offene Schwächen
+
+- P2: Faltenbahnen der Flügel zu regelmäßig; der Schlund könnte größer sein.
+- Speicherfassaden und Gassenwände sind flach (gleiches Bauteil wie im Hafen).
+- Die Kai-Laternen der Finale-Szene stehen dort, wo die Augen erscheinen.

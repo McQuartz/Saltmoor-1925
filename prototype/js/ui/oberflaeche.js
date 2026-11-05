@@ -195,7 +195,7 @@ function endschirmHtml(titel,satz){const r=S.ergebnis||{};const st=S.stats||{};c
  <div class="knoepfe"><button class="deco" data-act="neu">NEUER ABSTIEG</button><button class="deco klein" data-act="gleicherSeed">GLEICHER SEED</button><button class="deco klein" data-act="bildSpeichern">BILD SPEICHERN</button><button class="deco klein" data-act="titel">ZUM TITEL</button></div>`);}
 function strandHtml(){return endschirmHtml(esc(RUN.strand.titel).toUpperCase(),esc(RUN.strand.text));}
 function ankunftHtml(){const A=RUN.ankunft;const j=JOBS.find(x=>x.id===S.job);
- return `<div class="ankunft"><p class="bild">${esc(A.bild)}</p><p class="wahr">„${esc(j.wahrheit)}“</p><div class="zwei"><button class="deco" data-ende="bleiben">${A.bleiben.knopf.toUpperCase()}</button><button class="deco" data-ende="umkehren">${A.umkehren.knopf.toUpperCase()}</button></div></div>`;}
+ return `<div class="ankunft"><p class="bild">${esc(biom().ankunft_bild||A.bild)}</p><p class="wahr">„${esc(j.wahrheit)}“</p><div class="zwei"><button class="deco" data-ende="bleiben">${A.bleiben.knopf.toUpperCase()}</button><button class="deco" data-ende="umkehren">${A.umkehren.knopf.toUpperCase()}</button></div></div>`;}
 function endeHtml(){const A=RUN.ankunft;const r=S.ergebnis;return endschirmHtml(esc(A[r.ende].text).toUpperCase(),`„${esc(JOBS.find(x=>x.id===S.job).wahrheit)}“`);}
 // kleine Bilder des Wegs (Kampfszene je Biom, ganzzahlig 1:5 verkleinert)
 function wegbilderMalen(){document.querySelectorAll('canvas.wegbild').forEach(c=>{if(c.dataset.ok)return;c.dataset.ok=1;try{const sz=typeof World!=='undefined'?World.build(c.dataset.wbiom,{art:'kampf',variante:0,seed:3,fremdheit:.3}):ersatzSzene({biom:c.dataset.wbiom});

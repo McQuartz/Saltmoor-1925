@@ -7,7 +7,7 @@ const path = require('path');
 const L = require('./lib');
 
 const ORDNER = path.resolve(__dirname, '../../prototype/assets/gegner');
-const GROESSE = { normal: [96, 120], waechter: [160, 180], boss: [240, 220] }; // Auftrag 2: Wächter bis 160 × 180, Finale bis 240 × 220 (06-ki-bilder.md)
+const GROESSE = { normal: [96, 120], elite: [128, 160], waechter: [160, 180], boss: [240, 220] }; // Auftrag 2: Wächter bis 160 × 180, Finale bis 240 × 220 (06-ki-bilder.md)
 const nur = process.argv.slice(2);
 const namen = fs.readdirSync(ORDNER).filter(d => d.endsWith('.json')).map(d => d.replace(/\.json$/, '')).filter(n => !nur.length || nur.includes(n)).sort();
 let fehlerGesamt = 0;

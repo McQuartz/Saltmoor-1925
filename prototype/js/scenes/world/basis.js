@@ -505,6 +505,8 @@ World.ARTEN = ['kampf', 'waechter', 'weg', 'rast', 'werkstatt', 'kraemer', 'erei
 World.build = function (biom, opt) {
   const o = Object.assign({ variante: 0, seed: 1, fremdheit: 0, art: 'kampf' }, opt || {});
   o.variante = clamp(o.variante | 0, 0, 2); o.biom = World._biome[biom] ? biom : 'hafen';
+  // Ein Biom darf eine Sonderszene selbst mitbringen (z. B. World._biome.ufer.ankunft), sonst gilt die gemeinsame
+  if (World._spezial[o.art] && typeof World._biome[o.biom][o.art] === 'function') return World._biome[o.biom][o.art](o);
   if (World._spezial[o.art]) return World._spezial[o.art](o);
   return World._biome[o.biom].build(o);
 };

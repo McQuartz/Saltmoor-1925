@@ -48,11 +48,11 @@ Bildaufbau neu gegenüber allen anderen Orten: **Der Himmel ist das Meer**. Oben
 ## Elite im Vorraum: Der, der vor dir kam (`vorgaenger`)
 
 - **Motiv:** das Wiedersehen. Der Doppelgänger, aber nicht als Spiegel, sondern als der, der schon hier war.
-- **Wer er war:** du, beim letzten Mal. Der Kern baut ihn aus deinem letzten verlorenen Run (Figur und Items, `Meta.vorgaenger`); ohne gespeicherten Run eine andere Figur per Seed. Er kämpft mit deinen besten Karten von damals, verstärkt (`atk_faktor` 1,8), seine Beute ist sicher eines seiner Items.
+- **Wer er war:** du, beim letzten Mal. Der Kern baut ihn aus deinem letzten verlorenen Run (Figur und Items, `Meta.vorgaenger`); ohne gespeicherten Run eine andere Figur per Seed. Er kämpft mit deinen besten Karten von damals, verstärkt (`atk_faktor` 2,0), seine Beute ist sicher eines seiner Items.
 - **Was falsch ist:** Er steht mit dem Rücken zu dir am Wasser und dreht nur den Kopf halb über die Schulter, so dass ein Auge zu sehen ist. Er ist nass bis auf die Haut, die Hosenbeine bis über die Knie voller Sand, die Füße stecken im Sand. **Das Wasser tropft von ihm nach oben**, von Saum, Fingern und Haar. In der rechten Faust glimmt etwas, das er mitgenommen hat.
 - **Silhouette:** ein aufrechter Mann im langen Mantel, von hinten, Arme hängend, leicht abgesetzt vom Leib; einzige Figur im Spiel, die einem den Rücken zukehrt. Keine Mütze, kein Werkzeug, kein Kragen einer Uniform: nichts, woran man eine Figur erkennt, damit er zu jedem Run passt. Verworfene Skizze (in `vorgaenger.js` unter `skizzen`): frontal mit gesenktem Kopf; las sich als Ertrunkener.
 - **Kniff:** `voraus`: „Er war vor dir hier. Er weiß, welche Karte du als Nächstes ziehst, und spielt sie zuerst.“ Er spielt die oberste Karte deines Stapels gegen dich, bevor du sie ziehst, und wird schwach gegen den Stoff, den du am wenigsten spielst. Fordert: Mischung, Block vor dem eigenen Schlag.
-- **Werte:** Rang `elite` (skaliert im Kern nicht mit der Tiefe, nur mit `waechter_faktor` 1,35), 80 Leben (im Spiel 108), Rückfall-Muster Schlag 10, 3 × 4, Block 10 (greift, wenn sein Run kaum Angriffskarten hatte), Schwachstelle Licht als Rückfall (der Kern setzt einen Stoff, den keines seiner Items hat).
+- **Werte:** Rang `elite` (skaliert im Kern nicht mit der Tiefe, nur mit `waechter_faktor` 1,35), 110 Leben (im Spiel 149), Rückfall-Muster Schlag 10, 3 × 4, Block 10 (greift, wenn sein Run kaum Angriffskarten hatte), Schwachstelle Licht als Rückfall (der Kern setzt einen Stoff, den keines seiner Items hat).
 - **Stimme:** `schatten`. **Beute:** eines seiner Items, sonst *Der nasse Mantel*. **Beute-Satz:** „Er fällt nicht. Er setzt sich in den Sand, mit dem Rücken zu dir, und schaut weiter aufs Wasser.“
 - **Sprite:** 128 × 160, idle 4 (der Kopf nickt, Tropfen steigen, die Faust glimmt), angriff 4 (dreht sich halb um, der linke Arm holt nach hinten aus und schlägt quer, jetzt sieht man beide Augen), treffer 2, tod 6 (er sinkt in den Sand und zerfällt). Licht: Randlicht oben rechts, dazu ein kühles zweites Randlicht links (vom nassen Sand), Oberlicht auf Schultern und Kragen gedithert, Wasserglanz auf den Falten, wo der nasse Stoff an den Beinen klebt, Rückennaht, Gurt mit zwei Hornknöpfen, Strähnen im nassen Haar, Seetang über der Schulter.
 
@@ -83,14 +83,35 @@ Der nasse Mantel ist die Rückfall-Beute des Vorgängers (wenn sein Run keine It
 - **Weg A (Skript)**, `quelle: skript`. Sprite `tools/sprites/gegner/vorgaenger.js`, Palette `tools/sprites/zonen/ufer.json` (Extras `sand`, `see`).
 - `node tools/sprites/pruefen.js vorgaenger`: **0 Verstöße** (Rand oben rechts 89 %, Umriss schwarz 4 %, Idle-Wechsel 6 %). Das Sheet trägt `rang: waechter`, weil `pruefen.js` die Größe „elite“ nicht kennt (siehe Vorschläge).
 - Hintergrund `prototype/js/scenes/world/ufer.js`: 3 Varianten, Finale-Szene, rast, weg, uebergang, ankunft, dazu die allgemeinen Arten. Aufbau 250–500 ms je Szene in headless Chromium (die Decke ist teuer; im Spiel einmal je Szene).
-- Im Spiel (`newRun('fischer',3,{dev:true,route:['hafen','kapelle','salz','eis','ufer']})`, Akt V über `enterAct`, `leaveUebergang`, `chooseWeg(0)`): Ankunft, Weg, Vorraum-Elite, Rast, Finale, Finale Phase 2. **Keine Konsolenfehler.**
-- `node tools/biom-test.js ufer 20` (neue Fassung, Akte davor gespielt): siehe Bericht unten. `node tools/test-run.js`: „Alles gut.“
+- Im Spiel (`im-spiel-ankunft-akt.png` zeigt das Übergangsbild des Eises, siehe Vorschlag 3; `newRun('fischer',3,{dev:true,route:['hafen','kapelle','salz','eis','ufer']})`, Akt V über `enterAct`, `leaveUebergang`, `chooseWeg(0)`): Ankunft, Weg, Vorraum-Elite, Rast, Finale, Finale Phase 2. **Keine Konsolenfehler.**
+- `node tools/biom-test.js ufer 20` (neue Fassung, Akte davor gespielt): 21/30 überstanden, siehe Abstimmung. `node tools/test-run.js`: „Alles gut.“
 - Bilder: [bilder/M7/ufer/](../bilder/M7/ufer/): `kontakt.png` (neben Chorknabe, Hirte, Netzflickerin), `silhouetten.png` (neben den anderen menschenähnlichen Gegnern), `animation.png`, `varianten.png`, `arten.png`, `fremdheit.png`, `im-spiel-*.png`.
 
 ## Noten (Bewertungsbogen 06-ki-bilder.md Abschnitt 5)
 
-NOTEN_PLATZHALTER
+Je Punkt 1–5: Silhouette / Licht / Pixel / Konzept / Biom / im Spiel. Gesamt = schwächster Punkt. Für Hintergründe steht S für Lesbarkeit der Komposition.
+
+| Bild | S | L | P | K | B | Sp | Gesamt | Begründung |
+|---|---|---|---|---|---|---|---|---|
+| Der, der vor dir kam (Elite) | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Die einzige Figur im Spiel, die dir den Rücken zukehrt; schwarz gefüllt sofort ein Mensch im Mantel, aber schlicht. Randlicht rechts und ein zweites, kühles links, Oberlicht auf den Schultern, Wasserglanz auf den Graten, wo der nasse Stoff an den Beinen klebt, Sand an den Beinen, Gurt, Naht, Tang. Der untere Mantel bleibt die größte dunkle Fläche, und die aufsteigenden Tropfen (das falsche Detail) sind nur aus der Nähe zu sehen. Im Spiel steht er groß und klar vor dem hellen Horizontstreifen, auf seiner eigenen Spur. |
+| Hintergrund V0 Die Flutlinie | 4 | 4 | 4 | 5 | 4 | 4 | **4** | Das Meer als Decke liest sich sofort (Wellenreihen mit Schaumkronen und herabhängenden Fäden), die Säule und die Spur, die in ihr endet, sind das falsche Detail in Reinform; Sand und Treibholz vom Anfang. Die fernen Wellenreihen werden zum Horizont hin etwas krümelig. |
+| Hintergrund V1 Der Brecher | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Die eine große Welle, die von links oben herabhängt und hinten auf den Sand bricht, ist ein eigener Bildaufbau; ihre Unterseite ist eine große, ruhige dunkle Fläche, und der Schaumsaum auf dem Sand ist etwas zerrissen. |
+| Hintergrund V2 Der Strandkorb | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Felswand mit Schichten in der Flucht, Säule hinten links, Spuren am Korb vorbei. Schwächster Punkt: Der Strandkorb liest sich auf 30 px eher als Kasten mit gestreiftem Rand denn als Strandkorb. |
+| Finale-Szene Wo es ruft | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Der Trichter in der Decke, in den sich die Wellen drehen, und sechs Spuren, die von allen Seiten hinter dem Boss verschwinden; die Säule selbst verdeckt der Boss fast ganz, sichtbar bleibt der Trichter. |
+| Rast (Strandkorb mit Feuer) | 4 | 4 | 4 | 4 | 4 | 4 | **4** | Feuer aus Treibholz vor dem Korb, Panel verdeckt die Mitte; ruhig, ohne Abdunkeln. |
+
+Nichts liegt unter 4. Offene Schwächen für eine spätere Runde: mehr Binnenform im unteren Mantel des Vorgängers, Tropfen größer; Strandkorb mit sichtbarer Haube von der Seite; ferne Wellenreihen ruhiger.
+
+## Abstimmung
+
+- `node tools/biom-test.js ufer 20`: **10/16** (4 Seeds im Vorlauf gestorben), Seeds 21–40: **11/14**, zusammen **21/30 = 70 %**, 0 Fehler. Alle Niederlagen im Akt fallen im Finale (`ruft`), keine beim Vorgänger.
+- Der Vorgänger kostet die Bots wenig: mit 80 Leben im Mittel 3 Leben, mit 110 Leben und `atk_faktor` 2,0 (gewählt) etwa 6, höchstens 37, selbst mit 180 Leben nur 9. Grund: Im Dev-Modus (und damit im Test) baut der Kern ihn aus den **Startitems** einer anderen Figur, deren Karten schwach sind; im echten Spiel kommt er mit den Items deines letzten verlorenen Runs und schlägt deutlich härter (Faktor 2,0 auf z. B. 12er-Karten = 24). Darum nicht höher als 110 / 2,0.
+- Die Werte von `ruft` können sich noch ändern (der Agent für Pforte und Finale arbeitet parallel); dann den Test wiederholen.
 
 ## Vorschläge an den Kern
 
-VORSCHLAEGE_PLATZHALTER
+1. **`tools/sprites/pruefen.js`:** Größe für `rang: elite` (bis 128 × 160) in `GROESSE` aufnehmen. Heute läuft das Sheet des Vorgängers unter `rang: waechter`, sonst meldet die Prüfung „über 96 × 120“.
+2. **Ankunft je Biom:** `World._spezial.ankunft` (in `pforte.js`) gilt für jedes Biom. `ufer.js` stellt `World._biome.ufer.ankunft` bereit (das stille Meer ohne Säule, die Spuren enden im Sand); `World.build` könnte bei `art: 'ankunft'` zuerst `World._biome[biom].ankunft` nehmen.
+3. **Übergang beim Aktbeginn:** Beim Betreten von Akt V zeigt die Bühne das Übergangsbild des Eises (Loch im Eis), die Art `uebergang` des neuen Bioms wird nie gezeigt. `ufer.js` hat dafür die Strandtreppe aus dem Fels; wenn der Kern beim Aktbeginn das neue Biom zeigen will, liegt sie bereit.
+4. **Vorgänger im Test:** `vorgaengerDef` nimmt im Dev-Modus die Startitems einer Figur; dadurch ist die Elite für Bots und `biom-test` viel leichter als im Spiel. Vorschlag: im Dev-Modus Startitems plus 2–3 Items aus den Fundpools der Akte davor (per Seed), damit der Test die echte Stärke misst.
+5. **`data/README.md`:** `vorgaenger`, `atk_faktor`, `rang: elite` und `vorraum_elite` dort beschreiben (heute nur in paket-format.md).

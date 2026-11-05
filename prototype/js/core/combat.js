@@ -16,7 +16,10 @@ function mkEnemy(id,i){const f0=FOES[id];if(!f0)throw new Error('Unbekannter Geg
 // „Der, der vor dir kam“ (Ufer unten): Figur und Items deines letzten verlorenen Runs (Meta), sonst eine Figur per Seed.
 // Sein Muster sind seine besten Karten, verstärkt (f.atk_faktor); die Beute ist eines seiner Items.
 function vorgaengerDef(f){const r=rs('kampf');let v=typeof Meta!=='undefined'&&!S.dev?Meta.get().vorgaenger:null;
- if(!v||!JOBS.find(j=>j.id===v.job)){const j=r.pick(JOBS.filter(j=>j.id!==S.job));v={job:j.id,items:[...(j.w||[]),...(j.k||[]),...(j.t||[])]};}
+ if(!v||!JOBS.find(j=>j.id===v.job)){const j=r.pick(JOBS.filter(j=>j.id!==S.job));
+  // ohne gespeicherten Run: Startitems einer anderen Figur plus je ein Fund aus den Fundpools der Akte davor (per Seed), damit er so stark ist wie ein echter Vorgänger
+  const funde=(S.route||[]).slice(0,S.akt).map(b=>BIOMES[b]&&(BIOMES[b].fundpool||[]).filter(id=>ITEMS[id]&&!ITEMS[id].bases)).filter(p=>p&&p.length).map(p=>r.pick(p));
+  v={job:j.id,items:[...(j.w||[]),...(j.k||[]),...(j.t||[]),...funde]};}
  const job=JOBS.find(j=>j.id===v.job);const ids=(v.items||[]).filter(id=>ITEMS[id]);const cards=ids.flatMap(id=>ITEMS[id].cards||[]);
  const F=f.atk_faktor||1.6;const atk=cards.filter(c=>c.atk).sort((a,b)=>b.atk*(b.h||1)-a.atk*(a.h||1)).slice(0,3).map(c=>({t:'atk',v:Math.round(c.atk*F),...(c.h>1?{h:c.h}:{}),karte:c.n}));
  const blk=cards.filter(c=>c.blk&&!c.atk).sort((a,b)=>b.blk-a.blk).slice(0,1).map(c=>({t:'blk',v:Math.round(c.blk*F),karte:c.n}));

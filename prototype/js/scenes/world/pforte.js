@@ -319,6 +319,10 @@ function gasse(K, o) {
   fussnebel(K, 112, 140, .3);
   pflaster(K, P, (X, Z) => Math.abs(X - .2) < 2.6, { rinne: 0 });
   const [lx, ly] = P.q(2.5, 0, 3.2); laterne(K, K.eb(ly), lx - 6, ly, 54, false);
+  { const [x2, y2] = P.q(-2.3, 0, 6); laterne(K, K.eb(y2), x2 + 4, y2, 30, false); }
+  // ein Boot hängt kieloben in die Gasse, seine Kette reicht fast bis aufs Pflaster
+  rumpf(K, 2, 236, 22, 120, .12, [-8, 120, true]);
+  { const [kx, ky] = P.q(-2.1, 0, 2.2); kiste(K, K.eb(ky), kx + 10, ky, 22, 17); kiste(K, K.eb(ky), kx + 12, ky - 17, 16, 12); }
   const [fx, fy] = P.q(-2.0, 0, 2.6), fk = P.k(2.6) / 40, f = B.maske();
   f.poly([[fx - 9 * fk, fy], [fx - 10 * fk, fy - 12 * fk], [fx - 9 * fk, fy - 24 * fk], [fx + 9 * fk, fy - 24 * fk], [fx + 10 * fk, fy - 12 * fk], [fx + 9 * fk, fy]]); f.kap(fx - 4 * fk, fy - 24 * fk, fx - 7 * fk, -M, 1.6 * fk, 1.6 * fk);
   K.form(K.eb(fy), f, 0, { ton: 1.3, schatten: 2, muster: (x, y) => (Math.abs(y - (fy - 6 * fk)) < 1 || Math.abs(y - (fy - 18 * fk)) < 1) ? .8 : 0 });

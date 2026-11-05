@@ -86,7 +86,8 @@
    "Eine Muschel liegt mit der Öffnung zum Wasser. Alle liegen so.",
    "Du zählst die Abdrücke bis zum Wasser. Beim Zurückzählen sind es weniger."
   ],
-  "vorraum_elite": "vorgaenger"
+  "vorraum_elite": "vorgaenger",
+  "ankunft_bild": "Das Meer liegt still. Deine Spuren enden im Sand, genau dort, wo du stehst, und das Wasser wartet, als hätte es dich schon einmal gehabt."
  },
  "musik": {
   "n": "Ufer unten",
