@@ -4,4 +4,5 @@
 - Arbeit am prozeduralen Sprite-Generator: zuerst `docs/spritegen/README.md` und `docs/spritegen/AGENTS.md` lesen. Die Regeln dort sind verbindlich.
 - Großer Auftrag „spielbarer Prototyp-Run“: alles in `docs/auftrag/` (Start: `docs/auftrag/README.md`, Prompt: `docs/auftrag/PROMPT.md`). Wer daran arbeitet, folgt `docs/auftrag/01-regeln.md`.
 - Folgeauftrag „Deckbau und Inhalte in Masse“: alles in `docs/auftrag-2/` (Start: `docs/auftrag-2/README.md`, Prompt: `docs/auftrag-2/PROMPT.md`). Wer daran arbeitet, folgt `docs/auftrag-2/01-regeln.md`.
+- Auftrag 3 „Die Tiefe verändert das Spiel“ (Fixes, neue Oberfläche, Lovecraft-Kern): alles in `docs/auftrag-3/` (Start: `docs/auftrag-3/README.md`, Prompt: `docs/auftrag-3/PROMPT.md`). Wer daran arbeitet, folgt `docs/auftrag-3/01-regeln.md` und `docs/auftrag-3/08-dirigent.md`.
 - Nie direkt auf `main` pushen, Änderungen per Pull Request.
