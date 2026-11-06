@@ -1,0 +1,61 @@
+{
+ "id": "eingesalzene",
+ "rang": "waechter",
+ "w": 160,
+ "h": 180,
+ "zone": "salz_sole",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  82,
+  176
+ ],
+ "kopf": [
+  104,
+  6
+ ],
+ "augen": [
+  [
+   55,
+   83
+  ],
+  [
+   60,
+   83
+  ],
+  [
+   44,
+   170
+  ],
+  [
+   80,
+   170
+  ],
+  [
+   118,
+   170
+  ]
+ ],
+ "augenfarbe": "#ff9a5a"
+}

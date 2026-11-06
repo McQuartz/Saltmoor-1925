@@ -1,0 +1,833 @@
+{
+ "id": "leuchtturm",
+ "akt": 0,
+ "biom": {
+  "n": "Der Leuchtturmhof",
+  "kurz": "Leuchtturm",
+  "zeit": "1925, nach Mitternacht",
+  "anreise": "Über Saltmoor steht der Leuchtturm auf der Klippe. Seit dem Krieg fällt sein Strahl nicht aufs Meer, sondern auf den eigenen Hof.",
+  "koerper": [
+   "#050507",
+   "#0c0c11",
+   "#17161e",
+   "#2d2b38"
+  ],
+  "rand": [
+   "#857a60",
+   "#ece2c8"
+  ],
+  "augen": "#ffe07a",
+  "nebel": [
+   "#121220",
+   "#3a3a4c"
+  ],
+  "musik": "leuchtturm",
+  "szene_alt": "hafen",
+  "gegner": [
+   "lampenputzer",
+   "rueckmoewen",
+   "strahlgaenger",
+   "fensterzaehlerin"
+  ],
+  "waechter": "linse",
+  "waechter_alt": [
+   "nebelhorn"
+  ],
+  "fundpool": [
+   "putztuch",
+   "korkring",
+   "fensterschluessel",
+   "lantern",
+   "compass",
+   "oilcoat",
+   "boathook",
+   "flaregun",
+   "rum",
+   "sealskin",
+   "watch",
+   "anchorchain"
+  ],
+  "kraemer": {
+   "n": "Der Strandvogt",
+   "ort": "im Bootsschuppen unter der Klippe, zwischen Strandgut, bei einer Sturmlaterne",
+   "zeile": "Er verleiht, was das Meer bringt. Bis zur nächsten Flut, sagt er. Dann holt es sich alles wieder, auch das, was du dazugelegt hast.",
+   "art": "leihe"
+  },
+  "uebergang": "Unten im Turm, hinter der Wendeltreppe, geht eine zweite Treppe weiter, in den Fels. Der Strahl folgt dir hinab, Stufe um Stufe, bis er auf Wasser trifft, in dem eine Glocke läutet.",
+  "weg_hinweise": {
+   "kampf": [
+    "Auf dem Hof steht eine Trittleiter, und jemand steht darauf.",
+    "Möwen auf der Mauer. Sie sitzen falsch herum.",
+    "Nasse Fußspuren aus dem Strahl heraus, landeinwärts.",
+    "Hinter dem Wärterhaus zählt jemand halblaut."
+   ],
+   "ereignis": [
+    "In der Wachstube brennt Licht.",
+    "Auf der Galerie steht ein Eimer.",
+    "Von der Klippe aus sieht man die Schiffe."
+   ],
+   "wandbild": [
+    "In die weiße Wand des Turms sind Striche geritzt, unter dem Kalk."
+   ],
+   "kraemer": [
+    "Unten am Bootsschuppen schwingt eine Laterne."
+   ],
+   "werkstatt": [
+    "Der Öl- und Werkzeugschuppen. Die Tür klemmt, aber sie geht auf."
+   ],
+   "rast": [
+    "Das Nebelhornhaus. Der Kessel ist noch warm."
+   ],
+   "fundstelle": [
+    "Strandgut am Fuß der Klippe, angespült, trocken."
+   ]
+  },
+  "beute_saetze": [
+   "Der Strahl geht weiter über den Hof, als wäre nichts gewesen.",
+   "Draußen halten die Schiffe auf den Turm zu. Keins ist näher gekommen.",
+   "Oben dreht die Linse eine Runde mehr als die Uhr erlaubt.",
+   "Eine Möwe landet auf der Mauer, rückwärts, und sieht dich an.",
+   "Auf dem Hof ist es wieder still. Im Wärterhaus geht ein Fenster an, das vorher nicht da war.",
+   "Das Nebelhorn stöhnt einmal. Es ist kein Nebel.",
+   "Wo es lag, ist der Kalk blank geputzt.",
+   "Im Wachbuch steht morgen: Feuer brennt. Sicht gut. Einer weniger."
+  ]
+ },
+ "musik": {
+  "n": "Leuchtturmhof",
+  "root": 44,
+  "key": "gis-Moll",
+  "names": [
+   "G♯m",
+   "E",
+   "C♯m",
+   "D♯"
+  ],
+  "darkNames": [
+   "G♯m",
+   "A",
+   "C♯m",
+   "D♯♭9"
+  ],
+  "amb": {
+   "meer": 0.06,
+   "wind": 0.07
+  },
+  "rhy": "atem",
+  "detail": "hafen",
+  "ort": "Wind um die Galerie, Brandung tief unten, das Uhrwerk der Linse tickt",
+  "rhyN": "Atem im Takt der Kennung, ferne Glocke"
+ },
+ "foes": {
+  "lampenputzer": {
+   "n": "Der Lampenputzer",
+   "biom": "leuchtturm",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "lampenputzer_a",
+   "varianten": [
+    "lampenputzer_a",
+    "lampenputzer_b"
+   ],
+   "konzept": "Der Hilfswärter, der seit 1917 jeden Morgen die Linse putzt. Er steht mit Schürze und Ledertuch auf seiner Trittleiter mitten im Hof und putzt die Luft. Sein Gesicht hat er mitgeputzt: Es ist blank wie der Reflektor.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "heiler",
+    "v": 4,
+    "why": "Er putzt, was zerkratzt ist. Auch das, was du gerade zerkratzt hast."
+   },
+   "beute": "putztuch",
+   "beute_satz": "Die Leiter steht noch. Oben liegt das Tuch, ordentlich gefaltet, wie es Vorschrift ist.",
+   "quelle": "skript"
+  },
+  "rueckmoewen": {
+   "n": "Die Rückwärtsmöwe",
+   "biom": "leuchtturm",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 6
+    }
+   ],
+   "sprite": "rueckmoewen_a",
+   "varianten": [
+    "rueckmoewen_a",
+    "rueckmoewen_b"
+   ],
+   "konzept": "Eine Silbermöwe, so groß wie ein Mann. Sie fliegt rückwärts, der Schwanz voran; der Schnabel zeigt fort, aber die Augen sitzen nebeneinander auf der Seite, die dich ansieht.",
+   "stimme": "schmuggler",
+   "kniff": {
+    "art": "kopie",
+    "why": "Was du eben getan hast, bringt sie dir zurück, Schwanz voran."
+   },
+   "beute": null,
+   "beute_satz": "Sie fällt rückwärts von der Mauer. Unten liegen nur Federn, die Spitzen nach vorn.",
+   "quelle": "skript"
+  },
+  "strahlgaenger": {
+   "n": "Der aus dem Strahl",
+   "biom": "leuchtturm",
+   "rang": "normal",
+   "hp": 28,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "strahlgaenger_a",
+   "varianten": [
+    "strahlgaenger_a",
+    "strahlgaenger_b"
+   ],
+   "konzept": "Ein Matrose der „Gesine“, die im Winter 1917 auf die Klippe lief. Es gibt ihn nur, wo der Strahl ihn trifft: Eine gerade Kante schneidet ihn schräg durch, dahinter ist nur Staub im Licht. Das Wasser tropft nach oben.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "verstopfen",
+    "n": 1,
+    "karte": "Seewasser",
+    "why": "Er tropft. Was er anfasst, ist nass und zu nichts zu gebrauchen, bis es trocken ist."
+   },
+   "beute": "korkring",
+   "beute_satz": "Die Kante wandert weiter, und mit ihr geht der Rest von ihm. Auf dem Pflaster bleibt eine Pfütze, die nach oben tropft.",
+   "quelle": "skript"
+  },
+  "fensterzaehlerin": {
+   "n": "Die Fensterzählerin",
+   "biom": "leuchtturm",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 9
+    }
+   ],
+   "sprite": "fensterzaehlerin_a",
+   "varianten": [
+    "fensterzaehlerin_a",
+    "fensterzaehlerin_b"
+   ],
+   "konzept": "Die Frau des Oberwärters. Nachts zählt sie die Fenster der Wärterhäuser; es ist jede Nacht eins mehr. Eins trägt sie ausgehängt vor sich her. Darin ist Licht, als stünde ein Zimmer dahinter, und in einer Scheibe steht eine Frau und zählt.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Sie zählt nach, und es ist eins zu viel."
+   },
+   "beute": "fensterschluessel",
+   "beute_satz": "Das Fenster fällt auf das Pflaster und bricht nicht. Drinnen geht das Licht aus.",
+   "quelle": "skript"
+  },
+  "linse": {
+   "n": "Die Linse",
+   "biom": "leuchtturm",
+   "rang": "waechter",
+   "hp": 82,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "sprite": "linse",
+   "varianten": [
+    "linse"
+   ],
+   "konzept": "Die Gürtellinse erster Ordnung, groß wie ein Zimmer, auf ihrem Quecksilberbad. Der Oberwärter ist 1917 hineingestiegen, um sie nach innen zu drehen. Durch das Glas sieht man ihn in Streifen; das Ochsenauge vergrößert sein Auge.",
+   "stimme": "windgestalt",
+   "kniff": {
+    "art": "takt",
+    "v": 6,
+    "why": "Die Kennung: ein Blitz, dann Dunkel. Im Strahl ist alles geschützt, im Dunkel ist sie nur Glas."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 7,
+       "h": 2
+      },
+      {
+       "t": "blk",
+       "v": 10
+      },
+      {
+       "t": "atk",
+       "v": 16
+      },
+      {
+       "t": "atk",
+       "v": 5,
+       "h": 3
+      }
+     ]
+    ],
+    "ruft": {
+     "gegner": "strahlgaenger",
+     "alle": 3,
+     "anzahl": 1
+    }
+   },
+   "beute": "ochsenauge",
+   "beute_satz": "Die Linse bleibt stehen. Zum ersten Mal seit 1917 fällt der Strahl aufs Meer, und draußen drehen alle Schiffe zugleich bei.",
+   "quelle": "skript"
+  },
+  "nebelhorn": {
+   "n": "Das Nebelhorn",
+   "biom": "leuchtturm",
+   "rang": "waechter",
+   "hp": 98,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "laedt",
+     "v": 0
+    },
+    {
+     "t": "laedt",
+     "v": 0
+    },
+    {
+     "t": "atk",
+     "v": 19
+    }
+   ],
+   "sprite": "nebelhorn",
+   "varianten": [
+    "nebelhorn"
+   ],
+   "konzept": "Der Hornwärter, der in der Nacht der „Gesine“ das Horn nicht blies, weil die Küste dunkel bleiben sollte. Er trägt den Schalltrichter statt des Kopfes und den Blasebalg auf dem Rücken. Das Horn bläst nicht hinaus, es zieht ein: Nebel, Licht und Schall strömen hinein, bis es voll ist.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 19,
+    "why": "Es holt Luft, zwei Züge lang, und zieht dabei den Nebel ein. Dann kommt alles auf einmal zurück."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "rueckmoewen",
+    "alle": 3
+   },
+   "beute": "zunderbuechse",
+   "beute_satz": "Der Trichter ist leer. Zum ersten Mal seit 1917 hört man draußen die Brandung, und dann, sehr weit, ein Schiffshorn, das antwortet.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "leuchtturm_wachbuch",
+   "t": "Das Wachbuch",
+   "d": "In der Wachstube liegt das Wachbuch offen unter der Lampe. Jede Nacht seit dem Winter 1917 derselbe Eintrag: Feuer brennt. Sicht gut. Kein Schiff. Neben jedem Eintrag Striche, für die Schiffe, die doch kamen. Es sind sehr viele Striche.",
+   "bild": "Ein aufgeschlagenes Buch unter einer Petroleumlampe, die Seiten voller Striche in Fünferbündeln, am Rand ein Fingerabdruck in Ruß.",
+   "o": [
+    {
+     "l": "Einen Strich dazumachen: +1 Kerbe an einem Item, −5 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Die Striche zählen, bis die Lampe ausgeht: einen Handgriff lernen",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      }
+     ]
+    },
+    {
+     "l": "Die Seite herausreißen: +22 Gold, Kampf gegen den aus dem Strahl",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 22
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "strahlgaenger"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "leuchtturm_galerie",
+   "t": "Die Galerie",
+   "d": "Oben auf der Galerie steht ein Eimer Spiritus, daneben ein Ledertuch, ordentlich gefaltet. Die Scheiben der Laterne sind beschlagen, von innen. Jemand hat mit dem Finger einen Kreis hineingewischt, auf Augenhöhe.",
+   "bild": "Die eiserne Galerie um die Laterne, Scheiben mit Rautenrahmen, ein Kreis in der beschlagenen Scheibe, dahinter ein Glimmen.",
+   "o": [
+    {
+     "l": "Die Scheiben putzen, wie es Vorschrift ist: Ledertuch des Lampenputzers, −4 Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "putztuch"
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ]
+    },
+    {
+     "l": "Durch den Kreis sehen: eine Karte kostet dauerhaft 1 weniger, −6 max. Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ]
+    },
+    {
+     "l": "Deine Laterne an die Scheibe halten: +1 Kerbe an einem Item, +6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ],
+     "if": {
+      "item": "lantern"
+     }
+    },
+    {
+     "l": "Hinuntergehen, ohne hinzusehen: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "leuchtturm_schiffe",
+   "t": "Die Schiffe",
+   "d": "Von der Klippe aus sieht man draußen die Lichter. An jedem Schiff Rot und Grün zugleich, das heißt: Es hält genau auf dich zu. Es sind elf. Keins ist näher gekommen, seit du hier stehst.",
+   "bild": "Schwarzes Meer unter der Klippe, darauf elf Lichterpaare, rot und grün, alle in einer Linie, die auf den Betrachter zeigt.",
+   "o": [
+    {
+     "l": "Die Leuchtpistole abfeuern, rot: ein seltenes Item. Alle Lichter gehen aus. Eins nicht.",
+     "fx": [
+      {
+       "op": "give_rare"
+      }
+     ],
+     "if": {
+      "item": "flaregun"
+     }
+    },
+    {
+     "l": "Die Lichter zählen, bis es zwölf sind: +1 Talisman-Slot, −8 Leben",
+     "fx": [
+      {
+       "op": "add_slot",
+       "area": "talisman"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ],
+     "if": {
+      "slot_below_max": "talisman"
+     }
+    },
+    {
+     "l": "Du kennst die Lichter. So fährt keiner, der heimwill. Eine Reaktion entdecken, +6 Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ],
+     "if": {
+      "job": "fischer"
+     }
+    },
+    {
+     "l": "Dich umdrehen und gehen: +10 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "leuchtturm_waesche",
+   "t": "Die Wäscheleine",
+   "d": "Hinter dem Wärterhaus hängt Wäsche im Strahl: ein Kinderhemd, zwei Hosen, ein Ölzeug in Männergröße. Alles ist nass, obwohl es nicht regnet. In den Taschen des Ölzeugs steckt Tang.",
+   "bild": "Eine Wäscheleine zwischen zwei Pfählen, ein triefendes Ölzeug, darunter auf dem Pflaster Tropfen, die nach oben fallen.",
+   "o": [
+    {
+     "l": "Das Ölzeug abnehmen: Ölmantel, Kampf gegen den aus dem Strahl",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "oilcoat"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "strahlgaenger"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Die Taschen leeren: +18 Gold, eine Karte streichen",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 18
+      },
+      {
+       "op": "strike"
+      }
+     ]
+    },
+    {
+     "l": "Die Wäsche abnehmen und falten, wie es sich gehört: +12 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 12
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "leuchtturm_fenster",
+   "t": "Die Fenster",
+   "d": "Vor dem Wärterhaus steht die Frau des Oberwärters im Strahl und zählt die Fenster. „Elf“, sagt sie, und sieht dich an. Du zählst zwölf. Hinter dem zwölften brennt Licht.",
+   "bild": "Ein weiß gekalktes Haus mit Sprossenfenstern, zwölf, und eine Frau im Schultertuch davor, die einen Finger hebt.",
+   "o": [
+    {
+     "l": "„Zwölf.“ Schlüsselbund der Wärterfrau, Kampf gegen die Fensterzählerin",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "fensterschluessel"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "fensterzaehlerin"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "„Elf.“ +1 Kerbe an einem Item, −5 max. Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Ans zwölfte Fenster gehen und hineinsehen: ein Item tauschen",
+     "fx": [
+      {
+       "op": "item_tausch"
+      }
+     ],
+     "if": {
+      "job": "detektiv"
+     }
+    },
+    {
+     "l": "Nichts sagen: +12 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 12
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "leuchtturm_eintrag",
+   "t": "Ein neuer Eintrag",
+   "if": {
+    "event_gesehen": "leuchtturm_wachbuch"
+   },
+   "d": "Im Wachbuch steht ein neuer Eintrag, die Tinte ist noch nass. Feuer brennt. Sicht gut. Ein Schiff. Die Schrift ist deine.",
+   "bild": "Dieselbe Seite wie vorher, darunter eine Zeile in anderer Hand, der letzte Buchstabe ausgelaufen.",
+   "o": [
+    {
+     "l": "Den Eintrag unterschreiben: +1 Kerbe an einem Item, +10 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ]
+    },
+    {
+     "l": "Den Korkring auf die Seite legen: ein Handgriff, +1 Kerbe",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "item": "korkring"
+     }
+    },
+    {
+     "l": "Die Zeile durchstreichen: +25 Gold, −7 Leben",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 25
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "leuchtturm_marke",
+   "t": "Die Briefmarke",
+   "if": {
+    "event_gesehen": "alle_brief"
+   },
+   "d": "Am Fuß des Turms fällt es dir ein: Die Marke auf dem Brief zeigte diesen Turm. Das Licht nach unten. Du siehst hinauf. Der Strahl fällt auf dich.",
+   "bild": "Der rot-weiß gestreifte Turm von unten, der Strahl senkrecht herab wie ein Stab aus Licht, darin ein kleiner Mensch.",
+   "o": [
+    {
+     "l": "Im Strahl stehen bleiben: einen Handgriff lernen, volles Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "full_heal"
+      }
+     ]
+    },
+    {
+     "l": "Aus dem Strahl treten: +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "putztuch": {
+   "n": "Ledertuch des Lampenputzers",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "veil",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 22,
+   "eigen": {
+    "typ": "start_block",
+    "v": 2
+   },
+   "flavor": "Weiches Rehleder, wie es Vorschrift ist. Es putzt alles blank, auch was nicht schmutzig war.",
+   "cards": [
+    {
+     "n": "Blank reiben",
+     "c": 1,
+     "blk": 5,
+     "draw": 1
+    }
+   ]
+  },
+  "korkring": {
+   "n": "Korkring der Gesine",
+   "a": "kleidung",
+   "st": [
+    "W"
+   ],
+   "spr": "shell",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "block_haelt_halb"
+   },
+   "flavor": "Auf dem Ring steht der Name eines Schiffs, das 1917 an der Klippe sank. Er ist nass. Er wird nicht trocken.",
+   "cards": [
+    {
+     "n": "Obenbleiben",
+     "c": 1,
+     "blk": 7
+    }
+   ]
+  },
+  "fensterschluessel": {
+   "n": "Schlüsselbund der Wärterfrau",
+   "a": "talisman",
+   "st": [
+    "E"
+   ],
+   "spr": "watch",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 40,
+   "eigen": {
+    "typ": "hand_plus",
+    "v": 1
+   },
+   "flavor": "Elf Schlüssel für elf Fenster. Es sind zwölf Fenster. Einer der Schlüssel ist warm.",
+   "cards": [
+    {
+     "n": "Nachzählen",
+     "c": 1,
+     "draw": 2
+    }
+   ]
+  },
+  "ochsenauge": {
+   "n": "Das Ochsenauge",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "lantern",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 130,
+   "nodrop": true,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 2
+   },
+   "flavor": "Das mittlere Feld der Linse, so groß wie ein Teller. Wer hindurchsieht, sieht alles größer und näher. Manchmal sieht etwas zurück, auch vergrößert.",
+   "cards": [
+    {
+     "n": "Der Strahl",
+     "c": 2,
+     "atk": 7,
+     "all": true,
+     "vuln": 1
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/leuchtturm.js"
+ ]
+}

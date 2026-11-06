@@ -1,0 +1,255 @@
+{
+ "id": "salz_plus",
+ "ergaenzt": "salz",
+ "gegner_dazu": [
+  "salzmann"
+ ],
+ "waechter_dazu": [
+  "eingesalzene"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "salzwuerfel"
+ ],
+ "foes": {
+  "salzmann": {
+   "n": "Der Mann im Salz",
+   "biom": "salz",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    }
+   ],
+   "sprite": "salzmann_a",
+   "varianten": [
+    "salzmann_a",
+    "salzmann_b"
+   ],
+   "konzept": "Ein Hauer aus der Bronzezeit, vom Salz bewahrt, mit Tragsack und brennendem Kienspan; sein Kopf ist zu einem einzigen Salzwürfel auskristallisiert, und darin hat das Gesicht die Augen offen.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "rein",
+    "why": "Was dreitausend Jahre im Salz lag, verdirbt nicht mehr. Gift findet an ihm nichts, das faulen kann."
+   },
+   "beute": "salzwuerfel",
+   "beute_satz": "Unter dem Salz liegt ein Lederschuh, genäht, nicht genagelt. Er ist warm.",
+   "quelle": "skript"
+  },
+  "eingesalzene": {
+   "n": "Die Eingesalzene",
+   "biom": "salz",
+   "rang": "waechter",
+   "hp": 77,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 14
+    },
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 18
+    }
+   ],
+   "sprite": "eingesalzene",
+   "varianten": [
+    "eingesalzene"
+   ],
+   "konzept": "Eine Salzsiederin aus der Zeit vor den Römern. Sie hat sich in die Siedepfanne gesetzt, damit sie bleibt, und sie ist geblieben: Das Salz ist an ihr gewachsen, in Würfeln, alle gleich glatt, als Treppe bis unter die Decke. Unter der Pfanne brennt das Siedefeuer bis heute.",
+   "stimme": "opfernde",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Sie salzt ein, was sie berührt: Eine deiner Karten ist diesen Zug eingesalzen und unspielbar."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "eingesalzene_p2"
+    ],
+    "schwach": [
+     "B"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 14
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 3
+      },
+      {
+       "t": "buff",
+       "v": 3
+      },
+      {
+       "t": "atk",
+       "v": 20
+      }
+     ]
+    ]
+   },
+   "beute": "salzwuerfel",
+   "beute_satz": "Die Kruste fällt in die Pfanne, Würfel für Würfel. Darunter ist niemand mehr, nur eine Mulde in Menschenform, und die Sole darin ist warm.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "salz_schuh",
+   "t": "Der Schuh im Salz",
+   "d": "In der Stollenwand steckt ein Lederschuh, genäht, nicht genagelt, älter als jedes römische Zeichen hier unten. Daneben ein angekohlter Span. Als du ihn berührst, ist er warm, und weiter drinnen im Salz knistert etwas, als würde es wachsen.",
+   "bild": "Eine weiße Salzwand im Lampenlicht, darin halb eingeschlossen ein dunkler Schuh und ein Holzspan; über ihnen ein glatter, würfelförmiger Kristall.",
+   "o": [
+    {
+     "l": "Den Würfel aus der Wand brechen: Der Würfel aus dem Berg, Kampf gegen den Mann im Salz",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "salzwuerfel"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "salzmann"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Den Span anzünden und ihm folgen: einen Handgriff lernen, −5 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ],
+     "if": {
+      "hp_min": 6
+     }
+    },
+    {
+     "l": "Salz über den Schuh streuen und weitergehen: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "salz_zweites_buch",
+   "t": "Das ältere Schichtbuch",
+   "d": "Hinter der Lorenkehre liegt noch ein Schichtbuch, viel älter. Es hat keine Buchstaben, nur Striche in Reihen, eingekerbt in Holztafeln, und hinter jeder Reihe ein kleiner Würfel. Die Reihen werden nach hinten länger. Die letzte ist nicht fertig.",
+   "bild": "Ein Stapel dunkler Holztafeln auf einem Salzblock, voller Kerbstriche, daneben ein Häufchen kleiner, glatter Salzwürfel.",
+   "o": [
+    {
+     "l": "Die letzte Reihe mit den Einträgen von 1911 vergleichen: eine Karte kostet dauerhaft 1 weniger, −4 max. Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ],
+     "if": {
+      "event_gesehen": "salz_schichtbuch"
+     }
+    },
+    {
+     "l": "Einen Strich dazukerben: +1 Kerbe an einem Item, −6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 7
+     }
+    },
+    {
+     "l": "Die Würfel einstecken: +25 Gold, Kampf gegen den Mann im Salz",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 25
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "salzmann"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "salzwuerfel": {
+   "n": "Der Würfel aus dem Berg",
+   "a": "talisman",
+   "st": [
+    "S"
+   ],
+   "spr": "salt",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 46,
+   "eigen": {
+    "typ": "block_haelt_halb"
+   },
+   "flavor": "Ein Salzkristall, so rechtwinklig, als hätte ihn jemand gezogen. Wer lange hineinsieht, sieht ein Lid, das sich schließt.",
+   "cards": [
+    {
+     "n": "Einsalzen",
+     "c": 1,
+     "blk": 7
+    }
+   ]
+  }
+ }
+}

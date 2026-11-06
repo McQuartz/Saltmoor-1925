@@ -19,9 +19,19 @@ function szenenWahl(){const ph=S.phase||'titel';const b=S.route?biomId():'hafen'
  const variante=S.seed!=null?R(`szene:${S.akt}:${S.ebene}`).int(0,2):0;
  const map={titel:'titel',figur:'strand',strand:'strand',ankunft:'ankunft',ende:'ankunft',uebergang:'uebergang',weg:'weg',reward:'kampf',event:'ereignis',event_folge:'ereignis',streichen:'ereignis',kraemer:'kraemer',kraemer_streichen:'kraemer',werkstatt:'werkstatt',rast:'rast',wandbild:'wandbild',fund:'fund',knoten:'weg'};
  let art=map[ph]||'kampf';if(ph==='fight'||ph==='reward')art=(S.kampfArt==='waechter'||S.kampfArt==='finale')?'waechter':'kampf';
- return{biom:b,art,variante,fremdheit:fremd,seed:(S.seed||7)+S.akt*101+(S.ebene||0)*13};}
-function szeneHolen(){const w=szenenWahl();const key=JSON.stringify(w);if(key===BU.key&&BU.sz)return BU.sz;BU.key=key;
- try{BU.sz=typeof World!=='undefined'?World.build(w.biom,w):ersatzSzene(w);}catch(e){console.warn('Szene',e);BU.sz=ersatzSzene(w);}return BU.sz;}
+ const w={biom:b,art,variante,fremdheit:fremd,seed:(S.seed||7)+S.akt*101+(S.ebene||0)*13};
+ // Wächter-Szene je Boss-Phase (szenenPhase in combat.js): ab Phase 1 bekommt World.build ein Feld phase (paket-format.md)
+ const sp=art==='waechter'&&typeof szenenPhase==='function'?szenenPhase():0;if(sp)w.phase=sp;return w;}
+function szeneHolen(){const w=szenenWahl();const key=JSON.stringify(w);if(key===BU.key&&BU.sz)return BU.sz;BU.key=key;const alt=BU.sz,altPh=BU.szPhase||0;
+ try{BU.sz=typeof World!=='undefined'?World.build(w.biom,w):ersatzSzene(w);}catch(e){console.warn('Szene',e);BU.sz=ersatzSzene(w);}
+ // Neue Boss-Phase: alte Szene blendet in 0,8 s gestuft aus, die neue liegt darunter; optionaler Haken World._biome.<id>.phase(n, szene)
+ const ph=w.phase||0;BU.szPhase=ph;
+ if(alt&&w.art==='waechter'&&ph>altPh){BU.szAlt={sz:alt,t0:BU.t};const D=typeof World!=='undefined'&&World._biome&&World._biome[w.biom];
+  if(D&&typeof D.phase==='function'){try{D.phase(ph,BU.sz);}catch(e){console.warn('Szenenphase',e);}}
+  Bus.emit('szene_phase',{biom:w.biom,phase:ph,why:`Wächter-Szene ${w.biom} für Phase ${ph+1} neu gebaut (World.build mit phase ${ph})`});}
+ return BU.sz;}
+function zeichneSzene(sz,g,t,cam){if(sz.zeichneHintergrund){try{sz.zeichneHintergrund(g,t,cam);}catch(e){}return;}
+ sz.ebenen.forEach(L=>{g.drawImage(L.canvas,(L.x||0)-Math.round(cam.x*L.parallax),(L.y||0)-Math.round(cam.y*L.parallax));});try{sz.zeichneAnimiert&&sz.zeichneAnimiert(g,t,cam);}catch(e){}}
 // Ersatz, solange js/scenes/world/ fehlt: Nebel-Verlauf in den Biom-Farben, Boden, drei Reihen
 function ersatzSzene(w){const B=BIOMES[w.biom]||BIOMES.hafen;const c=document.createElement('canvas');c.width=SW;c.height=SH;const x=c.getContext('2d');
  const A=hx(B.nebel[0]),Z=hx(B.nebel[1]),K=hx(B.koerper[1]);const id=x.createImageData(SW,SH),d=id.data;
@@ -34,11 +44,11 @@ function visOf(e){let v=BU.vis.get(e.uid);if(!v){v={hit:0,kx:0,lunge:0,dying:0,g
 // Position eines Gegners in der Szene (Fußpunkt, Größe), aus Aufstellung und Reihen der Szene
 function enemyBox(e){const sz=BU.sz||szeneHolen();const rh=sz.reihen[e.reihe??2]||sz.reihen[2];const sp=e.sprite&&SPRITES[e.sprite];
  let w=96,h=120;if(sp&&sp.meta){w=sp.meta.w;h=sp.meta.h;}else if(e.spr==='boss'){w=160;h=140;}else{w=64;h=80;}
- const sk=e.rang==='normal'?rh.skala:1;return{x:Math.round(e.x*SW),y:rh.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel:rh.nebel,kopf:sp&&sp.meta&&sp.meta.kopf!=null?rh.y-Math.round((sp.meta.fuss[1]-(Array.isArray(sp.meta.kopf)?sp.meta.kopf[1]:sp.meta.kopf))*sk):rh.y-Math.round(h*sk*.92)};}
+ const sk=e.rang==='normal'||e.pendel?rh.skala:e.rang==='boss'?.92:1;if(e.pendel&&!FAST){e.xa=e.xa==null?e.x:e.xa+(e.x-e.xa)*.06;}const ex=e.pendel&&e.xa!=null?e.xa:e.x;return{x:Math.round(ex*SW),y:rh.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel:rh.nebel,kopf:sp&&sp.meta&&sp.meta.kopf!=null?rh.y-Math.round((sp.meta.fuss[1]-(Array.isArray(sp.meta.kopf)?sp.meta.kopf[1]:sp.meta.kopf))*sk):rh.y-Math.round(h*sk*.92)};}
 const FX={
  pos(e){return enemyBox(e);},
- hit(e,d,col){if(!e)return;const v=visOf(e);const p=enemyBox(e);v.hit=.11;v.kx=Math.min(8,3+d/3);v.anim='treffer';v.at=0;burst(p.x,p.y-p.h*.55,col||'#c8483a',Math.min(24,4+d),1.5);
-  if(d>0){BU.freeze=performance.now()+(d>=12?110:45);BU.shake=Math.max(BU.shake,Math.min(8,1.5+d/4));}},
+ hit(e,d,col,wer){if(!e)return;const W=BAL.wucht||{},k=wer==='eigen'?(W.eigen||1):(W.gegner||1);const v=visOf(e);const p=enemyBox(e);v.hit=.11;v.kx=Math.min(10,(W.rueckstoss||4)*k+d/4);v.anim='treffer';v.at=0;burst(p.x,p.y-p.h*.55,col||'#c8483a',Math.min(28,4+d)*k|0,1.5*k);
+  if(d>0){BU.freeze=performance.now()+(d>=(W.gross_ab||12)?(W.hitstop_gross_ms||120):(W.hitstop_ms||55))*k;BU.shake=Math.max(BU.shake,Math.min(9,((W.ruck||3)+d/5)*k));}},
  slash(e,col){const p=enemyBox(e);FXL.push({k:'slash',x:p.x,y:p.y-p.h*.55,col,t:0,dur:.2,s:p.w*.6,flip:Math.random()<.5});},
  ring(col,e){const p=e&&e.hp!==undefined?enemyBox(e):{x:240,y:180,h:0};FXL.push({k:'ring',x:p.x,y:p.y-p.h*.5,col,t:0,dur:.55,r:e?44:150});},
  flash(col,a){BU.flashCol=col;BU.flashA=a;},
@@ -63,8 +73,8 @@ function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.fr
  const atm=Math.sin(t*.35)*1.2;BU.cam.x+=(((BU.maus.x-240)/240)*4-BU.cam.x)*.05;BU.cam.y+=(((BU.maus.y-135)/135)*2+atm-BU.cam.y)*.05;
  BU.shake*=Math.pow(.002,dt||.016);const sx=(Math.random()-.5)*BU.shake,sy=(Math.random()-.5)*BU.shake;const cam={x:BU.cam.x+sx,y:BU.cam.y+sy};
  g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.fillStyle='#000';g.fillRect(0,0,SW,SH);
- if(sz.zeichneHintergrund){try{sz.zeichneHintergrund(g,t,cam);}catch(e){}}
- else{sz.ebenen.forEach(L=>{g.drawImage(L.canvas,(L.x||0)-Math.round(cam.x*L.parallax),(L.y||0)-Math.round(cam.y*L.parallax));});try{sz.zeichneAnimiert&&sz.zeichneAnimiert(g,t,cam);}catch(e){}}
+ zeichneSzene(sz,g,t,cam);
+ if(BU.szAlt){const q=(t-BU.szAlt.t0)/.8;if(q>=1||BU.szAlt.sz===sz)BU.szAlt=null;else{g.globalAlpha=Math.ceil((1-q)*4)/4;zeichneSzene(BU.szAlt.sz,g,t,cam);g.globalAlpha=1;}}
  if(S.enemies&&['fight','reward'].includes(S.phase)){const list=[...S.enemies].sort((a,b)=>(a.reihe-b.reihe)||(a.x-b.x));list.forEach(e=>zeichneGegner(g,e,dt,t,cam));}
  if(typeof PFX!=='undefined')try{PFX.zeichne(g,dt);}catch(e){}
  try{sz.zeichneVordergrund&&sz.zeichneVordergrund(g,t,cam);}catch(e){}
@@ -107,10 +117,17 @@ function zeichneGegner(g,e,dt,t,cam){const v=visOf(e);if(v.gone)return;const p=e
  glows.forEach(q=>dglowA(g,ox+Math.round((q[0]-fx)*sk),fy+Math.round((q[1]-fyy)*sk),q[3],q[2],.6));}
 // Trefferblitz, Zielmarkierung, Nebel der hinteren Reihe, Auflösen beim Tod (alles gedithert, keine Weichzeichnung)
 const _tmp={};function tmpCanvas(w,h){const k=w+'x'+h;if(!_tmp[k]){const c=document.createElement('canvas');c.width=w;c.height=h;_tmp[k]={c,x:c.getContext('2d',{willReadFrequently:true})};}return _tmp[k];}
+// Unverwundbarer Zug (Musterschritt unverw): halb durchscheinend im Schachbrett-Raster, kühl getönt, am Rand ein wandernder kalter Schimmer (kein Weichzeichner)
+const UNVERW_RAND=[[207,232,255],[120,160,210]],UNVERW_TON=[150,185,230];
 function nachbearbeiten(tc,e,v,p){const w=tc.c.width,h=tc.c.height;const neb=p.nebel||0;const tod=v.dying?Math.min(1,v.dying/.9):0;const ziel=typeof AIM!=='undefined'&&AIM.ei===S.enemies.indexOf(e);
- if(!(v.hit&&!v.sheet)&&!neb&&!tod&&!ziel)return;const id=tc.x.getImageData(0,0,w,h),d=id.data;const nc=hx(BIOMES[biomId()].nebel[1]);
+ const uv=!tod&&e.hp>0&&S.phase==='fight'&&typeof unverwJetzt==='function'&&unverwJetzt(e);
+ if(!(v.hit&&!v.sheet)&&!neb&&!tod&&!ziel&&!uv)return;const id=tc.x.getImageData(0,0,w,h),d=id.data;const nc=hx(BIOMES[biomId()].nebel[1]);
+ let al=null,ph=0;if(uv){al=new Uint8Array(w*h);for(let k=0;k<w*h;k++)al[k]=d[k*4+3]>0?1:0;ph=Math.floor(BU.t*7);}
  for(let y=0;y<h;y++)for(let i=0;i<w;i++){const o=(y*w+i)*4;if(!d[o+3])continue;
   if(tod&&(tod*1.15>bay(i,y)*.6+(1-y/h)*.5)){d[o+3]=0;continue;}
+  if(uv){const k=y*w+i;const rand=!(i>0&&al[k-1])||!(i<w-1&&al[k+1])||!(y>0&&al[k-w])||!(y<h-1&&al[k+w]);
+   if(rand){const c=UNVERW_RAND[((i+y+ph)%7)<3?0:1];d[o]=c[0];d[o+1]=c[1];d[o+2]=c[2];d[o+3]=255;continue;}
+   d[o]=(d[o]*3+UNVERW_TON[0])>>2;d[o+1]=(d[o+1]*3+UNVERW_TON[1])>>2;d[o+2]=(d[o+2]*3+UNVERW_TON[2])>>2;if((i+y)&1)d[o+3]=d[o+3]>>1;}
   if(v.hit>0&&!v.sheet&&((i+y)&1)){d[o]=Math.min(255,d[o]+50);d[o+1]=Math.min(255,d[o+1]+45);d[o+2]=Math.min(255,d[o+2]+40);continue;} // dezent; Sheets haben eine eigene Treffer-Animation
   if(neb&&neb>bay(i,y)+.35){d[o]=(d[o]+nc[0])>>1;d[o+1]=(d[o+1]+nc[1])>>1;d[o+2]=(d[o+2]+nc[2])>>1;}
   if(ziel&&((i+y)&7)===0){d[o]=Math.min(255,d[o]+60);}}

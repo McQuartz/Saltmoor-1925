@@ -1,0 +1,296 @@
+{
+ "id": "waisenhaus",
+ "akt": 1,
+ "biom": {
+  "n": "Das Waisenhaus am Deich",
+  "kurz": "Waisenhaus",
+  "zeit": "1925, nach dem Zapfenstreich",
+  "anreise": "Hinter Saltmoor steht auf dem Deich das Waisenhaus von 1890. Seit der Sturmflut von 1913 ist es voll belegt.",
+  "koerper": ["#060708", "#0d0f12", "#171a1f", "#252a31"],
+  "rand": ["#9a4630", "#f6b08a"],
+  "augen": "#ff3b2b",
+  "nebel": ["#14171b", "#2c3238"],
+  "musik": "waisenhaus",
+  "gegner": ["nachtschwester", "turnlehrer", "zugedeckte", "zwillinge"],
+  "waechter": "heimleiterin",
+  "waechter_alt": ["fotograf"],
+  "fundpool": ["trillerpfeife", "schluesselbund", "nachthemd", "musicbox", "candle", "bible", "rosary", "lantern", "laudanum", "smellingsalts"],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Hausmeister",
+   "ort": "im Heizungskeller unter dem Schlafsaal, zwischen Koks und einem Regal mit Fundsachen, an jeder ein Zettel mit einer Nummer",
+   "zeile": "Er verkauft, was die Kinder liegen gelassen haben. Sie holen es nicht mehr ab, sagt er, und er sagt es zu schnell. Er heizt, obwohl Sommer ist, damit oben endlich etwas trocken wird."
+  },
+  "uebergang": "Die Heimleiterin klappt das Buch zu. Im Schlafsaal ist jetzt ein Bett frei, und unter dem Bett ist eine Luke, aus der es nach nassem Stein riecht. Eine Leiter führt hinab, tiefer, als der Deich hoch ist.",
+  "weg_hinweise": {
+   "kampf": [
+    "Hinter einer Tür klirrt ein Schlüsselbund. Jemand zählt halblaut, und zählt sich nicht fest.",
+    "Ein Pfiff aus dem Turnsaal, kurz, wie zum Antreten.",
+    "Über das Linoleum schleift eine Decke, langsam, in deine Richtung."
+   ],
+   "ereignis": [
+    "Eine Tür mit einer Nummer, die es im Haus nicht geben dürfte.",
+    "Ein Fenster zum Deich, beschlagen. Von außen."
+   ],
+   "wandbild": [
+    "Eine Wandtafel mit Kreide: Kinderzeichnungen vom Deich. Auf allen ist das Wasser höher als das Haus."
+   ],
+   "kraemer": [
+    "Aus dem Keller kommt Wärme und das Scharren einer Kohlenschaufel."
+   ],
+   "werkstatt": [
+    "Die Werkstube der Großen. Hobelbank, Leim, ein halbfertiges Bett."
+   ],
+   "rast": [
+    "Ein Bett, das gemacht ist und trocken. Das einzige."
+   ],
+   "fundstelle": [
+    "Unter einem Kissen schaut etwas hervor."
+   ]
+  },
+  "beute_saetze": [
+   "Irgendwo im Haus sagt ein Kind „hier“. Dann noch eins. Dann sehr viele.",
+   "Auf dem Linoleum trocknet eine Spur aus nassen Fußabdrücken. Sie führt zu den Betten, nicht von ihnen weg.",
+   "Über einem leeren Bett schraubt jemand eine neue Nummer an die Wand. Man hört nur den Schraubenzieher.",
+   "Das rote Nachtlicht über der Tür flackert einmal, wie ein Lid.",
+   "Draußen auf dem Deich geht der Wind. Drinnen bewegen sich die Vorhänge in die andere Richtung.",
+   "Eine Decke liegt zusammengefaltet auf Kante, wo eben noch etwas lag. Sie ist warm, und sie tropft.",
+   "Im Flur stellt sich jemand ans Ende der Reihe. Die Reihe ist jetzt eins länger.",
+   "Aus dem Schlafsaal kommt das Geräusch von vierzig Menschen, die zugleich einatmen. Ausatmen hört man sie nicht."
+  ]
+ },
+ "musik": {"n": "Waisenhaus am Deich", "root": 53, "key": "f-Moll", "names": ["Fm", "D♭", "B♭m", "C"], "darkNames": ["Fm", "G", "B♭m", "C♭9"],
+  "amb": {"wind": 0.08, "meer": 0.03}, "rhy": "atem", "detail": "hafen",
+  "ort": "Schlafsaal bei Sturm, der Wind am Deich, Regen an hohen Fenstern, vierzig Kinder, die atmen", "rhyN": "Atem im Takt, sehr leise, wie Schlafende"},
+ "foes": {
+  "fotograf": {
+   "n": "Der Fotograf von 1913",
+   "biom": "waisenhaus",
+   "rang": "waechter",
+   "hp": 96,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 14
+    },
+    {
+     "t": "blk",
+     "v": 14
+    },
+    {
+     "t": "atk",
+     "v": 7,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 20
+    }
+   ],
+   "sprite": "fotograf",
+   "varianten": [
+    "fotograf",
+    "fotograf_p2"
+   ],
+   "konzept": "Er kam nach der Sturmflut für das Gruppenbild, das im Flur hängt und auf dem zu viele Köpfe sind. Die Plattenkamera steht auf dem Dreibein, er selbst unter dem schwarzen Tuch, die Blitzlampe hoch erhoben. Unter dem Saum stehen seine Schuhe, und daneben kleine nackte Füße, nass.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Bitte stillhalten. Eine Karte rührt sich nicht, bis das Bild gemacht ist."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "fotograf_p2"
+    ],
+    "schwach": [
+     "F"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 5,
+       "h": 5
+      },
+      {
+       "t": "atk",
+       "v": 17
+      },
+      {
+       "t": "blk",
+       "v": 12
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 4
+      }
+     ]
+    ]
+   },
+   "beute": "lantern",
+   "beute_satz": "Die Platte ist belichtet. Auf dem Bild steht die Halle, leer, und in der ersten Reihe ein Platz frei, genau so breit wie du.",
+   "quelle": "skript"
+  },
+  "nachtschwester": {
+   "n": "Die Nachtschwester", "biom": "waisenhaus", "rang": "normal", "hp": 25, "weak": "G",
+   "pat": [{"t": "atk", "v": 8}, {"t": "blk", "v": 6}, {"t": "atk", "v": 4, "h": 2}],
+   "sprite": "nachtschwester_a", "varianten": ["nachtschwester_a", "nachtschwester_b"],
+   "konzept": "Eine Diakonisse, seit 1913 im Haus, die jede Nacht die Runde macht und zählt. Sie trägt einen Schlüsselbund so groß wie ein Fassreifen, einen Schlüssel für jedes Bett; jede Nacht ist einer mehr daran, und alle tropfen.",
+   "stimme": "kultist",
+   "kniff": {"art": "teurer", "v": 1, "why": "Sie schließt ab. Was du willst, kostet einen Schlüssel mehr."},
+   "beute": "schluesselbund", "beute_satz": "Der Ring rollt noch ein Stück über das Linoleum und bleibt an einem Bettpfosten liegen. Ein Schlüssel daran ist neu und passt in keine Tür im Haus.",
+   "quelle": "skript"
+  },
+  "turnlehrer": {
+   "n": "Der Turnlehrer", "biom": "waisenhaus", "rang": "normal", "hp": 27, "weak": "B",
+   "pat": [{"t": "atk", "v": 9}, {"t": "buff", "v": 2}, {"t": "atk", "v": 4, "h": 2}],
+   "sprite": "turnlehrer_a", "varianten": ["turnlehrer_a", "turnlehrer_b"],
+   "konzept": "Er hat den Kindern im Herbst 1913 auf dem Deich die Waage beigebracht, bei Wind. Er hält sie noch, auf einem Bein, das zu lang ist für einen Menschen. Er atmet nicht; aus der Trillerpfeife unter seiner Brust tropft Wasser.",
+   "stimme": "salzlaeufer",
+   "kniff": {"art": "heiler", "v": 5, "why": "Er pfeift, und wer liegt, steht wieder auf und stellt sich an."},
+   "beute": "trillerpfeife", "beute_satz": "Er fällt nicht um. Er kippt, ganz gerade, wie ein Brett, und das Bein bleibt stehen, bis du wegsiehst.",
+   "quelle": "skript"
+  },
+  "zugedeckte": {
+   "n": "Das Zugedeckte", "biom": "waisenhaus", "rang": "normal", "hp": 25, "weak": "S",
+   "pat": [{"t": "atk", "v": 3, "h": 3}, {"t": "blk", "v": 7}, {"t": "atk", "v": 6}],
+   "sprite": "zugedeckte_a", "varianten": ["zugedeckte_a", "zugedeckte_b"],
+   "konzept": "Ein Kind im Nachthemd, die Anstaltsdecke um die Schultern. Die Decke geht mit und ist viel zu lang: Sie schleppt hinter ihm über das Linoleum, und unter der Schleppe liegen noch welche. Am Saum schauen ihre Hände heraus.",
+   "stimme": "chorknabe",
+   "kniff": {"art": "rein", "why": "Unter der Decke ist alles nass, seit 1913. Was du hineinstreust, wäscht sich aus."},
+   "beute": "nachthemd", "beute_satz": "Die Decke liegt flach auf dem Boden. Du hebst eine Ecke an. Darunter ist nur Linoleum, nass, in der Form von drei Kindern.",
+   "quelle": "skript"
+  },
+  "zwillinge": {
+   "n": "Die Zwillinge", "biom": "waisenhaus", "rang": "normal", "hp": 28, "weak": "L",
+   "pat": [{"t": "atk", "v": 5, "h": 2}, {"t": "atk", "v": 10}, {"t": "blk", "v": 6}],
+   "sprite": "zwillinge_a", "varianten": ["zwillinge_a", "zwillinge_b"],
+   "konzept": "Zwei Mädchen, gleich groß, gleich gekämmt, das Haar nass bis zur Hüfte, Hand in Hand; 1913 kamen sie zusammen ins Haus, Bett 17 und Bett 18. Das Licht wirft nur einen Schatten, und der Schatten hat zwei Köpfe.",
+   "stimme": "schatten",
+   "kniff": {"art": "dornen", "v": 3, "why": "Was du der einen tust, tut die andere dir."},
+   "beute": null, "beute_satz": "Sie lassen einander nicht los, auch jetzt nicht. Der Schatten bleibt noch liegen, als sie fort sind, und dann steht er auf.",
+   "quelle": "skript"
+  },
+  "heimleiterin": {
+   "n": "Die Heimleiterin", "biom": "waisenhaus", "rang": "waechter", "hp": 80, "weak": "F",
+   "pat": [{"t": "atk", "v": 10}, {"t": "atk", "v": 3, "h": 4}, {"t": "buff", "v": 2, "unverw": true, "why": "Nachtruhe. Alle schlafen, und wer schläft, dem tut man nichts."}, {"t": "atk", "v": 16}, {"t": "blk", "v": 10}],
+   "sprite": "heimleiterin", "varianten": ["heimleiterin"],
+   "konzept": "Hoch und schmal im schwarzen Kleid von 1890, mit Keulenärmeln und Stehkragen. Sie hält Appell: das Aufnahmebuch aufgeschlagen auf dem Arm, in der Hand die Feder. Hinter ihr stehen die Kinder in einer Reihe, nach hinten kleiner, und es sind mehr, als Betten da sind. Alle haben nasses Haar.",
+   "stimme": "glockenmutter",
+   "kniff": {"art": "ruf", "gegner": ["zwillinge", "zugedeckte"], "alle": 3, "why": "Sie ruft eine Nummer auf, und es antwortet jemand, der nicht auf der Liste steht."},
+   "kniffe": [{"art": "abschrift", "n": 1, "karte": "Nummer 41", "why": "Sie schreibt dich ins Buch. Die Nummer liegt danach in deinem Stapel und tut nichts."}],
+   "beute": "aufnahmebuch", "beute_satz": "Das Buch fällt zu. Im ganzen Haus ist es einen Atemzug lang still, und dann sagt hinter dir ein Kind, sehr leise: „hier“.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "waisenhaus_schlafsaal",
+   "t": "Vierzig Betten",
+   "d": "Der Schlafsaal: vierzig Betten aus Eisen in zwei Reihen, gemacht, die Decken auf Kante. Über jedem Bett eine Nummer aus Email. An der Stirnwand gehen die Nummern weiter, einundvierzig, zweiundvierzig, dreiundvierzig, bis unter die Decke, und unter ihnen steht kein Bett. Auf jedem Kissen ist ein feuchter Fleck, so groß wie ein Kopf.",
+   "bild": "Ein langer Schlafsaal mit zwei Reihen Eisenbetten, darüber kleine helle Schilder; an der Stirnwand Schilder ohne Betten bis unter die Decke, ein hohes Fenster mit Sturmlicht.",
+   "o": [
+    {"l": "Dich in ein freies Bett legen: volles Leben, −5 max. Leben", "fx": [{"op": "full_heal"}, {"op": "max_hp", "v": -5}]},
+    {"l": "Die Schilder zählen, bis du dich verzählst: einen Handgriff lernen, −4 Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "lose_hp", "v": 4}], "if": {"hp_min": 5}},
+    {"l": "Unter ein Kissen greifen: ein zufälliges Item, −6 Leben", "fx": [{"op": "give_random"}, {"op": "lose_hp", "v": 6}], "if": {"hp_min": 7}},
+    {"l": "Die Tür leise schließen: +5 Leben", "fx": [{"op": "heal", "v": 5}]}
+   ]
+  },
+  {
+   "id": "waisenhaus_reihe",
+   "t": "Die Reihe",
+   "d": "Im Flur stehen die Kinder in einer Reihe, nach Nummern, barfuß auf dem Linoleum. Eine Schwester ruft auf, und jedes Kind sagt „hier“. Bei vierzig klappt sie die Liste zu. Die Reihe ist länger. Am Ende ist ein Platz frei, und alle drehen den Kopf zu dir. Ihr Haar tropft.",
+   "bild": "Ein langer Flur mit einer Reihe kleiner Gestalten im Nachthemd, nach hinten kleiner, am Ende eine Lücke; vorn eine Schwester mit Liste unter einer Lampe.",
+   "o": [
+    {"l": "Das Kind aus dem Gepäcknetz steht in der Reihe. Es zeigt auf die Lücke und schüttelt den Kopf: +8 max. Leben", "fx": [{"op": "max_hp", "v": 8}], "if": {"event_gesehen": "nachtzug_netz"}},
+    {"l": "Dich in die Lücke stellen und „hier“ sagen: +1 Kerbe an einem Item, −6 max. Leben", "fx": [{"op": "kerbe"}, {"op": "max_hp", "v": -6}]},
+    {"l": "Laut weiterzählen, bis die Reihe zu Ende ist: eine Reaktion entdecken, Kampf gegen die Zwillinge", "fx": [{"op": "discover"}, {"op": "fight", "foes": ["zwillinge"]}]},
+    {"l": "Die Augen zumachen, bis sie fort sind: +5 Leben", "fx": [{"op": "heal", "v": 5}]}
+   ]
+  },
+  {
+   "id": "waisenhaus_waesche",
+   "t": "Die Wäschekammer",
+   "d": "In der Wäschekammer liegen Nachthemden in Fächern, gestapelt, an jedem Kragen eine Nummer. Alle sind nass. Auf einem Zettel an der Tür steht in Schönschrift: Seit 1913 nass. Nicht auswringen.",
+   "bild": "Ein Regal mit vielen Fächern, darin gefaltete helle Wäsche, unter jedem Fach ein dunkler Fleck auf dem Boden; an der Tür ein Zettel.",
+   "o": [
+    {"l": "Eines anziehen, das dir passt: das Nachthemd, −3 Leben (es ist kalt)", "fx": [{"op": "give_item", "item": "nachthemd"}, {"op": "lose_hp", "v": 3}], "if": {"hp_min": 4}},
+    {"l": "Eines auswringen: einen Handgriff umritzen. Das Wasser hört nicht auf zu laufen", "fx": [{"op": "umritzen"}]},
+    {"l": "Die Nummern an den Kragen abtrennen und dem Hausmeister verkaufen: +16 Gold, −3 max. Leben", "fx": [{"op": "gold", "v": 16}, {"op": "max_hp", "v": -3}]}
+   ]
+  },
+  {
+   "id": "waisenhaus_deich",
+   "t": "Das Fenster zum Deich",
+   "d": "Vom Schlafsaal sieht man den Deich. Oben auf der Krone stehen Kinder im Regen, mit dem Gesicht zum Haus, in einer Reihe, so weit man sehen kann. Sie klopfen nicht. Sie warten, dass ein Bett frei wird.",
+   "bild": "Ein hohes Sprossenfenster, dahinter Sturmgrau und die Linie des Deichs, darauf eine Reihe kleiner dunkler Gestalten; auf der Fensterbank innen Wasser.",
+   "o": [
+    {"l": "Der Lichtkegel aus dem Hafen streicht über den Deich und bleibt bei ihnen stehen. Sie drehen sich zu ihm um: +7 max. Leben, −6 Leben", "fx": [{"op": "max_hp", "v": 7}, {"op": "lose_hp", "v": 6}], "if": {"event_gesehen": "hafen_lichtkegel"}},
+    {"l": "Das Fenster öffnen: ein seltenes Item, Kampf gegen das Zugedeckte", "fx": [{"op": "give_rare"}, {"op": "fight", "foes": ["zugedeckte"]}]},
+    {"l": "Ein Bett freimachen: eine Karte streichen, −4 Leben", "fx": [{"op": "strike"}, {"op": "lose_hp", "v": 4}], "if": {"hp_min": 5}},
+    {"l": "Den Vorhang zuziehen: +6 Leben", "fx": [{"op": "heal", "v": 6}]}
+   ]
+  },
+  {
+   "id": "waisenhaus_turnsaal",
+   "t": "Der Turnsaal",
+   "d": "Im Turnsaal hängen die Ringe still. Auf den Dielen sind mit Kreide Füße vorgezeichnet, paarweise, in Reihen, für die Freiübungen. Auf jedem Paar steht ein Paar nasser Füße. Darüber ist nichts. Vorn am Haken hängt eine Trillerpfeife.",
+   "bild": "Ein hoher Turnsaal mit Sprossenwand und zwei hängenden Ringen, auf dem Boden Reihen gezeichneter Fußpaare, auf einigen nasse Abdrücke, die glänzen.",
+   "o": [
+    {"l": "„Rührt euch!“, wie im Feld: Die Füße treten weg, einer nach dem anderen. +1 Kerbe an einem Item, +6 Leben", "fx": [{"op": "kerbe"}, {"op": "heal", "v": 6}], "if": {"job": "veteran"}},
+    {"l": "Die Waage halten, so lange wie er: eine Karte kostet dauerhaft 1 weniger, −8 max. Leben", "fx": [{"op": "schleifen"}, {"op": "max_hp", "v": -8}]},
+    {"l": "Die Pfeife vom Haken nehmen: Trillerpfeife, Kampf gegen den Turnlehrer", "fx": [{"op": "give_item", "item": "trillerpfeife"}, {"op": "fight", "foes": ["turnlehrer"]}]},
+    {"l": "Auf Zehenspitzen hinaus: +4 Leben", "fx": [{"op": "heal", "v": 4}]}
+   ]
+  },
+  {
+   "id": "waisenhaus_nachtlicht",
+   "t": "Das Nachtlicht",
+   "d": "Über der Tür zum Schlafsaal brennt das Nachtlicht in rotem Glas, damit die Schwester nachts zählen kann. Es brennt seit 1913 ohne Öl. Wer darunter durchgeht, wirft einen Schatten, der nicht ganz seiner ist.",
+   "bild": "Eine hohe Tür im dunklen Flur, darüber eine kleine Lampe in rotem Glas, das einzige Licht; davor auf dem Linoleum ein langer Schatten.",
+   "o": [
+    {"l": "Das Ewige Licht daneben halten: Die beiden Flammen kennen sich. +1 Kerbe an einem Item, eine Karte kostet dauerhaft 1 weniger", "fx": [{"op": "kerbe"}, {"op": "schleifen"}], "if": {"item": "ewiges_licht"}},
+    {"l": "Es auspusten: eine zufällige Reliquie, −8 Leben, die Nachtschwester kommt zählen", "fx": [{"op": "reliquie"}, {"op": "lose_hp", "v": 8}, {"op": "fight", "foes": ["nachtschwester"]}], "if": {"hp_min": 9}},
+    {"l": "Darunter stehen bleiben, bis dein Schatten stimmt: +6 max. Leben, −8 Leben", "fx": [{"op": "max_hp", "v": 6}, {"op": "lose_hp", "v": 8}], "if": {"hp_min": 9}},
+    {"l": "Weitergehen, ohne hinzusehen: +4 Leben", "fx": [{"op": "heal", "v": 4}]}
+   ]
+  }
+ ],
+ "items": {
+  "trillerpfeife": {
+   "n": "Trillerpfeife", "a": "talisman", "st": ["E"], "spr": "musicbox",
+   "rar": "gewoehnlich", "kerben": 1, "preis": 26,
+   "flavor": "Messing, an einer grauen Schnur. In der Kugel klappert etwas, das keine Erbse ist. Wenn du hineinpfeifst, kommt Wasser heraus, und hinter dir stellt sich jemand an.",
+   "cards": [{"n": "Anpfiff", "c": 1, "atk": 4, "str": 1}]
+  },
+  "schluesselbund": {
+   "n": "Schlüsselbund der Nachtschwester", "a": "talisman", "st": ["E", "G"], "spr": "watch",
+   "rar": "selten", "kerben": 2, "preis": 48,
+   "eigen": {"typ": "behalten_eine", "t": "Am Ende deines Zugs schließt du eine Handkarte weg; sie liegt im nächsten Zug noch da."},
+   "flavor": "Ein Eisenring wie ein Fassreifen, ein Schlüssel für jedes Bett. Du hast nachgezählt. Es war einer mehr als beim letzten Mal.",
+   "cards": [{"n": "Abschließen", "c": 0, "blk": 4, "behalten": true}]
+  },
+  "nachthemd": {
+   "n": "Nachthemd Nr. 41", "a": "kleidung", "st": ["W"], "spr": "robe", "hp": 2,
+   "rar": "selten", "kerben": 2, "preis": 44,
+   "eigen": {"typ": "start_block", "v": 6, "t": "Zu Kampfbeginn 6 Block."},
+   "flavor": "Grobes Leinen, am Kragen die Nummer in rotem Garn. Es ist nass und wird nicht trocken. Es hält trotzdem warm, als läge jemand neben dir.",
+   "cards": [{"n": "Unter die Decke", "c": 1, "blk": 7}]
+  },
+  "aufnahmebuch": {
+   "n": "Das Aufnahmebuch", "a": "talisman", "st": ["G"], "spr": "bible",
+   "rar": "reliquie", "kerben": 2, "preis": 150,
+   "eigen": {"typ": "ballast_werfen", "fx": [{"op": "energy", "v": 1}], "ballast_start": 2, "ballast_karte": "Ein Name", "t": "Zu Kampfbeginn 2 „Namen“ (Ballast) in deinem Ziehstapel. Unspielbare Karten kosten 0: Du rufst sie auf, sie gehen über Bord, und jemand antwortet für dich: +1 Energie."},
+   "flavor": "Jeder, der seit 1890 ins Haus kam, mit Datum und Nummer. Nach 1913 werden die Einträge enger, dann gehen sie über den Rand. Die letzte Zeile ist frisch, in roter Tinte.",
+   "cards": [{"n": "Aufrufen", "c": 1, "atk": 6, "sonder": {"art": "fx", "fx": [{"op": "ballast", "n": 1, "karte": "Ein Name"}], "t": "Mische 1 „Ein Name“ in deinen Ziehstapel"}}]
+  }
+ },
+ "handgriffe": {},
+ "skripte": ["js/scenes/world/waisenhaus.js"]
+}

@@ -1,0 +1,271 @@
+{
+ "id": "stadt_plus",
+ "ergaenzt": "stadt",
+ "gegner_dazu": [
+  "vermesser",
+  "relief"
+ ],
+ "waechter_dazu": [
+  "getragene"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "schraeges_lot"
+ ],
+ "foes": {
+  "vermesser": {
+   "n": "Der Vermesser",
+   "biom": "stadt",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    }
+   ],
+   "sprite": "vermesser_a",
+   "varianten": [
+    "vermesser_a",
+    "vermesser_b"
+   ],
+   "konzept": "Ein Landvermesser der Expedition von 1903, von der Hüfte abwärts zum Stativ seines Theodoliten geworden, das Fernrohr im Auge; seine Messlatte knickt, obwohl sie gerade ist, und sein Lot hängt schräg.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "wechsel",
+    "stoffe": [
+     "L",
+     "E",
+     "F"
+    ],
+    "why": "Er misst dich jeden Zug neu, und jedes Mal kommt etwas anderes heraus. Hier unten stimmt keine Zahl zweimal."
+   },
+   "beute": "schraeges_lot",
+   "beute_satz": "Im Sand liegt ein Feldbuch voller Maße. Alle Türen sind darin breiter als die Stadt.",
+   "quelle": "skript"
+  },
+  "relief": {
+   "n": "Der aus dem Relief",
+   "biom": "stadt",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "relief_a",
+   "varianten": [
+    "relief_a",
+    "relief_b"
+   ],
+   "konzept": "Eine Platte aus dem Reliefband der Stadt, auf der einer der Erbauer gemeißelt ist; unten ist er noch flach und Bild, oben hat er schon Tiefe und lehnt sich heraus, und die Rahmenlinie schließt in keinem Winkel, den es gibt.",
+   "stimme": "mumie",
+   "kniff": {
+    "art": "dornen",
+    "v": 2,
+    "why": "Wer nach ihm schlägt, schlägt in behauenen Stein, und die Kanten sind so scharf wie am ersten Tag."
+   },
+   "beute": null,
+   "beute_satz": "Auf der Platte ist jetzt eine Stelle leer, genau so groß wie er.",
+   "quelle": "skript"
+  },
+  "getragene": {
+   "n": "Der Getragene",
+   "biom": "stadt",
+   "rang": "waechter",
+   "hp": 56,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "atk",
+     "v": 16
+    }
+   ],
+   "sprite": "getragene",
+   "varianten": [
+    "getragene"
+   ],
+   "konzept": "Durch die niedrigen Gänge der Erbauer zieht noch ein Leichenzug: vier Träger in Binden, mit den langen flachen Schädeln der Erbauer, tragen eine Lade auf zwei Stangen. Die Stirnseite ist sein Gesicht aus Stein. Der Deckel steht einen Spalt offen, und aus dem Spalt kommen Finger, zu viele und zu lang. Die Träger sind tot. Der in der Lade ist es nicht.",
+   "stimme": "chor",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 5,
+    "why": "Die Träger decken mit ihren Leibern, was neben der Lade geht."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "mumie",
+    "alle": 3
+   },
+   "beute": "schraeges_lot",
+   "beute_satz": "Die Träger setzen die Lade ab, zum ersten Mal seit sehr langer Zeit, und legen sich daneben. Der Deckel ist zu. Von innen klopft es nicht mehr.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "stadt_messlatte",
+   "t": "Die Messlatte",
+   "d": "An einer Tür lehnt eine Messlatte, rot und dunkel geteilt, mit Messingkappen. Nach ihrer Teilung ist die Tür vier Meter breit. Nach deinem Auge ist sie genau so breit wie du. Auf der Schwelle liegt ein Bleistift, frisch gespitzt.",
+   "bild": "Eine niedrige, viel zu breite Türöffnung im roten Stein, daran angelehnt eine geteilte Messlatte, deren obere Hälfte versetzt ist, als stünde sie im Wasser.",
+   "o": [
+    {
+     "l": "Die Tür nachmessen: eine Karte kostet dauerhaft 1 weniger, Kampf gegen den Vermesser",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "vermesser"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Den Bleistift nehmen und die Zahl korrigieren: einen Handgriff lernen, −4 max. Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Seitlich hindurchgehen, ohne hinzusehen: +6 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "stadt_leere_stelle",
+   "t": "Die leere Stelle im Relief",
+   "d": "Das Reliefband läuft hier weiter, Szene um Szene: die Erbauer beim Bau, beim Gebet, beim Abstieg. In einer Szene fehlt einer. Der Stein ist dort glatt und warm, und am Boden darunter liegen frische Splitter.",
+   "bild": "Ein langes Reliefband in rotem Stein mit kriechenden Gestalten, in der Mitte eine glatte, leere Fläche in Form eines Körpers, darunter Steinsplitter im Sand.",
+   "o": [
+    {
+     "l": "Die Notizen der Expedition danebenhalten: eine Reaktion entdecken, +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "event_gesehen": "stadt_grabkammer"
+     }
+    },
+    {
+     "l": "Dich in die leere Stelle legen: +8 max. Leben, eine Karte streichen, −10 Leben",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 8
+      },
+      {
+       "op": "strike"
+      },
+      {
+       "op": "lose_hp",
+       "v": 10
+      }
+     ],
+     "if": {
+      "hp_min": 11
+     }
+    },
+    {
+     "l": "Den Splittern folgen: ein zufälliges Item, Kampf gegen den aus dem Relief",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "relief"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "schraeges_lot": {
+   "n": "Das schräge Lot",
+   "a": "talisman",
+   "st": [
+    "E"
+   ],
+   "spr": "compass",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 48,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1
+   },
+   "flavor": "Ein Messinglot an gewachster Schnur. Es hängt nie senkrecht, immer schräg zu dem hin, der am nächsten steht.",
+   "cards": [
+    {
+     "n": "Lot fällen",
+     "c": 1,
+     "atk": 5,
+     "vuln": 1
+    }
+   ]
+  }
+ }
+}

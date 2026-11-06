@@ -11,17 +11,32 @@
   "musik": "fischer",
   "frei_ab": 0,
   "w": [
-   "harpoon",
-   "knife"
+   "harpoon"
   ],
   "k": [
-   "oilcoat",
-   "cap"
+   "oilcoat"
   ],
   "t": [
    "salt"
   ],
-  "bag": []
+  "bag": [
+   "knife",
+   "cap"
+  ],
+  "hg": {
+   "harpoon": [
+    "stossen"
+   ],
+   "oilcoat": [
+    "ausweichen"
+   ],
+   "salt": [
+    "abwarten"
+   ],
+   "knife": [
+    "durchatmen"
+   ]
+  }
  },
  {
   "id": "friedhofswaerter",
@@ -35,17 +50,32 @@
   "musik": "friedhofswaerter",
   "frei_ab": 0,
   "w": [
-   "shovel",
-   "pan"
+   "shovel"
   ],
   "k": [
-   "woolcoat",
-   "gloves"
+   "woolcoat"
   ],
   "t": [
    "lantern"
   ],
-  "bag": []
+  "bag": [
+   "pan",
+   "gloves"
+  ],
+  "hg": {
+   "shovel": [
+    "stossen"
+   ],
+   "woolcoat": [
+    "ausweichen"
+   ],
+   "lantern": [
+    "abwarten"
+   ],
+   "pan": [
+    "durchatmen"
+   ]
+  }
  },
  {
   "id": "pfarrerin",
@@ -59,17 +89,32 @@
   "musik": "pfarrerin",
   "frei_ab": 0,
   "w": [
-   "bible",
-   "revolver"
+   "bible"
   ],
   "k": [
-   "woolcoat",
-   "cap"
+   "woolcoat"
   ],
   "t": [
    "rosary"
   ],
-  "bag": []
+  "bag": [
+   "revolver",
+   "cap"
+  ],
+  "hg": {
+   "bible": [
+    "stossen"
+   ],
+   "woolcoat": [
+    "ausweichen"
+   ],
+   "rosary": [
+    "abwarten"
+   ],
+   "revolver": [
+    "durchatmen"
+   ]
+  }
  },
  {
   "id": "detektiv",
@@ -83,8 +128,7 @@
   "musik": "detektiv",
   "frei_ab": 3,
   "w": [
-   "revolver",
-   "knife"
+   "revolver"
   ],
   "k": [
    "trench"
@@ -92,7 +136,23 @@
   "t": [
    "lantern"
   ],
-  "bag": []
+  "bag": [
+   "knife"
+  ],
+  "hg": {
+   "revolver": [
+    "stossen"
+   ],
+   "trench": [
+    "ausweichen"
+   ],
+   "lantern": [
+    "abwarten"
+   ],
+   "knife": [
+    "durchatmen"
+   ]
+  }
  },
  {
   "id": "okkultist",
@@ -109,13 +169,28 @@
    "dagger"
   ],
   "k": [
-   "robe",
-   "gloves"
+   "robe"
   ],
   "t": [
    "salt"
   ],
-  "bag": []
+  "bag": [
+   "gloves"
+  ],
+  "hg": {
+   "dagger": [
+    "stossen"
+   ],
+   "robe": [
+    "ausweichen"
+   ],
+   "salt": [
+    "abwarten"
+   ],
+   "gloves": [
+    "durchatmen"
+   ]
+  }
  },
  {
   "id": "kneipenschlaeger",
@@ -132,13 +207,28 @@
    "bottle"
   ],
   "k": [
-   "gloves",
-   "oilcoat"
+   "gloves"
   ],
   "t": [
    "lantern"
   ],
-  "bag": []
+  "bag": [
+   "oilcoat"
+  ],
+  "hg": {
+   "bottle": [
+    "stossen"
+   ],
+   "gloves": [
+    "ausweichen"
+   ],
+   "lantern": [
+    "abwarten"
+   ],
+   "oilcoat": [
+    "durchatmen"
+   ]
+  }
  },
  {
   "id": "geologe",
@@ -154,23 +244,38 @@
   "faehigkeit": "karte",
   "faehigkeit_t": "Sieht von Anfang an, welcher Weg in Akt III liegt, und auf jeder Weg-Wahl, welche Gegner warten.",
   "w": [
-   "pick",
-   "knife"
+   "pick"
   ],
   "k": [
-   "oilcoat",
-   "boots"
+   "oilcoat"
   ],
   "t": [
    "lantern"
   ],
-  "bag": []
+  "bag": [
+   "knife",
+   "boots"
+  ],
+  "hg": {
+   "pick": [
+    "stossen"
+   ],
+   "oilcoat": [
+    "ausweichen"
+   ],
+   "lantern": [
+    "abwarten"
+   ],
+   "knife": [
+    "durchatmen"
+   ]
+  }
  },
  {
   "id": "wahrsagerin",
   "n": "Wahrsagerin",
   "d": "Liest Karten auf dem Jahrmarkt. Diesmal liest sie die richtigen.",
-  "set": null,
+  "set": "Wahrsagerin",
   "ausrede": "Die Karten zeigen seit Wochen dasselbe Bild. Ich will wissen, was es bedeutet.",
   "wahrheit": "Das Bild war ein Spiegel.",
   "vorliebe": "hafen",
@@ -180,17 +285,32 @@
   "faehigkeit": "voraus",
   "faehigkeit_t": "Sieht die oberste Karte des Stapels.",
   "w": [
-   "torch",
-   "dagger"
+   "torch"
   ],
   "k": [
-   "veil",
-   "woolcoat"
+   "veil"
   ],
   "t": [
    "candle"
   ],
-  "bag": []
+  "bag": [
+   "dagger",
+   "woolcoat"
+  ],
+  "hg": {
+   "torch": [
+    "stossen"
+   ],
+   "veil": [
+    "ausweichen"
+   ],
+   "candle": [
+    "abwarten"
+   ],
+   "dagger": [
+    "durchatmen"
+   ]
+  }
  },
  {
   "id": "veteran",
@@ -209,12 +329,27 @@
    "poker"
   ],
   "k": [
-   "trench",
-   "boots"
+   "officercoat"
   ],
   "t": [
    "salt"
   ],
-  "bag": []
+  "bag": [
+   "boots"
+  ],
+  "hg": {
+   "poker": [
+    "stossen"
+   ],
+   "salt": [
+    "abwarten"
+   ],
+   "boots": [
+    "durchatmen"
+   ],
+   "officercoat": [
+    "ausweichen"
+   ]
+  }
  }
 ]

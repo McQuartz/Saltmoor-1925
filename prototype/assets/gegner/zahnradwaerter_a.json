@@ -1,0 +1,49 @@
+{
+ "id": "zahnradwaerter",
+ "rang": "normal",
+ "w": 96,
+ "h": 120,
+ "zone": "gezeitenwerk",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  52,
+  116
+ ],
+ "kopf": [
+  54,
+  14
+ ],
+ "augen": [
+  [
+   50,
+   47
+  ],
+  [
+   50,
+   53
+  ]
+ ],
+ "augenfarbe": "#d4ff5a"
+}

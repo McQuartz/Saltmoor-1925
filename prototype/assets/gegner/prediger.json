@@ -1,0 +1,49 @@
+{
+ "id": "prediger",
+ "rang": "waechter",
+ "w": 160,
+ "h": 180,
+ "zone": "kapelle_w2",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  80,
+  175
+ ],
+ "kopf": [
+  80,
+  4
+ ],
+ "augen": [
+  [
+   73,
+   41
+  ],
+  [
+   77,
+   40
+  ]
+ ],
+ "augenfarbe": "#fff4d0"
+}

@@ -1,0 +1,268 @@
+{
+ "id": "glockengiesserei",
+ "akt": 1,
+ "biom": {
+  "n": "Die Glockengießerei",
+  "kurz": "Gießerei",
+  "zeit": "1641, unter dem Kirchhof",
+  "anreise": "Unter dem Kirchhof von St. Brendan sind die Gussgruben noch warm. Hier wurden die Glocken gegossen, die bei Flut läuten.",
+  "koerper": ["#060506", "#0e0b0d", "#1a1418", "#2a2026"],
+  "rand": ["#a8322a", "#ff9e6e"],
+  "augen": "#ffd36a",
+  "nebel": ["#180c0c", "#3a1c18"],
+  "musik": "glockengiesserei",
+  "gegner": ["giesser", "formerin", "kloeppelmann", "gussnaht"],
+  "waechter": "ungetaufte",
+  "waechter_alt": ["tretrad"],
+  "fundpool": ["giesskelle", "lehmmaske", "stimmeisen", "candle", "cross", "rosary", "minerlamp", "shovel", "pick", "tartorch"],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Wandergießer",
+   "ort": "an der kalten Grube, neben einem Haufen gesammelter Kessel, Leuchter und Löffel und einem Tiegelofen, der nie ausgeht",
+   "zeile": "Er nimmt kein Geld. Er gießt um, was du beim letzten Krämer gesehen hast, in seiner Speise, und was Feuer war, kommt als Wasser aus der Form. Er hat das schon einmal gemacht, mit einer ganzen Gemeinde.",
+   "art": "spiegel"
+  },
+  "uebergang": "Die große Glocke ist fort. Wo ihr Lehmkern stand, ist ein Loch, und in die Innenseite des Kerns hat jemand eine Wendeltreppe geschnitten. Von unten kommt Wärme, und ein Geruch nach Salz.",
+  "weg_hinweise": {
+   "kampf": [
+    "Unter einem Glockenrand treten zwei nackte Füße auf der Stelle.",
+    "Jemand trägt etwas Glühendes an einer langen Stange, sehr vorsichtig.",
+    "Im Lehm werden Gesichter glattgestrichen, eines nach dem anderen."
+   ],
+   "ereignis": [
+    "Eine Grube, aus der es klopft, im Takt.",
+    "Ein Buch auf einem Amboss, aufgeschlagen."
+   ],
+   "wandbild": [
+    "Ein Schriftband aus Bronze, an die Wand genagelt. Die Buchstaben sind Hände."
+   ],
+   "kraemer": [
+    "Ein Haufen Leuchter und Kessel, daneben ein kleiner Ofen und ein Mann, der wartet."
+   ],
+   "werkstatt": [
+    "Die Formenkammer. Drehschablonen hängen an der Wand wie Ruder."
+   ],
+   "rast": [
+    "Ein Kohlebecken, das kalt ist. Man kann es wieder anzünden."
+   ],
+   "fundstelle": [
+    "Eine kleine Form, zerschlagen. Darin glänzt etwas."
+   ]
+  },
+  "beute_saetze": [
+   "Irgendwo über dir schlägt eine Glocke einmal an, und die Füße unter allen Rändern zucken.",
+   "Die Rinne am Boden wird heller, als hätte jemand nachgegossen.",
+   "Im Lehm bleibt ein Abdruck deiner Hand. Er ist schon trocken.",
+   "Der Ofen atmet einmal aus. Funken steigen bis an das Gewölbe und gehen dort nicht aus.",
+   "Die Bronze kühlt und singt dabei leise, einen Ton zu tief.",
+   "Oben im Schacht bewegt sich das Seil, obwohl niemand zieht.",
+   "Ein Tropfen Speise läuft die Rinne hinauf, zurück zum Ofen.",
+   "Unter einer der kleinen Glocken stehen die Füße jetzt still. Unter einer anderen nicht mehr."
+  ]
+ },
+ "musik": {"n": "Glockengießerei", "root": 45, "key": "a-Moll", "names": ["Am", "F", "Dm", "E"], "darkNames": ["Am", "B", "Dm", "E♭9"],
+  "amb": {"stollen": 0.05, "wind": 0.03}, "rhy": "hacke", "detail": "kapelle",
+  "ort": "Gewölbe unter dem Kirchhof, Zugluft im Schacht, der Ofen atmet, ferne Glockenschläge", "rhyN": "Meißel und Hammer auf Bronze, Pauke"},
+ "foes": {
+  "tretrad": {
+   "n": "Das Tretrad",
+   "biom": "glockengiesserei",
+   "rang": "waechter",
+   "hp": 91,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "blk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 19
+    }
+   ],
+   "sprite": "tretrad",
+   "varianten": [
+    "tretrad"
+   ],
+   "konzept": "Der Kran, mit dem 1641 die Glocken durch den Schacht gezogen wurden: ein Rad aus Eiche, so hoch wie zwei Männer, daneben Mast und Ausleger. Im Rad geht einer, seit 1641; die Achse geht ihm mitten durch den Leib. Am Haken hängt ein Gießtiegel, der nie leer wird, und das Seil läuft ab, nicht auf.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "waechst",
+    "v": 2,
+    "why": "Er geht, und das Rad geht schneller, und er muss schneller gehen."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "F",
+     "B"
+    ]
+   },
+   "beute": "giesskelle",
+   "beute_satz": "Das Rad läuft aus. Zum ersten Mal seit 1641 steht er still, auf der untersten Sprosse, und das Seil hängt schlaff bis in die Grube.",
+   "quelle": "skript"
+  },
+  "giesser": {
+   "n": "Der Gießer", "biom": "glockengiesserei", "rang": "normal", "hp": 25, "weak": "W",
+   "pat": [{"t": "atk", "v": 8}, {"t": "blk", "v": 6}, {"t": "atk", "v": 4, "h": 2}],
+   "sprite": "giesser_a", "varianten": ["giesser_a", "giesser_b"],
+   "konzept": "Der Meister, der 1641 die Glocken für St. Brendan goss: breit, gebeugt, im Lederschurz, mit dem Gießlöffel an einer langen Stange. Vor dem Gesicht eine Maske aus Lehm, die Form seines eigenen Gesichts; hinter den Augenlöchern steht flüssige Bronze.",
+   "stimme": "grabwaechter",
+   "kniff": {"art": "brecher", "why": "Bronze läuft durch jede Fuge, auch durch deine Deckung."},
+   "beute": "giesskelle", "beute_satz": "Die Maske liegt im Lehm. Dahinter ist es noch warm, und es hat die Form eines Gesichts.",
+   "quelle": "skript"
+  },
+  "formerin": {
+   "n": "Die Formerin", "biom": "glockengiesserei", "rang": "normal", "hp": 21, "weak": "F",
+   "pat": [{"t": "atk", "v": 6}, {"t": "blk", "v": 7}, {"t": "atk", "v": 3, "h": 2}],
+   "sprite": "formerin_a", "varianten": ["formerin_a", "formerin_b"],
+   "konzept": "Die Magd, die den Lehm trat und die Kerne formte. Ab der Hüfte ist sie selbst ein Glockenkern auf der Spindel. In ihre Wölbung drückt sie Gesichter von Leuten, die nie hier waren; das jüngste hat offene Augen.",
+   "stimme": "torfstecherin",
+   "kniff": {"art": "abschrift", "n": 1, "karte": "Abdruck", "spr": "gipsabdruck", "why": "Sie drückt dein Gesicht in den Lehm. Der Abdruck liegt danach in deinem Stapel und tut nichts."},
+   "beute": "lehmmaske", "beute_satz": "Der Kern reißt im Kühlen. In einem der Gesichter erkennst du deines, schon trocken.",
+   "quelle": "skript"
+  },
+  "kloeppelmann": {
+   "n": "Der Klöppel", "biom": "glockengiesserei", "rang": "normal", "hp": 22, "weak": "G",
+   "pat": [{"t": "laedt", "v": 0}, {"t": "laedt", "v": 0}, {"t": "atk", "v": 13}],
+   "sprite": "kloeppelmann_a", "varianten": ["kloeppelmann_a", "kloeppelmann_b"],
+   "konzept": "Eine Glocke, mannshoch, geht auf zwei nackten Beinen. Er hängt darin, wo der Klöppel hängen müsste, und bei jedem Schritt schlägt er innen an. Unter dem Rand greift eine Hand hervor.",
+   "stimme": "nachgeher",
+   "kniff": {"art": "ansage", "zuege": 2, "v": 13, "why": "Er holt aus. Er holt aus. Dann schlägt er."},
+   "beute": null, "beute_satz": "Die Glocke liegt auf der Seite. Die Beine darunter bewegen sich noch eine Weile, dann nicht mehr, dann wieder.",
+   "quelle": "skript"
+  },
+  "gussnaht": {
+   "n": "Die Gussnaht", "biom": "glockengiesserei", "rang": "normal", "hp": 28, "weak": "B",
+   "pat": [{"t": "atk", "v": 4, "h": 2}, {"t": "blk", "v": 8}, {"t": "atk", "v": 7}],
+   "sprite": "gussnaht_a", "varianten": ["gussnaht_a", "gussnaht_b"],
+   "konzept": "Was in der Form stand, als die beiden Hälften zusammengesetzt wurden: der Länge nach eine Hälfte eines alten Mannes und eine Hälfte eines Kindes, aneinandergegossen. Die Naht glüht, aus ihr steht der Gussgrat als dünne Flosse über den Kopf.",
+   "stimme": "schatten",
+   "kniff": {"art": "nachlass", "was": "teilt", "gegner": "gussnaht", "why": "Wenn sie fällt, geht sie an der Naht auf, und jede Hälfte gießt sich die andere nach."},
+   "beute": null, "beute_satz": "An der Naht kühlt die Bronze. Die beiden Hälften liegen nebeneinander und passen nicht.",
+   "quelle": "skript"
+  },
+  "ungetaufte": {
+   "n": "Die Ungetaufte", "biom": "glockengiesserei", "rang": "waechter", "hp": 76, "weak": "W",
+   "pat": [{"t": "atk", "v": 11}, {"t": "atk", "v": 3, "h": 4}, {"t": "blk", "v": 12}, {"t": "atk", "v": 16}, {"t": "buff", "v": 2}],
+   "sprite": "ungetaufte", "varianten": ["ungetaufte"],
+   "konzept": "Die große Glocke für St. Brendan, so hoch wie ein Haus, nie geweiht, nie hinaufgezogen. Sie hängt am Galgen über ihrer Grube, halb noch im Lehmmantel. Aus ihrem glühenden Mund hängen zwei nackte Füße, groß wie Ruderblätter.",
+   "stimme": "glockenmutter",
+   "kniff": {"art": "takt", "v": 7, "klang": "glocke", "why": "Wenn sie schlägt, duckt sich alles in der Halle unter den Ton. Zwischen den Schlägen summt sie offen."},
+   "besonders": {"art": "ruft", "gegner": "kloeppelmann", "alle": 3},
+   "beute": "handglocke", "beute_satz": "Die Kette reißt nicht. Die Glocke hängt still, und die Füße darunter auch, zum ersten Mal seit 1641.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "glockengiesserei_grube",
+   "t": "Die warme Grube",
+   "d": "In einer Dammgrube steht eine Form, mannshoch, der Lehm noch dunkel vor Wärme. Von innen klopft es, langsam und im Takt, wie ein Klöppel, der auf etwas Weiches trifft. Auf dem Mantel steht in Wachs ein Datum. Es ist morgen.",
+   "bild": "Eine runde Grube im Lehmboden, darin eine bienenkorbförmige Form mit Eisenbändern, aus der Fuge oben ein dünner Rauch.",
+   "o": [
+    {"l": "Den Mantel abschlagen: einen Handgriff lernen, −6 Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "lose_hp", "v": 6}], "if": {"hp_min": 7}},
+    {"l": "Mitklopfen, bis es aufhört: +1 Kerbe an einem Item, Kampf gegen den Klöppel", "fx": [{"op": "kerbe"}, {"op": "fight", "foes": ["kloeppelmann"]}]},
+    {"l": "Erde darüberschaufeln: +6 Leben", "fx": [{"op": "heal", "v": 6}]}
+   ]
+  },
+  {
+   "id": "glockengiesserei_giessbuch",
+   "t": "Das Gießbuch",
+   "d": "Auf einem Amboss liegt das Gießbuch des Meisters. Jede Glocke hat eine Zeile: Gewicht, Gemeinde, Ton, und in der letzten Spalte, überschrieben mit „Klöppel“, ein Name. Die Namen sind Leute aus Saltmoor. Die letzte Zeile ist leer bis auf das Gewicht, und das Gewicht ist deins.",
+   "bild": "Ein aufgeschlagenes Folio auf einem Amboss, Spalten in brauner Tinte, die letzte Zeile frisch.",
+   "o": [
+    {"l": "Nachsehen, wer im Kirchenbuch neben dir stand: derselbe Name steht in der Spalte. +1 Kerbe an einem Item, +8 Leben", "fx": [{"op": "kerbe"}, {"op": "heal", "v": 8}], "if": {"event_gesehen": "alle_kirchenbuch"}},
+    {"l": "Die Zeile segnen, wie du es gelernt hast: eine Karte kostet dauerhaft 1 weniger", "fx": [{"op": "schleifen"}], "if": {"job": "pfarrerin"}},
+    {"l": "Einen anderen Namen eintragen: +20 Gold, −4 max. Leben", "fx": [{"op": "gold", "v": 20}, {"op": "max_hp", "v": -4}]},
+    {"l": "Die Seite herausreißen: eine Karte streichen, −5 Leben", "fx": [{"op": "strike"}, {"op": "lose_hp", "v": 5}]}
+   ]
+  },
+  {
+   "id": "glockengiesserei_stille",
+   "t": "Die stille Glocke",
+   "d": "Am Balken hängt eine Glocke so tief, dass ihr Rand dir bis zur Brust reicht. Unter ihr zwei Füße, nackt, sehr still. Sie sind warm. Wenn du die Bronze berührst, krümmen sich die Zehen ein wenig, wie bei jemandem, der schläft und es merkt.",
+   "bild": "Eine Glocke an einem dunklen Balken, darunter zwei hängende nackte Füße über einem glühenden Rinnsal.",
+   "o": [
+    {"l": "Den Klöppel von St. Brendan hineinhängen, wo er hingehört: Die Füße ziehen sich in die Glocke zurück. Eine zufällige Reliquie, −10 Leben", "fx": [{"op": "reliquie"}, {"op": "lose_hp", "v": 10}], "if": {"item": "kloeppel"}},
+    {"l": "Die Glocke anschlagen: eine Reaktion entdecken, Kampf gegen den Klöppel", "fx": [{"op": "discover"}, {"op": "fight", "foes": ["kloeppelmann"]}]},
+    {"l": "Unter den Rand sehen: einen Handgriff lernen, −4 max. Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "max_hp", "v": -4}]},
+    {"l": "Leise weitergehen: +5 Leben", "fx": [{"op": "heal", "v": 5}]}
+   ]
+  },
+  {
+   "id": "glockengiesserei_wachs",
+   "t": "Die Wachsbuchstaben",
+   "d": "In einem Setzkasten liegen Buchstaben aus Wachs, mit denen man das Schriftband einer Glocke belegt, bevor der Mantel kommt. Jemand hat schon angefangen: ein Spruch für die Flut. Mitten im Spruch fehlt ein Wort, und die Lücke ist genau so lang wie dein Name.",
+   "bild": "Ein Holzkasten mit Fächern voll kleiner Wachsbuchstaben, daneben ein Lehmband mit angedrückter Schrift und einer Lücke.",
+   "o": [
+    {"l": "Deinen Namen in die Lücke drücken: eine Karte kostet dauerhaft 1 weniger, −6 Leben", "fx": [{"op": "schleifen"}, {"op": "lose_hp", "v": 6}]},
+    {"l": "Ein anderes Wort hineinsetzen: einen Handgriff umritzen", "fx": [{"op": "umritzen"}]},
+    {"l": "Die Buchstaben einstecken und verkaufen: +18 Gold", "fx": [{"op": "gold", "v": 18}]}
+   ]
+  },
+  {
+   "id": "glockengiesserei_stimmen",
+   "t": "Das Stimmen",
+   "d": "Fünf Glocken stehen umgedreht am Boden, der Größe nach, zum Stimmen. Vier klingen, wie sie sollen. Die fünfte klingt einen halben Ton zu tief. Innen, wo man mit dem Meißel Bronze abnimmt, bis sie stimmt, ist die Wand weich.",
+   "bild": "Fünf Glocken mit dem Mund nach oben auf dem Lehmboden, in einer ein Meißel, der aufrecht steckt.",
+   "o": [
+    {"l": "Mit dem Stimmeisen nachstimmen, bis sie stimmt: +1 Kerbe an einem Item, eine Karte kostet dauerhaft 1 weniger", "fx": [{"op": "kerbe"}, {"op": "schleifen"}], "if": {"item": "stimmeisen"}},
+    {"l": "Mit der Hand nachstimmen: Stimmeisen, −7 Leben", "fx": [{"op": "give_item", "item": "stimmeisen"}, {"op": "lose_hp", "v": 7}]},
+    {"l": "Die falsche Glocke umwerfen: Kampf gegen die Gussnaht, +15 Gold", "fx": [{"op": "fight", "foes": ["gussnaht"]}, {"op": "gold", "v": 15}]},
+    {"l": "Zuhören, bis du den Ton nicht mehr hörst: +6 Leben", "fx": [{"op": "heal", "v": 6}]}
+   ]
+  },
+  {
+   "id": "glockengiesserei_flut",
+   "t": "Flut",
+   "d": "Oben im Schacht beginnen alle Glocken zugleich zu läuten, die von St. Brendan und andere, die du nicht kennst. Unter jedem Rand in der Halle fangen die Füße an zu treten, als liefen sie irgendwohin. Der Lehmboden wird nass, von unten.",
+   "bild": "Eine Reihe hängender Glocken im Halbdunkel, unter jeder treten zwei Füße in der Luft; durch den Boden steigt Wasser in die glühenden Rinnen.",
+   "o": [
+    {"l": "Du hast den Lichtkegel schon einmal gesehen. Du weißt, wohin sie laufen: +8 max. Leben, −8 Leben", "fx": [{"op": "max_hp", "v": 8}, {"op": "lose_hp", "v": 8}], "if": {"event_gesehen": "hafen_lichtkegel"}},
+    {"l": "Mitlaufen, bis es aufhört: einen Handgriff lernen, −5 Leben", "fx": [{"op": "handgriff", "zufall": true}, {"op": "lose_hp", "v": 5}]},
+    {"l": "Dich in eine leere Grube legen und warten: volles Leben, −6 max. Leben", "fx": [{"op": "full_heal"}, {"op": "max_hp", "v": -6}]}
+   ]
+  }
+ ],
+ "items": {
+  "giesskelle": {
+   "n": "Gießkelle", "a": "waffe", "st": ["F", "E"], "spr": "pan",
+   "rar": "gewoehnlich", "kerben": 1, "preis": 26,
+   "flavor": "Der Stiel ist so lang, dass zwischen dir und dem Guss ein Mensch Platz hätte. Innen ist der Löffel blank, als hätte ihn jemand ausgeleckt.",
+   "cards": [{"n": "Ausgießen", "c": 1, "atk": 5, "burn": 2}]
+  },
+  "lehmmaske": {
+   "n": "Lehmmaske", "a": "kleidung", "st": ["W"], "spr": "cultmask", "hp": 2,
+   "rar": "selten", "kerben": 2, "preis": 46,
+   "eigen": {"typ": "block_haelt_halb"},
+   "flavor": "Die Form eines Gesichts, innen. Sie passt dir, obwohl sie für einen anderen gemacht wurde. Lehm, der einmal warm war, bleibt lange warm.",
+   "cards": [{"n": "Den Kopf senken", "c": 1, "blk": 7}]
+  },
+  "stimmeisen": {
+   "n": "Stimmeisen", "a": "waffe", "st": ["E", "G"], "spr": "knife",
+   "rar": "selten", "kerben": 2, "preis": 50,
+   "eigen": {"typ": "erste_karte_billiger"},
+   "flavor": "Ein Meißel, mit dem man innen von der Glocke Bronze abnimmt, bis sie stimmt. An der Schneide klebt etwas, das kein Metall ist.",
+   "cards": [{"n": "Nachstimmen", "c": 0, "atk": 3, "vuln": 1}]
+  },
+  "handglocke": {
+   "n": "Die Handglocke der Ungetauften", "a": "talisman", "st": ["W"], "spr": "musicbox",
+   "rar": "reliquie", "kerben": 2, "preis": 150,
+   "eigen": {"typ": "kampfstart_fx", "fx": [{"op": "damage", "to": "all", "v": 3}, {"op": "status", "to": "all", "status": "weak", "v": 1}]},
+   "flavor": "Aus derselben Speise wie die große. Statt eines Klöppels hängt darin ein Fingerknochen, und sie läutet nur bei Flut. Irgendwo ist immer Flut.",
+   "cards": [{"n": "Anschlagen", "c": 1, "atk": 4, "all": true}]
+  }
+ },
+ "handgriffe": {},
+ "skripte": ["js/scenes/world/glockengiesserei.js"]
+}

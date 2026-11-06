@@ -15,7 +15,9 @@ const Meta=(()=>{const KEY='saltmoor.meta.v1';
  function runEnde(res,S){load();M.runs++;M.besteTiefe=Math.max(M.besteTiefe,res.tiefe);(S.route||[]).slice(0,res.akt+1).forEach(b=>{if(!M.biome.includes(b))M.biome.push(b);});
   const neu=[];if(res.akt>M.maxAkt){(RUN.startvarianten||[]).forEach(v=>{if(v.ab_akt>M.maxAkt&&v.ab_akt<=res.akt&&!M.start.includes(v.id)){M.start.push(v.id);neu.push({art:'start',id:v.id,n:'Startvariante „'+v.n+'“'});}});M.maxAkt=res.akt;}
   if(res.sieg){M.siege++;M.enden[res.ende]=(M.enden[res.ende]||0)+1;if(M.stufe>=M.maxStufe&&M.maxStufe<5){M.maxStufe++;neu.push({art:'stufe',id:M.maxStufe,n:'Schwierigkeit '+romanN(M.maxStufe+1)});}}
-  else{const k=res.biom;M.tode[k]=(M.tode[k]||0)+1;}
+  else{const k=res.biom;M.tode[k]=(M.tode[k]||0)+1;
+   // Für das Ufer unten: „Der, der vor dir kam“ trägt Figur und Items deines letzten verlorenen Runs
+   try{M.vorgaenger={job:S.job,items:allActive().map(it=>it.id),tiefe:res.tiefe,biom:k,max:maxHp()};}catch(e){}}
   const seit=M.neuSeit;M.neuSeit=[];const alle=[...seit,...neu];M.verlauf.push({run:M.runs,sieg:!!res.sieg,tiefe:res.tiefe,neu:alle.map(x=>x.n)});if(M.verlauf.length>60)M.verlauf.shift();save();return alle;}
  return{load,save,figurFrei,lies,runEnde,
   read:()=>load().fragmente,items:()=>load().items,get:()=>load(),

@@ -5,7 +5,7 @@
  "start_slots": 2,
  "max_slots": 4,
  "bag_size": 5,
- "victory_heal_pct": 0.28,
+ "victory_heal_pct": 0.15,
  "gold_per_victory": {
   "min": 12,
   "max": 20,
@@ -14,8 +14,11 @@
   "boss": 0
  },
  "enemy_scaling": {
-  "hp_per_depth": 0.04,
-  "atk_every_n_depths": 4
+  "_doc": "Nur normale Gegner skalieren mit der Tiefe; hp_faktor/waechter_faktor gleichen den stärkeren Deckbau aus Auftrag 2 aus.",
+  "hp_per_depth": 0.05,
+  "atk_every_n_depths": 5,
+  "hp_faktor": 1.15,
+  "waechter_faktor": 1.35
  },
  "encounters": {
   "_doc": "Ersetzt durch run.json (Gegnerzahl) und biomes.json (Gegner je Biom)."
@@ -37,7 +40,13 @@
    "price": 15,
    "v": 15
   },
-  "streichen_preis": 30
+  "streichen_preis": 30,
+  "verkauf_anteil": 0.4,
+  "hg_preis": 38,
+  "hg_preis_selten": 60,
+  "hg_entfernen": 25,
+  "reliquie_chance": 0.15,
+  "reliquie_preis": 140
  },
  "forge": {
   "bump": 3,
@@ -54,12 +63,6 @@
   ]
  },
  "card_copies": 2,
- "grundkarten": {
-  "copies": 1,
-  "waffe": {"n": "Stoßen", "c": 1, "atk": 5},
-  "kleidung": {"n": "Ausweichen", "c": 1, "blk": 5},
-  "talisman": {"n": "Zaudern", "c": 1, "blk": 4}
- },
  "waechter_belohnung": {
   "gold": [
    34,
@@ -75,5 +78,34 @@
   "koernung": 0.18,
   "kratzer": 0.25,
   "flackern": 0.12
- }
+ },
+ "wucht": {
+  "_doc": "Gefühl der Treffer. eigen/gegner = Faktor auf Hitstop, Ruck, Rückstoß und Zahlengröße (eigene Treffer 25 % wuchtiger).",
+  "eigen": 1.25,
+  "gegner": 1.0,
+  "hitstop_ms": 55,
+  "hitstop_gross_ms": 120,
+  "gross_ab": 12,
+  "ruck": 3,
+  "rueckstoss": 4,
+  "zahl_px": 5,
+  "anlauf_gegner_ms": 330,
+  "mehrfach_abstand_ms": 120,
+  "letzter_treffer_extra": 1.3
+ },
+ "musik": {
+  "boss_aufbau_takte": 6
+ },
+ "meldungen": {
+  "max": 2,
+  "dauer_s": 4,
+  "wichtig_s": 6,
+  "verlauf": 20
+ },
+ "belohnung": {
+  "_doc": "Belohnung nach Kämpfen (04-deckbau.md Abschnitt 6)",
+  "item_chance": 0.25,
+  "ueberspringen_gold": 10
+ },
+  "elite": {"_doc": "Zugabe: Chance, dass ein schwerer Kampf eine Elite des Bioms bringt (biom.elite / elite_dazu); sie ersetzt so viele normale Gegner", "chance": 0.5, "ersetzt": 2}
 }

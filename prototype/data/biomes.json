@@ -35,7 +35,9 @@
    "poker",
    "boardaxe",
    "sealskin",
-   "deepscale"
+   "deepscale",
+   "bleiguertel",
+   "geldkatze"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -69,7 +71,8 @@
    "fundstelle": [
     "Treibgut, das die Flut dagelassen hat."
    ]
-  }
+  },
+  "akt": 0
  },
  "moor": {
   "n": "Der Moorwald",
@@ -139,7 +142,8 @@
    "fundstelle": [
     "Etwas glänzt im Torf."
    ]
-  }
+  },
+  "akt": 0
  },
  "kapelle": {
   "n": "Die überflutete Kapelle",
@@ -175,7 +179,8 @@
    "robe",
    "cross",
    "holywater",
-   "cultmask"
+   "cultmask",
+   "geldkatze"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -209,7 +214,8 @@
    "fundstelle": [
     "Der Opferstock ist aufgebrochen."
    ]
-  }
+  },
+  "akt": 1
  },
  "salz": {
   "n": "Die Salzstollen",
@@ -246,7 +252,8 @@
    "silverknife",
    "saltgun",
    "dynamite",
-   "smellingsalts"
+   "smellingsalts",
+   "bleiguertel"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -280,7 +287,8 @@
    "fundstelle": [
     "Eine umgekippte Lore."
    ]
-  }
+  },
+  "akt": 2
  },
  "stadt": {
   "n": "Die namenlose Stadt",
@@ -314,7 +322,8 @@
    "watch",
    "tartorch",
    "bloodrosary",
-   "swordcane"
+   "swordcane",
+   "geldkatze"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -348,7 +357,8 @@
    "fundstelle": [
     "Eine Grabkammer, schon geöffnet."
    ]
-  }
+  },
+  "akt": 2
  },
  "eis": {
   "n": "Das schwarze Eis",
@@ -416,12 +426,13 @@
    "fundstelle": [
     "Eine Kiste der Expedition, halb im Eis."
    ]
-  }
+  },
+  "akt": 3
  },
  "pforte": {
   "n": "Die Pforte",
   "kurz": "Pforte",
-  "zeit": "außerhalb der Zeit",
+  "zeit": "unten, seitenverkehrt",
   "koerper": [
    "#030606",
    "#081010",
@@ -435,7 +446,7 @@
   "augen": "#ff6ad8",
   "nebel": [
    "#061212",
-   "#1a3a3a"
+   "#1c4440"
   ],
   "musik": "pforte",
   "szene_alt": "grund",
@@ -453,14 +464,25 @@
   "uebergang": "",
   "weg_hinweise": {
    "rast": [
-    "Ein Ort, an dem die Zeit kurz stillsteht."
+    "Ein Feuer brennt schwarz am Steg. Es wärmt trotzdem.",
+    "Hier hängen die Boote über dir still."
    ],
    "wandbild": [
+    "An der Speicherwand ist etwas geritzt. Es zeigt dich, mit deiner Laterne.",
     "Die letzte Wand. Sie zeigt dich."
    ],
    "finale": [
-    "Es ruft."
+    "Am Ende des Kais öffnet sich das Wasser.",
+    "Es ruft. Es hat deine Stimme gelernt."
+   ],
+   "kampf": [
+    "Eine Laterne hängt aus der See herab. Sie sieht dich an."
+   ],
+   "fundstelle": [
+    "Unter einem Poller liegt etwas, das oben verloren ging."
    ]
-  }
+  },
+  "akt": 4,
+  "anreise": "Unten wartet ein Hafen, den du kennst. Er ist seitenverkehrt."
  }
 }

@@ -13,12 +13,24 @@ function maxHp(){return BAL.start_hp+S.bonusHp+allActive().reduce((s,it)=>s+(def
 function roleState(){return ROLES.map(r=>{const have=r.i.filter(id=>allActive().some(it=>bases(it).includes(id)));return{r,have,on:have.length===r.i.length};});}
 // aktive Rollen-Boni eines Typs (siehe data/roles.json)
 function bonuses(type){return roleState().filter(x=>x.on&&x.r.bonus&&x.r.bonus.type===type).map(x=>x.r.bonus);}
-// passive Talismane (items.json → passiv)
-function passive(typ){return allActive().map(it=>def(it).passiv).filter(p=>p&&p.typ===typ);}
+// Eigenschaften angelegter Items (items.json → passiv aus Auftrag 1 und eigen aus Auftrag 2), z. B. passive('brand_haelt')
+function passive(typ){const o=[];for(const it of allActive()){const D=def(it);for(const p of [D.passiv,D.eigen])if(p&&p.typ===typ)o.push(p);}return o;}
+// Seltenheit und Kerben (04-deckbau.md Abschnitt 3): gewöhnlich 1 Kerbe, selten und Reliquie 2, Werkstatt höchstens 3
+function rarOf(D){return D.rar||(D.rare?'selten':'gewoehnlich');}
+function kerbenVon(it){const D=def(it);const b=D.kerben!=null?D.kerben:(rarOf(D)==='gewoehnlich'?1:2);return Math.min(3,b+(it.kerbenPlus||0));}
+function hgVon(it){if(!it.hg)it.hg=[...(def(it).fest_hg||[])];return it.hg;}
+// Karte eines Handgriffs in einem Item: nimmt die Stoffe des Items an
+function hgKarte(id,it,k){const H=HANDGRIFFE[id];if(!H)return null;const D=def(it);const geschliffen=it.schliff&&it.schliff['h'+k];
+ return{...H,c:Math.max(0,(H.c||0)-(geschliffen?1:0)),st:[...D.st],src:D.n,spr:H.spr||D.spr,img:(typeof hgBild==='function'&&hgBild(id))||(typeof itemBild==='function'?itemBild(it.id):''),uid:it.uid,hg:id,hgk:k,fest:(D.fest_hg||[]).includes(id),schliff:!!geschliffen};}
+// Alle Karten eines Items (Stammkarten × Kopien, dann Handgriffe), gleiche Rechnung für Deck, Vorschau und Rucksackmodus
+function kartenVon(it){if(it.x)return hgVon(it).map((id,k)=>hgKarte(id,it,k)).filter(Boolean);const D=def(it);const o=[];
+ for(let k=0;k<(BAL.card_copies||1);k++)D.cards.forEach((c,ci)=>{const g=it.schliff&&it.schliff['s'+ci];o.push({...c,c:Math.max(0,c.c-(g?1:0)),st:[...D.st],src:D.n,spr:D.spr,img:typeof itemBild==='function'?itemBild(it.id):'',uid:it.uid,ci,schliff:!!g,cid:it.uid+':'+ci+':'+k});});
+ hgVon(it).forEach((id,k)=>{const c=hgKarte(id,it,k);if(c){c.cid=it.uid+':h'+k;o.push(c);}});return o;}
+function deckListe(items){return(items||allActive()).flatMap(kartenVon);}
 function alive(){return S.enemies.filter(e=>e.hp>0);}
 function log(s){S.log.unshift(s);S.log=S.log.slice(0,14);}
-function biom(){return BIOMES[S.route?S.route[S.akt]:'hafen'];}
-function biomId(){return S.route?S.route[S.akt]:'hafen';}
+function biomId(){if(!S.route)return'hafen';return S.route[S.akt]||(S.angebote&&S.angebote[S.akt]&&S.angebote[S.akt][0])||S.route[S.akt-1]||'hafen';}
+function biom(){return BIOMES[biomId()]||BIOMES.hafen;}
 function itemOk(id){return !!ITEMS[id];}
 // Fundpool des aktuellen Bioms plus runübergreifend freigeschaltete Items
 function dropPool(){const b=biom();const extra=(S.metaItems||[]).filter(itemOk);let pool=[...(b.fundpool||[]),...extra].filter(id=>itemOk(id)&&!ITEMS[id].nodrop&&!ITEMS[id].bases&&!ITEMS[id].rare);

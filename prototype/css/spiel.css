@@ -164,6 +164,9 @@ button.deco small{font-family:var(--ft);font-size:.75em;letter-spacing:0}
 .zettel button.opt:hover:not(:disabled){color:#7a1a10}.zettel button.opt.gew{color:#7a1a10;font-weight:bold}
 .evd{font-size:calc(var(--u)*6.5)!important;max-width:calc(var(--u)*300);margin-inline:auto!important}
 .ereignis .innen{text-align:left}
+/* Ereignisbild (Zugabe 3): 160×90 Szenenpixel, ganzzahlig über --u skaliert, harte Pixel; dunkler Rand wie ein aufgeklebter Abzug */
+.evbild{width:calc(var(--u)*160);height:calc(var(--u)*90);margin:0 auto calc(var(--u)*4);background:#05060a;box-shadow:0 0 0 calc(var(--u)*1) #2a1c10,calc(var(--u)*1) calc(var(--u)*1.5) 0 calc(var(--u)*1) rgba(20,12,6,.55)}
+.evbild img{display:block;width:100%;height:100%;image-rendering:pixelated}
 .bench{display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);margin:calc(var(--u)*4) 0;flex-wrap:wrap}.bench .plus{font-size:calc(var(--u)*8)}
 .preview{width:calc(var(--u)*150);font-size:calc(var(--u)*5);text-align:left}.err{color:#e8584a}
 .wahl{display:flex;gap:calc(var(--u)*6);align-items:center;justify-content:center}.oder{font-style:italic;width:calc(var(--u)*110);font-size:calc(var(--u)*5.5);color:#bfb49a}
@@ -198,3 +201,55 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .feind .abs{background:radial-gradient(ellipse,rgba(0,0,0,.45),transparent 70%)}
 .ankunft{background:rgba(0,0,0,.78);border-top:1px solid var(--messing);border-bottom:1px solid var(--messing);padding:calc(var(--u)*10) calc(var(--u)*24);max-width:calc(var(--u)*360)}
 .ankunft .neu{font-size:calc(var(--u)*5);line-height:1.35;margin:calc(var(--u)*4) 0 calc(var(--u)*6)}
+/* Auftrag 2, M1: Spieler-Lebensbalken unten mittig über der Hand */
+#spieler{left:50%;bottom:calc(var(--u)*17);transform:translateX(-50%);width:calc(var(--u)*200);display:flex;align-items:center;gap:calc(var(--u)*3);flex-wrap:wrap;justify-content:center;pointer-events:none;z-index:3}
+#spieler:empty{display:none}
+#spieler .schild{display:flex;align-items:center;gap:calc(var(--u)*1);font-family:var(--fp);font-size:calc(var(--u)*5);color:#6a7a90;opacity:.55}
+#spieler .schild.an{color:#cfe0ff;opacity:1;text-shadow:0 0 calc(var(--u)*3) #000}
+#spieler .sbar{position:relative;flex:1;height:calc(var(--u)*8);background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20,0 0 calc(var(--u)*6) rgba(0,0,0,.8);display:flex}
+#spieler .sbar i{display:block;height:100%}#spieler .sbar .hp{background:linear-gradient(#d0463e,#9a2a24)}
+#spieler .sbar .schatten{background:repeating-linear-gradient(-45deg,#5a0e0a 0 3px,#300806 3px 6px);animation:puls .9s infinite alternate}
+#spieler .sbar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fk);font-size:calc(var(--u)*5);letter-spacing:.08em;color:#fff4e0;text-shadow:1px 1px 0 #000,0 0 3px #000}
+#spieler .swarn{width:100%;text-align:center;font-size:calc(var(--u)*5);color:#ff8a7a;text-shadow:1px 1px 0 #000,0 0 4px #000}
+.zwischentitel .spaet{opacity:0;animation:spaet .5s 1.5s forwards}@keyframes spaet{to{opacity:.8}}
+/* Meldungszeile: höchstens zwei nebeneinander, nie gestapelt */
+#toast{flex-direction:row!important;justify-content:center;width:70%!important;pointer-events:auto;cursor:pointer}
+.tst .n{color:var(--gold);font-family:var(--fp);font-size:.8em;margin-left:.4em}
+.tst.raus{animation:traus .35s forwards}@keyframes traus{to{opacity:0;transform:translateY(-6px)}}
+.endschirm .innen{text-align:left}.endschirm h2{text-align:center}.endschirm .lead{text-align:center}
+.wegbilder{display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*2);margin:calc(var(--u)*4) 0}.wegbilder div{display:flex;flex-direction:column;align-items:center;font-size:calc(var(--u)*4.4);color:#bfb49a}
+.wegbild{width:calc(var(--u)*48);height:calc(var(--u)*27);image-rendering:pixelated;border:1px solid #3a2c18}.wegbilder .pfeil{color:#6a604c}
+.endschirm .stats{columns:2;column-gap:calc(var(--u)*12);font-size:calc(var(--u)*5.4);line-height:1.5}
+.deckende{display:flex;flex-wrap:wrap;gap:calc(var(--u)*3);font-size:calc(var(--u)*4.6)}.deckende .dk{width:calc(var(--u)*90);line-height:1.2}.deckende img{width:calc(var(--u)*10);height:calc(var(--u)*10);image-rendering:pixelated;vertical-align:middle;margin-right:4px}
+.endschirm .knoepfe{display:flex;gap:calc(var(--u)*4);justify-content:center;flex-wrap:wrap;margin-top:calc(var(--u)*6)}
+/* Auftrag 2, M3: Handgriffe, Kerben, Ritzen */
+.karte.handgriff{background:#07060a}.karte .hgm{position:absolute;left:calc(var(--u)*2);bottom:calc(var(--u)*2);font-size:calc(var(--u)*5);opacity:.6}.karte .schl{position:absolute;right:calc(var(--u)*2);bottom:calc(var(--u)*2);color:var(--eld);font-size:calc(var(--u)*5)}
+.karte .bogen{position:relative}.karte.unspielbar{filter:grayscale(1) brightness(.5);border-style:dashed}.karte.frost{filter:hue-rotate(160deg) brightness(.6)}.karte.verteuert .kost span{color:#ff6a50;text-shadow:0 0 6px #e05040}
+.hgpick{width:calc(var(--u)*76)}.hgpick .hgk{font-family:var(--fl);font-size:calc(var(--u)*5.2);color:#efe4c8;display:flex;gap:calc(var(--u)*3);align-items:center;justify-content:center}.hgpick .hgc{display:inline-flex;width:calc(var(--u)*9);height:calc(var(--u)*9);transform:rotate(45deg);border:1px solid var(--messing2);align-items:center;justify-content:center;font-family:var(--fk)}
+.hgpick .hgt{font-style:italic;color:#a89c80;font-size:calc(var(--u)*4.4);margin-top:calc(var(--u)*2)}.hgpick .hgb{font-family:var(--fk);font-size:calc(var(--u)*3.8);letter-spacing:.12em;color:var(--messing2);margin-top:calc(var(--u)*2)}
+.ritzliste{display:flex;flex-direction:column;gap:calc(var(--u)*2);text-align:left;margin:calc(var(--u)*4) 0}.ritz{display:flex;align-items:center;gap:calc(var(--u)*4);background:#060504;border:1px solid #2a2014;padding:calc(var(--u)*2) calc(var(--u)*4)}.ritz.rucksack{opacity:.7}
+.ritz img{width:calc(var(--u)*14);height:calc(var(--u)*14);image-rendering:pixelated}.ritz .rn{flex:1;font-size:calc(var(--u)*5)}.kerben{display:flex;gap:calc(var(--u)*2);flex-wrap:wrap}
+.kerbe{font-family:var(--ft);font-size:calc(var(--u)*4.6);background:#000;border:1px dashed #5a4a2a;color:#bfb49a;padding:calc(var(--u)*1.5) calc(var(--u)*4);cursor:pointer}.kerbe.voll{border-style:solid;border-color:var(--messing);color:#efe4c8}.kerbe:hover:not(:disabled){border-color:var(--gold);color:#fff}
+.slot .kb{position:absolute;left:1px;bottom:1px;display:flex;gap:1px;pointer-events:none}.slot .kb i{width:calc(var(--u)*2);height:calc(var(--u)*2);border:1px solid #8a6a2a;display:block}.slot .kb i.voll{background:var(--gold)}
+.entf{display:flex;flex-wrap:wrap;gap:calc(var(--u)*2);justify-content:center}
+.box .wahl{flex-wrap:wrap}
+.rucksack{max-width:calc(var(--u)*460)}.rs3{display:flex;gap:calc(var(--u)*8);text-align:left}.rsl{flex:0 0 auto}.rsr{flex:1;font-size:calc(var(--u)*4.8);max-height:calc(var(--u)*170);overflow:auto}
+.rucksack h4{font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.12em;color:#a89c80;margin:calc(var(--u)*3) 0 calc(var(--u)*1.5)}
+.dg{border-left:2px solid #3a2c18;padding-left:calc(var(--u)*3);margin-bottom:calc(var(--u)*3)}.dg.neu{border-color:#5ac85a}.dg.neu .dc{color:#9ae08a}.dg.raus{border-color:#c84a3a}.dg.raus .dc{color:#c86a5a;text-decoration:line-through}
+.dc{display:inline-block;margin-right:calc(var(--u)*3)}.gr{color:#9ae08a}.rt{color:#e8584a}.rsinfo{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*4.8);max-width:calc(var(--u)*120)}
+#tip .vkr{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}#tip .vk{width:110px;background:#060504;border:1px solid #4a3a20;padding:4px;font-size:13px;position:relative}#tip .vkc{position:absolute;right:4px;top:2px;color:var(--gold);font-family:var(--fk)}#tip .vkt{color:#bfb49a;font-size:12px}
+#tip{max-width:520px}
+/* Belohnung: Rahmen nach Seltenheit, Aufdecken nacheinander, Reliquie mit langsamem Goldglanz */
+.p-reward .pick{animation:aufdecken .45s backwards}.p-reward .pick:nth-child(2){animation-delay:.18s}.p-reward .pick:nth-child(3){animation-delay:.36s}.p-reward .pick:nth-child(4){animation-delay:.54s}
+@keyframes aufdecken{from{transform:rotateY(90deg);opacity:0}}
+.pick.selten{border-color:var(--messing)}.pick.reliquie{border-color:var(--gold);animation:aufdecken .45s backwards,glanz 3.2s ease-in-out .5s infinite}
+@keyframes glanz{0%,100%{box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.15)}50%{box-shadow:0 0 calc(var(--u)*9) rgba(232,197,71,.45)}}
+
+.feind .nm .knf{color:#e8c070;margin-left:.3em;font-size:.8em}
+.abs .unverw{font-size:.8em;color:#d8ecff;background:rgba(20,30,45,.75);padding:0 .3em;border:1px solid rgba(200,225,255,.45);border-radius:2px}.abs .ruft{font-size:.8em;color:#ffe2b0;background:rgba(45,28,12,.78);padding:0 .3em;border:1px solid rgba(255,205,140,.5);border-radius:2px}.abs .laedt{opacity:.75}.abs .laedt small{font-size:.6em;opacity:.8}
+.hgpick .hgimg{display:block;margin:4px auto 2px;width:calc(var(--u,3px)*32);height:auto;image-rendering:pixelated}
+/* Belohnung mit Handgriff und Reliquie: etwas dichter, damit „Nichts nehmen“ ohne Scrollen sichtbar bleibt (seit Reliquien ihren Eigenschaftstext zeigen) */
+.box.reward{max-height:calc(var(--u)*264)}.box.reward .innen{padding:calc(var(--u)*4) calc(var(--u)*8)}.box.reward h3{margin:calc(var(--u)*3) 0 calc(var(--u)*1)}.box.reward .picks{margin:calc(var(--u)*2) 0}.box.reward .hgpick .hgimg{width:calc(var(--u)*24)}.box.reward .pick img{max-height:calc(var(--u)*20)}.box.reward .pick{padding:calc(var(--u)*3)}.box.reward .pick .ps{margin-top:calc(var(--u)*1)}
+
+/* Mehr als 6 Handkarten (Ballast, Strandbuch, Wahrsagerin): Karten überlappen, damit die Hand nie aus dem Bild läuft; die Karte unter der Maus liegt oben */
+#hand .karte+.karte{margin-left:calc(var(--u)*-1*var(--ov,0))}#hand .karte:hover{z-index:5}

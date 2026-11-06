@@ -1,0 +1,244 @@
+{
+ "id": "kapelle_plus",
+ "ergaenzt": "kapelle",
+ "gegner_dazu": [
+  "gepruefte",
+  "kirchenvogt"
+ ],
+ "gegner_weg": [],
+ "waechter_dazu": [
+  "prediger"
+ ],
+ "fundpool_dazu": [
+  "klingelbeutel"
+ ],
+ "foes": {
+  "prediger": {
+   "n": "Der Prediger",
+   "biom": "kapelle",
+   "rang": "waechter",
+   "hp": 66,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 16
+    }
+   ],
+   "sprite": "prediger",
+   "varianten": [
+    "prediger"
+   ],
+   "konzept": "Der Prediger von 1634 steht noch in der Kanzel, die schief im Wasser steht, unter dem Schalldeckel ohne Wand. Er ist mit jeder Predigt länger geworden, bis sein Kopf an den Deckel stieß; die Arme liegen über der Brüstung, die Hände hängen bis unter den Korb. An der Brüstung die Kanzelsanduhr, und der Sand läuft nach oben.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 1,
+    "v": 16,
+    "why": "Die Sanduhr läuft nach oben. Wenn sie voll ist, ist die Predigt zu Ende, und dann spricht er das Urteil."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "W",
+     "F",
+     "G"
+    ]
+   },
+   "beute": "bible",
+   "beute_satz": "Die Sanduhr fällt von der Brüstung und zerbricht nicht. Der Sand darin liegt oben, still, und unten ist das Glas leer.",
+   "quelle": "skript"
+  },
+  "gepruefte": {
+   "n": "Die Geprüfte",
+   "biom": "kapelle",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 7
+    }
+   ],
+   "sprite": "gepruefte_a",
+   "varianten": [
+    "gepruefte_a",
+    "gepruefte_b"
+   ],
+   "konzept": "1651 der Wasserprobe unterzogen: Daumen an die großen Zehen gebunden, ein Seil um den Leib, in den Teich vor der Kapelle geworfen. Wer schwimmt, ist schuldig. Sie schwimmt bis heute, auch in der Luft; das Seil hängt schlaff bis auf den Boden, und niemand hält es.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "wechsel",
+    "stoffe": [
+     "G",
+     "W"
+    ],
+    "why": "Mal schwimmt sie, mal sinkt sie. Das Urteil fällt jeden Zug neu."
+   },
+   "beute": "holywater",
+   "beute_satz": "Sie sinkt, endlich. Das Seil zieht sich von selbst nach unten, Hand über Hand.",
+   "quelle": "skript"
+  },
+  "kirchenvogt": {
+   "n": "Der Kirchenvogt",
+   "biom": "kapelle",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 3
+    }
+   ],
+   "sprite": "kirchenvogt_a",
+   "varianten": [
+    "kirchenvogt_a",
+    "kirchenvogt_b"
+   ],
+   "konzept": "Ging 1634 mit dem Klingelbeutel durch die Bänke, als die Flut kam, und sammelt seitdem weiter. Schwarzer Talar, ein Mühlsteinkragen wie ein Teller, und auf dem Rand des Tellers liegt sein Kopf, auf der Seite, und sieht dich von dort aus an.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "nachlass",
+    "was": "item",
+    "why": "Was im Beutel war, gehört der Gemeinde. Die Gemeinde braucht es nicht mehr."
+   },
+   "beute": "klingelbeutel",
+   "beute_satz": "Der Beutel reißt. Heraus fallen Knöpfe, Zähne, ein Ehering, und ganz zuletzt eine Münze mit deinem Gesicht.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "kapelle_probe",
+   "t": "Die Probe",
+   "d": "Vor der Kapelle, wo früher der Teich war, steht das Wasser bis zu den Fenstern. Darauf treibt ein zusammengebundenes Bündel aus Leinen, trocken, und dreht sich langsam zu dir. Am Ufer liegt das Ende eines Seils. Es ist warm, als hätte es eben noch jemand gehalten.",
+   "bild": "Ein helles Leinenbündel auf schwarzem Wasser vor einer halb versunkenen Kapellenwand, ein Seil führt vom Bündel ans Ufer zu deinen Füßen.",
+   "o": [
+    {
+     "l": "Das Seil anziehen: Kampf gegen die Geprüfte",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "gepruefte"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Selbst ins Wasser steigen, bis man dich freispricht: einen Handgriff lernen, −10 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 10
+      }
+     ]
+    },
+    {
+     "l": "Das Seil ins Wasser werfen: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "kapelle_kollekte",
+   "t": "Die Kollekte",
+   "d": "Zwischen den Bänken kommt eine lange Stange auf dich zu, am Ende ein nasser Samtbeutel mit einem Glöckchen. Wer sie hält, bleibt im Schatten unter der Empore. Das Glöckchen läutet, und es hört nicht auf, bis du gibst.",
+   "bild": "Ein Klingelbeutel an einer langen Stange über einer überfluteten Kirchenbank, das Glöckchen glänzt, der Halter ist nur ein Kragen im Dunkel.",
+   "o": [
+    {
+     "l": "Geben: −15 Gold, +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "gold",
+       "v": -15
+      },
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "gold_min": 15
+     }
+    },
+    {
+     "l": "Sagen, dass du schon gegeben hast, am Opferstock unter der Kerze: eine Karte kostet dauerhaft 1 weniger",
+     "fx": [
+      {
+       "op": "schleifen"
+      }
+     ],
+     "if": {
+      "event_gesehen": "kapelle_kerze"
+     }
+    },
+    {
+     "l": "Nicht geben: Kampf gegen den Kirchenvogt",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "kirchenvogt"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "klingelbeutel": {
+   "n": "Klingelbeutel",
+   "a": "talisman",
+   "st": [
+    "G"
+   ],
+   "spr": "rosary",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 45,
+   "eigen": {
+    "typ": "gold_bonus",
+    "v": 6
+   },
+   "flavor": "Nasser Samt an einer Stange, ein Glöckchen am Bügel. Er wird schwerer, wenn du nicht hinsiehst, und nie leichter.",
+   "cards": [
+    {
+     "n": "Glöckchen",
+     "c": 0,
+     "draw": 1,
+     "weak": 1
+    }
+   ]
+  }
+ }
+}

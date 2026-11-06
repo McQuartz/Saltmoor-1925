@@ -1,0 +1,53 @@
+{
+ "id": "rippenkriecher",
+ "rang": "normal",
+ "w": 96,
+ "h": 120,
+ "zone": "walkathedrale",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  48,
+  115
+ ],
+ "kopf": [
+  20,
+  82
+ ],
+ "augen": [
+  [
+   42,
+   91
+  ],
+  [
+   16,
+   95
+  ],
+  [
+   19,
+   95
+  ]
+ ],
+ "augenfarbe": "#ff8c70"
+}

@@ -1,0 +1,53 @@
+{
+ "id": "sender",
+ "rang": "waechter",
+ "w": 160,
+ "h": 180,
+ "zone": "funkstation",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  88,
+  174
+ ],
+ "kopf": [
+  90,
+  6
+ ],
+ "augen": [
+  [
+   89,
+   82
+  ],
+  [
+   104,
+   3
+  ],
+  [
+   25,
+   51
+  ]
+ ],
+ "augenfarbe": "#ff8a2a"
+}

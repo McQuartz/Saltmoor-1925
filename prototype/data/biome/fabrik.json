@@ -1,0 +1,832 @@
+{
+ "id": "fabrik",
+ "akt": 0,
+ "biom": {
+  "n": "Die Konservenfabrik",
+  "kurz": "Fabrik",
+  "zeit": "1925, Nachtschicht",
+  "anreise": "Am Rand von Saltmoor laufen nachts die Bänder der Konservenfabrik. Der Schornstein raucht, und der Rauch fällt.",
+  "koerper": [
+   "#040605",
+   "#09110e",
+   "#122019",
+   "#1d3327"
+  ],
+  "rand": [
+   "#8c5a24",
+   "#ffcf6a"
+  ],
+  "augen": "#e4f2d8",
+  "nebel": [
+   "#141d17",
+   "#3a3c28"
+  ],
+  "musik": "fabrik",
+  "szene_alt": "hafen",
+  "gegner": [
+   "ausnehmerin",
+   "dosenkind",
+   "kesselmann",
+   "kuehlhausgast"
+  ],
+  "waechter": "schicht",
+  "waechter_alt": [
+   "fang"
+  ],
+  "fundpool": [
+   "akkordmesser",
+   "stempelkarte",
+   "lakeeimer",
+   "gummischuerze",
+   "knife",
+   "gloves",
+   "boots",
+   "salt",
+   "pan",
+   "rum",
+   "gasmask",
+   "shovel",
+   "oilcoat"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Die Vorarbeiterin",
+   "ort": "an ihrem Spind im Umkleideraum, unter einer Glühbirne",
+   "zeile": "Sie kennt deinen Namen von der Stempelkarte. Du hast hier nie gearbeitet. Sie sagt, du seist spät dran."
+  },
+  "uebergang": "Im Kesselhaus steht der Bodenablauf offen. Der Rauch fließt hinein, und eine Eisenleiter führt ihm nach, hinunter in grünes Licht. Von unten läutet eine Glocke.",
+  "weg_hinweise": {
+   "kampf": [
+    "Messer im Takt, hinter der Packhalle.",
+    "Etwas rollt zwischen den Dosentürmen.",
+    "Die Feuertür des Kessels steht offen, und jemand atmet davor.",
+    "Reif auf dem Boden, vor dem Kühlhaus."
+   ],
+   "ereignis": [
+    "Die Stempeluhr am Tor schlägt, obwohl niemand kommt.",
+    "Ein Platz am Band ist frei.",
+    "Eine Dose ist aus dem Turm gefallen."
+   ],
+   "wandbild": [
+    "In die Kacheln der Umkleide ist etwas geritzt, unter der Farbe."
+   ],
+   "kraemer": [
+    "Licht im Umkleideraum. Ein Spind steht offen."
+   ],
+   "werkstatt": [
+    "Die Schlosserei. Die Drehbank läuft noch nach."
+   ],
+   "rast": [
+    "Das Feuerloch im Kesselhaus. Dort ist es warm."
+   ],
+   "fundstelle": [
+    "Ausschuss, in einer Kiste neben dem Band."
+   ]
+  },
+  "beute_saetze": [
+   "Die Dosen auf dem Band laufen weiter, auch ohne sie.",
+   "Irgendwo stempelt die Uhr eine Karte ab.",
+   "Der Rauch legt sich über das, was übrig ist, und deckt es zu.",
+   "Auf dem Boden liegt ein Messer. Es ist noch warm vom Takt.",
+   "Die Lampe über dem Band brummt eine Spur tiefer als vorher.",
+   "Im Kühlhaus schließt sich eine Tür. Von innen.",
+   "Auf jeder Dose steht das Datum von morgen. Auf einer steht jetzt deines.",
+   "Die Schicht ist nicht zu Ende. Es ist nur jemand weniger da."
+  ]
+ },
+ "musik": {
+  "n": "Konservenfabrik",
+  "root": 49,
+  "key": "cis-Moll",
+  "names": [
+   "C♯m",
+   "A",
+   "F♯m",
+   "G♯"
+  ],
+  "darkNames": [
+   "C♯m",
+   "D",
+   "F♯m",
+   "G♯♭9"
+  ],
+  "amb": {
+   "stollen": 0.05,
+   "wind": 0.03
+  },
+  "rhy": "ketten",
+  "detail": "salz",
+  "ort": "Bänder rattern, Dampf zischt, die Lampen brummen",
+  "rhyN": "Kettenrollen im Takt, Pauke"
+ },
+ "foes": {
+  "ausnehmerin": {
+   "n": "Die Ausnehmerin",
+   "biom": "fabrik",
+   "rang": "normal",
+   "hp": 23,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 5
+    }
+   ],
+   "sprite": "ausnehmerin_a",
+   "varianten": [
+    "ausnehmerin_a",
+    "ausnehmerin_b"
+   ],
+   "konzept": "Die schnellste Ausnehmerin der Schicht. Ihr Messerarm steht in allen Stellungen des Schnitts zugleich, ein Fächer aus Armen.",
+   "stimme": "salzlaeufer",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Je länger die Schicht, desto schneller die Messer."
+   },
+   "beute": "akkordmesser",
+   "beute_satz": "Der Fächer klappt zusammen. Es war immer nur ein Arm.",
+   "quelle": "skript"
+  },
+  "dosenkind": {
+   "n": "Das Dosenkind",
+   "biom": "fabrik",
+   "rang": "normal",
+   "hp": 14,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 5
+    }
+   ],
+   "sprite": "dosenkind_a",
+   "varianten": [
+    "dosenkind_a",
+    "dosenkind_b"
+   ],
+   "konzept": "Ein Lötjunge in einer Dose so groß wie ein Fass, der Deckel mit dem Schlüssel aufgerollt. Nicht gealtert. Auf der Dose das Datum von morgen.",
+   "stimme": "augen",
+   "kniff": {
+    "art": "nachlass",
+    "was": "explodiert",
+    "v": 5,
+    "why": "Wenn die Dose platzt, spritzt die Lake. Wer zuletzt zuschlägt, steht im Weg."
+   },
+   "beute": "lakeeimer",
+   "beute_satz": "Die Lake läuft in die Rinne. Die Dose ist leer, und sie war es immer.",
+   "quelle": "skript"
+  },
+  "kesselmann": {
+   "n": "Der Kesselmann",
+   "biom": "fabrik",
+   "rang": "normal",
+   "hp": 29,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "kesselmann_a",
+   "varianten": [
+    "kesselmann_a",
+    "kesselmann_b"
+   ],
+   "konzept": "Der Heizer an den Retorten. Sein Leib ist ein genieteter Kessel mit offener Feuertür; der Rauch aus seinem Rohr fällt nach unten.",
+   "stimme": "tiefling",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 3,
+    "why": "Er heizt, und der Dampf hüllt die anderen ein. Wer ihn zuerst löscht, nimmt ihnen den Schutz."
+   },
+   "beute": "gummischuerze",
+   "beute_satz": "Die Feuertür schlägt zu. Drinnen brennt es weiter, langsam, für niemanden.",
+   "quelle": "skript"
+  },
+  "kuehlhausgast": {
+   "n": "Der Kühlhausgast",
+   "biom": "fabrik",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "kuehlhausgast_a",
+   "varianten": [
+    "kuehlhausgast_a",
+    "kuehlhausgast_b"
+   ],
+   "konzept": "Ein Herr vom Aufsichtsrat, 1911 bei der Besichtigung im Kühlhaus eingeschlossen. Er steckt bis zur Hüfte im Eis und lehnt steif wie ein Brett; die Heringe im Eis sehen zu ihm hinauf.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Was er ansieht, hält still. Eine Karte auf deiner Hand friert für diesen Zug ein."
+   },
+   "beute": "watch",
+   "beute_satz": "Er neigt den Hut, ein letztes Mal. Seine Uhr steht auf 1911.",
+   "quelle": "skript"
+  },
+  "schicht": {
+   "n": "Die Schicht",
+   "biom": "fabrik",
+   "rang": "waechter",
+   "hp": 76,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 4
+    }
+   ],
+   "sprite": "schicht",
+   "varianten": [
+    "schicht"
+   ],
+   "konzept": "Zwölf Arbeiterinnen der Nachtschicht vom 4. November, übereinander gewachsen wie ein Dosenturm. Ein Leib, zwölf Kopftücher, dasselbe Gesicht. Jeder dritte Zug ist Akkord.",
+   "stimme": "kultist",
+   "besonders": {
+    "art": "ruft",
+    "gegner": "dosenkind",
+    "alle": 3
+   },
+   "beute": "ofen",
+   "beute_satz": "Die Lagen sinken in sich zusammen. Das Band läuft weiter, und am Platz ganz oben ist jetzt einer frei.",
+   "quelle": "skript",
+   "kniff": {
+    "art": "waechst",
+    "v": 2,
+    "why": "Der Takt zieht an. Jede Runde ein wenig schneller, so wie jede Nacht."
+   }
+  },
+  "fang": {
+   "n": "Der Fang",
+   "biom": "fabrik",
+   "rang": "waechter",
+   "hp": 88,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 18
+    }
+   ],
+   "sprite": "fang",
+   "varianten": [
+    "fang",
+    "fang_p2"
+   ],
+   "konzept": "Der letzte Kabeljau der „Anna Thormählen“, so lang wie zwei Männer, hängt am Kranhaken über dem Hauptband und wird seit dem 4. November gewogen. Auf der Flanke trägt er den Stempel mit dem Datum von morgen. Statt Brustflossen hat er Arme, an der linken Hand einen Ehering.",
+   "stimme": "tiefling",
+   "kniff": {
+    "art": "abschrift",
+    "n": 1,
+    "karte": "Gräte",
+    "spr": "bone",
+    "why": "Was vom Ausnehmen bleibt, landet in deinem Stapel: jeden Zug eine Gräte, die nichts tut."
+   },
+   "pendel": true,
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 9,
+       "h": 2
+      },
+      {
+       "t": "blk",
+       "v": 12
+      },
+      {
+       "t": "atk",
+       "v": 22
+      },
+      {
+       "t": "atk",
+       "v": 5,
+       "h": 4
+      }
+     ]
+    ],
+    "sprites": [
+     "fang_p2"
+    ]
+   },
+   "beute": "ehering",
+   "beute_satz": "Der Haken pendelt leer über dem Band. Die Waage zeigt kein Gewicht, nur das Datum von morgen.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "fabrik_stempeluhr",
+   "t": "Die Stempeluhr",
+   "d": "Neben dem Tor hängt die Stempeluhr, darunter ein Kasten mit Karten. Eine trägt deinen Namen, in einer Handschrift, die du kennst. Sie ist schon gestempelt: Schichtbeginn 5. November, 22 Uhr.",
+   "bild": "Eine Stempeluhr unter einer Glühbirne am Fabriktor, der Kartenkasten offen, eine Karte steht ein Stück heraus.",
+   "o": [
+    {
+     "l": "Die Karte einstecken: Stempelkarte, −4 Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "stempelkarte"
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ]
+    },
+    {
+     "l": "Noch einmal stempeln: eine Karte kostet dauerhaft 1 weniger, −5 max. Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Den Kasten durchsehen: +18 Gold. Alle Karten tragen deinen Namen.",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 18
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fabrik_platz",
+   "t": "Der freie Platz",
+   "d": "Am Band ist ein Platz frei, zwischen zwei Frauen, die nicht aufsehen. Ein Messer liegt bereit, der Schemel ist noch warm. Die Dosen kommen leer und gehen voll weiter, und niemand legt etwas hinein.",
+   "bild": "Ein leerer Schemel zwischen zwei gebeugten Rücken in Kopftüchern, auf dem Band davor eine Reihe blanker Dosen.",
+   "o": [
+    {
+     "l": "Dich setzen und mitarbeiten: einen Handgriff lernen, −6 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ]
+    },
+    {
+     "l": "Mit deinem eigenen Fischmesser mitschneiden: einen Handgriff lernen",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      }
+     ],
+     "if": {
+      "item": "knife"
+     }
+    },
+    {
+     "l": "Das Messer nehmen: Fischmesser des Akkords, Kampf gegen die Ausnehmerin",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "akkordmesser"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "ausnehmerin"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fabrik_dose",
+   "t": "Eine Dose von morgen",
+   "d": "Auf dem Boden liegt eine Dose, aus dem Turm gefallen. Kein Etikett, nur der Stempel: 5. November. Sie ist warm, und wenn du sie schüttelst, schüttelt sich etwas zurück.",
+   "bild": "Eine einzelne blanke Dose auf nassen Fliesen, dahinter der Dosenturm mit einer Lücke in der untersten Reihe.",
+   "o": [
+    {
+     "l": "Öffnen: ein zufälliges seltenes Item, −8 Leben",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ]
+    },
+    {
+     "l": "Der Vorarbeiterin bringen: +25 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 25
+      }
+     ]
+    },
+    {
+     "l": "Zurück in den Turm stellen, genau in die Lücke: +1 Kerbe an einem Item",
+     "fx": [
+      {
+       "op": "kerbe"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fabrik_kuehlhaus",
+   "t": "Die Tür zum Kühlhaus",
+   "d": "Die Tür des Kühlhauses steht einen Spalt offen, Reif an der Klinke. Drinnen sitzt ein Herr auf einer Kiste, den Hut auf den Knien. Er sagt, er warte auf die Führung, und fragt höflich, welches Jahr ist.",
+   "bild": "Ein Spalt aus kaltem Licht in einer gepolsterten Tür, dahinter ein Mann mit Melone zwischen gestapelten Fischkisten.",
+   "stummfilm": true,
+   "o": [
+    {
+     "l": "Ihm das Jahr sagen: Kampf gegen den Kühlhausgast, danach ein seltenes Item",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "kuehlhausgast"
+       ]
+      },
+      {
+       "op": "give_rare"
+      }
+     ]
+    },
+    {
+     "l": "Lügen: 1911. Er bedankt sich und schenkt dir seine Uhr",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "watch"
+      },
+      {
+       "op": "max_hp",
+       "v": -3
+      }
+     ]
+    },
+    {
+     "l": "Die Tür leise zudrücken: +6 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fabrik_rauch",
+   "t": "Rauch im Hof",
+   "d": "Der Rauch aus dem Schornstein liegt knietief auf dem Hof, warm wie Atem. Wer hineinsieht, sieht unten Lichter, als läge ein zweiter Hof darunter, und dort raucht ein zweiter Schornstein nach oben.",
+   "bild": "Ein Hof im Natriumlicht, knietief in Rauch, der vom Schornstein herabfließt; im Rauch glimmen Lichter von unten.",
+   "o": [
+    {
+     "l": "Hineinknien und einatmen: dauerhaft +1 Energie, −10 max. Leben",
+     "fx": [
+      {
+       "op": "energie_dauer",
+       "v": 1
+      },
+      {
+       "op": "max_hp",
+       "v": -10
+      }
+     ]
+    },
+    {
+     "l": "Mit dem Lakeeimer schöpfen, was unten liegt: eine Reliquie, −8 Leben",
+     "fx": [
+      {
+       "op": "reliquie"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ],
+     "if": {
+      "item": "lakeeimer"
+     }
+    },
+    {
+     "l": "Am Rand entlanggehen: +5 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fabrik_annahme",
+   "t": "Die Annahme",
+   "d": "In der Annahme stehen Kisten mit Hering, frisch, die Augen klar. Auf jeder Kiste klebt der Zettel eines Kutters. Einer davon ist deiner, und du warst heute nicht draußen.",
+   "bild": "Fischkisten unter einer Lampe, Eis und Hering, an einer Kiste ein Zettel mit einem Bootsnamen.",
+   "o": [
+    {
+     "l": "Die Fische zählen. Es sind genau so viele wie gestern: ein Item tauschen",
+     "fx": [
+      {
+       "op": "item_tausch"
+      }
+     ],
+     "if": {
+      "job": "fischer"
+     }
+    },
+    {
+     "l": "Einen Hering nehmen und essen: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    },
+    {
+     "l": "Die unterste Kiste öffnen: +20 Gold, Kampf gegen das Dosenkind",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 20
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "dosenkind"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fabrik_lohn",
+   "t": "Die Lohntüte",
+   "d": "Im offenen Spind liegt eine Lohntüte mit deinem Namen. Darin der Lohn für eine Woche Akkord, die du nicht gearbeitet hast, und ein Zettel in derselben Handschrift wie auf der Stempelkarte: »Pünktlich sein.«",
+   "bild": "Eine braune Lohntüte auf dem Brett eines Spindes, daneben ein Paar Gummistiefel, die nass sind.",
+   "o": [
+    {
+     "l": "Annehmen, du hast ja gestempelt: +40 Gold, −4 max. Leben",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 40
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ],
+     "if": {
+      "event_gesehen": "fabrik_stempeluhr"
+     }
+    },
+    {
+     "l": "Den Zettel umdrehen: einen Handgriff lernen, −3 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 3
+      }
+     ]
+    },
+    {
+     "l": "Die Tüte liegen lassen und die Stiefel nehmen: Gummistiefel",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "boots"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "akkordmesser": {
+   "n": "Fischmesser des Akkords",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "knife",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 45,
+   "eigen": {
+    "typ": "start_staerke",
+    "v": 1
+   },
+   "flavor": "Dünn geschliffen von tausend Schnitten am Tag. Stumpf ist es nie geworden, nur schneller.",
+   "cards": [
+    {
+     "n": "Akkordschnitt",
+     "c": 1,
+     "atk": 2,
+     "h": 3,
+     "kette": 1
+    }
+   ]
+  },
+  "stempelkarte": {
+   "n": "Stempelkarte",
+   "a": "talisman",
+   "st": [],
+   "spr": "watch",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 40,
+   "eigen": {
+    "typ": "energie_bleibt",
+    "v": 1
+   },
+   "flavor": "Gestempelt für eine Schicht, die morgen beginnt. Dein Name ist richtig geschrieben.",
+   "cards": [
+    {
+     "n": "Abstempeln",
+     "c": 1,
+     "blk": 5,
+     "draw": 1
+    }
+   ]
+  },
+  "lakeeimer": {
+   "n": "Lakeeimer",
+   "a": "talisman",
+   "st": [
+    "S"
+   ],
+   "spr": "salt",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 20,
+   "flavor": "Die Lake ist trüb und warm. Was man hineinlegt, hält sich. Man sollte nichts hineinlegen.",
+   "cards": [
+    {
+     "n": "Einlegen",
+     "c": 1,
+     "blk": 4,
+     "weak": 1
+    }
+   ]
+  },
+  "gummischuerze": {
+   "n": "Gummischürze",
+   "a": "kleidung",
+   "st": [
+    "W"
+   ],
+   "spr": "coat",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 22,
+   "eigen": {
+    "typ": "reaktion_block",
+    "v": 1
+   },
+   "flavor": "Schwer, kalt und bis zu den Knöcheln. Die Flecken gehen nicht ab, aber sie wandern.",
+   "cards": [
+    {
+     "n": "Abwischen",
+     "c": 1,
+     "blk": 6
+    }
+   ]
+  },
+  "ofen": {
+   "n": "Der Ofen unter der Fabrik",
+   "a": "talisman",
+   "st": [
+    "F"
+   ],
+   "spr": "candle",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 120,
+   "nodrop": true,
+   "eigen": {
+    "typ": "brand_springt"
+   },
+   "flavor": "Ein Ziegel aus der Feuerung unter dem Kesselhaus. Er ist warm, seit 1925, und er wird wärmer, wenn jemand stirbt.",
+   "cards": [
+    {
+     "n": "Glutkern",
+     "c": 1,
+     "burn": 4
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/fabrik.js"
+ ]
+}

@@ -1,0 +1,816 @@
+{
+ "id": "funkstation",
+ "akt": 3,
+ "biom": {
+  "n": "Die Funkstation am Pol",
+  "kurz": "Funkstation",
+  "zeit": "1912, auf dem schwarzen Eis",
+  "anreise": "Auf dem schwarzen Eis steht eine eingeschneite Funkstation von 1912. Die Röhren glühen noch, und der Empfänger empfängt etwas von unten.",
+  "koerper": [
+   "#060403",
+   "#110a07",
+   "#1e120c",
+   "#311d14"
+  ],
+  "rand": [
+   "#6a8698",
+   "#d6eaf4"
+  ],
+  "augen": "#ff8a2a",
+  "nebel": [
+   "#140d0a",
+   "#3a2c24"
+  ],
+  "musik": "funkstation",
+  "szene_alt": "eis",
+  "gegner": [
+   "funker",
+   "telegrafistin",
+   "mastkletterer",
+   "rauschen"
+  ],
+  "waechter": "sender",
+  "waechter_alt": [
+   "kastendrachen"
+  ],
+  "fundpool": [
+   "morsetaste",
+   "kopfhoerer",
+   "funkenstrecke",
+   "compass",
+   "lantern",
+   "musicbox",
+   "watch",
+   "sealskin",
+   "rum",
+   "flaregun",
+   "minerlamp",
+   "dynamite",
+   "smellingsalts"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Proviantmeister",
+   "ort": "vor der Hütte, zwischen den Kisten der Expedition, die Liste an ein Brett genagelt, eine Laterne im Schnee",
+   "zeile": "Er führt seit 1912 Inventur. Er gibt nichts heraus, was nicht von der Liste gestrichen wird: Für jedes Stück, das du nimmst, kommt eins von dir auf die Liste. Die Liste muss stimmen, sagt er, sonst merkt man unten, dass einer fehlt.",
+   "art": "tausch"
+  },
+  "uebergang": "Am Loch im Eis geht die Antennenlitze weiter hinab, straff, als hinge unten etwas daran. Du steigst an ihr hinunter. Die Zeichen kommen jetzt von überall, und sie sind fertig: Es ist dein Name.",
+  "weg_hinweise": {
+   "kampf": [
+    "Jemand sitzt im Schnee vor der Hütte, eine Hand am Ohr, und horcht.",
+    "Ein Klopfen, kurz, kurz, lang, ohne Pause. Es kommt näher.",
+    "Am Mast hängt etwas, das kein Eis ist, und es dreht den Kopf.",
+    "Im Schneefegen stehen Streifen still, wie Schultern."
+   ],
+   "ereignis": [
+    "Der Morsetisch. Die Taste bewegt sich, und niemand sitzt davor.",
+    "Die Kojen der Expedition, elf Schlafsäcke, zugeschnürt.",
+    "Ein rundes Loch im Eis. Ein Draht führt hinein, straff gespannt.",
+    "Das Funklogbuch liegt aufgeschlagen unter der Lampe."
+   ],
+   "wandbild": [
+    "In die Plankenwand ist etwas geritzt, mit einer Nadel, in Punkten und Strichen."
+   ],
+   "kraemer": [
+    "Eine Laterne zwischen Kisten. Jemand zählt laut, und die Zahl stimmt nicht."
+   ],
+   "werkstatt": [
+    "Ein Lötkolben, warm. Auf der Werkbank liegt ein Empfänger, halb aufgeschraubt."
+   ],
+   "rast": [
+    "Der Kanonenofen in der Hütte. Wenn du ihn anheizt, brennt er zum ersten Mal seit 1912."
+   ],
+   "fundstelle": [
+    "Eine Kiste der Expedition im Schnee. Darin glimmt etwas, kurz und lang."
+   ]
+  },
+  "beute_saetze": [
+   "Unter dem Eis blinkt es weiter, kurz, kurz, lang. Es hat nicht aufgehört, es hat nur gewartet.",
+   "Der Wind legt Schnee über die Spuren des Kampfs. Der Papierstreifen bleibt liegen. Er ist länger geworden.",
+   "In der Hütte schlägt die Taste einmal an. Dann ist es still, und die Stille klingt wie Rauschen.",
+   "Am Mast klirrt das Eishaar, obwohl kein Wind geht.",
+   "Die Röhren im Fenster werden dunkler, eine nach der anderen, und dann alle wieder hell.",
+   "Im Logbuch steht unter dem heutigen Datum ein neuer Eintrag: „Empfang gut.“",
+   "Du sagst nichts. Unter dem Eis antwortet trotzdem jemand.",
+   "Irgendwo knackt ein Kopfhörer, als hätte ihn jemand gerade abgesetzt."
+  ]
+ },
+ "musik": {
+  "n": "Funkstation am Pol",
+  "root": 50,
+  "key": "d-Moll",
+  "names": [
+   "Dm",
+   "B♭",
+   "Gm",
+   "A"
+  ],
+  "darkNames": [
+   "Dm",
+   "E♭",
+   "Gm",
+   "A♭9"
+  ],
+  "amb": {
+   "wind": 0.06,
+   "eisgrund": 0.03,
+   "schimmer": 0.03
+  },
+  "rhy": "holz",
+  "detail": "eis",
+  "ort": "Wind über dem Eis, ein Seil schlägt gegen den Mast; ganz leise summen die Röhren, und darunter dröhnt das Eis",
+  "rhyN": "das Klopfen der Taste, kurz, kurz, lang"
+ },
+ "foes": {
+  "funker": {
+   "n": "Der Funker",
+   "biom": "funkstation",
+   "rang": "normal",
+   "hp": 25,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "funker_a",
+   "varianten": [
+    "funker_a",
+    "funker_b"
+   ],
+   "konzept": "Der Funker der Expedition von 1912, der die Wache am Empfänger hatte, als das Signal zum ersten Mal kam. Der Kopfhörer ist ihm eingewachsen; der Bügel liegt unter der Haut, die Muschel glüht, und aus ihr läuft das Kabel den Rücken hinab bis ins Eis. Er horcht. Was er hört, gibt er weiter.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "kopie",
+    "why": "Er gibt weiter, was er hört. Was du eben gespielt hast, kommt von ihm zurück."
+   },
+   "beute": "kopfhoerer",
+   "beute_satz": "Die Muschel an seinem Kopf glüht noch eine Weile. Hältst du dein Ohr daran, hörst du dich selbst, eine Sekunde zu spät.",
+   "quelle": "skript"
+  },
+  "telegrafistin": {
+   "n": "Die Telegrafistin",
+   "biom": "funkstation",
+   "rang": "normal",
+   "hp": 23,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "telegrafistin_a",
+   "varianten": [
+    "telegrafistin_a",
+    "telegrafistin_b"
+   ],
+   "konzept": "Sie nahm 1912 im Postamt von Saltmoor die Meldungen der Expedition auf und fuhr eines Tages selbst hin. Ihre Finger klopfen ohne Pause auf der Taste, die ihr vor der Brust gewachsen ist. Was sie tippt, kommt ihr als Papierstreifen aus dem Mund und fällt in Schleifen bis auf den Boden. Auf dem Streifen steht dein Name.",
+   "stimme": "netzflickerin",
+   "kniff": {
+    "art": "verstopfen",
+    "n": 1,
+    "karte": "Dein Name",
+    "why": "Sie tippt deinen Namen, und er liegt dir in der Hand wie ein Stein."
+   },
+   "beute": "morsetaste",
+   "beute_satz": "Ihre Finger klopfen weiter, als sie schon still liegt. Der Streifen endet mitten im Wort, und das Wort ist dein Name.",
+   "quelle": "skript"
+  },
+  "mastkletterer": {
+   "n": "Der Mastkletterer",
+   "biom": "funkstation",
+   "rang": "normal",
+   "hp": 29,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    }
+   ],
+   "sprite": "mastkletterer_a",
+   "varianten": [
+    "mastkletterer_a",
+    "mastkletterer_b"
+   ],
+   "konzept": "Der Mechaniker der Expedition stieg im Sturm hinauf, um die Antenne zu richten, weil das Signal schwächer wurde. Er ist nie heruntergekommen. Er hängt an einem Stück Gittermast, das mit ihm wandert, festgefroren, und das Eis wächst ihm aus Kopf und Armen bis zum Boden, wie Haar.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "rein",
+    "why": "Er ist bis ins Mark gefroren. Gift fließt nicht."
+   },
+   "beute": null,
+   "beute_satz": "Das Eishaar bricht in einem Stück und klirrt wie Glas. Oben auf dem Mast glüht der Isolator weiter.",
+   "quelle": "skript"
+  },
+  "rauschen": {
+   "n": "Das Rauschen",
+   "biom": "funkstation",
+   "rang": "normal",
+   "hp": 21,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 7
+    }
+   ],
+   "sprite": "rauschen_a",
+   "varianten": [
+    "rauschen_a",
+    "rauschen_b"
+   ],
+   "konzept": "Niemand. Das, was zwischen zwei Sendern liegt. Es setzt sich zusammen wie ein Sender, den man sucht: erst Streifen, dann Schultern, dann ein Gesicht. In der Brust glüht eine Röhre wie ein Herz.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "heiler",
+    "v": 5,
+    "why": "Was fehlt, füllt das Rauschen auf. Es flickt die anderen."
+   },
+   "beute": null,
+   "beute_satz": "Die Streifen rutschen auseinander und kommen nicht mehr zusammen. Einen Augenblick lang war da ein Gesicht, das du kanntest.",
+   "quelle": "skript"
+  },
+  "sender": {
+   "n": "Der Sender",
+   "biom": "funkstation",
+   "rang": "waechter",
+   "hp": 86,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "sender",
+   "varianten": [
+    "sender"
+   ],
+   "konzept": "Der Röhrensender der Station, ein Schrank aus Bakelit und Eiche, so hoch wie zwei Männer, auf dem eine Kupferspule sitzt wie eine Krone. Aus ihm wächst ein Schalltrichter, der sich zu dir dreht wie ein Kopf; seine Kabel laufen wie Wurzeln in den Boden. Er sendet nicht. Er antwortet. Wenn die Türen aufspringen, ist innen, wo die Senderöhre sein sollte, ein Gesicht hinter Glas, und es spricht.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Man hört nur die Hälfte. Du weißt, was kommt, nicht wie laut."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "sender_p2"
+    ],
+    "schwach": [
+     "G"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 8,
+       "h": 2
+      },
+      {
+       "t": "blk",
+       "v": 10,
+       "unverw": true,
+       "why": "Funkstille: zwischen zwei Zeichen ist nichts, was man treffen kann"
+      },
+      {
+       "t": "atk",
+       "v": 16
+      },
+      {
+       "t": "buff",
+       "v": 2
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 3
+      }
+     ]
+    ],
+    "ruft": {
+     "gegner": "rauschen",
+     "alle": 3,
+     "anzahl": 1
+    }
+   },
+   "beute": "senderoehre",
+   "beute_satz": "Die Türen schlagen zu. Hinter dem Gitter geht eine Röhre nach der anderen aus, und als die letzte erlischt, hörst du sie noch, sehr leise, deinen Namen buchstabieren. Dann einen anderen.",
+   "quelle": "skript"
+  },
+  "kastendrachen": {
+   "n": "Der Kastendrachen",
+   "biom": "funkstation",
+   "rang": "waechter",
+   "hp": 70,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 4
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "kastendrachen",
+   "varianten": [
+    "kastendrachen"
+   ],
+   "pendel": true,
+   "konzept": "Der Antennendrachen der Station von 1912, ein Kastendrachen mit zwei Zellen, an einem Draht statt an einer Schnur. Er fliegt, obwohl hier unten kein Wind geht. Am Draht hängt im Gurt der Funker, der ihn halten sollte, die Füße über dem Boden, den Kopfhörer noch auf. Der Draht führt in ein Loch im Eis, und der Schwanz ist der Papierstreifen des Schreibempfängers.",
+   "stimme": "nest",
+   "kniff": {
+    "art": "dornen",
+    "v": 3,
+    "why": "Auf dem Draht liegt Strom. Wer ihn anfasst, bekommt ihn."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "W",
+     "F"
+    ]
+   },
+   "beute": "kopfhoerer",
+   "beute_satz": "Der Drachen kommt herunter wie ein nasses Laken. Der Funker steht auf dem Eis, zum ersten Mal seit 1912, und fällt dann einfach um. Im Kopfhörer piept es weiter.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "funkstation_morsetisch",
+   "t": "Der Morsetisch",
+   "d": "Die Röhren des Empfängers glühen, die Lampe brennt. Niemand sitzt am Tisch, und die Taste bewegt sich: kurz, kurz, lang. Der Schreiber druckt den Streifen mit. Du kannst Morse nicht lesen, und trotzdem liest du es. Es ist dein Name. Er ist noch nicht zu Ende.",
+   "bild": "Ein Tisch mit einem Röhrenempfänger, vier glühende Röhren, eine Taste, eine Petroleumlampe; ein Papierstreifen hängt über die Kante bis auf die Dielen.",
+   "o": [
+    {
+     "l": "Den Rest selbst tippen, bevor es die Taste tut: einen Handgriff lernen, −4 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ]
+    },
+    {
+     "l": "Den Kopfhörer aufsetzen und zuhören: Kopfhörer der Station, −5 max. Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "kopfhoerer"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Den Streifen abreißen und einstecken: +18 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 18
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "funkstation_mast",
+   "t": "Das Eishaar",
+   "d": "Am Fuß des Mastes hängen die Strähnen bis in den Schnee. Sie klirren, obwohl kein Wind geht. Wenn du eine anfasst, ist sie warm. Weit oben, im Gitter, hängt etwas Dunkles, und es hat den Kopf zu dir gedreht.",
+   "bild": "Der Fuß eines Gittermastes im Schnee, lange Eisfäden hängen von den Seilen; hoch oben eine dunkle Gestalt, darüber ein glühender Isolator.",
+   "o": [
+    {
+     "l": "Hinaufsteigen und die Antenne richten: +1 Kerbe an einem Item, −7 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ]
+    },
+    {
+     "l": "Eine Strähne abschlagen und mitnehmen: Die Morsetaste, die darin eingefroren war",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "morsetaste"
+      }
+     ]
+    },
+    {
+     "l": "Rufen, er soll herunterkommen: Kampf gegen den Mastkletterer, ein seltenes Item",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "mastkletterer"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "funkstation_kojen",
+   "t": "Die Kojen",
+   "d": "Hinter einem Vorhang zwölf Kojen übereinander. Elf Schlafsäcke sind zugeschnürt, von innen. Sie atmen nicht, aber sie liegen so, wie man liegt, wenn man horcht. Der zwölfte ist leer und frisch aufgeschüttelt. In den Kragen ist ein Name gestickt, in sauberer Hand.",
+   "bild": "Drei Reihen Kojen aus Planken, zugeschnürte Schlafsäcke darin, eine Laterne auf dem Boden; der unterste Sack ist offen.",
+   "o": [
+    {
+     "l": "In den zwölften Sack kriechen und schlafen: volle Heilung, −4 max. Leben",
+     "fx": [
+      {
+       "op": "full_heal"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Den Proviant aus der Kiste unter der Koje nehmen: +12 Leben, +10 Gold",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 12
+      },
+      {
+       "op": "gold",
+       "v": 10
+      }
+     ]
+    },
+    {
+     "l": "Den Namen aus dem Kragen trennen, Stich für Stich: eine Karte schleifen (kostet dauerhaft 1 weniger)",
+     "fx": [
+      {
+       "op": "schleifen"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "funkstation_eisloch",
+   "t": "Das Loch im Eis",
+   "d": "Die Antennenlitze kommt vom Mast herüber und geht hier ins Eis, durch ein rundes, glattes Loch, als wäre es gebohrt. Der Draht ist straff. Während du hinsiehst, ruckt er. Zweimal.",
+   "bild": "Ein rundes Loch im schwarzen Eis mit einem Wall aus Schnee, ein straffer Draht führt hinein; tief unten ein orange Schimmer.",
+   "o": [
+    {
+     "l": "Zweimal zurückrucken, das Zeichen für ‚alles gut‘: +1 Kerbe, eine zufällige Reliquie, −12 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "reliquie"
+      },
+      {
+       "op": "lose_hp",
+       "v": 12
+      }
+     ],
+     "if": {
+      "event_gesehen": "hafen_leiter"
+     }
+    },
+    {
+     "l": "Am Draht ziehen, bis etwas kommt: Kampf gegen das Rauschen, ein seltener Handgriff",
+     "fx": [
+      {
+       "op": "handgriff",
+       "rar": "selten"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "rauschen",
+        "rauschen"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Das Ohr an den Draht legen: eine Reaktion entdecken, −3 Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "lose_hp",
+       "v": 3
+      }
+     ]
+    },
+    {
+     "l": "Weitergehen: nichts",
+     "fx": []
+    }
+   ]
+  },
+  {
+   "id": "funkstation_logbuch",
+   "t": "Das Funklogbuch",
+   "d": "Seite um Seite dieselbe Zeile, in derselben Hand: „Kein Empfang.“ Drei Monate lang. Dann eine Seite nur aus Punkten und Strichen, so fest geschrieben, dass der Stift das Papier durchstoßen hat. Danach ist die Hand eine andere.",
+   "bild": "Ein aufgeschlagenes Logbuch unter einer Petroleumlampe, links ordentliche Zeilen, rechts eine Seite voller Punkte und Striche.",
+   "o": [
+    {
+     "l": "Mit dem Tagebuch aus dem Zelt vergleichen: Die Daten passen. Einen seltenen Handgriff lernen, +1 Kerbe",
+     "fx": [
+      {
+       "op": "handgriff",
+       "rar": "selten"
+      },
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "event_gesehen": "eis_zelt"
+     }
+    },
+    {
+     "l": "Die Handschriften vergleichen wie ein Ermittler: eine Karte schleifen, +15 Gold",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "gold",
+       "v": 15
+      }
+     ],
+     "if": {
+      "job": "detektiv"
+     }
+    },
+    {
+     "l": "Die Morseseite entziffern: einen Handgriff lernen, −4 max. Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Das Buch zuklappen: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "funkstation_antwort",
+   "t": "Antwort an",
+   "d": "Der Sender im zweiten Raum ist warm. Auf dem Pult liegt ein Formular der Station, sauber ausgefüllt: Datum von heute, Uhrzeit von jetzt, „Antwort an“, und darunter dein Name. Das Feld für den Text ist leer. Der Bleistift liegt daneben, frisch gespitzt.",
+   "bild": "Ein Pult vor einem hohen Röhrenschrank, darauf ein ausgefülltes Formular und ein Bleistift; die Röhren glühen durch das Gitter.",
+   "o": [
+    {
+     "l": "Antworten. Was du schreibst, weißt du nachher nicht mehr: +1 Energie auf Dauer, −12 max. Leben",
+     "fx": [
+      {
+       "op": "energie_dauer",
+       "v": 1
+      },
+      {
+       "op": "max_hp",
+       "v": -12
+      }
+     ],
+     "if": {
+      "event_gesehen": "funkstation_morsetisch"
+     }
+    },
+    {
+     "l": "Mit dem Kopfhörer mithören, was zurückkommt: Die Funkenstrecke, +1 Kerbe",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "funkenstrecke"
+      },
+      {
+       "op": "kerbe"
+      }
+     ],
+     "if": {
+      "item": "kopfhoerer"
+     }
+    },
+    {
+     "l": "Das Formular verbrennen: +1 Kerbe, −6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ]
+    },
+    {
+     "l": "Den Bleistift einstecken und gehen: +12 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 12
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "morsetaste": {
+   "n": "Die Morsetaste",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "pick",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 22,
+   "flavor": "Messing auf Eichenholz, der Knopf blank gegriffen. Wenn du sie loslässt, tippt sie weiter, ein, zwei Zeichen, wie ein Nachzittern.",
+   "cards": [
+    {
+     "n": "Kurz, kurz, lang",
+     "c": 1,
+     "atk": 2,
+     "h": 3
+    }
+   ]
+  },
+  "kopfhoerer": {
+   "n": "Kopfhörer der Station",
+   "a": "kleidung",
+   "st": [
+    "L"
+   ],
+   "spr": "cap",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "kette_start",
+    "v": 1,
+    "t": "Jeder Zug beginnt mit Kette 1: Du hörst schon mit, bevor es anfängt."
+   },
+   "flavor": "Man hört darin das Rauschen, und im Rauschen, ganz leise, jemanden, der mitschreibt.",
+   "cards": [
+    {
+     "n": "Mithören",
+     "c": 1,
+     "blk": 4,
+     "draw": 1
+    }
+   ]
+  },
+  "funkenstrecke": {
+   "n": "Die Funkenstrecke",
+   "a": "talisman",
+   "st": [
+    "F"
+   ],
+   "spr": "flaregun",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "mehrfach_plus1",
+    "t": "Angriffe mit mehreren Treffern treffen einmal mehr."
+   },
+   "flavor": "Zwei Kupferkugeln, ein Finger breit auseinander. Der Funke springt, auch wenn niemand sendet.",
+   "cards": [
+    {
+     "n": "Überschlag",
+     "c": 1,
+     "atk": 2,
+     "h": 2,
+     "funke": true
+    }
+   ]
+  },
+  "senderoehre": {
+   "n": "Die Senderöhre",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "lantern",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 140,
+   "eigen": {
+    "typ": "reaktion_schaden",
+    "v": 2,
+    "t": "Jede Reaktion geht auf Sendung: 2 Schaden an einem Gegner, irgendwo."
+   },
+   "flavor": "Sie ist kalt, und sie glüht. Hält man sie ans Ohr, hört man nichts. Hält man sie ans Eis, antwortet es.",
+   "cards": [
+    {
+     "n": "Auf Sendung",
+     "c": 2,
+     "atk": 4,
+     "all": true,
+     "kette": 1,
+     "funke": true
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/funkstation.js"
+ ]
+}

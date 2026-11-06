@@ -1,0 +1,253 @@
+{
+ "_doc": "Profile der Build-Bots (tools/build-bots.js), aus docs/auftrag-2/builds.md",
+ "builds": {
+  "glutnest": {
+   "items": [
+    "ofen",
+    "zunderbuechse",
+    "kohlenschaufel",
+    "tartorch",
+    "torch",
+    "candle",
+    "salt",
+    "poker",
+    "saltgun",
+    "flaregun",
+    "oilcoat"
+   ],
+   "handgriffe": [
+    "schueren",
+    "ofentuer",
+    "nachlegen",
+    "funkenflug",
+    "flaechenbrand",
+    "glimmen",
+    "zuendeln",
+    "brandmal",
+    "glut_halten",
+    "qualm",
+    "atemholen",
+    "standhalten"
+   ],
+   "stoffe": [
+    "F",
+    "S",
+    "E",
+    "L"
+   ]
+  },
+  "brackwasser": {
+   "items": [
+    "moorglas",
+    "ehering",
+    "scythe",
+    "shell",
+    "gasmask",
+    "dagger",
+    "boots",
+    "oilcoat",
+    "lantern",
+    "harpoon",
+    "sealskin",
+    "deepscale"
+   ],
+   "handgriffe": [
+    "ansteckung",
+    "faulen_lassen",
+    "hinabziehen",
+    "sickern",
+    "bodensatz",
+    "spucken",
+    "lauern",
+    "umruehren",
+    "schlick",
+    "aufschneiden",
+    "ausweichen"
+   ],
+   "stoffe": [
+    "V",
+    "W",
+    "B",
+    "L"
+   ]
+  },
+  "bollwerk": {
+   "items": [
+    "taufstein",
+    "kloeppel",
+    "holywater",
+    "bible",
+    "collar",
+    "salt",
+    "cross",
+    "divinghelm",
+    "sealskin",
+    "veil",
+    "rosary",
+    "witchbottle"
+   ],
+   "handgriffe": [
+    "kanzelschlag",
+    "bannspruch",
+    "standhalten",
+    "schwelle",
+    "wache",
+    "kreidekreis",
+    "gegenstemmen",
+    "kniefall",
+    "schulterstoss",
+    "weihen",
+    "abwarten"
+   ],
+   "stoffe": [
+    "G",
+    "S",
+    "W"
+   ]
+  },
+  "aderlass": {
+   "items": [
+    "herzglas",
+    "egelglas",
+    "bloodrosary",
+    "dagger",
+    "robe",
+    "boardaxe",
+    "veil",
+    "officercoat",
+    "cultmask",
+    "rosary",
+    "silverknife"
+   ],
+   "handgriffe": [
+    "bluteid",
+    "wunde_hand",
+    "aufschneiden",
+    "rausch",
+    "letzter_tropfen",
+    "handschnitt",
+    "durch_die_zaehne",
+    "blutzoll",
+    "abbinden",
+    "atemholen"
+   ],
+   "stoffe": [
+    "B",
+    "G",
+    "E"
+   ]
+  },
+  "kettenwerk": {
+   "items": [
+    "gezeitenrad",
+    "uhrwerk",
+    "knotenschnur",
+    "witchbottle",
+    "tarot",
+    "compass",
+    "tartorch",
+    "saltgun",
+    "flaregun",
+    "collar",
+    "salt",
+    "deepscale",
+    "watch"
+   ],
+   "handgriffe": [
+    "gegenlauf",
+    "fortsetzen",
+    "laeutwerk",
+    "wiederholung",
+    "umschlagen",
+    "schwungrad",
+    "weiterreichen",
+    "takt_halten",
+    "einrasten",
+    "antippen",
+    "durchatmen"
+   ],
+   "stoffe": [
+    "L",
+    "S",
+    "B",
+    "F",
+    "G",
+    "W"
+   ]
+  },
+  "hagel": {
+   "items": [
+    "patronengurt",
+    "sargnagelring",
+    "scherenfernrohr",
+    "anchorchain",
+    "revolver",
+    "boardaxe",
+    "knife",
+    "gloves",
+    "officercoat",
+    "silverknife",
+    "poker",
+    "harpoon"
+   ],
+   "handgriffe": [
+    "trommelfeuer",
+    "nachladen",
+    "salve",
+    "anschlagen",
+    "kurze_stoesse",
+    "zweimal",
+    "zielen",
+    "durchladen",
+    "abrollen",
+    "rundumschlag"
+   ],
+   "stoffe": [
+    "E",
+    "F"
+   ]
+  },
+  "ballast": {
+   "items": [
+    "ballaststein",
+    "strandbuch",
+    "radiermesser",
+    "korkweste",
+    "leere_seiten",
+    "bleiguertel"
+   ],
+   "handgriffe": [
+    "beschweren",
+    "standhalten",
+    "gegenstemmen",
+    "kanzelschlag",
+    "nachladen",
+    "rundumschlag",
+    "atemholen",
+    "umsehen",
+    "nachsetzen"
+   ],
+   "stoffe": [
+    "S",
+    "E",
+    "G",
+    "W"
+   ]
+  },
+  "kollekte": {
+   "items": [
+    "pfennigstrumpf",
+    "opferstock",
+    "faehrgeld",
+    "pfandschein",
+    "heuerbeutel",
+    "geldkatze"
+   ],
+   "handgriffe": [
+    "muenzwurf"
+   ],
+   "stoffe": [],
+   "gold_rest": 50
+  }
+ }
+}

@@ -86,3 +86,10 @@ const sfx={
  // Sieg: Dur-Arpeggio auf dem Grundton der Tonart
  win:()=>{const r=harm().root;[0,4,7,12].forEach((iv,i)=>pluck(r+24+iv,.12,i*.1,(i-1.5)*.2));tn(mf(r+12),1.2,'sine',.08,0,.3,{a:.1});}
 };
+// Glockenschlag (Kniff „takt“ mit klang: 'glocke', Glockengießerei): Teiltöne einer Kirchenglocke (Unterton 0,5, Prime 1,
+// kleine Terz 1,2, Quinte 1,5, Nominal 2, darüber kurze Mixturen), je zwei leicht verstimmt, damit sie schweben;
+// davor der Anschlag des Klöppels (Knack und dumpfer Körper). Grundton in der Tonart der Musik.
+sfx.glocke=()=>{const f=mf(harm().root+12);
+ nzx({f:2600,type:'highpass',q:.7,v:.14,dur:.02});thump(150,70,.18,.24,0,true);nzx({f:700,fEnd:300,q:1,v:.12,dur:.12,sat:true});
+ [[.5,.32,2.6],[1,.22,2.0],[1.2,.13,1.5],[1.5,.08,1.1],[2,.11,1.2],[2.51,.05,.6],[3.01,.035,.4],[4.07,.02,.25]].forEach(([r,v,d],i)=>{
+  tn(f*r,d,'sine',v*.8,0,0,{a:.004,pan:i%2?.16:-.16});tn(f*r*1.003,d*.9,'sine',v*.4,0,0,{a:.004,pan:i%2?-.1:.1});});};

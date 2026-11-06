@@ -19,7 +19,7 @@
   <p>Zum Spiel: <a href="index.html">index.html</a> · Bausteine, Gegner-Animationen und Hintergründe: <a href="gallery.html">gallery.html</a> · Hintergrund-Labor: <a href="hintergrund.html">hintergrund.html</a> · Ideenkiste: <a href="ideen.html">ideen.html</a></p>
   <div class="raster schmal" id="zahlen" style="margin-top:16px"></div>
  </header>
- <nav class="sprung" id="nav"><a href="#stoffe">Stoffe</a><a href="#reaktionen">Reaktionen</a><a href="#items">Items</a><a href="#sets">Sets</a><a href="#figuren">Figuren</a><a href="#gegner">Gegner</a><a href="#biome">Biome</a><a href="#ereignisse">Ereignisse</a><a href="#fragmente">Fragmente</a><a href="#ablauf">Run-Ablauf</a><a href="#zustaende">Zustände</a><a href="#ideen" class="hell">Ideen</a><input id="q" type="search" placeholder="Suchen: Name, Stoff, Effekt, Biom …"></nav>
+ <nav class="sprung" id="nav"><a href="#stoffe">Stoffe</a><a href="#reaktionen">Reaktionen</a><a href="#items">Items</a><a href="#handgriffe">Handgriffe</a><a href="#sets">Sets</a><a href="#figuren">Figuren</a><a href="#gegner">Gegner</a><a href="#biome">Biome</a><a href="#ereignisse">Ereignisse</a><a href="#fragmente">Fragmente</a><a href="#ablauf">Run-Ablauf</a><a href="#zustaende">Zustände</a><a href="#ideen" class="hell">Ideen</a><input id="q" type="search" placeholder="Suchen: Name, Stoff, Effekt, Biom …"></nav>
 
  <section class="abschnitt" id="stoffe"><h2>STOFFE <small>data/stoffe.json</small></h2>
   <p class="einl">Jedes Item trägt null, einen oder zwei Stoffe. Stoffe entscheiden über Reaktionen, Schwachstellen der Gegner und was die Werkstatt verschmelzen kann.</p>
@@ -35,6 +35,10 @@
   <p class="einl" id="itemEinl"></p>
   <div id="itemBox"></div></section>
 
+ <section class="abschnitt" id="handgriffe"><h2>HANDGRIFFE <small>data/handgriffe.json · assets/handgriffe/</small></h2>
+  <p class="einl" id="hgEinl"></p>
+  <div id="hgBox"></div></section>
+
  <section class="abschnitt" id="sets"><h2>ROLLEN-SETS <small>data/roles.json</small></h2>
   <p class="einl">Alle drei Items angelegt (auch als Teil eines verschmolzenen Items) = Bonus für den Rest des Kampfes.</p>
   <div class="raster breit" id="setRaster"></div></section>
@@ -48,7 +52,7 @@
   <div id="gegnerBox"></div></section>
 
  <section class="abschnitt" id="biome"><h2>BIOME <small>data/biomes.json · js/scenes/world/</small></h2>
-  <p class="einl">Die sieben Orte des Abstiegs, von oben nach unten. Das Vorschaubild kommt aus <code>World.build</code> (Variante 0, Kampf); fehlt ein Biom dort noch, steht ein Hinweis.</p>
+  <p class="einl">Alle Orte des Abstiegs, nach Akt geordnet; am Anfang jedes Akts wählst du zwischen zwei davon. Das Vorschaubild kommt aus <code>World.build</code> (Variante 0, Kampf); fehlt ein Biom dort noch, steht ein Hinweis.</p>
   <div id="biomBox"></div></section>
 
  <section class="abschnitt" id="ereignisse"><h2>EREIGNISSE <small>data/events.json</small></h2>

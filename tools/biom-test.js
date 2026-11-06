@@ -1,0 +1,22 @@
+// Autospieler nur in einem Biom (Abnahme je Biom-Paket): node tools/biom-test.js <biom> [seeds=10] [startSeed=1] [--waechter=<id>] [--elite=<id>]  (--waechter erzwingt einen zweiten Wächter, --elite die Elite in jedem schweren Kampf)
+// Startet je Seed einen Dev-Run, spielt die Akte davor (mit Heilung als Netz) und dann den ganzen Akt dieses Bioms
+// (alle Ebenen bis einschließlich Wächter). Meldet Siege (Akt überstanden), Leben am Ende, Gegner, Fehler.
+const {ladeKern}=require('./kern');
+(async()=>{const a0=process.argv.slice(2);const wArg=(a0.find(x=>x.startsWith('--waechter='))||'').slice(11);const eArg=(a0.find(x=>x.startsWith('--elite='))||'').slice(8);const a=a0.filter(x=>!x.startsWith('--'));const biom=a[0];const n=+(a[1]||10),s0=+(a[2]||1);if(!biom){console.log('Aufruf: node tools/biom-test.js <biom> [seeds] [start]');process.exit(2);}
+ const K=ladeKern();await K.init();if(!K.run(`!!BIOMES[${JSON.stringify(biom)}]`)){console.log('Biom unbekannt (in data/biome/index.json eingetragen?): '+biom);process.exit(2);}
+ const r=K.run(`(()=>{const out=[];const akt=BIOMES[${JSON.stringify(biom)}].akt;const jobs=JOBS.slice(0,6).map(j=>j.id);
+  for(let i=0;i<${n};i++){const seed=${s0}+i;const kf=FAST;FAST=true;let fehler=null,gegner=new Set(),kaempfe=0;
+   try{const route=RUN.akte.map((x,k)=>k===akt?${JSON.stringify(biom)}:x.biome.find(b=>BIOMES[b]));newRun(jobs[i%6],seed,{dev:true,route});S.devWaechter=${JSON.stringify(wArg)}||null;S.devElite=${JSON.stringify(eArg)}||null;
+    // Vorbereitung: die Akte davor wirklich spielen (Belohnungen, Handgriffe, Krämer wie im Run), mit Heilung als Netz,
+    // damit das Deck so gewachsen ist wie im echten Run; beim Eintritt in den Akt volles Leben
+    const netz=()=>{if(S.akt>=akt)return;if(S.hp<maxHp()*.6)S.hp=maxHp();if(S.turnNo>30)S.enemies.forEach(e=>{e.hp=0;});};Bus.on('turn_start',netz);
+    let v=0;while(S.akt<akt&&!['strand','ende'].includes(S.phase)&&v++<8000){if(S.hp<maxHp()*.6)S.hp=maxHp();if(!Bot.schritt())throw new Error('Vorlauf hängt in '+S.phase);}
+    if(S.akt!==akt){out.push({seed,job:jobs[i%6],vorlauf:true,gegner:[],kaempfe:0});FAST=kf;continue;}S.hp=maxHp();
+    Bus.on('fight_start',p=>{if(S.akt===akt){kaempfe++;S.enemies.forEach(e=>gegner.add(e.id));}});Bus.on('enemy_spawn',p=>{if(S.akt===akt&&p&&p.e)gegner.add(p.e.id);});
+    let g=0;while(S.akt===akt&&!['strand','ende'].includes(S.phase)&&g++<3000){if(!Bot.schritt())throw new Error('Bot hängt in '+S.phase);}
+   }catch(e){fehler=String(e&&e.stack||e).split('\\n').slice(0,3).join(' | ');}finally{FAST=kf;}
+   out.push({seed,job:jobs[i%6],ueberlebt:S.akt>akt||S.phase==='ankunft'||S.phase==='ende',hp:S.hp,max:maxHp(),kaempfe,gegner:[...gegner],fehler});}
+  return out;})()`);
+ const vl=r.filter(x=>x.vorlauf).length;r.splice(0,r.length,...r.filter(x=>!x.vorlauf));if(vl)console.log(`(${vl} Seed(s) im Vorlauf gestorben, nicht gewertet)`);
+ let ok=0;for(const x of r){if(x.ueberlebt)ok++;console.log(`${String(x.seed).padStart(3)} ${x.job.padEnd(17)} ${x.ueberlebt?'überstanden':'Strand     '} Leben ${x.hp}/${x.max} Kämpfe ${x.kaempfe} Gegner ${x.gegner.join(',')}${x.fehler?' FEHLER '+x.fehler:''}`);}
+ const fe=r.filter(x=>x.fehler).length;console.log(`\n${biom}: ${ok}/${r.length} Akte überstanden, Fehler ${fe}`);process.exit(fe?1:0);})();

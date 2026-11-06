@@ -1,0 +1,868 @@
+{
+ "id": "mond",
+ "akt": 3,
+ "biom": {
+  "n": "Der Mond unter dem Eis",
+  "kurz": "Mond",
+  "zeit": "vor dem Leben, unter dem Eis",
+  "anreise": "Unter dem schwarzen Eis hängt ein zweiter Mond, bleich und so nah, dass eine Strickleiter von 1890 bis auf seinen Staub reicht.",
+  "koerper": [
+   "#060606",
+   "#0f0f0d",
+   "#1b1b18",
+   "#2c2b26"
+  ],
+  "rand": [
+   "#83837d",
+   "#dddcd4"
+  ],
+  "augen": "#efe07c",
+  "nebel": [
+   "#141412",
+   "#3a3934"
+  ],
+  "musik": "mond",
+  "szene_alt": "eis",
+  "gegner": [
+   "astronom",
+   "kraterbewohner",
+   "mondmotte",
+   "gezogene"
+  ],
+  "waechter": "rueckseite",
+  "waechter_alt": [
+   "mondmann"
+  ],
+  "fundpool": [
+   "mondkarte",
+   "stechzirkel",
+   "mondstaub",
+   "compass",
+   "lantern",
+   "musicbox",
+   "tarot",
+   "rosary",
+   "laudanum",
+   "minerlamp",
+   "sealskin",
+   "flaregun",
+   "smellingsalts"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Gehilfe",
+   "ort": "am Fuß der Strickleiter, auf einer Kiste mit Instrumenten, die Lampe neben sich im Staub",
+   "zeile": "Er hat 1890 die Leiter gehalten, während der Herr hinabstieg, und hält sie seitdem. Er verkauft nichts, er verleiht: Hier gehört nichts jemandem, sagt er, nicht einmal das Licht.",
+   "art": "leihe"
+  },
+  "uebergang": "Am Rand der Nachtseite ist im Staub ein Loch, rund und glatt wie gebohrt. Die Leiter der Expedition geht weiter hinab. Von unten kommt Licht, und es ist kein Mondlicht.",
+  "weg_hinweise": {
+   "kampf": [
+    "Ein Herr im Gehrock misst die Krater ab, mit einem Zirkel, so groß wie er selbst.",
+    "Am Rand eines Kraters stützt sich jemand auf, wie auf ein Fensterbrett.",
+    "Zwei Augen auf einem Flügel, groß wie Teller. Darunter rieselt Staub.",
+    "Aus dem Eis hängt ein Strang aus Wasser bis in den Staub. Daran hängt jemand."
+   ],
+   "ereignis": [
+    "Ein Krater, in dem eine Lampe brennt. Unten ist ein Tisch gedeckt.",
+    "Ein Fernrohr auf einem Stativ, sauber geputzt. Es zeigt nach unten.",
+    "Fußspuren im Staub, scharf wie am ersten Tag.",
+    "Hier hört das Licht auf, wie mit dem Lineal gezogen."
+   ],
+   "wandbild": [
+    "In die Wand eines Kraters ist etwas geritzt, sorgfältig, mit einer Zirkelspitze."
+   ],
+   "kraemer": [
+    "Eine Lampe am Fuß der Leiter. Jemand hält noch immer das Seil."
+   ],
+   "werkstatt": [
+    "Das Lager des Astronomen: eine Werkbank, Feilen, Linsen in Watte."
+   ],
+   "rast": [
+    "Ein Feuer aus den Kisten der Expedition. Der Rauch steigt nicht, er fällt."
+   ],
+   "fundstelle": [
+    "Ein Instrumentenkasten, offen, im Staub. Das Messing glänzt, als hätte es jemand eben geputzt."
+   ]
+  },
+  "beute_saetze": [
+   "Der Staub setzt sich wieder. Er nimmt sich Zeit, als wollte er sich die Form merken.",
+   "In einem Krater weiter hinten geht eine Lampe aus. Dann, eine Weile später, wieder an.",
+   "Am Horizont hat sich etwas bewegt, das ein Lid gewesen sein könnte.",
+   "Kein Wind. Die Spuren des Kampfes werden hier bleiben, länger als alles, was du kennst.",
+   "Das Eis über dir knackt einmal, weit weg. Der Mond hängt ruhig darunter, als hörte er zu.",
+   "Im Licht von der Rückseite ist dein Schatten zu lang. Er zeigt auf dich zurück.",
+   "Was übrig ist, ist Asche. Es war schon vorher Asche.",
+   "Irgendwo deckt jemand einen Tisch ab, Tasse um Tasse."
+  ]
+ },
+ "musik": {
+  "n": "Mond unter dem Eis",
+  "root": 48,
+  "key": "c-Moll",
+  "names": [
+   "Cm",
+   "A♭",
+   "Fm",
+   "G"
+  ],
+  "darkNames": [
+   "Cm",
+   "D♭",
+   "Fm",
+   "G♭9"
+  ],
+  "amb": {
+   "sand": 0.04,
+   "eisgrund": 0.035,
+   "schimmer": 0.03
+  },
+  "rhy": "atem",
+  "detail": "pforte",
+  "ort": "kein Wind, Staub, der rieselt; das Eis darüber dröhnt sehr tief, und weit weg klirrt Porzellan",
+  "rhyN": "ein langsames Ein und Aus, wie ein Schläfer"
+ },
+ "foes": {
+  "astronom": {
+   "n": "Der Astronom",
+   "biom": "mond",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "astronom_a",
+   "varianten": [
+    "astronom_a",
+    "astronom_b"
+   ],
+   "konzept": "Ein Privatgelehrter der Expedition von 1890, der die Strickleiter hinabstieg, um den Mond von nah zu sehen. Wo sein Kopf war, steht eine Armillarsphäre aus Messing, und darin kreist ein kleiner, bleicher Mond. Mit einem Stechzirkel misst er die Krater ab, und dich.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Was er ansieht, hält still. Eine Karte auf deiner Hand liegt diesen Zug wie aufgezeichnet."
+   },
+   "beute": "stechzirkel",
+   "beute_satz": "Der kleine Mond in den Ringen läuft noch eine Runde, langsamer, und bleibt dann stehen, auf der Seite, die dir abgewandt ist.",
+   "quelle": "skript"
+  },
+  "kraterbewohner": {
+   "n": "Der Kraterbewohner",
+   "biom": "mond",
+   "rang": "normal",
+   "hp": 21,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "kraterbewohner_a",
+   "varianten": [
+    "kraterbewohner_a",
+    "kraterbewohner_b"
+   ],
+   "konzept": "Die Krater sind bewohnt. In jedem brennt eine Lampe, und wer darin wohnt, stützt sich auf den Wall wie auf ein Fensterbrett, um zu sehen, wer kommt. Er ist lang und mager, die Arme reichen bis draußen in den Staub, sein Schädel ist narbig wie der Mond.",
+   "stimme": "tiefling",
+   "kniff": {
+    "art": "ruf",
+    "gegner": [
+     "kraterbewohner",
+     "mondmotte"
+    ],
+    "alle": 3,
+    "why": "Er klopft an den Rand seines Kraters, und nebenan geht ein Licht an. Beim nächsten Mal kommt die Motte zum Licht."
+   },
+   "beute": null,
+   "beute_satz": "Die Lampe in seinem Krater brennt weiter. Niemand stützt sich mehr auf den Rand. Auf dem Wall steht eine Tasse, halb voll.",
+   "quelle": "skript"
+  },
+  "mondmotte": {
+   "n": "Die Mondmotte",
+   "biom": "mond",
+   "rang": "normal",
+   "hp": 18,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "mondmotte_a",
+   "varianten": [
+    "mondmotte_a",
+    "mondmotte_b"
+   ],
+   "konzept": "Hier lebt nichts. Der Staub hat nur gesehen, was zum Licht fliegt, und hat sich so gesetzt: eine Motte, groß wie ein Kind, aufrecht, die Flügel offen. Auf jedem Vorderflügel ein Augenfleck, und jeder Augenfleck ist ein Krater mit Wall.",
+   "stimme": "nest",
+   "kniff": {
+    "art": "loeschen",
+    "why": "Wo sie mit den Flügeln schlägt, fällt Asche, und jede Glut darunter erstickt."
+   },
+   "beute": "mondstaub",
+   "beute_satz": "Sie zerfällt, wie sie entstanden ist, Korn für Korn. Die beiden Augen bleiben am längsten im Staub liegen und sehen nach oben.",
+   "quelle": "skript"
+  },
+  "gezogene": {
+   "n": "Die Gezogene",
+   "biom": "mond",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 9
+    }
+   ],
+   "sprite": "gezogene_a",
+   "varianten": [
+    "gezogene_a",
+    "gezogene_b"
+   ],
+   "konzept": "Der Mond zieht das Meer über dem Eis zu sich herab, als Strang aus Wasser bis in den Staub, und mit ihm, wen das Meer behalten hat. Eine Ertrunkene hängt kopfüber daran, die Knöchel im Wasser, der Rock fällt über sie wie eine umgedrehte Glocke, das Haar liegt auf dem Mond wie Wurzeln. Sie sieht dich an, verkehrt herum.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "wechsel",
+    "stoffe": [
+     "W",
+     "S"
+    ],
+    "why": "Ebbe und Flut: Mal ist sie Wasser, mal trocknet sie zu Salz, je nachdem, wie der Mond gerade zieht."
+   },
+   "beute": null,
+   "beute_satz": "Der Strang reißt. Das Wasser fällt nicht, es steigt zurück ins Eis, und sie bleibt liegen, zum ersten Mal richtig herum.",
+   "quelle": "skript"
+  },
+  "rueckseite": {
+   "n": "Die Rückseite",
+   "biom": "mond",
+   "rang": "waechter",
+   "hp": 80,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "rueckseite",
+   "varianten": [
+    "rueckseite"
+   ],
+   "konzept": "Am Rand des kleinen Mondes geht die Rückseite auf, und sie hat ein Gesicht: eine Sichel, so hoch wie ein Haus, an der Innenkante ein Profil wie in einem alten Bauernkalender. Der Rest der Scheibe liegt im aschgrauen Licht, nur als Rand zu sehen, und darin öffnen sich die Krater wie Augen. Je weiter sie abnimmt, desto mehr sehen dich an.",
+   "stimme": "augen",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Wohin sie sieht, wird die Hand schwer. Eine Karte kostet diesen Zug 1 mehr."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.66,
+     0.33
+    ],
+    "sprites": [
+     "rueckseite_p2",
+     "rueckseite_p3"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 7,
+       "h": 2
+      },
+      {
+       "t": "buff",
+       "v": 2
+      },
+      {
+       "t": "atk",
+       "v": 14
+      },
+      {
+       "t": "blk",
+       "v": 10
+      }
+     ],
+     [
+      {
+       "t": "atk",
+       "v": 17
+      },
+      {
+       "t": "blk",
+       "v": 8,
+       "unverw": true,
+       "why": "Neumond: die Scheibe ist ganz dunkel, nichts trifft sie"
+      },
+      {
+       "t": "atk",
+       "v": 4,
+       "h": 4
+      },
+      {
+       "t": "blk",
+       "v": 20
+      },
+      {
+       "t": "atk",
+       "v": 19
+      }
+     ]
+    ],
+    "ruft": {
+     "gegner": "mondmotte",
+     "alle": 3,
+     "anzahl": 1
+    }
+   },
+   "beute": "aschlicht",
+   "beute_satz": "Die Sichel wird dünner, bis sie ein Strich ist, und dann ist auch der Strich weg. Nur das aschgraue Licht bleibt, und darin, sehr lange, die Augen.",
+   "quelle": "skript"
+  },
+  "mondmann": {
+   "n": "Der Mann im Mond",
+   "biom": "mond",
+   "rang": "waechter",
+   "hp": 84,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "sprite": "mondmann",
+   "varianten": [
+    "mondmann",
+    "mondmann_p2"
+   ],
+   "konzept": "Der aus dem Bauernkalender, der am Sonntag Reisig sammelte und dafür auf den Mond musste. Gebückt unter einem Bündel, größer als er selbst, mit Stock und Laterne. Das Bündel sind die Sprossen der Strickleiter von 1890, und an manchen hängen noch die Hände, die sich daran festhielten. Er geht durch Asche und hinterlässt keine Spur.",
+   "stimme": "hirte",
+   "kniff": {
+    "art": "abschrift",
+    "n": 2,
+    "karte": "Reisig",
+    "spr": "kerbholz",
+    "why": "Was er trägt, lädt er dir auf. Ein Bündel Reisig, das du nicht mehr loswirst."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "mondmann_p2"
+    ],
+    "schwach": [
+     "E"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 7,
+       "h": 2
+      },
+      {
+       "t": "atk",
+       "v": 15
+      },
+      {
+       "t": "atk",
+       "v": 4,
+       "h": 3
+      },
+      {
+       "t": "blk",
+       "v": 10
+      }
+     ]
+    ]
+   },
+   "beute": "mondstaub",
+   "beute_satz": "Er setzt sich auf sein Bündel und ist auf einmal sehr klein. Wo er gegangen ist, liegt die Asche glatt, als wäre nie jemand da gewesen. Nur deine Spuren führen zu ihm hin.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "mond_leiter",
+   "t": "Die Strickleiter",
+   "d": "Die Leiter der Expedition hängt aus dem Eis bis in den Staub. Jemand hat 1890 jede Sprosse mit Kreide beziffert, von oben nach unten, 1 bis 412. Von unten gezählt sind es 413.",
+   "bild": "Eine Strickleiter verschwindet senkrecht im schwarzen Eis; auf den Sprossen weiße Kreidezahlen, die unterste ohne Zahl.",
+   "o": [
+    {
+     "l": "Die Sprosse ohne Zahl herausschneiden und einstecken: einen Handgriff lernen, −4 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ]
+    },
+    {
+     "l": "Selbst nachzählen, Sprosse für Sprosse: +1 Kerbe an einem Item, −5 max. Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Ein Stück hinaufsteigen, wo es wärmer ist, und rasten: +12 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 12
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mond_krater",
+   "t": "Ein bewohnter Krater",
+   "d": "Am Wall eines Kraters steht eine Lampe. Unten ist ein Tisch gedeckt, zwei Gedecke, der Tee noch warm. Ein Stuhl ist zurückgeschoben, als wäre eben jemand aufgestanden, um zu sehen, wer kommt.",
+   "bild": "Eine Lampe auf einem Kraterwall; unten im Rund ein gedeckter Tisch mit zwei Tassen, ein Stuhl schräg.",
+   "o": [
+    {
+     "l": "Dich setzen und trinken: alle Leben, −6 max. Leben",
+     "fx": [
+      {
+       "op": "full_heal"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ]
+    },
+    {
+     "l": "Die Lampe mitnehmen: ein zufälliges Item, dann kommt er zurück (Kampf)",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "kraterbewohner",
+        "kraterbewohner"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Eine Münze unter die Untertasse legen: −15 Gold, eine Karte kostet dauerhaft 1 weniger",
+     "fx": [
+      {
+       "op": "gold",
+       "v": -15
+      },
+      {
+       "op": "schleifen"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mond_refraktor",
+   "t": "Der Refraktor",
+   "d": "Das Lager des Astronomen. Der Refraktor steht auf seinem Stativ, das Messing geputzt, und zeigt senkrecht nach unten in den Staub. Das Okular ist warm, als hätte eben noch jemand hindurchgesehen.",
+   "bild": "Ein Messingfernrohr auf drei Beinen, das Objektiv im Staub; daneben ein Klappstuhl und ein aufgeschlagenes Buch.",
+   "o": [
+    {
+     "l": "Hindurchsehen: eine Reaktion entdecken, einen seltenen Handgriff lernen, −6 max. Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "handgriff",
+       "rar": "selten"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ]
+    },
+    {
+     "l": "Die Karte vom Tisch nehmen: Mondkarte von 1890, −5 Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "mondkarte"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Das Rohr nach oben drehen, zum Eis: +1 Kerbe, dann kommt der Herr zurück (Kampf)",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "astronom"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mond_rand",
+   "t": "Der Rand",
+   "d": "Hier hört das Licht auf, eine Linie im Staub, wie mit dem Lineal gezogen. Dahinter ist es nicht dunkel, sondern grau, und der Boden dort ist warm. Du hörst etwas, das wie Lider klingt.",
+   "bild": "Eine scharfe Grenze zwischen hellem und grauem Staub; jenseits davon flache Mulden, in denen etwas glänzt.",
+   "o": [
+    {
+     "l": "Einen Schritt hinüber: eine zufällige Reliquie, −9 max. Leben",
+     "fx": [
+      {
+       "op": "reliquie"
+      },
+      {
+       "op": "max_hp",
+       "v": -9
+      }
+     ]
+    },
+    {
+     "l": "Nur die Hand hinüberhalten: eine Karte kostet dauerhaft 1 weniger, −5 Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Zurücktreten und warten, bis die Lider still sind: +10 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mond_spuren",
+   "t": "Zwölf und elf",
+   "d": "Stiefelspuren im Staub, scharf wie am ersten Tag, denn hier weht nichts. Zwölf Paar gehen hinaus zum Horizont. Elf kommen zurück.",
+   "bild": "Zwölf Spuren nebeneinander bis zum gekrümmten Horizont; zurück laufen elf, eine fehlt.",
+   "o": [
+    {
+     "l": "Der zwölften Spur folgen: Mondstaub im Fläschchen, dann hängt dort jemand (Kampf)",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "mondstaub"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "gezogene"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Neben den Spuren liegt eine rot-weiße Messlatte. Der Ingenieur aus dem Werk war also auch hier: +1 Kerbe, +20 Gold",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "gold",
+       "v": 20
+      }
+     ],
+     "if": {
+      "event_gesehen": "gezeitenwerk_ingenieur"
+     }
+    },
+    {
+     "l": "Die Spuren lesen wie ein Protokoll, Schritt für Schritt: einen Handgriff lernen",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      }
+     ],
+     "if": {
+      "job": "detektiv"
+     }
+    },
+    {
+     "l": "Den elf zurück folgen: +15 Gold aus einer liegengelassenen Tasche",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 15
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mond_beobachtungsbuch",
+   "t": "Das Beobachtungsbuch",
+   "d": "Auf einem Klappstuhl liegt das Buch des Astronomen. Uhrzeiten, Phasen, saubere Rechnungen. Der Mond nimmt ab, jeden Tag ein wenig. Er hat ausgerechnet, wann Neumond ist. Unten auf der Seite steht das Datum, unterstrichen. Es ist heute.",
+   "bild": "Ein aufgeschlagenes Buch auf einem Klappstuhl im Staub, eine Reihe kleiner Mondsicheln am Rand, die letzte nur ein Strich.",
+   "o": [
+    {
+     "l": "Mit dem Okular nachrechnen, die ganze Nacht: +1 Energie auf Dauer, −12 max. Leben",
+     "fx": [
+      {
+       "op": "energie_dauer",
+       "v": 1
+      },
+      {
+       "op": "max_hp",
+       "v": -12
+      }
+     ],
+     "if": {
+      "event_gesehen": "mond_refraktor"
+     }
+    },
+    {
+     "l": "Die Karte neben das Buch legen und vergleichen: +1 Kerbe, einen seltenen Handgriff lernen",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "handgriff",
+       "rar": "selten"
+      }
+     ],
+     "if": {
+      "item": "mondkarte"
+     }
+    },
+    {
+     "l": "Die Phasen deuten, wie man Karten deutet: einen Handgriff lernen, +10 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ],
+     "if": {
+      "job": "wahrsagerin"
+     }
+    },
+    {
+     "l": "Die letzte Seite herausreißen: +25 Gold",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 25
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "mondkarte": {
+   "n": "Mondkarte von 1890",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "tarot",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 40,
+   "eigen": {
+    "typ": "erste_karte_billiger"
+   },
+   "flavor": "Sauber getuscht, jeder Krater beziffert. Auf der Rückseite des Blattes ist dieselbe Karte noch einmal, von unten gesehen, und dort sind die Krater Augen.",
+   "cards": [
+    {
+     "n": "Kartieren",
+     "c": 1,
+     "blk": 5,
+     "draw": 1
+    }
+   ]
+  },
+  "stechzirkel": {
+   "n": "Stechzirkel",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "dagger",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 24,
+   "flavor": "Messing, so lang wie ein Unterarm. Die Spitzen stehen genau eine Mondbreite auseinander, und der Mond ist hier sehr klein.",
+   "cards": [
+    {
+     "n": "Abgreifen",
+     "c": 1,
+     "atk": 3,
+     "h": 2
+    }
+   ]
+  },
+  "mondstaub": {
+   "n": "Mondstaub im Fläschchen",
+   "a": "talisman",
+   "st": [
+    "S"
+   ],
+   "spr": "salt",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 20,
+   "flavor": "Er setzt sich nicht. Er wartet, bis du hinsiehst, und dann hat er eine Form, die du kennst.",
+   "cards": [
+    {
+     "n": "Staub in die Augen",
+     "c": 1,
+     "atk": 3,
+     "weak": 1
+    }
+   ]
+  },
+  "aschlicht": {
+   "n": "Das aschgraue Licht",
+   "a": "talisman",
+   "st": [
+    "S"
+   ],
+   "spr": "candle",
+   "rar": "reliquie",
+   "kerben": 2,
+   "preis": 130,
+   "eigen": {
+    "typ": "kampfstart_fx",
+    "fx": [
+     {
+      "op": "ward",
+      "v": 6
+     },
+     {
+      "op": "status",
+      "to": "all",
+      "status": "weak",
+      "v": 1
+     }
+    ]
+   },
+   "flavor": "Der Teil des Mondes, auf den kein Licht fällt. Man sieht ihn trotzdem, solange man nicht hinsieht.",
+   "cards": [
+    {
+     "n": "Neumond",
+     "c": 1,
+     "blk": 9,
+     "behalten": true
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/mond.js"
+ ]
+}

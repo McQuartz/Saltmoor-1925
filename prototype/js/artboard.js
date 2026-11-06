@@ -7,7 +7,7 @@ BU.k=2; // Pixelzeichen ganzzahlig wie im Spiel bei 1280 × 720
 const anims=[];// {c, f(t)} – nur sichtbare Bilder werden neu gezeichnet
 
 // ---------- kleine Helfer ----------
-const icon=(id,px=48,cls='bild')=>{const d=ITEMS[id];return d?`<img class="${cls}" src="${spr(d.spr)}" width="${px}" height="${px}" alt="" title="${esc(d.n)}">`:`<span class="et rot">${esc(id)}?</span>`;};
+const icon=(id,px=48,cls='bild')=>{const d=ITEMS[id];return d?`<img class="${cls}" src="${itemBild(id)}" style="image-rendering:pixelated" width="${px}" height="${px}" alt="" title="${esc(d.n)}">`:`<span class="et rot">${esc(id)}?</span>`;};
 const glyphs=(st,s=18)=>(st||[]).map(k=>gi(k,s)).join('');
 const stoffe=st=>st&&st.length?glyphs(st):'<span class="et">kein Stoff</span>';
 const et=(t,cls='')=>`<span class="et ${cls}">${t}</span>`;
@@ -136,9 +136,10 @@ function bauReaktionen(){
 function itemKachel(id,d,refs){
  const verbraucht=d.cards.some(c=>c.verbraucht),eroeff=d.cards.some(c=>c.eroeffnung);const fr=d.meta?fragmentFuer(id):null;const pools=fundpools(id);
  const tags=[d.rare?et('selten','gold'):'',d.nodrop?et('kein Fund','rot'):'',d.hp?et(`+${d.hp} max. Leben`,'gruen'):'',
-  verbraucht?et('verbraucht','rot'):'',eroeff?et('Eröffnung','blau'):'',d.passiv?et('passiv','violett'):'',d.meta?et('erst nach Fragment','gold'):''].join('');
+  verbraucht?et('verbraucht','rot'):'',eroeff?et('Eröffnung','blau'):'',d.passiv?et('passiv','violett'):'',d.meta?et('erst nach Fragment','gold'):'',
+  d.rar?et({gewoehnlich:'gewöhnlich',selten:'selten',reliquie:'Reliquie'}[d.rar]||d.rar,d.rar==='reliquie'?'violett':d.rar==='selten'?'gold':''):'',et(`${typeof kerbenVon==='function'?kerbenVon({id,uid:-1}):(d.kerben||1)} Kerbe(n)`),d.preis?et(`${d.preis} Gold`):''].join('');
  return `<div class="kachel ${d.rare?'selten':''}"><div class="kopf">${icon(id,48)}<div><div class="kn">${esc(d.n)}</div><div>${stoffe(d.st)}</div><div class="id">${id} · spr "${esc(d.spr)}"</div></div></div>
-  ${d.cards.map(c=>kartenZeile(c,d.st)).join('')}${d.passiv?`<div class="kzeile" style="--kb:var(--violett)"><b>Passiv</b> ${esc(passivText(d.passiv))}</div>`:''}
+  ${d.cards.map(c=>kartenZeile(c,d.st)).join('')}${d.passiv?`<div class="kzeile" style="--kb:var(--violett)"><b>Passiv</b> ${esc(passivText(d.passiv))}</div>`:''}${d.eigen?`<div class="kzeile" style="--kb:var(--gold)"><b>Eigenschaft</b> ${esc(d.eigen.typ)}${d.eigen.v!=null?' '+d.eigen.v:''}${d.eigen.preis&&typeof d.eigen.preis==='string'?' (Preis: '+esc(d.eigen.preis)+')':''}${d.eigen.t?': '+esc(d.eigen.t):''}</div>`:''}${d.flavor?`<div class="tx"><i>${esc(d.flavor)}</i></div>`:''}
   ${tags?`<div class="etiketten">${tags}</div>`:''}
   ${fr?`<div class="ref">Freigeschaltet durch Fragment <i>„${esc(fr.titel)}“</i> (${esc(BIOMES[fr.biom]?.kurz||fr.biom)})</div>`:''}
   <div class="ref">${pools.length?`Fundpool: <i>${pools.map(b=>esc(BIOMES[b].kurz)).join(', ')}</i>`:(d.rare?'Seltener Fund (überall ab Tiefe '+BAL.rewards.rare_from_depth+')':'in keinem Fundpool')}</div>
@@ -148,6 +149,10 @@ function bauItems(){const refs=itemRefs();
  $('itemBox').innerHTML=AREAS.map(a=>{const list=Object.entries(ITEMS).filter(([,d])=>d.a===a&&!d.bases).sort((x,y)=>(x[1].rare?1:0)-(y[1].rare?1:0)||(x[1].meta?1:0)-(y[1].meta?1:0));
   return `<h3 class="unter">${esc(AREA_N[a]).toUpperCase()} <small>${list.length} Items</small></h3><div class="raster">${list.map(([id,d])=>itemKachel(id,d,refs[id])).join('')}</div>`;}).join('');}
 
+function bauHandgriffe(){const box=$('hgBox');if(!box)return;const L=Object.entries(HANDGRIFFE).filter(([id])=>!id.startsWith('_t_'));
+ $('hgEinl').innerHTML=`${L.length} Handgriffe. Ein Handgriff wird in eine Kerbe eines Items geritzt und nimmt dessen Stoffe an; jede Karte 1× im Deck. Gewöhnlich nach normalen Kämpfen, selten nach schweren Kämpfen und Wächtern, im Krämer und in Ereignissen.`;
+ const gruppen={};L.forEach(([id,H])=>{const k=H.build||H.familie||'allgemein';(gruppen[k]=gruppen[k]||[]).push([id,H]);});
+ box.innerHTML=Object.entries(gruppen).map(([k,l])=>`<h3 class="unter">${esc(String(k)).toUpperCase()} <small>${l.length}</small></h3><div class="raster">${l.map(([id,H])=>`<div class="kachel ${H.rar==='selten'?'selten':''}"><div class="kopf">${hgBild(id)?`<img class="bild" src="${hgBild(id)}" width="48" height="48" style="image-rendering:pixelated">`:''}<div><div class="kn">${esc(H.n)}</div><div class="id">${id} · ${H.rar==='selten'?'selten':'gewöhnlich'}</div></div></div><div class="kzeile">${H.opfer?'Opfer '+H.opfer:H.c} · ${esc(typeof cardText==='function'?cardText(H):'')}</div>${H.t||H.flavor?`<div class="tx"><i>${esc(H.t||H.flavor)}</i></div>`:''}</div>`).join('')}</div>`).join('');}
 function bauSets(){
  $('setRaster').innerHTML=ROLES.map(r=>{const wer=JOBS.filter(j=>j.set===r.n).map(j=>j.n);
   return `<div class="kachel"><div class="kn">${esc(r.n)}</div>
@@ -183,6 +188,7 @@ function gegnerKachel(id,F){const t=document.createElement('div');t.className='k
   ${musterHtml(F.pat)}
   ${F.besonders&&F.besonders.art==='phasen'?F.besonders.muster.map((m,i)=>`<div class="ref">Phase ${i+2}${F.besonders.schwach&&F.besonders.schwach[i]?` · schwach ${gi(F.besonders.schwach[i],18)}`:''}</div>${musterHtml(m)}`).join(''):''}
   ${F.besonders?`<div class="kzeile" style="--kb:#ff6a5a">${besondersText(F)}</div>`:''}
+  ${[F.kniff,...(F.kniffe||[])].filter(Boolean).map(k=>`<div class="kzeile" style="--kb:#e8c070"><b>Kniff</b> ${esc(typeof KNIFF_TEXT!=='undefined'&&KNIFF_TEXT[k.art]?KNIFF_TEXT[k.art](k):k.art)}${k.why?` <i>${esc(k.why)}</i>`:''}</div>`).join('')}${F.beute_satz?`<div class="ref">Beute-Satz: <i>${esc(F.beute_satz)}</i></div>`:''}
   <div class="tx"><i>${esc(F.konzept||'')}</i></div>
   <div class="ref">Beute: ${F.beute?`${icon(F.beute,24,'bild k')} <i>${esc(iname(F.beute))}</i>`:'keine'} · Sheets: <i>${sheets.map(esc).join(', ')}</i></div>`);
  return t;}
@@ -211,7 +217,7 @@ function bauBiome(){const box=$('biomBox');const tf=aktTiefen();
    <div class="etiketten">${A?et(`${A.n} · ${A.titel}`,'gold')+et(`Tiefe ${tf[ai][0]}–${tf[ai][1]}`):''}${A&&A.biome.length>1?et(A.wahl==='figur'?`Wahl über die Vorliebe der Figur`:'Wahl per Seed 50/50','blau'):''}</div>
    <div class="tx">Zeitschicht: <i>${esc(B.zeit)}</i></div>
    ${farbfelder(B)}
-   <div class="ref">Gegner: <i>${(B.gegner||[]).map(fname).map(esc).join(', ')||'–'}</i> · Wächter: <i style="color:#ff8a7a">${esc(fname(B.waechter))}</i></div>
+   <div class="ref">Gegner: <i>${(B.gegner||[]).map(fname).map(esc).join(', ')||'–'}</i> · Wächter: <i style="color:#ff8a7a">${[B.waechter,...(B.waechter_alt||[])].map(fname).map(esc).join(' oder ')}</i></div>
    <div class="ref">Fundpool (${(B.fundpool||[]).length}): ${(B.fundpool||[]).map(id=>icon(id,24,'bild k')).join('')||'leer'}${(()=>{const extra=frs.filter(f=>f.schaltet&&f.schaltet.art==='item');return extra.length?` · nach Fragmenten dazu: ${extra.map(f=>icon(f.schaltet.id,24,'bild k')).join('')}`:'';})()}</div>
    ${kr.n&&kr.n!=='Niemand'?`<div class="kzeile" style="--kb:var(--gold)"><b>Krämer: ${esc(kr.n)}</b>, ${esc(kr.ort)}. <span class="zitat">${esc(kr.zeile)}</span></div>`:'<div class="ref">Kein Krämer.</div>'}
    ${B.uebergang?`<div class="ref">Übergang nach unten: <span class="zitat">„${esc(B.uebergang)}“</span></div>`:''}
@@ -301,8 +307,10 @@ function sucheEinrichten(){$('q').addEventListener('input',e=>{const q=e.target.
 
 (async()=>{
  try{await loadData();}catch(err){document.body.insertAdjacentHTML('afterbegin',`<div style="padding:20px;color:#ff8a7a;font:16px monospace">Daten konnten nicht geladen werden (${esc(err.message)}).<br>Bitte über einen lokalen Server öffnen (start.command / start.bat oder: python3 -m http.server im Ordner prototype).</div>`);return;}
- BIOM_IDS=Object.keys(BIOMES).filter(k=>!k.startsWith('_'));
- const schritte=[bauZahlen,bauStoffe,bauReaktionen,bauItems,bauSets,bauFiguren,bauGegner,bauBiome,bauEreignisse,bauFragmente,bauAblauf,bauZustaende];
+ // Hintergründe der Biom-Pakete nachladen (im Spiel macht das main.js)
+ for(const p of (typeof PAKETE!=='undefined'?PAKETE:[]))for(const src of p.skripte||[])await new Promise(res=>{const sc=document.createElement('script');sc.src=src;sc.onload=res;sc.onerror=res;document.head.appendChild(sc);});
+ const reihe=RUN.akte.flatMap(a=>a.biome);BIOM_IDS=Object.keys(BIOMES).filter(k=>!k.startsWith('_')).sort((x,y)=>((BIOMES[x].akt??9)-(BIOMES[y].akt??9))||((reihe.indexOf(x)+99)%99-(reihe.indexOf(y)+99)%99));
+ const schritte=[bauZahlen,bauStoffe,bauReaktionen,bauItems,bauHandgriffe,bauSets,bauFiguren,bauGegner,bauBiome,bauEreignisse,bauFragmente,bauAblauf,bauZustaende];
  for(const f of schritte){try{f();}catch(e){console.warn('Artboard:',f.name,e);}}
  try{await bauIdeen();}catch(e){console.warn('Artboard: Ideen',e);}
  sucheEinrichten();

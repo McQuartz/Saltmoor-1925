@@ -1,0 +1,800 @@
+{
+ "id": "gezeitenwerk",
+ "akt": 2,
+ "biom": {
+  "n": "Das Gezeitenwerk",
+  "kurz": "Gezeitenwerk",
+  "zeit": "vor Rom, vor allem",
+  "anreise": "Unter dem Salz liegt eine Maschine aus grüner Bronze. Sie macht Ebbe und Flut, und sie ist nicht für deine Hände gebaut.",
+  "koerper": [
+   "#030504",
+   "#08100c",
+   "#0f1d16",
+   "#1a2e24"
+  ],
+  "rand": [
+   "#3f8a6c",
+   "#a8e6c4"
+  ],
+  "augen": "#d4ff5a",
+  "nebel": [
+   "#0c1c16",
+   "#2c4a3c"
+  ],
+  "musik": "gezeitenwerk",
+  "gegner": [
+   "zahnradwaerter",
+   "kanalaal",
+   "oelerin",
+   "gewicht"
+  ],
+  "waechter": "regulator",
+  "waechter_alt": [
+   "griff"
+  ],
+  "fundpool": [
+   "siebenfingerschluessel",
+   "bronzezahn",
+   "oellappen",
+   "pegellatte",
+   "compass",
+   "divinghelm",
+   "anchorchain",
+   "oilcoat",
+   "deepscale",
+   "minerlamp",
+   "boathook"
+  ],
+  "ereignisse": [],
+  "kraemer": {
+   "n": "Der Ingenieur",
+   "ort": "auf einer eisernen Bühne, die er 1880 an einen Zahn geschraubt hat, zwischen Theodolit, Zeltbahn und Kisten mit Messing",
+   "zeile": "Er wollte nur kurz etwas nachsehen. Seine Taschenuhr zeigt zehn nach zwei, und er verkauft dir alles, was er nicht mehr braucht, um hier wieder hinauszufinden."
+  },
+  "uebergang": "Bei Ebbe läuft der Hauptkanal leer. Am Grund öffnet sich eine Schleuse, die niemand gebaut hat, um hinauszukommen, und das Wasser nimmt dich mit nach unten, wo es kalt wird.",
+  "weg_hinweise": {
+   "kampf": [
+    "Ein Klicken zwischen den Zähnen, in einem Takt, der nicht deiner ist.",
+    "Etwas Langes bewegt sich im Kanal gegen den Strom.",
+    "Eine Kette hängt durch, und an ihr hängt trotzdem etwas."
+   ],
+   "ereignis": [
+    "Ein Hebel, so hoch wie ein Mast, blank gegriffen.",
+    "Im Kanal steht Wasser, das bergauf läuft."
+   ],
+   "wandbild": [
+    "In die Bronze sind Hände gegraben, an jeder sieben Finger, alle im selben Abstand."
+   ],
+   "kraemer": [
+    "Eine Laterne aus Messing, die nicht von hier ist. Daneben ein Zelt von 1880."
+   ],
+   "werkstatt": [
+    "Eine Werkbank, auf der alles Werkzeug zu groß in der Hand liegt."
+   ],
+   "rast": [
+    "Eine trockene Nische hinter einem Zahn. Er rückt erst in einer Stunde weiter."
+   ],
+   "fundstelle": [
+    "Eine Kiste des Ingenieurs, beschriftet in Kupferstichschrift."
+   ]
+  },
+  "beute_saetze": [
+   "Irgendwo rückt das Hauptrad einen Zahn weiter.",
+   "Im Kanal steigt das Wasser um die Breite eines Fingers.",
+   "Auf dem Boden bleibt ein Abdruck mit sieben Fingern, warm.",
+   "Das Klicken im Gestänge setzt einen Schlag lang aus und fängt wieder an.",
+   "Das Phosphor in den Fugen wird kurz heller, dann wieder still.",
+   "Die Bronze nimmt deinen Fingerabdruck nicht an.",
+   "Ein Tropfen Öl läuft die Wand hinauf.",
+   "Draußen, sehr weit oben, kommt die Flut pünktlich."
+  ]
+ },
+ "musik": {
+  "n": "Gezeitenwerk",
+  "root": 43,
+  "key": "g-Moll",
+  "names": [
+   "Gm",
+   "Es",
+   "Cm",
+   "D"
+  ],
+  "darkNames": [
+   "Gm",
+   "As",
+   "Cm",
+   "D♭9"
+  ],
+  "amb": {
+   "stollen": 0.05,
+   "meer": 0.03,
+   "schimmer": 0.03
+  },
+  "rhy": "ketten",
+  "detail": "salz",
+  "ort": "Wasser in Kanälen, ein Gestänge, das im Takt klickt, sehr fern die Flut",
+  "rhyN": "Ketten und Zahnräder, Pauke"
+ },
+ "foes": {
+  "zahnradwaerter": {
+   "n": "Der Zahnrad-Wärter",
+   "biom": "gezeitenwerk",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "zahnradwaerter_a",
+   "varianten": [
+    "zahnradwaerter_a",
+    "zahnradwaerter_b"
+   ],
+   "konzept": "Ein Zahnrad, groß wie ein Mühlstein, steht hochkant auf zwei Vogelbeinen. In der Nabe zwei Lichter übereinander, aus der Nabe ein Arm mit sieben Fingern.",
+   "stimme": "salzlaeufer",
+   "kniff": {
+    "art": "dornen",
+    "v": 3,
+    "why": "Wer ihn schlägt, greift in die Zähne."
+   },
+   "beute": "bronzezahn",
+   "beute_satz": "Das Rad steht still. Einer seiner Zähne ist noch warm von deiner Hand.",
+   "quelle": "skript"
+  },
+  "kanalaal": {
+   "n": "Der Kanalaal",
+   "biom": "gezeitenwerk",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "kanalaal_a",
+   "varianten": [
+    "kanalaal_a",
+    "kanalaal_b"
+   ],
+   "konzept": "Ein Aal steigt in einem hohen S aus einem Stück Bronzekanal. Wo der Kopf sein müsste, ist eine Hand mit sieben Fingern, in der Handfläche ein Auge. Das Wasser läuft an ihm hinauf.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "rein",
+    "why": "Das Wasser in den Kanälen ist älter als jede Fäulnis. Gift findet nichts an ihm, woran es sich halten kann."
+   },
+   "beute": null,
+   "beute_satz": "Der Aal sinkt in den Kanal zurück. Die Hand bleibt offen über dem Wasser, bis sie untergeht.",
+   "quelle": "skript"
+  },
+  "oelerin": {
+   "n": "Die Ölerin",
+   "biom": "gezeitenwerk",
+   "rang": "normal",
+   "hp": 18,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "oelerin_a",
+   "varianten": [
+    "oelerin_a",
+    "oelerin_b"
+   ],
+   "konzept": "Ein gebeugter Umhang aus geöltem Tuch. Statt eines Kopfes eine Ölkanne auf dünnem Hals, der Ausguss reicht bis zum Boden. Im offenen Deckel leuchtet das Öl.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "heiler",
+    "v": 4,
+    "why": "Sie macht gängig, was klemmt. Auch das, was du gerade zerbrochen hast."
+   },
+   "beute": "oellappen",
+   "beute_satz": "Aus dem Ausguss läuft das Öl weiter, nach oben, in die Fugen.",
+   "quelle": "skript"
+  },
+  "gewicht": {
+   "n": "Das Gewicht",
+   "biom": "gezeitenwerk",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "laedt",
+     "v": 0
+    },
+    {
+     "t": "laedt",
+     "v": 0
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "sprite": "gewicht_a",
+   "varianten": [
+    "gewicht_a",
+    "gewicht_b"
+   ],
+   "konzept": "Ein siebenkantiges Senklot aus Bronze, die Spitze eine Handbreit über dem Boden. Es hängt an einer Kette, und die Kette hängt durch. In den Flächen Hände mit sieben Fingern.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 14,
+    "why": "Es tut nichts. Es zählt. Dann fällt es."
+   },
+   "beute": null,
+   "beute_satz": "Die Kette spannt sich zum ersten Mal, als nichts mehr daran hängt.",
+   "quelle": "skript"
+  },
+  "regulator": {
+   "n": "Der Regulator",
+   "biom": "gezeitenwerk",
+   "rang": "waechter",
+   "hp": 70,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 15
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 9
+    }
+   ],
+   "sprite": "regulator",
+   "varianten": [
+    "regulator"
+   ],
+   "konzept": "Ein Pendel, das einen Körper hat: oben der Anker der Hemmung mit zwei Krallen, eine Stange aus Wirbeln, unten eine hohle Linse, darin jemand zusammengerollt, der die Stange mit sieben Fingern hält.",
+   "stimme": "windgestalt",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Mit jedem Schlag rückt das Hauptrad einen Zahn weiter, und er schwingt ein wenig weiter aus."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "W",
+     "E"
+    ]
+   },
+   "beute": "gezeitenrad",
+   "beute_satz": "Das Pendel steht senkrecht. Irgendwo oben bleibt die Flut aus, nur dieses eine Mal.",
+   "quelle": "skript",
+   "pendel": true
+  },
+  "griff": {
+   "n": "Der Griff",
+   "biom": "gezeitenwerk",
+   "rang": "waechter",
+   "hp": 84,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 14
+    },
+    {
+     "t": "buff",
+     "v": 2
+    }
+   ],
+   "sprite": "griff",
+   "varianten": [
+    "griff"
+   ],
+   "konzept": "Die Hand, für die die Maschine gebaut ist. Sie steigt aus einem Kanal, der Unterarm verschwindet im Wasser. Sieben Finger: fünf oben und zwei Daumen, links und rechts, gleich lang. Um das Gelenk eine Bronzemanschette mit sieben Zapfen, in den Kuppen und in den Linien der Handfläche leuchtendes Öl.",
+   "stimme": "lotse",
+   "kniff": {
+    "art": "kopie",
+    "why": "Sieben Finger machen nach, was deine fünf tun: Sie spielt deine letzte Karte gegen dich."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "griff_p2"
+    ],
+    "schwach": [
+     "E"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 18
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 3
+      },
+      {
+       "t": "blk",
+       "v": 10
+      },
+      {
+       "t": "atk",
+       "v": 24
+      }
+     ]
+    ]
+   },
+   "beute": "siebenfingerschluessel",
+   "beute_satz": "Die Hand öffnet sich ein letztes Mal und sinkt in den Kanal zurück. Auf dem Beckenrand bleibt ein Abdruck, blank gegriffen, sieben Finger.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "gezeitenwerk_abdruecke",
+   "t": "Die Abdrücke",
+   "d": "Ein Hebel, so hoch wie ein Mast, der Griff blank gegriffen. In den Grünspan darunter sind Hände gedrückt, Dutzende, jede mit sieben Fingern. Das Öl darin ist frisch und leuchtet schwach. Der letzte Abdruck ist kleiner als die anderen.",
+   "bild": "Ein riesiger Bronzehebel vor dunkler Wand, darunter grün verkrustete Fläche voller leuchtender Handabdrücke mit sieben Fingern.",
+   "o": [
+    {
+     "l": "Deine Hand in den kleinen Abdruck legen: einen Handgriff lernen, −6 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ]
+    },
+    {
+     "l": "Den Hebel ziehen: +1 Kerbe an einem Item, Kampf gegen den Zahnrad-Wärter",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "zahnradwaerter"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Das Öl mit einem Lappen aufnehmen: Öllappen, −3 Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "oellappen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gezeitenwerk_ingenieur",
+   "t": "Ein Herr mit Messlatte",
+   "d": "Auf einer eisernen Bühne, die an einen Zahn geschraubt ist, steht ein Herr in Gehrock und Gamaschen am Theodolit. Er sieht nicht auf. Er wolle nur kurz etwas nachsehen, sagt er, die Flut komme heute vier Minuten zu früh. Dann fragt er dich, welches Jahr wir haben.",
+   "bild": "Ein Mann von 1880 mit Backenbart an einem Messinstrument auf einer kleinen Eisenbühne, dahinter Zähne eines Rades, groß wie Häuser.",
+   "o": [
+    {
+     "l": "Ihm das Jahr sagen: er schreibt es auf und gibt dir seine Pegellatte, −5 max. Leben",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "pegellatte"
+      },
+      {
+       "op": "max_hp",
+       "v": -5
+      }
+     ]
+    },
+    {
+     "l": "Eine Stunde lang die Latte halten: eine Karte kostet dauerhaft 1 weniger, −8 Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ]
+    },
+    {
+     "l": "Nichts sagen und weitergehen: +6 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gezeitenwerk_hauptrad",
+   "t": "Ein Zahn",
+   "d": "Du stehst am Hauptrad. Ein Zeiger aus Bronze zeigt auf eine Lücke zwischen zwei Zähnen, und in jeder Lücke liegt Wasser. Zur vollen Stunde rückt das Rad. Es dauert lange, bis die Stunde voll ist, und die Lücke vor dir ist so breit wie ein Bett.",
+   "bild": "Ein Zahnrad, dessen Zähne höher sind als Häuser, ein bronzener Zeiger, eine winzige Gestalt in einer Zahnlücke voll Wasser.",
+   "o": [
+    {
+     "l": "Dich in die Lücke legen und mitfahren: +1 Kerbe an einem Item, −8 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 8
+      }
+     ]
+    },
+    {
+     "l": "Einen gebrochenen Zahn aus dem Wasser ziehen: Bronzezahn, Kampf gegen das Gewicht",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "bronzezahn"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "gewicht"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Die Stunde abwarten: volle Heilung, −4 max. Leben",
+     "fx": [
+      {
+       "op": "full_heal"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gezeitenwerk_schleuse",
+   "t": "Die Schleuse",
+   "d": "In einem Kanal läuft das Wasser bergauf, gleichmäßig, in eine Schleusenkammer. Das Tor hat ein Handrad mit sieben Speichen und sieben Mulden für Finger. In der Kammer treibt etwas Langes, das sich nicht bewegt, und gegen den Strom.",
+   "bild": "Ein schräger Kanal, in dem das Wasser nach oben fließt, ein Schleusentor aus Bronze mit großem Handrad, ein dunkler Leib im Wasser.",
+   "o": [
+    {
+     "l": "Aus dem Kanal trinken: +10 Leben, eine Reaktion entdecken",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 10
+      },
+      {
+       "op": "discover"
+      }
+     ]
+    },
+    {
+     "l": "Das Handrad drehen: ein seltenes Item, Kampf gegen den Kanalaal",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "kanalaal"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Ein Item ins Wasser legen und sehen, was es hinaufträgt: ein Item verwandeln, −4 Leben",
+     "fx": [
+      {
+       "op": "transform"
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gezeitenwerk_oelkammer",
+   "t": "Die Ölkammer",
+   "d": "Krüge aus Ton, mannshoch, in Reihen. In jedem steht Öl, das von unten leuchtet. An einem Becken hängen Ausgüsse an Haken, lang wie Speere, und einer tropft noch. Hier füllen die Ölerinnen nach. Keine ist da.",
+   "bild": "Ein Gewölbe mit Reihen großer Tonkrüge, deren Inhalt grünlich glimmt, lange Ölkannen an Haken an der Wand.",
+   "o": [
+    {
+     "l": "Eine Karte einölen, bis sie leicht geht: eine Karte kostet dauerhaft 1 weniger, −5 Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Einen Krug umstoßen: ein Item nach Wahl des Zufalls, Kampf gegen die Ölerin und den Kanalaal",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "oelerin",
+        "kanalaal"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Die Hände in das Becken halten: +4 max. Leben, eine Karte streichen",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 4
+      },
+      {
+       "op": "strike"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gezeitenwerk_logbuch",
+   "t": "Das Logbuch",
+   "d": "Im Zelt des Ingenieurs liegt sein Logbuch offen. Jede Stunde ein Eintrag, seit 1880, in derselben Tinte: Flut vier Minuten zu früh. Nur kurz nachgesehen. Die Seiten reichen bis an den Boden des Zeltes und weiter. Der letzte Eintrag handelt von dir.",
+   "bild": "Ein Feldzelt aus Segeltuch unter Bronzezähnen, ein aufgeschlagenes Buch, dessen Seiten in einem Strom über den Boden fließen.",
+   "o": [
+    {
+     "l": "„Ich habe ihm das Jahr gesagt.“ Daneben steht es, in deiner Schrift: +1 Kerbe an einem Item, +6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "heal",
+       "v": 6
+      }
+     ],
+     "if": {
+      "event_gesehen": "gezeitenwerk_ingenieur"
+     }
+    },
+    {
+     "l": "Den Siebenfinger-Schlüssel in seine Taschenuhr stecken: ein Item tauschen, +10 Leben",
+     "fx": [
+      {
+       "op": "item_tausch"
+      },
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ],
+     "if": {
+      "item": "siebenfingerschluessel"
+     }
+    },
+    {
+     "l": "Die Handschrift mit seiner Unterschrift vergleichen: eine Reaktion entdecken, +15 Gold",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "gold",
+       "v": 15
+      }
+     ],
+     "if": {
+      "job": "detektiv"
+     }
+    },
+    {
+     "l": "Eine Zeile darunter schreiben: +12 Gold, −4 Leben",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 12
+      },
+      {
+       "op": "lose_hp",
+       "v": 4
+      }
+     ]
+    },
+    {
+     "l": "Das Buch zuklappen: +5 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 5
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "siebenfingerschluessel": {
+   "n": "Siebenfinger-Schlüssel",
+   "a": "talisman",
+   "st": [
+    "E",
+    "W"
+   ],
+   "spr": "watch",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 52,
+   "eigen": {
+    "typ": "energie_bleibt",
+    "v": 1
+   },
+   "flavor": "Der Griff hat Mulden für sieben Finger. Mit fünf bekommst du ihn gerade so herum, und er dreht sich danach ein Stück weiter allein.",
+   "cards": [
+    {
+     "n": "Sieben Umdrehungen",
+     "c": 1,
+     "blk": 3,
+     "draw": 1,
+     "kette": 1
+    }
+   ]
+  },
+  "bronzezahn": {
+   "n": "Bronzezahn",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "knife",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 26,
+   "flavor": "Aus dem Hauptrad gebrochen. Er ist länger als die Lücke, aus der er stammt.",
+   "cards": [
+    {
+     "n": "Eingreifen",
+     "c": 1,
+     "atk": 3,
+     "h": 2
+    }
+   ]
+  },
+  "oellappen": {
+   "n": "Öllappen",
+   "a": "kleidung",
+   "st": [
+    "F"
+   ],
+   "spr": "gloves",
+   "hp": 2,
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 22,
+   "flavor": "Riecht nach Lampenöl und nach etwas Älterem. Im Dunkeln leuchtet er schwach, an sieben Stellen nebeneinander.",
+   "cards": [
+    {
+     "n": "Einreiben",
+     "c": 1,
+     "burn": 3,
+     "behalten": true
+    }
+   ]
+  },
+  "pegellatte": {
+   "n": "Pegellatte des Ingenieurs",
+   "a": "waffe",
+   "st": [
+    "W"
+   ],
+   "spr": "harpoon",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 48,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1
+   },
+   "flavor": "Rot und weiß gestrichen, in Fuß und Zoll geteilt. Der Pegel steht heute bei einem Maß, das die Latte nicht hat.",
+   "cards": [
+    {
+     "n": "Ablesen",
+     "c": 0,
+     "draw": 1,
+     "vuln": 1
+    }
+   ]
+  }
+ },
+ "handgriffe": {},
+ "skripte": [
+  "js/scenes/world/gezeitenwerk.js"
+ ]
+}

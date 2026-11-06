@@ -1,0 +1,53 @@
+{
+ "id": "kesselmann",
+ "rang": "normal",
+ "w": 96,
+ "h": 120,
+ "zone": "fabrik",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  50,
+  115
+ ],
+ "kopf": [
+  44,
+  20
+ ],
+ "augen": [
+  [
+   44,
+   77
+  ],
+  [
+   37,
+   39
+  ],
+  [
+   40,
+   39
+  ]
+ ],
+ "augenfarbe": "#e4f2d8"
+}

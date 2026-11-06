@@ -1,0 +1,282 @@
+{
+ "id": "eis_plus",
+ "ergaenzt": "eis",
+ "gegner_dazu": [
+  "fahnentraeger",
+  "seelilie"
+ ],
+ "gegner_weg": [],
+ "waechter_dazu": [
+  "welle"
+ ],
+ "fundpool_dazu": [
+  "fahnentuch"
+ ],
+ "foes": {
+  "fahnentraeger": {
+   "n": "Der Fahnenträger",
+   "biom": "eis",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 8
+    }
+   ],
+   "sprite": "fahnentraeger_a",
+   "varianten": [
+    "fahnentraeger_a",
+    "fahnentraeger_b"
+   ],
+   "konzept": "Ein Mann der Expedition von 1903 im Parka, die Fahnenstange in beiden Fäusten, die Fahne steif gefroren; seine Kapuze ist leer, und sein Gesicht ist von hinten durch den Fahnenstoff gedrückt und ruft.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 4,
+    "why": "Wo eine Fahne steht, ist Lager. Das Gesicht im Tuch ruft die anderen Erfrorenen darunter, und das steife Tuch deckt sie."
+   },
+   "beute": "fahnentuch",
+   "beute_satz": "Die Fahne ist umgefallen. Auf dem Tuch ist kein Gesicht mehr, nur eine Delle, wo eins war.",
+   "quelle": "skript"
+  },
+  "seelilie": {
+   "n": "Die Seelilie",
+   "biom": "eis",
+   "rang": "normal",
+   "hp": 18,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 1,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 2,
+     "h": 2
+    }
+   ],
+   "sprite": "seelilie_a",
+   "varianten": [
+    "seelilie_a",
+    "seelilie_b"
+   ],
+   "konzept": "Ein Tier aus der Zeit vor dem Leben an Land, ein Stiel aus Steinscheiben mit einer Krone aus gefiederten Armen, das auf seinen Wurzelkrallen geht; in seinem Kelch sitzt das Gesicht eines Matrosen von 1903.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "kleinvieh",
+    "why": "Jeder Arm hat hundert Fiedern, und jede Fieder greift für sich allein."
+   },
+   "beute": null,
+   "beute_satz": "Im Eis liegen Steinscheiben wie Münzen. Eine hat ein Muttermal.",
+   "quelle": "skript"
+  },
+  "welle": {
+   "n": "Die Welle, die weiterkam",
+   "biom": "eis",
+   "rang": "waechter",
+   "hp": 82,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 22
+    }
+   ],
+   "sprite": "welle",
+   "varianten": [
+    "welle",
+    "welle_p2"
+   ],
+   "konzept": "Ein Brecher aus schwarzem Eis, so hoch wie ein Haus, mitten im Überschlagen gefroren. In seiner Wand stecken die Ersten, die zum Land hin schwammen, halb umgedreht, und ihre Augen sehen an dir vorbei. Hinter seinem Fuß liegt eine helle Narbe im Eis: Dort stand er vorhin.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 1,
+    "v": 30,
+    "why": "Jedes Mal, wenn du wegsiehst, ist sie ein Stück weiter. Dann bricht sie."
+   },
+   "besonders": {
+    "art": "phasen",
+    "bei": [
+     0.5
+    ],
+    "sprites": [
+     "welle_p2"
+    ],
+    "schwach": [
+     "G"
+    ],
+    "muster": [
+     [
+      {
+       "t": "atk",
+       "v": 5,
+       "h": 4
+      },
+      {
+       "t": "laedt",
+       "v": 0
+      },
+      {
+       "t": "atk",
+       "v": 30
+      },
+      {
+       "t": "atk",
+       "v": 6,
+       "h": 3
+      }
+     ]
+    ]
+   },
+   "beute": null,
+   "beute_satz": "Die Welle ist zu Ende gebrochen. Auf dem Eis liegt eine Linie aus Gischt, gefroren, und die Ersten liegen darin mit den Gesichtern zum Land.",
+   "quelle": "skript"
+  }
+ },
+ "events": [
+  {
+   "id": "eis_fahne",
+   "t": "Die Fahne",
+   "d": "Eine Fahne steht im schwarzen Eis, steif, obwohl kein Wind geht. Sie zeigt kein Land und kein Wappen, nur Falten. Je näher du kommst, desto deutlicher werden die Falten zu einem Gesicht, und es hat den Mund offen.",
+   "bild": "Eine einsame Fahnenstange auf spiegelndem schwarzem Eis, das Tuch gefroren und quer abstehend, im Stoff die Wölbung eines Gesichts.",
+   "o": [
+    {
+     "l": "Die Fahne herausziehen: Gefrorenes Fahnentuch, Kampf gegen den Fahnenträger",
+     "fx": [
+      {
+       "op": "give_item",
+       "item": "fahnentuch"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "fahnentraeger"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Deinen Namen in die Stange ritzen: +1 Kerbe an einem Item, −5 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ],
+     "if": {
+      "hp_min": 6
+     }
+    },
+    {
+     "l": "Dich in ihren Windschatten setzen, obwohl es keinen Wind gibt: +10 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "eis_garten",
+   "t": "Der Garten unter dem Eis",
+   "d": "Unter dem Eis steht ein Garten aus Steinlilien, Stiele aus Scheiben, Kronen aus Federn, alle zur Oberfläche geneigt. Eine Lilie fehlt, nur ihr Abdruck ist noch da, und Krallenspuren führen von ihm weg. Die Spuren gehen in die Richtung, aus der du gekommen bist.",
+   "bild": "Durch schwarzes Eis gesehen: ein Feld steinerner, gefiederter Lilien, eine Lücke darin, und auf dem Eis darüber eine Spur aus dünnen Krallenabdrücken.",
+   "o": [
+    {
+     "l": "Die Zeichnung aus dem Tagebuch im Zelt danebenhalten: ein seltenes Item, −6 Leben",
+     "fx": [
+      {
+       "op": "give_rare"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "event_gesehen": "eis_zelt"
+     }
+    },
+    {
+     "l": "Den Spuren zurück folgen: Kampf gegen die Seelilie",
+     "fx": [
+      {
+       "op": "fight",
+       "foes": [
+        "seelilie"
+       ]
+      }
+     ]
+    },
+    {
+     "l": "Das Eis über dem Garten polieren, bis du dich darin siehst: einen Handgriff lernen, −4 max. Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "items": {
+  "fahnentuch": {
+   "n": "Gefrorenes Fahnentuch",
+   "a": "kleidung",
+   "st": [
+    "W"
+   ],
+   "hp": 3,
+   "spr": "sealskin",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 26,
+   "flavor": "Steif wie ein Brett und doch warm, wenn man es umlegt. Manchmal bewegt sich der Stoff an deinem Rücken, wo du still stehst.",
+   "cards": [
+    {
+     "n": "Unter die Fahne",
+     "c": 1,
+     "blk": 6,
+     "eroeffnung": {
+      "blk": 2
+     }
+    }
+   ]
+  }
+ }
+}
