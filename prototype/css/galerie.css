@@ -114,3 +114,8 @@ table.tab td.z{text-align:center;font-family:var(--fk);font-weight:700;color:#ef
 .panelbox{display:flex;justify-content:center;align-items:flex-start;padding:10px;background:#050403;border:1px solid #1a140c}
 .panelbox .box{max-height:none}
 .panelbox .wandbild{padding:10px}
+/* Auftrag 3 M4: Rucksack „Am Körper“ als Probe, Silhouetten aller Figuren */
+.koeprobe{position:relative;width:calc(var(--u)*480);height:calc(var(--u)*362);border:1px solid #3a2c18;overflow:hidden;background:#000}
+.koeprobe #koerper{position:absolute}
+.silh{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}.silh figure{margin:0;text-align:center;background:radial-gradient(ellipse at 50% 60%,#26221c,#0a0908 70%);padding:8px}
+.silh img{width:220px;height:344px;image-rendering:pixelated}.silh figcaption{font-family:var(--fk);font-size:12px;color:#cfc4a8;letter-spacing:.1em}

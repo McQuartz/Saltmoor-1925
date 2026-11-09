@@ -67,9 +67,6 @@ function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.s
 // ---------- Ausrüstung unter der Szene ----------
 function slotHtml(loc,locked){const it=locked?null:getAt(loc);const d=it?def(it):null;const ibi=it?itemBild(it.id):'';
  return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${ibi}" alt="">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}<span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;}
-function gearHtml(){const M=BAL.max_slots;const rs=roleState().filter(x=>x.have.length);
- return `<div class="areas">${AREAS.map(a=>`<div class="area"><h4>${AREA_N[a]} <em>${S.slots[a]}/${M}</em></h4><div class="slots">${[...Array(M).keys()].map(i=>slotHtml(a+':'+i,i>=S.slots[a])).join('')}</div></div>`).join('')}
- <div class="area"><h4>RUCKSACK</h4><div class="slots">${S.bag.map((_,i)=>slotHtml('bag:'+i)).join('')}<div class="slot trash" data-loc="trash">✕</div></div></div></div>
- <div class="rollen">${rs.map(x=>`<span class="${x.on?'an':''}">${x.r.n} ${x.have.length}/${x.r.i.length}${x.on?': '+esc(x.r.t):''}</span>`).join(' · ')||'<span class="hint">Trag drei passende Teile, um ein Set zu bilden.</span>'}
- <span class="hint"> · Ziehen oder anklicken zum Tauschen.</span> <button class="deco klein" data-act="rucksack">RUCKSACK (R)</button></div>`;}
+// Auftrag 3 M4: die alte Itemleiste ist entfernt. Außerhalb des Kampfes liegt unten nur der Tisch mit dem Weg zum Rucksack „Am Körper“ (js/ui/rucksack.js).
+function tischHtml(){const an=allActive();return `<div class="tischreihe"><div class="tangelegt">${an.map(it=>`<img src="${itemBild(it.id)}" alt="${esc(def(it).n)}" title="${esc(def(it).n)}" draggable="false">`).join('')}</div><button class="deco" data-act="rucksack">AM KÖRPER (R)</button><span class="hint">${S.bag.filter(Boolean).length} im Rucksack</span></div>`;}
 

@@ -80,10 +80,13 @@ function bauKnoepfe(){const rauten=(n,max)=>`<div class="rauten">${[...Array(max
  const alle=new Set(allRx().map(r=>r.n));
  $('raeder').innerHTML=[rad('Stoff-Baum: Zugbeginn',{}),rad('nach Feuer, Hand passt',{last:['F'],chainLog:[{turn:3,st:['F'],prev:[],rx:[]}],hand:[karte('harpoon'),karte('salt')]}),rad('nach Feuer, Sackgasse (Hand zu teuer)',{last:['F'],chainLog:[{turn:3,st:['F'],prev:[],rx:[]}],energy:0,hand:[karte('harpoon')]}),rad('nach Salz + Blut',{last:['S','B'],chainLog:[{turn:3,st:['S'],prev:[],rx:[]},{turn:3,st:['S','B'],prev:['S'],rx:[]}],hand:[karte('torch')]})].join('');}
 
-function bauGear(){S=probeS({phase:'werkstatt'});S.sel='waffe:0';S.areas.kleidung[1].x=1;S.slots.talisman=1;
- S.bag[2]=mk(itemMit(d=>d.rare)||'knife');
- $('gear').innerHTML=`<div class="gearbox">${gearHtml()}</div><p class="einl" style="margin-top:8px">Ausgewählt: erster Waffen-Slot (gold). Gestrichen: Schiebermütze (rote Linie, das Item zählt weiter für Leben und Sets). Gesperrte Slots schraffiert. Seltenes Item im Rucksack mit Goldrand.</p>`;}
-
+function bauGear(){S=probeS({phase:'rast'});S.slots.talisman=1;S.bag[2]=mk(itemMit(d=>d.rare)||'knife');
+ // Auftrag 3 M4: Rucksack „Am Körper“ (js/ui/rucksack.js) statt der alten Itemleiste, dazu die Silhouetten aller Figuren
+ KOE={lesen:false,alt:koeZaehlung(deckListe()),zeig:S.areas.waffe[0]&&S.areas.waffe[0].uid};
+ const swap=S.bag.findIndex(it=>it&&def(it).a==='waffe');if(swap>=0){const a=S.areas.waffe[0];S.areas.waffe[0]=S.bag[swap];S.bag[swap]=a;}
+ $('gear').innerHTML=`<div class="koeprobe"><div id="koerper" class="an">${koerperHtml()}</div></div><p class="einl" style="margin-top:8px">Rucksack an der Rast, nach einem Tausch (Deck grün/rot), Talismane mit einem offenen Platz, Rest mit Schloss.</p>
+ <div class="silh">${JOBS.map(j=>`<figure><img src="assets/figuren/${j.id}.png" alt=""><figcaption>${esc(j.n)}</figcaption></figure>`).join('')}</div>`;
+ KOE=null;}
 function bauPicks(){S=probeS({phase:'kraemer'});
  const ids=[itemMit(d=>d.cards.some(c=>c.eroeffnung)),itemMit(d=>d.rare),Object.keys(ITEMS).find(k=>ITEMS[k].passiv),itemMit(d=>d.cards.some(c=>c.verbraucht))].filter(Boolean);
  $('picks').innerHTML=`<div class="box"><div class="innen"><div class="picks">${ids.map((id,i)=>itemPick(id,'',i===1?`<div class="preis">${BAL.shop.rare_price} GOLD</div>`:i===2?'<div class="preis">28 GOLD</div>':'')).join('')}</div></div></div>`;}

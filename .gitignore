@@ -5,3 +5,4 @@ node_modules/
 game/.godot/
 game/export/
 *.import
+.claude/

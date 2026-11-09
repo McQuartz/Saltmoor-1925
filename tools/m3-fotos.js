@@ -14,5 +14,5 @@ const {chromium}=require('playwright');
  await p.evaluate(()=>{S.reward=dropPool().slice(0,2);S.picked=false;render();});await p.waitForTimeout(300);const it=await p.$('[data-take]');if(it){await it.hover();await p.waitForTimeout(400);await p.screenshot({path:out+'/hover-item.png'});}
  await p.evaluate(()=>{takeReward(S.reward[0]);});
  // Rucksackmodus: Item aus dem Rucksack gegen ein angelegtes tauschen (Entwurf)
- await p.evaluate(()=>{rucksackAuf();const bi=RS.bag.findIndex(Boolean);const it=RS.bag[bi];const a=def(it).a;rsKlick('bag:'+bi);rsKlick(a+':0');});await p.waitForTimeout(500);await p.screenshot({path:out+'/rucksackmodus.png'});
+ await p.evaluate(()=>{rucksackAuf();const bi=S.bag.findIndex(Boolean);const it=S.bag[bi];const a=def(it).a;move('bag:'+bi,a+':0');});await p.waitForTimeout(500);await p.screenshot({path:out+'/rucksackmodus.png'});
  console.log(f.length?f.join('\n'):'Keine Konsolenfehler.');await b.close();})();

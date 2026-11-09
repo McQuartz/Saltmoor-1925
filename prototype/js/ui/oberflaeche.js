@@ -12,9 +12,9 @@ function render(){
  $('gegner').innerHTML=ph==='fight'||ph==='reward'?gegnerHtml(ph==='fight'):'';
  if($('spieler'))$('spieler').innerHTML=''; // M2: der eigene Balken sitzt im Footer (leisteKampf)
  $('panel').innerHTML=panelHtml(ph);$('panel').className=ph==='fight'?'':'an p-'+ph;
- $('leiste').innerHTML=ph==='fight'?leisteKampf():S.route&&canEquip()?gearHtml():'';
- $('leiste').className=ph==='fight'?'kampf':S.route&&canEquip()?'gear':'';
- dealAnim=false;karteNach();if(typeof Dev!=='undefined'&&Dev.an)Dev.render();}
+ $('leiste').innerHTML=ph==='fight'?leisteKampf():S.route&&canEquip()?tischHtml():'';
+ $('leiste').className=ph==='fight'?'kampf':S.route&&canEquip()?'tisch':'';
+ dealAnim=false;karteNach();if(typeof koeNachRender==='function')koeNachRender();if(typeof Dev!=='undefined'&&Dev.an)Dev.render();}
 
 // ---------- Kopfzeile ----------
 function kopfHtml(){const f=S.phase==='fight';const m=maxHp();const inc=f?incoming():0;const lose=Math.max(0,inc-S.block);

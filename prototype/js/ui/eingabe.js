@@ -41,7 +41,8 @@ document.addEventListener('click',e=>{
  const bw=e.target.closest('[data-biom]');if(bw){chooseBiom(+bw.dataset.biom);return;}
  const w=e.target.closest('[data-weg]');if(w){hideTip();chooseWeg(+w.dataset.weg);return;}
  const bu=e.target.closest('[data-buy]');if(bu){buy(bu.dataset.buy);return;}
- const rsl=e.target.closest('[data-rs]');if(rsl){rsKlick(rsl.dataset.rs);return;}
+ const ks=e.target.closest('[data-ksel]');if(ks){S.sel=S.sel===ks.dataset.ksel?null:ks.dataset.ksel;sfx.click();render();return;}
+ const kz=e.target.closest('[data-kzeig]');if(kz&&KOE){KOE.zeig=+kz.dataset.kzeig;koerperRender();return;}
  const hgp=e.target.closest('[data-hg]');if(hgp){takeHandgriff(hgp.dataset.hg);return;}
  const rz=e.target.closest('[data-ritz]');if(rz){const uid=+rz.dataset.ritz;if(rz.dataset.k!=null){S.ueberschreiben={uid,k:+rz.dataset.k,alt:hgVon(itemByUid(uid))[+rz.dataset.k]};render();}else placeHandgriff(uid);return;}
  const kb=e.target.closest('[data-kerbe]');if(kb){kerbeDazu(+kb.dataset.kerbe);return;}
@@ -66,8 +67,7 @@ function aktion(k,el){switch(k){
  case'buch':zeigeOverlay(buchHtml());break;case'tagebuch':zeigeOverlay(tagebuchHtml());break;case'einst':zeigeOverlay(einstHtml());break;case'zu':closeOv();break;
  case'gleicherSeed':{const sd=S.seed,jb=S.job;newRun(jb,sd,{});render();break;}
  case'bildSpeichern':endbildSpeichern();break;
- case'rucksack':rucksackAuf();break;case'rsUebernehmen':rucksackUebernehmen();break;case'rsZu':RS=null;closeOv();break;
- case'rsVerkaufen':{const l=RS.sel;const it=rsGet(l);if(!it)break;rsSet(l,null);const[k,i]=l.split(':');setAt(l,null);const v=Math.floor(preisVon(def(it))*.4);S.gold+=v;S.stats.gold+=v;Bus.emit('toast',{a:'VERKAUFT',b:`${def(it).n} · +${v} Gold`});RS.sel=null;zeigeRucksack();break;}
+ case'rucksack':rucksackAuf();break;case'rucksackZu':rucksackZu();break;
  case'hgSkip':skipHandgriff();break;case'hgVerwerfen':hgVerwerfen();break;
  case'ueberJa':{const u=S.ueberschreiben;S.ueberschreiben=null;placeHandgriff(u.uid,u.k);break;}case'ueberNein':S.ueberschreiben=null;render();break;
  case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;
@@ -77,10 +77,10 @@ function aktion(k,el){switch(k){
 function starteRun(job){const st=S.wahlStufe||0;const q=new URLSearchParams(location.search);const seed=q.get('seed')!=null&&!S.seedUsed?+q.get('seed'):neuerSeed();
  const start=S.wahlStart||null;newRun(job,seed,{dev:typeof Dev!=='undefined'&&Dev.cheat,stufe:st,start});Meta.get().stufe=st;Meta.save();render();}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
- if(e.key==='Escape'){S.sel=null;karteZu();closeOv();render();}
+ if(e.key==='Escape'){if(KOE){rucksackZu();return;}S.sel=null;karteZu();closeOv();render();}
  if((e.key==='m'||e.key==='M')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.repeat)karteUmschalten();
  if(e.key==='d'||e.key==='D'){if(typeof Dev!=='undefined')Dev.toggle();}
- if((e.key==='r'||e.key==='R')&&S.route&&canEquip()){if(RS){RS=null;closeOv();}else rucksackAuf();}
+ if((e.key==='r'||e.key==='R')&&!e.ctrlKey&&!e.metaKey&&!e.repeat&&S.route&&(canEquip()||S.phase==='fight')){if(KOE)rucksackZu();else rucksackAuf();}
  if(S.phase==='fight'&&!busy){if(e.key===' '||e.key==='e'){e.preventDefault();endTurn();}const n=+e.key;if(n>=1&&n<=9)playCard(n-1);}
  if(S.phase==='uebergang'&&!['Shift','Control','Alt','Meta','d','D'].includes(e.key))leaveUebergang();});
 // Tooltips

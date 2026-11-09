@@ -10,7 +10,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M1 Welle 1: sieben Fixes | fertig | Panzer 15 %, Fragmente 75 |
 | M2 Kampf-HUD, Stoff-Baum, Plakette, Aufstellung | fertig | HUD, Baum, Plakette, 100 Stellplätze |
 | M3 Peilkarte und Fahrt nach vorne | fertig | Netz, Karte, Fahrt, 75 Weg-Richtungen |
-| M4 Rucksack am Körper | nicht begonnen | Stopp nach M3 (Mo) |
+| M4 Rucksack am Körper | fertig | 9 Silhouetten, Ansicht am Körper, Branch `claude/project-thread-hifkqz` (Philip) |
 | M5 Die Tiefe biegt die Regeln | nicht begonnen | Stopp nach M3 (Mo) |
 | M6 Hören statt sehen | nicht begonnen | Stopp nach M3 (Mo) |
 | M7 Sehen und gesehen werden | nicht begonnen | Stopp nach M3 (Mo) |
@@ -164,6 +164,40 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
   - Haiku: Weg-Richtung und Zielpunkt der 75 Kulissen (`fahrt.json`)
 - Offen: Die Fahrt hat bei großen Verschiebungen dunkle Ränder, wo hinter einer nahen Ebene nichts gemalt ist (nachtzug Gangende), und stehende Dinge kippen am Rand leicht. Die Klänge für Rumpeln und Nebel sind nur im Code geprüft (headless kein Ton).
 
+### M4 Rucksack am Körper
+
+**Plan.** Silhouetten: neues Werkzeug `tools/sprites/figuren.js` (Zone `silhouette`, 110×172, Fuß-, Körper- und Augenpunkt als JSON), Fischer selbst als Muster, die übrigen acht von Sonnet-Agenten (je drei Figuren, parallel), jede Figur von mir benotet. Ansicht selbst statt durch einen weiteren Agenten, weil sie eng an `S.areas`/`S.slots`, `move()` und das Deck hängt: neu `js/ui/rucksack.js` und `css/rucksack.css`, `jobs.json → koerper` (Anschlusspunkte je Figur), Deck-Diff gegen den Stand beim Öffnen. Alter Rucksackmodus (`ueberlagerungen.js`) und alte Itemleiste (`gearHtml`) raus, Test `tools/test-rucksack.js`.
+
+**Schritte und Entscheidungen.**
+- **Öffnen:** Taste R und Knopf „AM KÖRPER (R)“ in der Leiste an Rast, Werkstatt und Krämer; nach einem Fund öffnet sich die Ansicht von selbst (Bus-Ereignis `item`). Im Kampf öffnet R die Ansicht nur lesend (keine Ziele, kein Tausch). Esc und „WEITER ›“ schließen.
+- **Kein Übernehmen/Verwerfen mehr:** Jeder Tausch gilt sofort, wie überall sonst im Spiel. Der Deck-Diff rechts vergleicht mit dem Stand beim Öffnen (grün dazu, rot weg), so sieht man trotzdem, was die ganze Umstellung bewirkt.
+- **Fächer:** Waffe als Säule links an der Hand, Kleidung als Block rechts am Leib, Talismane als Reihe oben am Hals; gestrichelte Linien vom Fach zum Anschlusspunkt der Figur. Gesperrte Plätze tragen ein Pixel-Schloss, Kerben sitzen als Stoff-Striche am Platz.
+- **Werkbank und Krämer:** In der Werkstatt hat der Fuß der Ansicht die zwei Werkbank-Plätze, beim Krämer gibt es „Verkaufen“ in der Ansicht und eine Itemreihe im Krämer-Fenster.
+- **Leiste außerhalb des Kampfs:** statt der alten Itemleiste der „Tisch“ mit den angelegten Items, dem Knopf und „n im Rucksack“.
+- **Bots:** bauen weiter über `move()` um; `tools/m3-fotos.js` nutzt jetzt `move` statt `rsKlick`.
+- **Nebel:** der Hintergrund ist gedithert und bewegt sich in 125-ms-Schritten (im FAST-Modus aus).
+
+#### Abnahme M4
+- Abnahmekriterien:
+  - Alle 9 Silhouetten Note ≥ 4: ✓ ([Kontaktbogen](bilder/M4/silhouetten-kontaktbogen.png), oben auf Nebel, unten auf Schwarz, links die Vorlage `fischer-figur-silhouette.png`; Noten unten)
+  - Fotos jede Figur im Rucksack: ✓ [Fischer](bilder/M4/rucksack-fischer-1440x900.png), [Friedhofswärter](bilder/M4/rucksack-friedhofswaerter-1440x900.png), [Pfarrerin](bilder/M4/rucksack-pfarrerin-1440x900.png), [Detektiv](bilder/M4/rucksack-detektiv-1440x900.png), [Okkultist](bilder/M4/rucksack-okkultist-1440x900.png), [Kneipenschläger](bilder/M4/rucksack-kneipenschlaeger-1440x900.png), [Geologe](bilder/M4/rucksack-geologe-1440x900.png), [Wahrsagerin](bilder/M4/rucksack-wahrsagerin-1440x900.png), [Veteran](bilder/M4/rucksack-veteran-1440x900.png)
+  - Tausch mit Grün/Rot: ✓ [gewählt](bilder/M4/rucksack-gewaehlt-1440x900.png), [nach dem Tausch](bilder/M4/rucksack-tausch-1440x900.png); gesperrte Plätze und Kerben in jedem Figurenfoto
+  - Drei Auflösungen: ✓ [1280×720](bilder/M4/rucksack-fischer-1280x720.png), [1440×900](bilder/M4/rucksack-fischer-1440x900.png), [1920×1080](bilder/M4/rucksack-fischer-1920x1080.png); `test-rucksack.js` prüft alle 9 Figuren in allen drei Auflösungen (Fächer überlappen nicht, nichts im Fuß, kein „?“)
+  - Weitere Fotos: [Krämer](bilder/M4/rucksack-kraemer-1440x900.png), [Werkbank](bilder/M4/rucksack-werkbank-1440x900.png), [nach einem Fund](bilder/M4/rucksack-fund-1440x900.png), [im Kampf, nur lesend](bilder/M4/rucksack-kampf-lesend-1440x900.png)
+  - Bots können weiter umbauen: ✓ `balance.js 50` 48 %, 0 Fehler ([balance-50.txt](bilder/M4/balance-50.txt))
+  - `test-deckbau.js` grün: ✓
+  - Ziehen mit der Maus: ✓ (zusätzlich zum Klicken)
+- Tests ([tests-nachher.txt](bilder/M4/tests-nachher.txt)): test-run → `Alles gut.`; test-deckbau → `Alles gut.`; test-ereignisse → `Alles gut.`; test-vorschau → `Gespielte Karten mit Vorschau: 400, Abweichungen: 0`; test-welle1 → `Alles gut.`; test-stoffbaum → `Alles gut (33 Prüfungen).`; test-karte → `Alles gut.`; test-speicher → `Alles gut.`; test-meta → `Fragmente gespeichert: 40, nach Reset: 0`; test-plakette → `Alles gut.`; test-oberflaeche → `Alles gut.`; test-karte-ui → `Alles gut.`; test-rucksack → `Alles gut.`; sprites/pruefen → `253 Sprites geprüft, 0 Verstöße.`; icons/pruefen → `242 Bilder geprüft, 0 Verstöße.`
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 237, alle als Entwurf markiert.`
+- Bots: generisch 50 Seeds 48 % (Basis 48 %), Ø 3,9 Züge je Kampf, 0 Fehler.
+- Bilder: oben, selbst angesehen: ja (alle neun Figuren bei 1440×900 neben `rucksack-b-am-koerper.png`, Fischer in allen drei Auflösungen, Kontaktbogen)
+- Regelprüfung: keine neue Mechanik (reine Oberfläche).
+- Abweichungen von Vorlage oder Konzept: kein Übernehmen/Verwerfen, Tausch gilt sofort (Grund oben); die Ansicht öffnet nur nach einem Fund von selbst, an Rast, Werkstatt und Krämer über den Knopf, damit man dort nicht jedes Mal durch sie hindurch muss.
+- Agenten:
+  - Sonnet ×3: Silhouetten (Friedhofswärter, Pfarrerin, Detektiv / Okkultist, Kneipenschläger, Geologe / Wahrsagerin, Veteran); Fischer selbst als Muster
+  - Ansicht, Fächer-Logik, Anschlusspunkte, Einbau und Test selbst (Abweichung vom Plan: kein eigener Agent für die Ansicht, Grund oben)
+- Offen: Detektiv ohne sichtbare Zigarettenglut, Wahrsagerin ohne Ohrringe, Veteran (Note 4, schwächste) mit kastigem Mantel. Die Silhouetten stehen noch nirgends außer im Rucksack und in der Galerie.
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -198,11 +232,28 @@ Lovecraft-Prinzip: das Unbegreifliche hängt an etwas Sichtbarem (Diener tragen 
 
 *Je neues Bild: Name, Note, Bildpfad, Kurzbegründung.*
 
+| Bild | Note | Pfad | Begründung |
+|---|---|---|---|
+| Fischer | 4 | `prototype/assets/figuren/fischer.png` | Südwester, Ölzeug, Netz über der Schulter, klar lesbar |
+| Friedhofswärter | 4 | `…/friedhofswaerter.png` | nach Rückgabe: Spaten und Laterne deutlich, Haltung gebeugt |
+| Pfarrerin | 4 | `…/pfarrerin.png` | nach Rückgabe: Talar mit Saum, Buch vor der Brust |
+| Detektiv | 4 | `…/detektiv.png` | nach Rückgabe: Hut und Trenchcoat gut, Zigarettenglut nicht sichtbar |
+| Okkultist | 4 | `…/okkultist.png` | Kapuze, Stab, gute Kontur |
+| Kneipenschläger | 4 | `…/kneipenschlaeger.png` | nach Rückgabe: breite Schultern, Fäuste lesbar |
+| Geologe | 4 | `…/geologe.png` | Hammer, Grubenlampe |
+| Wahrsagerin | 4 | `…/wahrsagerin.png` | Kopftuch und Rock gut, Ohrringe fehlen |
+| Veteran | 4 | `…/veteran.png` | nach Rückgabe: Stahlhelm und Gewehr, Mantel noch kastig (schwächste) |
+
 ## Neue Texte (Entwurf)
 
 *Je neuer Text: Datei, ID, erste Worte. Für Philip und Mo.*
 
+- **M4, Oberfläche (`js/ui/rucksack.js`, `kampf.js`, `bildschirme.js`):** „AM KÖRPER (R)“, „n im Rucksack“, „Klick ein Item, dann den Platz, an den es soll. Rechts siehst du, was das mit deinem Deck macht.“, „Trag drei passende Teile, um ein Set zu bilden.“, „· Ziehen oder anklicken zum Tauschen.“, Überschriften RUCKSACK, WERKBANK, DECK, Knöpfe „WEITER ›“, „ZURÜCK“, „Verkaufen“. `jobs.json → koerper` sind nur Zahlen.
+
 ## Entscheidungen unterwegs
+
+- **M4, Übernahme:** Philip hat am 2026-11-09 entschieden, dass ab M4 weitergearbeitet wird. M4 und folgende liegen auf `claude/project-thread-hifkqz` (von dieser Sitzung vorgegeben), aufgebaut auf Mos Branch `claude/project-thread-flvf7e`, als eigener Draft-PR dagegen.
+- **M4, Rucksack:** Tausch gilt sofort statt Übernehmen/Verwerfen; Deck-Diff gegen den Stand beim Öffnen. Automatisch öffnen nur nach einem Fund, sonst Knopf und Taste R. Im Kampf nur lesend.
 
 - **M0, Branch:** Die Sitzung gibt `claude/project-thread-flvf7e` vor, darum dieser Name statt `auftrag/run-3` (01-regeln.md Abschnitt 7 erlaubt das).
 - **M0, Ausführung:** Mo hat den Auftrag am 2026-11-09 in einer Projekt-Sitzung gestartet („do it all in succession and in the cloud“).
@@ -210,6 +261,8 @@ Lovecraft-Prinzip: das Unbegreifliche hängt an etwas Sichtbarem (Diener tragen 
 - **M3, Agenten-Arbeitsbäume:** Zwei Worktrees entstanden auf altem `main` statt auf dem Branch; die Agenten haben sie selbst auf den Branch-Stand gebracht. Ihre Änderungen habe ich als Diff gelesen und übernommen.
 
 ## Rückgaben an Sub-Agenten
+
+- **M4, Silhouetten (Sonnet):** Friedhofswärter, Pfarrerin, Detektiv, Kneipenschläger und Veteran kamen in der ersten Runde auf Note 3 (zu glatt, Werkzeuge und Kopfbedeckung nicht lesbar, Haltung steif). Rückgabe mit konkreten Punkten je Figur, zweite Runde je Note 4.
 
 - Keine Rückgabe nötig. In M3 habe ich zwei Punkte selbst nachgezogen statt zurückzugeben, weil sie außerhalb der erlaubten Dateien lagen: den Einsturz im Nebel (Kern) und das Kästchen „Übergänge kürzer“ (`ueberlagerungen.js`).
 

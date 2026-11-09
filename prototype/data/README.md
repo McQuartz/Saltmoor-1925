@@ -159,6 +159,8 @@ Rollen-Sets: `n` Name, `i` die drei Item-IDs, `t` Text, `bonus` Wirkung, wenn al
 
 Die sechs Startfiguren. `id` (Schlüssel, auch für die Musik), `n` Name, `d` Kurztext, `set` Name des Sets in roles.json, `ausrede` (Startzeile), `wahrheit` (Schlusszeile bei der Ankunft), `vorliebe` (`hafen` oder `moor`: Einstieg mit 70 %), `instrument`, `musik` (Rollen-Schlüssel in music.js), `frei_ab` (Zahl gelesener Fragmente, ab der die Figur wählbar ist), Start-Items je Bereich (`w`, `k`, `t`) und im Rucksack (`bag`).
 
+**Auftrag 3 (M4):** `koerper` = Anschlusspunkte der Fächer im Rucksack „Am Körper“ in Pixeln der Silhouette (`assets/figuren/<id>.png`, 110 × 172): `hals` (Talismane), `leib` (Kleidung), `hand` (Waffen und Schilde). Die Silhouetten baut `node tools/sprites/figuren.js` aus `tools/sprites/figuren/<id>.js`, das Werkzeug schreibt dieselben Punkte nach `assets/figuren/<id>.json`; `tools/test-rucksack.js` prüft, dass sie auf der Figur liegen.
+
 ## run.json
 
 Aufbau eines Runs (`js/core/run.js`).
