@@ -93,7 +93,8 @@ function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.fr
  if(!fahrtBild){
  zeichneSzene(sz,g,t,cam);
  if(BU.szAlt){const q=(t-BU.szAlt.t0)/.8;if(q>=1||BU.szAlt.sz===sz)BU.szAlt=null;else{g.globalAlpha=Math.ceil((1-q)*4)/4;zeichneSzene(BU.szAlt.sz,g,t,cam);g.globalAlpha=1;}}
- if(S.enemies&&['fight','reward'].includes(S.phase)){const list=[...S.enemies].sort((a,b)=>(enemyBox(a).y-enemyBox(b).y)||(a.x-b.x));list.forEach(e=>zeichneGegner(g,e,dt,t,cam));}
+ if(S.enemies&&['fight','reward'].includes(S.phase)){const list=[...S.enemies].sort((a,b)=>(enemyBox(a).y-enemyBox(b).y)||(a.x-b.x));list.forEach(e=>zeichneGegner(g,e,dt,t,cam));
+  if(S.verbuendeter&&S.phase==='fight')zeichneVerbuendeter(g,dt,t,cam);}
  if(BU.schatten){const q=(now-BU.schatten.t0)/BU.schatten.dur;if(q>=1)BU.schatten=null;else schattenMalen(g,q,cam);}
  if(typeof PFX!=='undefined')try{PFX.zeichne(g,dt);}catch(e){}
  try{sz.zeichneVordergrund&&sz.zeichneVordergrund(g,t,cam);}catch(e){}
@@ -116,6 +117,8 @@ function schattenMalen(g,q,cam){const sp=BU.schatten.sprite&&SPRITES[BU.schatten
  tc.x.putImageData(id,0,0);const x=Math.round(BU.schatten.x*SW-cam.x*.5-m.fuss[0]),y=Math.round(SH*.7-cam.y*.5-m.fuss[1]);g.drawImage(tc.c,x,y);}
 const stc=k=>k&&ST&&ST[k]?ST[k].c:(k||'#e8c547');
 
+// M9: der Verbündete aus der Asche steht links und schaut nach rechts zu den Gegnern (gespiegelt gezeichnet, aschgrau getönt)
+function zeichneVerbuendeter(g,dt,t,cam){const v=S.verbuendeter;const p=enemyBox(v);const px=Math.round(p.x-cam.x*.5);g.save();g.translate(px*2,0);g.scale(-1,1);zeichneGegner(g,v,dt,t,cam);g.restore();}
 function zeichneGegner(g,e,dt,t,cam){const v=visOf(e);if(v.gone)return;const p=enemyBox(e);
  v.hit=Math.max(0,v.hit-dt);v.kx*=Math.pow(.0005,dt);v.lunge=Math.max(0,v.lunge-dt);v.at+=dt;
  if(e.hp<=0&&!v.dying){v.dying=.001;v.anim='tod';v.at=0;}
@@ -150,10 +153,12 @@ const UNVERW_RAND=[[207,232,255],[120,160,210]],UNVERW_TON=[150,185,230];
 function nachbearbeiten(tc,e,v,p){const w=tc.c.width,h=tc.c.height;const neb=p.nebel||0;const tod=v.dying?Math.min(1,v.dying/.9):0;const ziel=typeof AIM!=='undefined'&&AIM.ei===S.enemies.indexOf(e);
  const uv=!tod&&e.hp>0&&S.phase==='fight'&&typeof unverwJetzt==='function'&&unverwJetzt(e);
  const gs=!!e.gesehener&&!tod;const gph=Math.floor(BU.t*4)&3; // M7: Gesehene halb durchsichtig im wandernden Bayer-Raster, kühl getönt
- if(!(v.hit&&!v.sheet)&&!neb&&!tod&&!ziel&&!uv&&!gs)return;const id=tc.x.getImageData(0,0,w,h),d=id.data;const nc=hx(BIOMES[biomId()].nebel[1]);
+ const asch=!!e.verbuendet&&!tod;const aph=Math.floor(BU.t*3); // M9: aus der Asche, grau, oben rieselt es
+ if(!(v.hit&&!v.sheet)&&!neb&&!tod&&!ziel&&!uv&&!gs&&!asch)return;const id=tc.x.getImageData(0,0,w,h),d=id.data;const nc=hx(BIOMES[biomId()].nebel[1]);
  let al=null,ph=0;if(uv){al=new Uint8Array(w*h);for(let k=0;k<w*h;k++)al[k]=d[k*4+3]>0?1:0;ph=Math.floor(BU.t*7);}
  for(let y=0;y<h;y++)for(let i=0;i<w;i++){const o=(y*w+i)*4;if(!d[o+3])continue;
   if(tod&&(tod*1.15>bay(i,y)*.6+(1-y/h)*.5)){d[o+3]=0;continue;}
+  if(asch){const l=(d[o]*.3+d[o+1]*.59+d[o+2]*.11);const hel=bay(i,y+aph)<.12&&y<h*.45;const q=hel?l*.55+120:l*.8+22;d[o]=q;d[o+1]=q*.97;d[o+2]=q*.92;if(y<h*.3&&bay(i,y+aph)<.08){d[o+3]=0;continue;}}
   if(gs){if(bay(i+gph,y)<.45){d[o+3]=0;continue;}d[o]=(d[o]*3+170)>>2;d[o+1]=(d[o+1]*3+200)>>2;d[o+2]=(d[o+2]*3+215)>>2;}
   if(uv){const k=y*w+i;const rand=!(i>0&&al[k-1])||!(i<w-1&&al[k+1])||!(y>0&&al[k-w])||!(y<h-1&&al[k+w]);
    if(rand){const c=UNVERW_RAND[((i+y+ph)%7)<3?0:1];d[o]=c[0];d[o+1]=c[1];d[o+2]=c[2];d[o+3]=255;continue;}

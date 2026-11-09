@@ -69,7 +69,7 @@ const Asche={
  nachKarte(c,vorher){if(!Zettel.hat('asche')||S.phase!=='fight'||!vorher||!(S.asche&&S.asche.length))return;const a=this.eigene(vorher),b=this.eigene(c);
   if(a.includes('S')&&b.includes('F')&&!S.verbuendeter)return this.rufen();
   if(a.includes('F')&&b.includes('S'))return this.aufloesen();},
- rufen(){const a=S.asche.pop();const v=mkEnemy(a.id,0);v.verbuendet=true;v.ascheVon=a.akt;v.pi=0;v.block=0;S.verbuendeter=v;
+ rufen(){const a=S.asche.pop();const v=mkEnemy(a.id,0);v.verbuendet=true;v.pendel=true;v.x=v.xa=.09;v.reihe=2;v.ascheVon=a.akt;v.pi=0;v.block=0;S.verbuendeter=v;
   (S.ascheRueck=S.ascheRueck||[]).push({id:a.id,akt:S.akt+2});
   Bus.emit('asche',{art:'gerufen',id:a.id,why:`Salz, dann Feuer: ${a.n} steht aus der Asche auf und kämpft an deiner Seite`});Bus.emit('changed');},
  aufloesen(){const a=S.asche.pop();Bus.emit('asche',{art:'aufgeloest',id:a.id,why:`Feuer, dann Salz: die Asche von ${a.n} zerfällt. Sie kommt nicht wieder`});Bus.emit('changed');},

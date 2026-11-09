@@ -297,7 +297,7 @@ function kniffNachAngriff(en,tot){if(tot>0)S.stats.todesursache=en.n;}
 // was der Spieler sieht: verborgene Angriffe zählen nicht mit
 // Fix 3 (Auftrag 3): wer in diesem Gegnerzug schon gehandelt hat, zeigt keine Absicht mehr, bis dein Zug beginnt
 // M6: stumme Gegner zeigen keine Absicht (man hört sie, hoeren.js)
-function absichtSichtbar(e){return !!e&&e.hp>0&&!e.gehandelt&&!S.nachGegnerzug&&!(typeof Hoeren!=='undefined'&&Hoeren.istStumm(e));}
+function absichtSichtbar(e){return !!e&&e.hp>0&&!S.begegnung&&!e.gehandelt&&!S.nachGegnerzug&&!(typeof Hoeren!=='undefined'&&Hoeren.istStumm(e));}
 function incomingSichtbar(){const v=typeof Blick!=='undefined'&&Blick.aktiv()?[]:alive().filter(e=>e.kniff&&e.kniff.art==='verborgen'); // M7: mit Hinsehen ist nichts verborgen
 if(!v.length)return incoming(true);const keep=v.map(e=>e.pat);v.forEach(e=>{e.pat=e.pat.map(p=>p.t==='atk'?{...p,v:-e.str,h:1}:p);});const r=incoming(true);v.forEach((e,i)=>e.pat=keep[i]);return Math.max(0,r);}
 function incoming(sicht){let tot=0;for(const en of alive()){if(sicht&&!absichtSichtbar(en))continue;if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='karte'&&typeof Diener!=='undefined'){tot+=Diener.schaden(en,it);continue;}if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}

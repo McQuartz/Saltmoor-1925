@@ -15,6 +15,7 @@ const {chromium}=require('playwright');
   if(z.ph==='uebergang'){await foto('uebergang-akt'+(z.akt+1),true);await klick('[data-act=weiter]');continue;}
   if(z.ph==='weg'){await foto('weg-'+z.b);const i=await p.evaluate(()=>Bot.wegIndex());log.push(`Tiefe ${z.d+1}: ${await p.evaluate(i=>S.weg[i].art,i)}`);await klick(`[data-weg="${i}"]`);continue;}
   if(z.ph==='fight'){await foto(`kampf-${z.b}${z.art==='waechter'?'-waechter':z.art==='finale'?'-finale':''}`);
+   if(await p.evaluate(()=>!!S.begegnung)){await foto('begegnung');log.push(`Tiefe ${z.d}: Begegnung, weitergegangen`);await klick('[data-act=weitergehen]');continue;}
    if(await p.evaluate(()=>!!S.blickWahl)){await foto('blick-wahl');const ja=await p.evaluate(()=>Blick.botWahl());log.push(`Tiefe ${z.d}: ${ja?'hinsehen':'nicht hinsehen'}`);await klick(`[data-act=${ja?'hinsehen':'wegsehen'}]`);continue;} // M7: Wahl wie der Bot
    const w=await p.evaluate(()=>Bot.besteKarte());
    if(w){if(w.t!=null)await klick(`.feind[data-ei="${w.t}"]`);await klick(`[data-card="${w.i}"]`);await p.waitForTimeout(300);}
