@@ -38,30 +38,14 @@ function enterAct(){S.ebene=0;if(S.akt>0)leiheZurueck();
 function leaveUebergang(){genWeg();}
 function chooseBiom(i){if(S.phase!=='biomwahl')return;const b=S.angebote[S.akt][i];if(!b)return;S.route[S.akt]=b;S.routeWhy.push(`${RUN.akte[S.akt].n}: ${BIOMES[b].kurz} gewählt`);Bus.emit('biom_gewaehlt',{biom:b,why:`${BIOMES[b].n} gewählt`});enterAct();}
 function ebeneKey(){return aktDef().ebenen[S.ebene];}
-// Wege für die nächste Ebene nach den Regeln aus run.json
-function genWeg(){const key=ebeneKey(),E=RUN.ebenen[key];const r=R(`weg:${S.akt}:${S.ebene}`);let arten;
- if(E.fest)arten=[E.fest];
- else if(E.fest_wahl)arten=[...E.fest_wahl];
- else{const n=r.int(E.wege[0],E.wege[1]);
-  for(let tries=0;tries<50;tries++){arten=E.verschiedene?r.sample([...new Set(E.pool)],n):r.sample(E.pool,n);
-   if(E.mindestens&&Object.entries(E.mindestens).some(([k,v])=>arten.filter(a=>a===k).length<v))continue;
-   if(E.verschiedene&&new Set(arten).size<E.verschiedene)continue;
-   if(E.einer_von&&!arten.some(a=>E.einer_von.includes(a)))continue;break;}}
- const b=biom();const used={};
- // Ufer unten: im Vorraum wartet „Der, der vor dir kam“ (Elite, Pflicht)
- if(key==='vorraum'&&b.vorraum_elite&&FOES[b.vorraum_elite])arten=['kampf_schwer'];
- S.weg=arten.map((art,i)=>{const hs=(b.weg_hinweise&&b.weg_hinweise[art==='kampf_schwer'?'kampf':art])||[RUN.knoten[art].n];used[art]=(used[art]||0);const hint=hs[(r.int(0,hs.length-1)+used[art]++)%hs.length];
-  const o={art,hint,i};if(art==='kampf'||art==='kampf_schwer')o.foes=key==='vorraum'&&b.vorraum_elite?[b.vorraum_elite]:rollFoes(art,r);if(key==='vorraum'&&b.vorraum_elite&&b.weg_hinweise&&b.weg_hinweise.vorraum)o.hint=b.weg_hinweise.vorraum[0];if(art==='waechter')o.foes=[waechterWahl(b)];if(art==='finale')o.foes=[b.waechter];return o;});
- S.phase='weg';
- Bus.emit('weg',{optionen:S.weg.map(o=>o.art),why:`Ebene ${S.ebene+1} von ${aktDef().ebenen.length} (${key}): ${S.weg.map(o=>RUN.knoten[o.art].n).join(', ')} nach Regel ${JSON.stringify(E.mindestens||E.einer_von||E.verschiedene||E.fest||E.fest_wahl||'frei')}`});
- save();Bus.emit('changed');}
+// Wege: genWeg und das Netz des Akts stehen in js/core/netz.js (Auftrag 3 M3, Peilkarte)
 function rollFoes(art,r){const b=biom();const z=RUN.kaempfe.zahl[S.akt];let n=z[Math.min(S.ebene,z.length-1)];if(art==='kampf_schwer')n+=RUN.kaempfe.schwer_extra;n=Math.min(4,n);
  const pool=b.gegner.filter(id=>FOES[id]);
  // Eliten (Zugabe): ein schwerer Kampf bringt mit BAL.elite.chance eine Elite des Bioms (biom.elite / elite_dazu) statt zwei normaler Gegner
  const el=(b.elite||[]).filter(id=>FOES[id]);const E=BAL.elite||{};if(art==='kampf_schwer'&&el.length&&(S.devElite||r.chance(E.chance??.5))){const e=S.devElite&&FOES[S.devElite]?S.devElite:r.pick(el);return[e,...[...Array(Math.max(0,n-(E.ersetzt??2)))].map(()=>r.pick(pool))];}
  return[...Array(n)].map(()=>r.pick(pool));}
 
-function chooseWeg(i){if(S.phase!=='weg')return;const o=S.weg[i];if(!o)return;S.cur=o;S.depth++;S.weg=null;S.phase='knoten';
+function chooseWeg(i){if(S.phase!=='weg')return;const o=S.weg[i];if(!o)return;S.cur=o;S.depth++;S.weg=null;S.phase='knoten';netzGehe(o);
  save(); // vor dem Betreten sichern: Fortsetzen betritt denselben Knoten neu (gleicher Seed = gleicher Inhalt)
  Bus.emit('weg_gewaehlt',{art:o.art,why:`Weg gewählt: ${RUN.knoten[o.art].n} („${o.hint}“), Tiefe ${S.depth}`});enterNode(o);}
 
@@ -92,7 +76,7 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
    Bus.emit('kraemer',{why:`Krämer ${b.kraemer.n}: Sortiment aus dem Fundpool von ${b.kurz}`});break;}
   case'werkstatt':S.forged=false;S.phase='werkstatt';break;
   case'rast':S.rastDone=false;S.phase='rast';break;
-  case'wandbild':{const fr=nextFragment(r);S.frag=fr?fr.id:null;S.phase='wandbild';if(fr)readFragment(fr);break;}
+  case'wandbild':{const fr=nextFragment(r);S.frag=fr?fr.id:null;S.phase='wandbild';if(fr)readFragment(fr);netzKlar();break;}
   case'fundstelle':{const F=RUN.fundstelle;const haken=r.chance(F.haken_chance);const item=r.chance(.55)?r.pick(dropPool()):null;const gold=item?0:r.int(F.gold[0],F.gold[1]);
    S.fund={item,gold,haken,taken:false};S.phase='fund';break;}
  }
@@ -172,19 +156,19 @@ function spiegelItem(id){const D=ITEMS[id];if(!D||D.spiegel)return id;const nid=
 // Leihgaben des Bibliothekars gehen beim nächsten Akt zurück
 function leiheZurueck(){const weg=[];besitz().forEach(b=>{if(b.it.leihe!=null&&b.it.leihe<S.akt){weg.push(def(b.it).n);setAt(b.loc,null);}});if(weg.length){Bus.emit('toast',{a:'ZURÜCKGEGEBEN',b:weg.join(', ')});log('Leihgabe zurück: '+weg.join(', '));}}
 function buy(i){const H=BAL.shop.heal;const sh=S.shop;if(!sh)return;
- if(i==='heal'){if(sh.heal||S.gold<H.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.gold-=H.price;S.stats.goldAus=(S.stats.goldAus||0)+H.price;sh.heal=true;healP(H.v,'Krämer: Laudanum');Bus.emit('changed');return;}
+ if(i==='heal'){if(sh.heal||S.gold<H.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.gold-=H.price;S.stats.goldAus=(S.stats.goldAus||0)+H.price;sh.heal=true;netzTat('kaufen');healP(H.v,'Krämer: Laudanum');Bus.emit('changed');return;}
  if(i==='strike'){if(sh.strike||S.gold<BAL.shop.streichen_preis){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.phase='kraemer_streichen';Bus.emit('changed');return;}
  const o=sh.items[+i];if(!o||o.sold)return;
  if(o.tausch){const gabe=S.sel&&getAt(S.sel);if(!gabe){Bus.emit('bad',{a:'GABE GEGEN GABE',b:'Wähl unten zuerst ein Item, das du hergibst.'});return;}const gn=def(gabe).n;setAt(S.sel,null);S.sel=null;o.sold=true;giveItem(o.id,`Getauscht gegen ${gn}`);Bus.emit('pick');Bus.emit('toast',{a:'GETAUSCHT',b:`${gn} → ${ITEMS[o.id].n}`});Bus.emit('changed');return;}
  if(S.gold<o.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:`Du brauchst ${o.price}.`});return;}if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}
- S.gold-=o.price;S.stats.goldAus=(S.stats.goldAus||0)+o.price;o.sold=true;giveItem(o.id,`Gekauft für ${o.price} Gold`);if(o.leihe){const neu=besitz().map(b=>b.it).filter(it=>it.id===o.id&&it.leihe==null).pop();if(neu)neu.leihe=S.akt;}Bus.emit('pick');Bus.emit('toast',{a:'GEKAUFT',b:ITEMS[o.id].n});Bus.emit('changed');}
+ S.gold-=o.price;S.stats.goldAus=(S.stats.goldAus||0)+o.price;o.sold=true;netzTat('kaufen');giveItem(o.id,`Gekauft für ${o.price} Gold`);if(o.leihe){const neu=besitz().map(b=>b.it).filter(it=>it.id===o.id&&it.leihe==null).pop();if(neu)neu.leihe=S.akt;}Bus.emit('pick');Bus.emit('toast',{a:'GEKAUFT',b:ITEMS[o.id].n});Bus.emit('changed');}
 function kraemerStrike(uid){if(uid!=null){S.gold-=BAL.shop.streichen_preis;S.shop.strike=true;strikeItem(uid);}S.phase='kraemer';Bus.emit('changed');}
 
 // --- Rast: heilen oder ein Item verbessern ---
-function rastHeal(){if(S.rastDone)return;S.rastDone=true;const v=Math.round(maxHp()*RUN.rast.heil_anteil);healP(v,`Rast: ${Math.round(RUN.rast.heil_anteil*100)} % Leben`);Bus.emit('changed');}
+function rastHeal(){if(S.rastDone)return;S.rastDone=true;netzTat('rasten');const v=Math.round(maxHp()*RUN.rast.heil_anteil);healP(v,`Rast: ${Math.round(RUN.rast.heil_anteil*100)} % Leben`);Bus.emit('changed');}
 function rastUpgrade(loc){if(S.rastDone)return;const it=getAt(loc);if(!it)return;const A=def(it);const F=BAL.forge;
  const id='m'+(++uidc)+'_'+S.depth;const nd={...A,n:`${A.base||A.n} +${(A.lvl||0)+1}`,base:A.base||A.n,lvl:(A.lvl||0)+1,bases:A.bases||[it.id],cards:A.cards.map(c=>{const n={...c};['atk','blk','heal','poison','burn'].forEach(q=>{if(n[q])n[q]+=F.bump;});return n;})};
- ITEMS[id]=nd;S.custom[id]=nd;it.id=id;S.rastDone=true;log(`Verbessert: ${nd.n}`);Bus.emit('forged',{name:nd.n,why:`Rast: ${A.n} verbessert, alle Werte +${F.bump}`});Bus.emit('changed');}
+ ITEMS[id]=nd;S.custom[id]=nd;it.id=id;S.rastDone=true;netzTat('rasten');log(`Verbessert: ${nd.n}`);Bus.emit('forged',{name:nd.n,why:`Rast: ${A.n} verbessert, alle Werte +${F.bump}`});Bus.emit('changed');}
 
 // --- Fundstelle ---
 function takeFund(){const f=S.fund;if(!f||f.taken)return;f.taken=true;if(f.haken){S.hp=Math.max(1,S.hp-RUN.fundstelle.haken_schaden);Bus.emit('player_hurt',{v:RUN.fundstelle.haken_schaden,why:'Fundstelle mit Haken'});}
@@ -206,7 +190,7 @@ function forgePreview(){const[a,b]=S.bench;if(!a||!b)return null;const A=def(a),
  return{n:name,a:A.a,st,same,hp:(A.hp||0)+(B.hp||0),spr:A.spr,cards:[...A.cards,...B.cards].map(bump),bases:[...(A.bases||[a.id]),...(B.bases||[b.id])],base,lvl,rx};}
 function forge(){if(S.forged||S.phase!=='werkstatt')return;const p=forgePreview();if(!p||p.err){Bus.emit('bad',{});return;}
  const id='m'+(++uidc)+'_'+S.depth;const nd={n:p.n,a:p.a,st:p.st,hp:p.hp,spr:p.spr,cards:p.cards,bases:p.bases,base:p.base,lvl:p.lvl};ITEMS[id]=nd;S.custom[id]=nd;
- S.bench=[{uid:++uidc,id},null];S.forged=true;Bus.emit('forged',{name:p.n,why:`Werkstatt: ${p.same?'Stufe':'Doppel-Item'} ${p.n}`});log(`Verschmolzen: ${p.n}`);
+ S.bench=[{uid:++uidc,id},null];S.forged=true;netzTat('schmieden');Bus.emit('forged',{name:p.n,why:`Werkstatt: ${p.same?'Stufe':'Doppel-Item'} ${p.n}`});log(`Verschmolzen: ${p.n}`);
  p.rx.forEach(r=>{if(!S.disc.has(r.n)){S.disc.add(r.n);log(`Reaktion entdeckt: ${r.n}`);}});Bus.emit('changed');}
 function leaveBench(){for(let i=0;i<2;i++){const it=S.bench[i];if(it){const j=S.bag.indexOf(null);if(j<0){Bus.emit('bad',{a:'KEIN PLATZ',b:'Nimm die Items von der Werkbank erst weg.'});return false;}S.bag[j]=it;S.bench[i]=null;}}return true;}
 function leaveNode(){if(!leaveBench())return;finishNode();}
@@ -304,6 +288,6 @@ function preisVon(D){return D.preis||({gewoehnlich:30,selten:55,reliquie:130})[r
 function verkaufen(loc){if(!S.shop)return;const it=getAt(loc);if(!it)return;const v=Math.floor(preisVon(def(it))*((BAL.shop&&BAL.shop.verkauf_anteil)||.4));setAt(loc,null);S.gold+=v;S.stats.gold+=v;
  Bus.emit('gold',{v,why:`${def(it).n} verkauft für ${v} Gold (40 %)`});Bus.emit('toast',{a:'VERKAUFT',b:`${def(it).n} · +${v} Gold`});after();}
 function kaufeHandgriff(i){const o=S.shop&&S.shop.hg&&S.shop.hg[i];if(!o||o.sold)return;if(S.gold<o.price){Bus.emit('bad',{a:'ZU WENIG GOLD',b:`Du brauchst ${o.price}.`});return;}
- S.gold-=o.price;S.stats.goldAus=(S.stats.goldAus||0)+o.price;o.sold=true;S.hgPending=o.id;S.phase='kraemer_hg';Bus.emit('changed');}
+ S.gold-=o.price;S.stats.goldAus=(S.stats.goldAus||0)+o.price;o.sold=true;netzTat('kaufen');S.hgPending=o.id;S.phase='kraemer_hg';Bus.emit('changed');}
 function entferneHandgriff(uid,k){const it=itemByUid(uid);const p=(BAL.shop&&BAL.shop.hg_entfernen)||25;if(!it||!hgVon(it)[k])return;if((def(it).fest_hg||[]).includes(hgVon(it)[k])){Bus.emit('bad',{a:'FEST EINGERITZT',b:''});return;}
  if(S.gold<p){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.gold-=p;S.stats.goldAus=(S.stats.goldAus||0)+p;const id=hgVon(it).splice(k,1)[0];Bus.emit('toast',{a:'ENTFERNT',b:HANDGRIFFE[id].n});after();}
