@@ -93,3 +93,14 @@ sfx.glocke=()=>{const f=mf(harm().root+12);
  nzx({f:2600,type:'highpass',q:.7,v:.14,dur:.02});thump(150,70,.18,.24,0,true);nzx({f:700,fEnd:300,q:1,v:.12,dur:.12,sat:true});
  [[.5,.32,2.6],[1,.22,2.0],[1.2,.13,1.5],[1.5,.08,1.1],[2,.11,1.2],[2.51,.05,.6],[3.01,.035,.4],[4.07,.02,.25]].forEach(([r,v,d],i)=>{
   tn(f*r,d,'sine',v*.8,0,0,{a:.004,pan:i%2?.16:-.16});tn(f*r*1.003,d*.9,'sine',v*.4,0,0,{a:.004,pan:i%2?-.1:.1});});};
+// Welt-Geräusche, die vorher direkt in feedback.js / jumpscare.js standen. Jetzt hier, damit das Aufnahme-Studio
+// (studio.html) sie auflisten und der Mund-Modus (mund.js) sie durch eigene Aufnahmen ersetzen kann. Klang unverändert.
+// Herzschlag (Kniff „takt“, Walkathedrale): doppelter tiefer Schlag
+sfx.herz=()=>{thump(70,34,.35,.5,0,true);thump(64,30,.3,.38,.24,true);};
+// Einsturz hinter dem Nebel (Peilkarte M3): dumpf und tief
+sfx.rumpeln=()=>{thump(54,26,.95,.5,0,true);nzx({f:190,fEnd:70,type:'lowpass',q:.7,v:.26,dur:1.2,a:.08,sat:true});
+ thump(46,24,.75,.34,.42,true);nzx({f:150,fEnd:60,type:'lowpass',q:.7,v:.16,dur:.9,a:.05,delay:.4});nzx({f:2400,type:'highpass',q:.7,v:.03,dur:.3,delay:.5});};
+// Das Wandbild hebt den Nebel: ein langer Luftzug
+sfx.nebel=()=>{nz(600,1.8,.07,.7,{fEnd:2800,a:.55});nz(1400,1.4,.03,1.2,{fEnd:4200,a:.7,delay:.25});tn(mf(harm().root+12),1.8,'sine',.035,0,.1,{a:.7,pan:-.2});tn(mf(harm().root+19),1.8,'sine',.025,0,.3,{a:.7,pan:.2});};
+// Jumpscare-Schrei
+sfx.schreck=()=>{nz(1800,.9,1.2,.4);nz(300,1.1,1,.5);tn(70,1.1,'sawtooth',.5,.5);tn(1250,.7,'square',.18,1.6);tn(1330,.7,'square',.15,1.5);};
