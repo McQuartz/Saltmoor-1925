@@ -128,11 +128,18 @@ const S={scene:'menu',biome:'hafen',hp:40,hpMax:40,foes:[],role:'fischer',stoff:
 let ctx=null,NBUF=null,timer=null,running=false,step=0,nextT=0,lastUpd=0;
 let dropF,drones=[],dissO,flirrO=[],tuned=[],master,duckG,dropG,shaper,driveG,toneF,pkF,hsF,dryG,wetG,hall,comp,L=[],voiceBus,flirrG,dissG,droneG;
 let beds={},farIn,echoIn,echoD,peakA,peakBuf;
+// Hören statt sehen (M6): eigener Bus für die Einsätze (hoerG), Messknoten am Bus (hoerA) und an der Summe vor der Kette (sumA)
+let hoerG,hoerA,sumA,hoerBuf;
+const HOER_DUCK=.75; // übrige Layer (2, 3, Stimmen) treten um 25 % zurück, solange Einsätze laufen
+const H={cur:{angriff:0,schutz:false,zauber:false},next:{angriff:0,schutz:false,zauber:false},duck:1,pegel:-120};
 const listeners=[];
 // Layer-Pegel selbst mitrechnen: Chrome rechnet die Automation stummer Knoten nicht weiter, gain.value bleibt dann stehen
 const LV={0:{v0:1,tgt:1,t0:0,tc:1},1:{v0:0,tgt:0,t0:0,tc:1},2:{v0:0,tgt:0,t0:0,tc:1},3:{v0:0,tgt:0,t0:0,tc:1},4:{v0:0,tgt:0,t0:0,tc:1},v:{v0:0,tgt:0,t0:0,tc:1}};
+Object.values(LV).forEach(e=>e.raw=e.tgt);
 function lvAt(k,t){const e=LV[k];return t<=e.t0?e.v0:e.tgt+(e.v0-e.tgt)*Math.exp(-(t-e.t0)/e.tc);}
-function lv(k,tgt,t,tc){LV[k]={v0:lvAt(k,t),tgt,t0:t,tc};(k==='v'?voiceBus:L[k]).gain.setTargetAtTime(tgt,t,tc);}
+// raw = Wunschpegel des Dirigenten; tgt = tatsächlicher Pegel (bei laufenden Einsätzen sind Layer 2, 3 und Stimmen leicht abgesenkt)
+const duckF=k=>(k===2||k===3||k==='v')?H.duck:1;
+function lv(k,raw,t,tc){const tgt=raw*duckF(k);LV[k]={v0:lvAt(k,t),tgt,raw,t0:t,tc};(k==='v'?voiceBus:L[k]).gain.setTargetAtTime(tgt,t,tc);}
 const mtof=m=>440*Math.pow(2,(m-69)/12);
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const spb=()=>60/S.bpm/4; // Sekunden pro 16tel
@@ -176,6 +183,9 @@ function build(){
  // Pegelmessung am gemeinsamen Ausgang (Musik + SFX, vor dem Limiter)
  peakA=ctx.createAnalyser();peakA.fftSize=2048;peakBuf=new Float32Array(peakA.fftSize);out.connect(peakA);
  for(let i=0;i<5;i++){const g=ctx.createGain();g.gain.value=i===0?1:0;g.connect(dropG);L.push(g);}
+ hoerG=ctx.createGain();hoerG.gain.value=1;hoerG.connect(dropG); // Einsätze der stummen Gegner
+ hoerA=ctx.createAnalyser();hoerA.fftSize=32768;hoerA.smoothingTimeConstant=0;hoerBuf=new Float32Array(32768);hoerG.connect(hoerA);
+ sumA=ctx.createAnalyser();sumA.fftSize=32768;sumA.smoothingTimeConstant=0;dropG.connect(sumA); // Summe aller Layer und Einsätze vor der Kette
  voiceBus=ctx.createGain();voiceBus.gain.value=0;voiceBus.connect(dropG);
  // Echo für den Boten (punktierte Achtel, folgt dem Tempo)
  echoIn=ctx.createGain();echoD=ctx.createDelay(2);echoD.delayTime.value=spb()*3;const eFb=ctx.createGain();eFb.gain.value=.38;
@@ -379,6 +389,36 @@ function bigBell(t){const r=BIOME[S.biome].root,b=ctx.createGain();b.gain.value=
  [[-24,.11,7],[-12,.08,5.5],[-9,.035,4],[-5,.03,3.2],[0,.026,2.6],[7,.01,1.8]].forEach(([iv,v,d])=>tone(b,t,mtof(r+iv),d,{v,a:.003,rot:false}));
  noise(b,t,.09,{f:1600,q:.8,v:.09});}
 
+// ---------- Hören statt sehen (M6) ----------
+// Drei Einsätze, einer je Absicht-Art, alle über hoerG. Töne kommen aus Akkord bzw. Bass des aktuellen Takts, also aus der Tonart des Bioms.
+// Angriff: tiefer gezupfter Puls (Kontrabass, Karplus-Strong ohne Verstimmung) auf dem Bass des Akkords; 1, 2 oder 4 Schläge je Takt (Stufe 1 bis 3).
+function hoerZupf(t,m,v){const k=ksBuf(m),s=ctx.createBufferSource();s.buffer=k.b;s.playbackRate.value=k.rate;
+ const g=ctx.createGain();g.gain.value=v*1.7;s.connect(g).connect(hoerG);s.start(t);s.stop(t+1.2);
+ tone(hoerG,t,mtof(m),.55,{type:'triangle',v:v*.55,a:.006,lp:520,rot:false});   // Körper des Basses
+ tone(hoerG,t,mtof(m+12),.3,{v:v*.2,a:.004,rot:false});                           // Oktave obenauf, damit man ihn auch klein hört
+ noise(hoerG,t,.03,{f:1100,type:'lowpass',q:.7,v:v*.3});}                         // Anzupfen des Fingers
+// Schutz: eine einzelne Glocke auf der Eins (Grundton des Akkords, zwei Oktaven höher; Teiltöne Oktave und Duodezime bleiben in der Tonart)
+function hoerGlocke(t,m,v){const f=mtof(m);tone(hoerG,t,f,2,{v,a:.003,rot:false});tone(hoerG,t,f*2,1.1,{v:v*.35,a:.003,rot:false});tone(hoerG,t,f*3,.5,{v:v*.18,a:.003,rot:false});}
+// Zauber: Harmonium-Ton (Formant »oh«, Terz des Akkords), der über den ganzen Takt langsam aufschwillt
+function hoerHarmonium(t,m,len,v){formant(hoerG,t,mtof(m),len,'oh',{v,voices:2,a:len*.86,r:len*.12,breath:.06});}
+function hoerSchedule(s,t,bar,ch,barLen,root){
+ const a=H.cur.angriff;
+ if(a&&s%4===0){const erlaubt=a===1?s===0:a===2?(s===0||s===8):true;
+  if(erlaubt)hoerZupf(t,root-12+ch.bass,s===0?.34:.28);}
+ if(H.cur.schutz&&s===0)hoerGlocke(t,root+24+ch.c[0],.32);
+ if(H.cur.zauber&&s===0){let m=root+12+ch.c[1];while(m<58)m+=12;hoerHarmonium(t,m,barLen,1.4);} // Terz des Akkords, nie unter A3 (sonst verschwindet der Formant-Ton im Rest)
+}
+// Neue Lage der Einsätze auf einer Taktgrenze übernehmen: Einsätze an, übrige Layer treten zurück (und wieder vor)
+function hoerenUebernehmen(t){
+ const n=H.next,c=H.cur;if(n.angriff===c.angriff&&n.schutz===c.schutz&&n.zauber===c.zauber)return;
+ const vor=[c.angriff?'angriff '+c.angriff:'',c.schutz?'schutz':'',c.zauber?'zauber':''].filter(Boolean).join(', ')||'keine';
+ H.cur={angriff:n.angriff,schutz:n.schutz,zauber:n.zauber};
+ const jetzt=[n.angriff?'angriff Stufe '+n.angriff:'',n.schutz?'schutz':'',n.zauber?'zauber':''].filter(Boolean).join(', ')||'keine';
+ const an=!!(n.angriff||n.schutz||n.zauber);H.duck=an?HOER_DUCK:1;
+ if(ctx)[2,3,'v'].forEach(k=>lv(k,LV[k].raw,t,.4));
+ note('hoeren',an?`Einsätze: ${jetzt} (vorher ${vor}), Layer 2, 3 und Stimmen um ${Math.round((1-HOER_DUCK)*100)} % zurück`:`Einsätze vorbei (vorher ${vor}), Layer wieder normal`);
+}
+
 // Ortsklang-Ereignisse (Layer 0): selten, zufällig (reine Kosmetik), tonale Klänge aus dem aktuellen Akkord
 function ambEvent(t,s,bar,ch){
  const b=BIOME[S.biome],r=b.root,k=lvAt(0,t);if(k<.05)return;const R=Math.random,dry=L[0];
@@ -446,6 +486,8 @@ function update(){
  if(!S.fin){dissG.gain.setTargetAtTime(S.gefahr*.045,now,.5);flirrG.gain.setTargetAtTime(S.gefahr>.55?(S.gefahr-.55)*.03:0,now,.5);}
  // Spitzenpegel am Ausgang
  peakA.getFloatTimeDomainData(peakBuf);let m=0;for(let i=0;i<peakBuf.length;i++){const a=Math.abs(peakBuf[i]);if(a>m)m=a;}if(m>S.peak)S.peak=m;
+ // Pegel des Einsatz-Busses: RMS der letzten 2048 Samples (der Analyser liefert die neuesten fftSize Samples)
+ if(hoerA&&(H.cur.angriff||H.cur.schutz||H.cur.zauber||H.pegel>-119)){hoerA.getFloatTimeDomainData(hoerBuf);let q=0;for(let i=hoerBuf.length-2048;i<hoerBuf.length;i++)q+=hoerBuf[i]*hoerBuf[i];H.pegel=q>1e-12?10*Math.log10(q/2048):-120;}
 }
 function bedLevels(t){const b=BIOME[S.biome],menu=S.scene==='menu',nl=S.fin==='niederlage';
  Object.entries(beds).forEach(([k,g])=>{let v=nl?(k==='meer'?.15:0):(b.amb[k]||0)*(menu?.75:1);g.gain.setTargetAtTime(v,t,1.2);});}
@@ -463,6 +505,7 @@ function barStart(t,bar){
  if(S.dark!==was&&!S.solo)note(S.dark?'kippt':'löst sich',S.fin?'Ende: '+S.fin:(S.dark?`Gefahr ${z(S.gefahr)} > 0,50`:`Gefahr ${z(S.gefahr)} < 0,42`));
  if(S.nextBiome&&S.nextBiome!==S.biome){const alt=S.biome;S.biome=S.nextBiome;retune(t);note('biom',`${BIOME[alt].n} → ${BIOME[S.biome].n}, Überblendung auf der Taktgrenze`);}
  S.nextBiome=null;
+ hoerenUebernehmen(t);
  bedLevels(t);
  S.spike=Math.max(0,S.spike-.25);
  if(S.fin){S.chord=S.fin==='umkehren'?1:0;S.slot=null;S.duel=false;return;} // Schlussakkord bleibt stehen (auch für tonale SFX)
@@ -535,6 +578,8 @@ function schedule(st,t){
   noise(duckG,t,beat,{f:300,fEnd:4000,q:1.8,v:.09,a:beat*.95});note('atemholen','Hochreaktion: ein Schlag halb leise und dumpf');}
  if(st===S.hitStep){dropG.gain.cancelScheduledValues(t);dropG.gain.setValueAtTime(.45,t);dropG.gain.linearRampToValueAtTime(1,t+.05);dropF.frequency.cancelScheduledValues(t);dropF.frequency.setValueAtTime(420,t);dropF.frequency.exponentialRampToValueAtTime(18000,t+.2);
   S.spike=1;S.wucht=1;for(let i=1;i<5;i++){const vor=S.gate[i];S.gate[i]=false;setGate(i,true,t,'Hochreaktion',vor);}S.drive=true;tutti(t,ch.c);}
+ // Hören statt sehen: Einsätze der stummen Gegner
+ if(H.cur.angriff||H.cur.schutz||H.cur.zauber)hoerSchedule(s,t,bar,ch,barLen,root);
  // Layer 0: Ortsklang-Ereignisse
  if(!S.solo||S.solo.layer===0)ambEvent(t,s,bar,ch);
  // Layer 1: Herzschlag (lub-dub), bei Wucht doppelt; Bass auf der Eins
@@ -632,6 +677,14 @@ return {
   S.hp=S.hpMax;S.telegraph=false;S.momentum=0;S.spike=0;S.pendingAns=[];S.abgesang=[];
   const fk=foeId(o.foe);if(o.layer==='voice'&&fk){S.scene=FOES[fk].rang==='normal'?'kampf':(FOES[fk].rang==='boss'?'boss':'waechter');S.foes=[{type:fk}];}else{S.scene='karte';S.foes=[];}},
  biome(k){if(BIOME[k]&&k!==S.biome)S.nextBiome=k;else if(k===S.biome)S.nextBiome=null;}, // wechselt auf der nächsten Taktgrenze
+ // Hören statt sehen (M6): Liste der hörbaren Absichten stummer Gegner [{art:'angriff'|'schutz'|'zauber', stufe:1..3, uid}].
+ // Die Einsätze setzen auf der nächsten Taktgrenze ein, laufen jeden Takt weiter und enden auf einer Taktgrenze, wenn die Liste sie nicht mehr enthält.
+ hoeren(liste){const n={angriff:0,schutz:false,zauber:false};
+  (Array.isArray(liste)?liste:[]).forEach(a=>{if(!a)return;if(a.art==='angriff')n.angriff=Math.max(n.angriff,clamp(Math.round(+a.stufe||1),1,3));else if(a.art==='schutz')n.schutz=true;else if(a.art==='zauber')n.zauber=true;});
+  const p=H.next;if(n.angriff===p.angriff&&n.schutz===p.schutz&&n.zauber===p.zauber)return;
+  H.next=n;if(!ctx||!running)hoerenUebernehmen(ctx?ctx.currentTime:0);}, // ohne laufende Musik sofort, sonst auf der nächsten Taktgrenze
+ // Messknoten für Labor und Prüfung: Analyser am Einsatz-Bus und an der Summe vor der Kette
+ hoerenMessung(){return ctx?{einsatz:hoerA,summe:sumA,gain:hoerG}:null;},
  // Für tonale SFX: Grundton und aktueller Akkord, damit Effekte in der Tonart klingen
  harmony(){const c=chordNow();return {root:BIOME[S.biome].root,chord:c.c,scale:c.scale};},
  stoff(k){if(!STOFFE[k])return;if(k!==S.stoff)note('stoff',STOFFE[k].n);S.stoff=k;if(!ctx)return;const st=STOFFE[k],n=ctx.currentTime;
@@ -646,6 +699,7 @@ return {
   chord:c.name,biome:S.biome,dark:S.dark,slot:S.slot,duel:S.duel,foes:S.foes.map(f=>f.type),hp:S.hp,hpMax:S.hpMax,chain:S.chain,telegraph:S.telegraph,momentum:S.momentum,
   bar:Math.floor(cur/16),beat:Math.floor((cur%16)/4)+1,akt:S.akt,role:S.role,stoff:S.stoff,abgesang:S.lastAbgesang,ende:S.fin,
   layerLevels:[0,1,2,3,4].map(i=>+clamp(lvAt(i,ctx?ctx.currentTime:0)).toFixed(3)),voiceLevel:+clamp(lvAt('v',ctx?ctx.currentTime:0)).toFixed(3),
+  hoeren:{angriff:H.cur.angriff,schutz:H.cur.schutz,zauber:H.cur.zauber,pegel:+H.pegel.toFixed(1),gain:hoerG?+hoerG.gain.value.toFixed(2):1,duck:H.duck},
   peak:S.peak>0?+(20*Math.log10(S.peak)).toFixed(2):-120,log:S.log.slice()};}
 };
 })();

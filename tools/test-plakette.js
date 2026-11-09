@@ -70,7 +70,7 @@ const STELLE = n => `S.enemies=biom().gegner.slice(0,${n}).map(id=>mkEnemy(id));
       const nach = await p.evaluate(() => new Promise(res => { let f = false; Bus.on('gegnerzug_ende', () => { if (f) return; f = true; render(); res({ abs: document.querySelectorAll('#gegner .abs').length, leer: [...document.querySelectorAll('#gegner .plakette')].length, bar: document.querySelectorAll('#gegner .pl-bar').length }); }); S.hand = []; endTurn(); setTimeout(() => res({ abs: -1 }), 9000); }));
       ok(nach.abs === 0 && nach.bar === nach.leer && nach.leer > 0, `nach dem Gegnerzug (gegnerzug_ende): keine Absicht, nur Leben (${JSON.stringify(nach)})`);
       await p.close();
-      const q = await seite(1440, 900, 'kampf', `S.enemies=[mkEnemy(biom().gegner[0]),mkEnemy(biom().gegner[1])];aufstellen(S.enemies);S.enemies[1].stumm=true;render();`);
+      const q = await seite(1440, 900, 'kampf', `S.enemies=[mkEnemy(biom().gegner[0]),mkEnemy(biom().gegner[1])];aufstellen(S.enemies);S.enemies[1].stumm=true;/* seit M6 zählt stumm nur in Akt IV und V (hoeren.js); hier im frühen Akt erzwungen */const alt=Hoeren.istStumm;Hoeren.istStumm=e=>e===S.enemies[1]||alt.call(Hoeren,e);render();`);
       const st = await q.evaluate(() => [...document.querySelectorAll('#gegner .feind')].map(f => ({ abs: f.querySelectorAll('.abs').length, bar: f.querySelectorAll('.pl-bar').length })));
       ok(st[0].abs === 1 && st[1].abs === 0 && st[1].bar === 1, `stummer Gegner: Plakette ohne Absicht-Element, mit Leben (${JSON.stringify(st)})`);
       const hoehe = await q.evaluate(() => [...document.querySelectorAll('#gegner .pl-box')].map(x => Math.round(x.getBoundingClientRect().height)));

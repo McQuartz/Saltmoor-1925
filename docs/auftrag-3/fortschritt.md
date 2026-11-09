@@ -12,14 +12,14 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M3 Peilkarte und Fahrt nach vorne | fertig | Netz, Karte, Fahrt, 75 Weg-Richtungen |
 | M4 Rucksack am Körper | fertig | 9 Silhouetten, Ansicht am Körper, Branch `claude/project-thread-hifkqz` (Philip) |
 | M5 Die Tiefe biegt die Regeln | fertig | 14 Biegungen, keine mehr als 5 Pp unter „aus“ |
-| M6 Hören statt sehen | nicht begonnen | Stopp nach M3 (Mo) |
-| M7 Sehen und gesehen werden | nicht begonnen | Stopp nach M3 (Mo) |
-| M8 Die Farbe | nicht begonnen | Stopp nach M3 (Mo) |
-| M9 Begegnungen | nicht begonnen | Stopp nach M3 (Mo) |
-| M10 Metaebene | nicht begonnen | Stopp nach M3 (Mo) |
-| M11 Würze | nicht begonnen | Stopp nach M3 (Mo) |
-| M12 Balance und Abschluss | nicht begonnen | Stopp nach M3 (Mo) |
-| Zugabe | nicht begonnen | Stopp nach M3 (Mo) |
+| M6 Hören statt sehen | fertig | sechs stumme Gegner, drei Einsätze, Klänge als Zeichen |
+| M7 Sehen und gesehen werden | nicht begonnen | Stopp nach M6 (Philip) |
+| M8 Die Farbe | nicht begonnen | Stopp nach M6 (Philip) |
+| M9 Begegnungen | nicht begonnen | Stopp nach M6 (Philip) |
+| M10 Metaebene | nicht begonnen | Stopp nach M6 (Philip) |
+| M11 Würze | nicht begonnen | Stopp nach M6 (Philip) |
+| M12 Balance und Abschluss | nicht begonnen | Stopp nach M6 (Philip) |
+| Zugabe | nicht begonnen | Stopp nach M6 (Philip) |
 
 ## Basis (M0, unverändertes main)
 
@@ -232,6 +232,32 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
   - Logik, Anzeige, Bots, Über-Eck-Test und Vergleichsläufe selbst
 - Offen: Die Bots spielen Ebbe und Flut, Ringofen und Rückwärts gewachsen nur über die Vorschau, ohne zu planen, welche Karte zuletzt kommt. Die Peilkarte zeigt Ereignisse weiter mit Mos altem Zeichen (Fragezeichen-Form aus M3), das gehört nicht zu M5.
 
+### M6 Hören statt sehen
+
+**Plan.** Kern selbst: `js/core/hoeren.js` mit `Hoeren.istStumm(e)`, `hoerbareAbsicht(e)` (die eine Schnittstelle für Musik, Einstellung und Bots), `incomingGehoert()` für die Bots; `stumm: true` an sechs Gegnern; `absichtSichtbar` blendet stumme aus (damit fallen Plakette, Vorschau im Balken und Tooltip-Hinweise weg); höchstens ein stummer je Kampf, auch beim Rufen. Brücke `Bus → Music.hoeren(liste)` in `feedback.js`. Sonnet: die drei Einsätze in `music.js`, Abschnitt im Musik-Labor, Messung je Biom. Sonnet: Einstellung „Klänge als Zeichen“. Die Auswahl der stummen Gegner habe ich selbst mit einem Skript über die Muster gemacht statt mit Haiku (eine Abfrage, zwölf Zeilen Ausgabe).
+
+**Schritte und Entscheidungen.**
+- **Stumm:** Rufer (Schwarzes Eis, Stärke/Angriff), Echo (Walkathedrale, Laden/Angriff), Splitterchor (Glasmeer), Astronom (Mond), Rauschen (Funkstation, heilt) und im Vorraum von Akt V die Tarierte (Waage, heilt). Alle haben mindestens zwei Absicht-Arten, keiner hat schon „verborgen“. Der Rufer wird auch in frühen Akten gerufen. Darum gilt stumm nur, wenn das Biom in Akt IV oder V liegt, und nur für normale Gegner.
+- **Arten:** Angriff (Stufe nach Gesamtschaden: bis 6, bis 14, darüber → 1, 2, 4 Schläge je Takt), Schutz (Block, und bei Heilern jeder Nicht-Angriff), Zauber (Stärke, Laden, Ruf).
+- **Bots:** Sie hören wie ein Spieler. Sichtbare Absichten zählen genau, stumme werden je Stufe geschätzt (5, 11, 18). Mit Schalter aus spielt sich alles wie vorher (`test-kern.js`, 4 Seeds gleich; `balance.js 50` mit Biegung und Hören aus = Basis 48 %).
+- **Musik (Sonnet, von mir nachgepegelt):** Angriff als gezupfter Kontrabass auf dem Akkordbass, Schutz als Glocke auf der Eins, Zauber als Formant-„oh“ auf der Terz, schwillt über den Takt. Die Einsätze setzen auf der nächsten Taktgrenze ein. Layer 2, 3 und die Stimmen gehen dabei um 25 % zurück. Die erste Messung hatte die Glocke nur 0,2 dB über dem Rest (Glasmeer, Walkathedrale) und den Zauber in der Waage bei 0,1 dB. Darum habe ich die Glocke von 0,2 auf 0,32 und den Zauber von 1 auf 1,4 angehoben und neu gemessen.
+- **Test angepasst:** `test-plakette.js` hat `stumm` in Akt I gesetzt. Seit M6 zählt stumm nur in Akt IV und V, darum erzwingt der Test es dort jetzt über `Hoeren.istStumm`.
+
+#### Abnahme M6
+- Abnahmekriterien:
+  - `test-kern.js` (Teil Hören) grün: ✓ 17 Prüfungen (sechs stumme, je Akt-IV-Biom einer, einer in Akt V, nie Wächter, Plakette und Vorschau ohne Absicht, Arten und Stufen, höchstens einer je Kampf, nicht in Akt I, Schalter aus, Speicherstand, Bots mit Schalter aus wie ohne)
+  - `musik-pruefen.js` grün: ✓ größte Spitze am Ausgang −0,52 dBFS, Tempo 80–88, neuer Härtetest „Hören“ (alle drei Einsätze mit Boss, Hochreaktion, Feuer, wenig Leben)
+  - Jeder Einsatz in jeder Akt-IV/V-Fassung aufgenommen und gemessen ([hoeren-messung.txt](bilder/M6/hoeren-messung.txt), `tools/hoeren-aufnahme.js`): Pegel, Spitze, Spektrum (Zentroid, stärkste Frequenz), Grundtöne alle auf der Biom-Leiter (höchstens 13 Cent daneben). Ein Satz je Biom, ob man es heraushört: nach dem Nachpegeln liegt in allen acht Biomen jeder Einsatz kurzzeitig 2,5 bis 5,6 dB über dem Rest. Der Angriff ist am Anschlag zu hören, nicht im Tiefbass. Am knappsten ist der Zauber in der Waage (+3,2 dB). Selbst gehört habe ich nichts (headless kein Ton), das Urteil steht allein auf den Messwerten.
+  - Foto der stummen Plakette ohne und mit „Klänge als Zeichen“: ✓ [plakette-stumm.png](bilder/M6/plakette-stumm.png), [plakette-klangzeichen.png](bilder/M6/plakette-klangzeichen.png) (selbst angesehen: nur Name und Leben, mit Einstellung ein rötlicher Notenkreis links)
+  - Bot-Vergleich: ✓ `balance.js 100` Hören an 42 %, aus 42 % ([an](bilder/M6/balance-100-hoeren-an.txt), [aus](bilder/M6/balance-100-hoeren-aus.txt)). In 30 Runs gab es 15 Kämpfe mit einem stummen Gegner. Die Schätzung wich in 79 von 5100 Bot-Entscheidungen ab, ohne dass sich ein Ergebnis änderte. Hören kostet den Bot also fast nichts.
+- Tests ([tests-nachher.txt](bilder/M6/tests-nachher.txt)): alle grün, dazu `test-klangzeichen.js` (Browser, 11 Prüfungen)
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 273, alle als Entwurf markiert.`
+- Regelprüfung: Tabelle unten, bestanden.
+- Agenten:
+  - Sonnet: Musik-Einsätze, Musik-Labor, `hoeren-aufnahme.js`, Härtetest in `musik-pruefen.js`. Nachgepegelt habe ich selbst.
+  - Sonnet: „Klänge als Zeichen“ (`klangzeichen.js`, Einstellung, Plakette, `test-klangzeichen.js`, Fotos)
+- Offen: Der Blick (M7) soll stumme Absichten sichtbar machen; der Platz dafür ist in `Hoeren.istStumm` vorbereitet (`Blick.siehtAbsicht`).
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -285,6 +311,20 @@ Gemeinsam für alle 14: **Das Deck bleibt deins** Ja (keine Biegung mischt eine 
 
 Lovecraft-Prinzip je Biegung: 1 (das Grauen ändert Regeln, nicht Werte) bei allen; dazu Wissen ist irreversibel (Die Rückseite, Spiegelbild), Substanz verfällt oder wird ersetzt (Wellen von oben, Rückwärts gewachsen), das Ding ist gleichgültig (Außerhalb der Zeit).
 
+### M6 Hören statt sehen
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | Die Absicht ist nicht weg, sie kommt über ein anderes Sinnesorgan; man spielt auf den Takt hin |
+| Das Deck bleibt deins | Ja | Nichts am Deck |
+| Selten ist stark | Ja | Sechs Gegnertypen, nur Akt IV und V, höchstens einer je Kampf |
+| Kein Fragezeichen | Ja | Die Plakette zeigt nur Leben, kein leerer Kasten, kein „?“, kein Tooltip |
+| Einwilligung vor Kontrollverlust | Ja | Keine Kontrolle genommen; „Klänge als Zeichen“ für alle, die nicht hören können |
+| Unheimlich, nicht anstrengend | Ja | Drei Klangfarben, einmal je Takt; der Bot zeigt, dass grobes Hören reicht |
+| Nie Herkunft als Bedrohung | Nein | Rein mechanisch |
+
+Lovecraft-Prinzip: Andeuten statt zeigen (Erich Zann).
+
 ## Noten
 
 *Je neues Bild: Name, Note, Bildpfad, Kurzbegründung.*
@@ -307,12 +347,14 @@ Lovecraft-Prinzip je Biegung: 1 (das Grauen ändert Regeln, nicht Werte) bei all
 
 *Je neuer Text: Datei, ID, erste Worte. Für Philip und Mo.*
 
+- **M6, Oberfläche:** Einstellung „Klänge als Zeichen“, Tooltip „Klang“, Musik-Labor „HÖREN STATT SEHEN“ mit Knöpfen.
 - **M5, `data/biegungen.json`:** 14 Namen und Regeltexte (z. B. „Über Eck: Die erste und die letzte Karte …“), drei Reaktionen (Sole, Pökeln, Gezeitenblut) und Funkspruch. Oberfläche: „Oben: …“, „Handkarte wählen“, „danach …“, „Ebbe“/„Flut“, „Dieser Zug …/Nächster Zug …“ in Tooltips.
 
 - **M4, Oberfläche (`js/ui/rucksack.js`, `kampf.js`, `bildschirme.js`):** „AM KÖRPER (R)“, „n im Rucksack“, „Klick ein Item, dann den Platz, an den es soll. Rechts siehst du, was das mit deinem Deck macht.“, „Trag drei passende Teile, um ein Set zu bilden.“, „· Ziehen oder anklicken zum Tauschen.“, Überschriften RUCKSACK, WERKBANK, DECK, Knöpfe „WEITER ›“, „ZURÜCK“, „Verkaufen“. `jobs.json → koerper` sind nur Zahlen.
 
 ## Entscheidungen unterwegs
 
+- **M6, Stopp:** Philip hat am 2026-11-09 gesagt, nach Abnahme und Push von M6 nicht weiterzumachen. M7 bis M12 und die Zugabe sind nicht begonnen.
 - **M4, Übernahme:** Philip hat am 2026-11-09 entschieden, dass ab M4 weitergearbeitet wird. M4 und folgende liegen auf `claude/project-thread-hifkqz` (von dieser Sitzung vorgegeben), aufgebaut auf Mos Branch `claude/project-thread-flvf7e`, als eigener Draft-PR dagegen.
 - **M4, Rucksack:** Tausch gilt sofort statt Übernehmen/Verwerfen; Deck-Diff gegen den Stand beim Öffnen. Automatisch öffnen nur nach einem Fund, sonst Knopf und Taste R. Im Kampf nur lesend.
 

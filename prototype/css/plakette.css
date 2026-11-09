@@ -40,3 +40,11 @@
 .feind.ziel .spitze{border-left-color:var(--messing2)}.feind.ziel .spitze::after{border-top-color:var(--messing2)}
 .feind .treffer{width:100%}
 .feind .abs .geschw,.feind .abs .laedt{display:inline-flex;align-items:center;gap:calc(var(--u)*1.5)}
+/* M6: „Klänge als Zeichen“ — Notenzeichen neben der Plakette stummer Gegner, Dauer je Puls in --kt (aus dem Takt der Musik) */
+.feind .klang{position:absolute;right:calc(100% + var(--u)*2);top:calc(var(--u)*1);width:calc(var(--u)*11);height:calc(var(--u)*11);display:flex;align-items:center;justify-content:center;
+ background:rgba(0,0,0,.72);border:1px solid #000;box-shadow:0 0 0 1px var(--kf);border-radius:50%;pointer-events:auto;transform-origin:center}
+.feind .klang .ico{display:block;filter:drop-shadow(0 0 calc(var(--u)*1.5) var(--kf))}
+.feind .klang.angriff,.feind .klang.schutz{animation:klangPuls var(--kt) ease-out infinite}
+.feind .klang.zauber{animation:klangSchwell var(--kt) ease-in-out infinite}
+@keyframes klangPuls{0%{transform:scale(1.35);opacity:1}60%,100%{transform:scale(.9);opacity:.6}}
+@keyframes klangSchwell{0%,100%{transform:scale(.7);opacity:.35}70%{transform:scale(1.25);opacity:1}}

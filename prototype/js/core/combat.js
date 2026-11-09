@@ -12,7 +12,7 @@ function mkEnemy(id,i){const f0=FOES[id];if(!f0)throw new Error('Unbekannter Geg
  const tief=(f.rang||'normal')==='normal'&&!f.ohne_tiefe;const sc=(tief?1+BAL.enemy_scaling.hp_per_depth*(d-1):1)*(1+ST2.hp_je_stufe*st),as=(tief?Math.floor((d-1)/BAL.enemy_scaling.atk_every_n_depths):0)+(st>=2?Math.floor(st/ST2.atk_alle_n_stufen):0);const hp=Math.round(f.hp*sc*(tief?(BAL.enemy_scaling.hp_faktor||1):(BAL.enemy_scaling.waechter_faktor||1)));
  const r=rs('kampf');
  return{uid:++uidc,id,n:f.n,spr:f.spr||f.sprite||id,variant:f.variant,sprite:f.rang==='boss'?(f.sprite||null):f.varianten?r.pick(f.varianten):(f.sprite||null),rang:f.rang||'normal',weak:f.weak,hp,max:hp,block:0,str:0,burn:0,poison:0,weak2:0,
-  pi:f.rang==='boss'||f.rang==='waechter'?0:Math.floor(r.next()*f.pat.length),as,pat:f.pat.map(p=>({...p,v:p.t==='atk'?Math.max(1,Math.round(p.v*(BAL.enemy_scaling.atk_faktor||1)))+as:p.v})),besonders:f.besonders||null,kniff:f.kniff||null,kniffe:f.kniffe||null,pendel:!!f.pendel,vuln:0,phase:0,turns:0,...kniffMuster(f,as)};}
+  pi:f.rang==='boss'||f.rang==='waechter'?0:Math.floor(r.next()*f.pat.length),as,pat:f.pat.map(p=>({...p,v:p.t==='atk'?Math.max(1,Math.round(p.v*(BAL.enemy_scaling.atk_faktor||1)))+as:p.v})),besonders:f.besonders||null,kniff:f.kniff||null,kniffe:f.kniffe||null,pendel:!!f.pendel,vuln:0,phase:0,turns:0,stumm:!!f.stumm,...kniffMuster(f,as)};}
 // „Der, der vor dir kam“ (Ufer unten): Figur und Items deines letzten verlorenen Runs (Meta), sonst eine Figur per Seed.
 // Sein Muster sind seine besten Karten, verstärkt (f.atk_faktor); die Beute ist eines seiner Items.
 function vorgaengerDef(f){const r=rs('kampf');let v=typeof Meta!=='undefined'&&!S.dev?Meta.get().vorgaenger:null;
@@ -40,7 +40,7 @@ function aufstellen(list){const r=rs('aufstellung');const n=list.length;
  const plan=big?[1,2,3,4]:n===1?[0]:n===2?[1,2]:[0,1,2,3,4];rest.forEach((e,i)=>{e.platzWunsch=plan[i]??null;e.platz=null;});if(big)big.platz=null;}
 
 function startFight(ids,art='kampf'){
- S.enemies=ids.map((id,i)=>mkEnemy(id,i));aufstellen(S.enemies);
+ S.enemies=ids.map((id,i)=>mkEnemy(id,i));aufstellen(S.enemies);if(typeof Hoeren!=='undefined')Hoeren.begrenzen(S.enemies); // M6: höchstens ein stummer Gegner
  S.kampfArt=art;S.target=0;S.phase='fight';S.chainLog=[];S.pstr=passive('start_staerke').reduce((s,p)=>s+(p.v||1),0);S.vorrat=0;S.blockVorher=0;S.frost=null;S.turnNo=0;S.draw=buildDeck();S.hand=[];S.discard=[];S.exhaust=[];S.ward=0;S.compassUsed=false;S.kampfLog=[];S.faehrgeld=false;S.ballastWeg=0;S.biegFolge=null;S.zuletztGespielt=null;S.vorzugLetzt=null;S.flutHand=0;S.zugSt=[];
  const pb=passive('start_block').reduce((s,p)=>s+p.v,0);
  log(`Tiefe ${S.depth}: ${S.enemies.map(e=>e.n).join(', ')}`);
@@ -88,7 +88,7 @@ function nachTod(e,brand){const k=e.kniff;
  if(brand>0&&passive('brand_springt').length){alive().forEach(o=>{o.burn+=brand;Bus.emit('enemy_status',{e:o,status:'burn',why:`Brand springt über: ${e.n} stirbt mit Brand ${brand}`});});}
  if(!k||k.art!=='nachlass')return;
  if(k.was==='explodiert'){const v=k.v||5;const ab=Math.min(S.block,v);S.block-=ab;S.hp=Math.max(1,S.hp-(v-ab));Bus.emit('player_hurt',{v:v-ab,e,why:`${e.n} zerplatzt (Nachlass): ${v} Schaden, Block fängt ${ab}`});}
- if(k.was==='teilt'&&FOES[k.gegner||e.id]){for(let n=0;n<2&&S.enemies.filter(x=>x.hp>0).length<4;n++){const a=mkEnemy(k.gegner||e.id);a.hp=a.max=Math.max(4,Math.round(a.max/2));a.kniff=null;a.x=Math.min(.9,Math.max(.1,e.x+(n?.12:-.12)));a.reihe=e.reihe;S.enemies.push(a);Bus.emit('enemy_spawn',{e:a,why:`${e.n} teilt sich (Nachlass)`});}}
+ if(k.was==='teilt'&&FOES[k.gegner||e.id]){for(let n=0;n<2&&S.enemies.filter(x=>x.hp>0).length<4;n++){const a=mkEnemy(k.gegner||e.id);a.hp=a.max=Math.max(4,Math.round(a.max/2));a.kniff=null;a.x=Math.min(.9,Math.max(.1,e.x+(n?.12:-.12)));a.reihe=e.reihe;if(typeof Hoeren!=='undefined')Hoeren.begrenzen([a]);S.enemies.push(a);Bus.emit('enemy_spawn',{e:a,why:`${e.n} teilt sich (Nachlass)`});}}
  if(k.was==='item'&&FOES[e.id].beute){S.sicheresBeute=FOES[e.id].beute;Bus.emit('toast',{a:'NACHLASS',b:`${e.n} hinterlässt etwas`});}}
 // Boss-Phasen (foes.json → besonders.art = phasen)
 function checkPhase(e){const b=e.besonders;if(!b||b.art!=='phasen')return;const q=e.hp/e.max;const want=b.bei.filter(x=>q<=x).length;if(want>e.phase){e.phase=want;const m=b.muster&&b.muster[want-1];if(m){e.pat=m.map(p=>({...p,v:p.t==='atk'?p.v+e.as:p.v}));e.pi=0;}
@@ -242,7 +242,7 @@ function kniffEiner(en,k){const why=k.why?` (${k.why})`:'';
  if(k.art==='loeschen'){alive().forEach(o=>{if(o.burn){o.burn=0;Bus.emit('enemy_status',{e:o,status:'geloescht',why:`${en.n} löscht den Brand${why}`});}});}
  if(k.art==='abschrift'){for(let n=0;n<(k.n||1);n++)S.discard.push(stoerKarte(en,k));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n||1}× „${k.karte||(en.kniff&&en.kniff.karte)||"Abschrift"}“ in deinen Ablagestapel`});}
  const rufId=k.art==='ruf'?[].concat(k.gegner)[Math.floor(en.turns/(k.alle||3))%[].concat(k.gegner).length]:null;
- if(k.art==='ruf'&&FOES[rufId]&&en.turns%(k.alle||3)===2&&alive().length<4){const a=mkEnemy(rufId);a.gerufen=true;if(a.kniff&&a.kniff.art==='ruf')a.kniff=null;a.x=rs('aufstellung').pick([.16,.84,.3,.7]);a.reihe=rs('aufstellung').pick([0,1]);S.enemies.push(a);Bus.emit('enemy_spawn',{e:a,why:`${en.n} ruft ${a.n}`});}
+ if(k.art==='ruf'&&FOES[rufId]&&en.turns%(k.alle||3)===2&&alive().length<4){const a=mkEnemy(rufId);a.gerufen=true;if(a.kniff&&a.kniff.art==='ruf')a.kniff=null;a.x=rs('aufstellung').pick([.16,.84,.3,.7]);a.reihe=rs('aufstellung').pick([0,1]);if(typeof Hoeren!=='undefined')Hoeren.begrenzen([a]);S.enemies.push(a);Bus.emit('enemy_spawn',{e:a,why:`${en.n} ruft ${a.n}`});}
  if(k.art==='kopie'){const c=S.vorherKarte;if(c&&!c.unspielbar){if(c.atk){gegnerTrifft(en,(c.atk+en.str)*(c.h||1),`${en.n} schreibt „${c.n}“ ab und spielt sie gegen dich`);}else if(c.blk){en.block+=c.blk;Bus.emit('enemy_block',{e:en,why:`${en.n} schreibt „${c.n}“ ab: +${c.blk} Block`});}
    Bus.emit('toast',{a:'ABGESCHRIEBEN',b:c.n});}
    if(k.n){for(let n=0;n<k.n;n++)S.discard.push(stoerKarte(en,k));Bus.emit('kniff',{e:en,why:`${en.n} mischt ${k.n}× „${k.karte||(en.kniff&&en.kniff.karte)||"Abschrift"}“ in deinen Ablagestapel`});}}
@@ -283,7 +283,8 @@ function gegnerTrifft(en,v,why){let d=Math.max(0,Math.round(v));if(en.weak2)d=Ma
 function kniffNachAngriff(en,tot){if(tot>0)S.stats.todesursache=en.n;}
 // was der Spieler sieht: verborgene Angriffe zählen nicht mit
 // Fix 3 (Auftrag 3): wer in diesem Gegnerzug schon gehandelt hat, zeigt keine Absicht mehr, bis dein Zug beginnt
-function absichtSichtbar(e){return !!e&&e.hp>0&&!e.gehandelt&&!S.nachGegnerzug;}
+// M6: stumme Gegner zeigen keine Absicht (man hört sie, hoeren.js)
+function absichtSichtbar(e){return !!e&&e.hp>0&&!e.gehandelt&&!S.nachGegnerzug&&!(typeof Hoeren!=='undefined'&&Hoeren.istStumm(e));}
 function incomingSichtbar(){const v=alive().filter(e=>e.kniff&&e.kniff.art==='verborgen');if(!v.length)return incoming(true);const keep=v.map(e=>e.pat);v.forEach(e=>{e.pat=e.pat.map(p=>p.t==='atk'?{...p,v:-e.str,h:1}:p);});const r=incoming(true);v.forEach((e,i)=>e.pat=keep[i]);return Math.max(0,r);}
 function incoming(sicht){let tot=0;for(const en of alive()){if(sicht&&!absichtSichtbar(en))continue;if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
 
@@ -326,6 +327,6 @@ function specials(){for(const en of alive()){
  // Pendel (Regulator): schwingt jeden Zug auf die andere Seite und zwischen zwei Tiefenreihen
  if(en.pendel){const l=en.turns%2===1;en.x=l?.3:.7;en.reihe=l?1:2;Bus.emit('kniff',{e:en,why:`${en.n} schwingt nach ${l?'links hinten':'rechts vorn'}`});}
  const b=en.besonders;if(!b)continue;
- if(b.art==='ruft'&&FOES[b.gegner]&&en.turns%(b.alle||3)===0&&alive().length<4){const add=mkEnemy(b.gegner);add.gerufen=true;if(add.kniff&&add.kniff.art==='ruf')add.kniff=null;add.x=rs('aufstellung').pick([.16,.84,.3,.7]);add.reihe=rs('aufstellung').pick([0,1]);S.enemies.push(add);Bus.emit('enemy_spawn',{e:add,why:`${en.n} ruft ${add.n} (alle ${b.alle||3} Züge)`});}
+ if(b.art==='ruft'&&FOES[b.gegner]&&en.turns%(b.alle||3)===0&&alive().length<4){const add=mkEnemy(b.gegner);add.gerufen=true;if(add.kniff&&add.kniff.art==='ruf')add.kniff=null;add.x=rs('aufstellung').pick([.16,.84,.3,.7]);add.reihe=rs('aufstellung').pick([0,1]);if(typeof Hoeren!=='undefined')Hoeren.begrenzen([add]);S.enemies.push(add);Bus.emit('enemy_spawn',{e:add,why:`${en.n} ruft ${add.n} (alle ${b.alle||3} Züge)`});}
  if(b.art==='schwach_wechsel'&&b.stoffe){en.weak=b.stoffe[en.turns%b.stoffe.length];Bus.emit('enemy_status',{e:en,status:'schwach',why:`${en.n} wechselt die Schwachstelle: jetzt ${ST[en.weak].n}`});}
- if(b.art==='phasen'&&b.ruft){const R2=typeof b.ruft==='string'?{gegner:b.ruft,alle:3,anzahl:1}:b.ruft;if(FOES[R2.gegner]&&en.phase>=1&&en.turns%(R2.alle||3)===0){for(let k=0;k<(R2.anzahl||1)&&alive().length<4;k++){const add=mkEnemy(R2.gegner);add.gerufen=true;if(add.kniff&&add.kniff.art==='ruf')add.kniff=null;add.x=rs('aufstellung').pick([.14,.86,.28,.72]);add.reihe=0;S.enemies.push(add);Bus.emit('enemy_spawn',{e:add,why:`${en.n} ruft ${add.n} (Phase ${en.phase+1}, alle ${R2.alle||3} Züge)`});}}}}}
+ if(b.art==='phasen'&&b.ruft){const R2=typeof b.ruft==='string'?{gegner:b.ruft,alle:3,anzahl:1}:b.ruft;if(FOES[R2.gegner]&&en.phase>=1&&en.turns%(R2.alle||3)===0){for(let k=0;k<(R2.anzahl||1)&&alive().length<4;k++){const add=mkEnemy(R2.gegner);add.gerufen=true;if(add.kniff&&add.kniff.art==='ruf')add.kniff=null;add.x=rs('aufstellung').pick([.14,.86,.28,.72]);add.reihe=0;if(typeof Hoeren!=='undefined')Hoeren.begrenzen([add]);S.enemies.push(add);Bus.emit('enemy_spawn',{e:add,why:`${en.n} ruft ${add.n} (Phase ${en.phase+1}, alle ${R2.alle||3} Züge)`});}}}}}

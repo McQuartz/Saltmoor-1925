@@ -237,6 +237,7 @@
    "n": "Das Rauschen",
    "biom": "funkstation",
    "rang": "normal",
+   "stumm": true,
    "hp": 21,
    "weak": "L",
    "pat": [

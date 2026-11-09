@@ -163,6 +163,7 @@
    "n": "Der Splitterchor",
    "biom": "glasmeer",
    "rang": "normal",
+   "stumm": true,
    "hp": 16,
    "weak": "L",
    "pat": [

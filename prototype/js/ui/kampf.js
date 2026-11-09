@@ -12,7 +12,8 @@ function naechsteSchwach(e){const k=kniffeVon(e).find(k=>k.art==='wechsel'&&k.st
 function feindTip(i){const e=S.enemies[i];if(!e||e.hp<=0)return'';const ks=[e.kniff,...(e.kniffe||[])].filter(k=>k&&KNIFF_TEXT[k.art]);
  const nw=naechsteSchwach(e);const pu=e.pat[e.pi%e.pat.length];
  const ruf=rufeVon(e);
- return `<b>${esc(e.n)}</b>${ruf.length?`<br>◆ Ruft im nächsten Gegnerzug: ${esc(ruf.map(id=>FOES[id].n).join(', '))}`:''}${pu&&unverwJetzt(e)?`<br>◆ Diesen Zug unverwundbar${pu.why?`<br><i class="hint">${esc(pu.why)}</i>`:''}`:''}${e.weak?`<br>Schwachstelle: ${gi(e.weak,KZ())} ${ST[e.weak].n} (×1,5)`:''}${nw&&nw!==e.weak?`<br>Danach: ${gi(nw,KZ())} ${ST[nw].n}`:''}${ks.map(k=>`<br>◆ ${esc(KNIFF_TEXT[k.art](k))}${k.why?`<br><i class="hint">${esc(k.why)}</i>`:''}`).join('')}${e.besonders&&BES_TEXT[e.besonders.art]?`<br>◆ ${esc(BES_TEXT[e.besonders.art](e.besonders))}`:''}${e.weak2?'<br>Geschwächt: halber Schaden':''}${e.panzer>0&&BAL.panzer?`<br>◆ ${esc(BAL.panzer.t)}`:''}${e.vuln>0?`<br>Verwundbar ${e.vuln} (+50 %)`:''}`;}
+ const stumm=typeof Hoeren!=='undefined'&&Hoeren.istStumm(e); // M6: kein Hinweis auf die Absicht, auch nicht im Tooltip
+ return `<b>${esc(e.n)}</b>${ruf.length&&!stumm?`<br>◆ Ruft im nächsten Gegnerzug: ${esc(ruf.map(id=>FOES[id].n).join(', '))}`:''}${pu&&unverwJetzt(e)&&!stumm?`<br>◆ Diesen Zug unverwundbar${pu.why?`<br><i class="hint">${esc(pu.why)}</i>`:''}`:''}${e.weak?`<br>Schwachstelle: ${gi(e.weak,KZ())} ${ST[e.weak].n} (×1,5)`:''}${nw&&nw!==e.weak?`<br>Danach: ${gi(nw,KZ())} ${ST[nw].n}`:''}${ks.map(k=>`<br>◆ ${esc(KNIFF_TEXT[k.art](k))}${k.why?`<br><i class="hint">${esc(k.why)}</i>`:''}`).join('')}${e.besonders&&BES_TEXT[e.besonders.art]?`<br>◆ ${esc(BES_TEXT[e.besonders.art](e.besonders))}`:''}${e.weak2?'<br>Geschwächt: halber Schaden':''}${e.panzer>0&&BAL.panzer?`<br>◆ ${esc(BAL.panzer.t)}`:''}${e.vuln>0?`<br>Verwundbar ${e.vuln} (+50 %)`:''}`;}
 // Absicht mit Zusatzzeichen: „unverwundbar“ (Musterschritt unverw) und „ruft“ (holt im nächsten Gegnerzug Verstärkung, rufAnsage in combat.js)
 const rufeVon=e=>e&&e.uid&&typeof rufAnsage==='function'&&S.enemies&&S.enemies.includes(e)?rufAnsage(e):[];
 function absicht(e){const r=absicht0(e);if(unverwJetzt(e))r.html+=' <small class="unverw">unverwundbar</small>';
@@ -25,11 +26,11 @@ function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==
 // Plakette (Auftrag 3, M2): Absicht oben, Leben als roter Balken, Block/Panzer als blaue Verlängerung, Status darunter, Kniff am Rand, Spitze zum Kopf.
 // Die Höhenstaffelung (--dx, --dy) setzt plakettenOrdnen() in js/ui/plakette.js nach dem Einsetzen ins DOM.
 function plaketteHtml(e,i,f,pv,tg){
- const abs=f&&!e.stumm&&absichtSichtbar(e)?`<div class="abs">${absicht(e).html}</div>${typeof Bieg!=='undefined'&&Bieg.absichtenSichtbar(e)>1?`<div class="abs abs2" title="Die Rückseite: was ${esc(e.n)} im Zug danach vorhat">danach ${absicht0({...e,pi:e.pi+1}).html}</div>`:''}`:'';
+ const abs=f&&absichtSichtbar(e)?`<div class="abs">${absicht(e).html}</div>${typeof Bieg!=='undefined'&&Bieg.absichtenSichtbar(e)>1?`<div class="abs abs2" title="Die Rückseite: was ${esc(e.n)} im Zug danach vorhat">danach ${absicht0({...e,pi:e.pi+1}).html}</div>`:''}`:'';
  const d=pv?Math.min(e.hp,pv.d):0,ab=pv?Math.min(e.block,pv.ab):0,W=v=>Math.max(0,Math.min(100,v/e.max*100)).toFixed(1)+'%';
  const st=[e.burn&&['burn',e.burn,STN.burn],e.poison&&['poison',e.poison,STN.poison],e.weak2&&['weak',1,'Geschwächt: halber Schaden'],e.str&&['buff',e.str,STN.buff],e.vuln>0&&['atk2',e.vuln,`Verwundbar ${e.vuln} (+50 %)`]].filter(Boolean);
  const blk=e.block-ab,ext=(blk>0||ab>0?`<b class="pl-blk ${ab?'pvb':''}" title="Block">${blk>0?blk:ab}</b>`:'')+(e.panzer>0?`<b class="pl-pz" title="${esc((BAL.panzer&&BAL.panzer.t)||'')}">${gi('blk',KZ())}${e.panzer}</b>`:'');
- return `<div class="plakette"><div class="pl-box">${e.kniff||e.besonders?'<b class="knf" title="Kniff: Maus darüber">◆</b>':''}${abs}
+ return `<div class="plakette"><div class="pl-box">${e.kniff||e.besonders?'<b class="knf" title="Kniff: Maus darüber">◆</b>':''}${abs}${f?klangzeichenHtml(e):''}
   <div class="pl-nm"><span>${esc(e.n).toUpperCase()}</span>${e.weak?gi(e.weak,KZ()):''}</div>
   <div class="pl-bar"><i class="hp" style="width:${W(e.hp-d)}"></i>${d?`<i class="pv" style="width:${W(d)}"></i>`:''}<span>${e.hp}/${e.max}${pv&&(pv.d||pv.ab)?` <em class="pvt">−${pv.d}</em>`:''}</span>${ext?`<div class="pl-ext">${ext}</div>`:''}</div></div>
   ${st.length?`<div class="sts">${st.map(([k,v,t])=>`<span title="${esc(t)}">${gi(k,KZ(),k==='atk2'?'#ffb070':undefined)}${v}</span>`).join('')}</div>`:''}<div class="spitze"></div></div>`;}

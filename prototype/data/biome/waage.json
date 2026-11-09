@@ -205,6 +205,7 @@
    "n": "Die Tarierte",
    "biom": "waage",
    "rang": "normal",
+   "stumm": true,
    "hp": 24,
    "weak": "S",
    "pat": [

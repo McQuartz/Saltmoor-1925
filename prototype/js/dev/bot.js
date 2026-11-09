@@ -7,8 +7,8 @@ const Bot={
  wert(p,inc){if(!p)return-1;let v=0;p.foes.forEach(f=>{if(f.hp<=0&&!f.kill)return;v+=f.d+f.ab*.4+(f.kill?12:0);const g=Math.max(0,f.gift),b=Math.max(0,f.brand);v+=Math.min(f.hp,g*(g+1)/2)*.7+Math.min(f.hp,b*1.8)*.7+(f.vuln>0?f.vuln*3:0)+(f.weak?4:0);});
   v+=(p.str||0)*4;const offen=Math.max(0,inc-S.block);v+=Math.min(p.block,offen)*1.3+p.block*.1;v+=Math.max(0,p.hp)*.8;if(p.hp<0)v+=p.hp*(S.hp<15?2:.6);v+=p.energy*3;v+=(p.gold||0)*(this.profil&&this.profil.gold_rest?.3:.15);return v;},
  // beste Karte jetzt (für den geklickten Run in tools/selbst-spielen.js): {i,t} oder null
- besteKarte(){const inc=incoming();let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
- kampfZug(){let guard=0;this.biegZugbeginn();while(S.phase==='fight'&&!busy&&guard++<30){const inc=incoming();let best=null;
+ besteKarte(){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
+ kampfZug(){let guard=0;this.biegZugbeginn();while(S.phase==='fight'&&!busy&&guard++<30){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;
    S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];const bw=this.biegWert(c,inc);
     ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0)+bw;if(!best||w>best.w)best={i,t,w};});});
    if(!best||best.w<=0)break;playCard(best.i,best.t);}

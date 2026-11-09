@@ -160,6 +160,7 @@
    "n": "Das Walfänger-Echo",
    "biom": "walkathedrale",
    "rang": "normal",
+   "stumm": true,
    "hp": 18,
    "weak": "G",
    "pat": [

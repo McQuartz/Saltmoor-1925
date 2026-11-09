@@ -639,6 +639,7 @@
   ],
   "biom": "eis",
   "rang": "normal",
+  "stumm": true,
   "sprite": "rufer_a",
   "varianten": [
    "rufer_a",

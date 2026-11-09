@@ -88,3 +88,7 @@ Bus.on('herzschlag',({e,klang})=>{if(FAST)return;if(klang==='glocke'){if(typeof 
 Bus.on('rumpeln',()=>{thump(54,26,.95,.5,0,true);nzx({f:190,fEnd:70,type:'lowpass',q:.7,v:.26,dur:1.2,a:.08,sat:true});
  thump(46,24,.75,.34,.42,true);nzx({f:150,fEnd:60,type:'lowpass',q:.7,v:.16,dur:.9,a:.05,delay:.4});nzx({f:2400,type:'highpass',q:.7,v:.03,dur:.3,delay:.5});});
 Bus.on('nebel_weg',()=>{nz(600,1.8,.07,.7,{fEnd:2800,a:.55});nz(1400,1.4,.03,1.2,{fEnd:4200,a:.7,delay:.25});tn(mf(harm().root+12),1.8,'sine',.035,0,.1,{a:.7,pan:-.2});tn(mf(harm().root+19),1.8,'sine',.025,0,.3,{a:.7,pan:.2});});
+// Auftrag 3 M6: Hören statt sehen. Die Musik bekommt bei jeder Änderung die hörbaren Absichten der stummen Gegner (hoeren.js);
+// sie setzt die Einsätze zum Zugbeginn ein und lässt sie über den Spielerzug laufen. Außerhalb des Kampfes: leer.
+function hoerenMusik(){if(typeof Music==='undefined'||typeof Music.hoeren!=='function'||typeof hoerbareAbsichten!=='function')return;Music.hoeren(S&&S.phase==='fight'?hoerbareAbsichten():[]);}
+['turn_start','gegnerzug_ende','enemy_die','enemy_spawn','fight_start','victory','game_over'].forEach(n=>Bus.on(n,()=>{if(!FAST)hoerenMusik();}));

@@ -127,6 +127,7 @@
    "n": "Der Astronom",
    "biom": "mond",
    "rang": "normal",
+   "stumm": true,
    "hp": 22,
    "weak": "L",
    "pat": [
