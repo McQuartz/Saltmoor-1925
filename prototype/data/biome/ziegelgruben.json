@@ -710,6 +710,51 @@
      ]
     }
    ]
+  },
+  {
+   "id": "ziegelgruben_ringgang",
+   "t": "Der Ringgang",
+   "d": "Der Rauch riecht nach heißem Lehm, und er zieht nicht ab, er geht im Kreis. Der Gang des Ofens hat keinen Anfang: Der Ziegel in der ersten Kammer trägt den Stempel der letzten, und die Glut dahinter ist noch warm von dem, was gerade kommt. Zwischen den Kammern fehlt keine Tür.",
+   "bild": "Ein runder, gewölbter Ofengang aus rußigen Ziegeln, die Kammern hintereinander im Kreis, im Vordergrund ein Ziegel mit sichtbarem Stempel.",
+   "o": [
+    {
+     "l": "Den Stempel der letzten Kammer in die erste drücken: eine Karte kostet dauerhaft 1 weniger, −5 Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ],
+     "if": {
+      "hp_min": 7
+     }
+    },
+    {
+     "l": "Einen Ziegel aus der Kette brechen: +1 Kerbe an einem Item, −6 max. Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ]
+    },
+    {
+     "l": "Dem Rauch einmal im Kreis folgen, bis du wieder hier stehst: +10 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

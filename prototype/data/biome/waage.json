@@ -615,6 +615,60 @@
      }
     }
    ]
+  },
+  {
+   "id": "waage_restposten",
+   "t": "Der Restposten",
+   "d": "Es riecht nach Siegellack und nassem Löschpapier. Am Schalter Reste liegt eine Lade voll kleiner Münzen, jede in Papier gewickelt und mit einer Zahl beschriftet: was bei anderen übrig geblieben ist. Die Rechenmaschine klickt, solange du nichts bezahlst. Auf einem Schild steht, dass nichts verfällt.",
+   "bild": "Ein Messingschalter mit einer Lade voller Papierröllchen, dahinter eine Rechenmaschine mit Kurbel, an der Wand ein emailliertes Schild.",
+   "o": [
+    {
+     "l": "Deinen Rest einzahlen, bis nichts übrig ist: +8 max. Leben, −20 Gold",
+     "fx": [
+      {
+       "op": "max_hp",
+       "v": 8
+      },
+      {
+       "op": "gold",
+       "v": -20
+      }
+     ],
+     "tiefe": 1,
+     "if": {
+      "gold_min": 20
+     }
+    },
+    {
+     "l": "Einen fremden Rest abheben: +30 Gold, −6 Leben",
+     "fx": [
+      {
+       "op": "gold",
+       "v": 30
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 8
+     }
+    },
+    {
+     "l": "Die Quittung mit dem abstempeln lassen, was von dir übrig bleibt: +1 Kerbe an einem Item, −5 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

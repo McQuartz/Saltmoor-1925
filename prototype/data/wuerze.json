@@ -386,6 +386,10 @@
    "ohne": {
     "t": "Du hast nichts, was er nehmen will. Er nimmt zurück, was er dir gegeben hat.",
     "entwurf": true
+   },
+   "preis": {
+    "t": "ANGESCHRIEBEN",
+    "entwurf": true
    }
   }
  }

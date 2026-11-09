@@ -650,6 +650,48 @@
      ]
     }
    ]
+  },
+  {
+   "id": "glasmeer_vorrat",
+   "t": "Der Rucksack unter dem Glas",
+   "d": "Unter dem Glas liegt dein Rucksack, geöffnet, und obenauf der Gegenstand, den du als Nächstes brauchen wirst. Er ist schon dort. Es riecht nach kaltem Metall und Pfefferminz, und dein Atem beschlägt das Glas an der Stelle, wo er liegt, einen Atemzug bevor du ausatmest.",
+   "bild": "Eine klare Glasplatte über dunklem Wasser, darunter ein offener Rucksack mit einer Laterne obenauf, darüber der Abdruck eines Atems.",
+   "o": [
+    {
+     "l": "Einen Gegenstand gegen sein Spiegelbild tauschen: ein Item wird getauscht",
+     "fx": [
+      {
+       "op": "item_tausch"
+      }
+     ]
+    },
+    {
+     "l": "Durch das Glas greifen und nehmen, was oben liegt: ein zufälliges Item, −7 Leben",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ],
+     "tiefe": 1,
+     "if": {
+      "hp_min": 9
+     }
+    },
+    {
+     "l": "Das Glas nicht berühren und warten, bis es weiß, was du willst: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

@@ -1551,5 +1551,205 @@
     "fx": []
    }
   ]
+ },
+ {
+  "id": "salz_probe",
+  "biom": "salz",
+  "t": "Die Probe",
+  "d": "Es riecht nach Pökelfass und nach Eisen, und im Salz knistert etwas wie nasses Papier. Auf einem Tisch aus Zinn stehen drei Gläser: Salz, Wasser, Blut. Der Zettel daneben ist von 1911, und die Tinte darauf ist noch feucht. Er sagt, die drei dürften nie in ein Glas, und er sagt es dreimal.",
+  "bild": "Ein Zinntisch in einem Stollen, drei Gläser in einer Reihe, ein Zettel mit nasser Tinte, daneben ein Schälchen mit grauem Salz.",
+  "o": [
+   {
+    "l": "Das Salz ins Wasser rühren, es wird nicht trüb: +1 Kerbe an einem Item, −5 Leben",
+    "fx": [
+     {
+      "op": "kerbe"
+     },
+     {
+      "op": "lose_hp",
+      "v": 5
+     }
+    ]
+   },
+   {
+    "l": "Das Blut aufs Salz tropfen lassen, es zieht sich zurück: +10 Leben, −4 max. Leben",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 10
+     },
+     {
+      "op": "max_hp",
+      "v": -4
+     }
+    ]
+   },
+   {
+    "l": "Wasser und Blut mischen, sie trennen sich nicht: eine Reaktion entdecken, −6 Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "lose_hp",
+      "v": 6
+     }
+    ],
+    "if": {
+     "hp_min": 8
+    }
+   }
+  ],
+  "entwurf": true
+ },
+ {
+  "id": "stadt_waescheleine",
+  "biom": "stadt",
+  "t": "Die Wäscheleine",
+  "d": "Zwischen zwei Häusern hängt eine Leine über einer Gasse, in die kein Mensch passt. Am einen Ende ein Hemd, am anderen ein Hemd, die Ärmel reichen sich über die Lücke und berühren sich nicht ganz. Es riecht nach Seifenlauge und kaltem Sand. Wo die Ärmel einander am nächsten sind, tropft es auf beiden Seiten gleichzeitig.",
+  "bild": "Eine schmale Gasse zwischen hohen Lehmhäusern, quer darüber eine Leine mit zwei Hemden, deren Ärmel sich fast berühren.",
+  "o": [
+   {
+    "l": "Die Ärmel verknoten: +1 Kerbe an einem Item, −6 Leben",
+    "fx": [
+     {
+      "op": "kerbe"
+     },
+     {
+      "op": "lose_hp",
+      "v": 6
+     }
+    ],
+    "if": {
+     "hp_min": 8
+    }
+   },
+   {
+    "l": "Ein Item an die Leine hängen. Von der anderen Seite kommt eines zurück",
+    "fx": [
+     {
+      "op": "item_tausch"
+     }
+    ]
+   },
+   {
+    "l": "Die Leine kappen, bevor sich die Ärmel finden: eine Karte streichen, −5 Leben",
+    "fx": [
+     {
+      "op": "strike"
+     },
+     {
+      "op": "lose_hp",
+      "v": 5
+     }
+    ]
+   }
+  ],
+  "entwurf": true
+ },
+ {
+  "id": "eis_peilung",
+  "biom": "eis",
+  "t": "Die Peilung",
+  "d": "Es riecht nach kalter Messingpolitur. Zwei Peilstangen mit rotem Tuch stecken im Eis, und wer die letzte anpeilt, sieht an ihr vorbei auf die vorletzte. Der Landvermesser hat seine Winkel ins Eis gekratzt, jeden um ein Stück falsch, und trotzdem stimmt die Summe.",
+  "bild": "Eine weite Eisfläche, zwei Peilstangen mit rotem Tuch hintereinander, davor ein Dreibein mit Messinginstrument und in das Eis gekratzte Linien.",
+  "o": [
+   {
+    "l": "Auf die vorletzte Stange peilen: eine Reaktion entdecken, −5 Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "lose_hp",
+      "v": 5
+     }
+    ]
+   },
+   {
+    "l": "Die letzte Stange umwerfen: +1 Kerbe an einem Item, −5 max. Leben",
+    "fx": [
+     {
+      "op": "kerbe"
+     },
+     {
+      "op": "max_hp",
+      "v": -5
+     }
+    ]
+   },
+   {
+    "l": "Das Instrument zuklappen und nach Gefühl gehen: +8 Leben, −8 Gold",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 8
+     },
+     {
+      "op": "gold",
+      "v": -8
+     }
+    ],
+    "if": {
+     "gold_min": 8
+    }
+   }
+  ],
+  "entwurf": true
+ },
+ {
+  "id": "pforte_nebentueren",
+  "biom": "pforte",
+  "t": "Die Nebentüren",
+  "d": "Es riecht nach Salz, dann nach nassem Schnee, dann nach Ziegelstaub, und jeder Atemzug bringt einen anderen Ort. Vor dir stehen Türen, jede ein Stück von woanders, und die nächste riechst du schon, bevor die jetzige zufällt. Auf dem Boden liegt ein Plan, der sich beim Hinsehen umdreht.",
+  "bild": "Ein dunkler Vorraum mit vier verschiedenen Türen: eine verkrustet mit Salz, eine verschneit, eine aus Ziegeln, eine aus Glas; auf dem Boden ein Plan mit Pfeilen.",
+  "o": [
+   {
+    "l": "Durch die Tür mit dem Salz gehen: eine Reaktion entdecken, −5 Leben",
+    "fx": [
+     {
+      "op": "discover"
+     },
+     {
+      "op": "lose_hp",
+      "v": 5
+     }
+    ]
+   },
+   {
+    "l": "Durch die Tür mit dem Schnee gehen: +10 Leben, −8 Gold",
+    "fx": [
+     {
+      "op": "heal",
+      "v": 10
+     },
+     {
+      "op": "gold",
+      "v": -8
+     }
+    ],
+    "if": {
+     "gold_min": 8
+    }
+   },
+   {
+    "l": "Die nächste Tür aufhalten, bevor die jetzige zufällt: einen Handgriff lernen, −7 Leben",
+    "fx": [
+     {
+      "op": "handgriff",
+      "zufall": true
+     },
+     {
+      "op": "lose_hp",
+      "v": 7
+     }
+    ],
+    "tiefe": 1,
+    "if": {
+     "hp_min": 9
+    }
+   }
+  ],
+  "entwurf": true
  }
 ]

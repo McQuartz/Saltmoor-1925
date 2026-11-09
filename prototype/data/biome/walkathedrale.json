@@ -672,6 +672,55 @@
      ]
     }
    ]
+  },
+  {
+   "id": "walkathedrale_dritter_schlag",
+   "t": "Der dritte Schlag",
+   "d": "Der Boden wird angeschlagen, zweimal leise, dann ein dritter, der die beiden mitnimmt. Es riecht nach Tran und feuchtem Holz, und die Rippen über dir schwingen mit, eine nach der anderen. Jemand hat mit Kreide an den Pfeiler geschrieben, dass man das erste nach dem dritten nicht mehr zählen kann.",
+   "bild": "Ein Gang zwischen Rippenbögen, am Boden drei Abdrücke von Schlägen, der dritte tiefer als die anderen, an einem Pfeiler eine Kreideschrift.",
+   "o": [
+    {
+     "l": "Auf den dritten Schlag mit der flachen Hand antworten: einen Handgriff lernen, −6 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 8
+     }
+    },
+    {
+     "l": "Zwischen dem zweiten und dem dritten Schlag atmen: +1 Kerbe an einem Item, −5 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Das Ohr an die Rippe legen und alle drei zählen: eine Reaktion entdecken, −4 max. Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

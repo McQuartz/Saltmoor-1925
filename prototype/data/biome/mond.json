@@ -779,6 +779,57 @@
      ]
     }
    ]
+  },
+  {
+   "id": "mond_zweiter_schatten",
+   "t": "Der zweite Schatten",
+   "d": "Jeder Stein in der Staubebene wirft zwei Schatten, einen zur Sonne hin und einen von ihr weg. Der zweite ist länger und kommt von etwas, das erst noch ankommt. Es klingt wie Sand in einer Röhre, und der Staub zu deinen Füßen rieselt in Richtung des langen Schattens.",
+   "bild": "Eine graue Mondebene mit einem einzelnen Fels, von dem zwei Schatten ausgehen, ein kurzer scharfer und ein langer weicher, der über den Horizont hinausläuft.",
+   "o": [
+    {
+     "l": "Dem langen Schatten entgegengehen: einen Handgriff lernen, −5 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ],
+     "tiefe": 1
+    },
+    {
+     "l": "Beide Schatten mit Kreide nachziehen: eine Reaktion entdecken, −3 Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "lose_hp",
+       "v": 3
+      }
+     ]
+    },
+    {
+     "l": "Auf der Rückseite des Felsens rasten: +14 Leben, −10 Gold",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 14
+      },
+      {
+       "op": "gold",
+       "v": -10
+      }
+     ],
+     "if": {
+      "gold_min": 10
+     }
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

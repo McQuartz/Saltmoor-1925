@@ -843,6 +843,58 @@
      ]
     }
    ]
+  },
+  {
+   "id": "wald_stumpf",
+   "t": "Der Stumpf",
+   "d": "Es riecht nach frischem Harz, mitten im Winter. Der Stumpf am Weg wächst: Aus dem Schnitt steigt die Rinde wieder auf, einen Finger breit mit jedem Atemzug, und die Axtspur klappt langsam zu. Im Holz steckt noch die Axt, das Blatt nach innen, als wäre sie nie herausgezogen worden.",
+   "bild": "Ein breiter Baumstumpf mit frischer, heller Schnittfläche, aus der Ringe in die Höhe wachsen; im Holz eine Axt, daneben Späne, die zum Stumpf zurückrollen.",
+   "o": [
+    {
+     "l": "Die Axt aus dem Schnitt ziehen, bevor er sich schließt: ein zufälliges Item, −6 Leben",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 8
+     }
+    },
+    {
+     "l": "Die Ringe rückwärts zählen: +1 Kerbe an einem Item, −4 max. Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    },
+    {
+     "l": "Dich auf den Stumpf setzen, bis er dich wieder hergibt: +12 Leben, −10 Gold",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 12
+      },
+      {
+       "op": "gold",
+       "v": -10
+      }
+     ],
+     "if": {
+      "gold_min": 10
+     }
+    }
+   ],
+   "entwurf": true
   }
  ],
  "handgriffe": {},

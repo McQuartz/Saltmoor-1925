@@ -716,6 +716,60 @@
      ]
     }
    ]
+  },
+  {
+   "id": "gezeitenwerk_staubecken",
+   "t": "Das Staubecken",
+   "d": "Ein tiefes Brummen steht im Kanal wie ein gehaltener Atem. Hinter dem Schütz drückt das Wasser, schwarz und glatt bis an die Kante, und auf dem Pegelstab steht Flut, obwohl draußen Ebbe ist. Das Handrad am Schütz ist warm, und es dreht sich nur, wenn du es loslässt.",
+   "bild": "Ein gemauertes Staubecken mit einem eisernen Schütz und einem Handrad, dahinter schwarzes Wasser bis zum Rand, daneben ein Pegelstab aus Messing.",
+   "o": [
+    {
+     "l": "Das Schütz einen Spalt öffnen und das Wasser abfließen lassen: +8 Leben, −6 Gold",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      },
+      {
+       "op": "gold",
+       "v": -6
+      }
+     ],
+     "if": {
+      "gold_min": 6
+     }
+    },
+    {
+     "l": "Das Handrad halten, bis die Arme zittern: +1 Kerbe an einem Item, −6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 8
+     }
+    },
+    {
+     "l": "Das Wehr ganz aufziehen: ein zufälliges Item, Kampf gegen den Kanalaal",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "kanalaal"
+       ]
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {
