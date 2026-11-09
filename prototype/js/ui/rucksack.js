@@ -71,7 +71,7 @@ function koeKopf(){const ph={rast:'RAST',werkstatt:'WERKSTATT',kraemer:'KRÄMER'
  <div class="kr"><span class="gold">${gi('gold',KZ())} <b>${S.gold}</b> Gold</span><span>Buch <b>${S.disc.size}/${allRx().length}</b></span><span>Deck <b>${deckListe().length}</b></span></div></div>`;}
 
 function koeLinks(){const J=koeFigur();const m=maxHp();const rs=roleState().filter(x=>x.have.length);
- return `<div class="kname"><h3>${esc(J.n).toUpperCase()}</h3><div class="khp">${S.hp}/${m} Leben</div><div class="kaus">„${esc(J.ausrede)}“</div>
+ return `<div class="kname"><h3>${esc(J.n).toUpperCase()}</h3><div class="khp">${S.hp}/${m} Leben</div><div class="kaus">„${esc(ausredeVon(J))}“</div>
  <div class="krollen">${rs.map(x=>`<span class="${x.on?'an':''}">${esc(x.r.n)} ${x.have.length}/${x.r.i.length}${x.on?': '+esc(x.r.t):''}</span>`).join('<br>')||'<span class="hint">Trag drei passende Teile, um ein Set zu bilden.</span>'}</div></div>`;}
 
 function koeFuss(){const bag=S.bag.map((_,i)=>koeSlot('bag:'+i)).join('');const ws=S.phase==='werkstatt'&&!KOE.lesen;

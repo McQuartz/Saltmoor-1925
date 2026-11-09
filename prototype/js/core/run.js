@@ -25,10 +25,12 @@ function newRun(jobId,seed,opt={}){
  S.hp=maxHp();
  const sv=(RUN.startvarianten||[]).find(v=>v.id===S.start);if(sv)runFx(sv.fx,{why:'Startvariante '+sv.n});
  const sr=Rng.of(seed,'schreck');const J=BAL.jumpscare;S.scareAt=(J.fenster_min[0]+sr.next()*(J.fenster_min[1]-J.fenster_min[0]))*60000;S.scares=0;
- log(job.ausrede);
+ log(typeof Metaebene!=='undefined'?Metaebene.ausrede(job):job.ausrede);
  Bus.emit('run_start',{seed,job:job.id,why:`Seed ${seed}, ${job.n}`});
  if(typeof Farbe!=='undefined')Farbe.planen(); // M8: ob und wo die Farbe kommt
  if(typeof Zettel!=='undefined')Zettel.wuerfeln(); // M9: Run-Zettel (zwei Begegnungen, Würze)
+ S.stats.waechter=[];S.loseHg=[];
+ if(typeof Metaebene!=='undefined'&&Metaebene.runStart(opt))return; // M10: Erbe-Angebot, Fehlzeit
  enterAct();}
 
 // --- Akte und Ebenen ---
@@ -59,7 +61,7 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
  switch(o.art){
   case'kampf':startFight(o.foes,'kampf');break;
   case'kampf_schwer':startFight(o.foes,'schwer');break;
-  case'waechter':startFight(o.foes,'waechter');break;
+  case'waechter':(S.stats.waechter=S.stats.waechter||[]).push(o.foes[0]);startFight(o.foes,'waechter');break;
   case'finale':startFight(o.foes,'finale');break;
   case'ereignis':{const seen=S.stats.events||[];const geht=e=>!seen.includes(e.id)&&condOk(e.if);const fresh=EVENTS.filter(e=>e.biom===biomId()&&geht(e));
    // biomübergreifende Ereignisse: in einem Viertel der Fälle (BAL.ereignis_allgemein), sonst nur, wenn das Biom leer ist
@@ -82,7 +84,7 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
    S.phase='kraemer';
    Bus.emit('kraemer',{why:`Krämer ${b.kraemer.n}: Sortiment aus dem Fundpool von ${b.kurz}`});break;}
   case'werkstatt':S.forged=false;S.phase='werkstatt';break;
-  case'rast':S.rastDone=false;S.phase='rast';break;
+  case'rast':S.rastDone=false;S.phase='rast';if(typeof Metaebene!=='undefined')Metaebene.notizenAnRast();break; // M10: Notizen des Vorgängers
   case'wandbild':{const fr=nextFragment(r);S.frag=fr?fr.id:null;S.phase='wandbild';if(fr)readFragment(fr);netzKlar();break;}
   case'fundstelle':{const F=RUN.fundstelle;const haken=r.chance(F.haken_chance);const item=r.chance(.55)?r.pick(dropPool()):null;const gold=item?0:r.int(F.gold[0],F.gold[1]);
    S.fund={item,gold,haken,taken:false};S.phase='fund';break;}
@@ -154,7 +156,9 @@ function afterEventFx(){const p=S.pending||[];if(!p.length){finishNode();return;
 
 // --- Karte streichen (Krämer, Ereignis): Item bleibt angelegt, gibt aber keine Karte mehr ---
 function strikeTargets(){return allActive().filter(it=>!it.x&&def(it).cards.length);}
-function strikeItem(uid){if(typeof uid==='string'&&uid.startsWith('lose:')){const id=uid.slice(5);const i=(S.lose||[]).indexOf(id);if(i>=0){S.lose.splice(i,1);const c=Tiefe.karte(id);log(`Gestrichen: ${c?c.n:id}`);Bus.emit('strike',{why:`${c?c.n:id} aus dem Deck gestrichen`});}
+function strikeItem(uid){if(typeof uid==='string'&&uid.startsWith('losehg:')){const i=+uid.slice(7);const x=(S.loseHg||[])[i];if(x){S.loseHg.splice(i,1);log(`Gestrichen: ${HANDGRIFFE[x.hg].n}`);Bus.emit('strike',{why:`${HANDGRIFFE[x.hg].n} (lose) aus dem Deck gestrichen`});}
+  if(S.phase==='streichen'){S.pending.shift();afterEventFx();}else Bus.emit('changed');return;} // M10: lose Handgriffe
+ if(typeof uid==='string'&&uid.startsWith('lose:')){const id=uid.slice(5);const i=(S.lose||[]).indexOf(id);if(i>=0){S.lose.splice(i,1);const c=Tiefe.karte(id);log(`Gestrichen: ${c?c.n:id}`);Bus.emit('strike',{why:`${c?c.n:id} aus dem Deck gestrichen`});}
   if(S.phase==='streichen'){S.pending.shift();afterEventFx();}else Bus.emit('changed');return;} // M9: lose Karten (Das Zeichen)
  const it=allActive().find(x=>x.uid===uid);if(!it||it.x)return;it.x=1;log(`Gestrichen: ${def(it).n}`);Bus.emit('strike',{it,why:`Karte von ${def(it).n} gestrichen, das Item zählt weiter für Leben und Sets`});
  if(S.phase==='streichen'){S.pending.shift();afterEventFx();}else Bus.emit('changed');}

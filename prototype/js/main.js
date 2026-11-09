@@ -16,6 +16,7 @@ function skala(){const W=innerWidth,H=innerHeight;const k=Math.max(1,Math.min(Ma
  skala();addEventListener('resize',()=>{skala();render();});new ResizeObserver(()=>skala()).observe(document.getElementById('spiel'));buehneInit();
  const q=new URLSearchParams(location.search);
  if(q.get('a3aus')&&BAL.auftrag3){const l=q.get('a3aus')==='alle'?Object.keys(BAL.auftrag3).filter(k=>!k.startsWith('_')):q.get('a3aus').split(',');l.forEach(k=>{if(k in BAL.auftrag3)BAL.auftrag3[k]=false;});}
+ if(typeof Metaebene!=='undefined')Metaebene.sitzung(); // M10: die Pause wird bemerkt
  if(typeof Dev!=='undefined')Dev.init(q);
  if(q.get('bot')){Dev.botLauf(+q.get('bot'),+(q.get('seed')||1));}
  else if(q.get('job')){newRun(q.get('job'),q.get('seed')!=null?+q.get('seed'):neuerSeed(),{dev:!!q.get('springe')});if(q.get('springe'))Dev.springe(q.get('springe'),q.get('akt')!=null?+q.get('akt'):null);}

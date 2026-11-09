@@ -17,9 +17,10 @@ function buehneInit(){spritesVorladen();BU.cv=document.getElementById('scene');B
 function szenenWahl(){const ph=S.phase||'titel';const b=S.route?biomId():'hafen';
  const fremd=S.route?Math.min(1,(S.ebene||0)/Math.max(1,(RUN.akte[S.akt]?.ebenen.length||4)-1)):0;
  const variante=S.seed!=null?R(`szene:${S.akt}:${S.ebene}`).int(0,2):0;
- const map={titel:'titel',figur:'strand',strand:'strand',ankunft:'ankunft',ende:'ankunft',uebergang:'uebergang',weg:'weg',reward:'kampf',event:'ereignis',event_folge:'ereignis',streichen:'ereignis',kraemer:'kraemer',kraemer_streichen:'kraemer',werkstatt:'werkstatt',rast:'rast',wandbild:'wandbild',fund:'fund',knoten:'weg'};
+ const map={titel:'titel',figur:'strand',erbe:'strand',strand:'strand',ankunft:'ankunft',ende:'ankunft',uebergang:'uebergang',weg:'weg',reward:'kampf',event:'ereignis',event_folge:'ereignis',streichen:'ereignis',kraemer:'kraemer',kraemer_streichen:'kraemer',werkstatt:'werkstatt',rast:'rast',wandbild:'wandbild',fund:'fund',knoten:'weg'};
  let art=map[ph]||'kampf';if(ph==='fight'||ph==='reward')art=(S.kampfArt==='waechter'||S.kampfArt==='finale')?'waechter':'kampf';
  const w={biom:b,art,variante,fremdheit:fremd,seed:(S.seed||7)+S.akt*101+(S.ebene||0)*13};
+ if(art==='strand'&&typeof Metaebene!=='undefined')w.spuren=Metaebene.strandStufe(); // M10: das Spiel zählt mit (Fußspuren am Strand)
  // Wächter-Szene je Boss-Phase (szenenPhase in combat.js): ab Phase 1 bekommt World.build ein Feld phase (paket-format.md)
  const sp=art==='waechter'&&typeof szenenPhase==='function'?szenenPhase():0;if(sp)w.phase=sp;
  // Dev/Werkzeuge (tools/stell-bogen.js): bestimmte Szene erzwingen, z. B. S.devSzene={variante:2}

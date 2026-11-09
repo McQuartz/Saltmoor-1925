@@ -1,5 +1,5 @@
 // Lädt alle Spieldaten aus data/*.json. Dieselben Dateien soll später die Godot-Version einlesen.
-let HANDGRIFFE={},PAKETE=[],ICONS=new Set(),HG_ICONS=new Set(),ST,SUFFIX,AREAS,AREA_N,ITEMS,ROLES,FOES,JOBS,REACT,VERST,HOCH,EVENTS,BAL,RUN,BIOMES,FRAGS,STELL={},FAHRT={};
+let HANDGRIFFE={},PAKETE=[],ICONS=new Set(),HG_ICONS=new Set(),ST,SUFFIX,AREAS,AREA_N,ITEMS,ROLES,FOES,JOBS,REACT,VERST,HOCH,EVENTS,BAL,RUN,BIOMES,FRAGS,STELL={},FAHRT={},META={};
 async function loadData(base='data/',fetchJson){
  const get=fetchJson||(async f=>{const r=await fetch(base+f+'.json',{cache:'no-store'});if(!r.ok)throw new Error(f+'.json: '+r.status);return r.json();});
  const opt=async f=>{try{return await get(f);}catch(e){return null;}};
@@ -12,6 +12,8 @@ async function loadData(base='data/',fetchJson){
  // Auftrag 3 M3: Weg-Richtung und Zielpunkt der Fahrt je Kulisse (data/fahrt.json → szenen["biom:kulisse"])
  const fahrt=await opt('fahrt');FAHRT=(fahrt&&fahrt.szenen)||{};
  const hg=await opt('handgriffe');
+ // Auftrag 3 M10: Texte der Metaebene (data/meta.json)
+ META=(await opt('meta'))||{};
  // Neue Icons (M5): assets/items/index.json und assets/handgriffe/index.json = Listen vorhandener IDs
  const ii=await (async()=>{try{const r=await fetch('assets/items/index.json',{cache:'no-store'});return r.ok?r.json():null;}catch(e){return null;}})();const hi=await (async()=>{try{const r=await fetch('assets/handgriffe/index.json',{cache:'no-store'});return r.ok?r.json():null;}catch(e){return null;}})();
  ICONS=new Set((ii&&(ii.items||ii.ids||ii))||[]);HG_ICONS=new Set((hi&&(hi.handgriffe||hi.ids||hi))||[]);

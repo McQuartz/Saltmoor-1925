@@ -1,0 +1,580 @@
+{
+ "_doc": "Auftrag 3 M10 Metaebene (docs/auftrag-3/07-begegnungen-meta-wuerze.md Abschnitt 3). Gelesen von js/core/metaebene.js. ausrede: Stufe 1 und 2 je Figur (Stufe 0 = jobs.json, Stufe 3 = ausrede_ende). pause: je Biom eine Zeile. notizen: je Wächter und Biom eine wahre und eine falsche Notiz.",
+ "ausrede": {
+  "fischer": [
+   {
+    "t": "Mein Bruder ist nicht zurückgekommen. Das Boot lag am Morgen trocken im Hafen.",
+    "entwurf": true
+   },
+   {
+    "t": "Mein Bruder hat das Boot nicht verloren. Er hat es zurückgeschickt.",
+    "entwurf": true
+   }
+  ],
+  "friedhofswaerter": [
+   {
+    "t": "Die Gräber sind leer. Die Erde darüber ist von unten festgeklopft.",
+    "entwurf": true
+   },
+   {
+    "t": "Die Gräber sind leer, und ich habe den Weg gesehen. Er führt nicht herauf.",
+    "entwurf": true
+   }
+  ],
+  "pfarrerin": [
+   {
+    "t": "Ich muss meine Gemeinde retten. Der Kult in der Kapelle singt aus meinem Gesangbuch.",
+    "entwurf": true
+   },
+   {
+    "t": "Meine Gemeinde ist längst unten. Ich will die Glocke nicht allein läuten lassen.",
+    "entwurf": true
+   }
+  ],
+  "detektiv": [
+   {
+    "t": "Vermisstenfälle. Die Spuren führen alle zum Wasser, und alle haben mein Schuhmaß.",
+    "entwurf": true
+   },
+   {
+    "t": "Die Akte ist fertig. Es fehlt nur noch die Zeile mit meinem Namen.",
+    "entwurf": true
+   }
+  ],
+  "okkultist": [
+   {
+    "t": "Ich suche das Wissen der Erbauer. Sie haben schon nach mir gesucht.",
+    "entwurf": true
+   },
+   {
+    "t": "Das Wissen habe ich. Ich will nur sehen, ob ich es dort unten behalte.",
+    "entwurf": true
+   }
+  ],
+  "kneipenschlaeger": [
+   {
+    "t": "Ich habe Schulden. Das Gold da unten hat noch keiner gezählt, der zurückkam.",
+    "entwurf": true
+   },
+   {
+    "t": "Die Schulden sind mir gleich. Ich will das alte Gold einmal anfassen.",
+    "entwurf": true
+   }
+  ],
+  "geologe": [
+   {
+    "t": "Ich war schon unten. Die Karte stimmt, nur bin ich nie so weit gekommen.",
+    "entwurf": true
+   },
+   {
+    "t": "Ich war schon unten. Die Karte habe ich nicht gezeichnet, und es ist meine Hand.",
+    "entwurf": true
+   }
+  ],
+  "wahrsagerin": [
+   {
+    "t": "Die Karten zeigen dasselbe Bild. Beim Legen sieht es mir zu.",
+    "entwurf": true
+   },
+   {
+    "t": "Ich weiß, was das Bild bedeutet. Ich will sehen, ob es zurücksieht.",
+    "entwurf": true
+   }
+  ],
+  "veteran": [
+   {
+    "t": "Unten soll es leiser sein. Ich höre es schon seit dem Strand.",
+    "entwurf": true
+   },
+   {
+    "t": "Es war nie still. Ich will nur wissen, woher es kommt.",
+    "entwurf": true
+   }
+  ]
+ },
+ "ausrede_ende": {"t": "Ich gehe hinunter.", "entwurf": true},
+ "ankunft_nach_umkehren": {
+  "t": "Du wachst am Strand auf. Deine Stiefel stehen im Sand, und die Spur dazu fehlt.",
+  "entwurf": true
+ },
+ "pause": {
+  "hafen": {
+   "t": "Am Kai hat jemand dein Boot festgemacht. Der Knoten ist nass, die Planken sind trocken.",
+   "entwurf": true
+  },
+  "moor": {
+   "t": "Der Torfstecher hat deinen Spaten aufbewahrt. Das Blatt ist feucht, der Stiel warm.",
+   "entwurf": true
+  },
+  "kapelle": {
+   "t": "Das Wasser in der Kapelle steht höher als zuletzt. Auf der Bank liegt dein Handschuh, trocken.",
+   "entwurf": true
+  },
+  "salz": {
+   "t": "In den Stollen ist deine Kreidemarke noch zu lesen. Jemand hat sie nachgezogen.",
+   "entwurf": true
+  },
+  "stadt": {
+   "t": "In der namenlosen Stadt ist eine Tür so breit wie deine Schultern geworden. Vorher war sie es nicht.",
+   "entwurf": true
+  },
+  "eis": {
+   "t": "Auf dem schwarzen Eis liegt dein Atem noch als Reif. Er hat sich nicht gesetzt.",
+   "entwurf": true
+  },
+  "pforte": {
+   "t": "Die Pforte steht, wie du sie verlassen hast. Nur die Angeln sind frisch geölt.",
+   "entwurf": true
+  },
+  "grotte": {
+   "t": "Die Kerzenfrau hat dir eine Kerze gelassen. Das Wachs ist weich, als hielte sie jemand.",
+   "entwurf": true
+  },
+  "kurhaus": {
+   "t": "Im Kurhaus ist dein Liegestuhl gedeckt. Die Decke ist warm, das Buch liegt offen, wo du aufgehört hast.",
+   "entwurf": true
+  },
+  "nachtzug": {
+   "t": "Der Schaffner hat ein Abteil für dich freigehalten. Die Fahrkarte ist gelocht, das Datum nass.",
+   "entwurf": true
+  },
+  "kloster": {
+   "t": "Ein Mönch hat deinen Namen abgeschrieben, mit rotem Anfangsbuchstaben. Die Tinte ist noch feucht.",
+   "entwurf": true
+  },
+  "fabrik": {
+   "t": "In der Fabrik läuft dein Band weiter. Die Dosen darauf tragen kein Etikett, nur Salzränder.",
+   "entwurf": true
+  },
+  "gezeitenwerk": {
+   "t": "Der Ingenieur hat die Flut für dich nachgetragen, auf einen Zeitpunkt, den keine Uhr kennt.",
+   "entwurf": true
+  },
+  "wald": {
+   "t": "Der Köhler hat den Meiler nicht angezündet. Er sitzt davor und hält die Hände ans Holz.",
+   "entwurf": true
+  },
+  "ufer": {
+   "t": "Der Strandwärter hat deine Spuren nicht verweht. Sie führen aus dem Meer heraus.",
+   "entwurf": true
+  },
+  "glasmeer": {
+   "t": "Im Glas steht dein Spiegelbild, wo du zuletzt standest. Es hat sich nicht gesetzt.",
+   "entwurf": true
+  },
+  "walkathedrale": {
+   "t": "Der Walfänger hat die Lampe für dich brennen lassen. Der Tran ist warm, das Herz still.",
+   "entwurf": true
+  },
+  "leuchtturm": {
+   "t": "Der Strandvogt hat die Laterne nachgefüllt. Der Strahl fällt wieder auf den Hof, nicht aufs Meer.",
+   "entwurf": true
+  },
+  "glockengiesserei": {
+   "t": "Der Wandergießer hat einen Löffel von dir eingeschmolzen. Er hängt jetzt an der Grube und klingt.",
+   "entwurf": true
+  },
+  "ziegelgruben": {
+   "t": "Der Schreiber hat dich in die Wachstafel eingetragen. Der Ziegel daneben ist noch warm.",
+   "entwurf": true
+  },
+  "mond": {
+   "t": "Im Mondstaub steht dein Stiefelabdruck. Er ist tiefer, als du schwer bist.",
+   "entwurf": true
+  },
+  "waage": {
+   "t": "Die Waage hat nachgewogen. Die Schale hängt noch schief, so schwer, wie du warst.",
+   "entwurf": true
+  },
+  "funkstation": {
+   "t": "Der Empfänger hat etwas für dich aufgenommen. Das Papierband liegt noch warm vom Rattern.",
+   "entwurf": true
+  },
+  "waisenhaus": {
+   "t": "Im Schlafsaal ist ein Bett gemacht. Die Heimleiterin führt dich weiter unter den Anwesenden.",
+   "entwurf": true
+  },
+  "station": {
+   "t": "Im Fundbüro liegt ein Hut, der deinem gleicht. Am Band hängt ein Zettel ohne Nummer.",
+   "entwurf": true
+  }
+ },
+ "erbe": {
+  "t": "Dein Griff vom letzten Mal. Das Leder ist abgegriffen, und er liegt noch warm in der Hand.",
+  "nehmen": "NEHMEN",
+  "lassen": "LIEGEN LASSEN",
+  "entwurf": true
+ },
+ "fehlzeit": {
+  "t": "Jemand anderes wird an deiner Stelle gehen. Du beginnst erst bei der Kapelle, den Weg davor geht er.",
+  "ja": "ANNEHMEN",
+  "nein": "SELBST GEHEN",
+  "start": "Das Stück davor ist schon gegangen. Im Gang liegen Spuren, und sie haben dein Schuhmaß.",
+  "tot": "Der andere ist nicht weit gekommen. Du stehst in der Kapelle, und sein Platz ist leer.",
+  "entwurf": true
+ },
+ "notizen": {
+  "waechter": {
+   "lotse": {
+    "wahr": "Lotse: Wasser setzt ihm zu. Aus dem Laternenkopf kommen immer wieder Tieflinge, die nicht liegen lassen.",
+    "falsch": "Lotse: Nur Feuer hilft. Die Laterne in seinem Kopf springt vor Hitze, dann bleibt er stehen.",
+    "entwurf": true
+   },
+   "opfernde": {
+    "wahr": "Opfernde: Blut trifft den Stein, sonst wenig. In Abständen kriecht ein Nest aus dem Moor nach.",
+    "falsch": "Opfernde: Salz, nichts anderes. Streu es auf den Arm, dann verliert der Stein seine Kraft.",
+    "entwurf": true
+   },
+   "glockenmutter": {
+    "wahr": "Glockenmutter: Eisen trifft sie hart. Wenn die Glocke ruft, kommen die Chorknaben und stellen sich vor sie.",
+    "falsch": "Glockenmutter: Glaube hilft, sie ist im Grunde Kirche. Mit Weihe zuerst, dann erst die Knaben.",
+    "entwurf": true
+   },
+   "wurm": {
+    "wahr": "Wurm im Salz: Seine Schwäche wechselt, mal Wasser, mal Feuer, mal Fäulnis. Auf das Neue achten.",
+    "falsch": "Wurm im Salz: Die Schwäche ist Wasser und bleibt es. Wer wechselt, verschenkt nur Züge.",
+    "entwurf": true
+   },
+   "windgestalt": {
+    "wahr": "Windgestalt: Wasser dämpft ihn. Nach dem tiefen Einatmen der Maske kommt der schwere Schlag.",
+    "falsch": "Windgestalt: Eisen schneidet die Binden auf. Der schwere Schlag kommt gleich am Anfang.",
+    "entwurf": true
+   },
+   "chor": {
+    "wahr": "Chor im Eis: Salz auf die Köpfe, dann wird er leise. Zuerst stärkt er sich, dann erst schlägt er.",
+    "falsch": "Chor im Eis: Feuer taut ihn auf, die Köpfe schweigen. Der schwere Schlag kommt als Erstes, Block bereit.",
+    "entwurf": true
+   },
+   "ruft": {
+    "wahr": "Was ruft: Zuerst schadet Salz am meisten. Später wechselt die Schwäche zu Glaube oder Fäulnis.",
+    "falsch": "Was ruft: Licht gegen jede Gestalt, vom König bis zum Auge. Die Augen am Rand lässt es in Ruhe.",
+    "entwurf": true
+   },
+   "erhoerte": {
+    "wahr": "Erhörte: Salz löscht den Docht. Sie schmilzt im eigenen Licht und wird dabei schneller, nicht warten.",
+    "falsch": "Erhörte: Feuer härtet das Wachs, dann hält sie still. Die Wachshände sind harmlos, nicht beachten.",
+    "entwurf": true
+   },
+   "ungeheilter": {
+    "wahr": "Ungeheilter: Feuer frisst die Binden. Er nimmt dir die Stütze, jede Karte wiegt mehr. Später hilft Glaube.",
+    "falsch": "Ungeheilter: Wasser wäscht ihm die Binden ab. Mit den Krücken in der Hand wird dir jede Karte billiger.",
+    "entwurf": true
+   },
+   "oberschwester": {
+    "wahr": "Oberschwester: Blut trifft sie, die Haube bleibt stehen. Die Ruhe, die sie verschreibt, ist eine tote Karte.",
+    "falsch": "Oberschwester: Salz kippt ihre Wanne, dann fällt sie. Die Ruhe, die sie verschreibt, heilt dich später.",
+    "entwurf": true
+   },
+   "badekarren": {
+    "wahr": "Badekarren: Feuer verträgt das Leinen nicht. Ist der Vorhang zu, kommt man an die Dame nicht heran.",
+    "falsch": "Badekarren: Wasser spült die Dame heraus. Was sie vorhat, sieht man durch das Leinen genau.",
+    "entwurf": true
+   },
+   "uhrmacher": {
+    "wahr": "Uhrmacher: Eisen trifft ihn am besten. Er stellt deine Uhr nach, eine Karte wird teurer, Block hält nicht.",
+    "falsch": "Uhrmacher: Block ist gegen ihn das Beste, seine Schläge sind lang zu sehen. Mit Salz wird er langsam.",
+    "entwurf": true
+   },
+   "oberkellner": {
+    "wahr": "Oberkellner: Wasser spült ihm den Teller vom Kragen. Die Rechnung, die er dir gibt, lässt sich nur tragen.",
+    "falsch": "Oberkellner: Die Rechnung kann man bezahlen, eine Karte genügt. Blut trifft ihn am meisten.",
+    "entwurf": true
+   },
+   "abschreiber": {
+    "wahr": "Abschreiber: Feuer frisst die Seiten. Was er von dir abschreibt, ist nutzlos und liegt dir nur im Stapel.",
+    "falsch": "Abschreiber: Wasser verwischt die Tinte. Seine Abschrift deiner letzten Karte kannst du selbst spielen.",
+    "entwurf": true
+   },
+   "adlerpult": {
+    "wahr": "Adler vom Pult: Eisen biegt das Messing. Wer ihn schlägt, greift in die Federkiele und spürt es.",
+    "falsch": "Adler vom Pult: Feuer verbrennt die Seiten, dann fällt er. Die Kiele stecken harmlos, ruhig zuschlagen.",
+    "entwurf": true
+   },
+   "schicht": {
+    "wahr": "Schicht: Feuer in den Dosenturm. Der Takt zieht Runde um Runde an, nicht lange herumspielen.",
+    "falsch": "Schicht: Der Takt bleibt gleich, man kann sich Zeit lassen. Wasser trifft den Dosenturm am härtesten.",
+    "entwurf": true
+   },
+   "fang": {
+    "wahr": "Fang: Salz auf den Kabeljau. Jeden Zug legt er dir eine Gräte in den Stapel, die nichts tut.",
+    "falsch": "Fang: Er ist ein Fisch, also Feuer, kochen. Die Gräten sind Waffen, aufheben und spielen.",
+    "entwurf": true
+   },
+   "regulator": {
+    "wahr": "Regulator: Wasser hemmt das Pendel. Die Schwäche wechselt zu Eisen und zurück, und das Rad rückt weiter.",
+    "falsch": "Regulator: Feuer löst die Hemmung. Er schlägt immer gleich weit aus, das Hauptrad bleibt, wo es ist.",
+    "entwurf": true
+   },
+   "griff": {
+    "wahr": "Griff: Blut trifft die Finger. Er spielt deine letzte Karte gegen dich, die schwache gehört ans Ende.",
+    "falsch": "Griff: Wasser, er kommt ja aus dem Kanal. Er macht nichts nach, er schlägt nur, Hieb um Hieb.",
+    "entwurf": true
+   },
+   "wurzelstock": {
+    "wahr": "Wurzelstock: Feuer in die Rinde. Mit jedem Zug lässt er einen Arm mehr herunter, kurz halten.",
+    "falsch": "Wurzelstock: Wasser lässt das Holz quellen und lähmt es. Seine Arme bleiben immer gleich viele.",
+    "entwurf": true
+   },
+   "kronengaenger": {
+    "wahr": "Kronengänger: Feuer und Eisen wechseln sich als Schwäche ab. Das Harz klebt dir jeden Zug eine tote Karte an.",
+    "falsch": "Kronengänger: Wasser spült das Harz ab, deine Karten bleiben frei. Seine Schwäche ist immer Feuer.",
+    "entwurf": true
+   },
+   "voraus": {
+    "wahr": "Voraus: Licht bricht das schwarze Glas. Er spielt deine nächste Karte vor dir, Seltenes sieht er nicht kommen.",
+    "falsch": "Voraus: Eisen splittert ihn. Neues sieht er voraus, deine Gewohnheiten bringen ihn aus dem Takt.",
+    "entwurf": true
+   },
+   "lichtqualle": {
+    "wahr": "Lichtqualle: Salz auf die Vorhänge. Wer ins Licht sieht, dem bleibt eine Karte diesen Zug stehen.",
+    "falsch": "Lichtqualle: Feuer verdampft sie. Ins Licht zu sehen schadet nicht, nichts bleibt dir liegen.",
+    "entwurf": true
+   },
+   "herz": {
+    "wahr": "Herz: Blut ist seine Schwäche. Es schlägt langsam, und zwischen zwei Schlägen liegt die Kammer offen.",
+    "falsch": "Herz: Solange es schlägt, liegt die Kammer offen, dann zuschlagen. Salz stillt die Adern.",
+    "entwurf": true
+   },
+   "kalb": {
+    "wahr": "Kalb: Licht trifft die Haut. Jeden Zug wächst ihm ein Knochen nach, in der zweiten Hälfte hilft Blut.",
+    "falsch": "Kalb: Es ist fertig, es wächst nichts mehr nach. Blut trifft es vom ersten Zug an.",
+    "entwurf": true
+   },
+   "linse": {
+    "wahr": "Linse: Im Blitz ist sie geschützt, im Dunkel nur Glas. Dann Salz auflegen, nicht im Strahl.",
+    "falsch": "Linse: Im Dunkel ist sie dicht, im Blitz ist sie Glas. Zuschlagen, wenn der Strahl über dich geht.",
+    "entwurf": true
+   },
+   "nebelhorn": {
+    "wahr": "Nebelhorn: Erst holt es lange Luft und zieht den Nebel ein, dann kommt alles auf einmal. Eisen.",
+    "falsch": "Nebelhorn: Es schlägt gleich im ersten Zug zu und wird danach langsamer. Wasser in den Trichter.",
+    "entwurf": true
+   },
+   "ungetaufte": {
+    "wahr": "Ungetaufte: Wasser in den glühenden Mund. Zwischen den Glockenschlägen summt sie offen, nur dann treffen.",
+    "falsch": "Ungetaufte: Beim Schlag steht sie offen, im Summen deckt sie der Lehm. Feuer setzt ihr zu.",
+    "entwurf": true
+   },
+   "tretrad": {
+    "wahr": "Tretrad: Feuer ins Eichenholz. Das Rad dreht sich Gang um Gang schneller, Blut trifft es zeitweise auch.",
+    "falsch": "Tretrad: Wasser macht die Eiche glitschig, er fällt. Das Rad geht gleichmäßig, Warten lohnt.",
+    "entwurf": true
+   },
+   "brennofen": {
+    "wahr": "Brennofen: Wasser nimmt ihm die Glut. Was brennt, frisst er, Feuerkarten verpuffen vor ihm.",
+    "falsch": "Brennofen: Feuer schwächt ihn, die Glut in der Tür. Feuerkarten gehören an den Anfang.",
+    "entwurf": true
+   },
+   "neununddreissigste": {
+    "wahr": "Neununddreißigste: Eisen. Sind die Schilde dicht, trifft nichts durch, und dazwischen stößt es zurück.",
+    "falsch": "Neununddreißigste: Gerade in der Schildkröte ist sie weich. Feuer macht den Lehm der Schilde mürbe.",
+    "entwurf": true
+   },
+   "rueckseite": {
+    "wahr": "Rückseite: Eisen. Wohin sie sieht, wird eine Karte schwerer. Im Neumond ist die Scheibe nicht zu treffen.",
+    "falsch": "Rückseite: Im Neumond ist die Scheibe verwundbar, dann alles hineinwerfen. Wasser lässt sie wachsen.",
+    "entwurf": true
+   },
+   "mondmann": {
+    "wahr": "Mann im Mond: Feuer ins Reisig. Was er trägt, lädt er dir auf, und es bleibt. Später hilft Eisen.",
+    "falsch": "Mann im Mond: Wasser, er geht ja durch Asche. Das Reisig lässt sich ablegen, wirf es einfach weg.",
+    "entwurf": true
+   },
+   "sender": {
+    "wahr": "Sender: Salz auf die Bakelitschränke. Man hört nur die Hälfte seiner Absicht, und in Funkstille trifft nichts.",
+    "falsch": "Sender: Licht lässt die Röhren platzen. Ist er funkstill, sieht man das Gesicht und trifft.",
+    "entwurf": true
+   },
+   "kastendrachen": {
+    "wahr": "Kastendrachen: Wasser trifft ihn. Auf dem Draht liegt Strom, wer ihn anfasst, bekommt ihn zurück.",
+    "falsch": "Kastendrachen: Der Draht ist tot, ruhig anfassen. Eisen trifft ihn am härtesten.",
+    "entwurf": true
+   },
+   "heimleiterin": {
+    "wahr": "Heimleiterin: Feuer ins Aufnahmebuch. In der Nachtruhe ist nichts zu holen, ihre Nummer tut nichts.",
+    "falsch": "Heimleiterin: Wasser, die Kinder haben nasses Haar. Die Nummer im Stapel ist gute Beute, behalten.",
+    "entwurf": true
+   },
+   "fotograf": {
+    "wahr": "Fotograf: Licht, die Platte verträgt es nicht. Eine Karte bleibt stehen, bis das Bild gemacht ist.",
+    "falsch": "Fotograf: Fäulnis verdirbt ihm die Platten. Das Stillhalten gilt für ihn, nicht für deine Hand.",
+    "entwurf": true
+   },
+   "einfahrt": {
+    "wahr": "Einfahrt: Salz auf die Schienen. Erst das Licht im Tunnel, dann das Rauschen, dann kommt der Schlag.",
+    "falsch": "Einfahrt: Der Zug kommt ohne Vorzeichen, plötzlich. Feuer auf die Stirnlampen.",
+    "entwurf": true
+   },
+   "menge": {
+    "wahr": "Menge: Licht trifft sie. Im Gedränge kostet eine Karte mehr, die Schwäche wechselt auf Blut.",
+    "falsch": "Menge: Salz auf den Bahnsteig, sie weichen aus. Im Gedränge werden deine Karten billiger.",
+    "entwurf": true
+   },
+   "galionsfigur": {
+    "wahr": "Galionsfigur: Feuer in das Holz. Ihr Bug geht durch jeden Block, wer sich nur duckt, hat nichts davon.",
+    "falsch": "Galionsfigur: Block hält ihren Rammstoß ab, aufbauen und warten. Wasser nimmt ihr die Fahrt.",
+    "entwurf": true
+   },
+   "moorpferd": {
+    "wahr": "Moorpferd: Feuer, manchmal auch Blut. Das Moor hält jeden Zug eine deiner Karten fest.",
+    "falsch": "Moorpferd: Wasser hilft gegen den Moorgrund. Die Karten bleiben dir, nur Gold bleibt hängen.",
+    "entwurf": true
+   },
+   "prediger": {
+    "wahr": "Prediger: Ist die Sanduhr voll, kommt das Urteil. Seine Schwäche wechselt zwischen Wasser, Feuer und Glaube.",
+    "falsch": "Prediger: Das Urteil kommt zu Beginn, danach ist er stumm. Seine Schwäche bleibt Salz.",
+    "entwurf": true
+   },
+   "eingesalzene": {
+    "wahr": "Eingesalzene: Wasser löst das Salz von ihr. Sie salzt dir eine Karte ein, die bleibt diesen Zug tot.",
+    "falsch": "Eingesalzene: Salz stärkt dich gegen sie, es nimmt ihr die Kraft. Deine Karten behältst du.",
+    "entwurf": true
+   },
+   "getragene": {
+    "wahr": "Getragener: Feuer in die Lade. Die Träger decken, was neben ihr geht, und die Mumien kommen nach.",
+    "falsch": "Getragener: Die Träger schützen nur sich selbst. Wasser auf die Binden, dann fällt die Lade.",
+    "entwurf": true
+   },
+   "welle": {
+    "wahr": "Welle: Eisen bricht das schwarze Eis. Jedes Mal, wenn du wegsiehst, ist sie weiter, dann bricht sie.",
+    "falsch": "Welle: Feuer lässt das Eis schmelzen. Sie bricht, sobald man sie ansieht, nicht erst später.",
+    "entwurf": true
+   }
+  },
+  "biome": {
+   "hafen": {
+    "wahr": "Hafen: Der Lotse hält Wasser nicht aus. Witwe Haskins unter der Fischhalle verkauft, was die Flut bringt.",
+    "falsch": "Hafen: Die Witwe unter dem Vordach tauscht nur, Gold nimmt sie nicht. Der Lotse fällt vor Feuer.",
+    "entwurf": true
+   },
+   "moor": {
+    "wahr": "Moor: Der Torfmann nimmt nur Gold und versenkt es gleich. Gegen den Opfernden hilft Blut.",
+    "falsch": "Moor: Der Torfmann tauscht gegen Dinge, Gold will er nicht. Das Nest brennt schlecht, Wasser nehmen.",
+    "entwurf": true
+   },
+   "kapelle": {
+    "wahr": "Kapelle: Der Küster verkauft die Gaben der Gemeinde. Salz setzt den Ertrunkenen zu.",
+    "falsch": "Kapelle: Der Küster kauft nur noch an, verkauft nichts. Die Ertrunkenen scheuen Feuer.",
+    "entwurf": true
+   },
+   "salz": {
+    "wahr": "Salz: Die alten Stoffe reagieren hier miteinander, Salz, Wasser, Blut. Der Salzläufer weicht vor Wasser.",
+    "falsch": "Salz: Hier reagieren Eisen und Feuer auf neue Weise. Dem Grabwächter ist Blut das Schlimmste.",
+    "entwurf": true
+   },
+   "stadt": {
+    "wahr": "Stadt: Beim Zugende reagieren die erste und die letzte Karte miteinander. Die Mumien leiden an Fäulnis.",
+    "falsch": "Stadt: Hier reagieren nur zwei Karten nebeneinander, wie oben. Die Boten fürchten Wasser.",
+    "entwurf": true
+   },
+   "eis": {
+    "wahr": "Eis: Jede Karte reagiert mit der vorletzten, nicht mit der letzten. Der Rufer verträgt Feuer schlecht.",
+    "falsch": "Eis: Die Reaktion geht hier wie oben von der letzten Karte aus. Der Rufer scheut Wasser.",
+    "entwurf": true
+   },
+   "pforte": {
+    "wahr": "Pforte: Jeden Zug gilt die Regel eines anderen Bioms, die nächste siehst du schon. Augen scheuen Licht.",
+    "falsch": "Pforte: Die Regel bleibt den ganzen Kampf dieselbe, such dir die Reihenfolge aus. Augen scheuen Salz.",
+    "entwurf": true
+   },
+   "grotte": {
+    "wahr": "Grotte: Die Kerzenfrau nimmt kein Geld, sie wiegt Gabe gegen Gabe. Wachshände halten Feuer nicht aus.",
+    "falsch": "Grotte: Die Kerzenfrau nimmt Gold, nur wenig. Wachs fürchtet Wasser, die Hände auch.",
+    "entwurf": true
+   },
+   "kurhaus": {
+    "wahr": "Kurhaus: Der Apotheker liest seine Rezepte selbst nicht. Salz trifft die Genesenden, Feuer die Badefrauen.",
+    "falsch": "Kurhaus: Der Apotheker liest jedes Rezept genau, darauf ist Verlass. Die Genesenden scheuen Blut.",
+    "entwurf": true
+   },
+   "nachtzug": {
+    "wahr": "Nachtzug: Der Schaffner verkauft Liegengelassenes, auch Dinge, die dir noch gehören werden. Gepäck: Wasser.",
+    "falsch": "Nachtzug: Der Schaffner kauft Liegengelassenes auf, er verkauft nichts. Das Gepäck scheut Feuer.",
+    "entwurf": true
+   },
+   "kloster": {
+    "wahr": "Kloster: Der Bibliothekar verleiht nur, nichts davon bleibt dein. Die Tintenfrau hält Wasser nicht aus.",
+    "falsch": "Kloster: Der Bibliothekar verkauft, und was du kaufst, bleibt dein. Die Tintenfrau scheut Feuer.",
+    "entwurf": true
+   },
+   "fabrik": {
+    "wahr": "Fabrik: Die Vorarbeiterin kennt deinen Namen von der Stempelkarte. Dosenkinder geben Eisen nach.",
+    "falsch": "Fabrik: Die Vorarbeiterin kennt dich nicht, sie fragt erst nach dem Namen. Der Kesselmann scheut Feuer.",
+    "entwurf": true
+   },
+   "gezeitenwerk": {
+    "wahr": "Gezeitenwerk: Jeden anderen Zug ist Flut, und die Hand bleibt dir. Das Gewicht gibt Eisen nach.",
+    "falsch": "Gezeitenwerk: Bei Flut wirfst du die Hand ab, bei Ebbe behältst du sie. Der Kanalaal scheut Salz.",
+    "entwurf": true
+   },
+   "wald": {
+    "wahr": "Wald: Am Zugbeginn kommt deine zuletzt gespielte Karte aus der Ablage zurück. Der Steinhirsch gibt Eisen nach.",
+    "falsch": "Wald: Am Zugbeginn kommt die erste Karte des letzten Zugs zurück. Der Harzfang scheut Feuer.",
+    "entwurf": true
+   },
+   "ufer": {
+    "wahr": "Ufer: Gespielte Karten gehen unter den Stapel, gemischt wird nie. Der, der vor dir kam, scheut Licht.",
+    "falsch": "Ufer: Die Ablage wird am Zugende gemischt wie sonst auch. Der, der vor dir kam, scheut Salz.",
+    "entwurf": true
+   },
+   "glasmeer": {
+    "wahr": "Glasmeer: Die oberste Karte liegt offen, eine Handkarte darf man dagegen tauschen. Leithund: Feuer.",
+    "falsch": "Glasmeer: Die unterste Karte liegt offen, man tauscht beliebig oft. Der Leithund scheut Licht.",
+    "entwurf": true
+   },
+   "walkathedrale": {
+    "wahr": "Walkathedrale: Die dritte Karte eines Zuges reagiert mit allen davor. Rippenkriecher geben Eisen nach.",
+    "falsch": "Walkathedrale: Hier reagiert die letzte Karte mit allen davor. Der Walfänger nimmt kein Gold.",
+    "entwurf": true
+   },
+   "leuchtturm": {
+    "wahr": "Leuchtturm: Der Strandvogt verleiht nur bis zur nächsten Flut, dann holt das Meer alles zurück. Möwen: Eisen.",
+    "falsch": "Leuchtturm: Der Strandvogt verkauft, was das Meer bringt, für immer. Die Möwen fürchten Feuer.",
+    "entwurf": true
+   },
+   "glockengiesserei": {
+    "wahr": "Glockengießerei: Der Wandergießer gießt um, was du beim Krämer sahst, aus Feuer wird Wasser. Naht: Blut.",
+    "falsch": "Glockengießerei: Der Wandergießer lässt die Stoffe, wie sie sind, nur der Preis ändert sich. Formerin: Wasser.",
+    "entwurf": true
+   },
+   "ziegelgruben": {
+    "wahr": "Ziegelgruben: Die erste Karte eines Zuges reagiert mit der letzten des vorigen. Der Schreiber nimmt kein Gold.",
+    "falsch": "Ziegelgruben: Am Zugende reißt die Kette ab, jeder Zug beginnt neu. Der Schreiber will Gold.",
+    "entwurf": true
+   },
+   "mond": {
+    "wahr": "Mond: Jeder Gegner zeigt seine nächste Absicht schon mit. Der Gehilfe verleiht nur, nichts gehört jemandem.",
+    "falsch": "Mond: Die Absichten sieht man hier gar nicht, man spielt blind. Der Kraterbewohner scheut Wasser.",
+    "entwurf": true
+   },
+   "waage": {
+    "wahr": "Waage: Übrige Energie verfällt nicht, sie liegt als Block in der Schale. Der Schlagbaum gibt Blut nach.",
+    "falsch": "Waage: Übrige Energie wird hier zu Heilung, nicht zu Block. Der Verwalter zahlt in Gold.",
+    "entwurf": true
+   },
+   "funkstation": {
+    "wahr": "Funkstation: Drei Karten mit gleichen Kosten nacheinander, die dritte wirkt stärker. Rauschen: Licht.",
+    "falsch": "Funkstation: Die erste von drei gleich teuren Karten wird verstärkt, immer. Die Telegrafistin scheut Feuer.",
+    "entwurf": true
+   },
+   "waisenhaus": {
+    "wahr": "Waisenhaus: Der Hausmeister verkauft, was die Kinder liegen ließen. Das Zugedeckte gibt Salz nach.",
+    "falsch": "Waisenhaus: Der Hausmeister kauft nur an, verkauft nichts. Der Turnlehrer scheut Glaube.",
+    "entwurf": true
+   },
+   "station": {
+    "wahr": "Station: Löst eine Karte eine Reaktion aus, liegt sie oben auf dem Stapel. Fundsachen gibt es nur geliehen.",
+    "falsch": "Station: Eine Karte, die reagiert, scheidet hier aus dem Spiel. Der Beamte verkauft die Fundsachen.",
+    "entwurf": true
+   }
+  }
+ },
+ "ui": {
+  "erbe_titel": "DAS ERBE",
+  "notizen_titel": "NOTIZEN",
+  "notizen_rast": "Unter dem Stein liegt ein Heft. Die Schrift ist nicht deine.",
+  "seite_vorgaenger": "Notizen des Vorgängers",
+  "seite_fehlzeit": "Einträge, die du nicht geschrieben hast",
+  "entwurf": true
+ }
+}

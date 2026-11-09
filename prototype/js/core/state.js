@@ -28,7 +28,7 @@ function hgKarte(id,it,k){const H=HANDGRIFFE[id];if(!H)return null;const D=def(i
 function kartenVon(it){if(it.x)return hgVon(it).map((id,k)=>hgKarte(id,it,k)).filter(Boolean);const D=def(it);const o=[];
  for(let k=0;k<(BAL.card_copies||1);k++)D.cards.forEach((c,ci)=>{const g=it.schliff&&it.schliff['s'+ci];const kc={...c,c:Math.max(0,c.c-(g?1:0)),st:[...D.st],src:D.n,spr:D.spr,img:typeof itemBild==='function'?itemBild(it.id):'',uid:it.uid,ci,schliff:!!g,cid:it.uid+':'+ci+':'+k};o.push(it.fremd&&it.fremd['s'+ci]&&typeof fremdeFassung==='function'?fremdeFassung(kc):kc);});
  hgVon(it).forEach((id,k)=>{const c=hgKarte(id,it,k);if(c){c.cid=it.uid+':h'+k;o.push(it.fremd&&it.fremd['h'+k]&&typeof fremdeFassung==='function'?fremdeFassung(c):c);}});return o;} // M9: fremde Fassung je Karte (it.fremd)
-function deckListe(items){const l=(items||allActive()).flatMap(kartenVon);if(!items&&S.lose&&S.lose.length&&typeof Tiefe!=='undefined')S.lose.forEach(id=>{const c=Tiefe.karte(id);if(c)l.push(c);});return l;} // M9: lose Karten (Das Zeichen)
+function deckListe(items){const l=(items||allActive()).flatMap(kartenVon);if(!items&&S.lose&&S.lose.length&&typeof Tiefe!=='undefined')S.lose.forEach(id=>{const c=Tiefe.karte(id);if(c)l.push(c);});if(!items&&S.loseHg&&S.loseHg.length&&typeof Metaebene!=='undefined')l.push(...Metaebene.loseKarten());return l;} // M9: lose Karten (Das Zeichen), M10: lose Handgriffe (Erbe, fremder Handgriff)
 function alive(){return S.enemies.filter(e=>e.hp>0);}
 function log(s){S.log.unshift(s);S.log=S.log.slice(0,14);}
 function biomId(){if(!S.route)return'hafen';return S.route[S.akt]||(S.angebote&&S.angebote[S.akt]&&S.angebote[S.akt][0])||S.route[S.akt-1]||'hafen';}

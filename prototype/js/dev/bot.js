@@ -69,6 +69,7 @@ const Bot={
    else if(w.art==='kerbe'){const k=besitz().filter(b=>b.an&&kerbenVon(b.it)<3).sort((a,b)=>kerbenVon(a.it)-kerbenVon(b.it))[0];if(k)kerbeDazu(k.it.uid);else wahlAbbrechen();}
    else wahlAbbrechen();break;}
   case'uebergang':leaveUebergang();break;
+  case'erbe':Metaebene.erbeWahl(true);break; // M10: das Erbe nimmt er immer
   case'biomwahl':{const an=S.angebote[S.akt];const job=JOBS.find(j=>j.id===S.job);let i=an.indexOf(job&&job.vorliebe);if(i<0)i=S.seed%an.length;chooseBiom(i);break;}
   case'weg':this.wegWahl();break;
   case'fight':this.kampfZug();break;

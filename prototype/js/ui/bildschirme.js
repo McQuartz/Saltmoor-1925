@@ -5,17 +5,17 @@ function panelHtml(ph){switch(ph){
  case'fight':return'';case'reward':return rewardHtml();case'event':case'event_folge':return eventHtml();case'streichen':return streichenHtml('Welche Karte streichst du?','skipstrike');
  case'kraemer':return kraemerHtml();case'kraemer_streichen':return streichenHtml(`Für ${BAL.shop.streichen_preis} Gold streicht ${esc(biom().kraemer.n)} eine Karte aus deinem Deck. Das Item bleibt angelegt.`,'kstrike0');
  case'werkstatt':return werkstattHtml();case'wahl':return wahlHtml();case'event_hg':case'kraemer_hg':return ritzenHtml('Wohin ritzt du den Handgriff?');case'rast':return rastHtml();case'wandbild':return wandbildHtml();case'fund':return fundHtml();
- case'strand':return strandHtml();case'ankunft':return ankunftHtml();case'ende':return endeHtml();}return'';}
+ case'erbe':return erbeHtml();case'strand':return strandHtml();case'ankunft':return ankunftHtml();case'ende':return endeHtml();}return'';}
 const box=(cls,inner)=>`<div class="box ${cls}"><div class="innen">${inner}</div></div>`;
 function titelHtml(){const M=Meta.get();return `<div class="titel"><h1>SALTMOOR</h1><div class="jahr">NEUENGLAND · 1925</div>
  <div class="menue">${hasSave()?'<button class="deco" data-act="fortsetzen">FORTSETZEN</button>':''}<button class="deco" data-act="neu">${hasSave()?'NEUER ABSTIEG':'HINAB'}</button>
  <button class="deco klein" data-act="tagebuch">TAGEBUCH</button><button class="deco klein" data-act="einst">EINSTELLUNGEN</button></div>
- <div class="fuss">${M.runs?`${M.runs} Abstiege · ${M.fragmente.length} von ${FRAGS.length} Fragmenten`:'Etwas unter der Stadt ruft.'}</div></div>`;}
+ ${typeof Metaebene!=='undefined'&&Metaebene.pauseText?`<p class="pause">${esc(Metaebene.pauseText)}</p>`:''}<div class="fuss">${M.runs?`${M.runs} Abstiege · ${M.fragmente.length} von ${FRAGS.length} Fragmenten`:'Etwas unter der Stadt ruft.'}</div></div>`;}
 function figurHtml(){const M=Meta.get();const st=M.maxStufe;
- return box('figur',`<h2>WER STEIGT HINAB?</h2><p class="lead">Du wachst am Strand von Saltmoor auf. Salz in der Lunge. Unter dir ruft etwas.</p>
+ return box('figur',`<h2>WER STEIGT HINAB?</h2>${typeof Metaebene!=='undefined'&&Metaebene.ankunftZeile()?`<p class="lead ankunftzeile">${esc(Metaebene.ankunftZeile())}</p>`:`<p class="lead">Du wachst am Strand von Saltmoor auf. Salz in der Lunge. Unter dir ruft etwas.</p>`}
  <div class="figuren">${JOBS.map(j=>{const frei=Meta.figurFrei(j)||(typeof Dev!=='undefined'&&Dev.an);const items=[...j.w,...j.k,...j.t];const deck=deckGroesse(items,j);const set=ROLES.find(r=>r.n===j.set);
   return `<div class="fig ${frei?'':'zu'}" ${frei?`data-job="${j.id}"`:''}><div class="fn">${esc(j.n).toUpperCase()}</div>
-   ${frei?`<div class="aus">„${esc(j.ausrede)}“</div><div class="its">${items.map(id=>`<img src="${itemBild(id)}" title="${esc(ITEMS[id].n)}">`).join('')}</div>
+   ${frei?`<div class="aus">„${esc(ausredeVon(j))}“</div><div class="its">${items.map(id=>`<img src="${itemBild(id)}" title="${esc(ITEMS[id].n)}">`).join('')}</div>
    <div class="fd">${esc(j.d)}</div>${j.faehigkeit_t?`<div class="set">Fähigkeit: <span class="hat">${esc(j.faehigkeit_t)}</span></div>`:''}<div class="set">${set?'Set: ':''}${set?set.i.map(id=>`<span class="${items.includes(id)?'hat':''}">${esc(ITEMS[id].n)}</span>`).join(', '):''}<br><span class="hint">${set?esc(set.t):''}</span></div><div class="deck">${deck} Karten · zieht ${BIOMES[j.vorliebe].kurz} vor</div>`
    :`<div class="aus zu">Gesperrt</div><div class="fd">Lies ${j.frei_ab} Wandbild-Fragmente (${M.fragmente.length}/${j.frei_ab}).</div>`}</div>`;}).join('')}</div>
  ${M.start.length?`<div class="stufen">Startvariante: <button class="${!S.wahlStart?'an':''}" data-start="">keine</button>${RUN.startvarianten.filter(v=>M.start.includes(v.id)).map(v=>`<button class="${S.wahlStart===v.id?'an':''}" data-start="${v.id}" title="${esc(v.t)}">${esc(v.n)}</button>`).join('')}</div>`:''}
@@ -23,7 +23,8 @@ function figurHtml(){const M=Meta.get();const st=M.maxStufe;
 function biomwahlHtml(){const a=RUN.akte[S.akt];const an=S.angebote[S.akt]||[];
  return box('weg',`<div class="ueber">${a.n.toUpperCase()} · ${esc(a.titel).toUpperCase()}</div><h2>WELCHER WEG FÜHRT HINAB?</h2>
  <div class="wege">${an.map((b,i)=>{const B=BIOMES[b];return `<div class="kbiom" data-biom="${i}">${karteMiniHtml(b)}<div class="wn">${esc(B.n).toUpperCase()}</div><div class="hinw">${esc(B.zeit||'')}</div><div class="ank">${esc(B.anreise||(B.weg_hinweise&&B.weg_hinweise.kampf&&B.weg_hinweise.kampf[0])||'')}</div>${karteBiegungHtml(b)}</div>`;}).join('')}</div>`);}
-function uebergangHtml(){const a=RUN.akte[S.akt];const b=biom();let satz=S.akt===0?(JOBS.find(j=>j.id===S.job).ausrede):BIOMES[S.route[S.akt-1]].uebergang;
+function uebergangHtml(){const a=RUN.akte[S.akt];const b=biom();let satz=S.akt===0?ausredeVon(JOBS.find(j=>j.id===S.job)):BIOMES[S.route[S.akt-1]].uebergang;
+ const fz=typeof Metaebene!=='undefined'&&Metaebene.übergangSatz();if(fz)satz=fz; // M10: Fehlzeit, das Stück davor ist schon gegangen
  return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p><div class="hint spaet">Klicken oder Taste drücken</div></div>`;}
 // Auftrag 3 M3: die Phase 'weg' zeigt die Peilkarte (js/ui/karte.js); die alte „1 aus 3“-Wegwahl ist entfernt
 function wegHtml(){return kartenHtml('haupt');}
@@ -71,7 +72,7 @@ let EV_BILDER=new Set();
 function evBildHtml(ev){return EV_BILDER.has(ev.id)?`<div class="evbild"><img src="assets/ereignisse/${encodeURIComponent(ev.id)}.png" alt="${esc(ev.bild||ev.t)}" draggable="false"></div>`:'';}
 function eventHtml(){const ev=curEvent();if(!ev)return'';const done=S.phase==='event_folge';
  return box('ereignis zettel',`${evBildHtml(ev)}<h2>${esc(ev.t).toUpperCase()}</h2><p class="evd">${esc(ev.d)}</p>${ev.o.map((o,i)=>`<button class="opt ${S.eventChoice===i&&done?'gew':''}" data-ev="${i}" ${condOk(o.if)&&!done?'':'disabled'}>› ${esc(o.l)}</button>`).join('')}`);}
-function streichenHtml(t,skip){const list=strikeTargets();return box('streichen',`<h2>KARTE STREICHEN</h2><p class="lead">${t}</p><div class="picks">${list.map(it=>{const d=def(it);return `<div class="pick" data-strike="${it.uid}"><img src="${itemBild(it.id)}"><div class="pn">${esc(d.n)}</div><div class="ps">${d.cards.map(c=>esc(c.n)+': '+esc(cardText(c))).join('<br>')}</div></div>`;}).join('')}${(S.lose||[]).map(id=>{const c=typeof Tiefe!=='undefined'&&Tiefe.karte(id);return c?`<div class="pick" data-strike="lose:${id}">${c.img?`<img src="${c.img}">`:''}<div class="pn">${esc(c.n)}</div><div class="ps">${esc(c.sonder.t)}</div></div>`:'';}).join('')}</div><button class="deco klein" data-act="${skip}">LIEBER NICHT</button>`);}
+function streichenHtml(t,skip){const list=strikeTargets();return box('streichen',`<h2>KARTE STREICHEN</h2><p class="lead">${t}</p><div class="picks">${list.map(it=>{const d=def(it);return `<div class="pick" data-strike="${it.uid}"><img src="${itemBild(it.id)}"><div class="pn">${esc(d.n)}</div><div class="ps">${d.cards.map(c=>esc(c.n)+': '+esc(cardText(c))).join('<br>')}</div></div>`;}).join('')}${(S.lose||[]).map(id=>{const c=typeof Tiefe!=='undefined'&&Tiefe.karte(id);return c?`<div class="pick" data-strike="lose:${id}">${c.img?`<img src="${c.img}">`:''}<div class="pn">${esc(c.n)}</div><div class="ps">${esc(c.sonder.t)}</div></div>`:'';}).join('')}${(S.loseHg||[]).map((x,i)=>{const H=HANDGRIFFE[x.hg];return H?`<div class="pick" data-strike="losehg:${i}">${hgBild(x.hg)?`<img src="${hgBild(x.hg)}">`:''}<div class="pn">${esc(H.n)}</div><div class="ps">${esc(cardText(H))}</div></div>`:'';}).join('')}</div><button class="deco klein" data-act="${skip}">LIEBER NICHT</button>`);}
 function kraemerHtml(){const b=biom();const k=b.kraemer;const H=BAL.shop.heal;const sh=S.shop;
  if(sh.zu)return box('kraemer',`<h2>${esc(k.n).toUpperCase()}</h2><p class="lead">${esc(k.ort)}. ${esc(RUN.begegnungen.kraemer_zu.t)}</p><button class="deco" data-act="leave">WEITER ›</button>`); // M9: der Krämer verweigert dich
  return box('kraemer',`<h2>${esc(k.n).toUpperCase()}</h2><p class="lead">${esc(k.ort)}. ${esc(k.zeile)}</p><p class="gold">${gi('gold',KZ())} ${S.gold} Gold</p>${sh.art==='tausch'?`<p class="hint">Hier zahlt man nicht mit Gold. Wähl unten ein Item, das du hergibst${S.sel&&getAt(S.sel)?` (gewählt: <b>${esc(def(getAt(S.sel)).n)}</b>)`:''}, dann das, was du dafür nimmst.</p>`:sh.art==='leihe'?'<p class="hint">Alles hier ist geliehen. Am Anfang des nächsten Akts kommt es zurück.</p>':sh.art==='spiegel'?'<p class="hint">Dieselben Dinge wie beim letzten Krämer. Nur andersherum.</p>':''}
@@ -90,6 +91,7 @@ function werkstattHtml(){const p=forgePreview();const F=BAL.forge;
  ${S.forged?'':`<p class="hint">Oder statt zu verschmelzen:</p><p><button class="deco klein" data-act="wsKerbe">EINE KERBE MEHR</button> <button class="deco klein" data-act="wsSchleifen">EINE KARTE SCHLEIFEN</button>${typeof Farbe!=='undefined'&&Farbe.mitSpur().length?' <button class="deco klein" data-act="wsTilgen">SPUR TILGEN</button>':''}</p>`}<button class="deco" data-act="leave">WEITER ›</button>`);}
 function rastHtml(){const v=Math.round(maxHp()*RUN.rast.heil_anteil);
  return box('rast',`<h2>RAST</h2><p class="lead">${esc((biom().weg_hinweise.rast||[''])[0])} Für einen Moment ruft nichts.</p>
+ ${S.notizen&&S.notizen.length?`<div class="notizen zettel"><p class="hint">${esc((META.ui||{}).notizen_rast||'')}</p>${S.notizen.map(x=>`<p class="hand">${esc(x.t)}</p>`).join('')}</div>`:''}
  ${S.rastDone?'<p class="hint">Du hast gerastet.</p>':`<div class="wahl"><button class="deco" data-act="rastHeil">SCHLAFEN<br><small>+${v} Leben</small></button><button class="deco" data-act="rastSchleifen">SCHLEIFEN<br><small>eine Karte −1 Kosten</small></button><button class="deco" data-act="rastUmritzen">UMRITZEN<br><small>Handgriff verlegen</small></button></div>`}
  <button class="deco" data-act="leave">WEITER ›</button>`);}
 function wandbildHtml(){const fr=FRAGS.find(f=>f.id===S.frag);const neu=S.fragNeu||[];
@@ -111,7 +113,7 @@ function endschirmHtml(titel,satz){const r=S.ergebnis||{};const st=S.stats||{};c
  ${zeile('Build',b.n)}${r.sieg?'':zeile('Todesursache',esc(st.todesursache||'die Tiefe'))}</div>
  <h3>DAS DECK AM ENDE</h3><div class="deckende">${deck}</div>
  ${neu.length?`<div class="neu">${neu.map(x=>'Neu: '+esc(x.n)).join('<br>')}</div>`:''}
- <div class="knoepfe"><button class="deco" data-act="neu">NEUER ABSTIEG</button><button class="deco klein" data-act="gleicherSeed">GLEICHER SEED</button><button class="deco klein" data-act="bildSpeichern">BILD SPEICHERN</button><button class="deco klein" data-act="titel">ZUM TITEL</button></div>`);}
+ ${fehlzeitHtml()}<div class="knoepfe"><button class="deco" data-act="neu">NEUER ABSTIEG</button><button class="deco klein" data-act="gleicherSeed">GLEICHER SEED</button><button class="deco klein" data-act="bildSpeichern">BILD SPEICHERN</button><button class="deco klein" data-act="titel">ZUM TITEL</button></div>`);}
 function strandHtml(){return endschirmHtml(esc(RUN.strand.titel).toUpperCase(),esc(RUN.strand.text));}
 function ankunftHtml(){const A=RUN.ankunft;const j=JOBS.find(x=>x.id===S.job);
  return `<div class="ankunft"><p class="bild">${esc(biom().ankunft_bild||A.bild)}</p><p class="wahr">„${esc(j.wahrheit)}“</p><div class="zwei"><button class="deco" data-ende="bleiben">${A.bleiben.knopf.toUpperCase()}</button><button class="deco" data-ende="umkehren">${A.umkehren.knopf.toUpperCase()}</button></div></div>`;}
@@ -121,3 +123,10 @@ function wegbilderMalen(){document.querySelectorAll('canvas.wegbild').forEach(c=
  const t=document.createElement('canvas');t.width=SW;t.height=SH;const g=t.getContext('2d');sz.ebenen.forEach(L=>g.drawImage(L.canvas,L.x||0,L.y||0));const x=c.getContext('2d');x.imageSmoothingEnabled=false;
  for(let y=0;y<54;y++)for(let i=0;i<96;i++){x.drawImage(t,i*5+2,y*5+2,1,1,i,y,1,1);}}catch(e){}});}
 
+// Auftrag 3 M10: Ausrede nach Stufe, Erbe-Angebot, Fehlzeit-Angebot (Texte aus data/meta.json)
+function ausredeVon(j){return typeof Metaebene!=='undefined'?Metaebene.ausrede(j):j.ausrede;}
+function erbeHtml(){const e=S.erbeAngebot;const T=(META.erbe||{});const U=META.ui||{};if(!e)return'';const c={...HANDGRIFFE[e.hg],st:[...e.st],src:e.src,hg:e.hg,erbe:true};
+ return box('erbe',`<h2>${esc(U.erbe_titel||'')}</h2><p class="lead">${esc(T.t||'')}</p><div class="picks">${hgKarteHtml(e.hg,'data-erbe="1"',`<div class="pst">${e.st.map(k=>gi(k,KZ())).join('')}</div><div class="hint">${esc(e.src||'')}</div>`)}</div>
+ <div class="zwei"><button class="deco" data-act="erbeNehmen">${esc(T.nehmen||'')}</button><button class="deco klein" data-act="erbeLassen">${esc(T.lassen||'')}</button></div>`);}
+function fehlzeitHtml(){if(typeof Metaebene==='undefined'||!Metaebene.an()||!a3('fehlzeit')||S.dev)return'';const M=Meta.get();if(!M.fehlzeitAngebot)return'';const F=META.fehlzeit||{};
+ return `<div class="fehlzeit"><p>${esc(F.t||'')}</p><div class="zwei"><button class="deco klein" data-act="fehlzeitJa">${esc(F.ja||'')}</button><button class="deco klein" data-act="fehlzeitNein">${esc(F.nein||'')}</button></div></div>`;}

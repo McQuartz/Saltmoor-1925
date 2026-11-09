@@ -459,6 +459,8 @@ function strand(o) {
   // Treibholz und Tang, Fußspuren aus dem Wasser
   const th = B.maske(); th.pfad([[300, 214], [330, 210], [356, 213]], 3, 2); th.kap(320, 211, 314, 202, 1.2, .8); K.form(4, th, 0, { k: SAND.slice(0, 4), r: ['#8a806a', '#e0d4bc'], ton: 2 });
   for (let i = 0; i < 12; i++) { const q = i / 12, px = 210 + q * 30 + (i & 1 ? 3 : -3), py = 176 + q * 70; K.e[K.eb(py)].set(px, py, B.pk(SAND[1])); K.e[K.eb(py)].set(px + 1, py, B.pk(SAND[1])); }
+  // Das Spiel zählt mit: Fußspuren je Zahl der bisherigen Runs (o.spuren 0 bis 4); Stufe 0 malt nichts dazu
+  if (o.spuren > 0) strandSpuren(K, o.spuren | 0, P, ufer, SAND, B.rng(Math.floor(r() * 4294967296)));
   // Brandung: Schaumlinien laufen an und ziehen sich zurück
   K.anim.push({ p: .3, f(ctx, t, ox, oy) { for (let k = 0; k < 3; k++) { const ph = (t * .12 + k / 3) % 1, dy = Math.sin(ph * Math.PI) * 10 - 6; ctx.fillStyle = k === 1 ? '#e0dcd0' : '#a0a4a8'; for (let x = -M; x < W + M; x += 2) { const y = Math.round(ufer(x) + dy - k * 3 + Math.sin(x * .1 + t + k) * 1.2); if (Math.sin(x * .23 + k * 2 + t * .5) > -.3) ctx.fillRect(x + ox, y + oy, 2, 1); } } } });
   // Möwen: kleine Winkel, gleiten in Kreisen
@@ -467,6 +469,72 @@ function strand(o) {
   B.partikel(K, { n: 30, farben: ['#a0a4a8', '#e0dcd0'], vx: -6, vy: -1, wob: 3, wf: .5, y0: 150, y1: 210, p: .6 });
   K.reihen = [{ y: 182, skala: .9, nebel: .3 }, { y: 198, skala: 1, nebel: .12 }, { y: 214, skala: 1, nebel: 0 }];
   return K.fertig();
+}
+// ---------- Spuren am Strand (Stufe 1 bis 4), harte Pixel, nur per Seed ----------
+// Ein Abdruck: Ballen breiter, Ferse schmaler, perspektivisch kleiner nach hinten. dir +1 = landeinwärts (Zehen zum Betrachter).
+function strandFuss(K, x, y, s, dir, nass, SAND) {
+  const fw = s > .3 ? Math.max(2, Math.round(3.4 * s)) : 1, fh = s > .55 ? 2 : 1;
+  if (x > 294 && x < 362 && y > 194 && y < 222) return; // Treibholz bleibt frei
+  const set = (px, py, c) => K.e[K.eb(py)].set(px, py, c);
+  // Mulde: eine Stufe dunkler als der Sand dort, unten ein Pixel heller Rand
+  const kern = B.pk(nass ? SAND[0] : SAND[1]), lippe = B.pk(nass ? SAND[5] : SAND[6]), x0 = Math.round(x - fw / 2);
+  for (let j = 0; j < fh; j++) {
+    const w = fh > 1 && fw > 2 && j === (dir > 0 ? 0 : 1) ? fw - 1 : fw; // Ferse schmaler, Ballen breit
+    for (let i = 0; i < w; i++) set(x0 + i, y + j, kern);
+  }
+  if (fw > 1) set(x0 + (dir > 0 ? 1 : 0), y + fh, lippe);
+  else if (!nass) set(x0, y + fh, lippe);
+}
+// Eine Spur: Paare links/rechts von (xa) am Wasser bis (xb) unten; stride = Schrittlänge (Tiefe), dir -1 = zurück ins Wasser
+function strandSpur(K, P, ufer, SAND, rs, xa, xb, stride, dir) {
+  const ya = ufer(xa) + 7, yb = 262, Za = P.h / (ya - P.vy), Zb = P.h / (yb - P.vy), Xa = P.X(xa, ya), Xb = P.X(xb, yb), pts = [];
+  let Z = Za, k = 0;
+  while (Z > Zb) { Z -= Math.max(stride * .6 * rs.f(.85, 1.2), .016 * Z * Z); if (Z < Zb) break; const t = (Za - Z) / (Za - Zb), X = Xa + (Xb - Xa) * t + Math.sin(t * 5 + xa) * .03; pts.push([X, Z, k++ & 1 ? 1 : -1]); }
+  if (dir < 0) pts.reverse();
+  for (const [X, Z, sd] of pts) {
+    const s = 1 / Z, Xs = X + sd * (.045 + rs.j(.01)), x = Math.round(P.vx + Xs * P.h * s + rs.j(1)), y = Math.round(P.vy + P.h * s);
+    strandFuss(K, x, y, s, dir, y - ufer(x) < 24, SAND);
+  }
+}
+// Stufe 4: ein ausgetretener, festgetretener Pfad. Verdichteter Sand, zwei Rillen, Wall am Rand, keine einzelnen Abdrücke mehr.
+function strandPfad(K, ufer, SAND, rs) {
+  const P = SAND.map(B.pk), cxf = y => 205 + (y - 176) * .38 + Math.sin(y * .04) * 8, hwf = y => Math.max(3, .26 * (y - 120));
+  const ruts = [-.5, .5];
+  for (let y = 172; y < H + 4; y++) {
+    const cx = cxf(y), hw = hwf(y), el = hw * (1 + rs.j(.08)), er = hw * (1 + rs.j(.08));
+    const dy = y - ufer(cx) - 1; if (dy < 0) continue;
+    const nass = y - ufer(cx) < 24, set = (x, c) => K.e[K.eb(y)].set(x, y, c);
+    for (let x = Math.floor(cx - el - 1); x <= Math.ceil(cx + er + 1); x++) {
+      const d = x - cx, u = d < 0 ? -d / el : d / er;
+      if (u > 1.08) continue;
+      if (dy < 8 && [[0, 2], [3, 1]][y & 1][x & 1] >= Math.floor(dy / 2)) continue; // Saum: gestuftes Dither, kein Alpha
+      const rand = u > .9, h = B.hash(x, y, 31), rutt = ruts.some(q => Math.abs(d - q * (d < 0 ? el : er)) < .7);
+      let c;
+      if (rand) c = d > 0 ? P[6] : P[2];
+      else if (rutt && h < .8) c = P[2];
+      else { c = nass ? P[3] : P[3]; if (u > .45 && ((x + y) & 1)) c = nass ? P[2] : P[4]; if (h > .93) c = nass ? P[5] : P[5]; else if (h < .06) c = nass ? P[0] : P[2]; if (nass && y % 3 === 0 && h > .8) c = P[5]; }
+      set(x, c);
+    }
+  }
+}
+function strandSpuren(K, stufe, P, ufer, SAND, rs) {
+  if (stufe >= 4) { strandPfad(K, ufer, SAND, rs); return; }
+  // [Start am Wasser, Ende unten, Schrittlänge, Richtung]; jede Stufe behält die Spuren der vorigen
+  const T = [[118, 82, .12, 1], [336, 408, .09, 1], [66, 22, .15, 1], [424, 452, .07, 1],
+    [182, 330, .1, 1], [452, 196, .11, 1], [286, 262, .08, -1], [46, 140, .24, -1], [388, 372, .14, 1], [140, 20, .12, -1], [250, 316, .21, 1], [96, 170, .16, 1]];
+  const n = stufe === 1 ? 1 : stufe === 2 ? 4 : 7;
+  for (let i = 0; i < n; i++) strandSpur(K, P, ufer, SAND, rs, ...T[i]);
+  if (stufe < 3) return;
+  // Zertretene Stellen: kleine gedither­te Flecken, wo Spuren sich kreuzen
+  for (let k = 0; k < 6; k++) {
+    const cx = rs.f(40, 440), cy = rs.f(186, 250), nass = cy - ufer(cx) < 24;
+    for (let j = -2; j <= 2; j++) for (let i = -6; i <= 6; i++) {
+      if ((i * i) / 36 + (j * j) / 4 > 1 || rs() < .4) continue;
+      const px = Math.round(cx + i), py = Math.round(cy + j);
+      if (px > 294 && px < 362 && py > 194 && py < 222) continue;
+      K.e[K.eb(py)].set(px, py, B.pk(j === 2 || (j === 1 && rs() < .3) ? SAND[5] : nass ? SAND[0] : SAND[1]));
+    }
+  }
 }
 // Titel: Saltmoor bei Nacht von der Küste
 function titel(o) {
