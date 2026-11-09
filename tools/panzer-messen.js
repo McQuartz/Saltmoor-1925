@@ -1,12 +1,24 @@
 // Auftrag 3, Fix 7: Verlängert der Panzer den Wächterkampf um höchstens einen Zug?
-// Spielt jeden Wächter (Spieler mit 9999 Leben, damit jeder Kampf bis zum Sieg läuft und nur die Züge bis zum Sieg zählen) mit unverw-Schritt allein gegen den Autospieler (je Figur mehrere Seeds), einmal mit Panzer (balance.json), einmal ohne Schutz (anteil 0).
-// node tools/panzer-messen.js [seeds je Figur]
+// Ganze Runs des Autospielers mit festem Seed; der Akt mit dem Biom des Wächters liegt auf der Route, der Wächter ist erzwungen (S.devWaechter).
+// Jeder Run läuft zweimal: mit Panzer (balance.json → panzer.anteil) und ohne Schutz (anteil 0). Gezählt werden die Züge dieses Wächterkampfs
+// und die Panzer-Züge darin, nur wo beide Läufe den Kampf gewinnen.
+// node tools/panzer-messen.js [seeds=20]
 const { ladeKern } = require('./kern');
 (async () => {
-  const K = ladeKern(); await K.init(); const n = +(process.argv[2] || 6);
-  const r = JSON.parse(K.run(`(()=>{const boss=Object.keys(FOES).filter(id=>JSON.stringify(FOES[id].pat||[]).includes('unverw')||JSON.stringify(FOES[id]).includes('"unverw"'));const out={};const anteil0=BAL.panzer.anteil;
-   for(const id of boss){out[id]={};for(const a of [anteil0,0]){BAL.panzer.anteil=a;let z=0,s=0,k=0,pz=0;for(const j of JOBS.map(x=>x.id))for(let i=0;i<${n};i++){FAST=true;newRun(j,900+i,{dev:true});S.route=RUN.akte.map(x=>x.biome[0]);S.route[2]=FOES[id].biom;S.akt=2;S.depth=15;
-      S.hp=9999;startFight([id],'waechter');let p=0;const off=Bus.on?null:null;let m=0;while(S.phase==='fight'&&m++<400){if(S.enemies.some(e=>e.panzer>0))p=1;Bot.schritt();}k++;z+=S.turnNo;if(S.phase!=='fight'&&S.hp>0)s++;pz+=p;}
-     out[id][a?'panzer':'ohne']={zuege:+(z/k).toFixed(2),siege:s,von:k,mitPanzer:pz};}}BAL.panzer.anteil=anteil0;return JSON.stringify(out);})()`));
-  for (const [id, v] of Object.entries(r)) console.log(`${id.padEnd(20)} mit Panzer Ø ${v.panzer.zuege} Züge (${v.panzer.siege}/${v.panzer.von} gewonnen, Panzer in ${v.panzer.mitPanzer} Kämpfen) · ohne Schutz Ø ${v.ohne.zuege} Züge · Unterschied ${(v.panzer.zuege - v.ohne.zuege).toFixed(2)}`);
+  const K = ladeKern(); await K.init(); const n = +(process.argv[2] || 20);
+  const r = JSON.parse(K.run(`(()=>{const boss=Object.keys(FOES).filter(id=>FOES[id].rang==='waechter'&&JSON.stringify(FOES[id]).includes('"unverw"'));const an0=BAL.panzer.anteil;const jobs=JOBS.map(j=>j.id);
+   const M={id:null,ai:-1,an:false,zug:0,pz:0,fertig:null};
+   Bus.on('turn_start',()=>{if(M.an)M.zug++;else if(M.fertig==null&&S.kampfArt==='waechter'&&S.akt===M.ai&&S.enemies.some(e=>e.id===M.id)){M.an=true;M.zug=1;}});
+   Bus.on('panzer_an',()=>{if(M.an)M.pz++;});
+   Bus.on('victory',()=>{if(M.an){M.fertig={zuege:M.zug,panzer:M.pz};M.an=false;}});
+   const out={};
+   for(const id of boss){M.id=id;M.ai=RUN.akte.findIndex(a=>a.biome.includes(FOES[id].biom));const paare=[];
+    for(let i=0;i<${n};i++){const je={};for(const an of [an0,0]){BAL.panzer.anteil=an;Object.assign(M,{an:false,zug:0,pz:0,fertig:null});
+      Bot.spiele(jobs[i%jobs.length],3100+i,{nachStart:()=>{S.route=RUN.akte.map((a,k)=>k===M.ai?FOES[id].biom:a.biome[0]);S.devWaechter=id;}});
+      je[an?'mit':'ohne']=M.fertig;}
+     if(je.mit&&je.ohne)paare.push(je);}
+    const s=(k,f)=>+(paare.reduce((t,p)=>t+p[k][f],0)/Math.max(1,paare.length)).toFixed(2);
+    out[id]={kaempfe:paare.length,mit:s('mit','zuege'),ohne:s('ohne','zuege'),panzer:s('mit','panzer')};}
+   BAL.panzer.anteil=an0;return JSON.stringify(out);})()`));
+  for (const [id, v] of Object.entries(r)) console.log(`${id.padEnd(20)} ${v.kaempfe} Kämpfe in beiden Läufen gewonnen · mit Panzer Ø ${v.mit} Züge, ohne Schutz Ø ${v.ohne} · Ø ${v.panzer} Panzer-Züge · Verlängerung je Panzer-Zug ${v.panzer ? ((v.mit - v.ohne) / v.panzer).toFixed(2) : '–'}`);
 })();

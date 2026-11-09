@@ -1,5 +1,5 @@
 // Auftrag 3: Bildschirmfotos einer Ansicht in festen Auflösungen mit festem Seed.
-// node tools/ui-fotos.js <ordner> <ansicht,…|alle> [--aufl=1280x720,1440x900,1920x1080] [--seed=3] [--job=fischer] [--url=zusatz]
+// node tools/ui-fotos.js <ordner> <ansicht,…|alle> [--aufl=1280x720,1440x900,1920x1080] [--seed=3] [--job=fischer] [--url=zusatz] [--dom]  (--dom schreibt zusätzlich das HTML von #spiel, für den Vergleich vor/nach einem Umbau)
 // Ansichten: kampf, kampf2, kampf3, waechter, nachzug, weg, karte, biomwahl, rucksack, belohnung, wandbild, kraemer, werkstatt, rast
 // Server muss laufen: cd prototype && python3 -m http.server 8000
 const { chromium } = require('playwright');
@@ -21,7 +21,7 @@ const WEG = {
   karte: { s: 'weg', akt: 1 },
   biomwahl: { s: null, nach: `S.akt=1;S.route[1]=null;enterAct();render();` },
   rucksack: { s: 'rast', akt: 1, nach: `if(typeof rucksackAuf==='function')rucksackAuf();` },
-  belohnung: { s: 'kampf', akt: 1, nach: `S.enemies.forEach(e=>{e.hp=0;});checkVictory(10);`, warte: 2500 },
+  belohnung: { s: 'kampf', akt: 1, nach: `S.enemies=biom().gegner.slice(0,2).map(id=>mkEnemy(id));aufstellen(S.enemies);S.enemies.forEach(e=>{e.hp=0;});checkVictory(10);`, warte: 2500 },
   wandbild: { s: 'wandbild', akt: 1 },
   kraemer: { s: 'kraemer', akt: 1 },
   werkstatt: { s: 'werkstatt', akt: 1 },
@@ -48,7 +48,8 @@ const WEG = {
       await p.goto(`${BASIS}index.html?dev=0&job=${job}&seed=${seed}${w.s ? '&springe=' + w.s : ''}${w.akt != null ? '&akt=' + w.akt : ''}${zusatz}`);
       await p.waitForTimeout(1500);
       if (w.nach) { await p.evaluate(w.nach); await p.waitForTimeout(w.warte || 1200); }
-      const f = `${out}/${v}-${W}x${H}.png`; await p.screenshot({ path: f }); console.log(f); await p.close();
+      const f = `${out}/${v}-${W}x${H}.png`; await p.screenshot({ path: f });
+      if (a.includes('--dom')) fs.writeFileSync(f.replace(/\.png$/, '.html'), await p.evaluate(() => document.getElementById('spiel').innerHTML.replace(/ style="[^"]*animation-delay[^"]*"/g, ''))); console.log(f); await p.close();
     }
   }
   if (fehler.length) console.log('KONSOLENFEHLER:\n' + fehler.join('\n'));

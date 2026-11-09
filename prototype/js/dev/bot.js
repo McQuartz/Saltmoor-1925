@@ -72,7 +72,7 @@ const Bot={
   case'ankunft':chooseEnde(S.seed%2?'bleiben':'umkehren');break;
   default:return false;}return true;},
  // Ganzer Run, schnell. Gibt das Ergebnis zurück.
- spiele(job,seed,opt={}){this.profil=opt.profil||null;const kf=FAST;FAST=true;let fehler=null,n=0;try{const M=opt.meta?Meta.get():null;const sv=M&&M.start.length?M.start[M.start.length-1]:null;newRun(job,seed,{dev:!opt.meta,start:sv,stufe:opt.stufe||0});
+ spiele(job,seed,opt={}){this.profil=opt.profil||null;const kf=FAST;FAST=true;let fehler=null,n=0;try{const M=opt.meta?Meta.get():null;const sv=M&&M.start.length?M.start[M.start.length-1]:null;newRun(job,seed,{dev:!opt.meta,start:sv,stufe:opt.stufe||0});if(opt.nachStart)opt.nachStart();
    while(!['strand','ende'].includes(S.phase)&&n++<5000){if(!this.schritt())throw new Error('Bot hängt in Phase '+S.phase);}
    if(n>=5000)throw new Error('Run endet nicht');}catch(e){fehler=String(e&&e.stack||e);}finally{FAST=kf;}
   const res=S.ergebnis||{};return{seed,job,sieg:!!res.sieg,ende:res.ende||null,tiefe:S.depth,akt:S.akt,biom:biomId(),route:S.route.join('>'),gegner:res.gegner||[],kaempfe:S.stats.kaempfe,zuege:S.stats.zuege||0,gold:S.stats.gold,fehler};}
