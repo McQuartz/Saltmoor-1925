@@ -1,5 +1,5 @@
 // Kampfanzeige (aus oberflaeche.js geteilt, Auftrag 3 M2): Gegner mit Absicht und Plakette, untere Leiste mit Hand und Energie, Ausrüstung unter der Szene.
-// ---------- Gegner (Absicht über dem Kopf, Name/Balken unter den Füßen) ----------
+// ---------- Gegner (Plakette über dem Kopf: Absicht, Leben, Block, Status) ----------
 // Kniffe und Besonderheiten der Gegner in Spielerworten (Tooltip über dem Gegner)
 const KNIFF_TEXT={dornen:k=>`Dornen: jeder Treffer an ihm kostet dich ${k.v||2}`,loeschen:()=>'Löscht jeden Brand seiner Seite',rein:()=>'Rein: Gift wirkt nur halb',brecher:()=>'Zerbricht deinen Block, bevor er zuschlägt',kleinvieh:()=>'Kommt selten allein',
  abschrift:k=>`Mischt ${k.n||1} unspielbare Karte(n) in deinen Ablagestapel`,waechst:k=>`Wächst: jeden Zug +${k.v||2} Stärke`,schuetzer:k=>`Gibt Verbündeten ${k.v||4} Block`,ruf:k=>`Ruft alle ${k.alle||3} Züge Verstärkung: ${[].concat(k.gegner).map(g=>FOES[g]?FOES[g].n:'?').join(', dann ')}`,
@@ -17,17 +17,25 @@ function feindTip(i){const e=S.enemies[i];if(!e||e.hp<=0)return'';const ks=[e.kn
 const rufeVon=e=>e&&e.uid&&typeof rufAnsage==='function'&&S.enemies&&S.enemies.includes(e)?rufAnsage(e):[];
 function absicht(e){const r=absicht0(e);if(unverwJetzt(e))r.html+=' <small class="unverw">unverwundbar</small>';
  const ruf=rufeVon(e);if(ruf.length)r.html+=` <small class="ruft" title="Ruft: ${esc(ruf.map(id=>FOES[id].n).join(', '))}">ruft</small>`;return r;}
-function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==='verborgen'){const k=it.t==='atk'?'atk':it.t==='blk'?'blk':'buff';return{k,html:`${gi(k,GZ())}?`};}if(it.t==='atk'){const v=it.v+e.str;const h=it.h?'×'+it.h:'';if(e.weak2){const n=Math.floor(v/2);return{k:'atk',html:`<span class="geschw" title="Geschwächt: halber Schaden">${gi('atk',GZ())}${n}${h}</span>`};}return{k:'atk',html:`${gi('atk',GZ())}${v}${h}`};}
+function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==='verborgen'){const k=it.t==='atk'?'atk':it.t==='blk'?'blk':'buff';return{k,html:`${gi(k,GZ())}`};}if(it.t==='atk'){const v=it.v+e.str;const h=it.h?'×'+it.h:'';if(e.weak2){const n=Math.floor(v/2);return{k:'atk',html:`<span class="geschw" title="Geschwächt: halber Schaden">${gi('atk',GZ())}${n}${h}</span>`};}return{k:'atk',html:`${gi('atk',GZ())}${v}${h}`};}
  if(it.t==='blk')return{k:'blk',html:`${gi('blk',GZ())}${it.v}`};
  // Ansage: lädt, dann großer Schlag; zeigt die Wucht und wie viele Züge noch
  if(it.t==='laedt'){let n=1,j=e.pi+1;while(n<9&&e.pat[j%e.pat.length].t==='laedt'){n++;j++;}const s=e.pat[j%e.pat.length];const v=(s.v||0)+e.str;return{k:'atk',html:`<span class="laedt">${gi('atk',GZ())}${v} <small>in ${n}</small></span>`};}
  return{k:'buff',html:`${gi('buff',GZ())}+${it.v}`};}
+// Plakette (Auftrag 3, M2): Absicht oben, Leben als roter Balken, Block/Panzer als blaue Verlängerung, Status darunter, Kniff am Rand, Spitze zum Kopf.
+// Die Höhenstaffelung (--dx, --dy) setzt plakettenOrdnen() in js/ui/plakette.js nach dem Einsetzen ins DOM.
+function plaketteHtml(e,i,f,pv,tg){
+ const abs=f&&!e.stumm&&absichtSichtbar(e)?`<div class="abs">${absicht(e).html}</div>`:'';
+ const d=pv?Math.min(e.hp,pv.d):0,ab=pv?Math.min(e.block,pv.ab):0,W=v=>Math.max(0,Math.min(100,v/e.max*100)).toFixed(1)+'%';
+ const st=[e.burn&&['burn',e.burn,STN.burn],e.poison&&['poison',e.poison,STN.poison],e.weak2&&['weak',1,'Geschwächt: halber Schaden'],e.str&&['buff',e.str,STN.buff],e.vuln>0&&['atk2',e.vuln,`Verwundbar ${e.vuln} (+50 %)`]].filter(Boolean);
+ const blk=e.block-ab,ext=(blk>0||ab>0?`<b class="pl-blk ${ab?'pvb':''}" title="Block">${blk>0?blk:ab}</b>`:'')+(e.panzer>0?`<b class="pl-pz" title="${esc((BAL.panzer&&BAL.panzer.t)||'')}">${gi('blk',KZ())}${e.panzer}</b>`:'');
+ return `<div class="plakette"><div class="pl-box">${e.kniff||e.besonders?'<b class="knf" title="Kniff: Maus darüber">◆</b>':''}${abs}
+  <div class="pl-nm"><span>${esc(e.n).toUpperCase()}</span>${e.weak?gi(e.weak,KZ()):''}</div>
+  <div class="pl-bar"><i class="hp" style="width:${W(e.hp-d)}"></i>${d?`<i class="pv" style="width:${W(d)}"></i>`:''}<span>${e.hp}/${e.max}${pv&&(pv.d||pv.ab)?` <em class="pvt">−${pv.d}</em>`:''}</span>${ext?`<div class="pl-ext">${ext}</div>`:''}</div></div>
+  ${st.length?`<div class="sts">${st.map(([k,v,t])=>`<span title="${esc(t)}">${gi(k,KZ(),k==='atk2'?'#ffb070':undefined)}${v}</span>`).join('')}</div>`:''}<div class="spitze"></div></div>`;}
 function gegnerHtml(f){return S.enemies.map((e,i)=>{if(e.hp<=0)return'';const b={...enemyBox(e)};if(e.pendel)b.x=Math.round(e.x*SW);const pv=vorschau&&vorschau.foes[i];const tg=f&&i===S.target;
-  const st=[e.burn&&['burn',e.burn],e.poison&&['poison',e.poison],e.weak2&&['weak',1],e.str&&['buff',e.str]].filter(Boolean);
   return `<div class="feind ${tg?'ziel':''} ${e.rang}" data-ei="${i}" style="left:${(b.x/SW*100).toFixed(2)}%;top:${(b.kopf/SH*100).toFixed(2)}%;--fh:${(b.y-b.kopf)/SH*100}">
-   ${f&&absichtSichtbar(e)?`<div class="abs">${absicht(e).html}</div>`:''}<div class="treffer" style="height:calc(var(--u)*${b.y-b.kopf})"></div>
-   <div class="info"><div class="nm"><span>${esc(e.n).toUpperCase()}</span>${e.weak?gi(e.weak,GZ()):''}${e.kniff||e.besonders?'<b class="knf" title="Kniff: Maus darüber">◆</b>':''}</div>${barHtml(e.hp,e.max,e.block,pv)}
-   <div class="zl"><span>${e.hp}/${e.max}${e.block?` <b class="blk">+${e.block}</b>`:''}${e.panzer>0?` <b class="panzer" title="${esc((BAL.panzer&&BAL.panzer.t)||'')}">${gi('blk',GZ())}${e.panzer}</b>`:''}${pv&&(pv.d||pv.ab)?` <b class="pvt">−${pv.d}</b>`:''}</span><span class="sts">${st.map(([k,v])=>`${gi(k,GZ())}${v}`).join(' ')}</span></div></div></div>`;}).join('')+(f?schutzLinien():'');}
+   ${plaketteHtml(e,i,f,pv,tg)}<div class="treffer" style="height:calc(var(--u)*${b.y-b.kopf})"></div></div>`;}).join('')+(f?schutzLinien():'');}
 // Fix 7: im Unverwundbar-Zug je eine dünne Linie von der Plakette des Bosses zu jedem Diener, an dem der Schutz hängt
 function schutzLinien(){if(typeof unverwJetzt!=='function')return'';const l=[];for(const e of alive())if(unverwJetzt(e)){const a=enemyBox(e),ax=e.pendel?Math.round(e.x*SW):a.x;for(const d of dienerVon(e)){const b=enemyBox(d),bx=d.pendel?Math.round(d.x*SW):b.x;l.push(`<line x1="${ax}" y1="${a.y}" x2="${bx}" y2="${b.y}"/>`);}}
  return l.length?`<svg class="schutz" viewBox="0 0 ${SW} ${SH}" preserveAspectRatio="none">${l.join('')}</svg>`:'';}

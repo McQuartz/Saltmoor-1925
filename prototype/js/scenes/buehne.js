@@ -21,7 +21,9 @@ function szenenWahl(){const ph=S.phase||'titel';const b=S.route?biomId():'hafen'
  let art=map[ph]||'kampf';if(ph==='fight'||ph==='reward')art=(S.kampfArt==='waechter'||S.kampfArt==='finale')?'waechter':'kampf';
  const w={biom:b,art,variante,fremdheit:fremd,seed:(S.seed||7)+S.akt*101+(S.ebene||0)*13};
  // Wächter-Szene je Boss-Phase (szenenPhase in combat.js): ab Phase 1 bekommt World.build ein Feld phase (paket-format.md)
- const sp=art==='waechter'&&typeof szenenPhase==='function'?szenenPhase():0;if(sp)w.phase=sp;return w;}
+ const sp=art==='waechter'&&typeof szenenPhase==='function'?szenenPhase():0;if(sp)w.phase=sp;
+ // Dev/Werkzeuge (tools/stell-bogen.js): bestimmte Szene erzwingen, z. B. S.devSzene={variante:2}
+ if(S.devSzene)Object.assign(w,S.devSzene);return w;}
 function szeneHolen(){const w=szenenWahl();const key=JSON.stringify(w);if(key===BU.key&&BU.sz)return BU.sz;BU.key=key;const alt=BU.sz,altPh=BU.szPhase||0;
  try{BU.sz=typeof World!=='undefined'?World.build(w.biom,w):ersatzSzene(w);}catch(e){console.warn('Szene',e);BU.sz=ersatzSzene(w);}
  // Neue Boss-Phase: alte Szene blendet in 0,8 s gestuft aus, die neue liegt darunter; optionaler Haken World._biome.<id>.phase(n, szene)

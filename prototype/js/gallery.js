@@ -66,10 +66,12 @@ function bauAbsichten(){const ab=(pat,mod={})=>`<div class="abs-reihe"><div clas
  $('absichten').innerHTML=[spec('Angriff',ab([{t:'atk',v:7}])),spec('Mehrfach',ab([{t:'atk',v:4,h:3}])),spec('mit Stärke +2',ab([{t:'atk',v:7}],{str:2})),
   spec('geschwächt',ab([{t:'atk',v:9}],{weak2:1})),spec('geschwächt, mehrfach',ab([{t:'atk',v:5,h:2}],{weak2:1})),spec('Block',ab([{t:'blk',v:8}])),spec('Stärke',ab([{t:'buff',v:2}]))].join('');}
 
-function bauZustaende(){const z=(k,v)=>`<div class="feind" style="position:relative;transform:none;width:auto"><div class="info"><div class="zl"><span class="sts">${gi(k,GZ())}${v}</span></div></div></div>`;
- $('zustaende').innerHTML=[['burn',3,'Brand'],['poison',4,'Gift'],['weak',1,'Geschwächt'],['buff',2,'Stärke']].map(([k,v,n])=>spec(n,z(k,v))).join('')
-  +spec('Block am Gegner',`<div class="feind" style="position:relative;transform:none;width:calc(var(--u)*64)"><div class="info"><div class="zl"><span>18/22 <b class="blk">+5</b></span><span class="sts">${gi('burn',GZ())}3 ${gi('weak',GZ())}1</span></div></div></div>`)
-  +spec('Vorschau-Zahl',`<div class="feind" style="position:relative;transform:none;width:calc(var(--u)*64)"><div class="info"><div class="zl"><span>14/22 <b class="pvt">−6</b></span></div></div></div>`);}
+// M2: Zustände in der Gegner-Plakette (plaketteHtml in kampf.js)
+function bauZustaende(){const fe=(mod,pv)=>{const e={n:'Schmuggler',hp:18,max:22,block:0,str:0,burn:0,poison:0,weak2:0,vuln:0,panzer:0,pat:[{t:'atk',v:7}],pi:0,...mod};
+  return `<div class="feind" style="position:relative;transform:none;left:auto;top:auto;width:calc(var(--u)*64);height:calc(var(--u)*56)"><div style="position:absolute;bottom:0;left:0;right:0">${plaketteHtml(e,0,false,pv,false)}</div></div>`;};
+ $('zustaende').innerHTML=[['burn',3,'Brand',{burn:3}],['poison',4,'Gift',{poison:4}],['weak',1,'Geschwächt',{weak2:1}],['buff',2,'Stärke',{str:2}]].map(([k,v,n,m])=>spec(n,fe(m))).join('')
+  +spec('Block am Gegner',fe({block:5,burn:3,weak2:1}))
+  +spec('Vorschau-Zahl',fe({hp:14},{d:6,ab:0}));}
 
 function bauKnoepfe(){const rauten=(n,max)=>`<div class="rauten">${[...Array(max)].map((_,i)=>`<i class="${i<n?'voll':''}"></i>`).join('')}</div>`;
  $('knoepfe').innerHTML=[spec('Energie 3/3',rauten(3,3)),spec('Energie 1/3',rauten(1,3)),spec('Energie 4 (Bonus)',rauten(4,4)),

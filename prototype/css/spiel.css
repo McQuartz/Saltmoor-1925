@@ -36,14 +36,7 @@ a[data-act]{color:inherit;cursor:pointer;pointer-events:auto;text-decoration:und
 .feind{position:absolute;transform:translateX(-50%);width:calc(var(--u)*64);pointer-events:auto}
 .feind .abs{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-family:var(--fp);font-size:calc(var(--u)*5);color:#fff;white-space:nowrap;margin-bottom:calc(var(--u)*2);
  text-shadow:1px 0 #000,-1px 0 #000,0 1px #000,0 -1px #000,1px 1px #000,-1px -1px #000,2px 2px 0 #000;display:flex;align-items:center;gap:calc(var(--u)*1.5)}
-.feind .abs s{font-size:.7em;opacity:.7;margin-right:.2em}
 .feind .treffer{width:100%}
-.feind .info{width:100%;text-shadow:1px 1px 0 #000,0 0 3px #000}
-.feind .nm{display:flex;justify-content:space-between;align-items:center;font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.08em;color:#e8dcc0}
-.feind .zl{display:flex;justify-content:space-between;font-size:calc(var(--u)*5);color:#d8ccb0}.feind .zl b{font-weight:normal}.feind .blk{color:var(--blau)}.feind .pvt{color:#ffb070}
-.feind .sts{display:flex;gap:calc(var(--u)*1.5);align-items:center}
-.feind.ziel .nm span{color:#ffd8a0;text-decoration:underline;text-underline-offset:3px}
-.feind.waechter,.feind.boss{width:calc(var(--u)*90)}
 
 /* ---------- Toasts, Zwischentitel ---------- */
 #toast{left:50%;top:calc(var(--u)*8);transform:translateX(-50%);display:flex;flex-direction:column;gap:calc(var(--u)*2);align-items:center;width:45%;z-index:5}
@@ -195,8 +188,6 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .fig{width:calc(var(--u)*92)}
 /* Lesbarkeit auf hellen Orten (Salzstollen): dezente dunkle Unterlage, keine Box */
 #kopf{background:radial-gradient(ellipse at 30% 40%,rgba(0,0,0,.62),rgba(0,0,0,.35) 60%,transparent 75%);padding:calc(var(--u)*3);margin:calc(var(--u)*-3)}
-.feind .info{background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.55) 25%,rgba(0,0,0,.55) 80%,rgba(0,0,0,0));padding:calc(var(--u)*1) calc(var(--u)*2)}
-.feind .abs{background:radial-gradient(ellipse,rgba(0,0,0,.45),transparent 70%)}
 .ankunft{background:rgba(0,0,0,.78);border-top:1px solid var(--messing);border-bottom:1px solid var(--messing);padding:calc(var(--u)*10) calc(var(--u)*24);max-width:calc(var(--u)*360)}
 .ankunft .neu{font-size:calc(var(--u)*5);line-height:1.35;margin:calc(var(--u)*4) 0 calc(var(--u)*6)}
 /* Auftrag 2, M1: Spieler-Lebensbalken unten mittig über der Hand */
@@ -245,7 +236,6 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .pick.selten{border-color:var(--messing)}.pick.reliquie{border-color:var(--gold);animation:aufdecken .45s backwards,glanz 3.2s ease-in-out .5s infinite}
 @keyframes glanz{0%,100%{box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.15)}50%{box-shadow:0 0 calc(var(--u)*9) rgba(232,197,71,.45)}}
 
-.feind .nm .knf{color:#e8c070;margin-left:.3em;font-size:.8em}
 .abs .unverw{font-size:.8em;color:#d8ecff;background:rgba(20,30,45,.75);padding:0 .3em;border:1px solid rgba(200,225,255,.45);border-radius:2px}.abs .ruft{font-size:.8em;color:#ffe2b0;background:rgba(45,28,12,.78);padding:0 .3em;border:1px solid rgba(255,205,140,.5);border-radius:2px}.abs .laedt{opacity:.75}.abs .laedt small{font-size:.6em;opacity:.8}
 .hgpick .hgimg{display:block;margin:4px auto 2px;width:calc(var(--u,3px)*32);height:auto;image-rendering:pixelated}
 /* Belohnung mit Handgriff und Reliquie: etwas dichter, damit „Nichts nehmen“ ohne Scrollen sichtbar bleibt (seit Reliquien ihren Eigenschaftstext zeigen) */
