@@ -1,5 +1,5 @@
 // Spielgefühl: hört auf Ereignisse der Spielregeln und spielt Effekte, Sounds, Musik und schwebende Zahlen ab.
-const hudEl=sel=>document.querySelector(S.phase==='fight'?'#spieler .sbar':'#kopf '+sel);
+const hudEl=sel=>document.querySelector(S.phase==='fight'?'#spieler2 .sbar':'#kopf '+sel);
 const FLOAT_COL={dmg:'#e8d8c0',big:'#ffd23f',heal:'#9ae08a',block:'#9cc3ff',hurt:'#e8584a'};
 function floatAt(el,txt,col,k=0){if(!el||FAST)return;const r=el.getBoundingClientRect();const f=document.createElement('div');f.className='float';f.textContent=txt;f.style.color=col;
  f.style.left=(r.left+r.width/2+(Math.random()-.5)*30)+'px';f.style.top=(r.top+r.height*.3)+'px';f.style.fontSize=(BU.k*5+Math.min(12,k))+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),1000);}
@@ -53,10 +53,10 @@ Bus.on('weakspot',({e})=>{if(!FAST)floatScene(e,'SCHWACHSTELLE',FLOAT_COL.big,2)
 Bus.on('attack',({k})=>{sfx.hit(k);if(typeof Music!=='undefined'&&audioOn)try{Music.strike();}catch(x){}});
 Bus.on('enemy_status',({e,status})=>{if(FAST)return;const p=enemyBox(e);const m={burn:'brand',poison:'gift',weak:'geschwaecht',block_weg:'block_splitter'}[status];if(m){pfx(m,{x:p.x,y:p.y,groesse:Math.round(p.h*.8),palette:status==='burn'?'F':status==='poison'?'V':biomId(),seed:e.uid});return;}if(status==='poison')burst(p.x,p.y-p.h*.5,'#86c062',12,1.1,.4);else if(status==='burn')burst(p.x,p.y-p.h*.4,'#e8873a',14,1.1,.7);else burst(p.x,p.y-p.h*.5,'#c9b8e8',8,1);});
 Bus.on('player_heal',({v})=>{sfx.heal();if(v)floatAt(hudEl('.bar'),'+'+v,FLOAT_COL.heal);});
-Bus.on('player_block',({v})=>{sfx.block();floatAt(document.querySelector('#spieler .schild')||hudEl('.bar'),'+'+v+' BLOCK',FLOAT_COL.block);if(typeof Music!=='undefined'&&audioOn)try{Music.block();}catch(x){}});
+Bus.on('player_block',({v})=>{sfx.block();floatAt(document.querySelector('#spieler2 .schild')||hudEl('.bar')||hudEl('.bar'),'+'+v+' BLOCK',FLOAT_COL.block);if(typeof Music!=='undefined'&&audioOn)try{Music.block();}catch(x){}});
 Bus.on('self_damage',({v})=>floatAt(hudEl('.bar'),'−'+v,FLOAT_COL.hurt));
 Bus.on('player_hurt',({v,letzter,von})=>{sfx.hurt();const W=BAL.wucht||{},k=(W.gegner||1)*(letzter&&von>1?(W.letzter_treffer_extra||1):1);FX.shake((W.ruck||3)*k+Math.min(5,v/3));if(!FAST)BU.freeze=performance.now()+(v>=(W.gross_ab||12)?W.hitstop_gross_ms:W.hitstop_ms)*k;vig();floatAt(document.querySelector('#spieler .sbar'),'−'+v,FLOAT_COL.hurt,Math.min(10,v)*k);if(typeof Music!=='undefined'&&audioOn)try{Music.hit(v);}catch(x){}});
-Bus.on('player_blocked',()=>{sfx.block();FX.shake(2);floatAt(document.querySelector('#spieler .schild'),'GEBLOCKT',FLOAT_COL.block);});
+Bus.on('player_blocked',()=>{sfx.block();FX.shake(2);floatAt(document.querySelector('#spieler2 .schild')||hudEl('.bar'),'GEBLOCKT',FLOAT_COL.block);});
 Bus.on('enemy_lunge',({e})=>{if(!FAST)FX.lunge(e);});
 Bus.on('enemy_block',({e})=>{sfx.block();if(FAST)return;const p=enemyBox(e);pfx('block_auf',{x:p.x,y:p.y,groesse:Math.round(p.h*.8),palette:biomId(),seed:e.uid});burst(p.x,p.y-p.h*.5,'#9cc3ff',10,1.2);});
 Bus.on('enemy_buff',({e})=>{sfx.react(0);if(FAST)return;const p=enemyBox(e);burst(p.x,p.y-p.h*.6,'#c86a4a',12,1,.6);});

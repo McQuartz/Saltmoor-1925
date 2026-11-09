@@ -35,9 +35,9 @@ const U=()=>BU.k;
 // Pixelzeichen immer ganzzahlig: GROSS = 9 px × Skala, KLEIN = halb so groß (mindestens 9 px)
 const GZ=()=>9*U(),KZ=()=>9*Math.max(1,Math.round(U()/2));
 
-// ---------- Untere Leiste im Kampf: Stoffrad, Hand, Energie ----------
+// ---------- Untere Leiste im Kampf (Footer als Tisch): eigener Balken und Stoff-Baum, Hand, Energie ----------
 function leisteKampf(){const n=S.hand.length;
- return `<div id="rad">${radSvg()}</div><div id="hand" style="--ov:${S.hand.length>6?((S.hand.length-6)*59/(S.hand.length-1)).toFixed(2):0}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
+ return `<div id="links"><div id="spieler2">${spielerHtml()}</div><div id="baum">${stoffBaumHtml()}</div></div><div id="hand" style="--ov:${S.hand.length>6?((S.hand.length-6)*59/(S.hand.length-1)).toFixed(2):0}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
  <div id="rechts"><div class="en-l">ENERGIE</div><div class="rauten">${[...Array(Math.max(BAL.energy_per_turn,S.energy))].map((_,i)=>`<i class="${i<S.energy?'voll':''}"></i>`).join('')}</div>
  <button id="endBtn" class="deco" data-act="end" ${busy?'disabled':''}>ZUG<br>BEENDEN</button><div class="stapel">Stapel ${S.draw.length} · Ablage ${S.discard.length}</div>${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
 // m: Reaktionsfaktor, den die Karte jetzt bekäme (Fix 6: Ziehen, Stärke und Gold zeigen den verstärkten Wert)
@@ -46,23 +46,16 @@ function cardText(c,m=1){const vs=v=>typeof verstaerkt==='function'?verstaerkt(v
  if(c.sonder&&c.sonder.t)p.push(c.sonder.t);
  let s=(kw.length?kw.join(', ')+'. ':'')+(p.join(', ')||(c.t&&!c.atk&&!c.blk?'':'–'));if(c.eroeffnung)s+=`. Eröffnung: ${Object.entries(c.eroeffnung).map(([k,v])=>k==='atk'?`+${v} Schaden`:k==='blk'?`+${v} Block`:k==='draw'?`ziehe ${v}`:k==='heal'?`+${v} Leben`:k==='en'?`+${v} Energie`:k==='burn'?`Brand ${v}`:k==='poison'?`Gift ${v}`:`${k} ${v}`).join(', ')}`;if(c.verbraucht)s+='. Verbraucht';return s;}
 function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.st);const self=c.st.length>1?rx.filter(r=>r.k&&[...r.k].every(k=>c.st.includes(k))):[];const vor=rx.filter(r=>!self.includes(r));
- const known=r=>S.disc.has(r.n);let rxl='';const km=rx.length&&rx.every(known)?rx.reduce((m,r)=>m*(r.pre&&r.pre.mult||1),1):1;
- if(vor.length)rxl=vor.every(known)?`<div class="rx">${vor.map(r=>r.n.toUpperCase()).join(' + ')}</div>`:`<div class="rx un">? ? ?</div>`;
- if(self.length)rxl+=`<div class="rx in">IN SICH: ${self.map(r=>known(r)?r.n.toUpperCase():'???').join(' + ')}</div>`;
+ // M2: Reaktionen stehen immer mit Namen als Band unten an der Karte (kein Fragezeichen); die Karte leuchtet in der Farbe ihres reagierenden Stoffs
+ let rxl='';const km=rx.length?rx.reduce((m,r)=>m*(r.pre&&r.pre.mult||1),1):1;
+ const glow=vor.length?(ST[c.st.find(k=>vor.some(r=>!r.k||String(r.k).includes(k)))||c.st[0]]||{}).c:null;
+ if(vor.length)rxl=`<div class="rx">${vor.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
+ if(self.length)rxl+=`<div class="rx in">IN SICH: ${self.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
  const rot=((i*37)%5-2)*1.3+(i-(n-1)/2)*.6,dy=((i*53)%3)*1.2;
- return `<div class="karte ${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''}" data-card="${i}" style="--r:${rot.toFixed(1)}deg;--dy:${dy}px;${dealAnim?`animation-delay:${i*60}ms`:'animation:none'}">
+ return `<div class="karte ${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''}" data-card="${i}" style="${glow?`--c:${glow};`:''}--r:${rot.toFixed(1)}deg;--dy:${dy}px;${dealAnim?`animation-delay:${i*60}ms`:'animation:none'}">
   <div class="kost${c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?' hoch':' tief'):''}"><span>${cost>=99?'–':cost}</span></div><div class="kst">${c.st.map(k=>gi(k,KZ())).join('')}</div>
   <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen"><img src="${c.img||spr(c.spr)}" alt="">${c.hg?'<span class="hgm" title="Handgriff">✋</span>':''}${c.schliff?'<span class="schl" title="geschliffen">◇</span>':''}</div>
   <div class="kt${km!==1&&(c.draw||c.str||c.gold)?' verst':''}">${esc(cardText(c,km))}</div>${rxl}</div>`;}
-// Stoffrad: in der Mitte der zuletzt gespielte Stoff, Linien nur zu Stoffen, die jetzt reagieren
-function radSvg(){const K=Object.keys(ST);const s=60*U()/2,cx=s,cy=s,R=s*.72,nr=s*.15;const last=S.last||[];let lines='',nodes='';
- const reacts=k=>{if(!last.length)return null;const rx=reactionsFor(last,[k]).filter(r=>!r.s);return rx.length?rx:null;};
- K.forEach((k,i)=>{const a=-Math.PI/2+i/K.length*Math.PI*2;const x=cx+Math.cos(a)*R,y=cy+Math.sin(a)*R;const rx=reacts(k);const kn=rx&&rx.every(r=>S.disc.has(r.n));
-  if(rx)lines+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${kn?ST[k].c:'#a080e0'}" stroke-width="${U()}" ${kn?'':`stroke-dasharray="${U()*2} ${U()*2}"`}/>`;
-  nodes+=`<circle cx="${x}" cy="${y}" r="${nr}" fill="#0c0a08" stroke="${rx?(kn?ST[k].c:'#a080e0'):'#3a3020'}" stroke-width="${rx?U():U()/2}"/><image href="${glyph(k)}" x="${x-nr*.62}" y="${y-nr*.62}" width="${nr*1.24}" height="${nr*1.24}" style="image-rendering:pixelated" opacity="${rx?1:.28}"><title>${ST[k].n}</title></image>`;});
- const c0=last[0];const mid=c0?`<image href="${glyph(c0)}" x="${cx-nr*.9}" y="${cy-nr*.9}" width="${nr*1.8}" height="${nr*1.8}" style="image-rendering:pixelated"/>`:'';
- return `<svg width="${s*2}" height="${s*2}">${lines}<circle cx="${cx}" cy="${cy}" r="${nr*1.6}" fill="#14110c" stroke="#efe4c8" stroke-width="${U()}"/>${mid}${nodes}<text x="${cx}" y="${cy+nr*2.6}" text-anchor="middle" class="radl">${c0?'ZULETZT':'—'}</text></svg>`;}
-
 // ---------- Ausrüstung unter der Szene ----------
 function slotHtml(loc,locked){const it=locked?null:getAt(loc);const d=it?def(it):null;const ibi=it?itemBild(it.id):'';
  return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${ibi}" alt="">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}<span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;}

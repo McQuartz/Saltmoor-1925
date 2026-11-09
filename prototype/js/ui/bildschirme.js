@@ -48,7 +48,7 @@ function rewardHtml(){if(S.hgPending&&!S.hgPicked)return ritzenHtml('Wohin ritzt
  <button class="deco" data-act="weiterReward">WEITER ›</button>`);}
 // Ritzen: Handgriff in ein Item. Zeigt je Item den Stoff, den er annimmt, und welche Reaktionen er dann auslösen kann.
 function ritzenHtml(frage){const id=S.hgPending;const H=HANDGRIFFE[id];if(!H)return'';const deckSt=new Set(allActive().flatMap(it=>def(it).st));
- const reih=st=>{const o=[];REACT.forEach(r=>{const[a,b]=[...r.k];if((st.includes(a)&&deckSt.has(b))||(st.includes(b)&&deckSt.has(a)))o.push(S.disc.has(r.n)?r.n:'???');});return[...new Set(o)];};
+ const reih=st=>{const o=[];REACT.forEach(r=>{const[a,b]=[...r.k];if((st.includes(a)&&deckSt.has(b))||(st.includes(b)&&deckSt.has(a)))o.push(r.n);});return[...new Set(o)];};
  return box('ritzen',`<h2>${esc(H.n).toUpperCase()}</h2><p class="lead">${esc(cardText(H))}${H.t?` · <i>${esc(H.t)}</i>`:''}</p><p>${frage} Er nimmt den Stoff des Items an.</p>
  <div class="ritzliste">${besitz().map(({it,an})=>{const D=def(it);const hg=hgVon(it),cap=kerbenVon(it);const rx=reih(D.st);
   return `<div class="ritz ${an?'':'rucksack'}"><img src="${itemBild(it.id)}"><div class="rn"><b>${esc(D.n)}</b> ${D.st.map(k=>gi(k,KZ())).join('')||'<span class="hint">stofflos</span>'}${an?'':' <span class="hint">(Rucksack)</span>'}<br><span class="hint">${rx.length?'reagiert mit: '+rx.join(', '):'keine Reaktion mit deinem Deck'}</span></div>

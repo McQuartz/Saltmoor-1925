@@ -42,7 +42,16 @@ function ersatzSzene(w){const B=BIOMES[w.biom]||BIOMES.hafen;const c=document.cr
 function burst(X,Y,col,n,sp=1.6,up=0){for(let i=0;i<n;i++){const a=Math.random()*6.283,v=(.4+Math.random())*sp;PT.push({x:X,y:Y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-up,g:.06,life:0,max:.35+Math.random()*.45,col});}}
 function visOf(e){let v=BU.vis.get(e.uid);if(!v){v={hit:0,kx:0,lunge:0,dying:0,gone:false,ph:Math.random()*10,anim:'idle',at:0,old:null};BU.vis.set(e.uid,v);}return v;}
 // Position eines Gegners in der Szene (Fußpunkt, Größe), aus Aufstellung und Reihen der Szene
-function enemyBox(e){const sz=BU.sz||szeneHolen();const rh=sz.reihen[e.reihe??2]||sz.reihen[2];const sp=e.sprite&&SPRITES[e.sprite];
+// Auftrag 3 M2: Stellplätze der Szene (data/stell.json). Jeder Gegner bekommt beim ersten Zeichnen den ersten freien Platz
+// in der Reihenfolge von S.enemies (aufstellen() gibt Wächtern Platz 1 = vorn Mitte); fehlt die Liste, gelten die alten Bodenreihen.
+function stellListe(){const w=szenenWahl();return STELL[`${w.biom}:${w.art}:${w.variante||0}`]||STELL[`${w.biom}:${w.art}`]||null;}
+function stellPlatz(e,l){if(e.platz!=null&&e.platz<l.length)return e.platz;const belegt=new Set((S.enemies||[]).filter(o=>o!==e&&o.hp>0&&o.platz!=null).map(o=>o.platz));
+ const frei=[...l.keys()].filter(i=>!belegt.has(i));const wunsch=e.platzWunsch!=null&&frei.includes(e.platzWunsch)?e.platzWunsch:frei[0];e.platz=wunsch??0;return e.platz;}
+function enemyBox(e){const sz=BU.sz||szeneHolen();const sl=!e.pendel&&typeof STELL!=='undefined'?stellListe():null;
+ if(sl&&sl.length){const P=sl[stellPlatz(e,sl)];const sp=e.sprite&&SPRITES[e.sprite];let w=96,h=120;if(sp&&sp.meta){w=sp.meta.w;h=sp.meta.h;}else if(e.spr==='boss'){w=160;h=140;}else{w=64;h=80;}
+  const sk=e.rang==='normal'?P.s:e.rang==='boss'?.92:Math.max(P.s,.95);const nebel=P.s<.85?.3:P.s<.97?.12:0;
+  return{x:P.x,y:P.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel,kopf:sp&&sp.meta&&sp.meta.kopf!=null?P.y-Math.round((sp.meta.fuss[1]-(Array.isArray(sp.meta.kopf)?sp.meta.kopf[1]:sp.meta.kopf))*sk):P.y-Math.round(h*sk*.92)};}
+ const rh=sz.reihen[e.reihe??2]||sz.reihen[2];const sp=e.sprite&&SPRITES[e.sprite];
  let w=96,h=120;if(sp&&sp.meta){w=sp.meta.w;h=sp.meta.h;}else if(e.spr==='boss'){w=160;h=140;}else{w=64;h=80;}
  const sk=e.rang==='normal'||e.pendel?rh.skala:e.rang==='boss'?.92:1;if(e.pendel&&!FAST){e.xa=e.xa==null?e.x:e.xa+(e.x-e.xa)*.06;}const ex=e.pendel&&e.xa!=null?e.xa:e.x;return{x:Math.round(ex*SW),y:rh.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel:rh.nebel,kopf:sp&&sp.meta&&sp.meta.kopf!=null?rh.y-Math.round((sp.meta.fuss[1]-(Array.isArray(sp.meta.kopf)?sp.meta.kopf[1]:sp.meta.kopf))*sk):rh.y-Math.round(h*sk*.92)};}
 const FX={
@@ -70,12 +79,13 @@ let lastT=performance.now();
 function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.freeze)dt=0;BU.t+=dt;const t=BU.t,g=BU.g;
  const sz=szeneHolen();
  // Kamera: ruhiges Atmen + ein paar Pixel Maus-Parallax + Ruck
- const atm=Math.sin(t*.35)*1.2;BU.cam.x+=(((BU.maus.x-240)/240)*4-BU.cam.x)*.05;BU.cam.y+=(((BU.maus.y-135)/135)*2+atm-BU.cam.y)*.05;
+ // Auftrag 3 M2: im Kampf keine Kamera (keine Mausfolge, kein Atmen); Wackeln bei Treffern (shake) bleibt
+ const kampfSzene=S.phase==='fight'||S.phase==='reward';if(kampfSzene){BU.cam.x=0;BU.cam.y=0;}else{const atm=Math.sin(t*.35)*1.2;BU.cam.x+=(((BU.maus.x-240)/240)*4-BU.cam.x)*.05;BU.cam.y+=(((BU.maus.y-135)/135)*2+atm-BU.cam.y)*.05;}
  BU.shake*=Math.pow(.002,dt||.016);const sx=(Math.random()-.5)*BU.shake,sy=(Math.random()-.5)*BU.shake;const cam={x:BU.cam.x+sx,y:BU.cam.y+sy};
  g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.fillStyle='#000';g.fillRect(0,0,SW,SH);
  zeichneSzene(sz,g,t,cam);
  if(BU.szAlt){const q=(t-BU.szAlt.t0)/.8;if(q>=1||BU.szAlt.sz===sz)BU.szAlt=null;else{g.globalAlpha=Math.ceil((1-q)*4)/4;zeichneSzene(BU.szAlt.sz,g,t,cam);g.globalAlpha=1;}}
- if(S.enemies&&['fight','reward'].includes(S.phase)){const list=[...S.enemies].sort((a,b)=>(a.reihe-b.reihe)||(a.x-b.x));list.forEach(e=>zeichneGegner(g,e,dt,t,cam));}
+ if(S.enemies&&['fight','reward'].includes(S.phase)){const list=[...S.enemies].sort((a,b)=>(enemyBox(a).y-enemyBox(b).y)||(a.x-b.x));list.forEach(e=>zeichneGegner(g,e,dt,t,cam));}
  if(typeof PFX!=='undefined')try{PFX.zeichne(g,dt);}catch(e){}
  try{sz.zeichneVordergrund&&sz.zeichneVordergrund(g,t,cam);}catch(e){}
  for(let i=FXL.length-1;i>=0;i--){const f=FXL[i];f.t+=dt||.016;const p=f.t/f.dur;if(p>=1){FXL.splice(i,1);continue;}

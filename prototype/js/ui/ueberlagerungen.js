@@ -2,7 +2,7 @@
 // ---------- Überlagerungen: Buch der Reaktionen, Tagebuch, Einstellungen ----------
 function buchHtml(){const disc=S.disc||new Set();const all=allRx();
  return box('buch',`<h2>BUCH DER REAKTIONEN</h2><p class="hint">${[...disc].length} von ${all.length} entdeckt.</p><div class="stoffe">${Object.keys(ST).map(k=>`${gi(k,KZ())} ${ST[k].n}`).join(' · ')}</div>
- <div class="rliste">${all.map(r=>{const keys=r.k?[...r.k]:r.s?[...r.s]:null;return disc.has(r.n)?`<div><b>${r.n}</b> ${keys?keys.map(k=>gi(k,KZ())).join('+'):'(gleicher Stoff zweimal)'}: ${esc(r.t)}</div>`:`<div class="u">${r.s?'Hochreaktion: drei Stoffe':'? ? ?'}</div>`;}).join('')}</div><button class="deco klein" data-act="zu">SCHLIESSEN</button>`);}
+ <div class="rliste">${all.filter(r=>disc.has(r.n)).map(r=>{const keys=r.k?[...r.k]:r.s?[...r.s]:null;return disc.has(r.n)?`<div><b>${r.n}</b> ${keys?keys.map(k=>gi(k,KZ())).join('+'):'(gleicher Stoff zweimal)'}: ${esc(r.t)}</div>`:`<div class="u">${r.s?'Hochreaktion: drei Stoffe':'? ? ?'}</div>`;}).join('')}</div><button class="deco klein" data-act="zu">SCHLIESSEN</button>`);}
 function tagebuchHtml(){const M=Meta.get();const st=M.biome;
  return box('tagebuch zettel',`<h2>TAGEBUCH</h2><div class="liste"><div>Abstiege: ${M.runs} · Angekommen: ${M.siege} (Bleiben ${M.enden.bleiben||0}, Umkehren ${M.enden.umkehren||0})</div><div>Größte Tiefe: ${M.besteTiefe?romanN(M.besteTiefe):'–'}</div>
  <div>Erreichte Orte: ${Object.keys(BIOMES).map(b=>st.includes(b)?esc(BIOMES[b].kurz):'…').join(' · ')}</div></div>
@@ -43,7 +43,7 @@ function zeigeRucksack(){zeigeOverlay(rucksackHtml());}
 function rucksackUebernehmen(){if(!RS)return;AREAS.forEach(a=>{S.areas[a]=RS.areas[a];});S.bag=RS.bag;RS=null;closeOv();Bus.emit('pick');after();}
 // ---------- Hover-Vorschau am Cursor: welche Karten ins Deck kämen, welche Reaktionen dadurch möglich würden ----------
 function vorschauKarten(karten,titel){const deckSt=new Set(allActive().flatMap(it=>def(it).st));const st=new Set(karten.flatMap(c=>c.st));const rx=[];
- REACT.forEach(r=>{const[a,b]=[...r.k];if((st.has(a)&&deckSt.has(b))||(st.has(b)&&deckSt.has(a)))rx.push(S.disc.has(r.n)?r.n:'???');});
+ REACT.forEach(r=>{const[a,b]=[...r.k];if((st.has(a)&&deckSt.has(b))||(st.has(b)&&deckSt.has(a)))rx.push(r.n);});
  const einm=[];const seen=new Set();karten.forEach(c=>{const k=c.n+c.hg;if(!seen.has(k)){seen.add(k);einm.push({...c,anz:karten.filter(x=>x.n===c.n&&x.hg===c.hg).length});}});
  return `<div class="tn">${titel}</div><div class="vkr">${einm.map(c=>`<div class="vk"><div class="vkc">${c.x?'X':c.opfer?'♥'+c.opfer:c.c}</div><b>${esc(c.n)}${c.anz>1?' ×'+c.anz:''}</b><div>${c.st.map(k=>gi(k,9)).join('')||'<span class="hint">Stoff des Items</span>'}</div><div class="vkt">${esc(cardText(c))}</div></div>`).join('')}</div>${rx.length?`<div class="hint">Reagiert mit deinem Deck: ${[...new Set(rx)].join(', ')}</div>`:''}`;}
 function hoverVorschau(el){const tk=el.closest('[data-take],[data-buy],[data-hg],[data-buyhg]');if(!tk)return null;

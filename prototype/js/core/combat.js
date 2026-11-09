@@ -34,7 +34,10 @@ function aufstellen(list){const r=rs('aufstellung');const n=list.length;
  const xs=n===1?[.5]:n===2?[.36,.64]:n===3?[.22,.5,.78]:[.14,.38,.62,.86];
  const reihen=n===1?[2]:r.shuffle(n===2?[1,2]:n===3?[0,1,2]:[0,1,1,2]);
  list.forEach((e,i)=>{e.x=xs[i]+(r.next()-.5)*.06;e.reihe=e.rang==='normal'?reihen[i]:2;});
- if(list.some(e=>e.rang!=='normal')){const big=list.find(e=>e.rang!=='normal');big.x=.5;const others=list.filter(e=>e!==big);others.forEach((e,i)=>{e.x=others.length===1?.2:[.16,.84,.3,.7][i];e.reihe=r.pick([0,1]);});}}
+ if(list.some(e=>e.rang!=='normal')){const big=list.find(e=>e.rang!=='normal');big.x=.5;const others=list.filter(e=>e!==big);others.forEach((e,i)=>{e.x=others.length===1?.2:[.16,.84,.3,.7][i];e.reihe=r.pick([0,1]);});}
+ // Auftrag 3 M2: Wunsch-Stellplatz (data/stell.json, Platz 0 = vorn Mitte, 1/2 = links/rechts, 3/4 = hinten); nur Anzeige, buehne.js vergibt
+ const big=list.find(e=>e.rang!=='normal');const rest=list.filter(e=>e!==big);if(big)big.platzWunsch=0;
+ const plan=big?[1,2,3,4]:n===1?[0]:n===2?[1,2]:[0,1,2,3,4];rest.forEach((e,i)=>{e.platzWunsch=plan[i]??null;e.platz=null;});if(big)big.platz=null;}
 
 function startFight(ids,art='kampf'){
  S.enemies=ids.map((id,i)=>mkEnemy(id,i));aufstellen(S.enemies);

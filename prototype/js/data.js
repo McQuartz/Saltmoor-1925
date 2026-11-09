@@ -1,10 +1,12 @@
 // Lädt alle Spieldaten aus data/*.json. Dieselben Dateien soll später die Godot-Version einlesen.
-let HANDGRIFFE={},PAKETE=[],ICONS=new Set(),HG_ICONS=new Set(),ST,SUFFIX,AREAS,AREA_N,ITEMS,ROLES,FOES,JOBS,REACT,VERST,HOCH,EVENTS,BAL,RUN,BIOMES,FRAGS;
+let HANDGRIFFE={},PAKETE=[],ICONS=new Set(),HG_ICONS=new Set(),ST,SUFFIX,AREAS,AREA_N,ITEMS,ROLES,FOES,JOBS,REACT,VERST,HOCH,EVENTS,BAL,RUN,BIOMES,FRAGS,STELL={};
 async function loadData(base='data/',fetchJson){
  const get=fetchJson||(async f=>{const r=await fetch(base+f+'.json',{cache:'no-store'});if(!r.ok)throw new Error(f+'.json: '+r.status);return r.json();});
  const opt=async f=>{try{return await get(f);}catch(e){return null;}};
  const[st,items,roles,foes,jobs,rx,ev,bal,run,biomes]=await Promise.all(['stoffe','items','roles','foes','jobs','reactions','events','balance','run','biomes'].map(get));
  const frags=await opt('fragmente');
+ // Auftrag 3 M2: Stellplätze der Gegner je Kampfszene (data/stell.json → szenen["biom:art:variante"])
+ const stell=await opt('stell');STELL=(stell&&stell.szenen)||{};
  const hg=await opt('handgriffe');
  // Neue Icons (M5): assets/items/index.json und assets/handgriffe/index.json = Listen vorhandener IDs
  const ii=await (async()=>{try{const r=await fetch('assets/items/index.json',{cache:'no-store'});return r.ok?r.json():null;}catch(e){return null;}})();const hi=await (async()=>{try{const r=await fetch('assets/handgriffe/index.json',{cache:'no-store'});return r.ok?r.json():null;}catch(e){return null;}})();

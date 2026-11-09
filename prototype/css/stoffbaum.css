@@ -1,0 +1,24 @@
+/* Stoff-Baum (js/ui/stoffbaum.js). Alle Maße in u, wie der Rest der Oberfläche. */
+#baum{position:relative;width:calc(var(--u)*150);height:calc(var(--u)*48);flex:none}
+#baum .sb{position:absolute;inset:0}
+#baum .sb-pfad{position:absolute;left:0;top:0;width:calc(var(--u)*46);height:calc(var(--u)*48);display:flex;align-items:center;justify-content:flex-end;overflow:hidden;
+ -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40%);mask-image:linear-gradient(90deg,transparent 0,#000 40%)}
+#baum .sb-kette{display:flex;align-items:center;flex:none;padding-right:calc(var(--u)*1)}
+#baum .sb-kette.rueck{animation:sbrueck .22s ease-out}
+@keyframes sbrueck{from{transform:translateX(calc(var(--u)*13))}to{transform:none}}
+#baum .sb-kette.rueck .sb-glied.letzt{animation:sbein .22s ease-out}
+@keyframes sbein{from{opacity:0}to{opacity:1}}
+#baum .sb-glied{display:flex;align-items:center;gap:calc(var(--u)*.5);padding:calc(var(--u)*1);border:calc(var(--u)*.5) solid transparent;background:#0c0a08;opacity:.75}
+#baum .sb-glied.letzt{border-color:var(--c);opacity:1;box-shadow:0 0 calc(var(--u)*2) var(--c)}
+#baum .sb-ver{display:block;width:calc(var(--u)*3);height:calc(var(--u)*.8);background:#5a4c34;flex:none}
+#baum .sb-punkt{display:block;width:calc(var(--u)*3);height:calc(var(--u)*3);background:#7a6a48;margin-right:calc(var(--u)*4)}
+#baum .sb-z{display:block;width:calc(var(--u)*9);height:calc(var(--u)*9);image-rendering:pixelated;flex:none}
+#baum .sb-glied .sb-z{width:calc(var(--u)*7);height:calc(var(--u)*7)}
+#baum .sb-bogen{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+#baum .sb-ast{position:absolute;left:calc(var(--u)*77);transform:translateY(-50%);display:flex;align-items:center;gap:calc(var(--u)*1.2);max-width:calc(var(--u)*72);
+ font-family:var(--fk);font-weight:700;letter-spacing:.06em;color:var(--c);cursor:default}
+#baum .sb-ast .sb-z{width:calc(var(--u)*4.5);height:calc(var(--u)*4.5)}
+#baum .sb-ast.dunkel{opacity:.4}
+#baum .sb-ast.gold{text-shadow:0 0 calc(var(--u)*2) rgba(232,197,71,.6)}
+#baum .sb-name{line-height:1.05;min-width:0}
+#baum .sb-sack{position:absolute;left:calc(var(--u)*77);top:50%;transform:translateY(-50%);font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.12em;color:var(--dim);font-style:italic}

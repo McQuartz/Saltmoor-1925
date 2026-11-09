@@ -1,5 +1,5 @@
 // Galerie: Schaufenster der Bausteine. Nutzt nur, was das Spiel selbst benutzt:
-// cardHtml, barHtml, absicht, gegnerHtml, kopfHtml, leisteKampf, radSvg, gearHtml, itemPick, wegHtml, eventHtml, wandbildHtml (oberflaeche.js),
+// cardHtml, barHtml, absicht, gegnerHtml, kopfHtml, leisteKampf, stoffBaumHtml (stoffbaum.js), gearHtml, itemPick, wegHtml, eventHtml, wandbildHtml (oberflaeche.js),
 // gi/glyph (zeichen.js), ladeSprite/frame/dglowA/ersatzSzene (buehne.js), World.build (scenes/world), alte Zeichner aus foes.js und zones.js.
 // Die Beispiele laufen über einen kleinen Beispielzustand S, der hier gebaut wird. Die Seite schreibt nichts in den Speicher.
 (()=>{
@@ -74,9 +74,9 @@ function bauZustaende(){const z=(k,v)=>`<div class="feind" style="position:relat
 function bauKnoepfe(){const rauten=(n,max)=>`<div class="rauten">${[...Array(max)].map((_,i)=>`<i class="${i<n?'voll':''}"></i>`).join('')}</div>`;
  $('knoepfe').innerHTML=[spec('Energie 3/3',rauten(3,3)),spec('Energie 1/3',rauten(1,3)),spec('Energie 4 (Bonus)',rauten(4,4)),
   spec('Knopf',`<button class="deco">ZUG<br>BEENDEN</button>`),spec('Knopf klein',`<button class="deco klein">TAGEBUCH</button>`),spec('Knopf mit Zusatz',`<button class="deco">SCHLAFEN<br><small>+20 Leben</small></button>`),spec('gesperrt',`<button class="deco" disabled>VERSCHMELZEN</button>`)].join('');
- const rad=(lbl,st)=>{S=probeS(st);return spec(lbl,`<div class="radw">${radSvg()}</div>`);};
+ const rad=(lbl,st)=>{S=probeS(st);return spec(lbl,`<div id="baum" class="radw" style="width:calc(var(--u)*118);height:calc(var(--u)*44)">${stoffBaumHtml()}</div>`);};
  const alle=new Set(allRx().map(r=>r.n));
- $('raeder').innerHTML=[rad('Stoffrad: noch nichts gespielt',{}),rad('nach Feuer, alles bekannt',{last:['F'],disc:alle}),rad('nach Feuer, nichts entdeckt (violett gestrichelt)',{last:['F']}),rad('nach Salz + Blut',{last:['S','B'],disc:new Set([REACT[0]&&REACT[0].n])})].join('');}
+ $('raeder').innerHTML=[rad('Stoff-Baum: Zugbeginn',{}),rad('nach Feuer, Hand passt',{last:['F'],chainLog:[{turn:3,st:['F'],prev:[],rx:[]}],hand:[karte('harpoon'),karte('salt')]}),rad('nach Feuer, Sackgasse (Hand zu teuer)',{last:['F'],chainLog:[{turn:3,st:['F'],prev:[],rx:[]}],energy:0,hand:[karte('harpoon')]}),rad('nach Salz + Blut',{last:['S','B'],chainLog:[{turn:3,st:['S'],prev:[],rx:[]},{turn:3,st:['S','B'],prev:['S'],rx:[]}],hand:[karte('torch')]})].join('');}
 
 function bauGear(){S=probeS({phase:'werkstatt'});S.sel='waffe:0';S.areas.kleidung[1].x=1;S.slots.talisman=1;
  S.bag[2]=mk(itemMit(d=>d.rare)||'knife');

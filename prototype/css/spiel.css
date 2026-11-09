@@ -60,8 +60,6 @@ a[data-act]{color:inherit;cursor:pointer;pointer-events:auto;text-decoration:und
 /* ---------- Untere Leiste ---------- */
 #leiste{position:relative;height:calc(var(--u)*92);background:#000;display:flex;align-items:flex-start;justify-content:space-between}
 #leiste.kampf{padding:0 calc(var(--u)*4)}
-#rad{width:calc(var(--u)*64);padding-top:calc(var(--u)*8)}
-#rad .radl{font-family:var(--fk);font-size:calc(var(--u)*3.6);fill:#a89c80;letter-spacing:.1em}
 #hand{flex:1;display:flex;justify-content:center;gap:calc(var(--u)*3);margin-top:calc(var(--u)*-14)}
 #rechts{width:calc(var(--u)*76);display:flex;flex-direction:column;align-items:center;padding-top:calc(var(--u)*4);gap:calc(var(--u)*3)}
 .en-l{font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.16em;color:#c8b890}
@@ -256,3 +254,28 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 /* Mehr als 6 Handkarten (Ballast, Strandbuch, Wahrsagerin): Karten überlappen, damit die Hand nie aus dem Bild läuft; die Karte unter der Maus liegt oben */
 #hand .karte+.karte{margin-left:calc(var(--u)*-1*var(--ov,0))}#hand .karte:hover{z-index:5}
 .kt.verst{color:#ffe08a}
+/* ---------- Auftrag 3 M2: Kampf-HUD Variante 2 (05-oberflaeche.md Abschnitt 1) ---------- */
+#kopf{right:calc(var(--u)*8);width:auto}
+#kopf .tz .sub{display:inline;margin-left:calc(var(--u)*5);font-family:var(--fs,inherit);font-weight:400;letter-spacing:0;font-size:calc(var(--u)*5.5)}
+#kopf .kr{position:absolute;right:0;top:0;display:flex;align-items:baseline;gap:calc(var(--u)*7);font-size:calc(var(--u)*6);color:#e6dcc0}
+#kopf .kr b{font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*6.5);color:#efe4c8}
+#kopf .kr .gold b{color:#e8c547}#kopf .kr .gold img{vertical-align:middle}
+#kopf .kr a{text-decoration:none}
+#leiste.kampf{background:linear-gradient(#17120c,#0b0907 30%,#060504);border-top:1px solid var(--messing);box-shadow:inset 0 1px 0 #5a4626,0 calc(var(--u)*-1) calc(var(--u)*3) rgba(0,0,0,.7);padding:0 calc(var(--u)*8)}
+#links{width:calc(var(--u)*118);padding-top:calc(var(--u)*9);display:flex;flex-direction:column;gap:calc(var(--u)*4);margin-right:calc(var(--u)*8)}
+#spieler2{pointer-events:auto}
+#spieler2 .skopf{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:calc(var(--u)*1.5)}
+#spieler2 .snm{font-family:var(--fk);font-size:calc(var(--u)*4.2);letter-spacing:.18em;color:#a89c80}
+#spieler2 .shp{font-family:var(--fk);font-size:calc(var(--u)*4.5);color:#a89c80}#spieler2 .shp b{font-size:calc(var(--u)*7.5);color:#efe4c8;font-weight:700}
+#spieler2 .szeile{display:flex;align-items:center;height:calc(var(--u)*6)}
+#spieler2 .sbar{position:relative;flex:1;height:100%;background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20;display:flex}
+#spieler2 .sbar i{display:block;height:100%}#spieler2 .sbar .hp{background:linear-gradient(#d0463e,#9a2a24)}
+#spieler2 .sbar .schraffur{background:repeating-linear-gradient(-45deg,#c8463a 0 2px,#3a0a08 2px 5px);box-shadow:inset 0 0 0 1px #ff8a7a55}
+#spieler2 .sblock{height:100%;width:calc(var(--u)*0.9*var(--bw));min-width:calc(var(--u)*3);display:flex;border:1px solid #000;border-left:0;box-shadow:0 0 0 1px #2a4a80}
+#spieler2 .sblock i{display:block;height:100%}#spieler2 .sblock .bk{background:linear-gradient(#6a9ae0,#3a64a8)}#spieler2 .sblock .bricht{background:repeating-linear-gradient(-45deg,#9ac0ff 0 2px,#2a4a80 2px 5px)}
+#spieler2 .schild{display:flex;align-items:center;margin-left:calc(var(--u)*-1);font-family:var(--fp);font-size:calc(var(--u)*4.5);color:#cfe0ff;text-shadow:0 0 calc(var(--u)*2) #000}
+#baum{flex:1;min-height:calc(var(--u)*40)}
+#hand{margin-top:calc(var(--u)*-16)}
+.karte .rx{position:absolute;left:50%;bottom:calc(var(--u)*-3);transform:translateX(-50%);white-space:nowrap;background:#0b0907;border:1px solid var(--c,var(--gold));padding:0 calc(var(--u)*2.5);color:var(--c,var(--gold));font-size:calc(var(--u)*3.6);letter-spacing:.14em;line-height:calc(var(--u)*5.5)}
+.karte .rx.in{bottom:calc(var(--u)*3);border-color:var(--blau);color:var(--blau)}
+.karte.reagiert{border-color:var(--c,var(--gold));box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px var(--c,#7a5a20),0 0 calc(var(--u)*7) calc(var(--u)*-1) var(--c,rgba(232,197,71,.6)),2px 3px 0 #000}
