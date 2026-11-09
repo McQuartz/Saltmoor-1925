@@ -31,7 +31,8 @@
   "kniff": {
    "art": "einfrieren",
    "why": "Ihr Netz verfängt jeden Zug eine deiner Karten."
-  }
+  },
+  "art": "veraendert"
  },
  "tiefling": {
   "n": "Tiefling",
@@ -67,7 +68,8 @@
    "gegner": "tiefling",
    "alle": 3,
    "why": "Er ruft ins Wasser, und ein Vetter kommt herauf."
-  }
+  },
+  "art": "veraendert"
  },
  "schmuggler": {
   "n": "Schmuggler",
@@ -97,7 +99,8 @@
   ],
   "konzept": "Bringt nachts Kisten in die zugemauerten Lagerhäuser; unter dem Mantel ein Arm zu viel.",
   "stimme": "schmuggler",
-  "beute": "revolver"
+  "beute": "revolver",
+  "art": "veraendert"
  },
  "lotse": {
   "n": "Der Lotse",
@@ -143,7 +146,8 @@
    "art": "ruft",
    "gegner": "tiefling",
    "alle": 3
-  }
+  },
+  "art": "veraendert"
  },
  "hirte": {
   "n": "Hirte",
@@ -173,7 +177,8 @@
   ],
   "konzept": "Schäfer, der zu lange in den Himmel sah: Gesicht aus Sternen, die es nicht gibt, Geweih mit leuchtenden Knoten.",
   "stimme": "hirte",
-  "beute": "woolcoat"
+  "beute": "woolcoat",
+  "art": "veraendert"
  },
  "torfstecherin": {
   "n": "Torfstecherin",
@@ -202,7 +207,8 @@
   ],
   "konzept": "Gräbt im Torf, bis sie sich selbst findet; wo sie den Boden berührt hat, ist die Haut Rinde.",
   "stimme": "torfstecherin",
-  "beute": "shovel"
+  "beute": "shovel",
+  "art": "veraendert"
  },
  "nest": {
   "n": "Das Nest",
@@ -236,7 +242,8 @@
   "kniff": {
    "art": "verborgen",
    "why": "Ein Hügel kündigt nichts an: Was es vorhat, sieht man nur halb."
-  }
+  },
+  "art": "tiefe"
  },
  "opfernde": {
   "n": "Der Opfernde",
@@ -278,7 +285,8 @@
    "art": "ruft",
    "gegner": "nest",
    "alle": 4
-  }
+  },
+  "art": "tiefe"
  },
  "chorknabe": {
   "n": "Chorknabe",
@@ -308,7 +316,8 @@
   ],
   "konzept": "Drei Chorknaben, ein Hals, eine Robe; sie singen nacheinander ein Lied mit falschem Text.",
   "stimme": "chorknabe",
-  "beute": "candle"
+  "beute": "candle",
+  "art": "veraendert"
  },
  "ertrunkener": {
   "n": "Ertrunkener",
@@ -345,7 +354,9 @@
   "kniff": {
    "art": "loeschen",
    "why": "Für ihn ist noch Wasser: Brand erlischt an ihm am Zugende."
-  }
+  },
+  "art": "veraendert",
+  "asche": true
  },
  "glockenmutter": {
   "n": "Die Glockenmutter",
@@ -391,7 +402,8 @@
    "art": "ruft",
    "gegner": "chorknabe",
    "alle": 3
-  }
+  },
+  "art": "veraendert"
  },
  "schlundtraeger": {
   "n": "Schlundträger",
@@ -421,7 +433,8 @@
   ],
   "konzept": "Bergmann mit senkrecht aufgeplatztem Kopf; aus dem Spalt hängen Tentakel, an den Rändern Zahnreihen.",
   "stimme": "schlundtraeger",
-  "beute": null
+  "beute": null,
+  "art": "veraendert"
  },
  "salzlaeufer": {
   "n": "Salzläufer",
@@ -452,7 +465,8 @@
   ],
   "konzept": "Blindes Tier aus der Tiefe, weiß verkrustet, tastet mit zu vielen Fühlern; die Kruste hat die Form eines Gesichts.",
   "stimme": "salzlaeufer",
-  "beute": "salt"
+  "beute": "salt",
+  "art": "tiefe"
  },
  "grabwaechter": {
   "n": "Grabwächter",
@@ -481,7 +495,8 @@
   ],
   "konzept": "Römischer Legionär, im Salz begraben, um Wache zu halten; der Helm ist mit dem Schädel verwachsen.",
   "stimme": "grabwaechter",
-  "beute": "pick"
+  "beute": "pick",
+  "art": "veraendert"
  },
  "wurm": {
   "n": "Der Wurm im Salz",
@@ -531,7 +546,8 @@
     "F",
     "V"
    ]
-  }
+  },
+  "art": "tiefe"
  },
  "bote": {
   "n": "Bote",
@@ -561,7 +577,9 @@
   ],
   "konzept": "Ein Postbote, dem man unten geantwortet hat: ein senkrechter Mund quer durch die Brust, Augen statt Hals.",
   "stimme": "bote",
-  "beute": "watch"
+  "beute": "watch",
+  "art": "veraendert",
+  "asche": true
  },
  "mumie": {
   "n": "Erbauer-Mumie",
@@ -597,7 +615,8 @@
    "was": "explodiert",
    "v": 6,
    "why": "Wenn die Binden reißen, entweicht der Staub von Äonen, und er trifft dich."
-  }
+  },
+  "art": "tiefe"
  },
  "windgestalt": {
   "n": "Der Wind, der Gestalt hat",
@@ -639,7 +658,8 @@
   ],
   "konzept": "Der Atem aus dem Abgrund hat sich aus den Binden der Erbauer einen hohlen Leib gewickelt und trägt eine Totenmaske; er atmet sichtbar ein und aus.",
   "stimme": "windgestalt",
-  "beute": "cross"
+  "beute": "cross",
+  "art": "nachahmer"
  },
  "rufer": {
   "n": "Rufer",
@@ -669,7 +689,8 @@
   ],
   "konzept": "Ahmt Menschen nach, die hier erfroren sind: Hals zu lang, Kopf zu klein, der Mund immer offen.",
   "stimme": "rufer",
-  "beute": "bottle"
+  "beute": "bottle",
+  "art": "nachahmer"
  },
  "nachgeher": {
   "n": "Nachgeher",
@@ -704,7 +725,8 @@
    "art": "abschrift",
    "n": 1,
    "why": "Er macht deine Bewegungen nach, und eine davon gehört danach ihm."
-  }
+  },
+  "art": "nachahmer"
  },
  "chor": {
   "n": "Der Chor im Eis",
@@ -751,7 +773,8 @@
    "art": "ruft",
    "gegner": "rufer",
    "alle": 3
-  }
+  },
+  "art": "veraendert"
  },
  "ruft": {
   "n": "Das, was ruft",
@@ -848,7 +871,8 @@
     "anzahl": 1
    }
   },
-  "quelle": "skript"
+  "quelle": "skript",
+  "art": "tiefe"
  },
  "augen": {
   "n": "Augen im Rand",
@@ -880,7 +904,8 @@
    "why": "Die Laternen leuchten ihm schwarz: solange sie hängen, deckt jede ihn mit Block."
   },
   "quelle": "skript",
-  "ohne_tiefe": true
+  "ohne_tiefe": true,
+  "art": "tiefe"
  },
  "gesehener_tief": {
   "n": "Der Danebenhängende",
@@ -912,7 +937,8 @@
   "beute": null,
   "quelle": "skript",
   "entwurf": true,
-  "ohne_tiefe": true
+  "ohne_tiefe": true,
+  "art": "tiefe"
  },
  "gesehener_grund": {
   "n": "Der Umfaltende",
@@ -944,7 +970,8 @@
   "beute": null,
   "quelle": "skript",
   "entwurf": true,
-  "ohne_tiefe": true
+  "ohne_tiefe": true,
+  "art": "tiefe"
  },
  "gesehener_letzt": {
   "n": "Der Hohe am Rand",
@@ -976,6 +1003,7 @@
   "beute": null,
   "quelle": "skript",
   "ohne_tiefe": true,
-  "entwurf": true
+  "entwurf": true,
+  "art": "tiefe"
  }
 }

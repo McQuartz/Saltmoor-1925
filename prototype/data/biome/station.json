@@ -160,7 +160,8 @@
    },
    "beute": "bahnsteigkarte",
    "beute_satz": "Die Zange klappt noch ein paarmal zu, ins Leere. Auf dem Brett der Kanzel liegt ein Fahrschein mit deinem Namen, schon gelocht.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "wartende": {
    "n": "Die Wartende",
@@ -196,7 +197,9 @@
    },
    "beute": null,
    "beute_satz": "Der Kopf sinkt langsam bis auf den Bahnsteig. Der Strauß liegt daneben, und eine der Blumen hat sich geöffnet.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "streckengaenger": {
    "n": "Der Streckengänger",
@@ -232,7 +235,8 @@
    },
    "beute": "streckenlaterne",
    "beute_satz": "Die Schienen, die seine Beine waren, liegen wieder flach am Boden. Sie führen jetzt an dir vorbei, ein Stück weiter als vorhin.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "kachelleger": {
    "n": "Der Kachelleger",
@@ -271,7 +275,8 @@
    },
    "beute": "letzte_kachel",
    "beute_satz": "Die Kacheln fallen nicht ab. Sie liegen in Reihen auf dem Boden, als wäre er eine Wand, die umgefallen ist. In einer Fuge brennt noch Licht.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "einfahrt": {
    "n": "Der Zug, der einfährt",
@@ -361,7 +366,8 @@
    },
    "beute": "stirnlampe",
    "beute_satz": "Die Türen schließen sich, und zum ersten Mal fährt ein Zug ab. Er fährt rückwärts in den Tunnel, und die Gesichter an den Scheiben sehen dir nach, bis die Stirnlampen klein werden. Eine bleibt auf den Schienen liegen und brennt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "menge": {
    "n": "Die Menge",
@@ -418,7 +424,8 @@
    },
    "beute": "bahnsteigkarte",
    "beute_satz": "Das Blitzlicht zündet, und für einen Augenblick ist der Bahnsteig weiß. Danach steht niemand mehr da. Das Band hängt zwischen den Ständern, ungeschnitten, und auf dem Boden liegt eine Eintrittskarte zur Eröffnung.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   }
  },
  "events": [
@@ -483,7 +490,8 @@
        "op": "max_hp",
        "v": -10
       }
-     ]
+     ],
+     "tiefe": 1
     },
     {
      "l": "Die Fahrkarte aus dem Nachtzug daneben legen, sie ist dieselbe: +1 Kerbe an einem Item, eine Reaktion entdecken",

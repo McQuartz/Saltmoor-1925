@@ -159,7 +159,9 @@
    },
    "beute": "stechzirkel",
    "beute_satz": "Der kleine Mond in den Ringen läuft noch eine Runde, langsamer, und bleibt dann stehen, auf der Seite, die dir abgewandt ist.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "kraterbewohner": {
    "n": "Der Kraterbewohner",
@@ -200,7 +202,8 @@
    },
    "beute": null,
    "beute_satz": "Die Lampe in seinem Krater brennt weiter. Niemand stützt sich mehr auf den Rand. Auf dem Wall steht eine Tasse, halb voll.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   },
   "mondmotte": {
    "n": "Die Mondmotte",
@@ -236,7 +239,8 @@
    },
    "beute": "mondstaub",
    "beute_satz": "Sie zerfällt, wie sie entstanden ist, Korn für Korn. Die beiden Augen bleiben am längsten im Staub liegen und sehen nach oben.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "gezogene": {
    "n": "Die Gezogene",
@@ -275,7 +279,8 @@
    },
    "beute": null,
    "beute_satz": "Der Strang reißt. Das Wasser fällt nicht, es steigt zurück ins Eis, und sie bleibt liegen, zum ersten Mal richtig herum.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "rueckseite": {
    "n": "Die Rückseite",
@@ -382,7 +387,8 @@
    },
    "beute": "aschlicht",
    "beute_satz": "Die Sichel wird dünner, bis sie ein Strich ist, und dann ist auch der Strich weg. Nur das aschgraue Licht bleibt, und darin, sehr lange, die Augen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "mondmann": {
    "n": "Der Mann im Mond",
@@ -464,7 +470,8 @@
    },
    "beute": "mondstaub",
    "beute_satz": "Er setzt sich auf sein Bündel und ist auf einmal sehr klein. Wo er gegangen ist, liegt die Asche glatt, als wäre nie jemand da gewesen. Nur deine Spuren führen zu ihm hin.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   }
  },
  "events": [
@@ -624,7 +631,8 @@
        "op": "max_hp",
        "v": -9
       }
-     ]
+     ],
+     "tiefe": 1
     },
     {
      "l": "Nur die Hand hinüberhalten: eine Karte kostet dauerhaft 1 weniger, −5 Leben",

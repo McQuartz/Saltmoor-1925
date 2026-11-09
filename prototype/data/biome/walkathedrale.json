@@ -155,7 +155,8 @@
    },
    "beute": "walzahnmesser",
    "beute_satz": "Das Gewölbe fällt in sich zusammen, Bogen auf Bogen. Darunter ist nur noch der Abdruck von Händen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "echo": {
    "n": "Das Walfänger-Echo",
@@ -193,7 +194,9 @@
    },
    "beute": "echoharpune",
    "beute_satz": "Die Leine erschlafft. Am anderen Ende, weit drinnen im Wal, zieht niemand mehr.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "markfresser": {
    "n": "Der Markfresser",
@@ -230,7 +233,8 @@
    },
    "beute": "tranlampe",
    "beute_satz": "Die Ringe erlöschen einer nach dem anderen, von hinten nach vorn. Zuletzt der Knochen in seiner Hand.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "seepockenmann": {
    "n": "Der Seepockenmann",
@@ -267,7 +271,8 @@
    },
    "beute": "fischbeinkorsett",
    "beute_satz": "Die Lichter in den Seepocken gehen aus, alle zugleich. Sie zeigen weiter zum Herzen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "herz": {
    "n": "Das Herz",
@@ -321,7 +326,8 @@
    },
    "beute": "herztuer",
    "beute_satz": "Das Herz schlägt noch einmal, ganz leise, als hätte es sich verzählt. Dann steht die Tür offen, und drinnen ist es warm.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "kalb": {
    "n": "Das Kalb",
@@ -401,7 +407,8 @@
    },
    "beute": "fischbeinkorsett",
    "beute_satz": "Die Hände öffnen sich, einer nach dem anderen die Finger. Die Schnur schaukelt noch lange, und oben im Dunkeln schlägt das Herz einmal zu viel.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [

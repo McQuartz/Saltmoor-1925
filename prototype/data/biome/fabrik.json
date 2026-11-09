@@ -155,7 +155,8 @@
    },
    "beute": "akkordmesser",
    "beute_satz": "Der Fächer klappt zusammen. Es war immer nur ein Arm.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "dosenkind": {
    "n": "Das Dosenkind",
@@ -193,7 +194,8 @@
    },
    "beute": "lakeeimer",
    "beute_satz": "Die Lake läuft in die Rinne. Die Dose ist leer, und sie war es immer.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "kesselmann": {
    "n": "Der Kesselmann",
@@ -230,7 +232,8 @@
    },
    "beute": "gummischuerze",
    "beute_satz": "Die Feuertür schlägt zu. Drinnen brennt es weiter, langsam, für niemanden.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "kuehlhausgast": {
    "n": "Der Kühlhausgast",
@@ -266,7 +269,8 @@
    },
    "beute": "watch",
    "beute_satz": "Er neigt den Hut, ein letztes Mal. Seine Uhr steht auf 1911.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   },
   "schicht": {
    "n": "Die Schicht",
@@ -325,7 +329,8 @@
     "art": "waechst",
     "v": 2,
     "why": "Der Takt zieht an. Jede Runde ein wenig schneller, so wie jede Nacht."
-   }
+   },
+   "art": "veraendert"
   },
   "fang": {
    "n": "Der Fang",
@@ -408,7 +413,8 @@
    },
    "beute": "ehering",
    "beute_satz": "Der Haken pendelt leer über dem Band. Die Waage zeigt kein Gewicht, nur das Datum von morgen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [
@@ -601,7 +607,8 @@
        "op": "max_hp",
        "v": -10
       }
-     ]
+     ],
+     "tiefe": 1
     },
     {
      "l": "Mit dem Lakeeimer schöpfen, was unten liegt: eine Reliquie, −8 Leben",

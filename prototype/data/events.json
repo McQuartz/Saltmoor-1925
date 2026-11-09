@@ -627,7 +627,8 @@
      {
       "op": "transform"
      }
-    ]
+    ],
+    "tiefe": 1
    },
    {
     "l": "Eine Gabe hineinwerfen: −15 Gold, ein seltenes Item steigt auf",
@@ -909,7 +910,8 @@
       "op": "lose_hp",
       "v": 14
      }
-    ]
+    ],
+    "tiefe": 1
    },
    {
     "l": "Dich festhalten: der Wind nimmt etwas, ein Item verwandelt sich",
@@ -1045,7 +1047,8 @@
     ],
     "if": {
      "slot_below_max": "talisman"
-    }
+    },
+    "tiefe": 1
    },
    {
     "l": "Hingehen: Kampf gegen den Rufer",
@@ -1394,7 +1397,8 @@
       "op": "lose_hp",
       "v": 6
      }
-    ]
+    ],
+    "tiefe": 1
    },
    {
     "l": "Den Docht kürzen: +1 Kerbe an einem Item",

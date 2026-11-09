@@ -154,7 +154,8 @@
    },
    "beute": "putztuch",
    "beute_satz": "Die Leiter steht noch. Oben liegt das Tuch, ordentlich gefaltet, wie es Vorschrift ist.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "rueckmoewen": {
    "n": "Die Rückwärtsmöwe",
@@ -190,7 +191,8 @@
    },
    "beute": null,
    "beute_satz": "Sie fällt rückwärts von der Mauer. Unten liegen nur Federn, die Spitzen nach vorn.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "strahlgaenger": {
    "n": "Der aus dem Strahl",
@@ -228,7 +230,8 @@
    },
    "beute": "korkring",
    "beute_satz": "Die Kante wandert weiter, und mit ihr geht der Rest von ihm. Auf dem Pflaster bleibt eine Pfütze, die nach oben tropft.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "fensterzaehlerin": {
    "n": "Die Fensterzählerin",
@@ -265,7 +268,8 @@
    },
    "beute": "fensterschluessel",
    "beute_satz": "Das Fenster fällt auf das Pflaster und bricht nicht. Drinnen geht das Licht aus.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   },
   "linse": {
    "n": "Die Linse",
@@ -346,7 +350,8 @@
    },
    "beute": "ochsenauge",
    "beute_satz": "Die Linse bleibt stehen. Zum ersten Mal seit 1917 fällt der Strahl aufs Meer, und draußen drehen alle Schiffe zugleich bei.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "nebelhorn": {
    "n": "Das Nebelhorn",
@@ -391,7 +396,8 @@
    },
    "beute": "zunderbuechse",
    "beute_satz": "Der Trichter ist leer. Zum ersten Mal seit 1917 hört man draußen die Brandung, und dann, sehr weit, ein Schiffshorn, das antwortet.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   }
  },
  "events": [

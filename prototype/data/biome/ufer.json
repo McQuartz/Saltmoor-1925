@@ -149,7 +149,8 @@
    },
    "beute": "nasser_mantel",
    "beute_satz": "Er fällt nicht. Er setzt sich in den Sand, mit dem Rücken zu dir, und schaut weiter aufs Wasser.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   }
  },
  "events": [

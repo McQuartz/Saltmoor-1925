@@ -52,7 +52,8 @@
    },
    "beute": "schraeges_lot",
    "beute_satz": "Im Sand liegt ein Feldbuch voller Maße. Alle Türen sind darin breiter als die Stadt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "relief": {
    "n": "Der aus dem Relief",
@@ -89,7 +90,8 @@
    },
    "beute": null,
    "beute_satz": "Auf der Platte ist jetzt eine Stelle leer, genau so groß wie er.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   },
   "getragene": {
    "n": "Der Getragene",
@@ -142,7 +144,8 @@
    },
    "beute": "schraeges_lot",
    "beute_satz": "Die Träger setzen die Lade ab, zum ersten Mal seit sehr langer Zeit, und legen sich daneben. Der Deckel ist zu. Von innen klopft es nicht mehr.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   }
  },
  "events": [

@@ -151,7 +151,9 @@
    },
    "beute": "legionsaxt",
    "beute_satz": "Der Helm liegt auf der Straße. Darunter ist nur noch ein Stammstück, und es hat eine frische Kerbe.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "steinhirsch": {
    "n": "Der Steinhirsch",
@@ -188,7 +190,8 @@
    },
    "beute": null,
    "beute_satz": "Die Stränge seines Geweihs liegen noch auf dem Boden. Sie haben angefangen, Wurzeln zu schlagen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "harzfang": {
    "n": "Der Harzfang",
@@ -224,7 +227,8 @@
    },
    "beute": "harzklumpen",
    "beute_satz": "Der Faden hängt noch von den Wurzeln. Das Gesicht im Bernstein sieht jetzt in eine andere Richtung.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "bernsteinlarve": {
    "n": "Die Bernsteinlarve",
@@ -260,7 +264,8 @@
    },
    "beute": "bernstein_fliege",
    "beute_satz": "Im leeren Köcher klappern Münzen. Auf jeder ist derselbe Kaiser, und er wird von Münze zu Münze jünger.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "wurzelstock": {
    "n": "Der Wurzelstock",
@@ -361,7 +366,8 @@
    },
    "beute": "harzkern",
    "beute_satz": "Die Arme hängen still bis auf den Boden. Im Mund des Gesichts ist eine Mulde, wo etwas gelegen hat.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "kronengaenger": {
    "n": "Der Kronengänger",
@@ -420,7 +426,8 @@
    },
    "beute": "harzklumpen",
    "beute_satz": "Er bleibt stehen, die Krone auf dem Boden, und wird wieder ein Baum, der falsch herum steht. Im Astloch ist das Harz kalt, die Augen darin sind zu.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "items": {

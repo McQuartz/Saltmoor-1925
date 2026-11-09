@@ -47,7 +47,8 @@
    },
    "beute": "weidenschlinge",
    "beute_satz": "Er legt sich zurück in den Torf, ordentlich, wie man ihn hingelegt hat. Die Pfähle stehen wieder senkrecht.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   },
   "moorpferd": {
    "n": "Das Moorpferd",
@@ -102,7 +103,8 @@
    },
    "beute": "moorglas",
    "beute_satz": "Die Stränge werden schlaff. Was unten die Leine hielt, hat losgelassen, und das Moor schließt sich über den Hufen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [

@@ -158,7 +158,9 @@
    },
    "beute": "kopfhoerer",
    "beute_satz": "Die Muschel an seinem Kopf glüht noch eine Weile. Hältst du dein Ohr daran, hörst du dich selbst, eine Sekunde zu spät.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "telegrafistin": {
    "n": "Die Telegrafistin",
@@ -196,7 +198,8 @@
    },
    "beute": "morsetaste",
    "beute_satz": "Ihre Finger klopfen weiter, als sie schon still liegt. Der Streifen endet mitten im Wort, und das Wort ist dein Name.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "mastkletterer": {
    "n": "Der Mastkletterer",
@@ -232,7 +235,8 @@
    },
    "beute": null,
    "beute_satz": "Das Eishaar bricht in einem Stück und klirrt wie Glas. Oben auf dem Mast glüht der Isolator weiter.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "rauschen": {
    "n": "Das Rauschen",
@@ -270,7 +274,8 @@
    },
    "beute": null,
    "beute_satz": "Die Streifen rutschen auseinander und kommen nicht mehr zusammen. Einen Augenblick lang war da ein Gesicht, das du kanntest.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   },
   "sender": {
    "n": "Der Sender",
@@ -359,7 +364,8 @@
    },
    "beute": "senderoehre",
    "beute_satz": "Die Türen schlagen zu. Hinter dem Gitter geht eine Röhre nach der anderen aus, und als die letzte erlischt, hörst du sie noch, sehr leise, deinen Namen buchstabieren. Dann einen anderen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "kastendrachen": {
    "n": "Der Kastendrachen",
@@ -411,7 +417,8 @@
    },
    "beute": "kopfhoerer",
    "beute_satz": "Der Drachen kommt herunter wie ein nasses Laken. Der Funker steht auf dem Eis, zum ersten Mal seit 1912, und fällt dann einfach um. Im Kopfhörer piept es weiter.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [
@@ -680,7 +687,8 @@
      ],
      "if": {
       "event_gesehen": "funkstation_morsetisch"
-     }
+     },
+     "tiefe": 1
     },
     {
      "l": "Mit dem Kopfhörer mithören, was zurückkommt: Die Funkenstrecke, +1 Kerbe",

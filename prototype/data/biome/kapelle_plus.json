@@ -51,7 +51,8 @@
    },
    "beute": "bible",
    "beute_satz": "Die Sanduhr fällt von der Brüstung und zerbricht nicht. Der Sand darin liegt oben, still, und unten ist das Glas leer.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "gepruefte": {
    "n": "Die Geprüfte",
@@ -91,7 +92,8 @@
    },
    "beute": "holywater",
    "beute_satz": "Sie sinkt, endlich. Das Seil zieht sich von selbst nach unten, Hand über Hand.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   },
   "kirchenvogt": {
    "n": "Der Kirchenvogt",
@@ -128,7 +130,8 @@
    },
    "beute": "klingelbeutel",
    "beute_satz": "Der Beutel reißt. Heraus fallen Knöpfe, Zähne, ein Ehering, und ganz zuletzt eine Münze mit deinem Gesicht.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   }
  },
  "events": [

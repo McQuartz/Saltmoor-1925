@@ -158,7 +158,9 @@
    },
    "beute": "glasscherbe",
    "beute_satz": "Er taucht nicht wieder auf. Die Bugwelle vor seinem Kopf bleibt stehen, wo sie war.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch",
+   "asche": true
   },
   "splitterchor": {
    "n": "Der Splitterchor",
@@ -196,7 +198,8 @@
    },
    "beute": "spiegelscherbe",
    "beute_satz": "Die letzte Scherbe hört mitten im Ton auf. Auf ihr ist jetzt ein Gesicht mehr.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   },
   "vorhergehende": {
    "n": "Der Vorhergehende",
@@ -236,7 +239,8 @@
    },
    "beute": "schneebrille",
    "beute_satz": "Er fällt. Sein Spiegelbild liegt schon eine Weile.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   },
   "leithund": {
    "n": "Der Leithund",
@@ -273,7 +277,8 @@
    },
    "beute": "polarlicht",
    "beute_satz": "Die Leine hinter ihm wird schlaff. Im Glas zieht etwas sie langsam ein.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "voraus": {
    "n": "Der Voraus",
@@ -321,7 +326,8 @@
    },
    "beute": "taschenspiegel",
    "beute_satz": "Er zerspringt, und in jeder Scherbe stehst du, einen Schritt hinter ihm. Dann holst du auf.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   },
   "lichtqualle": {
    "n": "Die Lichtqualle",
@@ -369,7 +375,8 @@
    },
    "beute": "polarlicht",
    "beute_satz": "Die Glocke sinkt ins Glas zurück, langsam, wie sie gekommen ist. Unten weht das Licht weiter, und für einen Augenblick siehst du darin den Schlitten, der weiterfährt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [

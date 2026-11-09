@@ -91,8 +91,11 @@ console.log('=== 2. asche.json (Akt II, III, IV) ===');
 const asche = readJson(path.join(VORSCHLAG, 'asche.json'));
 const zielBioms = Object.entries(bioms).filter(([, b]) => AKT_DATEN_ZIEL.includes(b.akt));
 const erwarteteBioms = zielBioms.map(([id]) => id).sort();
+const kandListe = {};
+const kandidatenLeer = (bid) => !(kandListe[bid] || []).length;
 for (const [bid, b] of zielBioms) {
   const kandidaten = b.gegner.filter((g) => foes[g] && foes[g].rang === 'normal' && art[g] && MENSCH_ART.includes(art[g].art));
+  kandListe[bid] = kandidaten;
   console.log(`Biom ${bid} (Akt ${b.akt + 1}): Kandidaten [${kandidaten.join(', ')}]`);
 }
 const proBiom = {};
@@ -109,7 +112,7 @@ for (const e of asche) {
 }
 for (const bid of erwarteteBioms) {
   const n = proBiom[bid] || 0;
-  if (n !== 1) fehl(`asche.json: Biom ${bid} hat ${n} Einträge, verlangt genau 1`);
+  if (n !== 1 && !(n === 0 && kandidatenLeer(bid))) fehl(`asche.json: Biom ${bid} hat ${n} Einträge, verlangt genau 1 (0 nur ohne Kandidaten)`);
 }
 for (const bid of Object.keys(proBiom)) if (!erwarteteBioms.includes(bid)) fehl(`asche.json: Biom ${bid} gehört nicht zu Akt II-IV`);
 console.log(`Einträge: ${asche.length}, Biome Akt II-IV: ${erwarteteBioms.length}`);

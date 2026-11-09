@@ -46,7 +46,9 @@
    },
    "beute": "salzwuerfel",
    "beute_satz": "Unter dem Salz liegt ein Lederschuh, genäht, nicht genagelt. Er ist warm.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "eingesalzene": {
    "n": "Die Eingesalzene",
@@ -126,7 +128,8 @@
    },
    "beute": "salzwuerfel",
    "beute_satz": "Die Kruste fällt in die Pfanne, Würfel für Würfel. Darunter ist niemand mehr, nur eine Mulde in Menschenform, und die Sole darin ist warm.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   }
  },
  "events": [

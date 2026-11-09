@@ -193,7 +193,8 @@
    },
    "beute": "lesestein",
    "beute_satz": "Das Buch liegt aufgeschlagen auf den Steinen. Die letzte Zeile ist ein Wort länger als vorhin, und das Wort ist eine Feder.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "novize": {
    "n": "Der Novize",
@@ -229,7 +230,8 @@
    },
    "beute": "federkiel",
    "beute_satz": "Aus dem Bücherturm ist ein Band gefallen. Er ist dicker, als er beim Fallen war.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "tintenfrau": {
    "n": "Die Tintenfrau",
@@ -270,7 +272,8 @@
    },
    "beute": "tintenhorn",
    "beute_satz": "Im Eimer liegt etwas auf dem Grund. Die Tinte darüber hat sich nicht bewegt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "kreuzgangwaechter": {
    "n": "Der Kreuzgangwächter",
@@ -310,7 +313,9 @@
    },
    "beute": "bussriemen",
    "beute_satz": "Zwischen seinen Zehen liegt etwas, glattgetreten wie er.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "leser": {
    "n": "Der Leser",
@@ -350,7 +355,8 @@
    },
    "beute": "lesestein",
    "beute_satz": "Er hatte ein Buch in der Hand. Darin ist eine Seite für dich gefaltet.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "abschreiber": {
    "n": "Der Abschreiber",
@@ -405,7 +411,8 @@
    },
    "beute": "abtssiegel",
    "beute_satz": "Am Ende des Streifens, ganz unten, liegt etwas. Die Zeile darüber ist ein Wort länger als vorhin.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   }
  },
  "events": [

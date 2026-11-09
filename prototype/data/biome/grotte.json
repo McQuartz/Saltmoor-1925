@@ -192,7 +192,8 @@
    },
    "beute": "pilgerstab",
    "beute_satz": "Die Krücken stehen noch, als er schon liegt, und fallen dann eine nach der anderen, langsam, wie man sie an die Wand hängt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "wachshand": {
    "n": "Die Wachshände",
@@ -229,7 +230,8 @@
    },
    "beute": "wachsauge",
    "beute_satz": "Ein Wachsfinger liegt im Gold und krümmt sich langsam.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "geheilter": {
    "n": "Der Geheilte",
@@ -266,7 +268,8 @@
    },
    "beute": "pilgerstab",
    "beute_satz": "Wo er lag, lehnt ein Paar Krücken an der Wand. Sie sind neu.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "quellwaerter": {
    "n": "Der Quellwärter",
@@ -303,7 +306,9 @@
    },
    "beute": "quellwasser",
    "beute_satz": "Die Kelle liegt neben dem Gold. Sie ist voll, und nichts läuft heraus.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch",
+   "asche": true
   },
   "bittsteller": {
    "n": "Der Bittsteller",
@@ -339,7 +344,8 @@
    },
    "beute": "votivherz",
    "beute_satz": "Das Wachsherz, das er hielt, liegt bei dir. Es schlägt nicht. Es ist nur warm.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   },
   "erhoerte": {
    "n": "Die Erhörte",
@@ -392,7 +398,8 @@
    },
    "beute": "docht",
    "beute_satz": "Wo sie stand, ist eine Lache Wachs. Darin der Abdruck von zwei gefalteten Händen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   }
  },
  "events": [
@@ -633,7 +640,8 @@
      ],
      "if": {
       "event_gesehen": "alle_brunnen"
-     }
+     },
+     "tiefe": 1
     },
     {
      "l": "Fragen, wer sie ist: +6 max. Leben, −10 Leben",

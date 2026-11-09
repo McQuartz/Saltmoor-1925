@@ -47,7 +47,9 @@
    },
    "beute": "fahnentuch",
    "beute_satz": "Die Fahne ist umgefallen. Auf dem Tuch ist kein Gesicht mehr, nur eine Delle, wo eins war.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "seelilie": {
    "n": "Die Seelilie",
@@ -84,7 +86,8 @@
    },
    "beute": null,
    "beute_satz": "Im Eis liegen Steinscheiben wie Münzen. Eine hat ein Muttermal.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "welle": {
    "n": "Die Welle, die weiterkam",
@@ -159,7 +162,8 @@
    },
    "beute": null,
    "beute_satz": "Die Welle ist zu Ende gebrochen. Auf dem Eis liegt eine Linie aus Gischt, gefroren, und die Ersten liegen darin mit den Gesichtern zum Land.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [

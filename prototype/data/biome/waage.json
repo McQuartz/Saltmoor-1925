@@ -161,7 +161,8 @@
    },
    "beute": null,
    "beute_satz": "Der Baum bleibt oben stehen. Zum ersten Mal ist der Weg frei, und es gibt keinen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "schreiber": {
    "n": "Der Schreiber",
@@ -199,7 +200,8 @@
    },
    "beute": "zollplombe",
    "beute_satz": "Das Papier steigt weiter, als er fällt. Auf der obersten Bahn steht dein Name, und dahinter ein Haken.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   },
   "tarierte": {
    "n": "Die Tarierte",
@@ -237,7 +239,8 @@
    },
    "beute": "wartemarke",
    "beute_satz": "Der Zeiger springt auf Null und bleibt dort. Sie wiegt jetzt genau so viel, wie sie wiegt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "schlange": {
    "n": "Die Warteschlange",
@@ -274,7 +277,8 @@
    },
    "beute": null,
    "beute_satz": "Die Reihe löst sich nicht auf. Sie rückt nur einen Schritt vor, ohne dich.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "oberzoellner": {
    "n": "Der Oberzöllner",
@@ -324,7 +328,8 @@
    ],
    "beute": "zuenglein",
    "beute_satz": "Die Waage auf seinem Kopf schwingt aus und steht. Die leere Schale hängt immer noch tiefer.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   }
  },
  "events": [

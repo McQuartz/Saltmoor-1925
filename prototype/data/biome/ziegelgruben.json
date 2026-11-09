@@ -154,7 +154,9 @@
    },
    "beute": "probeziegel",
    "beute_satz": "Die Brennprobe hängt noch an der Kette und glüht weiter, als hätte sie es nicht gemerkt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "ziegeltraeger": {
    "n": "Der Ziegelträger",
@@ -191,7 +193,8 @@
    },
    "beute": "traegerreff",
    "beute_satz": "Der Stapel steht noch, als er schon nicht mehr steht.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "stempel": {
    "n": "Der Stempel",
@@ -227,7 +230,8 @@
    },
    "beute": null,
    "beute_satz": "Im Boden, wo er fiel, ist ein Abdruck: LEG XXXIX, spiegelverkehrt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "lehmhund": {
    "n": "Der Lehmhund",
@@ -263,7 +267,8 @@
    },
    "beute": null,
    "beute_satz": "Vom Hund bleibt ein Haufen Lehm, und darin die Pfoten, sauber, wie in einen Ziegel gedrückt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "brennofen": {
    "n": "Der Brennofen",
@@ -345,7 +350,8 @@
    },
    "beute": "gebrannter_finger",
    "beute_satz": "Die Feuertür schlägt zu. Dahinter wird es still, dann kalt, und in der Asche liegt ein einzelner Finger aus gebranntem Ton.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "neununddreissigste": {
    "n": "Die Neununddreißigste",
@@ -401,7 +407,8 @@
    },
    "beute": "legionsstempel",
    "beute_satz": "Die Schildkröte öffnet sich. Darunter stehen keine Männer, nur Füße aus Lehm in einer Reihe, und das Feldzeichen fällt um. Der kleine Ofen oben brennt weiter.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   }
  },
  "events": [

@@ -148,7 +148,8 @@
    },
    "beute": "smellingsalts",
    "beute_satz": "Seine Brust ist kalt. Das Licht darin brennt weiter, ohne Luft.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "badefrau": {
    "n": "Die Badefrau",
@@ -184,7 +185,8 @@
    },
    "beute": "waermflasche",
    "beute_satz": "Wo sie stand, ist der Boden nass. Die Pfütze ist tiefer als dein Arm.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   },
   "liegender": {
    "n": "Der Liegende",
@@ -221,7 +223,8 @@
    },
    "beute": "kurkarte",
    "beute_satz": "Die Decken sind noch festgeschnürt. Sie sind länger als jeder Stuhl.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "kurgast": {
    "n": "Der Kurgast mit Taucherbrille",
@@ -262,7 +265,8 @@
    },
    "beute": "badethermometer",
    "beute_satz": "Seine Brille ist noch voll. Darin dreht sich etwas, das seinen Platz sucht.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "oberschwester": {
    "n": "Die Oberschwester",
@@ -343,7 +347,8 @@
    },
    "beute": "stilleswasser",
    "beute_satz": "Die Wanne steht gerade auf den Kacheln. Der Patient darin hat sich nicht gerührt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "badekarren": {
    "n": "Der Badekarren",
@@ -398,7 +403,8 @@
    },
    "beute": "egelglas",
    "beute_satz": "Das Verdeck ist dunkel. Auf dem Krankenblatt am Haken steht für heute: „Deutlich gebessert.“",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [
