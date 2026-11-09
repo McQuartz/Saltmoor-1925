@@ -138,5 +138,62 @@ module.exports = {
       K.licht(80, 30, 70, '#2a1608', .6);
       K.vignette(.7);
     },
+
+    // Ein Holztisch: links ein großer Lautsprecher mit Papiermembran, auf der der Staub in Ringen liegt, rechts ein Empfänger mit drei dunklen Röhren, vorn ein Zettel, ein Bleistiftstummel und drei Kreidestriche.
+    funkstation_dreimal(K) {
+      const { B } = K;
+      wand(K, 58, .06);
+      K.bretter(0, 58, 160, 90, HOLZ.slice(0, 6), { breite: 7, ton: .36, senkrecht: false });
+      K.lichtquelle(148, 6);
+      K.licht(148, 6, 130, '#24140a', .9, { oval: 1.1 });
+      // Tischkante
+      for (let x = 0; x < 160; x++) K.set(x, 58, '#7a5a44');
+      // Lautsprecher: Holzbrett, runder Rahmen, Papierkegel mit Rillen und Staubringen, Staubkappe
+      const brett = K.maske(); brett.rect(12, 6, 64, 54);
+      K.form(brett, 0, { k: HOLZ.slice(0, 6), r: ['#7a5a44', '#d8bea0'], ton: 1.8, fase: 1, rand: 1, L: [.6, -.8], schatten: 2 });
+      const cx = 44, cy = 34, R = 23;
+      const rahmen = K.maske(); rahmen.ell(cx, cy, R + 3, R + 3); rahmen.ell(cx, cy, R, R, 0);
+      K.form(rahmen, 0, { k: KUPFER.concat(['#d89a60']).slice(0, 4), r: ['#c0703e', '#ffd8b0'], ton: 1.4, fase: 0, rand: 1, L: [.6, -.8] });
+      const kegel = K.maske(); kegel.ell(cx, cy, R, R);
+      K.feld(cx - R, cy - R, cx + R + 1, cy + R + 1, PAP, (x, y) => {
+        if (!kegel.has(x, y)) return -1;
+        const dx = x - cx, dy = y - cy, r = Math.hypot(dx, dy) / R, rill = (r * 10) % 1 < .14 ? -.12 : 0;
+        let t = .3 + (1 - r) * .12 + (dx * .5 - dy * .7) / R * .16 + rill;
+        for (const rr of [.38, .62, .84]) if (Math.abs(r - rr) < .035 && B.hash(x, y, 9) > .25) t += .26;   // der Staub liegt in Ringen
+        return t - (r < .2 ? .18 : 0);
+      });
+      const kappe = K.maske(); kappe.ell(cx, cy, 5, 5);
+      K.form(kappe, 0, { k: PAP.slice(0, 4), r: [PAP[3], PAP[4]], ton: 2.2, fase: 1, rand: 1, L: [.6, -.8] });
+      // Empfänger: Holzkasten, Skala und Knopf, oben drei Röhren aus dunklem Glas, keine glüht
+      const gehaeuse = K.maske(); gehaeuse.rect(88, 38, 58, 24);
+      K.form(gehaeuse, 0, { k: HOLZ.slice(0, 6), r: ['#a48a74', '#e0cdb8'], ton: 1.6, fase: 1, rand: 2, L: [.6, -.8], schatten: 2 });
+      const skala = K.maske(); skala.ell(106, 52, 8, 8);
+      K.form(skala, 0, { k: ['#0d0806', '#1c1410', '#3a2c20', PAP[2]], r: [], ton: 1.6, fase: 0, rand: 1 });
+      for (let a = -2.6; a < -.5; a += .35) K.set(Math.round(106 + Math.cos(a) * 6), Math.round(52 + Math.sin(a) * 6), PAP[4]);
+      K.linie(106, 52, 110, 47, PAP[4]);
+      const kn = K.maske(); kn.ell(132, 51, 4.5, 4.5);
+      K.form(kn, 0, { k: KUPFER, r: ['#c0703e', '#ffd8b0'], ton: 1.8, fase: 1, rand: 1, L: [.6, -.8] });
+      K.set(133, 48, '#ffd8b0');
+      for (const rx of [98, 115, 132]) {
+        const r = K.maske(); r.rect(rx - 4, 24, 8, 14); r.ell(rx, 24, 4, 4);
+        K.form(r, 0, { k: ['#050403', '#0f0b09', '#1c1511', '#2e231b'], r: ['#6a3a1a', '#ffc080'], ton: 1.5, fase: 1, rand: 1, L: [.7, -.7] });
+        K.set(rx + 2, 22, '#c8d4e0'); K.set(rx + 2, 24, '#8a98a8');   // kalter Glanz, kein Glühen
+        K.set(rx - 3, 38, '#4a3a2a');
+      }
+      // Ein Zettel vorn links, Schrift in Bleistift, daneben der Stummel
+      const zet = K.maske(); zet.poly([[16, 72], [50, 69], [56, 80], [14, 84]]);
+      K.form(zet, 0, { k: PAP, r: [PAP[3], PAP[4]], ton: 2, fase: 0, rand: 1, L: [.4, -.9], lichtVon: [148, 6] });
+      for (let i = 0; i < 4; i++) K.schrift(21 + i, 73 + i * 2, 44 + i * 2, '#2a2218', { min: 1, max: 4 });
+      const bs = K.maske(); bs.kap(60, 80, 74, 77, 1.3, 1.1);
+      K.form(bs, 0, { k: ['#4a3a10', '#8a6a1c', '#c8a030', '#f0d060'], ton: 1.6, fase: 0, rand: 1, L: [0, -1] });
+      K.set(59, 80, '#c8b090'); K.set(58, 80, '#2a2218');
+      // Drei Kreidestriche auf der Tischplatte: zwei dünne, der dritte lang und dick
+      const kr = '#e8e0d0', krd = '#8a8678';
+      K.linie(100, 68, 98, 78, kr, .95); K.linie(109, 68, 107, 78, kr, .95);
+      K.linie(120, 64, 117, 82, kr); K.linie(121, 64, 118, 82, kr, .8); K.linie(119, 64, 116, 82, krd, .6);
+      for (let i = 0; i < 7; i++) K.set(115 + B.hash(i, 1, 8) * 8 | 0, 83 + (i % 3), i % 2 ? kr : krd);
+      K.licht(100, 74, 30, '#2a1a0c', .5, { oval: 1.4 });
+      K.vignette(.65, { cx: 90, cy: 44, innen: .6 });
+    },
   },
 };

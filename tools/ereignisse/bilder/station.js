@@ -171,5 +171,61 @@ module.exports = {
       for (let i = 0; i < 9; i++) { const x = 58 + i * 5.4, y = 27; const m = K.maske(); m.ell(x, y, 2, 1.5); m.ell(x, y - 1.6, 1.2, 1.2); K.form(m, 0, { k: ['#0a0705', '#140e0a', '#1e150f', '#2a1d14'], r: ['#8a7058', '#e0cbb0'], ton: 1.4, fase: 0, rand: 1 }); }
       K.vignette(.45);
     },
+
+    // Ein Bahnsteig unter einer Bogenlampe: links eine Abfahrtstafel aus Klappbuchstaben, alle Zeilen mit derselben Abfahrt, rechts ein stehender Zug mit offenen Türen, davor ein Gepäckwagen mit Lederkoffer.
+    station_abfahrt(K) {
+      const { B } = K;
+      const lx = 84, ly = 9;
+      kacheln(K, 0, 0, 160, 64, .18, [[lx, ly + 6, 100, .6]]);
+      sockel(K, 64, 70, .28);
+      K.feld(0, 70, 160, 90, STEIN, (x, y) => .12 + Math.max(0, 1 - Math.hypot(x - lx, (y - 74) * 1.8) / 90) * .5);
+      // Der Zug: ein Wagen von der Seite, dunkel, Fenster mit trübem Innenlicht, zwei Türen weit offen
+      const wg = K.maske(); wg.rect(62, 16, 98, 52); wg.rect(60, 14, 100, 4);
+      K.form(wg, 0, { k: ['#0a0f19', '#131b2a', '#1f2c41', '#2e4062', '#44587e'], r: KANTE, ton: 2.2, fase: 1, rand: 1, lichtVon: [lx, ly], schatten: 2, muster: (x, y) => ((y === 60 || y === 22) ? -.5 : 0) });
+      for (const fx of [92, 106, 122]) { K.feld(fx, 26, fx + 8, 40, KACHEL.slice(0, 6), (x, y) => .25 + (y - 26) / 28 * .3 + (x > fx + 6 ? .2 : 0)); }
+      for (const tx of [68, 138]) {
+        K.feld(tx, 24, tx + 18, 66, DUNKEL, () => 0);
+        const rahm = K.maske(); rahm.rect(tx - 2, 22, 2, 44); rahm.rect(tx + 18, 22, 2, 44); rahm.rect(tx - 2, 22, 22, 2);
+        K.form(rahm, 0, { k: MESSING.slice(0, 5), r: ['#b08e48', '#f0dca0'], ton: 1.6, fase: 0, rand: 1, lichtVon: [lx, ly] });
+        // innen nur der Boden und die Stange im Schimmer
+        K.feld(tx, 56, tx + 18, 66, KACHEL.slice(0, 5), (x, y) => .15 + (y - 56) / 20 * .35 + Math.max(0, 1 - Math.hypot(x - lx, y - 40) / 90) * .3);
+        const st = K.maske(); st.kap(tx + 9, 24, tx + 9, 66, .6, .6); K.form(st, 0, { k: MESSING.slice(1, 6), r: ['#b08e48', '#f0dca0'], ton: 1.3, fase: 0, rand: 1 });
+        K.rect(tx - 2, 66, 22, 2, '#8c8f84'); K.rect(tx - 2, 68, 22, 1, '#30333a');   // Trittbrett
+      }
+      K.kante(wg, lx, ly, 120, KANTE, { min: .45 });
+      // Die Tafel: schwarzer Kasten, Rahmen aus Messing, fünf Zeilen Klappzellen, alle Abfahrtszellen gleich und hell
+      K.rect(6, 6, 62, 40, DUNKEL[1]);
+      const rahm = K.maske(); rahm.rect(4, 4, 66, 44); rahm.rect(6, 6, 62, 40, 0);
+      K.form(rahm, 0, { k: MESSING.slice(0, 5), r: ['#b08e48', '#f0dca0'], ton: 1.8, fase: 1, rand: 1, lichtVon: [lx, ly] });
+      K.licht(lx - 24, 26, 50, LAMPE_G2, .35, { ohne: rahm });
+      for (let z = 0; z < 5; z++) {
+        const y = 9 + z * 7.6 | 0;
+        for (let i = 0; i < 6; i++) { const x = 8 + i * 6; K.rect(x, y, 5, 6, '#171d26'); K.linie(x, y + 3, x + 4, y + 3, DUNKEL[0]); }
+        zeichen(K, 8, y + 1, 4, 4, 6, 100 + z * 17, '#7c8ca6');
+        // die Abfahrt: vier gleiche Zellen, hell, in jeder Zeile dasselbe
+        for (let i = 0; i < 3; i++) { const x = 46 + i * 7 | 0; K.rect(x, y, 6, 6, '#1f2c41'); K.linie(x, y + 3, x + 5, y + 3, DUNKEL[0]); }
+        zeichen(K, 47, y + 1, 5, 4, 3, 7, '#f0f4ff');
+      }
+      K.set(6, 6, '#f0dca0');
+      // Der Kreis auf dem Boden: eine Spur aus hellen Punkten, auf der der Wagen rollt
+      for (let a = 0; a < 6.28; a += .09) { const x = Math.round(78 + 62 * Math.cos(a)), y = Math.round(80 + 8 * Math.sin(a)); if (B.bay(x, y) < .7) K.set(x, y, '#58627a'); }
+      // Gepäckwagen: Ladefläche, zwei Räder, Schiebegriff
+      const bett = K.maske(); bett.rect(92, 68, 54, 5); bett.rect(92, 73, 3, 6);
+      K.form(bett, 0, { k: HOLZ, r: ['#8a7058', '#e0cbb0'], ton: 1.8, fase: 1, rand: 1, lichtVon: [lx, ly], schatten: 2 });
+      const rad = (cx, cy, r) => { const m = K.maske(); m.ell(cx, cy, r, r); m.ell(cx, cy, r - 1.6, r - 1.6, 0); for (let i = 0; i < 6; i++) { const a = i / 6 * 6.28 + .3; m.kap(cx, cy, cx + Math.cos(a) * (r - 1), cy + Math.sin(a) * (r - 1), .5, .5); } m.ell(cx, cy, 1.6, 1.6); K.form(m, 0, { k: MESSING.slice(0, 5), r: ['#b08e48', '#f0dca0'], ton: 1.6, fase: 0, rand: 1, lichtVon: [lx, ly] }); };
+      rad(138, 80, 8); rad(103, 83, 5);
+      const gr = K.maske(); gr.kap(93, 70, 80, 54, .9, .9); gr.kap(80, 54, 76, 54, .9, .9);
+      K.form(gr, 0, { k: DUNKEL.slice(1, 5), r: KANTE, ton: 1.3, fase: 0, rand: 1 });
+      // Der Koffer: Leder, Riemen, Messingecken, Griff; er liegt der Lampe zugewandt und wirft sein Licht auf den Wagen
+      const kof = K.maske(); kof.rect(106, 52, 30, 16);
+      K.form(kof, 0, { k: ['#0c0705', '#1a0f0a', '#2c1b10', '#432a18', '#5e3c22'], r: ['#9a6a3a', '#ffd8a0'], ton: 2, fase: 1, rand: 1, lichtVon: [lx, ly], verlauf: .5, schatten: 2, muster: (x, y) => (B.rausch2(x * .4, y * .4, 3) - .5) * .4 });
+      for (const x of [112, 129]) { K.linie(x, 52, x, 67, '#120a06'); K.linie(x + 1, 52, x + 1, 67, '#6a4a2a', .7); }
+      for (const [x, y] of [[106, 52], [135, 52], [106, 67], [135, 67]]) { K.set(x, y, '#d2b46e'); K.set(x + (x > 120 ? -1 : 1), y, '#8c6c30'); }
+      const gf = K.maske(); gf.kap(117, 50, 125, 50, .9, .9); gf.rect(116, 50, 2, 3); gf.rect(125, 50, 2, 3);
+      K.form(gf, 0, { k: ['#1a0f0a', '#432a18', '#8c6c30', '#d2b46e'], ton: 1.5, fase: 0, rand: 0 });
+      lampe(K, lx, ly + 1, 80, .95);
+      K.lichtquelle(lx, ly);
+      K.vignette(.45);
+    },
   },
 };

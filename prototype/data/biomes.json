@@ -180,7 +180,8 @@
    "cross",
    "holywater",
    "cultmask",
-   "geldkatze"
+   "geldkatze",
+   "linse"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -253,7 +254,8 @@
    "saltgun",
    "dynamite",
    "smellingsalts",
-   "bleiguertel"
+   "bleiguertel",
+   "resonator"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -323,7 +325,8 @@
    "tartorch",
    "bloodrosary",
    "swordcane",
-   "geldkatze"
+   "geldkatze",
+   "resonator"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -392,7 +395,8 @@
    "holywater",
    "gasmask",
    "laudanum",
-   "rum"
+   "rum",
+   "grablampe"
   ],
   "ereignisse": [],
   "kraemer": {

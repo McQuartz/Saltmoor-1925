@@ -105,7 +105,7 @@ function bauZahlen(){const items=Object.values(ITEMS).filter(d=>!d.bases);const 
   [Object.keys(ST).length,'Stoffe','#stoffe'],[REACT.length+1,'Reaktionen','#reaktionen'],[HOCH.length,'Hochreaktionen','#reaktionen'],
   [items.length,'Items','#items'],[items.reduce((s,d)=>s+d.cards.length,0),'Karten','#items'],[ROLES.length,'Sets','#sets'],
   [JOBS.length,'Figuren','#figuren'],[Object.values(FOES).filter(f=>f.rang==='normal').length,'Gegner','#gegner'],[Object.values(FOES).filter(f=>f.rang!=='normal').length,'Wächter + Boss','#gegner'],
-  [BIOM_IDS.length,'Biome','#biome'],[EVENTS.length,'Ereignisse','#ereignisse'],[FRAGS.length,'Fragmente','#fragmente'],[RUN.akte.length,'Akte','#ablauf']];
+  [BIOM_IDS.length,'Biome','#biome'],[EVENTS.length,'Ereignisse','#ereignisse'],[FRAGS.length,'Fragmente','#fragmente'],[RUN.akte.length,'Akte','#ablauf'],[(typeof BIEGUNGEN!=='undefined'?BIEGUNGEN.length:0),'Regelbiegungen','#biegungen'],[Object.values(FOES).filter(f=>f.gesehener).length,'Gesehene','#gegner'],[((WUERZE&&WUERZE.stuecke)||[]).length,'Würze-Stücke','#wuerze']];
  $('zahlen').innerHTML=n.map(([v,l,h])=>`<a class="kachel" href="${h}" style="text-decoration:none"><span class="kn" style="font-size:26px">${v}</span><span class="mt">${l}</span></a>`).join('');}
 
 function bauStoffe(){
@@ -113,7 +113,7 @@ function bauStoffe(){
   const its=Object.values(ITEMS).filter(d=>d.st.includes(k)&&!d.bases);const foes=Object.values(FOES).filter(f=>f.weak===k||(f.besonders&&((f.besonders.stoffe||[]).includes(k)||(f.besonders.schwach||[]).includes(k))));
   const rx=rxOf(k);const hoch=HOCH.filter(h=>h.s.includes(k));
   return `<div class="kachel" style="border-left:4px solid ${s.c}"><div class="kopf">${gi(k,36)}<div><div class="kn">${esc(s.n).toUpperCase()}</div><div class="id">${k} · ${s.s}</div></div></div>
-   <div class="mt">Verschmolzen: „… ${esc(SUFFIX[k])}“</div>
+   ${SUFFIX[k]?`<div class="mt">Verschmolzen: „… ${esc(SUFFIX[k])}“</div>`:''}${s.schimmer?`<div class="mt">Schimmer in fünf Stufen:</div><div class="schimmerstufen">${s.schimmer.map(c=>`<i style="background:${c}" title="${c}"></i>`).join('')}</div>`:''}
    <div>${its.map(d=>`<img class="bild k" src="${spr(d.spr)}" width="24" height="24" title="${esc(d.n)}" alt="">`).join('')||'<span class="ref">noch kein Item</span>'}</div>
    <div class="ref">${plural(its.length,'Item','Items')} · reagiert mit ${rx.map(r=>gi([...r.k].find(x=>x!==k),18)).join('')||'nichts'}${hoch.length?` · Hoch: <i>${hoch.map(h=>esc(h.n)).join(', ')}</i>`:''}</div>
    <div class="ref">Schwachstelle von: <i>${foes.map(f=>esc(f.n)).join(', ')||'niemandem'}</i></div></div>`;}).join('');}
@@ -137,7 +137,7 @@ function itemKachel(id,d,refs){
  const verbraucht=d.cards.some(c=>c.verbraucht),eroeff=d.cards.some(c=>c.eroeffnung);const fr=d.meta?fragmentFuer(id):null;const pools=fundpools(id);
  const tags=[d.rare?et('selten','gold'):'',d.nodrop?et('kein Fund','rot'):'',d.hp?et(`+${d.hp} max. Leben`,'gruen'):'',
   verbraucht?et('verbraucht','rot'):'',eroeff?et('Eröffnung','blau'):'',d.passiv?et('passiv','violett'):'',d.meta?et('erst nach Fragment','gold'):'',
-  d.rar?et({gewoehnlich:'gewöhnlich',selten:'selten',reliquie:'Reliquie'}[d.rar]||d.rar,d.rar==='reliquie'?'violett':d.rar==='selten'?'gold':''):'',et(`${typeof kerbenVon==='function'?kerbenVon({id,uid:-1}):(d.kerben||1)} Kerbe(n)`),d.preis?et(`${d.preis} Gold`):''].join('');
+  d.rar?et({gewoehnlich:'gewöhnlich',selten:'selten',reliquie:'Reliquie'}[d.rar]||d.rar,d.rar==='reliquie'?'violett':d.rar==='selten'?'gold':''):'',et(`${typeof kerbenVon==='function'?kerbenVon({id,uid:-1}):(d.kerben||1)} Kerbe(n)`),d.preis?et(`${d.preis} Gold`):'',d.eigen&&d.eigen.typ==='blick'?et('Blick','violett'):'',d.wuerze?et('Würze: '+d.wuerze,'gold'):''].join('');
  return `<div class="kachel ${d.rare?'selten':''}"><div class="kopf">${icon(id,48)}<div><div class="kn">${esc(d.n)}</div><div>${stoffe(d.st)}</div><div class="id">${id} · spr "${esc(d.spr)}"</div></div></div>
   ${d.cards.map(c=>kartenZeile(c,d.st)).join('')}${d.passiv?`<div class="kzeile" style="--kb:var(--violett)"><b>Passiv</b> ${esc(passivText(d.passiv))}</div>`:''}${d.eigen?`<div class="kzeile" style="--kb:var(--gold)"><b>Eigenschaft</b> ${esc(d.eigen.typ)}${d.eigen.v!=null?' '+d.eigen.v:''}${d.eigen.preis&&typeof d.eigen.preis==='string'?' (Preis: '+esc(d.eigen.preis)+')':''}${d.eigen.t?': '+esc(d.eigen.t):''}</div>`:''}${d.flavor?`<div class="tx"><i>${esc(d.flavor)}</i></div>`:''}
   ${tags?`<div class="etiketten">${tags}</div>`:''}
@@ -182,12 +182,12 @@ function gegnerKachel(id,F){const t=document.createElement('div');t.className='k
  const rang={normal:et('normal'),waechter:et('Wächter','rot'),boss:et('Boss','violett')}[F.rang]||et(F.rang);
  const sheets=[...new Set([...(F.varianten||[F.sprite]),...((F.besonders&&F.besonders.sprites)||[])])];
  t.insertAdjacentHTML('beforeend',`<div class="kopf"><div><div class="kn">${esc(F.n)}</div><div class="id">id "${id}" · Stimme "${esc(F.stimme||id)}"</div></div></div>
-  <div class="etiketten">${rang}${et(esc(BIOMES[F.biom]?.kurz||F.biom))}${et(plural(sheets.length,'Sheet','Sheets'))}</div>
+  <div class="etiketten">${rang}${F.biom?et(esc(BIOMES[F.biom]?.kurz||F.biom)):''}${et(plural(sheets.length,'Sheet','Sheets'))}${F.gesehener?et('Gesehener (nur durch den Blick)','violett'):''}${F.art?et('art: '+F.art,'blau'):''}${F.asche?et('Asche','rot'):''}${F.stumm?et('stumm','violett'):''}${F.ohne_tiefe?et('Werte ohne Tiefe'):''}</div>
   <div class="mt">${hpTxt}</div>
   <div class="mt">Schwachstelle: ${gi(F.weak,18)} ${esc(ST[F.weak].n)}</div>
   ${musterHtml(F.pat)}
   ${F.besonders&&F.besonders.art==='phasen'?F.besonders.muster.map((m,i)=>`<div class="ref">Phase ${i+2}${F.besonders.schwach&&F.besonders.schwach[i]?` · schwach ${gi(F.besonders.schwach[i],18)}`:''}</div>${musterHtml(m)}`).join(''):''}
-  ${F.besonders?`<div class="kzeile" style="--kb:#ff6a5a">${besondersText(F)}</div>`:''}
+  ${F.besonders?`<div class="kzeile" style="--kb:#ff6a5a">${besondersText(F)}</div>`:''}${F.gesehen?`<div class="kzeile" style="--kb:var(--violett)"><b>Beim Hinsehen kommt dazu</b>${musterHtml([F.gesehen])}</div>`:''}
   ${[F.kniff,...(F.kniffe||[])].filter(Boolean).map(k=>`<div class="kzeile" style="--kb:#e8c070"><b>Kniff</b> ${esc(typeof KNIFF_TEXT!=='undefined'&&KNIFF_TEXT[k.art]?KNIFF_TEXT[k.art](k):k.art)}${k.why?` <i>${esc(k.why)}</i>`:''}</div>`).join('')}${F.beute_satz?`<div class="ref">Beute-Satz: <i>${esc(F.beute_satz)}</i></div>`:''}
   <div class="tx"><i>${esc(F.konzept||'')}</i></div>
   <div class="ref">Beute: ${F.beute?`${icon(F.beute,24,'bild k')} <i>${esc(iname(F.beute))}</i>`:'keine'} · Sheets: <i>${sheets.map(esc).join(', ')}</i></div>`);
@@ -286,6 +286,72 @@ function bauZustaende(){
  $('statusRaster').innerHTML=L.map(s=>`<div class="kachel"><div class="kopf">${gi(s.k,27)}<div class="kn k">${s.n.toUpperCase()}</div></div><div class="tx">${s.t}</div><div class="ref">Quellen: <i>${esc([...new Set(s.src)].join(', ')||'–')}</i></div></div>`).join('')
   +`<div class="kachel"><div class="kn k">ABSICHTEN DER GEGNER</div>${musterHtml([{t:'atk',v:7},{t:'atk',v:4,h:3},{t:'blk',v:8},{t:'buff',v:2}])}<div class="abs-reihe"><div class="feind"><div class="abs">${absicht({pat:[{t:'atk',v:9}],pi:0,str:0,weak2:1}).html}</div></div><span class="ref">geschwächt</span></div><div class="tx">Über jedem Gegner steht, was er im nächsten Zug tut: Zeichen und Zahl, ohne Wort.</div></div>`;}
 
+// ---------- Auftrag 3: Datenansichten (Biegungen, Begegnungen, Metaebene, Würze) ----------
+const kasten=(kn,inhalt,extra='',cls='')=>`<div class="kachel ${cls}"><div class="kn">${kn}</div>${inhalt}${extra}</div>`;
+const zitat=t=>`<div class="tx"><i>${esc(t||'')}</i></div>`;
+function bauBiegungen(){const L=(typeof BIEGUNGEN!=='undefined'?BIEGUNGEN:[]);
+ $('biegEinl').innerHTML=`${L.length} Regelbiegungen: je ein Biom der Akte III bis V und die Pforte, die in allen Kämpfen dort gilt. Zeichen und Name stehen im Kampf in der Kopfleiste, der Regeltext im Tooltip. Der Einhakpunkt sagt, wo <code>js/core/biegung.js</code> eingreift. Die Zeichen als Bild, wie sie im Kampf stehen: <a href="gallery.html#biegungen">Galerie</a>.`;
+ $('biegRaster').innerHTML=L.map(b=>{const rx=(b.reaktionen||[]).concat(b.reaktion?[b.reaktion]:[]);
+  return `<div class="kachel"><div class="kopf">${gi(b.zeichen,36)}<div><div class="kn">${esc(b.n)}</div><div class="id">${b.id} · ${b.zeichen} · Einhakpunkt ${esc(b.art)}</div></div></div>
+   <div class="etiketten">${et(esc(BIOMES[b.biom]?.n||b.biom),'gold')}${b.entwurf?et('Entwurf'):''}</div><div class="tx">${esc(b.t)}</div>
+   ${rx.map(r=>`<div class="kzeile" style="--kb:var(--gold)">${r.k?`${[...r.k].map(k=>gi(k,18)).join('')} `:''}<b>${esc(r.n||'')}</b> ${esc(r.t||'')}<div class="ref">${esc(fxListe(r.fx))}</div></div>`).join('')}</div>`;}).join('');}
+
+function bauBegegnungen(){const box=$('begBox');const B=RUN.begegnungen||{},K=(RUN.karten&&RUN.karten.zeichen)||null,SP=BAL.spuren||null;
+ const foes=Object.entries(FOES);
+ const arten={mensch:'Mensch',veraendert:'verändert',nachahmer:'Nachahmer',tiefe:'Tiefe'};
+ const tab=SP?`<table class="tab"><tr><th>Stufe</th>${SP.hp.map((v,i)=>`<th>${i+1}</th>`).join('')}</tr><tr><td>Leben ×</td>${SP.hp.map(v=>`<td class="z">${v}</td>`).join('')}</tr><tr><td>Angriff</td>${SP.atk.map(v=>`<td class="z">${v>0?'+':''}${v}</td>`).join('')}</tr><tr><td>Größe ×</td>${SP.gross.map(v=>`<td class="z">${v}</td>`).join('')}</tr><tr><td>Beute</td>${SP.beute.map(v=>`<td class="z">${esc(v)}</td>`).join('')}</tr></table>`:'';
+ const asche=foes.filter(([,F])=>F.asche);
+ box.innerHTML=`<h3 class="unter">DIE VIER <small>js/core/begegnungen.js</small></h3><div class="raster breit">
+  ${kasten('Die Diener erheben sich',`<div class="tx">Eine Karte, die du oft spielst, wird beim nächsten Wächter zu einem seiner Schritte. Siegst du, wird sie geschliffen oder zur fremden Fassung.</div>`)}
+  ${kasten('Spuren',`<div class="tx">Ein Kampfknoten je Akt I bis IV; jeder andere Knoten lässt die Spuren eine Stufe wachsen (balance.json → spuren).</div>${tab}`)}
+  ${kasten('Asche',`<div class="tx">Salz, dann Feuer ruft die jüngste Asche als Verbündeten. Feuer, dann Salz löst sie auf. Gerufene kommen zwei Akte später wieder.</div><div class="ref">${plural(asche.length,'Gegner trägt','Gegner tragen')} <code>asche</code>.</div>`)}
+  ${kasten('Die Tiefe erkennt dich',`<div class="tx">Nach zwei Ereigniswahlen mit <code>tiefe</code> liegt Das Zeichen lose im Deck. Gespielt: Seitenwechsel.</div>${B.begegnung?zitat(B.begegnung.t):''}${B.weiter?`<div class="ref">Knopf: <i>${esc(B.weiter.t)}</i></div>`:''}${B.kraemer_zu?`<div class="ref">Krämer: <span class="zitat">${esc(B.kraemer_zu.t)}</span></div>`:''}`)}</div>
+  ${K?`<h3 class="unter">DAS ZEICHEN <small>run.json → karten.zeichen</small></h3><div class="raster">${kasten(esc(K.n),`<div class="kopf">${K.img?`<img class="bild" src="${K.img}" width="64" height="96" style="image-rendering:pixelated" alt="">`:''}<div class="kzeile" style="--kb:#6a5a3a"><span class="ko">${K.c||0}</span><b>${esc(K.n)}</b> ${esc(K.t)}</div></div>`)}</div>`:''}
+  <h3 class="unter">ZUORDNUNG DER GEGNER <small>foes.json → art</small></h3><div class="raster">${Object.entries(arten).map(([a,n])=>{const l=foes.filter(([,F])=>F.art===a);return kasten(esc(n).toUpperCase(),`<div class="id">art "${a}" · ${plural(l.length,'Gegner','Gegner')}</div><div class="ref"><i>${l.map(([,F])=>esc(F.n)).join(', ')||'–'}</i></div>`);}).join('')}</div>
+  <h3 class="unter">ASCHE <small>foes.json → asche</small></h3><div class="raster">${asche.map(([id,F])=>kasten(esc(F.n),`<div class="id">${id} · ${esc(BIOMES[F.biom]?.kurz||F.biom||'')} · art ${esc(F.art||'')}</div><div class="ref">Schwach: ${gi(F.weak,18)} ${esc(ST[F.weak].n)} · ${F.hp} Leben</div>${musterHtml(F.pat)}`)).join('')}</div>`;}
+
+function bauMeta(){const M=META,box=$('metaBox');if(!M||!M.ausrede){box.innerHTML='';return;}
+ $('metaEinl').innerHTML=`Was das Spiel über die Läufe davor weiß: die Ausrede ändert sich, der Strand zählt mit, der Vorgänger hinterlässt Notizen, einen Handgriff als Erbe und manchmal eine Fehlzeit. Alle Texte stehen so in <code>data/meta.json</code>; Stufe 0 jeder Ausrede steht in <code>data/jobs.json</code>.`;
+ const stufen=['Stufe 0 (von Anfang an)','Stufe 1 (ab dem 3. Run mit der Figur)','Stufe 2 (ab dem 8.)','Stufe 3 (ab dem 15.)'];
+ const ausr=JOBS.map(j=>{const a=M.ausrede[j.id]||[];const t=[j.ausrede,(a[0]||{}).t,(a[1]||{}).t,(M.ausrede_ende||{}).t];
+  return kasten(esc(j.n),t.map((x,i)=>`<div class="ref">${stufen[i]}</div>${zitat(x)}`).join(''));}).join('');
+ const E=M.erbe||{},F=M.fehlzeit||{},U=M.ui||{};
+ const eig=[['Ankunft nach dem ersten Umkehren',(M.ankunft_nach_umkehren||{}).t],['Erbe: Angebot',E.t,[E.nehmen,E.lassen]],['Fehlzeit: Angebot',F.t,[F.ja,F.nein]],['Fehlzeit: Zwischentitel, wenn er gegangen ist',F.start],['Fehlzeit: wenn er gestorben ist',F.tot]];
+ const pause=Object.entries(M.pause||{}).map(([b,v])=>kasten(esc(bname(b)),zitat(v.t),`<div class="ref">Zeile auf dem Titel nach längerer Pause, wenn der letzte Run hier endete</div>`)).join('');
+ const nz=(o,name)=>Object.entries(o||{}).map(([id,v])=>kasten(esc(name(id)),`<div class="ref">wahr</div>${zitat(v.wahr)}<div class="ref">falsch</div>${zitat(v.falsch)}`)).join('');
+ const nW=Object.keys((M.notizen||{}).waechter||{}).length,nB=Object.keys((M.notizen||{}).biome||{}).length;
+ box.innerHTML=`<h3 class="unter">AUSREDE <small>meta.json → ausrede, ausrede_ende</small></h3><div class="raster breit">${ausr}</div>
+  <h3 class="unter">ANKUNFT, ERBE, FEHLZEIT <small>meta.json → ankunft_nach_umkehren, erbe, fehlzeit, ui</small></h3><div class="raster breit">${eig.map(([k,t,kn])=>kasten(esc(k),zitat(t),(kn||[]).filter(Boolean).length?`<div class="ref">Knöpfe: <i>${kn.filter(Boolean).map(esc).join(' · ')}</i></div>`:'')).join('')}
+   ${kasten('Beschriftungen',`<div class="ref">${Object.entries(U).filter(([k])=>k!=='entwurf').map(([k,v])=>`${esc(k)}: <i>${esc(v)}</i>`).join('<br>')}</div>`)}
+   ${kasten('Strand',`<div class="tx">Die Fußspuren am Strand wachsen in fünf Stufen mit der Zahl der bisherigen Abstiege. Die Bilder: <a href="gallery.html#strand">Galerie</a>.</div>`)}</div>
+  <h3 class="unter">PAUSE <small>meta.json → pause, ${plural(Object.keys(M.pause||{}).length,'Ort','Orte')}</small></h3><div class="raster breit">${pause}</div>
+  <h3 class="unter">NOTIZEN DES VORGÄNGERS: WÄCHTER <small>${plural(nW,'Paar','Paare')}</small></h3><div class="raster breit">${nz((M.notizen||{}).waechter,fname)}</div>
+  <h3 class="unter">NOTIZEN DES VORGÄNGERS: BIOME <small>${plural(nB,'Paar','Paare')}</small></h3><div class="raster breit">${nz((M.notizen||{}).biome,bname)}</div>`;}
+
+function bauWuerze(){const W=WUERZE,box=$('wuerzeBox');if(!W||!W.stuecke){box.innerHTML='';return;}const T=W.texte||{};
+ $('wuerzeEinl').innerHTML=`Zu Beginn jedes Runs würfelt das Spiel bis zu drei Stücke (jedes mit seiner Chance, keins aus dem letzten Run). Stücke mit <b>aus</b> sind in den Daten angelegt und ausgeschaltet (<code>an: false</code>).`;
+ const st=W.stuecke.map(s=>kasten(esc(s.id),`<div class="etiketten">${s.an===false?et('aus','rot'):et('an','gruen')}${et(Math.round(s.chance*100)+' %')}${s.entwurf?et('Entwurf'):''}</div><div class="tx">${esc(s.ort)}</div>`,'',s.an===false?'aus':'')).join('');
+ const Z0=T.zeitung||{};const ze=(Z0.ausschnitte||[]).map(a=>kasten(esc(a.kopf),zitat(a.t),`<div class="id">${esc(a.id)}</div>`)).join('');
+ const vm=Object.entries(Z0.vermisst||{}).map(([id,v])=>kasten(esc(((JOBS.find(j=>j.id===id)||{}).n)||id),zitat(v.t),`<div class="ref">${esc((Z0.vermisst_kopf||{}).t||'')}</div>`)).join('');
+ const Bf=T.brief||{};const bk=Object.entries(Bf.briefe||{}).map(([b,v])=>kasten(esc(bname(b)),zitat(v.t))).join('');
+ const be=Bf.ereignis?kasten(esc(Bf.ereignis.t),`<div class="tx">${esc(Bf.ereignis.d)}</div>${Bf.ereignis.bild?`<div class="ref">Bild: <i>${esc(Bf.ereignis.bild)}</i></div>`:''}`,`<div class="kzeile" style="--kb:var(--messing2)">› ${esc(Bf.ereignis.ja)}</div><div class="kzeile" style="--kb:var(--messing2)">› ${esc(Bf.ereignis.nein)}</div>${W.brief_bild?`<img class="bild" src="${W.brief_bild}" style="image-rendering:pixelated;max-width:100%" alt="">`:''}`):'';
+ const bn=Bf.knoten?kasten('Knoten mit dem Brief',`<div class="ref">Hinweis: <i>${esc(Bf.knoten.hint)}</i></div><div class="ref">Mit dem Vorgänger: <i>${esc(Bf.knoten.mit)}</i></div><div class="ref">Knöpfe: <i>${esc(Bf.knoten.nehmen)} · ${esc(Bf.knoten.lassen)}</i></div><div class="ref">Ohne Vorgänger: <i>${esc(Bf.knoten.leer)}</i></div>`):'';
+ const bt=Bf.tagebuch?kasten('Tagebuch, wenn niemand kam',zitat(Bf.tagebuch.t)):'';
+ const Tr=T.trennung||{};
+ const tk=['relief','ausschnitt','aussage'].map(k=>{const c=(W.karten||{})[k];const t=Tr[k]||{};if(!c)return'';
+  return kasten(esc(t.n||k),`<div class="kopf">${c.img?`<img class="bild" src="${c.img}" width="64" height="96" style="image-rendering:pixelated" alt="">`:''}<div style="flex:1">${kartenZeile({...c,n:t.n||k},c.st||[])}</div></div>`,zitat(t.t));}).join('');
+ const tz=Tr.zusammenhang?kasten(esc(Tr.zusammenhang.titel),zitat(Tr.zusammenhang.t),`<div class="ref">Wahl: <i>${esc(Tr.zusammenhang.wahl)}</i></div>`):'';
+ const tf=Tr.fund?kasten('An Fundstellen und Wandbildern',zitat(Tr.fund.t)):'';
+ const Z=T.zann||{};const refs=itemRefs();
+ const zk=Object.entries(W.items||{}).map(([id,d])=>itemKachel(id,d,refs[id])).join('');
+ const zt=(Z.offen||Z.zu)?kasten('Das Fenster',`<div class="ref">Offen: <i>${esc((Z.offen||{}).t||'')}</i></div><div class="ref">Zu: <i>${esc((Z.zu||{}).t||'')}</i></div>`,`<div class="ref">Wächter ${esc(fname(W.zann_waechter))} in ${esc(bname(W.zann_biom))}</div>`):'';
+ box.innerHTML=`<h3 class="unter">DIE STÜCKE <small>wuerze.json → stuecke</small></h3><div class="raster">${st}</div>
+  <h3 class="unter">ZEITUNGSAUSSCHNITTE <small>${plural((Z0.ausschnitte||[]).length,'Stück','Stücke')} · Übergang zwischen zwei Akten</small></h3><div class="raster breit">${ze}</div>
+  <h3 class="unter">VERMISSTENANZEIGEN <small>je Figur · ab dem 10. Run</small></h3><div class="raster breit">${vm}</div>
+  <h3 class="unter">DER FALSCHE BRIEF <small>Ereignis, ${plural(Object.keys(Bf.briefe||{}).length,'Brief','Briefe')}, Knoten</small></h3><div class="raster breit">${be}${bn}${bt}${bk}</div>
+  <h3 class="unter">BARMHERZIGE TRENNUNG <small>wuerze.json → karten, texte.trennung</small></h3><div class="raster breit">${tk}${tz}${tf}</div>
+  <h3 class="unter">ZANNS TAKT <small>wuerze.json → items, texte.zann</small></h3><div class="raster breit">${zk}${zt}</div>`;}
+
 // Ideen aus data/ideas.json, übernommene und gestrichene sichtbar markiert
 async function bauIdeen(){let L=[];try{const r=await fetch('data/ideas.json',{cache:'no-store'});if(r.ok)L=await r.json();}catch(e){}
  const box=$('ideenBox');if(!L.length){box.innerHTML='<div class="leer">Noch keine Ideen eingetragen. Neue Einträge in <code>data/ideas.json</code> erscheinen hier.</div>';return;}
@@ -307,10 +373,11 @@ function sucheEinrichten(){$('q').addEventListener('input',e=>{const q=e.target.
 
 (async()=>{
  try{await loadData();}catch(err){document.body.insertAdjacentHTML('afterbegin',`<div style="padding:20px;color:#ff8a7a;font:16px monospace">Daten konnten nicht geladen werden (${esc(err.message)}).<br>Bitte über einen lokalen Server öffnen (start.command / start.bat oder: python3 -m http.server im Ordner prototype).</div>`);return;}
+ S.enemies=S.enemies||[];// absicht() und unverwJetzt() (kampf.js, combat.js) fragen die Gegnerliste ab; hier gibt es keinen Kampf
  // Hintergründe der Biom-Pakete nachladen (im Spiel macht das main.js)
  for(const p of (typeof PAKETE!=='undefined'?PAKETE:[]))for(const src of p.skripte||[])await new Promise(res=>{const sc=document.createElement('script');sc.src=src;sc.onload=res;sc.onerror=res;document.head.appendChild(sc);});
  const reihe=RUN.akte.flatMap(a=>a.biome);BIOM_IDS=Object.keys(BIOMES).filter(k=>!k.startsWith('_')).sort((x,y)=>((BIOMES[x].akt??9)-(BIOMES[y].akt??9))||((reihe.indexOf(x)+99)%99-(reihe.indexOf(y)+99)%99));
- const schritte=[bauZahlen,bauStoffe,bauReaktionen,bauItems,bauHandgriffe,bauSets,bauFiguren,bauGegner,bauBiome,bauEreignisse,bauFragmente,bauAblauf,bauZustaende];
+ const schritte=[bauZahlen,bauStoffe,bauReaktionen,bauItems,bauHandgriffe,bauSets,bauFiguren,bauGegner,bauBiome,bauEreignisse,bauFragmente,bauAblauf,bauBiegungen,bauBegegnungen,bauMeta,bauWuerze,bauZustaende];
  for(const f of schritte){try{f();}catch(e){console.warn('Artboard:',f.name,e);}}
  try{await bauIdeen();}catch(e){console.warn('Artboard: Ideen',e);}
  sucheEinrichten();

@@ -6,7 +6,11 @@
 <title>Saltmoor Artboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&family=Limelight&family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/spiel.css">
+<link rel="stylesheet" href="css/farbe.css">
+<link rel="stylesheet" href="css/meta.css">
+<link rel="stylesheet" href="css/wuerze.css">
 <link rel="stylesheet" href="css/galerie.css">
+<link rel="stylesheet" href="css/schau.css">
 </head>
 <body>
 <!-- pixel.js braucht ein Canvas mit id="scene" (altes 320×180-Erbe), hier nur versteckt -->
@@ -19,7 +23,7 @@
   <p>Zum Spiel: <a href="index.html">index.html</a> · Bausteine, Gegner-Animationen und Hintergründe: <a href="gallery.html">gallery.html</a> · Hintergrund-Labor: <a href="hintergrund.html">hintergrund.html</a> · Ideenkiste: <a href="ideen.html">ideen.html</a></p>
   <div class="raster schmal" id="zahlen" style="margin-top:16px"></div>
  </header>
- <nav class="sprung" id="nav"><a href="#stoffe">Stoffe</a><a href="#reaktionen">Reaktionen</a><a href="#items">Items</a><a href="#handgriffe">Handgriffe</a><a href="#sets">Sets</a><a href="#figuren">Figuren</a><a href="#gegner">Gegner</a><a href="#biome">Biome</a><a href="#ereignisse">Ereignisse</a><a href="#fragmente">Fragmente</a><a href="#ablauf">Run-Ablauf</a><a href="#zustaende">Zustände</a><a href="#ideen" class="hell">Ideen</a><input id="q" type="search" placeholder="Suchen: Name, Stoff, Effekt, Biom …"></nav>
+ <nav class="sprung" id="nav"><a href="#stoffe">Stoffe</a><a href="#reaktionen">Reaktionen</a><a href="#items">Items</a><a href="#handgriffe">Handgriffe</a><a href="#sets">Sets</a><a href="#figuren">Figuren</a><a href="#gegner">Gegner</a><a href="#biome">Biome</a><a href="#ereignisse">Ereignisse</a><a href="#fragmente">Fragmente</a><a href="#ablauf">Run-Ablauf</a><a href="#biegungen">Biegungen</a><a href="#begegnungen">Begegnungen</a><a href="#meta">Metaebene</a><a href="#wuerze">Würze</a><a href="#zustaende">Zustände</a><a href="#ideen" class="hell">Ideen</a><input id="q" type="search" placeholder="Suchen: Name, Stoff, Effekt, Biom …"></nav>
 
  <section class="abschnitt" id="stoffe"><h2>STOFFE <small>data/stoffe.json</small></h2>
   <p class="einl">Jedes Item trägt null, einen oder zwei Stoffe. Stoffe entscheiden über Reaktionen, Schwachstellen der Gegner und was die Werkstatt verschmelzen kann.</p>
@@ -72,6 +76,22 @@
   <h3 class="unter">STARTVARIANTEN UND STUFEN</h3><div class="raster breit" id="metaRaster"></div>
   <h3 class="unter">ZAHLEN</h3><p class="einl" id="balLegende"></p></section>
 
+ <section class="abschnitt" id="biegungen"><h2>REGELBIEGUNGEN <small>data/biegungen.json · js/core/biegung.js</small></h2>
+  <p class="einl" id="biegEinl"></p>
+  <div class="raster breit" id="biegRaster"></div></section>
+
+ <section class="abschnitt" id="begegnungen"><h2>BEGEGNUNGEN <small>data/run.json → begegnungen, karten · data/foes.json → art, asche · data/balance.json → spuren</small></h2>
+  <p class="einl">Zwei der vier Begegnungen stehen auf dem Zettel jedes Runs: Die Diener erheben sich, Spuren, Asche, Die Tiefe erkennt dich. Welche Gegner wohin gehören, steht im Feld <code>art</code> jedes Gegners; wer als Mensch begonnen hat, trägt <code>asche</code>.</p>
+  <div id="begBox"></div></section>
+
+ <section class="abschnitt" id="meta"><h2>METAEBENE <small>data/meta.json · js/core/metaebene.js</small></h2>
+  <p class="einl" id="metaEinl"></p>
+  <div id="metaBox"></div></section>
+
+ <section class="abschnitt" id="wuerze"><h2>WÜRZE <small>data/wuerze.json · js/core/wuerze.js</small></h2>
+  <p class="einl" id="wuerzeEinl"></p>
+  <div id="wuerzeBox"></div></section>
+
  <section class="abschnitt" id="zustaende"><h2>ZUSTÄNDE UND ABSICHTEN <small>js/core/combat.js</small></h2>
   <p class="einl">Was auf Gegnern und Spieler liegen kann, und woher es kommt.</p>
   <div class="raster" id="statusRaster"></div></section>
@@ -88,8 +108,19 @@
 <script src="js/core/rules.js"></script>
 <script src="js/core/biegung.js"></script>
 <script src="js/core/hoeren.js"></script>
+<script src="js/core/blick.js"></script>
+<script src="js/core/farbe.js"></script>
+<script src="js/core/begegnungen.js"></script>
+<script src="js/core/combat.js"></script>
+<script src="js/core/run.js"></script>
+<script src="js/core/netz.js"></script>
+<script src="js/core/meta.js"></script>
+<script src="js/core/metaebene.js"></script>
+<script src="js/core/wuerze.js"></script>
 <script src="js/scenes/pixel.js"></script>
 <script src="js/sprites/items.js"></script>
+<script src="js/sprites/foes.js"></script>
+<script src="js/scenes/zones.js"></script>
 <script src="js/scenes/world/basis.js"></script>
 <script src="js/scenes/world/hafen.js"></script>
 <script src="js/scenes/world/moor.js"></script>
@@ -99,14 +130,20 @@
 <script src="js/scenes/world/eis.js"></script>
 <script src="js/scenes/world/pforte.js"></script>
 <script src="js/scenes/buehne.js"></script>
+<script src="js/scenes/fahrt.js"></script>
 <script src="js/ui/zeichen.js"></script>
+<script src="js/ui/farbe.js"></script>
 <script src="js/ui/zeichen-biegung.js"></script>
+<script src="js/ui/klangzeichen.js"></script>
 <script src="js/ui/einstellungen.js"></script>
 <script src="js/ui/oberflaeche.js"></script>
 <script src="js/ui/kampf.js"></script>
+<script src="js/ui/plakette.js"></script>
+<script src="js/ui/stoffbaum.js"></script>
 <script src="js/ui/karte.js"></script>
 <script src="js/ui/bildschirme.js"></script>
 <script src="js/ui/ueberlagerungen.js"></script>
+<script src="js/ui/rucksack.js"></script>
 <script src="js/artboard.js"></script>
 </body>
 </html>

@@ -23,7 +23,8 @@ const itemMit=pred=>Object.keys(ITEMS).find(k=>{const d=ITEMS[k];return !d.bases
 // ---------- (1) Oberfläche ----------
 function bauDemo(){
  S=probeS({last:['F'],disc:new Set()});
- const ids=['netzflickerin','tiefling','schmuggler'].filter(id=>FOES[id]);S.enemies=ids.map(id=>mkEnemy(id));aufstellen(S.enemies);
+ const ids=['netzflickerin','tiefling','schmuggler','gesehener_tief'].filter(id=>FOES[id]);S.enemies=ids.map(id=>mkEnemy(id));aufstellen(S.enemies);
+ S.slots.talisman=2;S.areas.talisman[1]=mk('linse');S.blickWahl={};// Auftrag 3 M7: Wahl über der Hand, Gesehener halb durchsichtig
  const [a,b,c]=S.enemies;if(a){a.burn=3;}if(b){b.poison=4;b.weak2=1;}if(c){c.str=2;c.block=5;}
  const hand=['torch','knife','harpoon','oilcoat','salt'].filter(id=>ITEMS[id]&&ITEMS[id].cards.length).map(id=>karte(id));S.hand=hand;
  const rFeuer=REACT.find(r=>hand.some(h=>reactionsFor(['F'],h.st).includes(r)));if(rFeuer)S.disc.add(rFeuer.n);
@@ -84,8 +85,7 @@ function bauGear(){S=probeS({phase:'rast'});S.slots.talisman=1;S.bag[2]=mk(itemM
  // Auftrag 3 M4: Rucksack „Am Körper“ (js/ui/rucksack.js) statt der alten Itemleiste, dazu die Silhouetten aller Figuren
  KOE={lesen:false,alt:koeZaehlung(deckListe()),zeig:S.areas.waffe[0]&&S.areas.waffe[0].uid};
  const swap=S.bag.findIndex(it=>it&&def(it).a==='waffe');if(swap>=0){const a=S.areas.waffe[0];S.areas.waffe[0]=S.bag[swap];S.bag[swap]=a;}
- $('gear').innerHTML=`<div class="koeprobe"><div id="koerper" class="an">${koerperHtml()}</div></div><p class="einl" style="margin-top:8px">Rucksack an der Rast, nach einem Tausch (Deck grün/rot), Talismane mit einem offenen Platz, Rest mit Schloss.</p>
- <div class="silh">${JOBS.map(j=>`<figure><img src="assets/figuren/${j.id}.png" alt=""><figcaption>${esc(j.n)}</figcaption></figure>`).join('')}</div>`;
+ $('gear').innerHTML=`<div class="koeprobe"><div id="koerper" class="an">${koerperHtml()}</div></div><p class="einl" style="margin-top:8px">Rucksack an der Rast, nach einem Tausch (Deck grün/rot), Talismane mit einem offenen Platz, Rest mit Schloss.</p>`;
  KOE=null;}
 function bauPicks(){S=probeS({phase:'kraemer'});
  const ids=[itemMit(d=>d.cards.some(c=>c.eroeffnung)),itemMit(d=>d.rare),Object.keys(ITEMS).find(k=>ITEMS[k].passiv),itemMit(d=>d.cards.some(c=>c.verbraucht))].filter(Boolean);
@@ -138,7 +138,7 @@ function gegnerKachel(id,F){const t=document.createElement('div');t.className='k
  let bes='';if(b.art==='ruft')bes=`Ruft alle ${b.alle||3} Züge ${esc(FOES[b.gegner]?.n||b.gegner)}.`;
  else if(b.art==='schwach_wechsel')bes=`Wechselt jeden Zug die Schwachstelle: ${b.stoffe.map(k=>gi(k,18)).join(' ')}`;
  else if(b.art==='phasen')bes=`Phasen bei ${b.bei.map(x=>Math.round(x*100)+' %').join(' / ')} Leben, ruft ${esc(FOES[(b.ruft&&b.ruft.gegner)||b.ruft]?.n||'')}.`;
- t.insertAdjacentHTML('beforeend',`<div class="kopf"><div><div class="kn">${esc(F.n)}</div><div class="id">${id} · ${rang} · ${esc(BIOMES[F.biom]?.kurz||F.biom)} · ${F.hp} Leben · schwach ${gi(F.weak,18)} ${esc(ST[F.weak].n)}</div></div></div>
+ t.insertAdjacentHTML('beforeend',`<div class="kopf"><div><div class="kn">${esc(F.n)}</div><div class="id">${id} · ${rang} · ${esc(BIOMES[F.biom]?.kurz||F.biom||'in keinem Biom')} · ${F.hp} Leben · schwach ${gi(F.weak,18)} ${esc(ST[F.weak].n)}</div></div></div>
   ${musterHtml(F.pat)}${b.art==='phasen'?(b.muster||[]).map((m,i)=>`<div class="ref">Phase ${i+2}:</div>${musterHtml(m)}`).join(''):''}
   ${bes?`<div class="kzeile" style="--kb:#ff6a5a">${bes}</div>`:''}<div class="tx"><i>${esc(F.konzept||'')}</i></div>`);
  return t;}
@@ -189,15 +189,80 @@ function bauAlt(){const g=$('altGegner');
   const t=document.createElement('div');t.className='kachel';t.appendChild(c);t.insertAdjacentHTML('beforeend',`<div class="kn">${esc(z)}</div><div class="id">zones.js → scene("${z}")</div>`);zg.appendChild(t);
   let last=-1;anims.push({c,f:tt=>{const s=Math.floor(tt*20);if(s===last)return true;last=s;x.drawImage(sc.bg,0,0);sc.back&&sc.back(x,tt);if(sc.midc)x.drawImage(sc.midc,0,0);sc.mid&&sc.mid(x,tt);x.drawImage(sc.fg,0,0);sc.front&&sc.front(x,tt);x.drawImage(VIG,0,0);return true;}});});}
 
+
+// ---------- (6) Auftrag 3: Silhouetten, Gesehene, Biegungen, Farbe, neue Items und Karten, Strand ----------
+function bauSilhouetten(){const box=$('silhBox');
+ box.innerHTML=JOBS.map(j=>`<figure data-job="${j.id}"><div class="silhbild"><img src="assets/figuren/${j.id}.png" alt=""></div><figcaption>${esc(j.n)}</figcaption></figure>`).join('');
+ const b=$('silhPunkte');if(b)b.onclick=()=>{box.classList.toggle('ohnepunkte');b.classList.toggle('an',!box.classList.contains('ohnepunkte'));};
+ JOBS.forEach(async j=>{try{const r=await fetch(`assets/figuren/${j.id}.json`);if(!r.ok)return;const m=await r.json();const bild=box.querySelector(`[data-job="${j.id}"] .silhbild`);if(!bild)return;
+  const pt=(k,xy)=>`<i class="pkt ${k}" style="left:${xy[0]*2}px;top:${xy[1]*2}px" title="${k} ${xy[0]}, ${xy[1]}"></i>`;
+  bild.insertAdjacentHTML('beforeend',pt('fuss',m.fuss)+Object.entries(m.koerper||{}).map(([k,xy])=>pt(k,xy)).join('')+(m.augen||[]).map(xy=>pt('auge',xy)).join(''));
+  bild.parentNode.querySelector('figcaption').insertAdjacentHTML('beforeend',` <small>${m.w}×${m.h}</small>`);}catch(e){console.warn('Silhouette',j.id,e);}});}
+
+function bauGesehene(){const box=$('gesehBox');const ids=Object.keys(FOES).filter(k=>FOES[k].gesehener);
+ const g=document.createElement('div');g.className='raster';g.style.gridTemplateColumns='repeat(auto-fill,minmax(440px,1fr))';ids.forEach(id=>g.appendChild(gegnerKachel(id,FOES[id])));box.appendChild(g);
+ const ab=(pat)=>`<div class="abs-reihe"><div class="feind"><div class="abs">${absicht({pat,pi:0,str:0,weak2:0}).html}</div></div></div>`;
+ const w=Object.entries(FOES).filter(([,F])=>F.gesehen);
+ $('gesehSchritt').innerHTML=w.map(([id,F])=>spec(F.n,ab([F.gesehen]))).join('');
+ $('gesehSchritt').insertAdjacentHTML('beforebegin',`<p class="einl">${w.length} Wächter mit Zusatzschritt.</p>`);}
+
+function bauBiegungen(){const out=[];const kopfe=[];
+ BIEGUNGEN.forEach(b=>{let kopf='',tip='';
+  try{const akt=Math.max(0,RUN.akte.findIndex(a=>a.biome.includes(b.biom)));const route=RUN.akte.map(a=>a.biome[0]);route[akt]=b.biom;
+   S=probeS({phase:'fight',route,akt,depth:3+akt*4,turnNo:3});
+   const h=biegKopfHtml();const tmp=document.createElement('div');tmp.innerHTML=h;const sp=tmp.firstElementChild;if(sp){tip=sp.dataset.tip||'';kopf=`<div class="kopfprobe"><div class="tz">TIEFE ${romanN(S.depth)} · ZUG ${S.turnNo}<span class="sub">${esc(BIOMES[b.biom]?.n||b.biom)}</span>${h}</div></div>`;}
+  }catch(e){console.warn('Biegung',b.id,e);}
+  out.push(`<div class="kachel biegkarte"><div class="gr">${[9,18,36,54].map(s=>gi(b.zeichen,s)).join('')}</div>
+   <div class="kn">${esc(b.n)}</div><div class="id">${b.id} · ${b.zeichen} · ${esc(BIOMES[b.biom]?.n||b.biom)} · Einhakpunkt ${esc(b.art)}</div>${kopf}${tip?`<div class="tipprobe">${tip}</div>`:`<div class="tx">${esc(b.t)}</div>`}</div>`);});
+ $('biegBox').innerHTML=out.join('');}
+
+let farbeS=null;
+function bauFarbe(){const box=$('farbeBox');
+ S=probeS({phase:'rast'});
+ const k=S.areas.waffe[0],b2=S.areas.waffe[1],k3=S.areas.kleidung[0],k4=S.areas.talisman[0];
+ S.farbe={uid:k.uid,letzte:null,gebunden:false,ab:3};b2.spuren=['F'];k3.spuren=['F','W'];k4.spuren=['F','W','B'];
+ farbeS=S;
+ const bild=(it,txt)=>`<figure style="margin:0;text-align:center"><div class="farbitem"><img src="${itemBild(it.id)}" alt="" data-fuid="${it.uid}"></div><figcaption class="ref">${esc(txt)}</figcaption></figure>`;
+ const stufen=(ST.X&&ST.X.schimmer||[]).map(c=>`<i style="background:${c}" title="${c}"></i>`).join('');
+ const hand=(ST.X?[karte('harpoon',0,{farbe:true,st:['F']}),karte('salt',0,{farbe:true,st:['S']})]:[]);
+ const ev=EVENTS.find(e=>e.id==='farbe_brunnen');
+ let brunnen='';if(ev){const keep=S;S=probeS({phase:'event',event:ev.id,gold:12});brunnen=`<div class="panelbox" style="width:760px">${eventHtml()}</div>`;S=keep;}
+ const karten=hand.map((c,i)=>cardHtml(c,i,hand.length)).join('');
+ box.innerHTML=`<h3 class="unter">STOFF X <small>data/stoffe.json → X</small></h3>
+  <div class="reihe"><div class="spec"><span class="lbl">Zeichen</span><div class="gr" style="display:flex;gap:12px;align-items:flex-end">${[9,18,36,54].map(s=>gi('X',s)).join('')}</div></div>
+   <div class="spec"><span class="lbl">${esc(ST.X?ST.X.n:'')} · Ton ${ST.X?ST.X.c:''} · fünf Schimmer-Stufen</span><div class="schimmerstufen">${stufen}</div></div></div>
+  <h3 class="unter">AUF DEM ITEM <small>FarbeUI: Schimmer, gebunden, Spur</small></h3>
+  <div class="farbreihe">${bild(k,esc(ST.X?'Die Farbe sitzt hier':'Item'))}${bild(b2,'Spur: 1')}${bild(k3,'Spuren: 2')}${bild(k4,'Spuren: 3')}</div>
+  <h3 class="unter">IN DER HAND <small>cardHtml, Karte mit c.farbe</small></h3><div class="kartenreihe" id="farbKarten">${karten}</div>
+  <h3 class="unter">BRUNNEN <small>events.json → farbe_brunnen · eventHtml()</small></h3><div class="reihe oben">${brunnen}</div>`;
+ const frei=$('farbeFrei'),geb=$('farbeGebunden');
+ const setze=g=>{farbeS.farbe.gebunden=g;frei.classList.toggle('an',!g);geb.classList.toggle('an',g);const keep=S;S=farbeS;try{FarbeUI.scan();}finally{S=keep;}};
+ frei.onclick=()=>setze(false);geb.onclick=()=>setze(true);}
+
+function bauNeu(){
+ S=probeS({phase:'kraemer'});
+ const ids=['linse','resonator','grablampe','zanns_geige'].filter(id=>ITEMS[id]);
+ $('neuPicks').innerHTML=`<div class="box"><div class="innen"><div class="picks">${ids.map(id=>itemPick(id,'',`<div class="preis">${ITEMS[id].preis||0} GOLD</div>`)).join('')}</div></div></div>`;
+ S=probeS({});
+ const ks=[];ids.forEach(id=>ITEMS[id].cards.forEach((c,i)=>ks.push(karte(id,i))));
+ ['zeichen','tr_relief','tr_ausschnitt','tr_aussage'].forEach(id=>{const c=Tiefe.karte(id);if(c)ks.push(c);});
+ $('neuKarten').innerHTML=ks.map(c=>spec(c.src,cardHtml(c,2,5))).join('');}
+
+function bauStrand(){const box=$('strandBox');const wann=['noch kein Abstieg','ab dem 1. bisherigen Abstieg','ab dem 4.','ab dem 14.','ab dem 39.'];
+ [0,1,2,3,4].forEach(n=>{const fig=document.createElement('figure');const c=document.createElement('canvas');c.width=480;c.height=270;c.className='szene';fig.appendChild(c);
+  fig.insertAdjacentHTML('beforeend',`<figcaption>Stufe ${n} · spuren ${n} · ${wann[n]}</figcaption>`);box.appendChild(fig);
+  szene('hafen',{variante:0,seed:7,fremdheit:0,art:'strand',spuren:n},c,null);});}
+
 // ---------- Start ----------
 (async()=>{
  try{await loadData();}catch(err){document.body.insertAdjacentHTML('afterbegin',`<div style="padding:20px;color:#ff8a7a;font:16px monospace">Daten konnten nicht geladen werden (${esc(err.message)}).<br>Bitte über einen lokalen Server öffnen (start.command / start.bat oder: python3 -m http.server im Ordner prototype).</div>`);return;}
  for(const p of (typeof PAKETE!=='undefined'?PAKETE:[]))for(const src of p.skripte||[])await new Promise(res=>{const sc=document.createElement('script');sc.src=src;sc.onload=res;sc.onerror=res;document.head.appendChild(sc);});
  const reihe=RUN.akte.flatMap(a=>a.biome);BIOM_IDS=Object.keys(BIOMES).filter(k=>!k.startsWith('_')).sort((x,y)=>((BIOMES[x].akt??9)-(BIOMES[y].akt??9))||((reihe.indexOf(x)+99)%99-(reihe.indexOf(y)+99)%99));
  spritesVorladen();
- for(const f of [bauKarten,bauBalken,bauAbsichten,bauZustaende,bauKnoepfe,bauGear,bauPicks,bauPanels,bauZeichen,bauGegner,bauBiome,bauAlt]){try{f();}catch(e){console.warn('Galerie:',f.name,e);}}
+ for(const f of [bauKarten,bauBalken,bauAbsichten,bauZustaende,bauKnoepfe,bauGear,bauPicks,bauPanels,bauZeichen,bauGegner,bauSilhouetten,bauGesehene,bauBiegungen,bauNeu,bauStrand,bauBiome,bauAlt,bauFarbe]){try{f();}catch(e){console.warn('Galerie:',f.name,e);}}
  S=probeS({phase:'titel'});
  try{bauDemo();}catch(e){console.warn('Galerie: Demo',e);}
+ if(farbeS){S=farbeS;try{FarbeUI.scan();}catch(e){console.warn('Galerie: Farbe',e);}}// FarbeUI liest den globalen Zustand; der Rest der Seite schaltet beim Zeichnen selbst um
  const naechste=()=>{const f=warte.shift();if(!f)return;f();setTimeout(naechste,20);};setTimeout(naechste,100);
  const sicht=new WeakSet();const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting?sicht.add(e.target):sicht.delete(e.target)));anims.forEach(a=>io.observe(a.c));
  const t0=performance.now();

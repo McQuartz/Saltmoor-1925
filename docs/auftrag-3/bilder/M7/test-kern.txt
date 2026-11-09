@@ -1,0 +1,39 @@
+ok    sechs stumme Gegnertypen (rufer, splitterchor, echo, astronom, tarierte, rauschen)
+ok    je Akt-IV-Biom genau einer (1 1 1 1 1)
+ok    im Vorraum von Akt V genau einer (1)
+ok    nie Wächter, Elite oder Finale
+ok    jeder hat mindestens zwei Absicht-Arten (2 2 2 2 2 2)
+ok    Astronom stumm, Kraterbewohner nicht (true,false)
+ok    Absicht nur beim Kraterbewohner sichtbar (false,true)
+ok    Vorschau im Balken zählt den stummen nicht mit (alle 18, sichtbar 9)
+ok    hörbare Absicht: Angriff Stufe 2 bei 9 Schaden ([{"art":"angriff","stufe":2,"uid":6}])
+ok    der Bot rechnet mit dem Gehörten (9 sichtbar + 11 geschätzt = 20)
+ok    Arten und Stufen: angriff1, angriff2, angriff3, schutz, zauber, zauber
+ok    höchstens ein stummer Gegner je Kampf (drei aufgestellt → 1, einer gerufen → 1)
+ok    ein Rufer in Akt I ist nicht stumm
+ok    Schalter aus: Absicht wieder sichtbar, nichts zu hören (false,true,0)
+ok    nach dem Gegnerzug hört man im neuen Zug wieder die neue Absicht (1)
+ok    Speicherstand trägt stumm (true,false)
+ok    Schalter aus spielt sich wie ohne stumme Gegner (4 Seeds: true,true,true,true)
+ok    drei Blick-Items (linse, resonator, grablampe), als Entwurf markiert
+ok    Fundorte: ab Akt II, III, IV (Akt-Index 1,2,3)
+ok    Krämer und seltene Beute: Blick-Items erst ab ihrem Akt (0,1,2,3,3)
+ok    ohne Blick-Item keine Wahl
+ok    mit Linse: Wahl liegt aus, Standard nicht hinsehen, Karten und Zugende gesperrt ({"wahl":true,"p":false,"zug":1,"hand":true,"hin":false})
+ok    im Finale keine Wahl
+ok    Schalter aus: keine Wahl, auch mit Linse
+ok    nicht hinsehen: kein Gesehener, der Astronom bleibt stumm ({"n0":2,"n":2,"sicht":false,"stumm":true})
+ok    hinsehen: der Astronom zeigt seine Absicht (sichtbar true, zu hören 0)
+ok    hinsehen in Akt IV: gesehener_grund kommt dazu (3 Gegner)
+ok    Vorschau mit Hinsehen zählt alle Absichten (26 von 26)
+ok    Gesehene je Akt II, III, IV, V: gesehener_tief, gesehener_tief, gesehener_grund, gesehener_letzt
+ok    auch im schweren Kampf kommt ein Gesehener
+ok    drei Gesehene mit Sprite, als Entwurf, in keinem Biom-Pool ([{"k":"gesehener_tief","biome":0,"sp":true,"e":true},{"k":"gesehener_grund","biome":0,"sp":true,"e":true},{"k":"gesehener_letzt","biome":0,"sp":true,"e":true}])
+ok    verborgener Kniff: ohne Hinsehen 0 in der Vorschau, mit Hinsehen 8 (0,8)
+ok    Wächter: ein Musterschritt mehr (5 → 6), kein Gesehener (Quelle gesehen)
+ok    nach Hinsehen: Handgriffe 1 aus 4, Item-Angebot in 12 von 12 Siegen
+ok    ohne Hinsehen: 1 aus 3, Item-Angebot in 6 von 12
+ok    Schatten: Akt II 1×, Akt III 1× in je 12 Kämpfen, mit Hinsehen 0×
+ok    Speicherstand trägt Hinsehen und den Gesehenen (true,true)
+ok    Bot: bei 90 % hinsehen, bei 50 % nicht (true,false)
+Alles gut.

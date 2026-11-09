@@ -199,5 +199,58 @@ module.exports = {
       K.rect(102, fy1 - 2, 10, 2, SIEGEL); K.rect(102, fy1 - 3, 10, 1, '#5a1a12');
       K.vignette(.8, { cx: 80, cy: 34 });
     },
+
+    // Ein Messingschalter: vorn eine herausgezogene Lade voller Papierröllchen mit Zahlen, dahinter eine Rechenmaschine mit Kurbel, an der Wand ein emailliertes Schild, über allem eine hängende Lampe.
+    waage_restposten(K) {
+      const { B } = K;
+      const lx = 62, ly = 17;
+      // Holzwand, im Lampenkreis heller
+      K.feld(0, 0, 160, 90, HOLZ, (x, y) => .26 + (x % 40 < 1 ? -.2 : 0) + (B.fbm(x * .05, y * .2, K.seed, 2) - .5) * .1 + Math.exp(-((((x - lx) / 70) ** 2) + (((y - 30) / 42) ** 2))) * .3);
+      K.lichtquelle(lx, ly);
+      // Emailschild links oben: cremeweiß, roter Rand, drei Schriftzeilen aus Strichen
+      const sch = K.maske(); sch.rect(10, 11, 36, 20);
+      K.form(sch, 0, { k: PAPIER, r: [MESS[7], MESS[8]], ton: 2.2, fase: 1, rand: 1, lichtVon: [lx, ly], verlauf: .4 });
+      for (let x = 11; x < 45; x++) { K.set(x, 12, SIEGEL); K.set(x, 29, SIEGEL); } for (let y = 12; y < 30; y++) { K.set(11, y, SIEGEL); K.set(44, y, SIEGEL); }
+      K.schrift(15, 16, 40, '#1a1208', { min: 2, max: 5 }); K.schrift(15, 20, 40, '#1a1208', { min: 2, max: 6 }); K.schrift(15, 24, 31, '#1a1208', { min: 2, max: 4 });
+      for (const [x, y] of [[13, 14], [42, 14], [13, 27], [42, 27]]) K.set(x, y, MESS[7]);
+      // Die Rechenmaschine: Messingkasten, Anzeige, Tastenfeld, Kurbel rechts
+      const kasten = K.maske(); kasten.rect(76, 26, 60, 38);
+      K.form(kasten, 0, { k: MESS.slice(0, 7), r: [MESS[7], MESS[8]], ton: 2.2, fase: 1, rand: 1, lichtVon: [lx, ly], schatten: 2, verlauf: .4, muster: (x, y) => (y === 40 ? -.7 : 0) });
+      K.rect(81, 30, 40, 8, DUNKEL[0]);
+      for (let i = 0; i < 9; i++) { const h = 3 + (B.hash(i, 3, 5) * 3 | 0); K.rect(83 + i * 4, 35 - h, 2, h, i % 4 === 3 ? LAMPE : LAMPE_K); }
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 9; c++) { const x = 81 + c * 6, y = 43 + r * 6; K.rect(x, y, 4, 4, DUNKEL[1]); K.rect(x, y, 4, 3, MESS[5]); K.set(x, y, MESS[8]); }
+      const arm = K.maske(); arm.kap(136, 50, 148, 50, 1.6, 1.6); arm.kap(148, 50, 148, 40, 1.3, 1.3); arm.ell(148, 38, 2.6, 2.6);
+      K.form(arm, 0, { k: MESS.slice(0, 7), r: [MESS[7], MESS[8]], ton: 2.2, fase: 0, rand: 1, lichtVon: [lx, ly] });
+      K.set(147, 37, LAMPE_K);
+      // Hängende Lampe mit Messingschirm: die hellste Stelle
+      const schnur = K.maske(); schnur.kap(lx, 0, lx, ly - 7, .5, .5); K.form(schnur, 0, { k: DUNKEL, ton: 1, fase: 0, rand: 0 });
+      K.licht(lx, ly + 6, 80, LAMPE_G, .95, { oval: 1.15 });
+      const schirm = K.maske(); schirm.poly([[lx - 3, ly - 7], [lx + 3, ly - 7], [lx + 9, ly + 1], [lx - 9, ly + 1]]);
+      K.form(schirm, 0, { k: MESS.slice(0, 7), r: [MESS[7], MESS[8]], ton: 1.8, fase: 0, rand: 1, L: [0, 1] });
+      K.rect(lx - 3, ly + 2, 7, 2, LAMPE); K.set(lx, ly + 2, LAMPE_K); K.set(lx - 1, ly + 3, LAMPE_K); K.set(lx, ly + 3, LAMPE_K);
+      // Tresen: Platte mit Messingkante, Front aus Holz
+      K.rect(0, 62, 160, 5, HOLZ[4]); K.rect(0, 62, 160, 1, MESS[8]); K.rect(0, 63, 160, 1, MESS[6]);
+      K.feld(0, 67, 160, 90, HOLZ, (x, y) => .24 + (x % 28 === 0 ? -.14 : 0) + (y === 67 ? -.1 : 0) - (y - 67) * .004 + Math.exp(-(((x - 40) / 70) ** 2)) * .16);
+      // Die Lade: herausgezogen, von oben gesehen; innen Reihen von Papierröllchen
+      const lade = K.maske(); lade.poly([[8, 66], [72, 66], [78, 83], [2, 83]]);
+      K.form(lade, 0, { k: HOLZ.slice(0, 5), r: [MESS[6], MESS[8]], ton: 1.4, fase: 1, rand: 1, lichtVon: [lx, ly], schatten: 2 });
+      const innen = K.maske(); innen.poly([[11, 68], [69, 68], [74, 81], [6, 81]]);
+      K.form(innen, 0, { k: ['#020201', '#060503', '#0e0a05'], ton: .5, fase: 0, rand: 0 });
+      for (const [y, s, n] of [[72, .85, 8], [77, 1.05, 7], [81, 1.25, 6]]) {
+        const xl = 11 - (y - 68) * .43, xr = 69 + (y - 68) * .43, dx = (xr - xl) / n;
+        for (let i = 0; i < n; i++) {
+          const x = xl + dx * (i + .5), m = K.maske(); m.rect(x - 2.6 * s, y - 3 * s, 5.2 * s, 3 * s); m.ell(x, y, 2.6 * s, 1.6 * s); m.ell(x, y - 3 * s, 2.6 * s, 1.5 * s);
+          K.form(m, 0, { k: PAPIER, r: [PAPIER[3], PAPIER[4]], ton: 2.2, fase: 0, rand: 1, lichtVon: [lx, ly], verlauf: .4 });
+          K.set(x, y - 2, '#1a1208'); K.set(x + 1, y - 2, i % 3 ? '#1a1208' : '#5a4a2a'); K.set(x, y - 1, SIEGEL);
+        }
+      }
+      // Die Lade vorn: Holzfront mit Messinggriff und Zahlenschild
+      const front = K.maske(); front.rect(2, 83, 76, 7);
+      K.form(front, 0, { k: HOLZ, r: [MESS[6], MESS[8]], ton: 2.2, fase: 1, rand: 1, lichtVon: [lx, ly] });
+      K.rect(34, 85, 12, 3, MESS[6]); K.rect(34, 85, 12, 1, MESS[8]); K.set(38, 86, DUNKEL[0]); K.set(42, 86, DUNKEL[0]);
+      // Zwei Röllchen lose auf dem Tresen, eines angestoßen
+      for (const [x, y, a] of [[96, 66, 0], [106, 67, 1]]) { const m = K.maske(); m.kap(x - 3, y - 2 - a, x + 3, y - 2 + a, 2, 2); K.form(m, 0, { k: PAPIER, r: [PAPIER[3], PAPIER[4]], ton: 2.2, fase: 0, rand: 1, lichtVon: [lx, ly] }); K.set(x, y - 2, '#1a1208'); K.set(x + 1, y - 2, SIEGEL); }
+      K.vignette(.65, { cx: 76, cy: 40 });
+    },
   },
 };

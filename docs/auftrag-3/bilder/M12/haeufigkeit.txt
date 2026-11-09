@@ -1,0 +1,9 @@
+Runs 100, Siege 58
+Regelbiegungen: Ø 2.33 verschiedene je Run, Kämpfe mit Biegung Ø 5.9 von 12.1
+Hören: Kämpfe mit stummem Gegner Ø 0.49 je Run, in 38 von 100 Runs
+Blick: Blick-Item am Ende getragen in 3 Runs, Blick-Meldungen Ø 0.15
+Farbe: im Run in 53 von 100 Runs, Meldungen Ø 2.30
+Begegnungen auf dem Zettel (je Run höchstens 2, Ø 2.00): {"spuren":67,"tiefe":51,"diener":47,"asche":35}
+  Tiefe: Zeichen bekommen in 1 Runs, gespielt (Seitenwechsel) in 1, Begegnung statt Kampf Ø 0.00; Asche gerufen in 12 Runs
+Würze (je Run höchstens 3, Ø 2.11): {"zann":50,"trennung":52,"zeitung":66,"brief":43}
+Niederlagen je Akt I–V: 3/13/5/7/14 (7 % · 31 % · 12 % · 17 % · 33 %)

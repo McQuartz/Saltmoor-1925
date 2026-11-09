@@ -30,7 +30,7 @@ function koeSlot(loc,{zu=false,klein=false}={}){const it=zu?null:getAt(loc);cons
  const kerben=it&&!it.x?[...Array(kerbenVon(it))].map((_,k)=>{const st=D.st[k%Math.max(1,D.st.length)];const col=st&&ST[st]?ST[st].c:'#b08a4a';return `<i class="${hgVon(it)[k]?'voll':''}" style="--k:${col}"></i>`;}).join(''):'';
  const attr=zu?'':KOE.lesen?(it?`data-kzeig="${it.uid}"`:''):`data-loc="${loc}"`;
  return `<div class="kslot ${zu?'zu':''} ${sel?'sel':''} ${ziel?'ziel':''} ${zeig?'zeig':''} ${rar&&rar!=='gewoehnlich'?'selten':''} ${rar==='reliquie'?'reliquie':''} ${it&&it.x?'gestrichen':''} ${klein?'klein':''}" ${attr}>
- ${zu?KOE_SCHLOSS:D?`<img src="${itemBild(it.id)}" alt="${esc(D.n)}" draggable="false">${D.st.length?`<span class="kss">${D.st.map(k=>gi(k,KZ())).join('')}</span>`:''}<span class="kkb">${kerben}</span>`:''}</div>`;}
+ ${zu?KOE_SCHLOSS:D?`<img src="${itemBild(it.id)}" alt="${esc(D.n)}" draggable="false" data-fuid="${it.uid}">${D.st.length?`<span class="kss">${D.st.map(k=>gi(k,KZ())).join('')}</span>`:''}<span class="kkb">${kerben}</span>`:''}</div>`;}
 // Schloss aus Pixeln (7 × 8), scharf in jeder Größe
 const KOE_SCHLOSS=`<svg class="schloss" viewBox="0 0 7 8" shape-rendering="crispEdges"><path fill="#5a4626" d="M2 0h3v1h1v3H5V1H2v3H1V1h1z"/><path fill="#7a6036" d="M0 3h7v5H0z"/><path fill="#2a2012" d="M3 5h1v2H3z"/></svg>`;
 
@@ -71,7 +71,7 @@ function koeKopf(){const ph={rast:'RAST',werkstatt:'WERKSTATT',kraemer:'KRÄMER'
  <div class="kr"><span class="gold">${gi('gold',KZ())} <b>${S.gold}</b> Gold</span><span>Buch <b>${S.disc.size}/${allRx().length}</b></span><span>Deck <b>${deckListe().length}</b></span></div></div>`;}
 
 function koeLinks(){const J=koeFigur();const m=maxHp();const rs=roleState().filter(x=>x.have.length);
- return `<div class="kname"><h3>${esc(J.n).toUpperCase()}</h3><div class="khp">${S.hp}/${m} Leben</div><div class="kaus">„${esc(J.ausrede)}“</div>
+ return `<div class="kname"><h3>${esc(J.n).toUpperCase()}</h3><div class="khp">${S.hp}/${m} Leben</div><div class="kaus">„${esc(ausredeVon(J))}“</div>
  <div class="krollen">${rs.map(x=>`<span class="${x.on?'an':''}">${esc(x.r.n)} ${x.have.length}/${x.r.i.length}${x.on?': '+esc(x.r.t):''}</span>`).join('<br>')||'<span class="hint">Trag drei passende Teile, um ein Set zu bilden.</span>'}</div></div>`;}
 
 function koeFuss(){const bag=S.bag.map((_,i)=>koeSlot('bag:'+i)).join('');const ws=S.phase==='werkstatt'&&!KOE.lesen;

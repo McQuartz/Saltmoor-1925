@@ -1,0 +1,56 @@
+| 1 | fischer | Sieg | 30 | 4 | Fragment „Die Regel über der Tür“, Fragment „Die Uhr im Glas“, Fragment „Die Aussage des Hundeführers“, Wollmantel, Detektiv, Fragment „Die Treppe“, Startvariante „Ersparnisse“, Startvariante „Ein Erbstück“, Startvariante „Zähe Natur“, Schwierigkeit II |
+| 2 | friedhofswaerter | Sieg | 31 | 6 | Fragment „Der Kerbstein“, Sense, Fragment „Das Eingangsbuch“, Okkultist |
+| 3 | pfarrerin | Sieg | 30 | 10 | Fragment „Der Krabbenfischer“, Fragment „Das Abnahmeprotokoll“, Fragment „Das Maßbuch des Zimmermanns“, Kneipenschläger, Fragment „Was ruft“ |
+| 4 | detektiv | Strand | 31 | 13 | Fragment „Die Rechnung des Meisters“, Fragment „Die Brennlisten“, Geologe, Fragment „Noch ein Schritt“ |
+| 5 | okkultist | Sieg | 31 | 15 | Fragment „Die gefrorene Welle“, Leuchtpistole, Fragment „Die letzte Wand“, Wahrsagerin |
+| 6 | kneipenschlaeger | Strand | 6 | 15 | – |
+| 7 | geologe | Sieg | 31 | 17 | Fragment „Die Strichliste des Vorstehers“, Spitzhacke, Fragment „Das Heft des Gehilfen“ |
+| 8 | wahrsagerin | Sieg | 31 | 18 | Fragment „Der Küsterzettel“, Kriegsveteran |
+| 9 | veteran | Sieg | 31 | 22 | Fragment „Die Hausordnung“, Fragment „Das Zeichen der Legion“, Grubenlampe, Fragment „Der Chor“, Offiziersmantel, Fragment „Der Umriss“ |
+| 10 | fischer | Sieg | 29 | 25 | Fragment „Die Stufen unter der Kaimauer“, Bootshaken, Fragment „Der Kreidestrich“, Fragment „Die Holzform“ |
+| 11 | friedhofswaerter | Sieg | 31 | 28 | Fragment „Die zwei Kreise“, Hexenflasche, Fragment „Das Appellbuch“, Fragment „Der Streifen im Schnee“ |
+| 12 | pfarrerin | Sieg | 31 | 29 | Fragment „Der Hirte“ |
+| 13 | detektiv | Sieg | 30 | 32 | Fragment „Das Verzeichnis des Mesners“, Fragment „Eintrag im Pilgerbuch“, Trauerschleier, Fragment „Das Reliefband: Die Küste“, Tarotkarten |
+| 14 | okkultist | Sieg | 31 | 34 | Fragment „Die letzte Eintragung der Chronik“, Fragment „Die Wachstafel des Vermessers“ |
+| 15 | kneipenschlaeger | Sieg | 31 | 36 | Fragment „Kerben im Kutterbalken“, Ankerkette, Fragment „Die oberste Stufe“ |
+| 16 | geologe | Sieg | 31 | 37 | Fragment „Das Lot an der Brücke“, Enterbeil |
+| 17 | wahrsagerin | Strand | 31 | 37 | – |
+| 18 | veteran | Sieg | 30 | 38 | Fragment „Die Liste im Leuchtturm“ |
+| 19 | fischer | Strand | 21 | 39 | Fragment „Der Stein, der falsch herum steht“ |
+| 20 | friedhofswaerter | Sieg | 31 | 39 | – |
+
+Fragmente gespeichert: 39, nach Reset: 0
+
+=== Metaebene (M10) ===
+ok    Strand-Stufen bei 0/1/4/14/39 Runs: 0,1,2,3,4
+ok    Ausrede-Stufen: „Mein Bruder ist mit dem Boot nicht zurückgekommen.“ / „Mein Bruder ist nicht zurückgekommen. Das Boot lag am Morgen trocken im Hafen.“ / „Mein Bruder hat das Boot nicht verloren. Er hat es zurückgeschickt.“ / „Ich gehe hinunter.“
+ok    Ausrede: je Figur zwei Stufen, alle Entwurf
+ok    Nach dem ersten Umkehren: Ankunftszeile steht
+ok    Nach dem nächsten Start: Ankunftszeile weg
+ok    Zweites Umkehren: keine Ankunftszeile mehr
+ok    Notizen an der ersten Rast in 110 von 300 Runs (soll etwa 1/3)
+ok    Notizen je Fund: Mittel 1.92 (1 bis 3)
+ok    Anteil falscher Notizen bei Tiefe 8 und 30 gemischt: 37 % (erwartet etwa 40 %)
+ok    Nach einem Sieg keine Notizen
+ok    Notizen: jedes Biom und jeder Wächter hat eine wahre und eine falsche
+ok    Tagebuch: 12 Seiten gemerkt (höchstens 12)
+ok    Erbe gemerkt: muenzwurf (8×, Stoffe L)
+ok    Erbe wird nach der Figurwahl angeboten
+ok    Erbe genommen: liegt zusätzlich lose im Deck
+ok    Nach dem Erbe geht der Run los
+ok    Erbe abgelehnt: Deck unverändert
+ok    Erbe lässt sich streichen
+ok    Tod in Akt V: Fehlzeit wird angeboten
+ok    Tod in Akt IV: keine Fehlzeit
+ok    Fehlzeit, 20 Seeds: beginnt in Akt II (19 mit seinem Deck in fremder Fassung, 1 nach seinem Tod mit Startdeck und einem fremden Handgriff)
+ok    Fehlzeit: Tagebucheinträge und Satz am Übergang
+ok    Pause 10 Tage: keine Zeile
+ok    Pause 20 Tage: Zeile der Kapelle
+ok    Zweite lange Pause nach 5 Tagen: keine Zeile (höchstens einmal in 30 Tagen)
+ok    Nach 40 Tagen wieder möglich
+ok    meta aus: Strand, Ausrede, Ankunft wie vorher
+ok    meta aus: kein Erbe
+ok    fehlzeit aus: kein Angebot
+ok    pause aus: keine Zeile
+
+Metaebene: 30 Prüfungen, alles gut

@@ -42,7 +42,8 @@ function netzBauen(){const r=R(`netz:${S.akt}:${biomId()}`);const eb=aktDef().eb
  const ebenen=eb.map((_,e)=>netzKnoten(e,R(`weg:${S.akt}:${e}`)));
  let kanten=[];for(let e=0;e+1<ebenen.length;e++)kanten.push(...netzVerbinden(e,ebenen[e].length,ebenen[e+1].length,r));
  const N={akt:S.akt,biom:biomId(),ebenen,kanten,pos:null,gegangen:[],klar:false,folgen:[]};
- netzFolgen(N,r);return N;}
+ netzFolgen(N,r);if(typeof Spuren!=='undefined')Spuren.markieren(N,r);if(typeof Wuerze!=='undefined')Wuerze.markieren(N,r); // M9: Spuren (Dunwich)
+ return N;}
 
 // Folgen auf der Karte, je Akt höchstens zwei verschiedene über den Seed: Brüchiger Gang, Abkürzung, Dunkler Stollen
 function netzFolgen(N,r){if(N.ebenen.length<5)return;const F=(BAL.karte&&BAL.karte.folgen)||{bruch:.6,kurz:.35,dunkel:.45};
@@ -82,7 +83,7 @@ function genWeg(){if(!S.netz||S.netz.akt!==S.akt||S.netz.biom!==biomId()){S.netz
  save();Bus.emit('changed');}
 
 // Nach der Wahl: Position im Netz setzen (chooseWeg ruft das), S.ebene folgt dem Netz (Abkürzung springt eine Ebene)
-function netzGehe(o){const N=S.netz;if(!N||!o.ziel)return;N.pos=o.ziel;N.gegangen.push(o.ziel);S.ebene=o.ziel[0];
+function netzGehe(o){const N=S.netz;if(!N||!o.ziel)return;N.pos=o.ziel;N.gegangen.push(o.ziel);S.ebene=o.ziel[0];if(typeof Spuren!=='undefined')Spuren.gehe(o);
  // verlorene Wege: alle Knoten der verlassenen Ebenen, die nicht gegangen wurden, verblassen in der Ansicht (über gegangen ablesbar)
  if(o.kurz)Bus.emit('abkuerzung',{why:'Abkürzung: eine Ebene übersprungen, direkt in einen schweren Kampf'});}
 

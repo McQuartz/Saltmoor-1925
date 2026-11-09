@@ -30,13 +30,20 @@ function baumDaten(){
   }
   sackgasse=!aeste.some(a=>a.hell);
  }
+ // M9 Asche: liegt Asche im Rucksack, zeigt der Baum einen eigenen Ast. Die Prüfung ist Asche.nachKarte (eigene Stoffe, Reihenfolge zählt), hier nur die Anzeige.
+ if(typeof Asche!=='undefined'&&Zettel.hat('asche')&&S.asche&&S.asche.length){const zk=S.zugKarten||[];const vor=zk[zk.length-1];const eig=vor?Asche.eigene(vor):[];const n=S.asche[S.asche.length-1].n;
+  const hat=k=>S.hand.filter(sbSpielbar).some(c=>Asche.eigene(c).includes(k));
+  if(eig.includes('S')&&!S.verbuendeter){aeste.push({stoff:['F'],rx:[{n:'Asche rufen',t:`Salz, dann Feuer: ${n} kämpft diesen Kampf an deiner Seite. Zwei Biome später kommt er als Gegner wieder.`}],n:'Asche rufen',hell:hat('F'),gold:false,asche:true});sackgasse=false;}
+  if(eig.includes('F')){aeste.push({stoff:['S'],rx:[{n:'Asche zerfällt',t:`Feuer, dann Salz: die Asche von ${n} zerfällt. Nichts kommt zurück.`}],n:'Asche zerfällt',hell:hat('S'),gold:false,asche:true});sackgasse=false;}}
  // Auftrag 3 M5: Regelbiegung im Baum. quelle = Glieder, von denen die Äste ausgehen (Falsche Winkel: das vorletzte, Der Schlag: alle davor);
  // eck = Über Eck (Bogen vom ersten zum letzten Glied, ab drei Karten, mit den Reaktionen, die beim Zugende kommen)
  let quelle=null,eck=null;const B=typeof Bieg!=='undefined'?Bieg.aktiv():null;const n=pfad.length;
  if(B&&B.id==='falsche_winkel')quelle=n>=2?[n-2]:[];
  if(B&&B.id==='schlag'&&n===2)quelle=[0,1];
  if(B&&B.id==='ueber_eck'&&n>=2){const rx=n>=3?Bieg.ueberEckRx():[];eck={rx:rx.map(r=>r.n),t:rx.map(r=>r.t),zu:n>=3,leuchtet:!!(S.ueberEck&&S.ueberEck.turn===S.turnNo)};}
- return{pfad,letzter:last,aeste,sackgasse,quelle,eck};}
+ // Glieder, die von Karten des Farbe-Items stammen (zugKarten läuft parallel zur Kette dieses Zuges)
+ const zk=S.zugKarten||[];const farbe=typeof Farbe!=='undefined'&&zk.length===pfad.length?zk.map(c=>Farbe.karte(c)):[];
+ return{pfad,farbe,letzter:last,aeste,sackgasse,quelle,eck};}
 
 // ---------- HTML ----------
 const SB_H=48,SB_PX=46,SB_AX=77; // Maße in u: Höhe, Anfang der Bögen, Anfang der Astzeichen (Breite 150)
@@ -55,7 +62,7 @@ function stoffBaumHtml(){
  sbPfadLaenge=len;
  // Pfad: Kette von Gliedern, das letzte mit Rahmen in Stofffarbe
  const kette=!pfad.length?'<i class="sb-punkt"></i>':pfad.map((g,i)=>{const letzt=d.quelle&&d.pfad.length?d.quelle.includes(i):i===pfad.length-1;
-  return (i?'<i class="sb-ver"></i>':'')+`<span class="sb-glied${letzt?' letzt':''}" style="--c:${ST[g[0]]?ST[g[0]].c:'#fff'}">${g.map(sbZeichen).join('')}</span>`;}).join('');
+  return (i?'<i class="sb-ver"></i>':'')+`<span class="sb-glied${letzt?' letzt':''}${len&&d.farbe[i]?' farbe':''}" style="--c:${ST[g[0]]?ST[g[0]].c:'#fff'}">${g.map(sbZeichen).join('')}</span>`;}).join('');
  // Äste
  const mitte=SB_H/2,n=d.aeste.length;
  let bogen='',aeste='',sack='';
@@ -67,7 +74,7 @@ function stoffBaumHtml(){
    const col=a.gold?'#e8c547':(ST[a.stoff[0]]?ST[a.stoff[0]].c:'#fff');
    const dx=SB_AX-2-SB_PX;
    bogen+=`<path d="M${SB_PX} ${mitte} C${SB_PX+dx*.55} ${mitte} ${SB_PX+dx*.45} ${y.toFixed(2)} ${SB_AX-2} ${y.toFixed(2)}" fill="none" stroke="${col}" stroke-width=".8"${a.hell?'':' stroke-dasharray="1.6 1.4"'} stroke-linecap="round" opacity="${a.hell?1:.4}"/>`;
-   aeste+=`<div class="sb-ast${a.hell?'':' dunkel'}${a.gold?' gold':''}" style="top:calc(var(--u)*${y.toFixed(2)});--c:${col};font-size:calc(var(--u)*${n>6?3.4:4})" data-ast="${a.stoff.join('')}" data-rx="${sbEsc(a.rx.map(r=>r.n).join('|'))}" data-hell="${a.hell?1:0}" title="${sbEsc(a.rx.map(r=>r.t).join('\n'))}">${a.stoff.map(sbZeichen).join('')}<span class="sb-name">${sbEsc(a.n)}</span></div>`;});
+   aeste+=`<div class="sb-ast${a.hell?'':' dunkel'}${a.gold?' gold':''}${a.asche?' asche':''}" style="top:calc(var(--u)*${y.toFixed(2)});--c:${col};font-size:calc(var(--u)*${n>6?3.4:4})" data-ast="${a.stoff.join('')}" data-rx="${sbEsc(a.rx.map(r=>r.n).join('|'))}" data-hell="${a.hell?1:0}" title="${sbEsc(a.rx.map(r=>r.t).join('\n'))}">${a.stoff.map(sbZeichen).join('')}<span class="sb-name">${sbEsc(a.n)}</span></div>`;});
  }
  const eck=d.eck?`<div class="sb-eck${d.eck.rx.length?' an':''}${d.eck.leuchtet?' leuchtet':''}" title="${sbEsc(d.eck.rx.length?'Über Eck beim Zugende: '+d.eck.t.join(' '):'Über Eck: ab drei Karten reagieren die erste und die letzte beim Zugende')}">${d.eck.rx.length?`<span>${sbEsc(d.eck.rx.join(' · '))}</span>`:''}</div>`:'';
  return `<div class="sb${d.eck?' mit-eck':''}${Date.now()<sbFunkBis?' funk':''}"><div class="sb-pfad"><div class="sb-kette${rueck?' rueck':''}">${eck}${kette}</div></div><svg class="sb-bogen" viewBox="0 0 150 ${SB_H}" aria-hidden="true">${bogen}</svg>${aeste}${sack}</div>`;}

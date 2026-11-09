@@ -1,0 +1,36 @@
+ok    100 Seeds: höchstens drei Stücke je Run (Verteilung 0/1/2/3: 10/45/40/5)
+ok    Mittel 1.40 Stücke je Run (soll etwa 1,5); je Stück: {"zann":29,"trennung":35,"brief":39,"zeitung":37}
+ok    kein Stück in zwei aufeinanderfolgenden Runs (0 Wiederholungen)
+ok    abgeschaltete Stücke (Grabbeigabe, Licht im Turm, Lügender Kartentext) kommen nicht
+ok    Zeitung in 76 von 160 Übergängen (nicht in jedem)
+ok    ab dem 10. Run: Vermisstenanzeige in 17 von 40 Runs (höchstens einmal je Run)
+ok    vor dem 10. Run nie die Vermisstenanzeige
+ok    Brief: erstes Ereignis in Akt I ist der Brief
+ok    Brief eingesteckt: verspricht eis in Akt 4
+ok    Biomwahl: das versprochene Biom steht im Angebot
+ok    Peilkarte: Brief-Knoten auf Ebene 5 (rast)
+ok    Brief-Knoten mit Vorgänger: er bietet eines seiner Items
+ok    Item genommen, Knoten fertig
+ok    Brief-Knoten ohne verlorenen Run: leer, der Brief bleibt im Tagebuch
+ok    Brief liegen gelassen: kein Knoten
+ok    ohne Zettel kein Brief
+ok    Trennung: drei Teile an drei Fundstellen, die vierte bringt keinen
+ok    Teile sind 0-Kosten-Karten im Deck
+ok    zwei Teile mit einer anderen Karte dazwischen: nichts
+ok    zwei Teile direkt nacheinander: der Zusammenhang
+ok    nach dem Sieg: Wahl des Handgriffs
+ok    Handgriff dauerhaft fremd, zurück zur Belohnung
+ok    einmal pro Run
+ok    Glockengießerei mit zann: die Geige kommt sicher als nächste Beute
+ok    Geige im Fundpool der Glockengießerei
+ok    nicht in anderen Biomen
+ok    Geige angelegt
+ok    Kampf gegen die Ungetaufte mit Geige: Zanns Takt aktiv
+ok    Zug mit Geige: Wächter wie immer
+ok    Zug ohne Geige: Fenster offen, nächster Schritt ist der stärkste (Schritt 3)
+ok    wieder gespielt: Fenster zu
+ok    ohne Geige: Wächter wie immer
+ok    wuerze aus: leerer Zettel
+ok    30 Bot-Runs mit allen vier Stücken ohne Fehler (21 Siege; Zeitungen 51, Brief eingesteckt 19, Teile gefunden 83, Trennung ausgelöst 24, Geige getragen 5)
+
+34 Prüfungen, alles gut

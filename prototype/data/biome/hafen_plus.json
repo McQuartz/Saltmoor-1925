@@ -46,7 +46,8 @@
    },
    "beute": "sichtglas",
    "beute_satz": "Der Helm rollt bis an die Kaikante und bleibt liegen. Innen steht das Wasser still, und es ist warm.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "galionsfigur": {
    "n": "Die Galionsfigur",
@@ -77,6 +78,10 @@
      "v": 17
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 25
+   },
    "sprite": "galionsfigur",
    "varianten": [
     "galionsfigur",
@@ -120,7 +125,8 @@
    },
    "beute": "heuerbeutel",
    "beute_satz": "Das Holz liegt still auf dem Kai. Am Steven trocknet die Bugwelle, die es nie gab, und unter dem Riss ist es dunkel.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   }
  },
  "events": [

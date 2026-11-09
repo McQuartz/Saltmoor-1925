@@ -10,7 +10,7 @@ const Hoeren={
  // Höchstens ein stummer Gegner je Kampf: beim Aufstellen und beim Rufen
  begrenzen(list){let da=(S.enemies||[]).some(x=>x.hp>0&&x.stumm&&!list.includes(x));for(const e of list){if(!e.stumm)continue;if(da)e.stumm=false;else da=true;}},
  // Art einer Absicht für das Ohr: angriff (Puls), schutz (Glocke), zauber (Harmonium)
- art(it,e){if(!it)return null;if(it.t==='atk')return'angriff';if(it.t==='blk')return'schutz';
+ art(it,e){if(!it)return null;if(it.t==='atk'||it.t==='karte')return'angriff';if(it.t==='blk')return'schutz';
   if(it.t==='buff'||it.t==='laedt')return'zauber';return'zauber';},
  // Stärke eines Angriffs in drei Stufen (wie viele Schläge pro Takt): bis 6, bis 14, darüber
  stufe(v){return v<=6?1:v<=14?2:3;},

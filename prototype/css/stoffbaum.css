@@ -31,3 +31,4 @@
 @keyframes sbeck{0%{filter:brightness(2.2)}100%{filter:none}}
 #baum .sb.funk .sb-glied.letzt{animation:sbfunk 1s linear}
 @keyframes sbfunk{0%,10%{opacity:1;filter:brightness(2.4)}11%,20%{filter:none}21%,31%{filter:brightness(2.4)}32%,45%{filter:none}46%,90%{filter:brightness(2.4)}91%,100%{filter:none}}
+#baum .sb-ast.asche .sb-name{color:#b8b2a6;font-style:italic}

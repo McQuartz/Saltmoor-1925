@@ -1,0 +1,504 @@
+{
+ "_doc": "Auftrag 3 M11 Würze (docs/auftrag-3/07-begegnungen-meta-wuerze.md Abschnitt 4). Gelesen von js/core/wuerze.js. stuecke: id, ort, chance je Run (vor dem Ausschluss des letzten Runs), an (false = per Schalter aus). Höchstens drei je Run. karten: Wirkung der Teile der Barmherzigen Trennung. items: Zanns Geige (nur im Fundpool der Glockengießerei, wenn zann auf dem Zettel steht).",
+ "stuecke": [
+  {
+   "id": "zeitung",
+   "ort": "Übergang zwischen zwei Akten",
+   "chance": 0.6,
+   "entwurf": true
+  },
+  {
+   "id": "brief",
+   "ort": "Ereignis in Akt I oder II, Knoten im versprochenen Biom",
+   "chance": 0.5,
+   "entwurf": true
+  },
+  {
+   "id": "trennung",
+   "ort": "Fundstellen und Wandbilder eines Runs",
+   "chance": 0.5,
+   "entwurf": true
+  },
+  {
+   "id": "zann",
+   "ort": "Glockengießerei (Akt II), Wächter Die Ungetaufte",
+   "chance": 0.5,
+   "entwurf": true
+  },
+  {
+   "id": "grabbeigabe",
+   "ort": "Ereignis in der Kapelle",
+   "chance": 0.3,
+   "an": false,
+   "entwurf": true
+  },
+  {
+   "id": "licht",
+   "ort": "Leuchtturmhof",
+   "chance": 0.3,
+   "an": false,
+   "entwurf": true
+  },
+  {
+   "id": "luegt",
+   "ort": "ein Gegnertyp in Akt III",
+   "chance": 0.3,
+   "an": false,
+   "entwurf": true
+  },
+  {
+   "id": "masken",
+   "n": "Der Krämer mit tausend Masken",
+   "ort": "der erste Krämer in Akt II bis IV",
+   "chance": 0.25,
+   "an": true,
+   "probe": "masken",
+   "entwurf": true
+  }
+ ],
+ "zeitung_chance": 0.5,
+ "zann_biom": "glockengiesserei",
+ "zann_waechter": "ungetaufte",
+ "brief_bild": "assets/ereignisse/falscher_brief.png",
+ "karten": {
+  "relief": {
+   "c": 0,
+   "blk": 6,
+   "st": [
+    "S"
+   ],
+   "img": "assets/karten/relief.png"
+  },
+  "ausschnitt": {
+   "c": 0,
+   "draw": 2,
+   "st": [
+    "L"
+   ],
+   "img": "assets/karten/ausschnitt.png"
+  },
+  "aussage": {
+   "c": 0,
+   "atk": 5,
+   "st": [
+    "W"
+   ],
+   "img": "assets/karten/aussage.png"
+  }
+ },
+ "items": {
+  "zanns_geige": {
+   "n": "Zanns Geige",
+   "a": "talisman",
+   "st": [
+    "G"
+   ],
+   "spr": "zanns_geige",
+   "rar": "selten",
+   "kerben": 1,
+   "preis": 60,
+   "nodrop": false,
+   "wuerze": "zann",
+   "flavor": "Der Bogen ist bis aufs Holz abgespielt. Ihre Saiten kennen nur eine Melodie, und sie ist nicht zum Zuhören gedacht.",
+   "cards": [
+    {
+     "n": "Der Takt",
+     "c": 1,
+     "blk": 5
+    }
+   ],
+   "entwurf": true
+  }
+ },
+ "texte": {
+  "zeitung": {
+   "ausschnitte": [
+    {
+     "id": "wattwagen",
+     "kopf": "SALTMOOR GAZETTE · Hafennachrichten",
+     "t": "Der Kutter Margaret Hale lief im Februar leer in den Hafen ein. Die Netze waren nass, die Kojen warm. Die Mannschaft wird weiter erwartet.",
+     "entwurf": true
+    },
+    {
+     "id": "gesangbuch",
+     "kopf": "SALTMOOR GAZETTE · Kirchliches",
+     "t": "Pfarrer Voss bittet, die Gesangbücher nach der Sonntagsmesse nicht mehr einzusammeln. Es fehlen drei, und es werden jede Woche mehr gesungen.",
+     "entwurf": true
+    },
+    {
+     "id": "bibliothek",
+     "kopf": "SALTMOOR GAZETTE · Aus Arkham",
+     "t": "Die Bibliothek der Universität bleibt für Besucher gesperrt. Ein Band wurde über Nacht zurückgegeben, mit Salz zwischen den Seiten und in fremder Schrift ergänzt.",
+     "entwurf": true
+    },
+    {
+     "id": "schnaps",
+     "kopf": "SALTMOOR GAZETTE · Küstenwache",
+     "t": "Die Küstenwache meldet in dieser Saison weniger Schmuggler vor Cape Ward. Die Flaschen, die dennoch antreiben, sind alle gleich beschriftet und alle halb voll.",
+     "entwurf": true
+    },
+    {
+     "id": "glocke",
+     "kopf": "SALTMOOR GAZETTE · Lokales",
+     "t": "Die Glocke von St. Brendan läutete am Dienstag bei Hochwasser, obwohl der Turm seit 1913 ohne Seil ist. Küster Ames hat nichts gehört. Er sei taub, sagt er.",
+     "entwurf": true
+    },
+    {
+     "id": "medium",
+     "kopf": "SALTMOOR GAZETTE · Vermischtes",
+     "t": "Eine Sitzung bei der Witwe Crane in der Marsh Lane endete vorzeitig. Das Medium sprach drei Stimmen auf einmal. Die dritte kannte alle Anwesenden beim Vornamen.",
+     "entwurf": true
+    },
+    {
+     "id": "faehre",
+     "kopf": "SALTMOOR GAZETTE · Verkehr",
+     "t": "Die Fähre nach Kingsport fährt ab sofort nur noch bei Tag. Der Kapitän gibt keinen Grund an. Er lässt die Laternen an Bord bis zum Morgen brennen.",
+     "entwurf": true
+    },
+    {
+     "id": "expedition",
+     "kopf": "SALTMOOR GAZETTE · Wissenschaft",
+     "t": "Die Miskatonic-Expedition ist seit dem Herbst ohne Nachricht. Das letzte Telegramm bestand aus einer Zeile Punkten und Strichen, die das Telegrafenamt nicht entziffern konnte.",
+     "entwurf": true
+    },
+    {
+     "id": "wetter",
+     "kopf": "SALTMOOR GAZETTE · Wetterbericht",
+     "t": "Für die Küste ist Nebel zu erwarten, stellenweise mit Geruch nach Kupfer. Die Fischer empfehlen, bei Ebbe nicht auf das Watt zu gehen und auch nicht zu pfeifen.",
+     "entwurf": true
+    },
+    {
+     "id": "friedhof",
+     "kopf": "SALTMOOR GAZETTE · Gemeinde",
+     "t": "Auf dem Friedhof am Moorweg wurden zwei Gräber neu angelegt. Beide waren schon belegt. Der Wärter bittet, ihn nicht danach zu fragen, bevor es hell ist.",
+     "entwurf": true
+    },
+    {
+     "id": "zug",
+     "kopf": "SALTMOOR GAZETTE · Eisenbahn",
+     "t": "Der Nachtzug aus Boston traf mit einem Wagen mehr ein, als er abgefahren war. Der zusätzliche Wagen war leer, geheizt und auf den Namen Saltmoor ausgestellt.",
+     "entwurf": true
+    },
+    {
+     "id": "leuchtturm",
+     "kopf": "SALTMOOR GAZETTE · Hafennachrichten",
+     "t": "Der Leuchtturmwärter von Cape Ward ersucht um Lampenöl. Er brauche mehr als früher, erklärt er, weil nachts jemand im Hof steht und wartet, dass es dunkel wird.",
+     "entwurf": true
+    },
+    {
+     "id": "lampenoel",
+     "kopf": "SALTMOOR GAZETTE · Polizeibericht",
+     "t": "Es roch nach Lampenöl und kaltem Salz, als Constable Marsh am Montag die Tür der Ropewalk Lane 14 öffnete. Das Bett war gemacht, das Kissen nass. Der Mieter hat sich nicht gemeldet.",
+     "entwurf": true
+    },
+    {
+     "id": "kerzenboot",
+     "kopf": "SALTMOOR GAZETTE · Anzeigen",
+     "t": "Nach Kerzenwachs riecht das Fischerboot, das hier zum Verkauf steht, 14 Fuß, sonst tadellos. Der Geruch lässt sich nicht auswaschen. Besichtigung nur bei Tageslicht.",
+     "entwurf": true
+    },
+    {
+     "id": "klopfen",
+     "kopf": "SALTMOOR GAZETTE · Leserbrief",
+     "t": "Seit Mittwoch klopft es in unserer Wand im Takt der Glocke von St. Brendan, auch wenn die Glocke schweigt. Mein Mann sagt, es sei die Wasserleitung. Wir haben keine Wasserleitung. Mrs. E. Doyle, Church Street.",
+     "entwurf": true
+    },
+    {
+     "id": "kohlentern",
+     "kopf": "SALTMOOR GAZETTE · Hafennachrichten",
+     "t": "Nach Kohlenstaub und darunter nach Weihrauch roch die Tern aus Boston beim Anlegen. Der Schiffer fuhr allein. Er bittet, nicht nach den vier benutzten Kojen zu fragen.",
+     "entwurf": true
+    },
+    {
+     "id": "moorbrot",
+     "kopf": "SALTMOOR GAZETTE · Aus dem Moor",
+     "t": "Vom Moorweg her riecht es seit Sonntag nach frischem Brot, bis in die Church Street. Bäcker Hale weist darauf hin, dass seine Backstube seit Ostern geschlossen ist und am Moorweg kein Ofen steht.",
+     "entwurf": true
+    },
+    {
+     "id": "harmonium",
+     "kopf": "SALTMOOR GAZETTE · Kirchliches",
+     "t": "Aus dem Keller des Pfarrhauses dringt seit dem Wochenende Harmoniummusik, obwohl das Harmonium im März verkauft wurde. Pfarrer Voss bittet die Gemeinde, nicht mitzusingen.",
+     "entwurf": true
+    },
+    {
+     "id": "archivtuer",
+     "kopf": "SALTMOOR GAZETTE · Rathaus",
+     "t": "Die Tür zum Archiv des Rathauses steht jeden Morgen offen, obwohl sie abends zweimal abgeschlossen wird. Der Pförtner hat den Schlüssel seit Montag in der Tasche. Er steckt jeden Morgen von innen.",
+     "entwurf": true
+    },
+    {
+     "id": "rathausuhr",
+     "kopf": "SALTMOOR GAZETTE · Lokales",
+     "t": "Die Rathausuhr schlägt seit Freitag zwischen zwei Schlägen eine Pause, in der sich die Straße leert. Uhrmacher Pell hat das Werk zweimal zerlegt und nichts gefunden. Er bittet die Bürger, in der Pause nicht zu antworten.",
+     "entwurf": true
+    },
+    {
+     "id": "logbuch",
+     "kopf": "SALTMOOR GAZETTE · Nachlass",
+     "t": "Das Logbuch des verstorbenen Kapitäns Trask, das der Konsul am Freitag versiegelte, wies am Montag einen neuen Eintrag auf, in seiner Handschrift, mit dem Datum von heute. Die Erben verzichten auf das Buch.",
+     "entwurf": true
+    },
+    {
+     "id": "ratten",
+     "kopf": "SALTMOOR GAZETTE · Gesundheitsamt",
+     "t": "Die Ratten des Hafenviertels ziehen seit Montag nach Westen, in Reihen, ohne Hast. Rattenfänger Dunn lehnt weitere Aufträge ab. In diese Richtung gehe sonst nur das Wasser, sagt er.",
+     "entwurf": true
+    },
+    {
+     "id": "nasseschritte",
+     "kopf": "SALTMOOR GAZETTE · Polizeibericht",
+     "t": "Ein Herr aus der Ropewalk Lane meldete der Wache, er werde verfolgt. Der Constable sah niemanden, fand aber im Schlick hinter dem Herrn ein zweites Paar Fußabdrücke, das bei jedem Halt einen halben Schritt aufholte.",
+     "entwurf": true
+    },
+    {
+     "id": "spaziergang",
+     "kopf": "SALTMOOR GAZETTE · Vermischtes",
+     "t": "Miss Tabitha Reed aus der Church Street kehrte gestern von einem Spaziergang zurück, den sie am 3. Februar angetreten hatte. Sie sagt, es sei ein kurzer Weg gewesen. Ihr Mantel ist noch nass vom Februar.",
+     "entwurf": true
+    },
+    {
+     "id": "vitrine",
+     "kopf": "SALTMOOR GAZETTE · Heimatmuseum",
+     "t": "Das Heimatmuseum bittet, die Seemannsfigur in Vitrine 4 nicht mehr zu beachten. Der Kustos hat ihren Standort mit Kreide eingezeichnet. Am Morgen steht sie an der Linie, mit dem Gesicht zur Tür.",
+     "entwurf": true
+    },
+    {
+     "id": "friseur",
+     "kopf": "SALTMOOR GAZETTE · Geschäftliches",
+     "t": "Friseur Garrity, Dock Street, entfernt auf Wunsch seiner Kundschaft den Wandspiegel. Mehrere Herren gaben an, ihr Spiegelbild sei beim Rasieren schon fertig gewesen.",
+     "entwurf": true
+    },
+    {
+     "id": "dunmore",
+     "kopf": "SALTMOOR GAZETTE · Anzeigen",
+     "t": "Pension Dunmore, Zimmer 6, frei ab sofort. Preis ermäßigt, weil die Matratze morgens eine Mulde hat, die nicht von den Gästen stammt. Fließend Wasser vorhanden.",
+     "entwurf": true
+    },
+    {
+     "id": "wagenfahrt",
+     "kopf": "SALTMOOR GAZETTE · Anzeigen",
+     "t": "GESUCHT: Pferd und Wagen für eine einzelne Fahrt ins Moor. Der Kutscher fährt nicht mit, der Wagen kommt nicht zurück. Zahlung bar im Voraus, Auskunft im Hafenamt.",
+     "entwurf": true
+    },
+    {
+     "id": "bronzelampe",
+     "kopf": "SALTMOOR GAZETTE · Landwirtschaft",
+     "t": "Ein Landarbeiter fand beim Pflügen am Moorweg eine alte Lampe aus Bronze. Im Licht sah er sein Feld, wie es ist, und daneben, wie es war, mit Wasser darauf. Die Lampe liegt auf der Wache.",
+     "entwurf": true
+    },
+    {
+     "id": "todesfall",
+     "kopf": "SALTMOOR GAZETTE · Todesfälle",
+     "t": "Mr. Josiah Pell, 61, Reeder, starb am Dienstag. Das Mittagessen mit seinem Teilhaber am Mittwoch hat er trotzdem eingehalten. Der Teilhaber bittet um Diskretion.",
+     "entwurf": true
+    }
+   ],
+   "vermisst": {
+    "fischer": {
+     "t": "VERMISST seit dem Frühjahr: ein Fischer, wettergegerbt, trägt Ölzeug und eine Mütze. Er suchte nach seinem Bruder und ging zum Wasser. Hinweise an das Hafenamt Saltmoor.",
+     "entwurf": true
+    },
+    "friedhofswaerter": {
+     "t": "VERMISST: ein Totengräber der Gemeinde, kräftig, mit Spaten und Laterne zuletzt gesehen. Sein Werkzeug fand man am Morgen auf dem Grab, die Erde war frisch.",
+     "entwurf": true
+    },
+    "pfarrerin": {
+     "t": "VERMISST: die Pfarrerin der Gemeinde, in dunkler Wolle, mit Bibel und Revolver. Sie wollte nach der Kapelle am Moor sehen. Die Glocke läutet seither ohne sie.",
+     "entwurf": true
+    },
+    "detektiv": {
+     "t": "VERMISST: ein Privatermittler, hager, Trenchcoat, raucht. Er hinterließ eine Akte mit lauter Fällen und einem letzten, der ihm auffallend ähnlich sieht.",
+     "entwurf": true
+    },
+    "okkultist": {
+     "t": "VERMISST: ein Gelehrter in schwarzer Robe, eingefallene Wangen, Salz in den Taschen. Er sagte, er wisse genau, wohin er gehe. Seine Bibliothek ist unvollständig zurückgeblieben.",
+     "entwurf": true
+    },
+    "kneipenschlaeger": {
+     "t": "VERMISST: ein Hafenarbeiter, breit gebaut, Narben an den Fäusten, Hausverbot in drei Kneipen. Wegen Schulden zuletzt unterwegs zum Wasser. Gläubiger melden sich bitte nicht.",
+     "entwurf": true
+    },
+    "geologe": {
+     "t": "VERMISST: der einzige Überlebende der Expedition von 1923, Geologe, schmal, mit Hammer und einer Karte. Er sagte, er kenne den Weg. Die Karte ist noch zu Hause.",
+     "entwurf": true
+    },
+    "wahrsagerin": {
+     "t": "VERMISST: eine Kartenlegerin vom Jahrmarkt, bunt gekleidet, mit abgegriffenem Spiel. Sie legte vor ihrem Verschwinden dreimal dieselbe Karte. Das Zelt steht noch offen.",
+     "entwurf": true
+    },
+    "veteran": {
+     "t": "VERMISST: ein Kriegsteilnehmer von 1917, aufrecht, Gasmaske im Beutel, schweigsam. Er sagte, es sei dort leiser. Seine Schwester bittet um Nachricht, gleich welcher Art.",
+     "entwurf": true
+    }
+   },
+   "vermisst_kopf": {
+    "t": "SALTMOOR GAZETTE · Vermisst",
+    "entwurf": true
+   }
+  },
+  "brief": {
+   "ereignis": {
+    "t": "Ein Brief ohne Marke",
+    "d": "Unter der Tür steckt ein Umschlag, auf dem dein Name steht. Die Schrift kommt dir bekannt vor, und doch neigt sie sich nach der falschen Seite. Das Papier riecht nach Salz und Kerzenwachs.",
+    "bild": "Ein Umschlag auf einer nassen Schwelle, die Handschrift darauf schräg wie von einer Hand, die an das Schreiben nicht gewöhnt ist.",
+    "ja": "Den Brief einstecken",
+    "nein": "Den Brief liegen lassen",
+    "entwurf": true
+   },
+   "briefe": {
+    "kapelle": {
+     "t": "Wenn du die Kapelle erreichst, die im Wasser steht, warte hinter dem Altar, wo die Treppe nass ist. Ich habe dort etwas für dich zurückgelegt. Du wirst es brauchen.",
+     "entwurf": true
+    },
+    "kloster": {
+     "t": "Im Kloster auf dem Watt, wo bei Ebbe noch geschrieben wird, sitze ich am letzten Pult. Lies nichts mit. Komm einfach, ich gebe dir, was ich bei mir habe.",
+     "entwurf": true
+    },
+    "grotte": {
+     "t": "In der Grotte der Gaben, in der Steilküste, riecht es nach Wachs. Dort lasse ich dir etwas auf dem untersten Pfad. Nimm es, es ist mit Absicht für dich da.",
+     "entwurf": true
+    },
+    "glockengiesserei": {
+     "t": "Unter dem Kirchhof, in der Glockengießerei, sind die Gruben noch warm. Dort warte ich am Rand der Form. Ich hätte früher kommen sollen, hilf mir jetzt, damit ich dir helfen kann.",
+     "entwurf": true
+    },
+    "waisenhaus": {
+     "t": "Das Waisenhaus am Deich hat ein Fenster im Dach, das nachts leuchtet. Dort bin ich. Die Kinder tun dir nichts, wenn du etwas Warmes mitbringst. Ich lege dir etwas hin.",
+     "entwurf": true
+    },
+    "salz": {
+     "t": "In den Salzstollen, tief unter dem Hafen, habe ich an einer Weiche ein Licht gelassen. Geh dem Licht nach. Es führt zu dem, was ich dir geben kann.",
+     "entwurf": true
+    },
+    "stadt": {
+     "t": "Die namenlose Stadt liegt im Sand unter dem Abgrund. Am Rand der ersten Straße steht ein Stein, auf dem ich auf dich warte. Sag mir dort, ob du es bis hierher geschafft hast.",
+     "entwurf": true
+    },
+    "wald": {
+     "t": "Im Wald, der nach unten wächst, hängen die Wurzeln über dem Weg. Ich sitze unter dem dicksten. Du erkennst mich am Husten. Ich habe etwas, das dir nützt.",
+     "entwurf": true
+    },
+    "gezeitenwerk": {
+     "t": "Das Gezeitenwerk aus grüner Bronze schlägt in meinem Takt. Wenn du es erreichst, wirst du mich am größten Zahnrad finden. Ich gebe dir etwas ab, bevor es wieder anfängt.",
+     "entwurf": true
+    },
+    "ziegelgruben": {
+     "t": "In den Ziegelgruben, wo die Öfen noch warm sind, habe ich ein Bündel versteckt. Neben dem dritten Ofen. Ich bin in der Nähe, falls du es lieber aus meiner Hand nimmst.",
+     "entwurf": true
+    },
+    "station": {
+     "t": "Die Station, die nie eröffnet wurde, hat einen Bahnsteig, an dem ich stehe. Die Züge fahren nicht ab. Ich warte mit etwas für dich und kann nicht weg.",
+     "entwurf": true
+    },
+    "eis": {
+     "t": "Auf dem schwarzen Eis, wo darunter keine Tiefe mehr ist, habe ich ein Zelt aufgestellt. Es steht noch. Komm hinein, wenn du da bist, ich bewahre etwas für dich auf.",
+     "entwurf": true
+    },
+    "walkathedrale": {
+     "t": "In der Walkathedrale, zwischen den Rippen, rufe ich leise. Der Raum gibt es dir zurück. Geh dem Echo nach, am Ende hat es eine Hand, und die hält etwas für dich.",
+     "entwurf": true
+    },
+    "glasmeer": {
+     "t": "Auf dem Glasmeer geht dein Spiegelbild voraus. Folge ihm nicht, folge mir. Ich stehe am Rand der Ebene und gebe dir ab, was ich entbehren kann.",
+     "entwurf": true
+    },
+    "mond": {
+     "t": "Der Mond unter dem Eis hängt nah. Die Strickleiter von 1890 hält, ich habe sie geprüft. Oben, im Staub, wartet jemand, der dir ein Stück seiner Last anbietet.",
+     "entwurf": true
+    },
+    "funkstation": {
+     "t": "In der Funkstation am Pol brennen die Röhren noch. Ich sitze am Empfänger und höre mit. Komm herein, ich habe dir etwas hingelegt, bevor ich wieder zuhöre.",
+     "entwurf": true
+    }
+   },
+   "knoten": {
+    "hint": "Ein Knoten mit einem Brief, in schräger Schrift.",
+    "mit": "Er sitzt schon da, als hätte er gewartet. Seine Hand ist deine Hand, nur müder. Er hält dir etwas hin und sagt, er brauche es nicht mehr.",
+    "nehmen": "Annehmen",
+    "lassen": "Ablehnen",
+    "leer": "Hier ist niemand. Nur Salz auf dem Boden, in der Form von Schritten, die an der Stelle enden, wo du stehst.",
+    "entwurf": true
+   },
+   "tagebuch": {
+    "t": "Der Brief hat eine Stelle versprochen. Dort war niemand, nur ein Platz, der warm genug war, dass jemand gesessen haben muss. Vielleicht kommt er noch.",
+    "entwurf": true
+   }
+  },
+  "trennung": {
+   "relief": {
+    "n": "Das Relief",
+    "t": "Zwei Gestalten, eine Hand, ein Schnitt dazwischen.",
+    "entwurf": true
+   },
+   "ausschnitt": {
+    "n": "Der Ausschnitt",
+    "t": "Zwei Namen, ein Seil, ein Grab. Das zweite ist leer.",
+    "entwurf": true
+   },
+   "aussage": {
+    "n": "Die Aussage",
+    "t": "Wir haben gekappt. Er hat uns zugenickt.",
+    "entwurf": true
+   },
+   "zusammenhang": {
+    "titel": "Zwei Teile, ein Seil",
+    "t": "Du siehst, wer gehalten hat und wer gehalten wurde. Es war ein Geschenk, kein Verrat. Du kannst nicht mehr so tun, als wüsstest du es nicht.",
+    "wahl": "Wähle den Handgriff, der von jetzt an in fremder Fassung liegt. Das lässt sich nie rückgängig machen.",
+    "entwurf": true
+   },
+   "fund": {
+    "t": "Zwischen den Dingen liegt ein Stück, das nicht zu ihnen gehört und doch passt. Etwas daran ist mit Absicht zurückgelassen.",
+    "entwurf": true
+   }
+  },
+  "zann": {
+   "geige": {
+    "n": "Zanns Geige",
+    "flavor": "Der Bogen ist bis aufs Holz abgespielt. Ihre Saiten kennen nur eine Melodie, und sie ist nicht zum Zuhören gedacht.",
+    "karte": "Der Takt",
+    "entwurf": true
+   },
+   "offen": {
+    "t": "Der Takt reißt ab. Das Fenster steht offen.",
+    "entwurf": true
+   },
+   "zu": {
+    "t": "Du spielst wieder. Das Fenster schließt sich.",
+    "entwurf": true
+   }
+  },
+  "masken": {
+   "angebot": {
+    "t": "Hinter dem Tresen steht ein anderer als beim letzten Mal. Der Ring an seiner Hand ist derselbe. „Nimm, was du brauchst. Ich schreibe es an.“",
+    "entwurf": true
+   },
+   "regel": {
+    "t": "Ein Stück ohne Gold, einmal. Am Anfang des nächsten Akts kassiert er: einen Handgriff deiner Wahl.",
+    "entwurf": true
+   },
+   "knopf": {
+    "t": "ANSCHREIBEN",
+    "entwurf": true
+   },
+   "angeschrieben": {
+    "t": "Angeschrieben:",
+    "entwurf": true
+   },
+   "kassieren": {
+    "titel": "Der Ring",
+    "t": "Am Übergang wartet jemand mit einem Gesicht, das du nicht kennst. Den Ring kennst du. „Du schuldest mir noch etwas.“",
+    "wahl": "Wähl den Handgriff, den er mitnimmt.",
+    "entwurf": true
+   },
+   "ohne": {
+    "t": "Du hast nichts, was er nehmen will. Er nimmt zurück, was er dir gegeben hat.",
+    "entwurf": true
+   },
+   "preis": {
+    "t": "ANGESCHRIEBEN",
+    "entwurf": true
+   }
+  }
+ }
+}

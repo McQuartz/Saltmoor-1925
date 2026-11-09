@@ -46,7 +46,8 @@
    "minerlamp",
    "sealskin",
    "flaregun",
-   "smellingsalts"
+   "smellingsalts",
+   "grablampe"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -158,7 +159,9 @@
    },
    "beute": "stechzirkel",
    "beute_satz": "Der kleine Mond in den Ringen läuft noch eine Runde, langsamer, und bleibt dann stehen, auf der Seite, die dir abgewandt ist.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "kraterbewohner": {
    "n": "Der Kraterbewohner",
@@ -199,7 +202,8 @@
    },
    "beute": null,
    "beute_satz": "Die Lampe in seinem Krater brennt weiter. Niemand stützt sich mehr auf den Rand. Auf dem Wall steht eine Tasse, halb voll.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   },
   "mondmotte": {
    "n": "Die Mondmotte",
@@ -235,7 +239,8 @@
    },
    "beute": "mondstaub",
    "beute_satz": "Sie zerfällt, wie sie entstanden ist, Korn für Korn. Die beiden Augen bleiben am längsten im Staub liegen und sehen nach oben.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "gezogene": {
    "n": "Die Gezogene",
@@ -274,7 +279,8 @@
    },
    "beute": null,
    "beute_satz": "Der Strang reißt. Das Wasser fällt nicht, es steigt zurück ins Eis, und sie bleibt liegen, zum ersten Mal richtig herum.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "rueckseite": {
    "n": "Die Rückseite",
@@ -301,6 +307,11 @@
      "v": 13
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
    "sprite": "rueckseite",
    "varianten": [
     "rueckseite"
@@ -376,7 +387,8 @@
    },
    "beute": "aschlicht",
    "beute_satz": "Die Sichel wird dünner, bis sie ein Strich ist, und dann ist auch der Strich weg. Nur das aschgraue Licht bleibt, und darin, sehr lange, die Augen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "mondmann": {
    "n": "Der Mann im Mond",
@@ -403,6 +415,11 @@
      "v": 15
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
    "sprite": "mondmann",
    "varianten": [
     "mondmann",
@@ -453,7 +470,8 @@
    },
    "beute": "mondstaub",
    "beute_satz": "Er setzt sich auf sein Bündel und ist auf einmal sehr klein. Wo er gegangen ist, liegt die Asche glatt, als wäre nie jemand da gewesen. Nur deine Spuren führen zu ihm hin.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   }
  },
  "events": [
@@ -613,7 +631,8 @@
        "op": "max_hp",
        "v": -9
       }
-     ]
+     ],
+     "tiefe": 1
     },
     {
      "l": "Nur die Hand hinüberhalten: eine Karte kostet dauerhaft 1 weniger, −5 Leben",
@@ -760,6 +779,56 @@
      ]
     }
    ]
+  },
+  {
+   "id": "mond_zweiter_schatten",
+   "t": "Der zweite Schatten",
+   "d": "Jeder Stein in der Staubebene wirft zwei Schatten, einen zur Sonne hin und einen von ihr weg. Der zweite ist länger und kommt von etwas, das erst noch ankommt. Es klingt wie Sand in einer Röhre, und der Staub zu deinen Füßen rieselt in Richtung des langen Schattens.",
+   "bild": "Eine graue Mondebene mit einem einzelnen Fels, von dem zwei Schatten ausgehen, ein kurzer scharfer und ein langer weicher, der über den Horizont hinausläuft.",
+   "o": [
+    {
+     "l": "Dem langen Schatten entgegengehen: einen Handgriff lernen, −5 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Beide Schatten mit Kreide nachziehen: eine Reaktion entdecken, −3 Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "lose_hp",
+       "v": 3
+      }
+     ]
+    },
+    {
+     "l": "Auf der Rückseite des Felsens rasten: +14 Leben, −10 Gold",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 14
+      },
+      {
+       "op": "gold",
+       "v": -10
+      }
+     ],
+     "if": {
+      "gold_min": 10
+     }
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

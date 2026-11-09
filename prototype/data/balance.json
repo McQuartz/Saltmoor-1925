@@ -14,11 +14,12 @@
   "boss": 0
  },
  "enemy_scaling": {
-  "_doc": "Nur normale Gegner skalieren mit der Tiefe; hp_faktor/waechter_faktor gleichen den stärkeren Deckbau aus Auftrag 2 aus.",
+  "_doc": "Nur normale Gegner skalieren mit der Tiefe; hp_faktor/waechter_faktor gleichen den stärkeren Deckbau aus Auftrag 2 aus. Auftrag 3 M12: waechter_faktor 1,35 → 1,5 (Wächter und Elite; Begegnungen und Würze machten Akt I–IV leichter, Akt V verursachte 55 % der Niederlagen), boss_faktor 1,2 nur für das Finale (vorher galt waechter_faktor).",
   "hp_per_depth": 0.05,
   "atk_every_n_depths": 5,
   "hp_faktor": 1.15,
-  "waechter_faktor": 1.35
+  "waechter_faktor": 1.5,
+  "boss_faktor": 1.2
  },
  "encounters": {
   "_doc": "Ersetzt durch run.json (Gegnerzahl) und biomes.json (Gegner je Biom)."
@@ -121,6 +122,9 @@
   "hoeren": true,
   "begegnungen": true,
   "meta": true,
-  "wuerze": true
- }
+  "fehlzeit": true,
+  "pause": true,
+  "wuerze": true, "masken": true
+ },
+ "spuren": {"_doc": "Auftrag 3 M9 Spuren: Stufe 0–3 je Knoten, an dem man vorbeigeht. hp/atk/gross je Stufe, beute: kampf, schwer oder reliquie.", "hp": [0.6, 0.85, 1.1, 1.35], "atk": [-2, 0, 2, 4], "gross": [0.9, 1, 1.1, 1.22], "beute": ["kampf", "kampf", "schwer", "reliquie"]}
 }

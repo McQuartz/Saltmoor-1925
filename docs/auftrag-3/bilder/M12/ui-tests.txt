@@ -1,0 +1,7 @@
+== test-oberflaeche: Alles gut.
+== test-karte-ui: Alles gut.
+== test-rucksack: Alles gut.
+== test-plakette: Alles gut.
+== test-stoffbaum: Alles gut (33 Prüfungen).
+== icons: 250 Bilder geprüft, 0 Verstöße.
+== sprites: 256 Sprites geprüft, 0 Verstöße.

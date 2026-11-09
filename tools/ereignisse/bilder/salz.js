@@ -261,5 +261,71 @@ module.exports = {
       grubenlampe(K, lx, 38, { haken: true, hof: 80 });
       K.vignette(.5, { cx: 80, cy: 50 });
     },
+
+    // Ein Zinntisch im Stollen, drei Gläser in einer Reihe (Salz, Wasser, Blut), links an einem Balken ein Zettel mit nasser Tinte, rechts ein Schälchen grauen Salzes.
+    salz_probe(K) {
+      const { B } = K;
+      const lx = 136, ly = 22;
+      salzwand(K, 0, 0, 160, 90, 112, 34, 120, { gr: 12, st: .8, basis: 0, oval: 1.3 });
+      // Stützbalken links, an dem der Zettel hängt
+      const bal = K.maske(); bal.rect(4, 0, 12, 70);
+      balken(K, bal, { mat: { lichtVon: [lx, ly] } });
+      // Zettel: Papier, schief genagelt, drei Blöcke Schrift, Tinte läuft in Fäden nach unten
+      const PAP = ['#2a241d', '#52483a', '#85796a', '#b4a892', '#d8ccb4'];
+      const zet = K.maske(); zet.poly([[17, 19], [43, 18], [44, 46], [18, 47]]);
+      K.form(zet, 0, { k: PAP, r: ['#b4a892', '#f4ecd8'], ton: 1.6, fase: 1, rand: 1, lichtVon: [lx, ly], verlauf: .5 });
+      const tinte = ['#06060a', '#14161e'];
+      for (const [y0, n] of [[22, 3], [31, 3], [40, 2]]) {
+        for (let j = 0; j < n; j++) K.schrift(21, y0 + j * 2, 40 - (j === n - 1 ? 7 : 0) - (y0 === 40 ? 3 : 0), tinte[0], { min: 2, max: 5 });
+      }
+      // Nasse Tinte: Tropfspuren mit glänzendem Ende
+      for (const [x, y0, l] of [[27, 29, 9], [34, 38, 6], [24, 44, 12], [38, 24, 17]]) { for (let j = 0; j < l; j++) K.set(x, y0 + j, j % 5 === 4 ? '#14161e' : tinte[0]); K.set(x, y0 + l, '#3a4a6a'); K.set(x + 1, y0 + l - 1, '#8aa0c8'); }
+      K.set(17, 19, '#52483a'); K.linie(17, 19, 17, 21, '#1a1510');
+      // Nagel
+      K.set(30, 20, '#9a9a9a'); K.set(31, 20, '#d8d8d8');
+      // Zinntisch: breite Platte in leichter Aufsicht, Schürze, zwei Beine
+      const ZINN = ['#0a0b0c', '#1a1c1e', '#2e3236', '#464c52', '#646d74', '#8a949b'];
+      const ZR = ['#8a949b', '#f0f6f8'];
+      const platte = K.maske(); platte.poly([[22, 66], [34, 57], [152, 57], [158, 66]]);
+      const schuerze = K.maske(); schuerze.rect(22, 66, 136, 7);
+      const bein1 = K.maske(); bein1.rect(30, 73, 6, 17);
+      const bein2 = K.maske(); bein2.rect(146, 73, 6, 17);
+      K.form(bein1, 0, { k: ZINN.slice(0, 4), r: ZR, ton: 2, fase: 0, rand: 1, lichtVon: [lx, ly] });
+      K.form(bein2, 0, { k: ZINN.slice(0, 4), r: ZR, ton: 2, fase: 0, rand: 1, lichtVon: [lx, ly] });
+      K.form(schuerze, 0, { k: ZINN.slice(0, 5), r: ZR, ton: 1.6, fase: 1, rand: 1, lichtVon: [lx, ly], verlaufX: 1.5, schatten: 2 });
+      K.form(platte, 0, { k: ZINN.slice(1, 6), r: ZR, ton: 2.2, fase: 0, rand: 1, lichtVon: [lx, ly], verlaufX: 1.5 });
+      // Gläser: Wandung hell am Rand, Inhalt nach Rampe, Füllstand gleich hoch
+      const glas = (cx, inh, o) => {
+        const yo = 36, yb = 62, lv = 45;
+        const innen = K.maske(); innen.poly([[cx - 5, lv], [cx + 5, lv], [cx + 4, yb - 1.5], [cx - 4, yb - 1.5]]);
+        K.form(innen, 0, Object.assign({ fase: 0, rand: 0, ton: 1.8, lichtVon: [lx, ly], verlaufX: 1.4 }, inh));
+        // Meniskus: hellste Linie
+        K.linie(cx - 5, lv, cx + 5, lv, o.mensk); K.set(cx + 4, lv - 1, o.mensk);
+        // Glas: Kanten, Boden, Rand
+        K.linie(cx - 6, yo, cx - 4.5, yb, '#5a6c72'); K.linie(cx + 6, yo, cx + 4.5, yb, '#d4e6ec'); K.linie(cx + 5, yo, cx + 3.8, yb, '#7e9298');
+        K.linie(cx - 6, yo, cx + 6, yo, '#8ea4aa'); K.linie(cx - 5, yo + 1, cx + 5, yo + 1, '#34444a', .8);
+        K.linie(cx - 5, yb, cx + 5, yb, '#9eb4ba'); K.linie(cx - 4, yb - 1, cx + 4, yb - 1, '#46585e');
+        // Spiegelung des Lampenlichts auf dem Glas
+        K.set(cx + 3, yo + 6, '#f4ffff'); K.set(cx + 3, yo + 7, '#d4e6ec'); K.set(cx + 3, yo + 8, '#d4e6ec');
+        // Schatten des Glases auf der Platte, nach links weg von der Lampe
+        for (let i = 0; i < 12; i++) if (B.bay(cx + i, 63) < .8 - i * .05) K.set(cx - 6 - i, 63 + (i > 6 ? 1 : 0), '#0a0b0c');
+      };
+      // Salz: körnig, hell
+      glas(60, { k: SALZ.slice(3, 10), r: [], muster: (x, y) => (B.hash(x, y, 3) > .6 ? .5 : B.hash(x, y, 4) < .25 ? -.5 : 0) }, { mensk: '#f4ece4' });
+      // Wasser: dunkel, glatt, mit Lichtstreif
+      glas(84, { k: ['#050a0e', '#0b1820', '#14303c', '#2a5666', '#5088a0'], r: [], ton: 1.4, muster: (x, y) => (x === 86 || x === 87 ? .6 : 0) }, { mensk: '#c8e8f4' });
+      // Blut: tiefrot, fast schwarz, schmaler heller Saum
+      glas(108, { k: ['#0c0202', '#1e0404', '#38080a', '#5c1012', '#80201c'], r: [], ton: 1.5, muster: (x, y) => (y < 48 ? .3 : 0) }, { mensk: '#d86a58' });
+      // Schälchen mit grauem Salz rechts
+      const sch = K.maske(); sch.ell(138, 60, 10, 3.2); sch.rect(128, 58, 20, 2);
+      K.form(sch, 0, { k: ZINN.slice(0, 5), r: ZR, ton: 2, fase: 0, rand: 1, lichtVon: [lx, ly] });
+      const haufen = K.maske(); haufen.poly([[130, 59], [134, 54], [140, 52], [145, 55], [147, 59]]);
+      K.form(haufen, 0, { k: ['#1c1a18', '#322e2a', '#4e4842', '#726a62', '#9a9088'], r: ['#9a9088', '#ece4dc'], ton: 2.4, fase: 0, rand: 1, lichtVon: [lx, ly], muster: (x, y) => (B.hash(x, y, 8) > .55 ? .5 : -.3) });
+      // Lampe hängt rechts oben an der Kette
+      const ket = K.maske(); ket.kap(lx, ly - 15, lx, 0, .5, .5); K.form(ket, 0, { k: EISEN, ton: 2, fase: 0, rand: 0 });
+      grubenlampe(K, lx, ly, { hof: 90, staerke: .8 });
+      K.licht(lx - 10, 48, 70, LAMPG, .55, { oval: 1.3 });
+      K.vignette(.5, { cx: 90, cy: 44 });
+    },
   },
 };

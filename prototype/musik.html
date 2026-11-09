@@ -117,7 +117,7 @@ input[type=range]{width:100%;accent-color:#d0453a}
    <h2>HÖREN STATT SEHEN</h2>
    <p class="hint">Stumme Gegner (Akt IV und V) zeigen keine Absicht, man hört sie. Jede Absicht-Art hat einen Einsatz über dem Kampf-Stück des Bioms: <b>Angriff</b> = tiefer gezupfter Bass auf dem Bass des Akkords, Stufe 1/2/3 = 1, 2 oder 4 Schläge je Takt; <b>Schutz</b> (Block, Schutz, Heilung) = eine einzelne Glocke auf der Eins; <b>Zauber</b> (Status, Ruf, Laden) = Harmonium-Ton, der über den Takt aufschwillt. Die Einsätze setzen auf der nächsten Taktgrenze ein, die Layer 2 und 3 und die Gegnerstimme treten dafür um 25 % zurück. Ein Klick startet das Kampf-Stück des Bioms mit genau diesem Einsatz.</p>
    <div class="facts"><span>Einsätze <b id="hS">keine</b></span><span>Pegel Einsatz-Bus <b id="hP">–</b> dBFS</span><span>Layer 2/3 und Stimmen <b id="hD">×1,00</b></span></div>
-   <div class="btns"><button class="sm" id="hAus">ALLE EINSÄTZE AUS</button><button class="sm" id="hAlle">ALLE DREI ZUSAMMEN (Biom oben)</button></div>
+   <div class="btns"><button class="sm" id="hAus">ALLE EINSÄTZE AUS</button><button class="sm" id="hAlle">ALLE DREI ZUSAMMEN (Biom oben)</button><button class="sm" id="bGeige">GEIGE AN/AUS</button></div>
    <div id="hGrid" style="display:grid;gap:6px"></div>
   </section>
   <section class="panel wide">
@@ -257,6 +257,7 @@ async function laden(){
   $('hGrid').appendChild(row);});
 }
 $('hAus').onclick=()=>{ensure();Music.hoeren([]);document.querySelectorAll('#hGrid button').forEach(b=>b.classList.remove('on'));};
+$('bGeige').onclick=()=>{ensure();const an=!Music.state().geige;if(an&&!Music.state().foes.length){Music.solo(null);Music.scene('waechter');Music.hp(40,40);Music.foeSpawn(foeFuer(Music.state().biome));}Music.geige(an,'Labor');$('bGeige').classList.toggle('on',an);};
 $('hAlle').onclick=()=>{const k=Music.state().biome;los(HB.includes(k)?k:'eis','alle',2,null);};
 function zeig(){const h=Music.state().hoeren;
  $('hS').textContent=[h.angriff?'Angriff '+h.angriff:'',h.schutz?'Schutz':'',h.zauber?'Zauber':''].filter(Boolean).join(' + ')||'keine';

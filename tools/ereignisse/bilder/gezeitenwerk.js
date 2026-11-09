@@ -290,5 +290,56 @@ module.exports = {
       K.laterne(lx, ly + 1, .85, { hof: 60, staerke: .8 });
       K.vignette(.6, { cx: 76, cy: 54 });
     },
+
+    // Ein gemauertes Staubecken, schwarzes Wasser bis an den Rand, ein eisernes Schütz in der Mauer mit Handrad auf einem Gerüst darüber, rechts ein Pegelstab aus Messing.
+    gezeitenwerk_staubecken(K) {
+      const { B } = K;
+      const wy = 40;   // Wasserspiegel, genau an der Mauerkrone
+      // Raum hinter dem Becken: ruhiges Nassgrün, das Phosphorlicht kommt vom Wasser
+      K.fuell(NASS, (x, y) => ruhig(.1 + Math.max(0, 1 - Math.hypot(x - 80, (y - wy) * 1.4) / 120) * .5, NASS.length - 1));
+      // Ferne Pfeiler
+      for (const x of [14, 40, 106, 140]) { const p = K.maske(); p.rect(x, 0, 5, wy); K.form(p, .6, { k: BRONZE.slice(0, 5), r: RAND, ton: 1.2, fase: 0, rand: 1, L: [0, 1] }); }
+      // Wasser: schwarz, glatt, gewölbt bis zur Krone; Phosphorfunken nur in der Tiefe
+      const was = K.maske(); was.rect(0, wy - 5, 160, 6); was.ell(80, wy - 3, 90, 5);
+      K.form(was, 0, { k: ['#000101', '#010404', '#020807', '#04100d'], r: [], ton: .8, fase: 0, rand: 0, verlauf: .4 });
+      for (let x = 0; x < 160; x++) { const q = Math.abs(x - 80) / 80, y = Math.round(wy - 8 + q * q * 5); if (B.bay(x, y) < .75) K.set(x, y, x % 5 < 2 ? '#2a5a46' : '#10281f'); }
+      leuchten(K, 0, wy - 8, 160, wy, (x, y) => .8 + Math.exp(-(((x - 80) / 50) ** 2)));
+      // Mauer des Beckens: grünliche Bronzequader, unten im Dunkel
+      K.mauer(0, wy, 160, 90, BRONZE, { hoehe: 7, breite: 18, ton: .36, tf: (x, y) => -(y - wy) * .004 - Math.abs(x - 80) * .0022 });
+      const krone = K.maske(); krone.rect(0, wy, 160, 3);
+      K.form(krone, 0, { k: BRONZE.slice(2, 8), r: RAND, ton: 1.8, fase: 1, rand: 1, L: [0, -1], schatten: 2 });
+      // Das Schütz: schmaler Schlitz in der Mauer, darin eine eiserne Platte mit Nietreihen, links und rechts Führungsschienen
+      K.feld(54, wy + 3, 90, 90, DUNST.slice(0, 3), () => 0);
+      const sch = K.maske(); sch.rect(57, wy + 6, 30, 38);
+      K.form(sch, 0, { k: ['#05090a', '#0c1410', '#16241d', '#26382c', '#3a5240'], r: RAND, ton: 2.6, fase: 1, rand: 1, L: [0, -1], schatten: 2, lichtVon: [72, wy], verlauf: -.4, muster: (x, y) => ((y - wy) % 12 < 1 ? -.9 : 0) });
+      for (const x of [59, 84]) for (let y = wy + 9; y < wy + 44; y += 6) { K.set(x, y, '#5a8a6a'); K.set(x + 1, y + 1, '#050a08'); }
+      for (const x of [55, 89]) { const s = K.maske(); s.rect(x, wy + 3, 3, 44); K.form(s, 0, { k: BRONZE.slice(1, 7), r: RAND, ton: 2, fase: 0, rand: 1, L: [0, -1] }); }
+      // Wasser drückt: dünne Rinnsale am Schützrand, ein Tropfen mit Phosphor am Fuß
+      for (const [x, l] of [[58, 14], [86, 9], [72, 20]]) for (let j = 0; j < l; j++) if (j % 3 !== 2) K.set(x, wy + 4 + j, j > l - 4 ? PHOS_M : '#0a1c16');
+      K.set(86, wy + 14, PHOS); K.set(58, wy + 19, PHOS_K);
+      // Gerüst über dem Schütz: zwei Pfosten, Querbalken, Spindel
+      for (const x of [51, 89]) { const p = K.maske(); p.rect(x, 12, 4, wy - 10); K.form(p, 0, { k: BRONZE.slice(0, 6), r: RAND, ton: 2, fase: 1, rand: 1, L: [0, -1], schatten: 2 }); }
+      const qb = K.maske(); qb.rect(48, 10, 48, 5); K.form(qb, 0, { k: BRONZE.slice(1, 8), r: RAND, ton: 2, fase: 1, rand: 1, L: [0, -1] });
+      const sp = K.maske(); sp.kap(71, 15, 71, wy + 8, 1.3, 1.3); K.form(sp, 0, { k: BRONZE.slice(2, 8), r: MESS, ton: 1.6, fase: 0, rand: 1, L: [1, 0] });
+      // Handrad: groß, von vorn, sechs Speichen, Messing; warm im Randlicht
+      const hx = 71, hy = 27, hr = 12;
+      const rad = K.maske(); rad.ell(hx, hy, hr, hr); rad.ell(hx, hy, hr - 2.6, hr - 2.6, 0);
+      for (let i = 0; i < 6; i++) { const a = i / 6 * TAU + .3; rad.kap(hx, hy, hx + Math.cos(a) * (hr - 1), hy + Math.sin(a) * (hr - 1), 1.1, .9); }
+      rad.ell(hx, hy, 3, 3);
+      K.form(rad, 0, { k: BLANK, r: MESS, ton: 2.2, fase: 1, rand: 1, schatten: 2, lichtVon: [80, wy] });
+      K.kante(rad, hx + 6, hy + 14, 40, [WARM[0], WARM[1]], { min: .1, nah: .5 });
+      K.set(hx, hy, '#ffd27a');
+      // Pegelstab rechts: Messingstab mit Strichen, die große Marke genau am Wasserspiegel (Flut)
+      const px = 124;
+      const stab = K.maske(); stab.rect(px, 8, 4, 82);
+      K.form(stab, 0, { k: ['#2a2210', '#4a3a1a', '#7a6230', '#a8823e', '#e6c88a'], r: MESS, ton: 2.4, fase: 0, rand: 1, L: [-1, 0] });
+      for (let y = 12; y < 88; y += 4) { const lang = ((y - 12) % 16) === 0; K.linie(px - (lang ? 6 : 3), y, px - 1, y, y < wy ? '#e6c88a' : '#5a4a22'); }
+      const pl = K.maske(); pl.poly([[px - 11, wy - 5], [px, wy - 5], [px, wy + 3], [px - 11, wy + 3], [px - 14, wy - 1]]);
+      K.form(pl, 0, { k: ['#2a2210', '#4a3a1a', '#7a6230', '#a8823e', '#e6c88a'], r: MESS, ton: 2.8, fase: 1, rand: 1, L: [0, -1] });
+      K.set(px - 11, wy - 1, '#1a1308'); K.set(px - 9, wy - 1, '#1a1308'); K.set(px - 7, wy - 1, '#1a1308'); K.set(px - 5, wy - 1, '#1a1308');
+      K.licht(80, wy - 4, 100, PHOS_G, .8, { oval: 2.2 });
+      K.lichtquelle(80, wy - 6);
+      K.vignette(.5, { cx: 80, cy: 46 });
+    },
   },
 };

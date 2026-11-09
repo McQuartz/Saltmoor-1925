@@ -45,7 +45,10 @@ document.addEventListener('click',e=>{
  const kz=e.target.closest('[data-kzeig]');if(kz&&KOE){KOE.zeig=+kz.dataset.kzeig;koerperRender();return;}
  const hgp=e.target.closest('[data-hg]');if(hgp){takeHandgriff(hgp.dataset.hg);return;}
  const rz=e.target.closest('[data-ritz]');if(rz){const uid=+rz.dataset.ritz;if(rz.dataset.k!=null){S.ueberschreiben={uid,k:+rz.dataset.k,alt:hgVon(itemByUid(uid))[+rz.dataset.k]};render();}else placeHandgriff(uid);return;}
+ const ms=e.target.closest('[data-masken]');if(ms){const[u,k]=ms.dataset.masken.split(':');Wuerze.bezahlen(+u,+k);render();return;} const an=e.target.closest('[data-anschreiben]');if(an){Wuerze.anschreiben(+an.dataset.anschreiben);render();return;} // Zugabe
+ const tn=e.target.closest('[data-trennen]');if(tn){const[u,k]=tn.dataset.trennen.split(':');Wuerze.trennen(+u,+k);render();return;} // M11
  const kb=e.target.closest('[data-kerbe]');if(kb){kerbeDazu(+kb.dataset.kerbe);return;}
+ const tg=e.target.closest('[data-tilgen]');if(tg){if(Farbe.tilgen(+tg.dataset.tilgen))wahlFertig();return;} // M8
  const sl2=e.target.closest('[data-schleif]');if(sl2){schleifen(+sl2.dataset.schleif,sl2.dataset.key);return;}
  const uq=e.target.closest('[data-umquelle]');if(uq){S.umritzQuelle={uid:+uq.dataset.umquelle,k:+uq.dataset.k};render();return;}
  const uz=e.target.closest('[data-umziel]');if(uz){const q=S.umritzQuelle;S.umritzQuelle=null;umritzen(q.uid,q.k,+uz.dataset.umziel);return;}
@@ -53,24 +56,25 @@ document.addEventListener('click',e=>{
  const en3=e.target.closest('[data-entf]');if(en3){entferneHandgriff(+en3.dataset.entf,+en3.dataset.k);return;}
  const tk=e.target.closest('[data-take]');if(tk){takeReward(tk.dataset.take);return;}
  const ev=e.target.closest('[data-ev]');if(ev&&!ev.disabled){chooseEvent(+ev.dataset.ev);return;}
- const st=e.target.closest('[data-strike]');if(st){const uid=+st.dataset.strike;if(S.phase==='kraemer_streichen')kraemerStrike(uid);else strikeItem(uid);return;}
+ const st=e.target.closest('[data-strike]');if(st){const sv=st.dataset.strike;const uid=sv.startsWith('lose')?sv:+sv;if(S.phase==='kraemer_streichen')kraemerStrike(uid);else strikeItem(uid);return;}
  const j=e.target.closest('[data-job]');if(j){starteRun(j.dataset.job);return;}
  const sv=e.target.closest('[data-start]');if(sv){S.wahlStart=sv.dataset.start||null;render();return;}
  const sf=e.target.closest('[data-stufe]');if(sf){S.wahlStufe=+sf.dataset.stufe;render();return;}
  const en2=e.target.closest('[data-ende]');if(en2){chooseEnde(en2.dataset.ende);return;}});
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.einst;if(!k)return;const v=e.target.type==='checkbox'?e.target.checked:e.target.tagName==='SELECT'?+e.target.value:+e.target.value;Einst.set(k,v);});
 function aktion(k,el){switch(k){
- case'end':spiegelWahl=false;endTurn();break;case'spiegel':spiegelWahl=!spiegelWahl;render();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
+ case'end':spiegelWahl=false;endTurn();break;case'hinsehen':Blick.waehlen(true);break;case'weitergehen':Tiefe.weiter();render();break;case'wegsehen':Blick.waehlen(false);break;case'spiegel':spiegelWahl=!spiegelWahl;render();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
  case'karte':karteUmschalten();break; case'weiter':leaveUebergang();break;case'neu':S={phase:'figur',wahlStufe:Meta.get().stufe||0};render();break;case'titel':S={phase:'titel'};render();break;
  case'fortsetzen':loadRun();render();break;case'rastHeil':rastHeal();break;case'fund':takeFund();break;
  case'skipstrike':skipStrike();break;case'kstrike0':kraemerStrike(null);break;
  case'buch':zeigeOverlay(buchHtml());break;case'tagebuch':zeigeOverlay(tagebuchHtml());break;case'einst':zeigeOverlay(einstHtml());break;case'zu':closeOv();break;
+ case'erbeNehmen':Metaebene.erbeWahl(true);render();break;case'erbeLassen':Metaebene.erbeWahl(false);render();break;case'briefNehmen':Wuerze.briefNehmen(true);render();break;case'briefLassen':Wuerze.briefNehmen(false);render();break;case'fehlzeitJa':Metaebene.fehlzeitWahl(true);render();break;case'fehlzeitNein':Metaebene.fehlzeitWahl(false);render();break; // M10
  case'gleicherSeed':{const sd=S.seed,jb=S.job;newRun(jb,sd,{});render();break;}
  case'bildSpeichern':endbildSpeichern();break;
  case'rucksack':rucksackAuf();break;case'rucksackZu':rucksackZu();break;
  case'hgSkip':skipHandgriff();break;case'hgVerwerfen':hgVerwerfen();break;
  case'ueberJa':{const u=S.ueberschreiben;S.ueberschreiben=null;placeHandgriff(u.uid,u.k);break;}case'ueberNein':S.ueberschreiben=null;render();break;
- case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;
+ case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;case'wsTilgen':wahlStart('tilgen','werkstatt');break;
  case'rastSchleifen':wahlStart('schleifen','rast');break;case'rastUmritzen':S.umritzQuelle=null;wahlStart('umritzen','rast');break;case'wahlAbbruch':S.umritzQuelle=null;wahlAbbrechen();break;
  case'verkaufen':if(S.sel){verkaufen(S.sel);S.sel=null;render();}break;
  case'devToggle':if(typeof Dev!=='undefined')Dev.toggle();break;}}

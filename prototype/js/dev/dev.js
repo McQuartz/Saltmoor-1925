@@ -60,7 +60,7 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
  kurve(){const c=document.getElementById('devKurve');if(!c||typeof Music==='undefined')return;this.mk=this.mk||[];const m=Music.state();this.mk.push([m.wucht||0,m.gefahr||0]);if(this.mk.length>320)this.mk.shift();const x=c.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,320,60);
   [['#7affc8',0],['#ff6a5a',1]].forEach(([col,k])=>{x.fillStyle=col;this.mk.forEach((v,i)=>x.fillRect(i,58-v[k]*56,1,1));});},
  // ----- Reiter Tiefe (Auftrag 3): Schalter der neuen Systeme, Erzwingen. Wächst mit jedem Meilenstein. -----
- t_tiefe(){const A=BAL.auftrag3||{};const N={regelbiegung:'Regelbiegung',hoeren:'Hören statt sehen',blick:'Sehen und gesehen werden',farbe:'Die Farbe',begegnungen:'Begegnungen',meta:'Metaebene',wuerze:'Würze'};
+ t_tiefe(){const A=BAL.auftrag3||{};const N={regelbiegung:'Regelbiegung',hoeren:'Hören statt sehen',blick:'Sehen und gesehen werden',farbe:'Die Farbe',begegnungen:'Begegnungen',meta:'Metaebene',fehlzeit:'Fehlzeit',pause:'Pause',wuerze:'Würze',masken:'Krämer mit tausend Masken (Probe)'};
   let h=`<h5>Systeme (balance.json → auftrag3)</h5><div>${Object.keys(N).map(k=>`<button data-cheat="a3" data-arg="${k}" class="${A[k]?'an':''}">${N[k]} ${A[k]?'an':'aus'}</button>`).join(' ')}</div><div class="dim">Aus heißt: das Spiel läuft genau wie ohne das System. Gilt bis zum Neuladen; dauerhaft über ?a3aus=farbe,blick</div>`;
   (this.tiefeTeile||[]).forEach(f=>{h+=f();});return h;},
  // Meilensteine hängen hier ihre Abschnitte an (Funktion, die HTML liefert)
@@ -86,6 +86,19 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
    case'a3':{BAL.auftrag3=BAL.auftrag3||{};BAL.auftrag3[a]=!BAL.auftrag3[a];this.markDev();Bus.emit('a3_schalter',{k:a,an:BAL.auftrag3[a],why:`Auftrag-3-System ${a} ${BAL.auftrag3[a]?'an':'aus'}`});render();break;}
    // M5: Regelbiegung. biegNur: nur diese Biegung gilt (wie kern-vergleich.js), biegBeide: Falsche Winkel mit letzter und vorletzter Karte, biegFeld: Biom der Biegung im aktuellen Akt erzwingen
    case'biegNur':{BAL.auftrag3.biegung_nur=BAL.auftrag3.biegung_nur===a?null:a;this.markDev();Bus.emit('a3_schalter',{k:'biegung_nur',an:!!BAL.auftrag3.biegung_nur,why:BAL.auftrag3.biegung_nur?`Nur die Biegung ${a} gilt`:'Alle Biegungen gelten'});render();break;}
+   // M9: Run-Zettel ändern (Begegnung an/aus, höchstens zwei), Zeichen geben, Asche geben, Spuren-Stufe setzen
+   case'wuerze':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};const l=z.wuerze=z.wuerze||[];const i=l.indexOf(a);if(i>=0)l.splice(i,1);else{l.push(a);if(l.length>3)l.shift();}this.markDev();render();break;} // M11
+   case'wuerzeTun':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};z.wuerze=z.wuerze||[];if(!z.wuerze.includes(a))z.wuerze.push(a);this.markDev();
+    if(a==='zeitung'){S.zeitung=null;const r0=WUERZE.zeitung_chance;WUERZE.zeitung_chance=1;S.akt=Math.max(1,S.akt);S.route[S.akt]=S.route[S.akt]||RUN.akte[S.akt].biome.find(b=>BIOMES[b]);enterAct();WUERZE.zeitung_chance=r0;}
+    if(a==='masken'){S.masken=null;S.akt=Math.max(1,Math.min(3,S.akt));this.springe('kraemer');}
+    if(a==='brief'){S.brief=null;S.akt=0;if(Wuerze.briefHier()){S.event='falscher_brief';S.phase='event';S.node={art:'ereignis'};}}
+    if(a==='trennung'){for(let k=0;k<3;k++)Wuerze.teilFinden();}
+    if(a==='zann'){giveItem('zanns_geige','Dev');const b=S.bag.findIndex(x=>x&&x.id==='zanns_geige');if(b>=0)move('bag:'+b,'talisman:0');S.akt=1;S.route[1]='glockengiesserei';startFight(['ungetaufte'],'waechter');}
+    render();break;}
+   case'zettel':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};const l=z.begegnungen;const i=l.indexOf(a);if(i>=0)l.splice(i,1);else{l.push(a);if(l.length>2)l.shift();}this.markDev();render();break;}
+   case'zeichenGeben':{if(!(S.lose||[]).includes('zeichen')){(S.lose=S.lose||[]).push('zeichen');S.zeichenGegeben=true;}this.markDev();render();break;}
+   case'ascheGeben':{const id=Object.keys(FOES).find(k=>FOES[k].asche&&(biom().gegner||[]).includes(k))||Object.keys(FOES).find(k=>FOES[k].asche);if(id&&(S.asche||[]).length<3)(S.asche=S.asche||[]).push({id,n:FOES[id].n,akt:S.akt});this.markDev();render();break;}
+   case'spurenStufe':{const v=typeof Spuren!=='undefined'&&Spuren.knoten();if(v)v.spuren=+a;this.markDev();render();break;}
    case'biegBeide':{BAL.auftrag3.falsche_winkel_beide=!BAL.auftrag3.falsche_winkel_beide;this.markDev();render();break;}
    case'seedcopy':navigator.clipboard&&navigator.clipboard.writeText(String(S.seed));break;
    case'akt':this.springe('weg',+a);break;
@@ -138,3 +151,16 @@ Dev.tiefeTeil(()=>{if(typeof Bieg==='undefined')return'';const A=BAL.auftrag3||{
  return `<h5>Regelbiegung</h5><div>Jetzt: ${k?esc((k.jetzt||k.b).n)+(k.naechste?' · nächster Zug '+esc(k.naechste.n):'')+(k.zusatz?' · '+k.zusatz:''):'<span class="dim">keine (Akt I/II, Schalter aus oder anderes Biom)</span>'}</div>
  <div>Nur eine Biegung: ${BIEGUNGEN.map(b=>`<button data-cheat="biegNur" data-arg="${b.id}" class="${A.biegung_nur===b.id?'an':''}" title="${esc(b.t)}">${esc(b.n)} (${BIOMES[b.biom]?esc(BIOMES[b.biom].kurz):b.biom})</button>`).join(' ')}</div>
  <div><button data-cheat="biegBeide" class="${A.falsche_winkel_beide?'an':''}">Falsche Winkel: letzte und vorletzte ${A.falsche_winkel_beide?'an':'aus'}</button> <span class="dim">Biom erzwingen im Reiter Cheats → Biom erzwingen</span></div>`;});
+// M11: Würze im Zettel und jedes Stück erzwingen
+Dev.tiefeTeil(()=>{if(typeof Wuerze==='undefined'||!S||!S.route)return'';const z=(S.zettel&&S.zettel.wuerze)||[];const N={zeitung:'Zeitungsausschnitte',brief:'Der falsche Brief',trennung:'Barmherzige Trennung',zann:'Zanns Takt',masken:'Krämer mit tausend Masken (Probe)'};
+ return `<h5>Würze</h5><div>Auf dem Zettel (höchstens drei): ${Object.keys(N).map(k=>`<button data-cheat="wuerze" data-arg="${k}" class="${z.includes(k)?'an':''}">${N[k]}</button>`).join(' ')}</div>
+ <div>Erzwingen: <button data-cheat="wuerzeTun" data-arg="zeitung">Ausschnitt im nächsten Übergang</button> <button data-cheat="wuerzeTun" data-arg="brief">Brief-Ereignis</button> <button data-cheat="wuerzeTun" data-arg="trennung">drei Teile ins Deck</button> <button data-cheat="wuerzeTun" data-arg="zann">Geige und die Ungetaufte</button> <button data-cheat="wuerzeTun" data-arg="masken">Krämer mit tausend Masken (Probe)</button></div>
+ <div class="dim">Brief: ${S.brief?(S.brief.angenommen?'eingesteckt, ':'gesehen, ')+esc(BIOMES[S.brief.ziel].kurz)+' in Akt '+(S.brief.akt+1):'–'} · Teile: ${S.trennungTeile||0}/3${S.trennungFertig?' · ausgelöst':''} · Zann: ${S.zannKampf?(S.zannAus?'Fenster offen':'Fenster zu'):'–'} · zuletzt: ${(Meta.get().wuerzeZuletzt||[]).join(', ')||'–'}</div>`;});
+// M9: Run-Zettel (im Spiel unsichtbar, hier sichtbar und änderbar) und Zustand der Begegnungen
+Dev.tiefeTeil(()=>{if(typeof Zettel==='undefined'||!S||!S.route)return'';const z=S.zettel||{begegnungen:[],wuerze:[]};const N={diener:'Die Diener erheben sich',asche:'Asche',spuren:'Spuren',tiefe:'Die Tiefe erkennt dich'};
+ const sv=typeof Spuren!=='undefined'?Spuren.knoten():null;const d=typeof Diener!=='undefined'?Diener.kandidat():null;
+ return `<h5>Run-Zettel</h5><div>Begegnungen (höchstens zwei): ${BEGEGNUNGEN.map(k=>`<button data-cheat="zettel" data-arg="${k}" class="${z.begegnungen.includes(k)?'an':''}">${N[k]}</button>`).join(' ')}</div>
+ <div>Würze: ${(z.wuerze||[]).length?z.wuerze.map(esc).join(', '):'<span class="dim">keine</span>'}</div>
+ <div class="dim">Diener: ${d?esc(d.c.n)+' '+d.n+'-mal':'noch keine Karte mit 8 Einsätzen'}${S.dienerGenutzt?' · schon genutzt':''} · Spuren: ${sv?'Stufe '+(sv.spuren+1)+' von 4'+(sv.besucht?' (betreten)':''):'kein Knoten'} ${sv?[0,1,2,3].map(s=>`<button data-cheat="spurenStufe" data-arg="${s}">${s+1}</button>`).join(''):''}</div>
+ <div class="dim">Asche: ${(S.asche||[]).map(a=>esc(a.n)).join(', ')||'keine'}${S.verbuendeter?' · Verbündeter '+esc(S.verbuendeter.n):''}${(S.ascheRueck||[]).length?' · kommt wieder: '+S.ascheRueck.map(x=>esc(FOES[x.id].n)+' in Akt '+(x.akt+1)).join(', '):''} <button data-cheat="ascheGeben">Asche geben</button></div>
+ <div class="dim">Tiefe: ${S.tiefeZahl||0}-mal nachgegeben${(S.lose||[]).includes('zeichen')?' · Zeichen im Deck':''}${S.tiefeSeite?' · Seite gewechselt':''} <button data-cheat="zeichenGeben">Zeichen geben</button></div>`;});

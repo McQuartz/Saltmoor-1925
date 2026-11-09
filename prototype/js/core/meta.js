@@ -1,9 +1,13 @@
-// Runübergreifender Fortschritt (Meta), gespeichert in localStorage 'saltmoor.meta.v1'.
+// Runübergreifender Fortschritt (Meta), gespeichert in localStorage 'saltmoor.meta.v1' (Schlüssel bleibt, Inhalt hat ein Feld v: 1 = alt, 2 = Auftrag 3 M10).
 // Konzept: docs/auftrag/progression.md. Gelesene Fragmente bleiben, schalten Figuren und Items frei; Tagebuch-Statistik.
 const Meta=(()=>{const KEY='saltmoor.meta.v1';
- const leer=()=>({v:1,fragmente:[],items:[],figuren:[],runs:0,siege:0,enden:{bleiben:0,umkehren:0},besteTiefe:0,biome:[],stufe:0,maxStufe:0,neuSeit:[],tode:{},maxAkt:0,start:[],verlauf:[]});
+ const leer=()=>({v:2,fragmente:[],items:[],figuren:[],runs:0,siege:0,enden:{bleiben:0,umkehren:0},besteTiefe:0,biome:[],stufe:0,maxStufe:0,neuSeit:[],tode:{},maxAkt:0,start:[],verlauf:[],
+  // Auftrag 3 M10 (Metaebene, js/core/metaebene.js): Runs je Figur, erstes Umkehren, letzter Run für die Notizen, Erbe, Fehlzeit, Sitzungen, Seiten im Tagebuch, Würze
+  runsJob:{},umkehrenGewaehlt:false,ankunftOffen:false,letzter:null,letzterOrt:null,erbe:null,fehlzeitAngebot:false,fehlzeitNaechster:false,zuletzt:0,pauseGezeigt:0,seiten:[],wuerzeZuletzt:[]});
+ // Migration v1 → v2: neue Felder mit Vorgabe; wer schon umgekehrt ist, bekommt die Ankunftszeile nicht mehr
+ function migriere(m){if((m.v||1)<2){m.umkehrenGewaehlt=!!(m.enden&&m.enden.umkehren>0);m.v=2;}return m;}
  let M=null;
- function load(){if(M)return M;try{M=JSON.parse(localStorage.getItem(KEY))||leer();}catch(e){M=leer();}M={...leer(),...M};return M;}
+ function load(){if(M)return M;try{M=JSON.parse(localStorage.getItem(KEY))||leer();}catch(e){M=leer();}M=migriere({...leer(),...M,v:(M&&M.v)||1});return M;}
  function save(){try{localStorage.setItem(KEY,JSON.stringify(M));}catch(e){}}
  // Figur frei? frei_ab = Zahl gelesener Fragmente
  function figurFrei(job){load();return job.frei_ab<=M.fragmente.length||M.figuren.includes(job.id);}
@@ -18,8 +22,9 @@ const Meta=(()=>{const KEY='saltmoor.meta.v1';
   else{const k=res.biom;M.tode[k]=(M.tode[k]||0)+1;
    // Für das Ufer unten: „Der, der vor dir kam“ trägt Figur und Items deines letzten verlorenen Runs
    try{M.vorgaenger={job:S.job,items:allActive().map(it=>it.id),tiefe:res.tiefe,biom:k,max:maxHp()};}catch(e){}}
+  if(typeof Metaebene!=='undefined')Metaebene.runEnde(res,M);
   const seit=M.neuSeit;M.neuSeit=[];const alle=[...seit,...neu];M.verlauf.push({run:M.runs,sieg:!!res.sieg,tiefe:res.tiefe,neu:alle.map(x=>x.n)});if(M.verlauf.length>60)M.verlauf.shift();save();return alle;}
- return{load,save,figurFrei,lies,runEnde,
+ return{load,save,migriere,figurFrei,lies,runEnde,
   read:()=>load().fragmente,items:()=>load().items,get:()=>load(),
-  reset(){M=leer();save();},
+  reset(){M=leer();save();},neuLaden(){M=null;return load();},
   allesFrei(){load();M.fragmente=FRAGS.map(f=>f.id);M.items=FRAGS.filter(f=>f.schaltet&&f.schaltet.art==='item').map(f=>f.schaltet.id);M.figuren=JOBS.map(j=>j.id);M.maxStufe=5;M.start=(RUN.startvarianten||[]).map(v=>v.id);M.maxAkt=4;save();}};})();
