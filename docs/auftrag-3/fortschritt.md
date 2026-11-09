@@ -13,7 +13,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M4 Rucksack am Körper | fertig | 9 Silhouetten, Ansicht am Körper, Branch `claude/project-thread-hifkqz` (Philip) |
 | M5 Die Tiefe biegt die Regeln | fertig | 14 Biegungen, keine mehr als 5 Pp unter „aus“ |
 | M6 Hören statt sehen | fertig | sechs stumme Gegner, drei Einsätze, Klänge als Zeichen |
-| M7 Sehen und gesehen werden | nicht begonnen | Stopp nach M6 (Philip) |
+| M7 Sehen und gesehen werden | fertig | drei Blick-Items, drei Gesehene, 44 Wächter-Schritte, Wahl zu Kampfbeginn |
 | M8 Die Farbe | nicht begonnen | Stopp nach M6 (Philip) |
 | M9 Begegnungen | nicht begonnen | Stopp nach M6 (Philip) |
 | M10 Metaebene | nicht begonnen | Stopp nach M6 (Philip) |
@@ -258,6 +258,33 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
   - Sonnet: „Klänge als Zeichen“ (`klangzeichen.js`, Einstellung, Plakette, `test-klangzeichen.js`, Fotos)
 - Offen: Der Blick (M7) soll stumme Absichten sichtbar machen; der Platz dafür ist in `Hoeren.istStumm` vorbereitet (`Blick.siehtAbsicht`).
 
+### M7 Sehen und gesehen werden
+
+**Plan.** Kern selbst: `js/core/blick.js` mit `Blick.kampfStart` (Wahl auslegen), `Blick.waehlen(ja)`, `Blick.siehtAbsicht` (Einhakpunkt aus M6 in `Hoeren.istStumm`), Gesehener dazu, Wächter-Zusatz, Schatten, Beute und Bot-Regel. Sperre von `playCard`/`endTurn`, solange die Wahl offen ist. `verborgen` wird beim Hinsehen voll angezeigt (Plakette, Vorschau, Tooltip). Oberfläche: Wahl über der Hand, Gesehene halb durchsichtig und schwebend, Schatten in der Bühne, Marke „sieht dich“ am Zusatzschritt. Agenten (alle Sonnet): Blick-Items mit Icons, Gesehener 1 und 2, Gesehener 3, `gesehen`-Schritte für alle Wächter.
+
+**Schritte und Entscheidungen.**
+- **Wahl:** Liegt nach der ersten Hand über dem Tisch, die Hand ist abgedunkelt, Zugende gesperrt. „NICHT HINSEHEN“ ist hervorgehoben (Standard). Im Finale gibt es keine Wahl, weil danach keine Beute kommt.
+- **Hinsehen:** `Blick.aktiv()` macht stumme Absichten sichtbar (die Musik hört dann auf, sie anzuspielen), zeigt verborgene Werte und zählt sie in der Vorschau mit; der Tooltip-Satz „Verborgen: …“ entfällt dann.
+- **Gesehene:** Akt I–III „Der Danebenhängende“, Akt IV „Der Umfaltende“, Akt V „Der Hohe am Rand“. Sie stehen in keinem Biom-Pool, nur `Blick.gesehenerDazu()` stellt sie auf (hinten, auf dem freiesten Platz, höchstens vier Gegner). Werte ohne Tiefe (`ohne_tiefe`), zuerst 26/40/54 Leben; nach dem Bot-Vergleich auf 16/22/28 (×1,35 Wächter-Faktor = 22/30/38) und schwächere Muster gesenkt. Stimme „schatten“, weil `music.js` keine eigene hat.
+- **Durchsichtig:** Macht die Bühne zur Laufzeit (wanderndes Bayer-Raster, kühler Ton, Schweben ohne Bodenschatten). Darum ließ ich die festen Dither-Lücken aus den Sprites wieder entfernen.
+- **Wächter:** `gesehen`-Schritt aus den Paketdaten (44 von 44, Tabelle [m7-waechter-gesehen.md](m7-waechter-gesehen.md)); er kommt direkt nach dem aktuellen Schritt ins Muster. Fallback ohne Daten: der stärkste Schritt ein zweites Mal (nicht mehr nötig, aber im Code).
+- **Beute:** nach Hinsehen Handgriffe 1 aus 4 und das Item-Angebot sicher. Der Zufallswurf für das Item läuft trotzdem, damit die Seeds gleich bleiben.
+- **Fundorte:** Die Items sind `rare` wie die anderen seltenen Talismane. Der Krämer und schwere Kämpfe ziehen aus dem globalen `rarePool`. Darum habe ich `blickAb(id)` eingebaut: Ein Blick-Item gibt es erst ab dem Akt, in dessen Fundpools es steht (Linse ab II, Resonator ab III, Lampe ab IV).
+- **Schatten:** Ohne Hinsehen mit 50 % per Seed, höchstens einmal je Akt, nur normale und schwere Kämpfe. Umriss des Gesehenen des Akts, dunkel gedithert, eine halbe Sekunde, abseits der Gegner. Kein Text.
+- **Bot:** hinsieht, wenn Leben über 60 %. `selbst-spielen.js` klickt die Wahl wie der Bot.
+
+#### Abnahme M7
+- Abnahmekriterien:
+  - `test-kern.js` (Teil Blick) grün: ✓ 21 Prüfungen ([test-kern.txt](bilder/M7/test-kern.txt)): drei Items mit Fundorten, Krämer erst ab Akt, Wahl nur mit Item, gesperrt bis gewählt, nicht im Finale, Schalter aus, nicht hinsehen ändert nichts, hinsehen macht den Astronomen lesbar, Gesehener je Akt (II, III, IV, V) und im schweren Kampf, verborgen 0 → 8 in der Vorschau, Wächter ein Schritt mehr, Beute 1 aus 4 und 12/12 Item-Angebote (ohne: 1 aus 3, 6/12), Schatten einmal je Akt und nie beim Hinsehen, Speicherstand, Bot-Regel
+  - Gesehene Note ≥ 4: ✓ alle drei mit 4, je nach einer Rückgabe (Tabelle Noten)
+  - Fotos, selbst angesehen: ✓ [Wahl](bilder/M7/01-wahl.png), [Hinsehen, Astronom zeigt Block 7 statt nichts](bilder/M7/02-hinsehen-akt4.png) neben [nicht hinsehen](bilder/M7/03-nicht-hinsehen-akt4.png), Gesehene [Akt II](bilder/M7/04-gesehener-akt2.png), [Akt III schwer](bilder/M7/05-gesehener-akt3-schwer.png), [Akt V](bilder/M7/06-gesehener-akt5.png), [Wächter mit Zusatzschritt „sieht dich“](bilder/M7/07-waechter-zusatz.png), [Beute 1 aus 4 mit Fund](bilder/M7/08-beute-1-aus-4.png), [Schatten](bilder/M7/09-schatten.png). Erzeugt mit `tools/m7-fotos.js`, keine Konsolenfehler.
+  - Bot-Vergleich: ✓ `tools/blick-vergleich.js 40` ([blick-vergleich-40.txt](bilder/M7/blick-vergleich-40.txt)). Ohne Item finden die Bots die seltenen Items kaum (5 Wahlen in 40 Runs), Siege gleich (50 %). Mit Linse ab Start: Blick aus 53 %, Blick an 43 %. Der Bot sieht in 284 von 303 Kämpfen hin und besiegt dabei 208 Gesehene. Mit den ersten Werten (26/40/54) waren es 40 % gegen 53 %. Ein Gegenversuch ohne Wächter-Zusatz brachte 18 statt 17 Siege, der Unterschied liegt also bei den Gesehenen. Bei 40 Runs ist das Rauschen etwa ±8 Pp. Immer hinsehen kostet den gierigen Bot damit rund 10 Pp. Hinsehen ist eine echte Abwägung und nicht umsonst, wie gewollt. Feinabstimmung kommt in M12.
+- Tests: `test-kern`, `test-run`, `test-deckbau`, `test-speicher`, `test-biegungen`, `test-oberflaeche`, `test-plakette`, `test-karte-ui`, `test-rucksack` alle „Alles gut.“; `sprites/pruefen.js` 256 Sprites 0 Verstöße; `icons/pruefen.js` 245 Bilder 0 Verstöße
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 288, alle als Entwurf markiert.`
+- Regelprüfung: Tabelle unten, bestanden.
+- Agenten (alle Sonnet, Worktree): Blick-Items und Icons; Gesehener 1 und 2 (Grund zurückgegeben); Gesehener 3 (zurückgegeben); `gesehen`-Schritte für 44 Wächter. Alle drei Bild-Agenten starteten auf altem `main` und haben sich laut Auftrag selbst auf den Branch gesetzt.
+- Mindestens erfüllt? Mehr: eigene `gesehen`-Schritte für alle Wächter statt des Fallbacks.
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -325,6 +352,20 @@ Lovecraft-Prinzip je Biegung: 1 (das Grauen ändert Regeln, nicht Werte) bei all
 
 Lovecraft-Prinzip: Andeuten statt zeigen (Erich Zann).
 
+### M7 Sehen und gesehen werden
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | Hinsehen tauscht Wissen und Beute gegen einen Gegner mehr; der Kampf spielt sich mit offenen Karten anders |
+| Das Deck bleibt deins | Ja | Nichts wird eingemischt; die Items bringen eigene Karten wie jedes Item |
+| Selten ist stark | Ja | Drei seltene Items, erst ab Akt II; ohne Item gibt es keine Wahl |
+| Kein Fragezeichen | Ja | Ohne Hinsehen ist nichts angedeutet außer dem einen Schatten ohne Text; mit Hinsehen ist alles offen |
+| Einwilligung vor Kontrollverlust | Ja | Der Spieler wählt jedes Mal selbst, Standard ist nicht hinsehen |
+| Unheimlich, nicht anstrengend | Ja | Eine Wahl je Kampf mit zwei Knöpfen, danach nichts zu verwalten |
+| Nie Herkunft als Bedrohung | Nein | Rein mechanisch |
+
+Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: wer hinsieht, wird gesehen).
+
 ## Noten
 
 *Je neues Bild: Name, Note, Bildpfad, Kurzbegründung.*
@@ -342,11 +383,16 @@ Lovecraft-Prinzip: Andeuten statt zeigen (Erich Zann).
 | Veteran | 4 | `…/veteran.png` | nach Rückgabe: Stahlhelm und Gewehr, Mantel noch kastig (schwächste) |
 | Zeichen Alte Stoffe, Ringofen, Falsche Winkel, Der Schlag, Spiegelbild, Rückseite, Außerhalb der Zeit, Wellen von oben, Aufgewogen, Ebbe und Flut | 4 | `docs/auftrag-3/bilder/M5/zeichen-bogen.png` | klar, unterscheidbar (Sonnet) |
 | Zeichen Über Eck, Rückwärts gewachsen, Keiner fährt ab, Funkspruch | 4 | ebenda | vom Agenten mit 4 gemeldet, von mir mit 3 bewertet (Quadrat ohne Kreis, Baum wie Schriftzeichen, Prellbock wie Stuhl, Funkspruch wie das Salz-Dreieck) und selbst neu gezeichnet |
+| Linse, Resonator, Lampe aus dem Grab | 4 | `prototype/assets/items/{linse,resonator,grablampe}.png`, [Kontakt](bilder/M7/items-kontakt.png) | lesbar neben Weihwasser und Silbermesser; Lichtkegel der Linse bei 32 px nur ein Strich |
+| Gesehener Tief („Der Danebenhängende“) | 4 | `prototype/assets/gegner/gesehener_tief.png`, [Kontakt](bilder/M7/gesehen-kontakt-1.png) | Qualle mit Knopfaugen, klar; feste Lücken auf meine Bitte entfernt |
+| Gesehener Grund („Der Umfaltende“) | 4 | `…/gesehener_grund.png`, ebenda | nach Rückgabe (erst 3: flache Lappen, Lückenmuster): geschlossene Klammer, Mund als Brennpunkt, kräftiger Rand |
+| Gesehener Letzt („Der Hohe am Rand“) | 4 | `…/gesehener_letzt.png`, [Kontakt](bilder/M7/gesehen-letzt-kontakt.png) | nach Rückgabe (erst 3: Tausendfüßler aus Fäden): hohe gebeugte Säule mit Haube; Säule etwas flächig |
 
 ## Neue Texte (Entwurf)
 
 *Je neuer Text: Datei, ID, erste Worte. Für Philip und Mo.*
 
+- **M7, Daten:** `items.json` Linse (Karte „Brennpunkt“, „Ein Messingring mit einem Glas darin …“), Resonator („Nachklang“, „Eine Stimmgabel auf einem Eisenfuß …“), Lampe aus dem Grab („Schwelen“, „Man gibt sie den Toten mit …“); `foes.json` „Der Danebenhängende“, „Der Umfaltende“, „Der Hohe am Rand“ mit Konzeptsätzen. Oberfläche: „HINSEHEN“, „NICHT HINSEHEN“, „sieht dich“, Eigenschaft „Zu Kampfbeginn: hinsehen oder nicht“.
 - **M6, Oberfläche:** Einstellung „Klänge als Zeichen“, Tooltip „Klang“, Musik-Labor „HÖREN STATT SEHEN“ mit Knöpfen.
 - **M5, `data/biegungen.json`:** 14 Namen und Regeltexte (z. B. „Über Eck: Die erste und die letzte Karte …“), drei Reaktionen (Sole, Pökeln, Gezeitenblut) und Funkspruch. Oberfläche: „Oben: …“, „Handkarte wählen“, „danach …“, „Ebbe“/„Flut“, „Dieser Zug …/Nächster Zug …“ in Tooltips.
 
@@ -354,6 +400,8 @@ Lovecraft-Prinzip: Andeuten statt zeigen (Erich Zann).
 
 ## Entscheidungen unterwegs
 
+- **M7, Fortsetzung:** Mo hat am 2026-11-09 gesagt, nach M6 weiterzumachen („we completed through m6, can you continue from there again?“). Ich habe `claude/project-thread-flvf7e` auf den M6-Stand von `claude/project-thread-hifkqz` vorgespult und arbeite ab M7 dort weiter.
+- **M7:** keine Wahl im Finale; Blick-Items erst ab ihrem Akt auch beim Krämer (`blickAb`); Gesehene ohne Tiefenskalierung und nach dem Bot-Vergleich schwächer.
 - **M6, Stopp:** Philip hat am 2026-11-09 gesagt, nach Abnahme und Push von M6 nicht weiterzumachen. M7 bis M12 und die Zugabe sind nicht begonnen.
 - **M4, Übernahme:** Philip hat am 2026-11-09 entschieden, dass ab M4 weitergearbeitet wird. M4 und folgende liegen auf `claude/project-thread-hifkqz` (von dieser Sitzung vorgegeben), aufgebaut auf Mos Branch `claude/project-thread-flvf7e`, als eigener Draft-PR dagegen.
 - **M4, Rucksack:** Tausch gilt sofort statt Übernehmen/Verwerfen; Deck-Diff gegen den Stand beim Öffnen. Automatisch öffnen nur nach einem Fund, sonst Knopf und Taste R. Im Kampf nur lesend.
@@ -365,6 +413,7 @@ Lovecraft-Prinzip: Andeuten statt zeigen (Erich Zann).
 
 ## Rückgaben an Sub-Agenten
 
+- **M7, Gesehene:** Grund (Note 3: flache, bananenförmige Lappen, Lückenmuster) und Letzt (Note 3: unruhige Silhouette aus vielen Fäden, „hoch“ nicht lesbar) mit konkreten Punkten zurück; beide in der zweiten Runde Note 4. Bei allen drei sollten die festen Dither-Lücken raus, weil die Bühne die Durchsichtigkeit selbst macht.
 - **M4, Silhouetten (Sonnet):** Friedhofswärter, Pfarrerin, Detektiv, Kneipenschläger und Veteran kamen in der ersten Runde auf Note 3 (zu glatt, Werkzeuge und Kopfbedeckung nicht lesbar, Haltung steif). Rückgabe mit konkreten Punkten je Figur, zweite Runde je Note 4.
 
 - Keine Rückgabe nötig. In M3 habe ich zwei Punkte selbst nachgezogen statt zurückzugeben, weil sie außerhalb der erlaubten Dateien lagen: den Einsturz im Nebel (Kern) und das Kästchen „Übergänge kürzer“ (`ueberlagerungen.js`).

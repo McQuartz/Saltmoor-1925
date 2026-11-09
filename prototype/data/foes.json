@@ -881,5 +881,101 @@
   },
   "quelle": "skript",
   "ohne_tiefe": true
+ },
+ "gesehener_tief": {
+  "n": "Der Danebenhängende",
+  "hp": 16,
+  "weak": "L",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 5
+   },
+   {
+    "t": "atk",
+    "v": 3,
+    "h": 2
+   },
+   {
+    "t": "buff",
+    "v": 1
+   }
+  ],
+  "rang": "normal",
+  "gesehener": true,
+  "sprite": "gesehener_tief",
+  "varianten": [
+   "gesehener_tief"
+  ],
+  "konzept": "Etwas Kleines, Quallenartiges, das neben dir in der Luft hängt und schon immer da war; in der Naht seiner Glocke sitzen Augen wie Knöpfe, und der längste Faden endet in einem Auge, das zu Boden sieht.",
+  "stimme": "schatten",
+  "beute": null,
+  "quelle": "skript",
+  "entwurf": true,
+  "ohne_tiefe": true
+ },
+ "gesehener_grund": {
+  "n": "Der Umfaltende",
+  "hp": 22,
+  "weak": "E",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 8
+   },
+   {
+    "t": "blk",
+    "v": 6
+   },
+   {
+    "t": "atk",
+    "v": 4,
+    "h": 2
+   }
+  ],
+  "rang": "normal",
+  "gesehener": true,
+  "sprite": "gesehener_grund",
+  "varianten": [
+   "gesehener_grund"
+  ],
+  "konzept": "Etwas Größeres, Lappiges mit Mundorganen, das sich um dich herum faltet; zwei Lappen hängen offen neben einer leeren Mitte und schließen sich mit jedem Atemzug, an ihrer Innenseite sitzen Ringe aus Zähnen.",
+  "stimme": "schatten",
+  "beute": null,
+  "quelle": "skript",
+  "entwurf": true,
+  "ohne_tiefe": true
+ },
+ "gesehener_letzt": {
+  "n": "Der Hohe am Rand",
+  "hp": 28,
+  "weak": "L",
+  "pat": [
+   {
+    "t": "atk",
+    "v": 11
+   },
+   {
+    "t": "atk",
+    "v": 5,
+    "h": 2
+   },
+   {
+    "t": "buff",
+    "v": 2
+   }
+  ],
+  "rang": "normal",
+  "gesehener": true,
+  "sprite": "gesehener_letzt",
+  "varianten": [
+   "gesehener_letzt"
+  ],
+  "konzept": "Etwas Hohes und Dünnes aus übereinanderstehenden Gliedern und Fühlfäden, zu groß für den Raum; es schwebt, man sieht durch es hindurch, und es beugt sich langsam über den, der hinsieht.",
+  "stimme": "schatten",
+  "beute": null,
+  "quelle": "skript",
+  "ohne_tiefe": true,
+  "entwurf": true
  }
 }

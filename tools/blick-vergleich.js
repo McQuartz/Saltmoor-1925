@@ -1,5 +1,5 @@
 // Auftrag 3 M7: Bot-Vergleich für den Blick (06-lovecraft-kern.md Abschnitt 5 und 8).
-// Gleiche Seeds, gleiche Figuren reihum, drei Läufe: Blick aus; Blick an (Bots finden die Items selbst); Blick an mit einem Blick-Item ab Kampf 1
+// Gleiche Seeds, gleiche Figuren reihum, vier Läufe: Blick aus/an (Bots finden die Items selbst), und beides mit einem Blick-Item ab Kampf 1
 // (Linse am Körper, damit die Wahl in jedem Kampf fällt). Gezählt: Siege, Tiefe, Züge je Kampf, wie oft hingesehen, Gesehene besiegt, Wächter mit Zusatzschritt.
 // node tools/blick-vergleich.js [seeds=40] [startSeed=1]
 const {ladeKern}=require('./kern');
@@ -9,7 +9,7 @@ const {ladeKern}=require('./kern');
   const nachStart=${mitItem}?()=>{const a=ITEMS.linse.a;S.slots[a]=Math.max(1,S.slots[a]);const frei=S.areas[a].findIndex((x,i)=>i<S.slots[a]&&!x);S.areas[a][frei<0?0:frei]=mk('linse');}:null;
   for(let i=0;i<${n};i++){const r=Bot.spiele(jobs[i%jobs.length],${s0}+i,nachStart?{nachStart}:{});o.push({sieg:r.sieg,tiefe:r.tiefe,zuege:r.zuege,kaempfe:r.kaempfe,fehler:r.fehler});}
   BAL.auftrag3.blick=true;return JSON.stringify({o,bl:{...__bl}});})()`));
- const zeilen=[['Blick aus',lauf(false,false)],['Blick an',lauf(true,false)],['Blick an, Linse ab Start',lauf(true,true)]];
+ const zeilen=[['Blick aus',lauf(false,false)],['Blick an',lauf(true,false)],['Blick aus, Linse ab Start',lauf(false,true)],['Blick an, Linse ab Start',lauf(true,true)]];
  const p=v=>(Math.round(v*100)+' %').padStart(5);
  console.log('Lauf'.padEnd(28)+'Siege   Ø Tiefe  Züge/Kampf  hingesehen  nicht  Gesehene besiegt  Wächter+  Schatten  Fehler');
  const out=[];for(const [name,{o,bl}] of zeilen){const s=o.filter(x=>x.sieg).length/n,t=o.reduce((q,x)=>q+x.tiefe,0)/n,zk=o.reduce((q,x)=>q+x.zuege,0)/Math.max(1,o.reduce((q,x)=>q+x.kaempfe,0)),f=o.filter(x=>x.fehler);

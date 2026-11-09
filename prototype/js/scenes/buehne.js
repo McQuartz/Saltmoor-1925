@@ -106,11 +106,11 @@ function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.fr
  if(typeof Dev!=='undefined'&&Dev.an)Dev.szene(g,t);
  requestAnimationFrame(frame);}
 // M7: Ohne Hinsehen flackert höchstens einmal je Akt ein Schatten (Umriss des Gesehenen, dunkel, gedithert), kein Text
-Bus.on('blick_schatten',({gegner})=>{if(FAST)return;const f=FOES[gegner];BU.schatten={t0:performance.now(),dur:520,sprite:f&&f.sprite,x:.3+Math.random()*.4};if(f&&f.sprite)ladeSprite(f.sprite);});
+Bus.on('blick_schatten',({gegner})=>{if(FAST)return;const f=FOES[gegner];const xs=(S.enemies||[]).filter(e=>e.hp>0).map(e=>e.x);const x=[.12,.88,.3,.7].reduce((a,b)=>Math.min(1,...xs.map(q=>Math.abs(q-b)))>Math.min(1,...xs.map(q=>Math.abs(q-a)))?b:a);BU.schatten={t0:performance.now(),dur:520,sprite:f&&f.sprite,x};if(f&&f.sprite)ladeSprite(f.sprite);});
 function schattenMalen(g,q,cam){const sp=BU.schatten.sprite&&SPRITES[BU.schatten.sprite];if(!sp||!sp.ok)return;const m=sp.meta,an=m.anim.idle;
- const a=Math.sin(q*Math.PI)*(Math.random()<.25?.3:1)*.55;const tc=tmpCanvas(m.w,m.h);tc.x.clearRect(0,0,m.w,m.h);tc.x.drawImage(sp.img,0,an.zeile*m.h,m.w,m.h,0,0,m.w,m.h);
+ const a=Math.sin(q*Math.PI)*(Math.random()<.25?.35:1)*.8;const tc=tmpCanvas(m.w,m.h);tc.x.clearRect(0,0,m.w,m.h);tc.x.drawImage(sp.img,0,an.zeile*m.h,m.w,m.h,0,0,m.w,m.h);
  const id=tc.x.getImageData(0,0,m.w,m.h),d=id.data;for(let y=0;y<m.h;y++)for(let i=0;i<m.w;i++){const o=(y*m.w+i)*4;if(!d[o+3])continue;if(bay(i,y)>a){d[o+3]=0;continue;}d[o]=6;d[o+1]=8;d[o+2]=10;d[o+3]=255;}
- tc.x.putImageData(id,0,0);const x=Math.round(BU.schatten.x*SW-cam.x*.5-m.fuss[0]),y=Math.round(SH*.62-cam.y*.5-m.fuss[1]);g.drawImage(tc.c,x,y);}
+ tc.x.putImageData(id,0,0);const x=Math.round(BU.schatten.x*SW-cam.x*.5-m.fuss[0]),y=Math.round(SH*.7-cam.y*.5-m.fuss[1]);g.drawImage(tc.c,x,y);}
 const stc=k=>k&&ST&&ST[k]?ST[k].c:(k||'#e8c547');
 
 function zeichneGegner(g,e,dt,t,cam){const v=visOf(e);if(v.gone)return;const p=enemyBox(e);
