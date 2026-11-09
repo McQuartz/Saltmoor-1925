@@ -184,6 +184,114 @@
      "kopf": "SALTMOOR GAZETTE · Hafennachrichten",
      "t": "Der Leuchtturmwärter von Cape Ward ersucht um Lampenöl. Er brauche mehr als früher, erklärt er, weil nachts jemand im Hof steht und wartet, dass es dunkel wird.",
      "entwurf": true
+    },
+    {
+     "id": "lampenoel",
+     "kopf": "SALTMOOR GAZETTE · Polizeibericht",
+     "t": "Es roch nach Lampenöl und kaltem Salz, als Constable Marsh am Montag die Tür der Ropewalk Lane 14 öffnete. Das Bett war gemacht, das Kissen nass. Der Mieter hat sich nicht gemeldet.",
+     "entwurf": true
+    },
+    {
+     "id": "kerzenboot",
+     "kopf": "SALTMOOR GAZETTE · Anzeigen",
+     "t": "Nach Kerzenwachs riecht das Fischerboot, das hier zum Verkauf steht, 14 Fuß, sonst tadellos. Der Geruch lässt sich nicht auswaschen. Besichtigung nur bei Tageslicht.",
+     "entwurf": true
+    },
+    {
+     "id": "klopfen",
+     "kopf": "SALTMOOR GAZETTE · Leserbrief",
+     "t": "Seit Mittwoch klopft es in unserer Wand im Takt der Glocke von St. Brendan, auch wenn die Glocke schweigt. Mein Mann sagt, es sei die Wasserleitung. Wir haben keine Wasserleitung. Mrs. E. Doyle, Church Street.",
+     "entwurf": true
+    },
+    {
+     "id": "kohlentern",
+     "kopf": "SALTMOOR GAZETTE · Hafennachrichten",
+     "t": "Nach Kohlenstaub und darunter nach Weihrauch roch die Tern aus Boston beim Anlegen. Der Schiffer fuhr allein. Er bittet, nicht nach den vier benutzten Kojen zu fragen.",
+     "entwurf": true
+    },
+    {
+     "id": "moorbrot",
+     "kopf": "SALTMOOR GAZETTE · Aus dem Moor",
+     "t": "Vom Moorweg her riecht es seit Sonntag nach frischem Brot, bis in die Church Street. Bäcker Hale weist darauf hin, dass seine Backstube seit Ostern geschlossen ist und am Moorweg kein Ofen steht.",
+     "entwurf": true
+    },
+    {
+     "id": "harmonium",
+     "kopf": "SALTMOOR GAZETTE · Kirchliches",
+     "t": "Aus dem Keller des Pfarrhauses dringt seit dem Wochenende Harmoniummusik, obwohl das Harmonium im März verkauft wurde. Pfarrer Voss bittet die Gemeinde, nicht mitzusingen.",
+     "entwurf": true
+    },
+    {
+     "id": "archivtuer",
+     "kopf": "SALTMOOR GAZETTE · Rathaus",
+     "t": "Die Tür zum Archiv des Rathauses steht jeden Morgen offen, obwohl sie abends zweimal abgeschlossen wird. Der Pförtner hat den Schlüssel seit Montag in der Tasche. Er steckt jeden Morgen von innen.",
+     "entwurf": true
+    },
+    {
+     "id": "rathausuhr",
+     "kopf": "SALTMOOR GAZETTE · Lokales",
+     "t": "Die Rathausuhr schlägt seit Freitag zwischen zwei Schlägen eine Pause, in der sich die Straße leert. Uhrmacher Pell hat das Werk zweimal zerlegt und nichts gefunden. Er bittet die Bürger, in der Pause nicht zu antworten.",
+     "entwurf": true
+    },
+    {
+     "id": "logbuch",
+     "kopf": "SALTMOOR GAZETTE · Nachlass",
+     "t": "Das Logbuch des verstorbenen Kapitäns Trask, das der Konsul am Freitag versiegelte, wies am Montag einen neuen Eintrag auf, in seiner Handschrift, mit dem Datum von heute. Die Erben verzichten auf das Buch.",
+     "entwurf": true
+    },
+    {
+     "id": "ratten",
+     "kopf": "SALTMOOR GAZETTE · Gesundheitsamt",
+     "t": "Die Ratten des Hafenviertels ziehen seit Montag nach Westen, in Reihen, ohne Hast. Rattenfänger Dunn lehnt weitere Aufträge ab. In diese Richtung gehe sonst nur das Wasser, sagt er.",
+     "entwurf": true
+    },
+    {
+     "id": "nasseschritte",
+     "kopf": "SALTMOOR GAZETTE · Polizeibericht",
+     "t": "Ein Herr aus der Ropewalk Lane meldete der Wache, er werde verfolgt. Der Constable sah niemanden, fand aber im Schlick hinter dem Herrn ein zweites Paar Fußabdrücke, das bei jedem Halt einen halben Schritt aufholte.",
+     "entwurf": true
+    },
+    {
+     "id": "spaziergang",
+     "kopf": "SALTMOOR GAZETTE · Vermischtes",
+     "t": "Miss Tabitha Reed aus der Church Street kehrte gestern von einem Spaziergang zurück, den sie am 3. Februar angetreten hatte. Sie sagt, es sei ein kurzer Weg gewesen. Ihr Mantel ist noch nass vom Februar.",
+     "entwurf": true
+    },
+    {
+     "id": "vitrine",
+     "kopf": "SALTMOOR GAZETTE · Heimatmuseum",
+     "t": "Das Heimatmuseum bittet, die Seemannsfigur in Vitrine 4 nicht mehr zu beachten. Der Kustos hat ihren Standort mit Kreide eingezeichnet. Am Morgen steht sie an der Linie, mit dem Gesicht zur Tür.",
+     "entwurf": true
+    },
+    {
+     "id": "friseur",
+     "kopf": "SALTMOOR GAZETTE · Geschäftliches",
+     "t": "Friseur Garrity, Dock Street, entfernt auf Wunsch seiner Kundschaft den Wandspiegel. Mehrere Herren gaben an, ihr Spiegelbild sei beim Rasieren schon fertig gewesen.",
+     "entwurf": true
+    },
+    {
+     "id": "dunmore",
+     "kopf": "SALTMOOR GAZETTE · Anzeigen",
+     "t": "Pension Dunmore, Zimmer 6, frei ab sofort. Preis ermäßigt, weil die Matratze morgens eine Mulde hat, die nicht von den Gästen stammt. Fließend Wasser vorhanden.",
+     "entwurf": true
+    },
+    {
+     "id": "wagenfahrt",
+     "kopf": "SALTMOOR GAZETTE · Anzeigen",
+     "t": "GESUCHT: Pferd und Wagen für eine einzelne Fahrt ins Moor. Der Kutscher fährt nicht mit, der Wagen kommt nicht zurück. Zahlung bar im Voraus, Auskunft im Hafenamt.",
+     "entwurf": true
+    },
+    {
+     "id": "bronzelampe",
+     "kopf": "SALTMOOR GAZETTE · Landwirtschaft",
+     "t": "Ein Landarbeiter fand beim Pflügen am Moorweg eine alte Lampe aus Bronze. Im Licht sah er sein Feld, wie es ist, und daneben, wie es war, mit Wasser darauf. Die Lampe liegt auf der Wache.",
+     "entwurf": true
+    },
+    {
+     "id": "todesfall",
+     "kopf": "SALTMOOR GAZETTE · Todesfälle",
+     "t": "Mr. Josiah Pell, 61, Reeder, starb am Dienstag. Das Mittagessen mit seinem Teilhaber am Mittwoch hat er trotzdem eingehalten. Der Teilhaber bittet um Diskretion.",
+     "entwurf": true
     }
    ],
    "vermisst": {

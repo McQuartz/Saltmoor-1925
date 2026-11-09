@@ -218,354 +218,844 @@
    "lotse": {
     "wahr": "Lotse: Wasser setzt ihm zu. Aus dem Laternenkopf kommen immer wieder Tieflinge, die nicht liegen lassen.",
     "falsch": "Lotse: Nur Feuer hilft. Die Laterne in seinem Kopf springt vor Hitze, dann bleibt er stehen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Lotse: Er beginnt mit Block, erst danach kommt der erste Hieb. Wasser ist seine Schwäche, und alle drei Züge steht ein Tiefling mehr neben ihm.",
+      "falsch": "Lotse: Er schlägt gleich zu und deckt sich nie. Seine Schwäche ist Salz, und die Tieflinge ruft er nur einmal.",
+      "entwurf": true
+     }
+    ]
    },
    "opfernde": {
     "wahr": "Opfernde: Blut trifft den Stein, sonst wenig. In Abständen kriecht ein Nest aus dem Moor nach.",
     "falsch": "Opfernde: Salz, nichts anderes. Streu es auf den Arm, dann verliert der Stein seine Kraft.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Opfernde: Sie beginnt mit Block, der schwere Schlag kommt zuletzt, nach dem Aufbau. Blut ist ihre Schwäche, und alle vier Züge kriecht ein Nest nach.",
+      "falsch": "Opfernde: Der schwere Schlag kommt als Erstes. Gegen sie hilft Licht, und das Nest ruft sie nur einmal.",
+      "entwurf": true
+     }
+    ]
    },
    "glockenmutter": {
     "wahr": "Glockenmutter: Eisen trifft sie hart. Wenn die Glocke ruft, kommen die Chorknaben und stellen sich vor sie.",
     "falsch": "Glockenmutter: Glaube hilft, sie ist im Grunde Kirche. Mit Weihe zuerst, dann erst die Knaben.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Glockenmutter: Der erste Schlag ist klein, der große kommt erst nach dem Aufbau. Eisen ist ihre Schwäche, und alle drei Züge ruft sie einen Chorknaben.",
+      "falsch": "Glockenmutter: Sie beginnt mit dem großen Schlag und läutet dann ab. Wasser dämpft die Glocke, die Chorknaben kommen nur einmal.",
+      "entwurf": true
+     }
+    ]
    },
    "wurm": {
     "wahr": "Wurm im Salz: Seine Schwäche wechselt, mal Wasser, mal Feuer, mal Fäulnis. Auf das Neue achten.",
     "falsch": "Wurm im Salz: Die Schwäche ist Wasser und bleibt es. Wer wechselt, verschenkt nur Züge.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Wurm im Salz: Er beginnt mit einem Hieb, dann Block, am Ende der große Schlag. Die Schwäche geht Zug um Zug der Reihe nach durch Wasser, Feuer und Fäulnis.",
+      "falsch": "Wurm im Salz: Er fängt mit dem großen Schlag an. Seine Schwäche bleibt Wasser, wer Feuer spielt, verschenkt den Zug.",
+      "entwurf": true
+     }
+    ]
    },
    "windgestalt": {
     "wahr": "Windgestalt: Wasser dämpft ihn. Nach dem tiefen Einatmen der Maske kommt der schwere Schlag.",
     "falsch": "Windgestalt: Eisen schneidet die Binden auf. Der schwere Schlag kommt gleich am Anfang.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Windgestalt: Wasser dämpft ihn. Der Aufbau liegt in der Mitte, danach fällt der große Schlag, und ein kleinerer hängt hinten dran.",
+      "falsch": "Windgestalt: Salz bindet den Sand in ihm. Der große Schlag beendet die Runde, danach hat man Ruhe.",
+      "entwurf": true
+     }
+    ]
    },
    "chor": {
     "wahr": "Chor im Eis: Salz auf die Köpfe, dann wird er leise. Zuerst stärkt er sich, dann erst schlägt er.",
     "falsch": "Chor im Eis: Feuer taut ihn auf, die Köpfe schweigen. Der schwere Schlag kommt als Erstes, Block bereit.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Chor im Eis: Salz ist seine Schwäche, und alle drei Züge ruft er einen Rufer dazu. Der große Schlag kommt zuletzt, der Block steht in der Mitte.",
+      "falsch": "Chor im Eis: Er ruft nur einmal und steht dann allein. Gegen Salz ist er taub, Feuer setzt ihm zu.",
+      "entwurf": true
+     }
+    ]
    },
    "ruft": {
     "wahr": "Was ruft: Zuerst schadet Salz am meisten. Später wechselt die Schwäche zu Glaube oder Fäulnis.",
     "falsch": "Was ruft: Licht gegen jede Gestalt, vom König bis zum Auge. Die Augen am Rand lässt es in Ruhe.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Was ruft: Es zeigt drei Gesichter nacheinander, und mit jedem wechselt die Schwäche. Ab dem ersten Wechsel ruft es alle zwei Züge ein Auge.",
+      "falsch": "Was ruft: Es bleibt in einer Gestalt bis zum Ende. Die Augen ruft es von Anfang an, alle drei Züge.",
+      "entwurf": true
+     }
+    ]
    },
    "erhoerte": {
     "wahr": "Erhörte: Salz löscht den Docht. Sie schmilzt im eigenen Licht und wird dabei schneller, nicht warten.",
     "falsch": "Erhörte: Feuer härtet das Wachs, dann hält sie still. Die Wachshände sind harmlos, nicht beachten.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Erhörte: Sie beginnt klein, mit einem Schlag und einem Aufbau, und wird mit jedem Zug schneller. Alle drei Züge reicht eine Wachshand nach.",
+      "falsch": "Erhörte: Wasser löscht ihren Docht, dann ist sie harmlos. Sie wird nicht schneller, aber ihre Hände kommen auf einmal.",
+      "entwurf": true
+     }
+    ]
    },
    "ungeheilter": {
     "wahr": "Ungeheilter: Feuer frisst die Binden. Er nimmt dir die Stütze, jede Karte wiegt mehr. Später hilft Glaube.",
     "falsch": "Ungeheilter: Wasser wäscht ihm die Binden ab. Mit den Krücken in der Hand wird dir jede Karte billiger.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Ungeheilter: Feuer ist seine Schwäche, nach der Hälfte Glaube. Hinter dem dicken Block in der Mitte der Runde kommt der feste Schlag.",
+      "falsch": "Ungeheilter: Eisen trifft ihn bis zuletzt am härtesten. Seine Krücken nehmen dir nichts, sie stützen nur ihn.",
+      "entwurf": true
+     }
+    ]
    },
    "oberschwester": {
     "wahr": "Oberschwester: Blut trifft sie, die Haube bleibt stehen. Die Ruhe, die sie verschreibt, ist eine tote Karte.",
     "falsch": "Oberschwester: Salz kippt ihre Wanne, dann fällt sie. Die Ruhe, die sie verschreibt, heilt dich später.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Oberschwester: Blut ist ihre Schwäche, und sie beginnt mit Block. In der zweiten Hälfte ruft sie alle drei Züge einen Genesenden.",
+      "falsch": "Oberschwester: Sie holt von Anfang an Genesende. Salz in die Wanne, dann hat sie nichts mehr.",
+      "entwurf": true
+     }
+    ]
    },
    "badekarren": {
     "wahr": "Badekarren: Feuer verträgt das Leinen nicht. Ist der Vorhang zu, kommt man an die Dame nicht heran.",
     "falsch": "Badekarren: Wasser spült die Dame heraus. Was sie vorhat, sieht man durch das Leinen genau.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Badekarren: Feuer ist seine Schwäche. Auf den ersten Hieb folgt der Vorhang, da trifft nichts, und alle drei Züge steigt eine Badefrau aus.",
+      "falsch": "Badekarren: Wasser spült das Leinen weg. Der Vorhang bleibt offen, und die Badefrauen kommen nur, wenn man zu lange hinsieht.",
+      "entwurf": true
+     }
+    ]
    },
    "uhrmacher": {
     "wahr": "Uhrmacher: Eisen trifft ihn am besten. Er stellt deine Uhr nach, eine Karte wird teurer, Block hält nicht.",
     "falsch": "Uhrmacher: Block ist gegen ihn das Beste, seine Schläge sind lang zu sehen. Mit Salz wird er langsam.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Uhrmacher: Eisen ist seine Schwäche. Wer sich mit Block schützt, wird zurückgedreht, und alle drei Züge sitzt ein Mitreisender mehr im Wagen.",
+      "falsch": "Uhrmacher: Hinter Block ist man vor ihm sicher. Wasser hält die Uhren an, Mitreisende ruft er keine.",
+      "entwurf": true
+     }
+    ]
    },
    "oberkellner": {
     "wahr": "Oberkellner: Wasser spült ihm den Teller vom Kragen. Die Rechnung, die er dir gibt, lässt sich nur tragen.",
     "falsch": "Oberkellner: Die Rechnung kann man bezahlen, eine Karte genügt. Blut trifft ihn am meisten.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Oberkellner: Wasser ist seine Schwäche. Die Rechnung liegt in jedem Zug in deiner Hand, und nach der Hälfte wechselt sein Muster.",
+      "falsch": "Oberkellner: Feuer, dann dampft der Teller. Die Rechnung bekommst du nur einmal, und sie lässt sich spielen.",
+      "entwurf": true
+     }
+    ]
    },
    "abschreiber": {
     "wahr": "Abschreiber: Feuer frisst die Seiten. Was er von dir abschreibt, ist nutzlos und liegt dir nur im Stapel.",
     "falsch": "Abschreiber: Wasser verwischt die Tinte. Seine Abschrift deiner letzten Karte kannst du selbst spielen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Abschreiber: Feuer ist seine Schwäche. Er endet jede Runde mit fünf kleinen Schlägen, und alle drei Züge kommt ein Novize dazu.",
+      "falsch": "Abschreiber: Er endet mit dem großen Schlag. Wasser auf das Pult, Novizen ruft er keine.",
+      "entwurf": true
+     }
+    ]
    },
    "adlerpult": {
     "wahr": "Adler vom Pult: Eisen biegt das Messing. Wer ihn schlägt, greift in die Federkiele und spürt es.",
     "falsch": "Adler vom Pult: Feuer verbrennt die Seiten, dann fällt er. Die Kiele stecken harmlos, ruhig zuschlagen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Adler vom Pult: Eisen ist seine Schwäche, nach der Hälfte Blut. Die Federn stechen zurück, jeder Schlag auf ihn kostet dich etwas.",
+      "falsch": "Adler vom Pult: Wasser. Er trägt keine Dornen, und nach der Hälfte ändert sich nichts an ihm.",
+      "entwurf": true
+     }
+    ]
    },
    "schicht": {
     "wahr": "Schicht: Feuer in den Dosenturm. Der Takt zieht Runde um Runde an, nicht lange herumspielen.",
     "falsch": "Schicht: Der Takt bleibt gleich, man kann sich Zeit lassen. Wasser trifft den Dosenturm am härtesten.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Schicht: Feuer ist ihre Schwäche. Alle drei Züge steigt ein Dosenkind auf, und der Takt wird mit jeder Runde enger.",
+      "falsch": "Schicht: Salz trifft die Dosen am härtesten. Der Takt bleibt gleich, und Dosenkinder kommen nur zum Schluss.",
+      "entwurf": true
+     }
+    ]
    },
    "fang": {
     "wahr": "Fang: Salz auf den Kabeljau. Jeden Zug legt er dir eine Gräte in den Stapel, die nichts tut.",
     "falsch": "Fang: Er ist ein Fisch, also Feuer, kochen. Die Gräten sind Waffen, aufheben und spielen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Fang: Er pendelt am Haken, aber Salz trifft ihn trotzdem am härtesten. Die Gräte liegt jeden Zug in deinem Stapel und bringt nichts.",
+      "falsch": "Fang: Er pendelt am Haken, darum hilft Blut. Die Gräte kommt nur ein einziges Mal.",
+      "entwurf": true
+     }
+    ]
    },
    "regulator": {
     "wahr": "Regulator: Wasser hemmt das Pendel. Die Schwäche wechselt zu Eisen und zurück, und das Rad rückt weiter.",
     "falsch": "Regulator: Feuer löst die Hemmung. Er schlägt immer gleich weit aus, das Hauptrad bleibt, wo es ist.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Regulator: Wasser oder Eisen, je nachdem, wo das Pendel steht. Mit jedem Schlag rückt das Hauptrad einen Zahn weiter.",
+      "falsch": "Regulator: Nur Eisen, in jedem Zug. Das Pendel schlägt gleich weit aus, und nichts rückt nach.",
+      "entwurf": true
+     }
+    ]
    },
    "griff": {
     "wahr": "Griff: Blut trifft die Finger. Er spielt deine letzte Karte gegen dich, die schwache gehört ans Ende.",
     "falsch": "Griff: Wasser, er kommt ja aus dem Kanal. Er macht nichts nach, er schlägt nur, Hieb um Hieb.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Griff: Blut ist seine Schwäche, nach der Hälfte Eisen. Er macht deine letzte Karte nach, und die Hand schlägt dann schneller.",
+      "falsch": "Griff: Wasser, bis zuletzt. Die Finger machen nichts nach, und die zweite Hälfte ist wie die erste.",
+      "entwurf": true
+     }
+    ]
    },
    "wurzelstock": {
     "wahr": "Wurzelstock: Feuer in die Rinde. Mit jedem Zug lässt er einen Arm mehr herunter, kurz halten.",
     "falsch": "Wurzelstock: Wasser lässt das Holz quellen und lähmt es. Seine Arme bleiben immer gleich viele.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Wurzelstock: Feuer ist seine Schwäche. Er ändert zweimal sein Muster, bei zwei Dritteln und bei einem Drittel Leben.",
+      "falsch": "Wurzelstock: Wasser lässt ihn quellen. Sein Muster bleibt gleich, nur die Arme werden mehr.",
+      "entwurf": true
+     }
+    ]
    },
    "kronengaenger": {
     "wahr": "Kronengänger: Feuer und Eisen wechseln sich als Schwäche ab. Das Harz klebt dir jeden Zug eine tote Karte an.",
     "falsch": "Kronengänger: Wasser spült das Harz ab, deine Karten bleiben frei. Seine Schwäche ist immer Feuer.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Kronengänger: Feuer und Eisen wechseln sich ab. Jeden Zug klebt ein Harztropfen in deiner Hand, den du nicht spielen kannst.",
+      "falsch": "Kronengänger: Wasser löst das Harz. Der Tropfen lässt sich spielen, und seine Schwäche wechselt nie.",
+      "entwurf": true
+     }
+    ]
    },
    "voraus": {
     "wahr": "Voraus: Licht bricht das schwarze Glas. Er spielt deine nächste Karte vor dir, Seltenes sieht er nicht kommen.",
     "falsch": "Voraus: Eisen splittert ihn. Neues sieht er voraus, deine Gewohnheiten bringen ihn aus dem Takt.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Voraus: Licht ist seine Schwäche. Er kennt deine nächste Karte, nur was du selten spielst, sieht er nicht kommen.",
+      "falsch": "Voraus: Er kennt nur, was du schon gespielt hast, und Eisen splittert ihn. Neues bringt ihn nicht aus dem Takt.",
+      "entwurf": true
+     }
+    ]
    },
    "lichtqualle": {
     "wahr": "Lichtqualle: Salz auf die Vorhänge. Wer ins Licht sieht, dem bleibt eine Karte diesen Zug stehen.",
     "falsch": "Lichtqualle: Feuer verdampft sie. Ins Licht zu sehen schadet nicht, nichts bleibt dir liegen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Lichtqualle: Salz ist ihre Schwäche. Alle drei Züge löst sich ein Vorhergehender aus ihr, und eine Karte bleibt stehen.",
+      "falsch": "Lichtqualle: Fäulnis zersetzt ihr Gewebe. Sie ruft niemanden, und deine Hand bleibt frei.",
+      "entwurf": true
+     }
+    ]
    },
    "herz": {
     "wahr": "Herz: Blut ist seine Schwäche. Es schlägt langsam, und zwischen zwei Schlägen liegt die Kammer offen.",
     "falsch": "Herz: Solange es schlägt, liegt die Kammer offen, dann zuschlagen. Salz stillt die Adern.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Herz: Blut ist seine Schwäche. Zwischen zwei Schlägen liegt die Kammer offen, und alle drei Züge kriecht ein Rippenkriecher heran.",
+      "falsch": "Herz: Es ist nur beim Schlag offen, dann hilft Salz. Rippenkriecher kommen erst, wenn es schwach wird.",
+      "entwurf": true
+     }
+    ]
    },
    "kalb": {
     "wahr": "Kalb: Licht trifft die Haut. Jeden Zug wächst ihm ein Knochen nach, in der zweiten Hälfte hilft Blut.",
     "falsch": "Kalb: Es ist fertig, es wächst nichts mehr nach. Blut trifft es vom ersten Zug an.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Kalb: Licht trifft es am besten, in der zweiten Hälfte Blut. Es ist nicht fertig, jeden Zug wächst ihm ein Knochen nach.",
+      "falsch": "Kalb: Eisen, und nur das. Es wächst nicht nach, und nach der Hälfte ändert sich nichts an ihm.",
+      "entwurf": true
+     }
+    ]
    },
    "linse": {
     "wahr": "Linse: Im Blitz ist sie geschützt, im Dunkel nur Glas. Dann Salz auflegen, nicht im Strahl.",
     "falsch": "Linse: Im Dunkel ist sie dicht, im Blitz ist sie Glas. Zuschlagen, wenn der Strahl über dich geht.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Linse: Salz ist ihre Schwäche, nur im Dunkel zu treffen. In der zweiten Hälfte tritt alle drei Züge einer aus dem Strahl.",
+      "falsch": "Linse: Sie ruft von Anfang an einen aus dem Strahl. Gegen Eisen ist sie dicht, Salz perlt ab.",
+      "entwurf": true
+     }
+    ]
    },
    "nebelhorn": {
     "wahr": "Nebelhorn: Erst holt es lange Luft und zieht den Nebel ein, dann kommt alles auf einmal. Eisen.",
     "falsch": "Nebelhorn: Es schlägt gleich im ersten Zug zu und wird danach langsamer. Wasser in den Trichter.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Nebelhorn: Eisen ist seine Schwäche. Zwei Züge holt es Luft, dann kommt der Schlag, und alle drei Züge fliegt eine Möwe herbei.",
+      "falsch": "Nebelhorn: Wasser. Es schlägt in jedem Zug und ruft keine Möwen.",
+      "entwurf": true
+     }
+    ]
    },
    "ungetaufte": {
     "wahr": "Ungetaufte: Wasser in den glühenden Mund. Zwischen den Glockenschlägen summt sie offen, nur dann treffen.",
     "falsch": "Ungetaufte: Beim Schlag steht sie offen, im Summen deckt sie der Lehm. Feuer setzt ihr zu.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Ungetaufte: Wasser ist ihre Schwäche. Zwischen den Glockenschlägen ist sie offen, und alle drei Züge tritt ein Klöppelmann hervor.",
+      "falsch": "Ungetaufte: Eisen, sie steht immer offen. Das Läuten schadet nur ihr selbst, Klöppelmänner ruft sie keine.",
+      "entwurf": true
+     }
+    ]
    },
    "tretrad": {
     "wahr": "Tretrad: Feuer ins Eichenholz. Das Rad dreht sich Gang um Gang schneller, Blut trifft es zeitweise auch.",
     "falsch": "Tretrad: Wasser macht die Eiche glitschig, er fällt. Das Rad geht gleichmäßig, Warten lohnt.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Tretrad: Feuer und Blut wechseln sich als Schwäche ab, Zug um Zug. Das Rad wird schneller, und er muss mit.",
+      "falsch": "Tretrad: Eisen auf die Achse, dann steht es. Das Rad wird nicht schneller, es stockt eher.",
+      "entwurf": true
+     }
+    ]
    },
    "brennofen": {
     "wahr": "Brennofen: Wasser nimmt ihm die Glut. Was brennt, frisst er, Feuerkarten verpuffen vor ihm.",
     "falsch": "Brennofen: Feuer schwächt ihn, die Glut in der Tür. Feuerkarten gehören an den Anfang.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Brennofen: Wasser ist seine Schwäche, Feuer frisst er. Nach der Hälfte glüht die Tür auf, und sein Muster wechselt.",
+      "falsch": "Brennofen: Eisen schlägt ihm die Tür ein. Feuerkarten bringen ihm nichts, und nach der Hälfte wird er ruhiger.",
+      "entwurf": true
+     }
+    ]
    },
    "neununddreissigste": {
     "wahr": "Neununddreißigste: Eisen. Sind die Schilde dicht, trifft nichts durch, und dazwischen stößt es zurück.",
     "falsch": "Neununddreißigste: Gerade in der Schildkröte ist sie weich. Feuer macht den Lehm der Schilde mürbe.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Neununddreißigste: Eisen ist ihre Schwäche. Alle vier Züge kommt ein Stempel dazu, und wer auf die Schilde schlägt, trifft Lanzen.",
+      "falsch": "Neununddreißigste: Feuer, die Schilde sind Ton. Stempel ruft sie alle zwei Züge, die Lanzen sind nur Zierde.",
+      "entwurf": true
+     }
+    ]
    },
    "rueckseite": {
     "wahr": "Rückseite: Eisen. Wohin sie sieht, wird eine Karte schwerer. Im Neumond ist die Scheibe nicht zu treffen.",
     "falsch": "Rückseite: Im Neumond ist die Scheibe verwundbar, dann alles hineinwerfen. Wasser lässt sie wachsen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Rückseite: Eisen ist ihre Schwäche. Ab dem ersten Wechsel ruft sie alle drei Züge eine Mondmotte, und im letzten Drittel ist ein Schritt lang nichts zu treffen.",
+      "falsch": "Rückseite: Licht trifft sie am besten. Die Motten kommen von Anfang an, und im Neumond ist sie am verwundbarsten.",
+      "entwurf": true
+     }
+    ]
    },
    "mondmann": {
     "wahr": "Mann im Mond: Feuer ins Reisig. Was er trägt, lädt er dir auf, und es bleibt. Später hilft Eisen.",
     "falsch": "Mann im Mond: Wasser, er geht ja durch Asche. Das Reisig lässt sich ablegen, wirf es einfach weg.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Mann im Mond: Feuer ist seine Schwäche, nach der Hälfte Eisen. Er lädt dir Reisig auf, das du nicht mehr loswirst.",
+      "falsch": "Mann im Mond: Wasser. Das Reisig ist leicht, nach dem Zug ist es wieder fort.",
+      "entwurf": true
+     }
+    ]
    },
    "sender": {
     "wahr": "Sender: Salz auf die Bakelitschränke. Man hört nur die Hälfte seiner Absicht, und in Funkstille trifft nichts.",
     "falsch": "Sender: Licht lässt die Röhren platzen. Ist er funkstill, sieht man das Gesicht und trifft.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Sender: Salz ist seine Schwäche, nach der Hälfte Glaube. Man hört nur die halbe Absicht, und danach ruft er alle drei Züge ein Rauschen.",
+      "falsch": "Sender: Eisen schlägt die Röhren. Seine Absicht liegt offen, und das Rauschen kommt von Anfang an.",
+      "entwurf": true
+     }
+    ]
    },
    "kastendrachen": {
     "wahr": "Kastendrachen: Wasser trifft ihn. Auf dem Draht liegt Strom, wer ihn anfasst, bekommt ihn zurück.",
     "falsch": "Kastendrachen: Der Draht ist tot, ruhig anfassen. Eisen trifft ihn am härtesten.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Kastendrachen: Wasser und Feuer wechseln sich ab. Der Draht gibt Strom zurück, auch wenn kein Wind geht.",
+      "falsch": "Kastendrachen: Immer Eisen. Ohne Wind fällt er herunter und ist harmlos.",
+      "entwurf": true
+     }
+    ]
    },
    "heimleiterin": {
     "wahr": "Heimleiterin: Feuer ins Aufnahmebuch. In der Nachtruhe ist nichts zu holen, ihre Nummer tut nichts.",
     "falsch": "Heimleiterin: Wasser, die Kinder haben nasses Haar. Die Nummer im Stapel ist gute Beute, behalten.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Heimleiterin: Feuer ist ihre Schwäche. Alle drei Züge ruft sie eine Nummer auf, und es antworten Zwillinge oder ein Zugedecktes.",
+      "falsch": "Heimleiterin: Wasser. Sie ruft nur die Nachtschwester, und die Nummer in deinem Stapel ist eine gute Karte.",
+      "entwurf": true
+     }
+    ]
    },
    "fotograf": {
     "wahr": "Fotograf: Licht, die Platte verträgt es nicht. Eine Karte bleibt stehen, bis das Bild gemacht ist.",
     "falsch": "Fotograf: Fäulnis verdirbt ihm die Platten. Das Stillhalten gilt für ihn, nicht für deine Hand.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Fotograf: Licht ist seine Schwäche, nach der Hälfte Feuer. Eine Karte rührt sich nicht, bis das Bild gemacht ist.",
+      "falsch": "Fotograf: Blut. Er hält deine ganze Hand still, nicht nur eine Karte.",
+      "entwurf": true
+     }
+    ]
    },
    "einfahrt": {
     "wahr": "Einfahrt: Salz auf die Schienen. Erst das Licht im Tunnel, dann das Rauschen, dann kommt der Schlag.",
     "falsch": "Einfahrt: Der Zug kommt ohne Vorzeichen, plötzlich. Feuer auf die Stirnlampen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Einfahrt: Salz ist seine Schwäche, nach der Hälfte Blut. Zwei Züge nur Licht und Rauschen, dann kommt er, und in der zweiten Hälfte stehen Wartende am Gleis.",
+      "falsch": "Einfahrt: Eisen auf die Schienen. Er kündigt sich an, aber die Wartenden ruft er von Anfang an.",
+      "entwurf": true
+     }
+    ]
    },
    "menge": {
     "wahr": "Menge: Licht trifft sie. Im Gedränge kostet eine Karte mehr, die Schwäche wechselt auf Blut.",
     "falsch": "Menge: Salz auf den Bahnsteig, sie weichen aus. Im Gedränge werden deine Karten billiger.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Menge: Licht und Blut wechseln sich als Schwäche ab, Zug um Zug. Im Gedränge kostet dich eine Karte mehr.",
+      "falsch": "Menge: Nur Salz, nie etwas anderes. Auf dem Bahnsteig wird jede Karte billiger.",
+      "entwurf": true
+     }
+    ]
    },
    "galionsfigur": {
     "wahr": "Galionsfigur: Feuer in das Holz. Ihr Bug geht durch jeden Block, wer sich nur duckt, hat nichts davon.",
     "falsch": "Galionsfigur: Block hält ihren Rammstoß ab, aufbauen und warten. Wasser nimmt ihr die Fahrt.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Galionsfigur: Feuer ist ihre Schwäche. Ihr Bug bricht deinen Block, und in der zweiten Hälfte rammt sie härter zu.",
+      "falsch": "Galionsfigur: Eisen, denn Holz splittert. Dein Block hält, und der Bug prallt ab.",
+      "entwurf": true
+     }
+    ]
    },
    "moorpferd": {
     "wahr": "Moorpferd: Feuer, manchmal auch Blut. Das Moor hält jeden Zug eine deiner Karten fest.",
     "falsch": "Moorpferd: Wasser hilft gegen den Moorgrund. Die Karten bleiben dir, nur Gold bleibt hängen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Moorpferd: Wasser macht den Grund nur nasser, Feuer und Blut wirken besser. Jeden Zug zieht das Moor eine deiner Karten fest.",
+      "falsch": "Moorpferd: Es hält deine ganze Hand fest. Gegen Eisen ist es blank.",
+      "entwurf": true
+     }
+    ]
    },
    "prediger": {
     "wahr": "Prediger: Ist die Sanduhr voll, kommt das Urteil. Seine Schwäche wechselt zwischen Wasser, Feuer und Glaube.",
     "falsch": "Prediger: Das Urteil kommt zu Beginn, danach ist er stumm. Seine Schwäche bleibt Salz.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Prediger: Wasser, Feuer und Glaube kommen als Schwäche der Reihe nach. Jeden zweiten Zug ist Predigt, und der Schlag danach ist das Urteil.",
+      "falsch": "Prediger: Nur Salz stört ihn. Das Urteil spricht er in jedem Zug.",
+      "entwurf": true
+     }
+    ]
    },
    "eingesalzene": {
     "wahr": "Eingesalzene: Wasser löst das Salz von ihr. Sie salzt dir eine Karte ein, die bleibt diesen Zug tot.",
     "falsch": "Eingesalzene: Salz stärkt dich gegen sie, es nimmt ihr die Kraft. Deine Karten behältst du.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Eingesalzene: Wasser ist ihre Schwäche, nach der Hälfte Blut. Eine Karte ist jeden Zug eingesalzen und lässt sich nicht spielen.",
+      "falsch": "Eingesalzene: Feuer trocknet sie aus. Das Salz sitzt nur auf ihr, deine Karten bleiben frei.",
+      "entwurf": true
+     }
+    ]
    },
    "getragene": {
     "wahr": "Getragener: Feuer in die Lade. Die Träger decken, was neben ihr geht, und die Mumien kommen nach.",
     "falsch": "Getragener: Die Träger schützen nur sich selbst. Wasser auf die Binden, dann fällt die Lade.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Getragener: Feuer ist seine Schwäche. Alle drei Züge steht eine Mumie auf, und die Träger decken, was neben der Lade geht.",
+      "falsch": "Getragener: Eisen schlägt die Lade auf. Die Träger decken niemanden, Mumien ruft er keine.",
+      "entwurf": true
+     }
+    ]
    },
    "welle": {
     "wahr": "Welle: Eisen bricht das schwarze Eis. Jedes Mal, wenn du wegsiehst, ist sie weiter, dann bricht sie.",
     "falsch": "Welle: Feuer lässt das Eis schmelzen. Sie bricht, sobald man sie ansieht, nicht erst später.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Welle: Eisen ist ihre Schwäche, nach der Hälfte Glaube. Jeden zweiten Zug ist sie ein Stück näher, und der Schlag danach bricht schwer.",
+      "falsch": "Welle: Wasser nimmt ihr die Wucht. Sie schlägt ohne Vorlauf zu, in jedem Zug gleich.",
+      "entwurf": true
+     }
+    ]
    }
   },
   "biome": {
    "hafen": {
     "wahr": "Hafen: Der Lotse hält Wasser nicht aus. Witwe Haskins unter der Fischhalle verkauft, was die Flut bringt.",
     "falsch": "Hafen: Die Witwe unter dem Vordach tauscht nur, Gold nimmt sie nicht. Der Lotse fällt vor Feuer.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Hafen: Die Netzflickerin gibt Eisen nach, der Tiefling dem Licht. Die Kais enden an einer Kirchenmauer, die zur Hälfte im Wasser steht.",
+      "falsch": "Hafen: Die Netzflickerin scheut Feuer, der Tiefling Salz. Die Kais enden am Leuchtturm, und die Glocke schweigt.",
+      "entwurf": true
+     }
+    ]
    },
    "moor": {
     "wahr": "Moor: Der Torfmann nimmt nur Gold und versenkt es gleich. Gegen den Opfernden hilft Blut.",
     "falsch": "Moor: Der Torfmann tauscht gegen Dinge, Gold will er nicht. Das Nest brennt schlecht, Wasser nehmen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Moor: Der Hirte scheut Licht, die Torfstecherin Fäulnis. Der Kirchpfad führt hinaus, zur Kapelle mit dem schiefen Wasser.",
+      "falsch": "Moor: Der Hirte gibt Blut nach, die Torfstecherin Eisen. Der Kirchpfad führt zum Leuchtturm.",
+      "entwurf": true
+     }
+    ]
    },
    "kapelle": {
     "wahr": "Kapelle: Der Küster verkauft die Gaben der Gemeinde. Salz setzt den Ertrunkenen zu.",
     "falsch": "Kapelle: Der Küster kauft nur noch an, verkauft nichts. Die Ertrunkenen scheuen Feuer.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Kapelle: Die Chorknaben fürchten Glaube, die Ertrunkenen Salz. Hinter dem Altar führt eine nasse Treppe nach unten.",
+      "falsch": "Kapelle: Die Chorknaben fürchten Feuer. Hinter dem Altar liegt eine trockene Krypta, die Treppe führt nach oben.",
+      "entwurf": true
+     }
+    ]
    },
    "salz": {
     "wahr": "Salz: Die alten Stoffe reagieren hier miteinander, Salz, Wasser, Blut. Der Salzläufer weicht vor Wasser.",
     "falsch": "Salz: Hier reagieren Eisen und Feuer auf neue Weise. Dem Grabwächter ist Blut das Schlimmste.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Salz: Der Schlundträger leidet an Blut. Der letzte Hauer arbeitet seit 1911 hier unten, ihm hat niemand Schichtende gesagt.",
+      "falsch": "Salz: Der Schlundträger gibt Wasser nach. Der letzte Hauer kam erst gestern herunter und kennt den Weg nach oben.",
+      "entwurf": true
+     }
+    ]
    },
    "stadt": {
     "wahr": "Stadt: Beim Zugende reagieren die erste und die letzte Karte miteinander. Die Mumien leiden an Fäulnis.",
     "falsch": "Stadt: Hier reagieren nur zwei Karten nebeneinander, wie oben. Die Boten fürchten Wasser.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Stadt: Die Vermesserin kam 1903 mit einer Expedition und misst Türen, die zu breit sind. Der Wind trägt Sand nach oben.",
+      "falsch": "Stadt: Die Vermesserin kam erst 1925 und misst Fenster. Der Sand fällt wie Regen.",
+      "entwurf": true
+     }
+    ]
    },
    "eis": {
     "wahr": "Eis: Jede Karte reagiert mit der vorletzten, nicht mit der letzten. Der Rufer verträgt Feuer schlecht.",
     "falsch": "Eis: Die Reaktion geht hier wie oben von der letzten Karte aus. Der Rufer scheut Wasser.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Eis: Der Nachgeher gibt Glaube nach. Der Schlittenführer hat seinen Namen vergessen, aber nicht die Preise.",
+      "falsch": "Eis: Der Nachgeher scheut Feuer. Der Schlittenführer kennt seinen Namen noch, nur die Preise hat er vergessen.",
+      "entwurf": true
+     }
+    ]
    },
    "pforte": {
     "wahr": "Pforte: Jeden Zug gilt die Regel eines anderen Bioms, die nächste siehst du schon. Augen scheuen Licht.",
     "falsch": "Pforte: Die Regel bleibt den ganzen Kampf dieselbe, such dir die Reihenfolge aus. Augen scheuen Salz.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Pforte: Der, der hier ruft, ist anfangs gegen Salz verletzlich. Die Regel jedes Zuges ist nie dieselbe wie die davor.",
+      "falsch": "Pforte: Der, der hier ruft, fürchtet nur Eisen. Die Regel bleibt den ganzen Kampf, nur die Gegner wechseln.",
+      "entwurf": true
+     }
+    ]
    },
    "grotte": {
     "wahr": "Grotte: Die Kerzenfrau nimmt kein Geld, sie wiegt Gabe gegen Gabe. Wachshände halten Feuer nicht aus.",
     "falsch": "Grotte: Die Kerzenfrau nimmt Gold, nur wenig. Wachs fürchtet Wasser, die Hände auch.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Grotte: Der Geheilte fürchtet Glaube, der Quellwärter Fäulnis. Die Stufen nach unten sind von Knien ausgetreten.",
+      "falsch": "Grotte: Der Geheilte fürchtet Feuer, der Quellwärter Eisen. Die Stufen sind aus dem Fels gesprengt.",
+      "entwurf": true
+     }
+    ]
    },
    "kurhaus": {
     "wahr": "Kurhaus: Der Apotheker liest seine Rezepte selbst nicht. Salz trifft die Genesenden, Feuer die Badefrauen.",
     "falsch": "Kurhaus: Der Apotheker liest jedes Rezept genau, darauf ist Verlass. Die Genesenden scheuen Blut.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Kurhaus: Der Liegende gibt Licht nach, der Kurgast Wasser. Am Ende steht die Oberschwester oder der Badekarren.",
+      "falsch": "Kurhaus: Der Liegende scheut Feuer, der Kurgast Eisen. Am Ende steht immer die Oberschwester.",
+      "entwurf": true
+     }
+    ]
    },
    "nachtzug": {
     "wahr": "Nachtzug: Der Schaffner verkauft Liegengelassenes, auch Dinge, die dir noch gehören werden. Gepäck: Wasser.",
     "falsch": "Nachtzug: Der Schaffner kauft Liegengelassenes auf, er verkauft nichts. Das Gepäck scheut Feuer.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Nachtzug: Die Kontrolleurin fürchtet Glaube, das Schlafwagenkind Licht. Im Speisewagen wartet der Uhrmacher oder der Oberkellner.",
+      "falsch": "Nachtzug: Die Kontrolleurin fürchtet Blut, das Schlafwagenkind Salz. Im Speisewagen wartet immer nur der Uhrmacher.",
+      "entwurf": true
+     }
+    ]
    },
    "kloster": {
     "wahr": "Kloster: Der Bibliothekar verleiht nur, nichts davon bleibt dein. Die Tintenfrau hält Wasser nicht aus.",
     "falsch": "Kloster: Der Bibliothekar verkauft, und was du kaufst, bleibt dein. Die Tintenfrau scheut Feuer.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Kloster: Der Novize scheut Licht, der Leser Glaube. Am Ende steht der Abschreiber oder der Adler vom Pult.",
+      "falsch": "Kloster: Der Novize scheut Blut, der Leser Eisen. Am Ende steht immer der Abschreiber.",
+      "entwurf": true
+     }
+    ]
    },
    "fabrik": {
     "wahr": "Fabrik: Die Vorarbeiterin kennt deinen Namen von der Stempelkarte. Dosenkinder geben Eisen nach.",
     "falsch": "Fabrik: Die Vorarbeiterin kennt dich nicht, sie fragt erst nach dem Namen. Der Kesselmann scheut Feuer.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Fabrik: Die Ausnehmerin und der Kühlhausgast fürchten beide Feuer. Am Ende steht die Schicht oder der Fang.",
+      "falsch": "Fabrik: Die Ausnehmerin fürchtet Salz, der Kühlhausgast Wasser. Am Ende steht immer die Schicht.",
+      "entwurf": true
+     }
+    ]
    },
    "gezeitenwerk": {
     "wahr": "Gezeitenwerk: Jeden anderen Zug ist Flut, und die Hand bleibt dir. Das Gewicht gibt Eisen nach.",
     "falsch": "Gezeitenwerk: Bei Flut wirfst du die Hand ab, bei Ebbe behältst du sie. Der Kanalaal scheut Salz.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Gezeitenwerk: Der Zahnrad-Wärter scheut Salz, die Ölerin Feuer. Die Uhr des Ingenieurs zeigt zehn nach zwei.",
+      "falsch": "Gezeitenwerk: Der Zahnrad-Wärter scheut Eisen, die Ölerin Wasser. Die Uhr des Ingenieurs steht auf Mitternacht.",
+      "entwurf": true
+     }
+    ]
    },
    "wald": {
     "wahr": "Wald: Am Zugbeginn kommt deine zuletzt gespielte Karte aus der Ablage zurück. Der Steinhirsch gibt Eisen nach.",
     "falsch": "Wald: Am Zugbeginn kommt die erste Karte des letzten Zugs zurück. Der Harzfang scheut Feuer.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Wald: Der Holzfäller gibt Glaube nach, die Bernsteinlarve Wasser. Der Köhler sagt, morgen fange der Meiler Feuer.",
+      "falsch": "Wald: Der Holzfäller scheut Feuer, die Bernsteinlarve Salz. Der Köhler hat den Meiler gestern angezündet.",
+      "entwurf": true
+     }
+    ]
    },
    "ufer": {
     "wahr": "Ufer: Gespielte Karten gehen unter den Stapel, gemischt wird nie. Der, der vor dir kam, scheut Licht.",
     "falsch": "Ufer: Die Ablage wird am Zugende gemischt wie sonst auch. Der, der vor dir kam, scheut Salz.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Ufer: Der Strandwärter vermietet noch einen Korb, den neben deinem. Die Spuren im Sand gehen ins Wasser.",
+      "falsch": "Ufer: Der Strandwärter vermietet alle Körbe, nur deiner fehlt. Die Spuren führen aus dem Wasser heraus.",
+      "entwurf": true
+     }
+    ]
    },
    "glasmeer": {
     "wahr": "Glasmeer: Die oberste Karte liegt offen, eine Handkarte darf man dagegen tauschen. Leithund: Feuer.",
     "falsch": "Glasmeer: Die unterste Karte liegt offen, man tauscht beliebig oft. Der Leithund scheut Licht.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Glasmeer: Der Glasschwimmer gibt Wasser nach, der Splitterchor Licht. Dein Spiegelbild nennt den Preis, bevor du fragst.",
+      "falsch": "Glasmeer: Der Glasschwimmer scheut Feuer, der Splitterchor Eisen. Dein Spiegelbild fragt erst und nennt dann den Preis.",
+      "entwurf": true
+     }
+    ]
    },
    "walkathedrale": {
     "wahr": "Walkathedrale: Die dritte Karte eines Zuges reagiert mit allen davor. Rippenkriecher geben Eisen nach.",
     "falsch": "Walkathedrale: Hier reagiert die letzte Karte mit allen davor. Der Walfänger nimmt kein Gold.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Walkathedrale: Das Echo gibt Glaube nach, der Markfresser Feuer. Am Ende steht das Herz oder das Kalb.",
+      "falsch": "Walkathedrale: Das Echo scheut Eisen, der Markfresser Salz. Am Ende steht immer das Herz.",
+      "entwurf": true
+     }
+    ]
    },
    "leuchtturm": {
     "wahr": "Leuchtturm: Der Strandvogt verleiht nur bis zur nächsten Flut, dann holt das Meer alles zurück. Möwen: Eisen.",
     "falsch": "Leuchtturm: Der Strandvogt verkauft, was das Meer bringt, für immer. Die Möwen fürchten Feuer.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Leuchtturm: Der Lampenputzer fürchtet Feuer, die Fensterzählerin Wasser. Der Strahl fällt seit dem Krieg auf den eigenen Hof.",
+      "falsch": "Leuchtturm: Der Lampenputzer fürchtet Wasser, die Fensterzählerin Blut. Der Strahl fällt seit dem Krieg aufs Meer.",
+      "entwurf": true
+     }
+    ]
    },
    "glockengiesserei": {
     "wahr": "Glockengießerei: Der Wandergießer gießt um, was du beim Krämer sahst, aus Feuer wird Wasser. Naht: Blut.",
     "falsch": "Glockengießerei: Der Wandergießer lässt die Stoffe, wie sie sind, nur der Preis ändert sich. Formerin: Wasser.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Glockengießerei: Der Gießer gibt Wasser nach, der Klöppel Glaube. Am Ende hängt die Ungetaufte oder dreht sich das Tretrad.",
+      "falsch": "Glockengießerei: Der Gießer scheut Feuer, der Klöppel Eisen. Am Ende hängt immer die Ungetaufte.",
+      "entwurf": true
+     }
+    ]
    },
    "ziegelgruben": {
     "wahr": "Ziegelgruben: Die erste Karte eines Zuges reagiert mit der letzten des vorigen. Der Schreiber nimmt kein Gold.",
     "falsch": "Ziegelgruben: Am Zugende reißt die Kette ab, jeder Zug beginnt neu. Der Schreiber will Gold.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Ziegelgruben: Der Brennmeister fürchtet Wasser, der Ziegelträger Salz. Am Ende steht der Brennofen oder die Neununddreißigste.",
+      "falsch": "Ziegelgruben: Der Brennmeister fürchtet Feuer, der Ziegelträger Blut. Am Ende steht immer der Brennofen.",
+      "entwurf": true
+     }
+    ]
    },
    "mond": {
     "wahr": "Mond: Jeder Gegner zeigt seine nächste Absicht schon mit. Der Gehilfe verleiht nur, nichts gehört jemandem.",
     "falsch": "Mond: Die Absichten sieht man hier gar nicht, man spielt blind. Der Kraterbewohner scheut Wasser.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Mond: Der Astronom fürchtet Licht, die Mondmotte Wasser. Die Strickleiter von 1890 reicht bis auf den Staub.",
+      "falsch": "Mond: Der Astronom fürchtet Eisen, die Mondmotte Feuer. Die Strickleiter von 1890 ist abgerissen und liegt im Staub.",
+      "entwurf": true
+     }
+    ]
    },
    "waage": {
     "wahr": "Waage: Übrige Energie verfällt nicht, sie liegt als Block in der Schale. Der Schlagbaum gibt Blut nach.",
     "falsch": "Waage: Übrige Energie wird hier zu Heilung, nicht zu Block. Der Verwalter zahlt in Gold.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Waage: Der Schreiber fürchtet Feuer, die Tarierte Salz. Der Verwalter legt dein Stück in die Schale, und seine ist immer leichter.",
+      "falsch": "Waage: Der Schreiber fürchtet Wasser, die Tarierte Blut. Die Schale des Verwalters ist immer schwerer als deine.",
+      "entwurf": true
+     }
+    ]
    },
    "funkstation": {
     "wahr": "Funkstation: Drei Karten mit gleichen Kosten nacheinander, die dritte wirkt stärker. Rauschen: Licht.",
     "falsch": "Funkstation: Die erste von drei gleich teuren Karten wird verstärkt, immer. Die Telegrafistin scheut Feuer.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Funkstation: Der Funker gibt Wasser nach, der Mastkletterer Feuer. Der Proviantmeister setzt für jedes Stück, das du nimmst, eines von dir auf die Liste.",
+      "falsch": "Funkstation: Der Funker fürchtet Salz, der Mastkletterer Eisen. Der Proviantmeister schenkt dir, was auf der Liste steht.",
+      "entwurf": true
+     }
+    ]
    },
    "waisenhaus": {
     "wahr": "Waisenhaus: Der Hausmeister verkauft, was die Kinder liegen ließen. Das Zugedeckte gibt Salz nach.",
     "falsch": "Waisenhaus: Der Hausmeister kauft nur an, verkauft nichts. Der Turnlehrer scheut Glaube.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Waisenhaus: Die Nachtschwester fürchtet Glaube, die Zwillinge Licht. Am Ende steht die Heimleiterin oder der Fotograf.",
+      "falsch": "Waisenhaus: Die Nachtschwester fürchtet Feuer, die Zwillinge Eisen. Am Ende steht immer die Heimleiterin.",
+      "entwurf": true
+     }
+    ]
    },
    "station": {
     "wahr": "Station: Löst eine Karte eine Reaktion aus, liegt sie oben auf dem Stapel. Fundsachen gibt es nur geliehen.",
     "falsch": "Station: Eine Karte, die reagiert, scheidet hier aus dem Spiel. Der Beamte verkauft die Fundsachen.",
-    "entwurf": true
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Station: Der Sperrenschaffner fürchtet Feuer, der Streckengänger Licht. Am Ende steht der Zug, der einfährt, oder die Menge.",
+      "falsch": "Station: Der Sperrenschaffner fürchtet Wasser, der Streckengänger Salz. Am Ende steht immer die Menge.",
+      "entwurf": true
+     }
+    ]
    }
   }
  },
