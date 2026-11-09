@@ -56,11 +56,25 @@ const {ladeKern}=require('./kern');
  run('busy=false;S.energy=3;endTurn()');ok(run('S.enemies[0].pi%S.enemies[0].pat.length')===w0&&run('S.zannAus'),`Zug ohne Geige: Fenster offen, nächster Schritt ist der stärkste (Schritt ${w0})`);
  run("(()=>{busy=false;const g=deckListe().find(c=>c.src===ITEMS.zanns_geige.n);S.hand=[g,...S.hand];S.energy=3;playCard(0,0);})()");ok(!run('S.zannAus'),'wieder gespielt: Fenster zu');
  run("startFight(['ungetaufte'],'waechter');S.blickWahl=null;S.areas.talisman=S.areas.talisman.map(i=>i&&i.id==='zanns_geige'?null:i);");run('busy=false;endTurn()');ok(!run('S.zannAus'),'ohne Geige: Wächter wie immer');
+ // --- Zugabe, Probe: Der Krämer mit tausend Masken ---
+ neu(['masken'],7);run(`S.akt=1;S.route[1]=S.route[1]||RUN.akte[1].biome.find(b=>BIOMES[b]);S.phase='weg';enterNode({art:'kraemer'})`);
+ ok(run('!!S.shop.masken&&!!S.masken'),'Masken: der erste Krämer in Akt II schreibt an');
+ const kr=run(`(()=>{const i=S.shop.items.findIndex(o=>!o.sold&&!o.tausch);const g=S.gold;const id=S.shop.items[i].id;Wuerze.anschreiben(i);return{g0:g,g1:S.gold,id,hat:besitz().some(b=>b.it.id===id),schuld:S.masken.schuld&&S.masken.schuld.id}})()`);
+ ok(kr.g0===kr.g1&&kr.hat&&kr.schuld===kr.id,`angeschrieben ohne Gold: ${kr.id}`);
+ run(`(()=>{const i=S.shop.items.findIndex(o=>!o.sold&&!o.tausch);if(i>=0)Wuerze.anschreiben(i);})()`);ok(run('S.shop.items.filter(o=>o.kredit).length')===1,'nur ein Stück auf Kredit');
+ run(`leaveNode();S.akt=2;S.route[2]=S.route[2]||RUN.akte[2].biome.find(b=>BIOMES[b]);enterAct()`);
+ ok(run(`S.phase==='wahl'&&S.wahl.art==='masken'`),'Anfang von Akt III: er kassiert (Wahl eines Handgriffs)');
+ const hgVor=run('Wuerze.maskenHandgriffe().length');run(`(()=>{const x=Wuerze.maskenHandgriffe()[0];Wuerze.bezahlen(x.it.uid,x.k);})()`);
+ ok(run('Wuerze.maskenHandgriffe().length')===hgVor-1&&run(`S.phase==='uebergang'&&S.masken.bezahlt`),'bezahlt: ein Handgriff weniger, zurück im Übergang');
+ run(`S.akt=3;S.route[3]=S.route[3]||RUN.akte[3].biome.find(b=>BIOMES[b]);enterAct()`);ok(run(`S.phase==='uebergang'`),'danach kassiert er nicht noch einmal');
+ run(`S.phase='weg';enterNode({art:'kraemer'})`);ok(run('!S.shop.masken'),'einmal je Run');
+ neu([],7);run(`S.akt=1;S.route[1]=S.route[1]||RUN.akte[1].biome.find(b=>BIOMES[b]);S.phase='weg';enterNode({art:'kraemer'})`);ok(run('!S.shop.masken'),'ohne Zettel kein Masken-Krämer');
+ run('BAL.auftrag3.masken=false');ok(!run(`Wuerze.stuecke().some(s=>s.id==='masken')`),'Schalter masken aus: das Stück wird nicht gewürfelt');run('BAL.auftrag3.masken=true');
  // --- Schalter ---
  run('BAL.auftrag3.wuerze=false');run(`(()=>{Meta.reset();newRun('fischer',3,{});})()`);ok(run('S.zettel.wuerze.length')===0,'wuerze aus: leerer Zettel');run('BAL.auftrag3.wuerze=true');
  // --- Bots mit allen vier Stücken ---
  run('Meta.reset()');let bf=0,sieg=0;const zahl={zeitung:0,brief:0,briefKnoten:0,teile:0,trennung:0,geige:0,zann:0};
- for(let s=1;s<=30;s++){const r=run(`(()=>{const x=Bot.spiele(JOBS[${s}%9].id,${s},{nachStart:()=>{S.zettel.wuerze=['zeitung','brief','trennung','zann'];}});return {x,z:(S.zeitungGesehen||[]).length,b:!!(S.brief&&S.brief.angenommen),t:S.trennungTeile||0,tf:!!S.trennungFertig,g:allActive().some(i=>i.id==='zanns_geige')||S.bag.some(i=>i&&i.id==='zanns_geige'),bk:!!(S.netz&&0)}})()`);
+ for(let s=1;s<=30;s++){const r=run(`(()=>{const x=Bot.spiele(JOBS[${s}%9].id,${s},{nachStart:()=>{S.zettel.wuerze=['zeitung','brief','trennung','zann','masken'];}});return {x,z:(S.zeitungGesehen||[]).length,b:!!(S.brief&&S.brief.angenommen),t:S.trennungTeile||0,tf:!!S.trennungFertig,g:allActive().some(i=>i.id==='zanns_geige')||S.bag.some(i=>i&&i.id==='zanns_geige'),bk:!!(S.netz&&0)}})()`);
   if(r.x.fehler){bf++;console.log(r.x.fehler.split('\n').slice(0,3).join(' | '));}if(r.x.sieg)sieg++;zahl.zeitung+=r.z;if(r.b)zahl.brief++;zahl.teile+=r.t;if(r.tf)zahl.trennung++;if(r.g)zahl.geige++;}
- ok(bf===0,`30 Bot-Runs mit allen vier Stücken ohne Fehler (${sieg} Siege; Zeitungen ${zahl.zeitung}, Brief eingesteckt ${zahl.brief}, Teile gefunden ${zahl.teile}, Trennung ausgelöst ${zahl.trennung}, Geige getragen ${zahl.geige})`);
+ ok(bf===0,`30 Bot-Runs mit allen fünf Stücken ohne Fehler (${sieg} Siege; Zeitungen ${zahl.zeitung}, Brief eingesteckt ${zahl.brief}, Teile gefunden ${zahl.teile}, Trennung ausgelöst ${zahl.trennung}, Geige getragen ${zahl.geige})`);
  run('Meta.reset()');console.log(`\n${n} Prüfungen, ${fehler?fehler+' FEHLER':'alles gut'}`);process.exit(fehler?1:0);})();

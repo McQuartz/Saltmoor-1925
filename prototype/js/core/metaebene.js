@@ -74,7 +74,7 @@ const Metaebene={
   const themen=[...(q.waechter||[]).filter(w=>N.waechter&&N.waechter[w]).map(id=>['waechter',id]),...(q.biome||[]).filter(b=>N.biome&&N.biome[b]).map(id=>['biome',id])];
   if(!themen.length){S.notizen=[];return S.notizen;}
   const p=Math.min(.6,(q.tiefe||0)/40);const n=Math.min(themen.length,r.int(1,3));
-  S.notizen=r.sample(themen,n).map(([art,id])=>{const wahr=!r.chance(p);return{art,id,wahr,t:N[art][id][wahr?'wahr':'falsch']};});
+  S.notizen=r.sample(themen,n).map(([art,id])=>{const wahr=!r.chance(p);return{art,id,wahr,t:(()=>{const e=N[art][id];const v=r.pick([e,...(e.mehr||[])]);return v[wahr?'wahr':'falsch'];})()}; /* Zugabe: weitere Fassungen je Thema in mehr[] */});
   this.seiteMerken('vorgaenger',S.notizen.map(x=>x.t));
   Bus.emit('meta',{art:'notizen',why:`Notizen des Vorgängers (Tiefe ${q.tiefe}): ${S.notizen.length} Sätze, ${S.notizen.filter(x=>!x.wahr).length} falsch (Anteil ${Math.round(p*100)} %)`});return S.notizen;},
  seiteMerken(art,zeilen){if(!zeilen||!zeilen.length||S.dev)return;const M=Meta.get();M.seiten=M.seiten||[];M.seiten.push({art,run:(M.runs||0)+1,job:S.job,zeilen});if(M.seiten.length>12)M.seiten.shift();Meta.save();}

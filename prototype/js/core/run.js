@@ -39,7 +39,7 @@ function enterAct(){S.ebene=0;if(S.akt>0)leiheZurueck();
  if(!S.route[S.akt]||!BIOMES[S.route[S.akt]]){const an=biomAngebot(S.akt);if(typeof Wuerze!=='undefined')Wuerze.angebot(an);/* M11: der Brief nennt ein Biom */S.angebote[S.akt]=an.biome;S.routeWhy.push(an.why);
   if(an.biome.length>1){S.phase='biomwahl';Bus.emit('biomwahl',{biome:an.biome,why:an.why});save();Bus.emit('changed');return;}S.route[S.akt]=an.biome[0];}
  if(typeof Wuerze!=='undefined'){Wuerze.uebergang();Wuerze.aktEintritt();} // M11: Zeitungsausschnitt, Zanns Geige
- S.phase='uebergang';Bus.emit('act_start',{akt:S.akt,biom:biomId(),why:`${aktDef().n}: ${biom().n}`});Bus.emit('changed');}
+ S.phase='uebergang';Bus.emit('act_start',{akt:S.akt,biom:biomId(),why:`${aktDef().n}: ${biom().n}`});if(typeof Wuerze!=='undefined')Wuerze.kassieren(); /* Zugabe: der Ring kassiert */Bus.emit('changed');}
 function leaveUebergang(){genWeg();}
 function chooseBiom(i){if(S.phase!=='biomwahl')return;const b=S.angebote[S.akt][i];if(!b)return;S.route[S.akt]=b;S.routeWhy.push(`${RUN.akte[S.akt].n}: ${BIOMES[b].kurz} gewählt`);Bus.emit('biom_gewaehlt',{biom:b,why:`${BIOMES[b].n} gewählt`});enterAct();}
 function ebeneKey(){return aktDef().ebenen[S.ebene];}
@@ -84,6 +84,7 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
    if(kart==='spiegel'){const alt=(S.letzterKraemer&&S.letzterKraemer.length?S.letzterKraemer:o2).filter(id=>ITEMS[id]);S.shop.items=alt.map(id=>({id:spiegelItem(id),price:ITEMS[id].rare?SH.rare_price:r.int(SH.normal_price[0],SH.normal_price[1]),sold:false}));}
    else S.letzterKraemer=S.shop.items.map(o=>o.id);
    if(typeof Tiefe!=='undefined'&&Tiefe.kraemerZu()){S.shop={items:[],hg:[],heal:true,strike:true,zu:true,art:null};S.phase='kraemer';Bus.emit('kraemer',{zu:true,why:`${b.kraemer.n} verweigert dich: die Tiefe hat dich erkannt`});break;} // M9: Seitenwechsel
+   if(typeof Wuerze!=='undefined')Wuerze.maskenKraemer(); // Zugabe: Krämer mit tausend Masken
    S.phase='kraemer';
    Bus.emit('kraemer',{why:`Krämer ${b.kraemer.n}: Sortiment aus dem Fundpool von ${b.kurz}`});break;}
   case'werkstatt':S.forged=false;S.phase='werkstatt';break;

@@ -45,6 +45,7 @@ document.addEventListener('click',e=>{
  const kz=e.target.closest('[data-kzeig]');if(kz&&KOE){KOE.zeig=+kz.dataset.kzeig;koerperRender();return;}
  const hgp=e.target.closest('[data-hg]');if(hgp){takeHandgriff(hgp.dataset.hg);return;}
  const rz=e.target.closest('[data-ritz]');if(rz){const uid=+rz.dataset.ritz;if(rz.dataset.k!=null){S.ueberschreiben={uid,k:+rz.dataset.k,alt:hgVon(itemByUid(uid))[+rz.dataset.k]};render();}else placeHandgriff(uid);return;}
+ const ms=e.target.closest('[data-masken]');if(ms){const[u,k]=ms.dataset.masken.split(':');Wuerze.bezahlen(+u,+k);render();return;} const an=e.target.closest('[data-anschreiben]');if(an){Wuerze.anschreiben(+an.dataset.anschreiben);render();return;} // Zugabe
  const tn=e.target.closest('[data-trennen]');if(tn){const[u,k]=tn.dataset.trennen.split(':');Wuerze.trennen(+u,+k);render();return;} // M11
  const kb=e.target.closest('[data-kerbe]');if(kb){kerbeDazu(+kb.dataset.kerbe);return;}
  const tg=e.target.closest('[data-tilgen]');if(tg){if(Farbe.tilgen(+tg.dataset.tilgen))wahlFertig();return;} // M8

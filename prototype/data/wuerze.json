@@ -45,6 +45,15 @@
    "chance": 0.3,
    "an": false,
    "entwurf": true
+  },
+  {
+   "id": "masken",
+   "n": "Der Krämer mit tausend Masken",
+   "ort": "der erste Krämer in Akt II bis IV",
+   "chance": 0.25,
+   "an": true,
+   "probe": "masken",
+   "entwurf": true
   }
  ],
  "zeitung_chance": 0.5,
@@ -348,6 +357,34 @@
    },
    "zu": {
     "t": "Du spielst wieder. Das Fenster schließt sich.",
+    "entwurf": true
+   }
+  },
+  "masken": {
+   "angebot": {
+    "t": "Hinter dem Tresen steht ein anderer als beim letzten Mal. Der Ring an seiner Hand ist derselbe. „Nimm, was du brauchst. Ich schreibe es an.“",
+    "entwurf": true
+   },
+   "regel": {
+    "t": "Ein Stück ohne Gold, einmal. Am Anfang des nächsten Akts kassiert er: einen Handgriff deiner Wahl.",
+    "entwurf": true
+   },
+   "knopf": {
+    "t": "ANSCHREIBEN",
+    "entwurf": true
+   },
+   "angeschrieben": {
+    "t": "Angeschrieben:",
+    "entwurf": true
+   },
+   "kassieren": {
+    "titel": "Der Ring",
+    "t": "Am Übergang wartet jemand mit einem Gesicht, das du nicht kennst. Den Ring kennst du. „Du schuldest mir noch etwas.“",
+    "wahl": "Wähl den Handgriff, den er mitnimmt.",
+    "entwurf": true
+   },
+   "ohne": {
+    "t": "Du hast nichts, was er nehmen will. Er nimmt zurück, was er dir gegeben hat.",
     "entwurf": true
    }
   }

@@ -124,7 +124,7 @@
   "meta": true,
   "fehlzeit": true,
   "pause": true,
-  "wuerze": true
+  "wuerze": true, "masken": true
  },
  "spuren": {"_doc": "Auftrag 3 M9 Spuren: Stufe 0–3 je Knoten, an dem man vorbeigeht. hp/atk/gross je Stufe, beute: kampf, schwer oder reliquie.", "hp": [0.6, 0.85, 1.1, 1.35], "atk": [-2, 0, 2, 4], "gross": [0.9, 1, 1.1, 1.22], "beute": ["kampf", "kampf", "schwer", "reliquie"]}
 }

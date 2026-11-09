@@ -6,7 +6,7 @@ const Wuerze={
  an(){return a3('wuerze');},
  D(){return(typeof WUERZE!=='undefined'&&WUERZE)||{};},
  T(){return this.D().texte||{};},
- stuecke(){return(this.D().stuecke||[]).filter(s=>s.an!==false);},
+ stuecke(){return(this.D().stuecke||[]).filter(s=>s.an!==false&&(!s.probe||a3(s.probe)));}, // Zugabe: Proben (Krämer mit tausend Masken) mit eigenem Schalter
  hat(id){return this.an()&&!!(S.zettel&&(S.zettel.wuerze||[]).includes(id));},
  // Beim Start (aus Zettel.wuerfeln): jedes Stück mit seiner Chance, ohne die des letzten Runs, höchstens drei
  wuerfeln(){if(!this.an())return[];const M=typeof Meta!=='undefined'?Meta.get():{};const zuletzt=M.wuerzeZuletzt||[];const r=R('wuerze');
@@ -76,5 +76,26 @@ const Wuerze={
  // nach dem Gegnerzug: die nächste Absicht des Wächters ist sein stärkster Angriff
  nachGegnerzug(){if(!S.zannOffen)return;S.zannOffen=false;const z=this.zannAktiv();if(!z)return;const w=z.w;let bi=-1,bv=-1;
   w.pat.forEach((x,i)=>{if(x.t==='atk'){const v=(x.v||0)*(x.h||1);if(v>bv){bv=v;bi=i;}}});if(bi>=0)w.pi=bi;},
- kampfEnde(){if(S.zannKampf){S.zannKampf=false;this.musik(false,'Kampf vorbei');}}
+ kampfEnde(){if(S.zannKampf){S.zannKampf=false;this.musik(false,'Kampf vorbei');}},
+
+ // ---------- Zugabe, Probe: Der Krämer mit tausend Masken (Schalter auftrag3.masken) ----------
+ // Der erste Krämer in Akt II bis IV hat ein anderes Gesicht und denselben Ring. Er schreibt ein Item an (einmal je Run).
+ // Am Anfang des nächsten Akts kassiert er: einen Handgriff deiner Wahl. Hast du keinen, nimmt er das Item zurück.
+ maskenHier(){return this.hat('masken')&&!S.masken&&S.akt>=1&&S.akt<=3&&S.shop&&!S.shop.zu&&S.shop.art!=='tausch';},
+ maskenKraemer(){if(!this.maskenHier())return;S.shop.masken=true;S.masken={akt:S.akt,schuld:null,bezahlt:false};
+  Bus.emit('wuerze',{art:'masken',why:'Der Krämer mit tausend Masken: ein Item auf Kredit, bezahlt wird am Anfang des nächsten Akts mit einem Handgriff'});},
+ anschreiben(i){const sh=S.shop,M=S.masken;if(!sh||!sh.masken||!M||M.schuld)return;const o=sh.items[+i];if(!o||o.sold||o.tausch)return;
+  if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}
+  o.sold=true;o.kredit=true;giveItem(o.id,'Angeschrieben');const it=besitz().map(b=>b.it).filter(x=>x.id===o.id).pop();M.schuld={id:o.id,uid:it?it.uid:null,akt:S.akt};
+  netzTat('kaufen');Bus.emit('pick');Bus.emit('toast',{a:'ANGESCHRIEBEN',b:ITEMS[o.id].n});
+  Bus.emit('wuerze',{art:'masken_kredit',why:`${ITEMS[o.id].n} angeschrieben: am Anfang von Akt ${S.akt+2} kassiert er einen Handgriff`});Bus.emit('changed');},
+ maskenHandgriffe(){const l=[];besitz().forEach(({it})=>hgVon(it).forEach((h,k)=>{if(HANDGRIFFE[h]&&!(def(it).fest_hg||[]).includes(h))l.push({it,k,hg:h});}));return l;},
+ // aus enterAct, nach dem Übergang gesetzt: die Schuld ist fällig
+ kassieren(){const M=S.masken;if(!M||!M.schuld||M.bezahlt||S.akt<=M.schuld.akt||S.phase!=='uebergang')return;
+  if(this.maskenHandgriffe().length){wahlStart('masken','uebergang');return;}
+  M.bezahlt=true;const b=besitz().find(x=>x.it.uid===M.schuld.uid);const T=(this.T().masken||{});if(b)setAt(b.loc,null);
+  Bus.emit('toast',{a:'',b:(T.ohne||{}).t||''});Bus.emit('wuerze',{art:'masken_bezahlt',why:'Kein Handgriff zum Bezahlen: er nimmt das Item zurück'});},
+ bezahlen(uid,k){if(!S.wahl||S.wahl.art!=='masken')return;const it=itemByUid(uid);if(!it||!hgVon(it)[k]||(def(it).fest_hg||[]).includes(hgVon(it)[k]))return;
+  const id=hgVon(it).splice(k,1)[0];S.masken.bezahlt=true;Bus.emit('toast',{a:'BEZAHLT',b:HANDGRIFFE[id].n});
+  Bus.emit('wuerze',{art:'masken_bezahlt',why:`Der Ring nimmt ${HANDGRIFFE[id].n} von ${def(it).n} mit`});wahlFertig();}
 };
