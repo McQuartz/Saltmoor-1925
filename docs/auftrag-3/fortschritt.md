@@ -18,7 +18,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M9 Begegnungen | fertig | Run-Zettel, alle vier Begegnungen, `art` für alle 143 Gegner |
 | M10 Metaebene | fertig | Strand zählt mit, Ausrede in Stufen, Ankunftszeile, Notizen des Vorgängers, Erbe, Fehlzeit, Pause |
 | M11 Würze | fertig | Zeitungsausschnitte, Der falsche Brief, Barmherzige Trennung, Zanns Takt; Grabbeigabe, Licht im Turm, Lügender Kartentext per Schalter aus |
-| M12 Balance und Abschluss | nicht begonnen | Stopp nach M6 (Philip) |
+| M12 Balance und Abschluss | fertig | generisch 53 %, Builds 40–62 %, kein Akt über 35 %; geklickter Run (114 Stationen), Galerie, Artboard, Daten-README, Bericht |
 | Zugabe | nicht begonnen | Stopp nach M6 (Philip) |
 
 ## Basis (M0, unverändertes main)
@@ -387,6 +387,32 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
 - Agenten: Sonnet Texte (ohne Änderung übernommen), Sonnet Bilder (eine Rückgabe), Sonnet Klang (ohne Rückgabe übernommen; Klang ungehört).
 - Mindestens erfüllt: ✓ genau die vier verlangten Stücke; der Rest ist per Schalter aus.
 
+### M12 Balance und Abschluss
+
+**Plan.** Balance und Bericht selbst. Sonnet: Galerie und Artboard zeigen alles Neue; Sonnet: `data/README.md` erklärt alle neuen Daten. Geklickter Run mit eigenem Skript.
+
+**Schritte und Entscheidungen.**
+- **Messung vorher** (alle Systeme an, Werte aus M11): generisch 58 % ([balance-vorher.txt](bilder/M12/balance-vorher.txt)), Builds 34–58 % ([build-bots-vorher.txt](bilder/M12/build-bots-vorher.txt)). Akt V verursachte 55 % der Niederlagen des generischen Bots (Basis M0: 31 %), bei Glutnest und Brackwasser über 50 %. Tode durch Eliten stiegen von 6 auf 21 %.
+- **Ursache gesucht** (je 100 Runs, [aus/](bilder/M12/aus/), [beg/](bilder/M12/beg/)): Alle Systeme aus: 52 %, Akt V 33 %. Einzeln aus: Begegnungen 52 % / 33 %, Würze 51 % / 37 %, Regelbiegung 60 % / 42 %, Blick, Farbe, Hören ohne Wirkung auf den Anteil. Je eine Begegnung allein: 33–42 %. Die Systeme machen Akt I bis IV leichter (Diener, Spuren-Beute, Asche, Brief), Akt V bleibt gleich schwer. Darum verschieben sich die Niederlagen nach hinten; keine einzelne Mechanik ist schuld.
+- **Kandidaten** ([kandidat/](bilder/M12/kandidat/), über Seeds 1–100, 101–200, 201–300): `hp_per_depth` 0,04 (Akt V 46 %), `elite.chance` 0,35 (keine Wirkung), Spuren weicher oder härter (52–53 %), `waechter_faktor` 1,45 oder 1,5 allein (je nach Seeds 33–46 %, weil der Faktor auch das Finale stärker macht). Gewählt: **`waechter_faktor` 1,35 → 1,5** und neu **`boss_faktor` 1,2** (nur das Finale „ruft“, vorher galt der Wächter-Faktor). Seeds 1–100: 53 % / Akt V 32 %; 101–200: 56 % / 30 %; 201–300: 62 % / 29 %.
+- **`boss_faktor`:** neuer Schlüssel in `balance.json → enemy_scaling`; `combat.js → mkEnemy` liest ihn für Rang `boss`, sonst gilt wie bisher `waechter_faktor`. Eine Zeile Code, damit der Ausgleich in `balance.json` bleibt.
+- **Geklickter Run** (`tools/m12-geklickt.js detektiv 21`): Seed 21 mit dem Detektiv per Suche über 120 Seeds gefunden (keine Dev-Zettel gesetzt). Im Run: drei Biegungen (Ebbe und Flut, Der Schlag, Aufgewogen), ein Kampf mit stummem Gegner, sieben Blick-Wahlen, Farbe (fünf Meldungen), Begegnungen Asche und Die Tiefe erkennt dich, Würze Trennung, Brief und Zeitung; Sieg in Tiefe 31. Die Entscheidungen trifft der Autospieler (`Bot.schritt`) in der laufenden Seite, vor jedem Schritt wird die Station gezeichnet und fotografiert. Echte Mausklicks sind es nicht; die Oberfläche läuft aber vollständig mit, mit allen Animationen. 114 Stationen, keine Konsolenfehler.
+- **Galerie und Artboard** (Sonnet, übernommen mit zwei Nachbesserungen von mir: die Überschriften der Biegungs-Kacheln saßen zur Hälfte links außerhalb, weil `karte.css` die Klasse `.kn` für Peilkarten-Knoten nutzt; die Karten standen gedreht wie in der Hand). Neu in der Galerie: Silhouetten mit Anschlusspunkten, Gesehene, 14 Biegungs-Zeichen mit Kopfleiste und Tooltip, Farbe (Schimmer, Spur, gebunden), neue Items und Karten, Strand-Stufen 0–4. Neu im Artboard: Regelbiegungen, Begegnungen (mit `art`-Zuordnung aller Gegner und Asche-Liste), Metaebene, Würze, Stoff X, Etiketten an Gegnern und Items, alles über die Suche findbar. Nebenbei behoben: `artboard.html` lud `combat.js` nicht.
+- **Daten-README:** neuer Abschnitt „Auftrag 3“ mit allen neuen Dateien und Feldern samt Lesestelle im Code.
+- **Kleinigkeit:** „Das Zeichen“ zeigte „… nicht.. Verbraucht“; `kampf.js` hängt „Verbraucht“ jetzt ohne doppelten Punkt an.
+
+#### Abnahme M12
+- Abnahmekriterien:
+  - Generischer Bot 50–65 %: ✓ 53 % ([balance-nachher.txt](bilder/M12/balance-nachher.txt)), auf zwei weiteren Seed-Bereichen 56 % und 62 %.
+  - Builds 40–65 %: ✓ 40–62 % ([build-bots-nachher.txt](bilder/M12/build-bots-nachher.txt)).
+  - Kein Akt über 35 % der Niederlagen: ✓ Builds zusammen I 17 % · II 20 % · III 14 % · IV 18 % · V 31 %; generisch ([haeufigkeit.txt](bilder/M12/haeufigkeit.txt)) I 7 % · II 31 % · III 12 % · IV 17 % · V 33 %.
+  - Geklickter Run nach 09-pruefen §6: ✓ [Kontaktbogen](bilder/M12/run-uebersicht.png), Einzelbilder in [run/](bilder/M12/run/), [Protokoll](bilder/M12/run-protokoll.json).
+  - Galerie und Artboard zeigen alles Neue: ✓ [Silhouetten](bilder/M12/galerie-1-silhouetten.png), [Gesehene](bilder/M12/galerie-2-gesehene.png), [Biegungs-Zeichen](bilder/M12/galerie-3-biegungs-zeichen.png), [Farbe](bilder/M12/galerie-4-farbe-frei.png), [neue Items](bilder/M12/galerie-5-neue-items-und-karten.png), [Strand](bilder/M12/galerie-6-strand-stufen.png); Artboard [Biegungen](bilder/M12/artboard-1-biegungen.png), [Begegnungen](bilder/M12/artboard-2-begegnungen.png), [Metaebene](bilder/M12/artboard-3-metaebene.png), [Würze](bilder/M12/artboard-4-wuerze.png). Erzeugt mit `tools/m12-galerie-fotos.js`, keine Konsolenfehler.
+  - `data/README.md` erklärt alle neuen Daten: ✓
+  - Alle Tests grün: ✓ `test-kern`, `test-run`, `test-deckbau`, `test-begegnungen`, `test-biegungen`, `test-ereignisse`, `test-speicher` „Alles gut.“, `test-meta` 30, `test-wuerze` 34, `test-vorschau` 398 Karten ohne Abweichung; [Oberfläche](bilder/M12/ui-tests.txt): `test-oberflaeche`, `test-karte-ui`, `test-rucksack`, `test-plakette` „Alles gut.“, `test-stoffbaum` 33, Icons 250 und Sprites 256 ohne Verstoß.
+  - texte-pruefen: ✓ `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 578, alle als Entwurf markiert.`
+- Agenten: Sonnet Galerie/Artboard (zwei Nachbesserungen von mir), Sonnet README (ohne Änderung übernommen).
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -638,6 +664,7 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 ## Entscheidungen unterwegs
 
+- **M12:** Ausgleich über `waechter_faktor` 1,5 und neuen `boss_faktor` 1,2 statt über Leben je Tiefe, weil nur so Akt V auf allen drei Seed-Bereichen unter 35 % blieb; `boss_faktor` braucht eine Zeile in `combat.js`, der Wert steht in `balance.json`. Der geklickte Run lässt den Autospieler in der Seite entscheiden statt echter Mausklicks (siehe M12). Seed per Suche statt per Dev-Zettel.
 - **M11:** Grabbeigabe, Licht im Turm und Lügender Kartentext aus (Mindestens verlangt nur die vier anderen); die Geige ist in der Glockengießerei die nächste sichere Beute, sonst sah man Zanns Takt fast nie; Trennungs-Teile auch an Wandbildern, damit drei Teile in einem Run zu finden sind; Mittel 1,40 statt 1,5 gelassen, weil die Sperre für das letzte Stück die Chancen drückt und höhere Chancen zu oft drei Stücke ergaben; „Das Relief“ mit Note 3 angenommen.
 - **M7, Fortsetzung:** Mo hat am 2026-11-09 gesagt, nach M6 weiterzumachen („we completed through m6, can you continue from there again?“). Ich habe `claude/project-thread-flvf7e` auf den M6-Stand von `claude/project-thread-hifkqz` vorgespult und arbeite ab M7 dort weiter.
 - **M10:** Ausrede-Stufe 3 und alle Meta-Texte als Entwurf markiert, auch der Satz aus dem Steckbrief; Fehlzeit-Start fest bei der Kapelle (Steckbrief), nicht per Biomwahl; das Erbe nimmt der Bot immer; Notizen kommen nach der Fehlzeit, damit der Autospieler sie nicht an seiner Rast findet; Pausen-Zeile auf dem Titel statt am Runstart, weil sie dort zuerst gesehen wird.
@@ -667,10 +694,67 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 ## Bericht
 
-Stand nach M3 (Stopp auf Wunsch von Mo). Fertig und abgenommen: M0 bis M3.
+Stand nach M12. Fertig und abgenommen: M0 bis M12 (M4 bis M6 von Philip auf `claude/project-thread-hifkqz`, hier vorgespult). Die Zugabe folgt.
 
-- **M1:** Alle sieben Fixes sind drin. Dazu gehören 75 Fragmente (54 neu, Entwurf), die Beutesätze ohne Ersatztext und dass nach dem Gegnerzug keine Absicht mehr zu sehen ist. Außerdem: ehrliche Absichten ohne Durchstreichen, die Schraffur im Balken, Verstärkt für Ziehen, Stärke und Gold, und Panzer statt Unverwundbarkeit. Den Panzer habe ich auf 15 % des Lebens gemessen, ein Panzer-Zug verlängert den Kampf damit um etwa 0,9 Züge.
-- **M2:** Das HUD hat Variante 2. Der Stoff-Baum ersetzt das Stoffrad, es gibt eine Gegner-Plakette und 100 Stellplätze für Gegner. Im Kampf gibt es keine Kamera mehr und keine Fragezeichen.
-- **M3:** Die Peilkarte im Nebel ist das ganze Netz des Akts, mit Abkürzung, Brüchigem Gang und Dunklem Stollen. Das Wandbild hebt den Nebel, und das Netz liegt im Speicherstand. Nach jeder Wahl folgt eine Fahrt nach vorne durch die Ebenen, mit geprüfter Weg-Richtung für alle 75 Kulissen.
-- **Bots:** Die Siegrate liegt durchgehend bei 48 % wie die Basis, ohne Fehler.
-- **Für Philip und Mo zum Ansehen:** die neuen Texte (Fragmente, Panzer-Tooltip, Kartenwörter „UNKARTIERT“, „Aufbruch“, „Wähle den nächsten Abschnitt …“, „Übergänge kürzer“) und die Fotos unter `bilder/M1` bis `bilder/M3`.
+### Kernsysteme
+
+Jedes System hat einen Schalter in `balance.json → auftrag3` und im Dev-Reiter TIEFE (`?dev=1`, Knopf DEV). `?a3aus=alle` schaltet alle aus.
+
+| System | Gebaut | Erzwingen | Regelprüfung | Bild |
+|---|---|---|---|---|
+| Rucksack am Körper | Silhouette je Figur, Items am Körper, Deck-Diff rechts | Taste R außerhalb des Kampfs | alle sieben Ja (M4) | [Fischer](bilder/M4/rucksack-fischer-1440x900.png) |
+| Regelbiegung | 14 Biegungen, eine je Biom in Akt III–V, Zeichen in Kopfleiste und Peilkarte | Reiter TIEFE „Nur eine Biegung“, CHEATS „Biom erzwingen“ | alle Ja, keine Biegung mehr als 5 Pp unter „aus“ (M5) | [Aufgewogen](bilder/M5/kampf-aufgewogen-1440x900.png) |
+| Hören statt sehen | sechs stumme Gegner in Akt IV/V, drei Einsätze in der Musik, Klänge als Zeichen | CHEATS „spawn“ mit einem stummen Gegner in Akt IV | alle Ja (M6) | [stumm](bilder/M6/plakette-stumm.png) |
+| Sehen und gesehen werden | Linse, Resonator, Lampe; Wahl zu Kampfbeginn; drei Gesehene; 44 Wächter-Schritte | CHEATS „Item“ Linse, dann Kampf | alle Ja (M7) | [Wahl](bilder/M7/01-wahl.png) |
+| Die Farbe | Stoff X, Brunnen, Wandern, Spur, Binden, Tilgen | per Seed (etwa jeder zweite Run, `Farbe.planen`) | alle Ja (M8) | [auf dem Item](bilder/M8/01-farbe-auf-item-rucksack.png) |
+| Begegnungen | Run-Zettel mit zwei von vier: Diener, Asche, Spuren, Die Tiefe erkennt dich | Reiter TIEFE Zettel-Knöpfe, „Asche geben“, „Spuren-Stufe“, „Zeichen geben“ | alle vier Ja (M9) | [Diener](bilder/M9/01-waechter-deine-karte.png) |
+| Metaebene | Strand zählt, Ausrede in Stufen, Ankunftszeile, Notizen, Erbe, Fehlzeit, Pause | Run verlieren (CHEATS „tod“), neu starten; „Meta zurücksetzen“ | alle Ja (M10) | [Erbe](bilder/M10/erbe-angebot.png) |
+| Würze | Zeitung, Falscher Brief, Barmherzige Trennung, Zanns Takt | Reiter TIEFE Abschnitt Würze, CHEATS `wuerze`/`wuerzeTun` | alle vier Ja (M11) | [Fenster offen](bilder/M11/13-zann-fenster-offen.png) |
+
+### Alle Systeme an und aus (Werte nach M12)
+
+| Build | an: Siege | an: Niederlagen je Akt I/II/III/IV/V | aus: Siege | aus: Niederlagen je Akt |
+|---|---|---|---|---|
+| Glutnest | 48 % | 7/4/2/5/8 | 46 % | 4/4/5/5/9 |
+| Brackwasser | 40 % | 2/7/3/3/15 | 36 % | 4/4/7/9/8 |
+| Bollwerk | 56 % | 6/3/2/4/7 | 42 % | 5/4/6/7/7 |
+| Aderlass | 62 % | 2/2/7/3/5 | 50 % | 2/4/9/5/5 |
+| Kettenwerk | 46 % | 5/6/5/4/7 | 46 % | 4/4/3/13/3 |
+| Hagel | 46 % | 2/4/3/10/8 | 46 % | 2/7/8/5/5 |
+| Ballast | 54 % | 4/9/2/3/5 | 44 % | 4/9/5/3/7 |
+| Kollekte | 50 % | 5/5/4/4/7 | 44 % | 5/6/5/5/7 |
+| **Generisch** (100) | **53 %** | Akt V 32 % | **48 %** | Akt V 35 % |
+
+„Aus“ heißt alle neun Schalter aus, mit den Werten aus M12 ([build-bots-aus.txt](bilder/M12/build-bots-aus.txt), [balance-aus.txt](bilder/M12/balance-aus.txt)). Mit den Systemen gewinnen die Builds im Mittel 50 % statt 45 %. Brackwasser bleibt der schwächste Build und verliert mit allen Systemen die Hälfte seiner Runs in Akt V.
+
+### Häufigkeit je Run (100 Seeds, Autospieler, [haeufigkeit.txt](bilder/M12/haeufigkeit.txt))
+
+- Regelbiegungen: Ø 2,33 verschiedene je Run, 5,9 von 12,1 Kämpfen mit Biegung.
+- Stumme Gegner: Ø 0,49 Kämpfe je Run, in 38 von 100 Runs.
+- Blick: Ein Blick-Item trug der Bot am Ende nur in 3 Runs. Er nimmt sie selten (siehe offene Fragen).
+- Farbe: in 53 von 100 Runs.
+- Begegnungen: immer genau zwei auf dem Zettel (Spuren 67, Die Tiefe erkennt dich 51, Diener 47, Asche 35). Das Zeichen bekam der Bot in 1 Run, Asche rief er in 12.
+- Würze: höchstens drei je Run. In den Bot-Runs liegt das Mittel bei 2,11, weil Dev-Runs nichts im Meta-Stand ablegen und die Sperre für das Stück des letzten Runs dort nicht greift. In einer echten Folge von Runs (`test-wuerze.js`, 100 Seeds nacheinander) liegt es bei 1,40, ohne Wiederholung. Je Stück: Zeitung 66, Trennung 52, Zann 50, Brief 43.
+
+### Neue Texte
+
+Alle neuen Texte tragen `"entwurf": true`. Sie stehen nach Meilenstein geordnet mit Datei und ersten Worten im Abschnitt „Neue Texte (Entwurf)“ oben. `node tools/texte-pruefen.js` zählt 578 und findet keinen geänderten alten Text. Im Artboard findet die Suche jeden davon.
+
+### Fünf Dinge zum Ausprobieren
+
+1. **Der ganze Run aus dem Bericht:** `index.html?job=detektiv&seed=21`. Er hat drei Biegungen, einen stummen Gegner, den Blick, die Farbe, Asche, den Brief, die Trennung und Zeitungen.
+2. **Eine Regelbiegung im Kampf:** `index.html?job=fischer&seed=4&springe=kampf&akt=3` (Akt IV). Danach im Reiter TIEFE eine andere Biegung wählen.
+3. **Peilkarte und Fahrt:** `index.html?job=pfarrerin&seed=7&springe=weg&akt=1`. Einen Knoten wählen und der Fahrt zusehen.
+4. **Metaebene:** einen Run absichtlich verlieren (DEV → CHEATS „tod“) und neu starten. Dann zeigen sich der Strand mit Spuren, das Erbe und die Notizen an der ersten Rast.
+5. **Klang:** `musik.html`, Abschnitt „Hören statt sehen“, die drei Einsätze und „GEIGE AN/AUS“. Die Geige hat noch niemand gehört.
+
+### Offene Fragen an Philip und Mo
+
+1. Die Geigenebene (Zanns Takt) ist ungehört. Klingt sie richtig, und ist sie leiser als die Gegnerstimme? Den Pegel regelt `GEIGE_V` in `music.js`.
+2. Für den Ausgleich habe ich Wächter und Eliten stärker gemacht (`waechter_faktor` 1,5) und das Finale schwächer (`boss_faktor` 1,2). Passt das Gefühl in den Wächterkämpfen?
+3. Blick-Items kommen selten an den Körper (beim Bot in 3 von 100 Runs). Sollen sie öfter im Fund liegen?
+4. „Das Zeichen“ kommt selten (beim Bot in 1 von 100 Runs), der Seitenwechsel war in M9 hart. Ist das so gewollt?
+5. Bild „Das Relief“ hat nur Note 3 (flach, warmbraun statt Stein). Soll es neu?
+6. Grabbeigabe, Licht im Turm und Lügender Kartentext sind gebaut als Daten, aber aus. Sollen sie in einer späteren Runde an?
+7. Fehlzeit und Pause sind an. Sollen sie im ersten Spieltest an bleiben?
+8. 578 Entwurfstexte warten auf Durchsicht. Gibt es Stellen, die zuerst gelesen werden sollen?

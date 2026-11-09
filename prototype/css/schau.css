@@ -1,0 +1,27 @@
+/* Galerie und Artboard: Abschnitte zu Auftrag 3 (Silhouetten, Biegungen, Farbe, Strand, Datenansichten) */
+.silh figure{position:relative}
+.silh .silhbild{position:relative;width:220px;height:344px}
+.silh .pkt{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border:1px solid #000;box-sizing:border-box;pointer-events:none}
+.silh.ohnepunkte .pkt{display:none}
+.silh .pkt.fuss{background:#6ad06a}.silh .pkt.hals{background:#e8c547}.silh .pkt.leib{background:#e8584a}.silh .pkt.hand{background:#6d9be0}.silh .pkt.auge{background:#fff}
+.biegkarte{display:flex;flex-direction:column;gap:8px}
+.biegkarte .gr{display:flex;gap:14px;align-items:flex-end}
+.kopfprobe{background:#000;border:1px solid #2a2014;padding:8px 10px;overflow:hidden}
+.kopfprobe .tz{font-family:var(--fk);font-weight:700;font-size:16px;letter-spacing:.06em;color:#efe4c8}
+.kopfprobe .tz .sub{margin-left:10px;font-family:var(--fs,inherit);font-weight:400;letter-spacing:0;font-size:11px}
+.kopfprobe .kopfbieg{display:inline-flex;vertical-align:middle;margin-left:10px;gap:3px;font-size:9px;letter-spacing:.04em;font-weight:400;color:#d8c890;cursor:help}
+.kopfprobe .kopfbieg b{font-weight:400}.kopfprobe .bz{font-style:normal;color:#a89c80;margin-left:4px}
+.tipprobe{background:#000;border:1px solid var(--messing);padding:8px 10px;font-size:15px;line-height:1.25;max-width:300px}
+.tipprobe .tn{font-family:var(--fk);color:#efe4c8}
+.farbreihe{display:flex;flex-wrap:wrap;gap:22px 26px;align-items:flex-end;margin:10px 0 18px}
+.farbitem{position:relative;width:96px;height:96px;background:#0a0908;border:1px solid #2a2014}
+.farbitem img{width:96px;height:96px;image-rendering:pixelated;display:block}
+.farbitem canvas.fb-ov{image-rendering:pixelated}
+.schimmerstufen{display:flex;gap:4px}.schimmerstufen i{display:block;width:28px;height:28px;border:1px solid #000}
+.strandzeile{display:grid;grid-template-columns:repeat(2,max-content);gap:12px 14px}
+.strandzeile figure{margin:0}
+.strandzeile figcaption,.silh figcaption small{font-family:var(--fk);font-size:12px;color:#cfc4a8;letter-spacing:.08em}
+.datenzeile{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:15px;color:#cfc4a8}
+.datenzeile b{color:#efe4c8;font-weight:400}
+.kachel.aus{opacity:.62;border-style:dashed}
+.kachel .kn{position:static;transform:none;border-radius:0;pointer-events:auto} /* karte.css nutzt .kn für Peilkarten-Knoten */

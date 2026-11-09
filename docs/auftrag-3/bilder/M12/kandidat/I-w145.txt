@@ -1,0 +1,5 @@
+Runs 100 · Siege 58 (58 %) · Ø Tiefe 26.7 · Ø Züge je Kampf 3.8 · Fehler 0
+Niederlagen je Biom: pforte 6 (14 %), waage 6 (14 %), waisenhaus 4 (10 %), station 3 (7 %), funkstation 3 (7 %), glockengiesserei 3 (7 %), ufer 3 (7 %), hafen 2 (5 %), glasmeer 2 (5 %), gezeitenwerk 2 (5 %), salz 2 (5 %), moor 2 (5 %), wald 1 (2 %), kloster 1 (2 %), mond 1 (2 %), ziegelgruben 1 (2 %)
+Je Figur (Runs/Siege): fischer 12/5, friedhofswaerter 11/10, pfarrerin 11/6, detektiv 11/8, okkultist 11/6, kneipenschlaeger 11/5, geologe 11/4, wahrsagerin 11/7, veteran 11/7
+Am Leben beim Tod: ruft 9, giesser 6, oberzoellner 5, vorhergehende 4, mastkletterer 3, zwillinge 3, schlundtraeger 3, wartende 2
+Niederlagen je Kampfart: normal 17 (40 %), waechter 10 (24 %), boss 9 (21 %), elite 6 (14 %)
