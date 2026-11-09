@@ -27,7 +27,7 @@ document.addEventListener('pointermove',e=>{
  if(down.drag){$('ghost').style.left=(e.clientX-20)+'px';$('ghost').style.top=(e.clientY-20)+'px';}});
 document.addEventListener('pointerup',e=>{
  if(cdrag){const d=cdrag;cdrag=null;$('aim').style.display='none';const ei=AIM.ei;AIM.ei=-1;$('szene').classList.remove('drop');vorschau=null;hoverCard=-1;
-  if(!d.moved){playCard(d.i);return;}
+  if(!d.moved){if(spiegelWahl){spiegelWahl=false;Bieg.spiegelTausch(d.i);render();return;}playCard(d.i);return;}
   if(d.tg){if(ei>=0)playCard(d.i,ei);else if(alive().length===1&&inScene(e.clientX,e.clientY))playCard(d.i);else render();}
   else{if(inScene(e.clientX,e.clientY))playCard(d.i);else render();}return;}
  if(!down)return;const d=down;down=null;$('ghost').style.display='none';
@@ -60,7 +60,7 @@ document.addEventListener('click',e=>{
  const en2=e.target.closest('[data-ende]');if(en2){chooseEnde(en2.dataset.ende);return;}});
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.einst;if(!k)return;const v=e.target.type==='checkbox'?e.target.checked:e.target.tagName==='SELECT'?+e.target.value:+e.target.value;Einst.set(k,v);});
 function aktion(k,el){switch(k){
- case'end':endTurn();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
+ case'end':spiegelWahl=false;endTurn();break;case'spiegel':spiegelWahl=!spiegelWahl;render();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
  case'karte':karteUmschalten();break; case'weiter':leaveUebergang();break;case'neu':S={phase:'figur',wahlStufe:Meta.get().stufe||0};render();break;case'titel':S={phase:'titel'};render();break;
  case'fortsetzen':loadRun();render();break;case'rastHeil':rastHeal();break;case'fund':takeFund();break;
  case'skipstrike':skipStrike();break;case'kstrike0':kraemerStrike(null);break;

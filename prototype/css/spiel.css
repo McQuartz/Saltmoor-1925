@@ -269,3 +269,12 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .karte .rx{position:absolute;left:50%;top:calc(100% - var(--u)*3);transform:translateX(-50%);white-space:normal;width:max-content;max-width:calc(100% - var(--u)*2);box-sizing:border-box;text-align:center;background:#0b0907;border:1px solid var(--c,var(--gold));padding:0 calc(var(--u)*2.5);color:var(--c,var(--gold));font-size:calc(var(--u)*3.6);letter-spacing:.1em;line-height:calc(var(--u)*5.5)}
 .karte .rx.in{bottom:calc(var(--u)*3);border-color:var(--blau);color:var(--blau)}
 .karte.reagiert{border-color:var(--c,var(--gold));box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px var(--c,#7a5a20),0 0 calc(var(--u)*7) calc(var(--u)*-1) var(--c,rgba(232,197,71,.6)),2px 3px 0 #000}
+/* Auftrag 3 M5: Regelbiegung in der Kopfleiste, zweite Absicht (Die Rückseite), Spiegelbild am Stapel */
+#kopf .kopfbieg{display:inline-flex;vertical-align:middle;margin-left:calc(var(--u)*5);gap:calc(var(--u)*1.5);font-size:calc(var(--u)*4.6);letter-spacing:.04em;font-weight:400;min-height:0;color:#d8c890;cursor:help}
+#kopf .kopfbieg .ico{width:calc(var(--u)*7);height:calc(var(--u)*7)}
+#kopf .kopfbieg .bz{font-family:var(--ft);font-style:italic;color:var(--dim);font-size:calc(var(--u)*4.2);letter-spacing:0;margin-left:calc(var(--u)*1)}
+.feind .plakette .abs.abs2{font-size:calc(var(--u)*4);min-height:calc(var(--u)*6);opacity:.7;margin-top:calc(var(--u)*-1);font-family:var(--fk);letter-spacing:.04em}
+.feind .plakette .abs.abs2 .ico{width:calc(var(--u)*5)!important;height:calc(var(--u)*5)!important}
+.voraus.spiegel{cursor:pointer;pointer-events:auto;color:#cfe6ff;text-decoration:underline dotted}
+.voraus.spiegel.wahl{color:#fff;text-shadow:0 0 calc(var(--u)*2) #9fc4ff}
+.voraus.spiegel.aus{cursor:default;opacity:.55;text-decoration:none}

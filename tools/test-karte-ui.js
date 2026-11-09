@@ -162,11 +162,11 @@ let fehler = 0; const ok = (c, m) => { if (!c) { fehler++; console.log('FEHLER: 
     await p.keyboard.press('m'); await p.waitForTimeout(150); await p.keyboard.press('Escape'); await p.waitForTimeout(150); ok(!(await auf()), 'Esc schließt die Karte');
     await p.close(); }
 
-  // 8. Regelbiegung: ohne Biegung bleibt der Platz leer (kein Hinweis), mit Biegung stehen Zeichen und Name da
+  // 8. Regelbiegung (seit M5 aus js/core/biegung.js, BIEGUNGEN): ohne Biegung bleibt der Platz leer (kein Hinweis), mit Biegung stehen Zeichen und Name da
   { const p = await seite(1440, 900);
     const leer = await p.evaluate(() => { const e = document.querySelector('.peil .kbieg'); return { da: !!e, text: e ? e.textContent.trim() : null, biegung: BIOMES[S.netz.biom].biegung || null }; });
     ok(leer.da && (leer.biegung ? leer.text !== '' : leer.text === ''), `Platz für die Regelbiegung (Biegung ${leer.biegung}, Text „${leer.text}“)`);
-    const mit = await p.evaluate(() => { const b = S.netz.biom; BIOMES[b].biegung = 'probe'; window.BIEGUNGEN = [{ id: 'probe', n: 'Probe', t: 'Regeltext', zeichen: 'buff' }]; render(); const e = document.querySelector('.peil .kbieg'); const r = { text: e.textContent.trim(), bild: !!e.querySelector('img') }; delete BIOMES[b].biegung; delete window.BIEGUNGEN; render(); return r; });
+    const mit = await p.evaluate(() => { const b = S.netz.biom; const alt = BIOMES[b].biegung; BIOMES[b].biegung = 'probe'; BIEGUNGEN.push({ id: 'probe', n: 'Probe', t: 'Regeltext', zeichen: 'buff' }); render(); const e = document.querySelector('.peil .kbieg'); const r = { text: e.textContent.trim(), bild: !!e.querySelector('img') }; BIEGUNGEN.pop(); if (alt) BIOMES[b].biegung = alt; else delete BIOMES[b].biegung; render(); return r; });
     ok(mit.text === 'Probe' && mit.bild, `mit Biegung stehen Zeichen und Name da (${mit.text})`);
     await p.close(); }
 

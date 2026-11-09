@@ -1,13 +1,16 @@
 // Reaktionsregeln, Kartenkosten und der Effekt-Interpreter für data/reactions.json und data/events.json.
 const pairKey=(a,b)=>[a,b].sort().join('');
-function reactionsFor(prev,cur){const out=[];const add=r=>{if(!out.includes(r))out.push(r);};
- for(const a of prev)for(const b of cur){if(a===b)add(VERST);else{const r=REACT.find(r=>r.k===pairKey(a,b));if(r)add(r);}}
- for(let i=0;i<cur.length;i++)for(let j=i+1;j<cur.length;j++){const r=REACT.find(r=>r.k===pairKey(cur[i],cur[j]));if(r)add(r);}
+// Auftrag 3 M5: Paare der Regelbiegung (Bieg.extraReaktionen, z. B. Salzstollen) gelten zusätzlich, dieselbe Regel für Kampf, Vorschau, Stoff-Baum und Bots
+function rxPaare(){const x=typeof Bieg!=='undefined'?Bieg.extraReaktionen():[];return x.length?[...REACT,...x]:REACT;}
+function reactionsFor(prev,cur){const out=[];const add=r=>{if(!out.includes(r))out.push(r);};const P=rxPaare();
+ for(const a of prev)for(const b of cur){if(a===b)add(VERST);else{const r=P.find(r=>r.k===pairKey(a,b));if(r)add(r);}}
+ for(let i=0;i<cur.length;i++)for(let j=i+1;j<cur.length;j++){const r=P.find(r=>r.k===pairKey(cur[i],cur[j]));if(r)add(r);}
  const u=new Set([...prev,...cur]);for(const h of HOCH){if([...h.s].every(x=>u.has(x))&&[...h.s].some(x=>cur.includes(x))&&!(S.hochUsed||new Set()).has(h.n))add(h);}
  return out;}
 // Warum hat etwas reagiert? Für Ketten-Anzeige und Dev-Modus.
 function whyRx(r,prev,cur){
  if(r===VERST){const x=cur.find(y=>prev.includes(y));return{n:r.n,t:r.t,keys:[x,x],src:`${ST[x].n} zweimal hintereinander`,kind:'v'};}
+ if(!r.k&&!r.s)return{n:r.n,t:r.t,keys:[...cur],src:r.biegung==='funkspruch'?'drei Karten mit gleichen Kosten nacheinander':'Regelbiegung',kind:'b'};
  if(r.s){const ks=[...r.s];const fp=ks.filter(x=>prev.includes(x)&&!cur.includes(x)),fc=ks.filter(x=>cur.includes(x));return{n:r.n,t:r.t,keys:ks,src:fp.length?`${fp.map(x=>ST[x].n).join(' + ')} aus der Karte davor, ${fc.map(x=>ST[x].n).join(' + ')} aus dieser`:'alle drei Stoffe in dieser Karte',kind:'h'};}
  const[a,b]=[...r.k];const self=cur.includes(a)&&cur.includes(b);const pa=prev.includes(a)&&cur.includes(b)?[a,b]:[b,a];
  return{n:r.n,t:r.t,keys:self?[a,b]:pa,src:self?'beide Stoffe stecken in dieser Karte':`${ST[pa[0]].n} von der Karte davor trifft ${ST[pa[1]].n}`,kind:''};}
@@ -33,6 +36,7 @@ function runFx(list,ctx={}){for(const f of list||[]){const tg=ctx.tg&&ctx.tg.hp>
   case'ward':S.ward+=f.v;Bus.emit('ward',{v:f.v,why});break;
   case'heal':healP(f.v,why);break;
   case'energy':S.energy+=f.v;Bus.emit('energy',{v:f.v,why});break;
+  case'draw':if(S.phase==='fight')drawCards(f.v||1);break;
   case'break_block':tos.forEach(e=>{e.block=0;Bus.emit('enemy_status',{e,status:'block_weg',why});});break;
   case'poison_burst':tos.forEach(e=>{if(e.poison){const d=e.poison*f.mult;e.poison=0;hit(e,d,1,'V',why,{dot:true});}});break;
   case'poison_mult':tos.forEach(e=>{e.poison*=f.mult;Bus.emit('enemy_status',{e,status:'poison',why});});break;

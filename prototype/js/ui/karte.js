@@ -15,7 +15,7 @@ function kpal(bid){const B=BIOMES[bid]||{};return{k:(B.koerper||['#05070a','#0b1
 
 // ---------- Regelbiegung des Bioms (kommt in M5; ohne Biegung bleibt der Platz leer) ----------
 function karteBiegung(bid){const id=BIOMES[bid]&&BIOMES[bid].biegung;if(!id)return null;
- const L=typeof BIEGUNGEN!=='undefined'?BIEGUNGEN:null;const b=L&&(Array.isArray(L)?L.find(x=>x.id===id):L[id]);if(!b)return null;
+ const b=typeof Bieg!=='undefined'?Bieg.vomBiom(bid):null;if(!b)return null; // M5: Schalter aus oder Vergleichslauf → kein Hinweis
  return{id,n:b.n||id,t:b.t||'',zeichen:b.zeichen||null};}
 function karteBiegungHtml(bid){const b=karteBiegung(bid);if(!b)return'<div class="kbieg"></div>';
  return `<div class="kbieg" data-tip="${esc(`<div class="tn">${esc(b.n)}</div><div>${esc(b.t)}</div>`)}">${b.zeichen?gi(b.zeichen,0):''}<b>${esc(b.n)}</b></div>`;}

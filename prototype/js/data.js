@@ -5,6 +5,8 @@ async function loadData(base='data/',fetchJson){
  const opt=async f=>{try{return await get(f);}catch(e){return null;}};
  const[st,items,roles,foes,jobs,rx,ev,bal,run,biomes]=await Promise.all(['stoffe','items','roles','foes','jobs','reactions','events','balance','run','biomes'].map(get));
  const frags=await opt('fragmente');
+ // Auftrag 3 M5: Regelbiegungen (data/biegungen.json), je Biom höchstens eine
+ const bieg=await opt('biegungen');
  // Auftrag 3 M2: Stellplätze der Gegner je Kampfszene (data/stell.json → szenen["biom:art:variante"])
  const stell=await opt('stell');STELL=(stell&&stell.szenen)||{};
  // Auftrag 3 M3: Weg-Richtung und Zielpunkt der Fahrt je Kulisse (data/fahrt.json → szenen["biom:kulisse"])
@@ -29,6 +31,7 @@ async function loadData(base='data/',fetchJson){
    if(p.elite_dazu)b.elite=[...new Set((b.elite||[]).concat(p.elite_dazu))];
    Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.ergaenzt,...e})));continue;}
   BIOMES[p.id]={...p.biom,akt:p.akt};Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.id,...e})));}
+ if(typeof BIEGUNGEN!=='undefined'){BIEGUNGEN.length=0;for(const b of (bieg&&bieg.biegungen)||[]){BIEGUNGEN.push(b);if(BIOMES[b.biom])BIOMES[b.biom].biegung=b.id;(b.reaktionen||[]).forEach(r=>r.biegung=b.id);if(b.reaktion)b.reaktion.biegung=b.id;}}
  EVENTS=evAll.map((e,i)=>({id:e.id||('alt_'+i),biom:e.biom||'alle',...e}));
 }
 const chip=k=>`<span class="st" style="background:${ST[k].c}" title="${ST[k].n}">${ST[k].s}</span>`;

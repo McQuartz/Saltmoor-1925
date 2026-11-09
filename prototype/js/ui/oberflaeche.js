@@ -20,9 +20,14 @@ function render(){
 function kopfHtml(){const f=S.phase==='fight';const m=maxHp();const inc=f?incoming():0;const lose=Math.max(0,inc-S.block);
  const total=allRx().length;
  // Auftrag 3 M2 (Variante 2): links Tiefe/Zug und Biom kursiv, rechts Gold, Buch und Deck in gleicher Größe
- return `<div class="tz">TIEFE ${romanN(Math.max(1,S.depth))}${f?` · ZUG ${S.turnNo}`:''}<span class="sub">${esc(biom().n)}</span></div>
+ return `<div class="tz">TIEFE ${romanN(Math.max(1,S.depth))}${f?` · ZUG ${S.turnNo}`:''}<span class="sub">${esc(biom().n)}</span>${biegKopfHtml()}</div>
  <div class="kr"><span class="gold">${gi('gold',KZ())} <b>${S.gold}</b> Gold</span>${S.netz&&S.netz.akt===S.akt&&S.phase!=='weg'?'<a data-act="karte" title="Karte (M)">Karte</a>':''}<a data-act="buch">Buch <b>${S.disc.size}/${total}</b></a><span>Deck <b>${deckListe().length}</b></span></div>
  ${f?'':`<div class="du">DU · ${esc(S.jobN).toUpperCase()}</div>${barHtml(S.hp,m,0,null,'gross')}<div class="zahlen">${S.hp}/${m}</div>`}`;}
+// Auftrag 3 M5: Zeichen und Name der Regelbiegung rechts neben dem Biom-Namen, Tooltip mit dem Regeltext.
+// Pforte: die Biegung dieses Zuges, klein die des nächsten. Ebbe und Flut: ob dieser Zug Ebbe oder Flut ist.
+function biegKopfHtml(){if(typeof Bieg==='undefined')return'';const k=Bieg.kopf();if(!k)return'';const b=k.b,j=k.jetzt||b;
+ const tip=`<div class="tn">${esc(b.n)}</div><div>${esc(b.t)}</div>`+(j!==b?`<div class="tn" style="margin-top:6px">Dieser Zug: ${esc(j.n)}</div><div>${esc(j.t)}</div>`:'')+(k.naechste?`<div class="tn" style="margin-top:6px">Nächster Zug: ${esc(k.naechste.n)}</div><div>${esc(k.naechste.t)}</div>`:'')+(k.zusatzT?`<div style="margin-top:6px">${esc(k.zusatzT)}</div>`:'');
+ return `<span class="kbieg kopfbieg" data-bieg="${b.id}" data-tip="${esc(tip)}">${gi(j.zeichen,KZ())}<b>${esc(j.n)}</b>${k.zusatz?`<em class="bz">${esc(k.zusatz)}</em>`:''}${k.naechste?`<em class="bz">danach ${esc(k.naechste.n)}</em>`:''}</span>`;}
 // Spieler-Lebensbalken unten mittig über der Hand: Block als Schild links, angekündigter Schaden als roter Schatten im Balken
 // Fix 5 (Auftrag 3): keine Zeile „−x Leben“ mehr. Der drohende Verlust steht im Balken: Block (blau) bricht zuerst, der rote Rest ist schraffiert.
 // Die Worte stehen nur noch im Tooltip des Balkens.

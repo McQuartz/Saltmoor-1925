@@ -8,11 +8,25 @@ const Bot={
   v+=(p.str||0)*4;const offen=Math.max(0,inc-S.block);v+=Math.min(p.block,offen)*1.3+p.block*.1;v+=Math.max(0,p.hp)*.8;if(p.hp<0)v+=p.hp*(S.hp<15?2:.6);v+=p.energy*3;v+=(p.gold||0)*(this.profil&&this.profil.gold_rest?.3:.15);return v;},
  // beste Karte jetzt (für den geklickten Run in tools/selbst-spielen.js): {i,t} oder null
  besteKarte(){const inc=incoming();let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
- kampfZug(){let guard=0;while(S.phase==='fight'&&!busy&&guard++<30){const inc=incoming();let best=null;
-   S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];
-    ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});
+ kampfZug(){let guard=0;this.biegZugbeginn();while(S.phase==='fight'&&!busy&&guard++<30){const inc=incoming();let best=null;
+   S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];const bw=this.biegWert(c,inc);
+    ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0)+bw;if(!best||w>best.w)best={i,t,w};});});
    if(!best||best.w<=0)break;playCard(best.i,best.t);}
   if(S.phase==='fight'&&!busy)endTurn();},
+ // ---------- Regelbiegung (Auftrag 3 M5): der Bot kennt die Biegung und spielt auf sie hin, über dieselben Einhakpunkte wie der Kampf ----------
+ // Zusatzwert einer Karte durch die Biegung (zu dem, was die Vorschau schon sieht)
+ biegWert(c,inc){const b=Bieg.aktiv();if(!b)return 0;let v=0;
+  // Über Eck: als dritte oder spätere Karte zählt, ob sie mit der ersten Karte des Zuges den Kreis schließt
+  if(b.id==='ueber_eck'&&(S.zugSt||[]).length>=2){const innen=reactionsFor([],c.st);v+=reactionsFor(S.zugSt[0],c.st).filter(r=>!innen.includes(r)).length*5;}
+  // Aufgewogen: übrige Energie ist Block wert, eine Karte muss mehr bringen als 3 Block je Energie
+  // Nur der Teil zählt, der wirklich einen Treffer fängt, sonst würde der Bot gar nicht mehr angreifen
+  if(b.id==='aufgewogen'){const offen=Math.max(0,inc-S.block),e=S.energy,k=cardCost(c);v-=1.3*(Math.min(offen,3*e)-Math.min(offen,3*Math.max(0,e-k)));}
+  return v;},
+ // Wert einer Karte für Tausch-Entscheidungen (Spiegelbild)
+ kartenWert(c){if(!c||c.unspielbar)return -9;return this.hgWertRoh(c);},
+ biegZugbeginn(){if(typeof Bieg==='undefined')return;
+  // Das Spiegelbild ist voraus: die offene oberste Karte gegen die schwächste Handkarte tauschen, wenn sie klar besser ist
+  if(Bieg.spiegelKann()){const top=Bieg.spiegelOffen();let wi=-1,wv=1e9;S.hand.forEach((c,i)=>{const v=this.kartenWert(c);if(v<wv){wv=v;wi=i;}});if(wi>=0&&this.kartenWert(top)>wv+2)Bieg.spiegelTausch(wi);}},
  wertItem(it){const P=this.profil;const d=def(it);return (P&&(P.items||[]).includes(it.id)?12:0)+(P?d.st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+hgVon(it).length*3+(d.eigen?6:0)+d.cards.reduce((s,c)=>s+(c.atk||0)*(c.h||1)*(c.all?1.6:1)+(c.blk||0)+(c.heal||0)+(c.poison||0)*1.5+(c.burn||0)*1.5+(c.draw||0)*3-(c.c||0)*2,0)+(d.hp||0)+(d.passiv?6:0)+d.st.length*2;},
  ausruesten(){// leere Slots aus dem Rucksack füllen, sonst schwächere Items tauschen (einfach: mehr Karten-Werte)
   const wertItem=it=>this.wertItem(it);
@@ -72,7 +86,7 @@ const Bot={
   case'ankunft':chooseEnde(S.seed%2?'bleiben':'umkehren');break;
   default:return false;}return true;},
  // Ganzer Run, schnell. Gibt das Ergebnis zurück.
- spiele(job,seed,opt={}){this.profil=opt.profil||null;const kf=FAST;FAST=true;let fehler=null,n=0;try{const M=opt.meta?Meta.get():null;const sv=M&&M.start.length?M.start[M.start.length-1]:null;newRun(job,seed,{dev:!opt.meta,start:sv,stufe:opt.stufe||0});if(opt.nachStart)opt.nachStart();
+ spiele(job,seed,opt={}){this.profil=opt.profil||null;const kf=FAST;FAST=true;let fehler=null,n=0;try{const M=opt.meta?Meta.get():null;const sv=M&&M.start.length?M.start[M.start.length-1]:null;newRun(job,seed,{dev:!opt.meta,start:sv,stufe:opt.stufe||0,...(opt.route?{route:opt.route}:{})});if(opt.nachStart)opt.nachStart();
    while(!['strand','ende'].includes(S.phase)&&n++<5000){if(!this.schritt())throw new Error('Bot hängt in Phase '+S.phase);}
    if(n>=5000)throw new Error('Run endet nicht');}catch(e){fehler=String(e&&e.stack||e);}finally{FAST=kf;}
   const res=S.ergebnis||{};return{seed,job,sieg:!!res.sieg,ende:res.ende||null,tiefe:S.depth,akt:S.akt,biom:biomId(),route:S.route.join('>'),gegner:res.gegner||[],kaempfe:S.stats.kaempfe,zuege:S.stats.zuege||0,gold:S.stats.gold,fehler};}

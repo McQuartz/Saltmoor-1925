@@ -25,7 +25,7 @@ function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==
 // Plakette (Auftrag 3, M2): Absicht oben, Leben als roter Balken, Block/Panzer als blaue Verlängerung, Status darunter, Kniff am Rand, Spitze zum Kopf.
 // Die Höhenstaffelung (--dx, --dy) setzt plakettenOrdnen() in js/ui/plakette.js nach dem Einsetzen ins DOM.
 function plaketteHtml(e,i,f,pv,tg){
- const abs=f&&!e.stumm&&absichtSichtbar(e)?`<div class="abs">${absicht(e).html}</div>`:'';
+ const abs=f&&!e.stumm&&absichtSichtbar(e)?`<div class="abs">${absicht(e).html}</div>${typeof Bieg!=='undefined'&&Bieg.absichtenSichtbar(e)>1?`<div class="abs abs2" title="Die Rückseite: was ${esc(e.n)} im Zug danach vorhat">danach ${absicht0({...e,pi:e.pi+1}).html}</div>`:''}`:'';
  const d=pv?Math.min(e.hp,pv.d):0,ab=pv?Math.min(e.block,pv.ab):0,W=v=>Math.max(0,Math.min(100,v/e.max*100)).toFixed(1)+'%';
  const st=[e.burn&&['burn',e.burn,STN.burn],e.poison&&['poison',e.poison,STN.poison],e.weak2&&['weak',1,'Geschwächt: halber Schaden'],e.str&&['buff',e.str,STN.buff],e.vuln>0&&['atk2',e.vuln,`Verwundbar ${e.vuln} (+50 %)`]].filter(Boolean);
  const blk=e.block-ab,ext=(blk>0||ab>0?`<b class="pl-blk ${ab?'pvb':''}" title="Block">${blk>0?blk:ab}</b>`:'')+(e.panzer>0?`<b class="pl-pz" title="${esc((BAL.panzer&&BAL.panzer.t)||'')}">${gi('blk',KZ())}${e.panzer}</b>`:'');
@@ -47,7 +47,15 @@ const GZ=()=>9*U(),KZ=()=>9*Math.max(1,Math.round(U()/2));
 function leisteKampf(){const n=S.hand.length;
  return `<div id="links"><div id="spieler2">${spielerHtml()}</div><div id="baum">${stoffBaumHtml()}</div></div><div id="hand" style="--ov:${S.hand.length>6?((S.hand.length-6)*59/(S.hand.length-1)).toFixed(2):0}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
  <div id="rechts"><div class="en-l">ENERGIE</div><div class="rauten">${[...Array(Math.max(BAL.energy_per_turn,S.energy))].map((_,i)=>`<i class="${i<S.energy?'voll':''}"></i>`).join('')}</div>
- <button id="endBtn" class="deco" data-act="end" ${busy?'disabled':''}>ZUG<br>BEENDEN</button><div class="stapel">Stapel ${S.draw.length} · Ablage ${S.discard.length}</div>${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
+ <button id="endBtn" class="deco" data-act="end" ${busy?'disabled':''}>ZUG<br>BEENDEN</button>${stapelHtml()}${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
+// Stapel und Ablage; Regelbiegungen ändern, was man davon sieht (M5): Spiegelbild (oberste Karte offen, Tausch), Keiner fährt ab (zurückgekommene Karte oben), Wellen von oben (keine Ablage)
+let spiegelWahl=false;
+function stapelHtml(){const B=typeof Bieg!=='undefined';const top=S.draw.length?S.draw[S.draw.length-1]:null;
+ const ufer=B&&Bieg.ist('wellen_oben');let h=`<div class="stapel">Stapel ${S.draw.length}${ufer?'':` · Ablage ${S.discard.length}`}</div>`;
+ if(B&&Bieg.ist('spiegelbild')&&top){const kann=Bieg.spiegelKann();h+=`<div class="voraus spiegel${spiegelWahl?' wahl':''}${kann?'':' aus'}" ${kann?'data-act="spiegel"':''} title="${esc(kann?'Erst hier klicken, dann die Handkarte, die du gegen sie tauschst (einmal je Zug)':'In diesem Zug schon getauscht')}">Oben: ${esc(top.n)}${spiegelWahl?' · Handkarte wählen':''}</div>`;}
+ else if(B&&Bieg.ist('keiner_faehrt')&&top&&top.zurueck)h+=`<div class="voraus">Oben: ${esc(top.n)}</div>`;
+ else if(jobFaehigkeit()==='voraus'&&top)h+=`<div class="voraus">Als Nächstes: ${esc(top.n)}</div>`;
+ return h;}
 // m: Reaktionsfaktor, den die Karte jetzt bekäme (Fix 6: Ziehen, Stärke und Gold zeigen den verstärkten Wert)
 function cardText(c,m=1){const vs=v=>typeof verstaerkt==='function'?verstaerkt(v,m):v;if(c.unspielbar)return typeof werfbar==='function'&&werfbar(c)?`Über Bord werfen: ${passive('ballast_werfen').map(p=>fxKurz(p.fx)).join(', ')}.`:'Unspielbar.';const p=[];const kw=[];if(c.funke)kw.push('Funke');if(c.zoll)kw.push(`Zoll ${c.zoll}`);if(c.behalten)kw.push('Behalten');if(c.x)kw.push('X');if(c.kette)kw.push(`Kette ${c.kette}`);if(c.opfer)kw.push(`Opfer ${c.opfer}`);
  if(c.atk)p.push(`${c.atk}${c.x?'×X':c.h?'×'+c.h:''} Schaden${c.all?' an allen':''}`);if(c.blk)p.push(`${c.blk} Block`);if(c.heal)p.push(`+${c.heal} Leben`);if(c.poison)p.push(`Gift ${c.poison}`);if(c.burn)p.push(`Brand ${c.burn}`);if(c.weak)p.push('Geschwächt');if(c.vuln)p.push(`Verwundbar ${c.vuln}`);if(c.str)p.push(`Stärke ${vs(c.str)}`);if(c.strip)p.push('Block weg');if(c.draw)p.push(`Ziehe ${vs(c.draw)}`);if(c.en)p.push(`+${c.en} Energie`);if(c.self)p.push(`−${c.self} Leben`);if(c.gold)p.push(`+${c.gold} Gold`.replace(String(c.gold),String(vs(c.gold))));

@@ -41,7 +41,7 @@ function aufstellen(list){const r=rs('aufstellung');const n=list.length;
 
 function startFight(ids,art='kampf'){
  S.enemies=ids.map((id,i)=>mkEnemy(id,i));aufstellen(S.enemies);
- S.kampfArt=art;S.target=0;S.phase='fight';S.chainLog=[];S.pstr=passive('start_staerke').reduce((s,p)=>s+(p.v||1),0);S.vorrat=0;S.blockVorher=0;S.frost=null;S.turnNo=0;S.draw=buildDeck();S.hand=[];S.discard=[];S.exhaust=[];S.ward=0;S.compassUsed=false;S.kampfLog=[];S.faehrgeld=false;S.ballastWeg=0;
+ S.kampfArt=art;S.target=0;S.phase='fight';S.chainLog=[];S.pstr=passive('start_staerke').reduce((s,p)=>s+(p.v||1),0);S.vorrat=0;S.blockVorher=0;S.frost=null;S.turnNo=0;S.draw=buildDeck();S.hand=[];S.discard=[];S.exhaust=[];S.ward=0;S.compassUsed=false;S.kampfLog=[];S.faehrgeld=false;S.ballastWeg=0;S.biegFolge=null;S.zuletztGespielt=null;S.vorzugLetzt=null;S.flutHand=0;S.zugSt=[];
  const pb=passive('start_block').reduce((s,p)=>s+p.v,0);
  log(`Tiefe ${S.depth}: ${S.enemies.map(e=>e.n).join(', ')}`);
  Bus.emit('fight_start',{art,ids,why:`${RUN.knoten[art==='schwer'?'kampf_schwer':art]?.n||art} auf Tiefe ${S.depth} (${biom().kurz}), Gegner aus dem Biom per Seed`});
@@ -53,7 +53,7 @@ function startFight(ids,art='kampf'){
 // Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), Pfandschein (gold_energie: ab p.ab Gold), übrige Energie (energie_bleibt)
 function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0)+passive('gold_energie').reduce((s,p)=>s+((S.gold||0)>=(p.ab||100)?(p.v||1):0),0);}
 
-function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=rs('kampf').shuffle(S.discard);S.discard=[];}const c=S.draw.pop();S.hand.push(c);S.gezogen=(S.gezogen||0)+1;
+function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=Bieg.mischen(S.discard);S.discard=[];}const c=S.draw.pop();c.zurueck=false;S.hand.push(c);S.gezogen=(S.gezogen||0)+1;
  // Eigenschaft ballast_ziehen (Strandbuch): eine unspielbare Karte gezogen → eine nach und Block, höchstens 4-mal je Zug
  if(c.unspielbar&&S.phase==='fight'){const bz=passive('ballast_ziehen');if(bz.length&&(S.bzZug||0)<4){S.bzZug=(S.bzZug||0)+1;n+=bz.reduce((s,p)=>s+(p.v||1),0);const b=bz.reduce((s,p)=>s+(p.blk||0),0);if(b)addBlock(b,`Strandbuch: „${c.n}“ gezogen, ${b} Block und eine Karte nach`);}}}}
 function handSize(){return Math.max(BAL.hand_size,...bonuses('hand_size').map(b=>b.amount))+passive('hand_plus').reduce((s,p)=>s+(p.v||1),0)-passive('energie_plus').filter(p=>p.preis==='hand').length;}
@@ -63,7 +63,8 @@ function startTurn(){S.nachGegnerzug=false;(S.enemies||[]).forEach(e=>{e.gehande
  const gbk=goldStufe('gold_block');if(gbk){S.block+=gbk;Bus.emit('player_block',{v:gbk,why:`Opferstock: ${gbk} Block für ${S.gold} Gold im Beutel`});}
  const bleibt=Math.min(S.vorrat||0,passive('energie_bleibt').reduce((s,p)=>s+(p.v||1),0));S.energy=energieJeZug()+bleibt;S.vorrat=0;
  S.last=[];S.played=0;S.hochUsed=new Set();S.hochZahl=0;S.turnNo=(S.turnNo||0)+1;
- drawCards(handSize());
+ Bieg.zugStart(); // Regelbiegung: Zugbuchhaltung, Ringofen setzt S.last auf die letzte Karte des Vorzugs
+ Bieg.ziehen(); // normal: drawCards(handSize()); Rückwärts gewachsen, Ebbe und Flut ändern es
  kniffeZugbeginn();panzerZugbeginn();ansagenZugbeginn();
  // Falsches Detail der Pforte: Im Finale kosten zufällige Karten diese Runde 1 weniger oder 1 mehr
  if(S.kampfArt==='finale'){const r=rs('pforte');S.hand.forEach(c=>{c.mod=0;if(r.chance(.35))c.mod=r.chance(.5)?-1:1;});const m=S.hand.filter(c=>c.mod);if(m.length)Bus.emit('pforte_mod',{why:`Die Regeln biegen sich: ${m.map(c=>c.n+(c.mod>0?' +1':' −1')).join(', ')}`});}
@@ -114,10 +115,11 @@ function playCard(i,ei){
  if(ei!=null&&S.enemies[ei]&&S.enemies[ei].hp>0)S.target=ei;
  const first=S.played===0;if(first&&S.turnNo===1&&passive('erste_karte_billiger').length)S.compassUsed=true;
  const zoll=c.zoll&&S.gold>=c.zoll?c.zoll:0; // Zoll: zahlt Gold statt Energie
- const xMal=c.x?S.energy:0;S.energy-=cost;S.hand.splice(i,1);if(c.verbraucht)S.exhaust.push(c);else S.discard.push(c);S.played++;
+ const xMal=c.x?S.energy:0;S.energy-=cost;S.hand.splice(i,1);if(c.verbraucht)S.exhaust.push(c);else Bieg.ablegen(c);S.played++;
  if(c.opfer){zahleLeben(c.opfer,`${c.n}: Opfer ${c.opfer} statt Energie`);}
  if(zoll){S.gold-=zoll;if(S.stats&&!DRY)S.stats.zoll=(S.stats.zoll||0)+zoll;Bus.emit('gold',{v:-zoll,why:`${c.n}: Zoll ${zoll} Gold statt Energie`});}
  const e=tgt();const vorher=S.joker?[...new Set([...S.last,...S.joker])]:S.last;const rx=reactionsFor(vorher,c.st);const ctx={tg:e,card:c};
+ const fk=Bieg.funkspruch(cost);if(fk){rx.push(fk);S.funkZug=true;}
  Bus.emit('card_played',{c,e,why:`${c.n} (${c.src}) gespielt, kostet ${cost}`+(c.st.length?`, Stoff ${c.st.map(k=>ST[k].n).join(' + ')}`:', ohne Stoff')});
  let mult=1;const multWhy=[];rx.forEach(r=>{if(r.pre&&r.pre.mult){mult*=r.pre.mult;multWhy.push(`${r.n} ×${r.pre.mult}`);}});
  if(first&&jobFaehigkeit()==='erste_doppelt'){mult*=1.5;multWhy.push('Kriegsveteran: erste Karte ×1,5');}
@@ -138,14 +140,15 @@ function playCard(i,ei){
   passive('reaktion_schaden').forEach(p=>{const z=alive();if(z.length)hit(rs('kampf').pick(z),p.v||2,1,null,'Eigenschaft: Reaktion trifft');});
   passive('reaktion_block').forEach(p=>addBlock(p.v||1,`Eigenschaft: Reaktion gibt ${p.v||1} Block`));passive('reaktion_heil').forEach(p=>healP(p.v||1,`Eigenschaft: Reaktion heilt ${p.v||1}`));
   const live=ctx.tg&&ctx.tg.hp>0?ctx.tg:alive()[0];const w=S.chainLog[S.chainLog.length-1].rx.find(x=>x.n===r.n);
-  const why=`${r.n} ausgelöst: ${w?w.src:''}`+(r===VERST?' (gleicher Stoff)':r.s?` (Hochreaktion ${[...r.s].join('')})`:` (Paar ${r.k} aus reactions.json)`);
+  const why=`${r.n} ausgelöst: ${w?w.src:''}`+(r===VERST?' (gleicher Stoff)':r.s?` (Hochreaktion ${[...r.s].join('')})`:r.biegung?` (Regelbiegung ${(Bieg.def(r.biegung)||{}).n||r.biegung})`:` (Paar ${r.k} aus reactions.json)`);
   if(r.fx)runFx(r.fx,{tg:live,why});
-  const isNew=!S.disc.has(r.n);S.disc.add(r.n);log(isNew?`Reaktion entdeckt: ${r.n}`:`Reaktion: ${r.n}`);
+  const isNew=!S.disc.has(r.n);if(r.k||r.s||r===VERST)S.disc.add(r.n);log(isNew?`Reaktion entdeckt: ${r.n}`:`Reaktion: ${r.n}`);
   Bus.emit('reaction',{r,k,isNew,keys:w?w.keys:c.st,live,hoch:!!r.s,why});}
  S.rxZug=(S.rxZug||0)+rx.length;if(!DRY&&S.stats&&S.rxZug>(S.stats.maxKette||0))S.stats.maxKette=S.rxZug;if(!DRY&&S.stats)S.stats.reaktionen=(S.stats.reaktionen||0)+rx.length;
  // Gegenlauf: merkt sich die Stoffe der Karte davor für die nächste Karte
  S.joker=S.jokerNaechste?prevSt:null;S.jokerNaechste=false;S.vorherKarte=c.sonder&&c.sonder.art==='wiederholen'?S.vorherKarte:c;
- S.last=[...c.st];
+ Bieg.nachKarte(c,cost); // setzt S.last (normal: die Stoffe dieser Karte; Falsche Winkel, Der Schlag ändern es)
+ Bieg.nachReaktion(c,rx); // Keiner fährt ab
  Bus.emit('changed');checkVictory();return true;}
 
 function applyMain(c,ctx,mult,flat,multWhy=[],kette=0){
@@ -286,10 +289,12 @@ function incoming(sicht){let tot=0;for(const en of alive()){if(sicht&&!absichtSi
 
 function endTurn(){
  if(S.phase!=='fight'||busy)return;busy=true;S.vorrat=S.energy;
+ Bieg.zugEnde(); // Über Eck, Aufgewogen
  const bb=passive('ballast_block').reduce((s,p)=>s+(p.v||2),0),bz=S.hand.filter(c=>c.unspielbar).length;if(bb&&bz)addBlock(bb*bz,`Gesangbuch: ${bz} unspielbare Karte(n) auf der Hand, je ${bb} Block`);
  let bleib=S.hand.filter(c=>c.behalten&&!c.unspielbar);
  if(passive('behalten_eine').length){const rest=S.hand.filter(c=>!bleib.includes(c)&&!c.unspielbar).sort((a,b)=>cardCost(b)-cardCost(a));if(rest[0])bleib=[...bleib,rest[0]];}
- bleib.forEach(c=>{if(c.sonder&&c.sonder.art==='zugende_hand')runFx(c.sonder.fx,{tg:alive()[0],why:`${c.n} am Zugende auf der Hand`});});S.discard.push(...S.hand.filter(c=>!bleib.includes(c)).filter(c=>!(c.unspielbar&&c.verbraucht&&c.cid&&String(c.cid).startsWith('stoer')&&c.hand)));S.hand=bleib;S.hand.forEach(c=>{c.frost=false;c.teuer=0;});S.discard.forEach(c=>{c.frost=false;c.teuer=0;});S.behaltenNaechster=bleib.length;Bus.emit('changed');
+ if(Bieg.handBleibt())bleib=S.hand.filter(c=>!c.unspielbar); // Ebbe und Flut: in der Flut bleibt die Hand
+ bleib.forEach(c=>{if(c.sonder&&c.sonder.art==='zugende_hand')runFx(c.sonder.fx,{tg:alive()[0],why:`${c.n} am Zugende auf der Hand`});});Bieg.abwerfen(S.hand.filter(c=>!bleib.includes(c)).filter(c=>!(c.unspielbar&&c.verbraucht&&c.cid&&String(c.cid).startsWith('stoer')&&c.hand)));S.hand=bleib;Bieg.zugAus();S.hand.forEach(c=>{c.frost=false;c.teuer=0;});S.discard.forEach(c=>{c.frost=false;c.teuer=0;});S.behaltenNaechster=bleib.length;Bus.emit('changed');
  const list=alive();let i=0;
  const step=()=>{
   if(S.hp<=0&&!faehrgeld()){busy=false;return runLost();}

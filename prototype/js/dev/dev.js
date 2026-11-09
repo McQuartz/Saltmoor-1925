@@ -84,6 +84,9 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
  cheatAus(k,a){const sel=document.getElementById('devItem');
   switch(k){
    case'a3':{BAL.auftrag3=BAL.auftrag3||{};BAL.auftrag3[a]=!BAL.auftrag3[a];this.markDev();Bus.emit('a3_schalter',{k:a,an:BAL.auftrag3[a],why:`Auftrag-3-System ${a} ${BAL.auftrag3[a]?'an':'aus'}`});render();break;}
+   // M5: Regelbiegung. biegNur: nur diese Biegung gilt (wie kern-vergleich.js), biegBeide: Falsche Winkel mit letzter und vorletzter Karte, biegFeld: Biom der Biegung im aktuellen Akt erzwingen
+   case'biegNur':{BAL.auftrag3.biegung_nur=BAL.auftrag3.biegung_nur===a?null:a;this.markDev();Bus.emit('a3_schalter',{k:'biegung_nur',an:!!BAL.auftrag3.biegung_nur,why:BAL.auftrag3.biegung_nur?`Nur die Biegung ${a} gilt`:'Alle Biegungen gelten'});render();break;}
+   case'biegBeide':{BAL.auftrag3.falsche_winkel_beide=!BAL.auftrag3.falsche_winkel_beide;this.markDev();render();break;}
    case'seedcopy':navigator.clipboard&&navigator.clipboard.writeText(String(S.seed));break;
    case'akt':this.springe('weg',+a);break;
    case'gabel':{const b=a;if(!S.route)return;this.markDev();const i=BIOMES[b].akt;S.route[i]=b;S.routeWhy=[...(S.routeWhy||[]),`Gabelung erzwungen: ${b}`];if(S.akt===i){BU.key='';genWeg();}render();break;}
@@ -130,3 +133,8 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   #dev button{background:#0a1210;border:1px solid #2a4a3a;color:#b8d8c8;font:10px monospace;margin:1px;cursor:pointer}#dev input,#dev select{background:#000;color:#cfc;border:1px solid #2a4a3a;font:10px monospace}#dev .ge{border:1px solid #12201a;padding:4px;margin:3px 0}
   #dev .bt td{font-size:10px}body.dev .karte:after{content:attr(data-dev);}`;document.head.appendChild(s);}
 };
+// M5: Abschnitt Regelbiegung im Reiter TIEFE
+Dev.tiefeTeil(()=>{if(typeof Bieg==='undefined')return'';const A=BAL.auftrag3||{};const k=S&&S.route?Bieg.kopf():null;
+ return `<h5>Regelbiegung</h5><div>Jetzt: ${k?esc((k.jetzt||k.b).n)+(k.naechste?' · nächster Zug '+esc(k.naechste.n):'')+(k.zusatz?' · '+k.zusatz:''):'<span class="dim">keine (Akt I/II, Schalter aus oder anderes Biom)</span>'}</div>
+ <div>Nur eine Biegung: ${BIEGUNGEN.map(b=>`<button data-cheat="biegNur" data-arg="${b.id}" class="${A.biegung_nur===b.id?'an':''}" title="${esc(b.t)}">${esc(b.n)} (${BIOMES[b.biom]?esc(BIOMES[b.biom].kurz):b.biom})</button>`).join(' ')}</div>
+ <div><button data-cheat="biegBeide" class="${A.falsche_winkel_beide?'an':''}">Falsche Winkel: letzte und vorletzte ${A.falsche_winkel_beide?'an':'aus'}</button> <span class="dim">Biom erzwingen im Reiter Cheats → Biom erzwingen</span></div>`;});

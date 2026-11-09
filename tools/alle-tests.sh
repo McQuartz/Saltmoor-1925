@@ -3,7 +3,7 @@
 cd "$(dirname "$0")/.."
 AUS=${1:-/dev/stdout}
 : > "$AUS.tmp"
-for t in test-run test-deckbau test-ereignisse test-vorschau test-welle1 test-stoffbaum test-karte test-speicher test-meta test-plakette test-oberflaeche test-karte-ui test-rucksack; do
+for t in test-run test-deckbau test-ereignisse test-vorschau test-welle1 test-stoffbaum test-karte test-speicher test-meta test-plakette test-oberflaeche test-karte-ui test-rucksack test-biegungen; do
   [ -f tools/$t.js ] || continue
   if [ "$t" = test-plakette ] || [ "$t" = test-rucksack ]; then out=$(node tools/$t.js --ohne-fotos 2>&1); else out=$(node tools/$t.js 2>&1); fi
   echo "$t → $(echo "$out" | tail -1)" >> "$AUS.tmp"

@@ -11,7 +11,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M2 Kampf-HUD, Stoff-Baum, Plakette, Aufstellung | fertig | HUD, Baum, Plakette, 100 Stellplätze |
 | M3 Peilkarte und Fahrt nach vorne | fertig | Netz, Karte, Fahrt, 75 Weg-Richtungen |
 | M4 Rucksack am Körper | fertig | 9 Silhouetten, Ansicht am Körper, Branch `claude/project-thread-hifkqz` (Philip) |
-| M5 Die Tiefe biegt die Regeln | nicht begonnen | Stopp nach M3 (Mo) |
+| M5 Die Tiefe biegt die Regeln | fertig | 14 Biegungen, keine mehr als 5 Pp unter „aus“ |
 | M6 Hören statt sehen | nicht begonnen | Stopp nach M3 (Mo) |
 | M7 Sehen und gesehen werden | nicht begonnen | Stopp nach M3 (Mo) |
 | M8 Die Farbe | nicht begonnen | Stopp nach M3 (Mo) |
@@ -198,6 +198,40 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
   - Ansicht, Fächer-Logik, Anschlusspunkte, Einbau und Test selbst (Abweichung vom Plan: kein eigener Agent für die Ansicht, Grund oben)
 - Offen: Detektiv ohne sichtbare Zigarettenglut, Wahrsagerin ohne Ohrringe, Veteran (Note 4, schwächste) mit kastigem Mantel. Die Silhouetten stehen noch nirgends außer im Rucksack und in der Galerie.
 
+### M5 Die Tiefe biegt die Regeln
+
+**Plan.** Kern selbst: `js/core/biegung.js` (ein Objekt `Bieg` mit den Einhakpunkten `extraReaktionen`, `quelleReaktion`, `zugEnde`, `ziehen`, `ablegen`/`abwerfen`, `absichtenSichtbar` und der Zugbuchhaltung), `data/biegungen.json` (14 Biegungen, `entwurf: true`), Aufrufe in `rules.js` (`reactionsFor` nimmt die Zusatzpaare, sonst keine Kopie der Regeln) und `combat.js` (Zugbeginn, Karte gespielt, Zugende, Ablage, Mischen). Schalter `auftrag3.regelbiegung`, für Vergleichsläufe `auftrag3.biegung_nur`. Anzeige selbst: Kopfleiste, Stoff-Baum (Über-Eck-Bogen, Quelle bei Falsche Winkel und Der Schlag, Funkspruch blinkt), Stapel (Spiegelbild, Keiner fährt ab, Wellen von oben), Plakette (zweite Absicht), Peilkarte und Biom-Wahl (Platz aus M3), Dev-Reiter TIEFE. Erste Probe Über Eck ganz fertig (Logik, Baum, Bot, Test, Foto, `kern-vergleich.js`), danach die übrigen 13. Agenten: Sonnet zeichnet die 14 Zeichen (Note vergebe ich), Sonnet schreibt die Tests der übrigen 13 Biegungen nach meiner Logik. Die Bot-Strategien schreibe ich selbst, weil sie an denselben Einhakpunkten hängen (Über Eck, Aufgewogen, Spiegelbild; die übrigen sieht der Bot über die Vorschau, die dieselbe Regel rechnet). Vergleichsläufe lasse ich selbst im Hintergrund laufen (ein Befehl).
+
+**Schritte und Entscheidungen.**
+- **Ein Modul, keine Kopie der Regeln:** `reactionsFor` (rules.js) nimmt die Zusatzpaare der Biegung (`rxPaare`), alles andere biegt nur, welche Stoffe als „Karte davor“ gelten (`S.last`), wohin Karten gehen und was am Zugbeginn und Zugende geschieht. Kampf, Vorschau (`previewCard` spielt die Karte auf einer Kopie), Stoff-Baum und Bots lesen dieselbe Stelle. Mit Schalter aus ist das Spiel gleich: sechs Seeds spielen sich mit Schalter aus genau wie ganz ohne Biegungsdaten (`test-biegungen.js`), 100 Seeds ergeben die Basis 48 %, Ø Tiefe 26,1.
+- **Über Eck:** wertet beim Drücken von „Zug beenden“ nur die Paare zwischen erster und letzter Karte aus (was die letzte Karte in sich trägt, hat schon reagiert). Verstärkt und Opfer haben keine eigene Wirkung, sie wirken auf eine Karte. Hier lässt Verstärkt die letzte Karte um 50 % nachwirken, Opfer lässt sie für das Leben noch einmal wirken. Hochreaktionen zählen mit, wenn sie in diesem Zug noch frei sind.
+- **Alte Stoffe:** Sole (SW: 6 Block, 1 Karte), Pökeln (BS: 6 Schaden, 3 Heilung), Gezeitenblut (BW: alle Gegner verwundbar 1). Dafür gibt es den neuen Effekt `draw` in `runFx`. Die drei Namen landen im Buch, Funkspruch nicht (er ist kein Stoffpaar).
+- **Ebbe und Flut:** Die geraden Züge sind Flut. Unspielbare Karten werden auch in der Flut abgeworfen, damit Störkarten nicht dauerhaft die Hand blockieren.
+- **Keiner fährt ab:** Verbrauchte Karten kehren nicht zurück. Der Stapel zeigt „Oben: …“, solange die zurückgekehrte Karte oben liegt.
+- **Falsche Winkel:** Die Fassung „nur die vorletzte“ hat den Vergleich bestanden (+2 Pp), die Ausweichfassung „letzte und vorletzte“ liegt als Schalter `auftrag3.falsche_winkel_beide` im Dev-Reiter.
+- **Außerhalb der Zeit:** Die Folge ist je Kampf neu, aus dem Strom `biegung` per Seed, und nie zweimal hintereinander dieselbe. Die Kopfleiste zeigt die Biegung dieses Zuges und klein die des nächsten. Die Pforte behält zusätzlich ihr altes falsches Detail im Finale (Kosten ±1).
+- **Bots:** Der Bot rechnet Über Eck mit (Karte, die mit der ersten den Kreis schließt), tauscht beim Spiegelbild eine klar bessere offene Karte und bewertet bei Aufgewogen die übrige Energie als Block. Die anderen Biegungen sieht er über die Vorschau. Der erste Entwurf für Aufgewogen hat jede Karte mit 3 Block je Energie bestraft. Dadurch hat der Bot in einem Kampf gar nicht mehr angegriffen und mit 900 Leben verloren (`test-run.js` rot). Jetzt zählt nur der Block, der wirklich einen Treffer fängt.
+- **Anzeige:** Zeichen und Name rechts neben dem Biom, Tooltip mit dem Regeltext (Pforte und Gezeiten mit Zusatz), Peilkarte und Biom-Wahl über den Platz aus M3. Im Stoff-Baum zeigt Über Eck einen Bogen über der Kette (gestrichelt ab zwei Karten, durchgezogen mit Namen, sobald der Kreis eine Reaktion ergibt, leuchtet beim Zugende). Bei Falsche Winkel und Der Schlag leuchten die Glieder, von denen die Äste ausgehen. Funkspruch blinkt kurz-kurz-lang. Die Rückseite hat eine zweite, kleinere Zeile „danach …“ auf der Plakette. Das Spiegelbild zeigt „Oben: …“ am Stapel zum Anklicken.
+- **Test angepasst:** `test-karte-ui.js` hat die Biegung über `window.BIEGUNGEN` vorgetäuscht. Seit M5 kommt sie aus dem Modul, darum schiebt der Test jetzt einen Probe-Eintrag in `BIEGUNGEN`.
+
+#### Abnahme M5
+- Abnahmekriterien:
+  - `test-biegungen.js` grün: ✓ 92 Prüfungen, `Alles gut.` (Daten, Schalter aus = ohne Biegung, je Biegung ein fester Zug mit Gegenprobe, Vorschau = Kampf für fünf Biegungen)
+  - Schalter aus = Basis: ✓ `balance.js 100` mit Schalter aus 48 %, Ø Tiefe 26,1, wie die Basis ([balance-100-aus.txt](bilder/M5/balance-100-aus.txt))
+  - Regelprüfung aller 14: ✓ bestanden (Tabelle in „Regelprüfung“), umgebaut wurde keine
+  - `kern-vergleich.js` (60 Seeds, gleicher Weg, nur diese Biegung an gegen alle aus): ✓ keine Biegung mehr als 10 Pp darunter, die schwächsten liegen bei −5 Pp (Ebbe und Flut, Keiner fährt ab, Wellen von oben), Aufgewogen +12 Pp ([kern-vergleich-60.txt](bilder/M5/kern-vergleich-60.txt), Nachlauf mit Zählern [kern-vergleich-60-nachlauf.txt](bilder/M5/kern-vergleich-60-nachlauf.txt)). Jede Biegung wird ausgelöst (z. B. Über Eck 156-mal, Keiner fährt ab 1081, Funkspruch 142, Pökeln 59 in je 60 Runs).
+  - Alle an, generisch 100 Seeds: 42 % gegen 48 % (−6 Pp, [balance-100-an.txt](bilder/M5/balance-100-an.txt))
+  - Fotos: ✓ jede Biegung im Kampf mit Baum und Tooltip (`bilder/M5/kampf-<id>-1440x900.png`), auf der Peilkarte (`karte-<id>-1440x900.png`), Biom-Wahl Akt III bis V (`biomwahl-akt3…5`), Über Eck in [1280×720](bilder/M5/kampf-ueber_eck-1280x720.png) und [1920×1080](bilder/M5/kampf-ueber_eck-1920x1080.png), Zeichen-Bogen [zeichen-bogen.png](bilder/M5/zeichen-bogen.png)
+- Tests ([tests-nachher.txt](bilder/M5/tests-nachher.txt)): alle grün, test-run und test-karte-ui nach den zwei Korrekturen oben erneut gelaufen (`Alles gut.`)
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 273, alle als Entwurf markiert.`
+- Bilder: selbst angesehen: ja (alle 14 Kampffotos als Bogen, Peilkarte Über Eck, Biom-Wahl Akt IV, Plakette im Mond vergrößert, Zeichen-Bogen)
+- Abweichungen: Funkspruch-Zeichen mit Strichen statt Bögen (auf 9×9 zerfielen die Bögen); Über Eck wirkt mit Verstärkt auf die letzte Karte nach (die Regel sagt nicht, worauf Verstärkt wirkt, wenn keine Karte gespielt wird).
+- Agenten:
+  - Sonnet: 14 Zeichen (`js/ui/zeichen-biegung.js`, `tools/biegung-zeichen-bogen.js`), Note je ≥ 4 nach eigener Nacharbeit (siehe Noten)
+  - Sonnet: Tests der 13 übrigen Biegungen in `tools/test-biegungen.js` (fand keinen Logikfehler; ich habe Ebbe und Flut, Wellen von oben und Aufgewogen im Lauf nachgelesen)
+  - Logik, Anzeige, Bots, Über-Eck-Test und Vergleichsläufe selbst
+- Offen: Die Bots spielen Ebbe und Flut, Ringofen und Rückwärts gewachsen nur über die Vorschau, ohne zu planen, welche Karte zuletzt kommt. Die Peilkarte zeigt Ereignisse weiter mit Mos altem Zeichen (Fragezeichen-Form aus M3), das gehört nicht zu M5.
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -228,6 +262,29 @@ Lovecraft-Prinzip: das Unbegreifliche hängt an etwas Sichtbarem (Diener tragen 
 | Unheimlich, nicht anstrengend | Ja | Man hört ein Rumpeln im Nebel und sieht später den verschütteten Gang; nichts zu zählen |
 | Nie Herkunft als Bedrohung | Nein | Rein räumlich |
 
+### M5 Regelbiegungen (14)
+
+Gemeinsam für alle 14: **Das Deck bleibt deins** Ja (keine Biegung mischt eine Karte ein oder nimmt eine weg; Spiegelbild und Keiner fährt ab ordnen nur den Stapel), **Nie Herkunft als Bedrohung** Nein (rein mechanisch), **Kein Fragezeichen** Nein (Zeichen und Name in der Kopfleiste, Regeltext im Tooltip, auf Peilkarte und Biom-Wahl vor dem Akt). Je Biegung die übrigen vier Fragen:
+
+| Biegung | Verändern statt schwächen | Selten ist stark | Einwilligung vor Kontrollverlust | Unheimlich, nicht anstrengend |
+|---|---|---|---|---|
+| Alte Stoffe erinnern sich | Ja, drei neue Paare, nichts fällt weg | Ja, nur ein Biom, nur Salz/Wasser/Blut | Ja, keine Kontrolle genommen | Ja, die Äste im Baum zeigen die neuen Paare von selbst |
+| Über Eck | Ja, die Reihenfolge des Zuges zählt doppelt | Ja, ab drei Karten und nur, wenn erste und letzte passen | Ja, wirkt nur zusätzlich | Ja, ein Bogen im Baum mit dem Namen der Reaktion |
+| Rückwärts gewachsen | Ja, die letzte Karte wird planbar | Ja, eine Karte je Zug | Ja, man wählt selbst, welche Karte zuletzt kommt | Ja, die Karte ist einfach wieder da |
+| Ebbe und Flut | Ja, jeder zweite Zug erlaubt Aufsparen | Ja, jeder zweite Zug | Ja, die Hand bleibt, nichts wird genommen | Ja, „Ebbe“/„Flut“ steht in der Kopfleiste |
+| Der Ringofen | Ja, Züge hängen aneinander | Ja, nur die erste Karte eines Zuges | Ja | Ja, der Baum beginnt mit dem Glied des Vorzugs |
+| Keiner fährt ab | Ja, gute Karten kommen wieder | Ja, höchstens zwei je Zug | Ja (der Stapel zeigt die zurückgekommene Karte) | Ja |
+| Falsche Winkel | Ja, man plant zwei Karten voraus | Ja, ein Biom | Ja | Ja, der Baum hebt das vorletzte Glied als Quelle hervor |
+| Der Schlag | Ja, die dritte Karte wird zum Knoten | Ja, einmal je Zug | Ja | Ja, beide Glieder leuchten als Quelle |
+| Das Spiegelbild ist voraus | Ja, mehr Wissen und eine Wahl | Ja, einmal je Zug | Ja, freiwillig | Ja, eine Karte offen, ein Klick |
+| Die Rückseite | Ja, mehr Wissen statt weniger | Ja, ein Biom | Ja | Ja, eine zweite, kleinere Zeile |
+| Funkspruch | Ja, Kosten werden zu einem Stoff | Ja, einmal je Zug | Ja | Ja, das Glied blinkt kurz-kurz-lang |
+| Außerhalb der Zeit | Ja, jede Runde eine andere Regel | Ja, nur die Pforte | Ja, die nächste Regel ist vorher zu sehen | Grenzfall: zwei Namen in der Kopfleiste; dafür vorher sichtbar, damit man nicht rät |
+| Die Wellen kommen von oben | Ja, das Deck wird planbar | Ja, ein Biom | Ja | Ja, der Stapel zeigt nur noch seine Länge |
+| Aufgewogen | Ja, Energie sparen wird eine Wahl | Ja, ein Biom | Ja | Ja, Block kommt mit Grund im Log |
+
+Lovecraft-Prinzip je Biegung: 1 (das Grauen ändert Regeln, nicht Werte) bei allen; dazu Wissen ist irreversibel (Die Rückseite, Spiegelbild), Substanz verfällt oder wird ersetzt (Wellen von oben, Rückwärts gewachsen), das Ding ist gleichgültig (Außerhalb der Zeit).
+
 ## Noten
 
 *Je neues Bild: Name, Note, Bildpfad, Kurzbegründung.*
@@ -243,10 +300,14 @@ Lovecraft-Prinzip: das Unbegreifliche hängt an etwas Sichtbarem (Diener tragen 
 | Geologe | 4 | `…/geologe.png` | Hammer, Grubenlampe |
 | Wahrsagerin | 4 | `…/wahrsagerin.png` | Kopftuch und Rock gut, Ohrringe fehlen |
 | Veteran | 4 | `…/veteran.png` | nach Rückgabe: Stahlhelm und Gewehr, Mantel noch kastig (schwächste) |
+| Zeichen Alte Stoffe, Ringofen, Falsche Winkel, Der Schlag, Spiegelbild, Rückseite, Außerhalb der Zeit, Wellen von oben, Aufgewogen, Ebbe und Flut | 4 | `docs/auftrag-3/bilder/M5/zeichen-bogen.png` | klar, unterscheidbar (Sonnet) |
+| Zeichen Über Eck, Rückwärts gewachsen, Keiner fährt ab, Funkspruch | 4 | ebenda | vom Agenten mit 4 gemeldet, von mir mit 3 bewertet (Quadrat ohne Kreis, Baum wie Schriftzeichen, Prellbock wie Stuhl, Funkspruch wie das Salz-Dreieck) und selbst neu gezeichnet |
 
 ## Neue Texte (Entwurf)
 
 *Je neuer Text: Datei, ID, erste Worte. Für Philip und Mo.*
+
+- **M5, `data/biegungen.json`:** 14 Namen und Regeltexte (z. B. „Über Eck: Die erste und die letzte Karte …“), drei Reaktionen (Sole, Pökeln, Gezeitenblut) und Funkspruch. Oberfläche: „Oben: …“, „Handkarte wählen“, „danach …“, „Ebbe“/„Flut“, „Dieser Zug …/Nächster Zug …“ in Tooltips.
 
 - **M4, Oberfläche (`js/ui/rucksack.js`, `kampf.js`, `bildschirme.js`):** „AM KÖRPER (R)“, „n im Rucksack“, „Klick ein Item, dann den Platz, an den es soll. Rechts siehst du, was das mit deinem Deck macht.“, „Trag drei passende Teile, um ein Set zu bilden.“, „· Ziehen oder anklicken zum Tauschen.“, Überschriften RUCKSACK, WERKBANK, DECK, Knöpfe „WEITER ›“, „ZURÜCK“, „Verkaufen“. `jobs.json → koerper` sind nur Zahlen.
 

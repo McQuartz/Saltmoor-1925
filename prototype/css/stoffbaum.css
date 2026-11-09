@@ -22,3 +22,12 @@
 #baum .sb-ast.gold{text-shadow:0 0 calc(var(--u)*2) rgba(232,197,71,.6)}
 #baum .sb-name{line-height:1.05;min-width:0}
 #baum .sb-sack{position:absolute;left:calc(var(--u)*77);top:50%;transform:translateY(-50%);font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.12em;color:var(--dim);font-style:italic}
+/* Auftrag 3 M5: Über Eck als Bogen vom ersten zum letzten Glied (leuchtet beim Zugende), Funkspruch blinkt kurz-kurz-lang */
+#baum .sb-kette{position:relative}
+#baum .sb-eck{position:absolute;left:calc(var(--u)*5);right:calc(var(--u)*6);top:calc(var(--u)*-6);height:calc(var(--u)*6);border:calc(var(--u)*.6) dashed #5a4c34;border-bottom:none;border-radius:calc(var(--u)*4) calc(var(--u)*4) 0 0;pointer-events:auto;opacity:.6}
+#baum .sb-eck.an{border-style:solid;border-color:#d8c890;opacity:1}
+#baum .sb-eck.leuchtet{border-color:#ffe9a8;box-shadow:0 calc(var(--u)*-1) calc(var(--u)*3) #e8c547;animation:sbeck .5s ease-out 2}
+#baum .sb-eck span{position:absolute;left:50%;top:calc(var(--u)*-5.5);transform:translateX(-50%);white-space:nowrap;font-family:var(--fk);font-size:calc(var(--u)*3.6);color:#e8d8a0;text-shadow:0 0 calc(var(--u)*1) #000}
+@keyframes sbeck{0%{filter:brightness(2.2)}100%{filter:none}}
+#baum .sb.funk .sb-glied.letzt{animation:sbfunk 1s linear}
+@keyframes sbfunk{0%,10%{opacity:1;filter:brightness(2.4)}11%,20%{filter:none}21%,31%{filter:brightness(2.4)}32%,45%{filter:none}46%,90%{filter:brightness(2.4)}91%,100%{filter:none}}
