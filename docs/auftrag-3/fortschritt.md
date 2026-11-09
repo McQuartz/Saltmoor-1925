@@ -16,7 +16,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M7 Sehen und gesehen werden | fertig | drei Blick-Items, drei Gesehene, 44 Wächter-Schritte, Wahl zu Kampfbeginn |
 | M8 Die Farbe | fertig | Stoff X #c800ff, Brunnen etwa jeder zweite Run, Wandern, Spur, Binden, Tilgen |
 | M9 Begegnungen | fertig | Run-Zettel, alle vier Begegnungen, `art` für alle 143 Gegner |
-| M10 Metaebene | nicht begonnen | Stopp nach M6 (Philip) |
+| M10 Metaebene | fertig | Strand zählt mit, Ausrede in Stufen, Ankunftszeile, Notizen des Vorgängers, Erbe, Fehlzeit, Pause |
 | M11 Würze | nicht begonnen | Stopp nach M6 (Philip) |
 | M12 Balance und Abschluss | nicht begonnen | Stopp nach M6 (Philip) |
 | Zugabe | nicht begonnen | Stopp nach M6 (Philip) |
@@ -333,6 +333,33 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
 - Agenten: Haiku (Vorschläge `art`, `asche`, `tiefe`), Sonnet (Prüfung gegen Steckbriefe), Sonnet (Bild „Das Zeichen“, Note 4 ohne Rückgabe).
 - Mindestens erfüllt? Mehr: alle vier Begegnungen an, nicht nur Zettel, Diener und Spuren.
 
+### M10 Metaebene
+
+**Plan.** Kern selbst: Meta Version 2 mit Migration (`js/core/meta.js`), die Metaebene in `js/core/metaebene.js`, Texte in `data/meta.json`. Sonnet: Texte (Ausrede-Stufen, Ankunftszeile, Pausen-Zeilen, Erbe, Fehlzeit), Sonnet: Tagebuch-Notizen (je Wächter und Biom wahr/falsch, mit Belegen aus den Daten), Sonnet: Strand-Stufen als Bild in `hafen.js strand(o)`.
+
+**Schritte und Entscheidungen.**
+- **Meta v2:** Schlüssel bleibt `saltmoor.meta.v1`, das Feld `v` sagt die Fassung. Neue Felder: `runsJob`, `umkehrenGewaehlt`, `ankunftOffen`, `letzter` (verloren, Tiefe, Biome, Wächter), `letzterOrt`, `erbe`, `fehlzeitAngebot`/`fehlzeitNaechster`, `zuletzt`/`pauseGezeigt`, `seiten` (Tagebuch, höchstens 12), `wuerzeZuletzt` (für M11). Alter Stand: alles bleibt, wer schon umgekehrt ist, bekommt die Ankunftszeile nicht mehr.
+- **Das Spiel zählt mit:** `szenenWahl` gibt dem Strand `spuren` 0–4 (ab dem 2., 5., 15., 40. Abstieg). Eine Spur, mehrere, viele mit Trittflecken, ein ausgetretener Pfad. Keine Zahl.
+- **Ausrede:** Stufe 0 bleibt `jobs.json` wörtlich, 1 ab dem 3., 2 ab dem 8. Run mit der Figur, 3 ab dem 15.: „Ich gehe hinunter.“ Überall, wo die Ausrede steht (Figurwahl, Zwischentitel Akt I, Rucksack, Log).
+- **Bleiben ist der Sog:** erstes Umkehren überhaupt → beim nächsten Start steht auf der Figurwahl statt „Du wachst am Strand von Saltmoor auf …“ einmal die eigene Ankunftszeile. Danach nie wieder.
+- **Notizen des Vorgängers:** nach einem verlorenen Run mit 1/3 an der ersten Rast, ein bis drei Sätze über Biome und Wächter, die er gesehen hat; falsch mit Tiefe/40, höchstens 60 %. Auf einem Zettel in der Rast und als eigene Seite im Tagebuch.
+- **Erbe:** der meistgespielte Handgriff des letzten Runs (aus der Zählung der Diener) mit den Stoffen seines Items. Angebot nach der Figurwahl, „NEHMEN“ legt ihn lose ins Deck (`S.loseHg`), mit abgegriffenem Rahmen, streichbar. Ablehnen geht immer.
+- **Fehlzeit:** nach einem Run, der in Akt V endet, auf dem Endschirm. Angenommen: Der nächste Run lässt den Autospieler Akt I still spielen (Bus stumm, keine Meta-Wirkung), danach beginnt man in Akt II bei der Kapelle mit seinem Deck, Gold und Items, seine Handgriffe in fremder Fassung. Stirbt er: Startdeck, Kapelle und ein fremder Handgriff von ihm. Seine Tagebucheinträge sind die wahren Notizen zu dem, was er gesehen hat; der Zwischentitel sagt den Satz zur Fehlzeit.
+- **Pause:** Beim Laden der Seite: mehr als 14 Tage seit der letzten Sitzung, höchstens einmal in 30 Tagen → eine Zeile zum Ort, an dem der letzte Run endete, auf dem Titel.
+- **Schalter:** `auftrag3.meta` (alles), dazu `fehlzeit` und `pause` einzeln, im Dev-Reiter „Tiefe“.
+- **Nachtrag M9:** Die fremde Fassung hatte noch keinen eigenen Rahmen (Abschnitt 5 verlangt ihn). Jetzt `.karte.fremd`: dunkler, Schrift kursiv und leicht geneigt.
+
+#### Abnahme M10
+- Abnahmekriterien:
+  - `test-meta.js` erweitert und grün: ✓ 30 Prüfungen der Metaebene ([test-meta.txt](bilder/M10/test-meta.txt)), u. a. Notizen in 110 von 300 Runs, je Fund 1,9 Sätze, falsch 37 % bei Tiefe 8/30 gemischt; Fehlzeit über 20 Seeds immer in Akt II (19 mit seinem Deck, 1 nach seinem Tod).
+  - `test-speicher.js` mit altem Meta-Stand grün: ✓ v1-Stand wird gelesen, ergänzt und zählt weiter; Erbe-Karte übersteht Speichern und Laden.
+  - Fotos, selbst angesehen: Strand [0](bilder/M10/strand-0.png) [1](bilder/M10/strand-1.png) [2](bilder/M10/strand-2.png) [3](bilder/M10/strand-3.png) [4](bilder/M10/strand-4.png); Ausrede Fischer [0](bilder/M10/ausrede-fischer-0.png) [1](bilder/M10/ausrede-fischer-1.png) [2](bilder/M10/ausrede-fischer-2.png) [3](bilder/M10/ausrede-fischer-3.png), Pfarrerin [0](bilder/M10/ausrede-pfarrerin-0.png) [1](bilder/M10/ausrede-pfarrerin-1.png) [2](bilder/M10/ausrede-pfarrerin-2.png) [3](bilder/M10/ausrede-pfarrerin-3.png); [Figurwahl mit Ankunftszeile](bilder/M10/figurwahl-ankunftzeile.png); [Pausen-Zeile](bilder/M10/pause-titel.png); [Erbe-Angebot](bilder/M10/erbe-angebot.png), [Erbe in der Hand](bilder/M10/erbe-in-der-hand.png); [Notizen an der Rast](bilder/M10/notizen-rast.png), [Tagebuch](bilder/M10/tagebuch-notizen.png); [Fehlzeit-Angebot](bilder/M10/fehlzeit-angebot.png), [Start bei der Kapelle](bilder/M10/fehlzeit-start-akt2.png), [fremde Handgriffe](bilder/M10/fehlzeit-fremde-handgriffe.png), [Einträge im Tagebuch](bilder/M10/fehlzeit-tagebuch.png). Erzeugt mit `tools/m10-fotos.js` und `tools/strand-fotos.js`, keine Konsolenfehler.
+  - Jeder neue Text von mir gelesen: ✓ (eine Änderung: Fehlzeit-Knopf „SEIN LASSEN“ → „ANNEHMEN“, eindeutiger).
+- Tests ([tests.txt](bilder/M10/tests.txt)): `test-speicher` 246 Prüfungen, `test-kern`, `test-run`, `test-deckbau`, `test-begegnungen`, `test-biegungen`, `test-oberflaeche`, `test-karte-ui`, `test-rucksack`, `test-plakette` „Alles gut.“, `test-stoffbaum` 33 Prüfungen.
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 494, alle als Entwurf markiert.`
+- Agenten: Sonnet Texte (eine Änderung), Sonnet Notizen (70 Paare, Belege in [notizen-belege.md](m10-texte/notizen-belege.md)), Sonnet Strand (eine Rückgabe).
+- Mindestens erfüllt? Mehr: auch Fehlzeit und Pause sind an (per Schalter abschaltbar).
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -474,6 +501,18 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 | Unheimlich, nicht anstrengend | Ja | Eine Karte, eine Entscheidung, danach nur Folgen |
 | Nie Herkunft als Bedrohung | Ja | Die Tiefe erkennt dich, weil du ihr gefolgt bist; `art` ordnet nach Körper und Form, kein Grund nennt Herkunft oder Blut |
 
+### M10 Metaebene
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | Erbe und Fehlzeit geben etwas, Notizen informieren (manchmal falsch); nichts nimmt dem Run Stärke |
+| Das Deck bleibt deins | Ja | Erbe nur auf Wunsch und streichbar; Fehlzeit nur nach eigener Wahl am Ende eines Runs, und es ist dein Seed und deine Figur |
+| Selten ist stark | Ja | Ankunftszeile einmal im Leben, Pause höchstens alle 30 Tage, Notizen jeder dritte verlorene Run |
+| Kein Fragezeichen | Ja | Fehlzeit sagt vorher, was sie bedeutet; alles andere ist Text und Bild |
+| Einwilligung vor Kontrollverlust | Ja | Fehlzeit ist der einzige Kontrollverlust und geschieht nur nach „ANNEHMEN“ und nur am Runstart |
+| Unheimlich, nicht anstrengend | Ja | keine Zahl, keine Leiste; der Strand und die Ausrede ändern sich still |
+| Nie Herkunft als Bedrohung | Ja | Die Texte handeln von Wiederkehr und Spuren, nicht von Abstammung (vom Text-Agenten und von mir geprüft) |
+
 ## Noten
 
 *Je neues Bild: Name, Note, Bildpfad, Kurzbegründung.*
@@ -498,12 +537,15 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 | Ereignisbild Der Brunnen im Hof | 4 | `prototype/assets/ereignisse/farbe_brunnen.png`, [Foto](bilder/M8/05-ereignis-brunnen.png) | nach Rückgabe (erst 3: flache Fläche im Schacht, Hof zu dunkel): Blick hinunter mit dichter werdendem Schimmer, Hof lesbar |
 | Farbe im Bild (Schimmern, Kristall, Spur-Linie, Zeichen X) | 4 | `prototype/js/ui/farbe.js`, Fotos M8 | Schimmer wandert am Umriss, gebunden starr in Facetten; Kartenrand etwas dick |
+| Strand-Stufen (Fußspuren, Pfad) | 4 | `prototype/js/scenes/world/hafen.js` (`strandSpuren`), [Stufen](bilder/M10/strand-1.png) | nach Rückgabe (erst 2: Abdrücke wie Grabsteine): kleine Mulden in Paaren, Stufe 4 ein Pfad mit Wall; rechte Pfadkante noch etwas hart |
+| Erbe-Rahmen und fremde Fassung | 4 | `prototype/css/meta.css`, [Erbe](bilder/M10/erbe-in-der-hand.png), [fremd](bilder/M10/fehlzeit-fremde-handgriffe.png) | gestrichelt und vergilbt bzw. dunkler und kursiv; die fremde Fassung ist im Spielbild eher leise |
 | Karte Das Zeichen | 4 | `prototype/assets/karten/zeichen.png`, [×4](bilder/M9/zeichen-x4.png) | Auge mit Gezeitenstrudel auf nassem Holz, klar lesbar im Bogen; etwas sauber und symmetrisch |
 
 ## Neue Texte (Entwurf)
 
 *Je neuer Text: Datei, ID, erste Worte. Für Philip und Mo.*
 
+- **M10, Daten (`data/meta.json`):** Ausrede-Stufen je Figur (z. B. Fischer „Mein Bruder ist nicht zurückgekommen. Das Boot lag am Morgen trocken im Hafen.“), „Ich gehe hinunter.“, Ankunftszeile „Du wachst am Strand auf. Deine Stiefel stehen im Sand, und die Spur dazu fehlt.“, 25 Pausen-Zeilen (z. B. Kapelle „Das Wasser in der Kapelle steht höher als zuletzt …“), Erbe („Dein Griff vom letzten Mal …“, NEHMEN, LIEGEN LASSEN), Fehlzeit („Jemand anderes wird an deiner Stelle gehen …“, ANNEHMEN, SELBST GEHEN, zwei Sätze zum Start), 45 Wächter- und 25 Biom-Notizen je wahr und falsch, Oberfläche „DAS ERBE“, „NOTIZEN“, „Unter dem Stein liegt ein Heft. Die Schrift ist nicht deine.“, „Notizen des Vorgängers“, „Einträge, die du nicht geschrieben hast“.
 - **M9, Daten:** `run.json → karten.zeichen` „Das Zeichen“ („Für den Rest des Runs: Die Tiefe lässt dich gehen. Die Menschen nicht.“), `run.json → begegnungen` „Sie stehen da und sehen dich an. Keiner hebt die Hand.“, „WEITERGEHEN“, „Der Laden ist zu, als du kommst. Hinter dem Glas dreht jemand das Schild um.“ Oberfläche: „AUS DER ASCHE · FÜR DICH“, Baum-Äste „Asche rufen“ / „Asche zerfällt“ mit Tooltips, Meldungen der Begegnungen (Bus `why`).
 - **M8, Daten:** `stoffe.json → X` „Die Farbe“, `events.json → farbe_brunnen` „Der Brunnen im Hof“ mit zwei Wahlen. Oberfläche: „SPUR TILGEN“, „Welches Item bekommt seinen Stoff zurück?“, Meldungen der Farbe.
 - **M7, Daten:** `items.json` Linse (Karte „Brennpunkt“, „Ein Messingring mit einem Glas darin …“), Resonator („Nachklang“, „Eine Stimmgabel auf einem Eisenfuß …“), Lampe aus dem Grab („Schwelen“, „Man gibt sie den Toten mit …“); `foes.json` „Der Danebenhängende“, „Der Umfaltende“, „Der Hohe am Rand“ mit Konzeptsätzen. Oberfläche: „HINSEHEN“, „NICHT HINSEHEN“, „sieht dich“, Eigenschaft „Zu Kampfbeginn: hinsehen oder nicht“.
@@ -515,6 +557,7 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 ## Entscheidungen unterwegs
 
 - **M7, Fortsetzung:** Mo hat am 2026-11-09 gesagt, nach M6 weiterzumachen („we completed through m6, can you continue from there again?“). Ich habe `claude/project-thread-flvf7e` auf den M6-Stand von `claude/project-thread-hifkqz` vorgespult und arbeite ab M7 dort weiter.
+- **M10:** Ausrede-Stufe 3 und alle Meta-Texte als Entwurf markiert, auch der Satz aus dem Steckbrief; Fehlzeit-Start fest bei der Kapelle (Steckbrief), nicht per Biomwahl; das Erbe nimmt der Bot immer; Notizen kommen nach der Fehlzeit, damit der Autospieler sie nicht an seiner Rast findet; Pausen-Zeile auf dem Titel statt am Runstart, weil sie dort zuerst gesehen wird.
 - **M9:** Gezeitenwerk ohne Asche (kein Gegner war je ein Mensch, `m9-vorschlaege.js` erlaubt 0 nur dann); Begegnung = halbes Gold und kein Item; Spuren weichen auf schwere oder Rand-Kämpfe aus, wenn das Netz keinen normalen Kampf in der Mitte hat; Text der Karte „Das Zeichen“ von mir, nicht von Sonnet (kürzer, damit er auf die Karte passt).
 - **M8:** #c800ff statt des `--alles`-Tons; Brunnen darf bis Akt III rutschen (sonst kam er nur in jedem vierten Run).
 - **M7:** keine Wahl im Finale; Blick-Items erst ab ihrem Akt auch beim Krämer (`blickAb`); Gesehene ohne Tiefenskalierung und nach dem Bot-Vergleich schwächer.
@@ -529,6 +572,7 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 ## Rückgaben an Sub-Agenten
 
+- **M10, Strand:** Note 2 (Abdrücke lasen sich als Grabsteine, zu dunkel, zu groß) mit sechs Punkten zurück; zweite Runde Note 4.
 - **M8, Brunnenbild:** Note 3 (flache Fläche im Schacht, Hof zu dunkel, Seil zu kurz) mit fünf Punkten zurück; zweite Runde Note 4.
 - **M7, Gesehene:** Grund (Note 3: flache, bananenförmige Lappen, Lückenmuster) und Letzt (Note 3: unruhige Silhouette aus vielen Fäden, „hoch“ nicht lesbar) mit konkreten Punkten zurück; beide in der zweiten Runde Note 4. Bei allen drei sollten die festen Dither-Lücken raus, weil die Bühne die Durchsichtigkeit selbst macht.
 - **M4, Silhouetten (Sonnet):** Friedhofswärter, Pfarrerin, Detektiv, Kneipenschläger und Veteran kamen in der ersten Runde auf Note 3 (zu glatt, Werkzeuge und Kopfbedeckung nicht lesbar, Haltung steif). Rückgabe mit konkreten Punkten je Figur, zweite Runde je Note 4.

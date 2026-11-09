@@ -1,0 +1,82 @@
+{
+ "ausrede": {
+  "fischer": [
+   {"t": "Mein Bruder ist nicht zurückgekommen. Das Boot lag am Morgen trocken im Hafen.", "entwurf": true},
+   {"t": "Mein Bruder hat das Boot nicht verloren. Er hat es zurückgeschickt.", "entwurf": true}
+  ],
+  "friedhofswaerter": [
+   {"t": "Die Gräber sind leer. Die Erde darüber ist von unten festgeklopft.", "entwurf": true},
+   {"t": "Die Gräber sind leer, und ich habe den Weg gesehen. Er führt nicht herauf.", "entwurf": true}
+  ],
+  "pfarrerin": [
+   {"t": "Ich muss meine Gemeinde retten. Der Kult in der Kapelle singt aus meinem Gesangbuch.", "entwurf": true},
+   {"t": "Meine Gemeinde ist längst unten. Ich will die Glocke nicht allein läuten lassen.", "entwurf": true}
+  ],
+  "detektiv": [
+   {"t": "Vermisstenfälle. Die Spuren führen alle zum Wasser, und alle haben mein Schuhmaß.", "entwurf": true},
+   {"t": "Die Akte ist fertig. Es fehlt nur noch die Zeile mit meinem Namen.", "entwurf": true}
+  ],
+  "okkultist": [
+   {"t": "Ich suche das Wissen der Erbauer. Sie haben schon nach mir gesucht.", "entwurf": true},
+   {"t": "Das Wissen habe ich. Ich will nur sehen, ob ich es dort unten behalte.", "entwurf": true}
+  ],
+  "kneipenschlaeger": [
+   {"t": "Ich habe Schulden. Das Gold da unten hat noch keiner gezählt, der zurückkam.", "entwurf": true},
+   {"t": "Die Schulden sind mir gleich. Ich will das alte Gold einmal anfassen.", "entwurf": true}
+  ],
+  "geologe": [
+   {"t": "Ich war schon unten. Die Karte stimmt, nur bin ich nie so weit gekommen.", "entwurf": true},
+   {"t": "Ich war schon unten. Die Karte habe ich nicht gezeichnet, und es ist meine Hand.", "entwurf": true}
+  ],
+  "wahrsagerin": [
+   {"t": "Die Karten zeigen dasselbe Bild. Beim Legen sieht es mir zu.", "entwurf": true},
+   {"t": "Ich weiß, was das Bild bedeutet. Ich will sehen, ob es zurücksieht.", "entwurf": true}
+  ],
+  "veteran": [
+   {"t": "Unten soll es leiser sein. Ich höre es schon seit dem Strand.", "entwurf": true},
+   {"t": "Es war nie still. Ich will nur wissen, woher es kommt.", "entwurf": true}
+  ]
+ },
+ "ankunft_nach_umkehren": {"t": "Du wachst am Strand auf. Deine Stiefel stehen im Sand, und die Spur dazu fehlt.", "entwurf": true},
+ "pause": {
+  "hafen": {"t": "Am Kai hat jemand dein Boot festgemacht. Der Knoten ist nass, die Planken sind trocken.", "entwurf": true},
+  "moor": {"t": "Der Torfstecher hat deinen Spaten aufbewahrt. Das Blatt ist feucht, der Stiel warm.", "entwurf": true},
+  "kapelle": {"t": "Das Wasser in der Kapelle steht höher als zuletzt. Auf der Bank liegt dein Handschuh, trocken.", "entwurf": true},
+  "salz": {"t": "In den Stollen ist deine Kreidemarke noch zu lesen. Jemand hat sie nachgezogen.", "entwurf": true},
+  "stadt": {"t": "In der namenlosen Stadt ist eine Tür so breit wie deine Schultern geworden. Vorher war sie es nicht.", "entwurf": true},
+  "eis": {"t": "Auf dem schwarzen Eis liegt dein Atem noch als Reif. Er hat sich nicht gesetzt.", "entwurf": true},
+  "pforte": {"t": "Die Pforte steht, wie du sie verlassen hast. Nur die Angeln sind frisch geölt.", "entwurf": true},
+  "grotte": {"t": "Die Kerzenfrau hat dir eine Kerze gelassen. Das Wachs ist weich, als hielte sie jemand.", "entwurf": true},
+  "kurhaus": {"t": "Im Kurhaus ist dein Liegestuhl gedeckt. Die Decke ist warm, das Buch liegt offen, wo du aufgehört hast.", "entwurf": true},
+  "nachtzug": {"t": "Der Schaffner hat ein Abteil für dich freigehalten. Die Fahrkarte ist gelocht, das Datum nass.", "entwurf": true},
+  "kloster": {"t": "Ein Mönch hat deinen Namen abgeschrieben, mit rotem Anfangsbuchstaben. Die Tinte ist noch feucht.", "entwurf": true},
+  "fabrik": {"t": "In der Fabrik läuft dein Band weiter. Die Dosen darauf tragen kein Etikett, nur Salzränder.", "entwurf": true},
+  "gezeitenwerk": {"t": "Der Ingenieur hat die Flut für dich nachgetragen, auf einen Zeitpunkt, den keine Uhr kennt.", "entwurf": true},
+  "wald": {"t": "Der Köhler hat den Meiler nicht angezündet. Er sitzt davor und hält die Hände ans Holz.", "entwurf": true},
+  "ufer": {"t": "Der Strandwärter hat deine Spuren nicht verweht. Sie führen aus dem Meer heraus.", "entwurf": true},
+  "glasmeer": {"t": "Im Glas steht dein Spiegelbild, wo du zuletzt standest. Es hat sich nicht gesetzt.", "entwurf": true},
+  "walkathedrale": {"t": "Der Walfänger hat die Lampe für dich brennen lassen. Der Tran ist warm, das Herz still.", "entwurf": true},
+  "leuchtturm": {"t": "Der Strandvogt hat die Laterne nachgefüllt. Der Strahl fällt wieder auf den Hof, nicht aufs Meer.", "entwurf": true},
+  "glockengiesserei": {"t": "Der Wandergießer hat einen Löffel von dir eingeschmolzen. Er hängt jetzt an der Grube und klingt.", "entwurf": true},
+  "ziegelgruben": {"t": "Der Schreiber hat dich in die Wachstafel eingetragen. Der Ziegel daneben ist noch warm.", "entwurf": true},
+  "mond": {"t": "Im Mondstaub steht dein Stiefelabdruck. Er ist tiefer, als du schwer bist.", "entwurf": true},
+  "waage": {"t": "Die Waage hat nachgewogen. Die Schale hängt noch schief, so schwer, wie du warst.", "entwurf": true},
+  "funkstation": {"t": "Der Empfänger hat etwas für dich aufgenommen. Das Papierband liegt noch warm vom Rattern.", "entwurf": true},
+  "waisenhaus": {"t": "Im Schlafsaal ist ein Bett gemacht. Die Heimleiterin führt dich weiter unter den Anwesenden.", "entwurf": true},
+  "station": {"t": "Im Fundbüro liegt ein Hut, der deinem gleicht. Am Band hängt ein Zettel ohne Nummer.", "entwurf": true}
+ },
+ "erbe": {
+  "t": "Dein Griff vom letzten Mal. Das Leder ist abgegriffen, und er liegt noch warm in der Hand.",
+  "nehmen": "NEHMEN",
+  "lassen": "LIEGEN LASSEN",
+  "entwurf": true
+ },
+ "fehlzeit": {
+  "t": "Jemand anderes wird an deiner Stelle gehen. Du beginnst erst bei der Kapelle, den Weg davor geht er.",
+  "ja": "SEIN LASSEN",
+  "nein": "SELBST GEHEN",
+  "start": "Das Stück davor ist schon gegangen. Im Gang liegen Spuren, und sie haben dein Schuhmaß.",
+  "tot": "Der andere ist nicht weit gekommen. Du stehst in der Kapelle, und sein Platz ist leer.",
+  "entwurf": true
+ }
+}

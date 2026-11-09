@@ -1,0 +1,13 @@
+Seeds: 30, Prüfungen: 246, davon mit eingestürztem Gang: 1, mit Wandbild: 10
+Alles gut.
+test-kern: Alles gut.
+test-run: Alles gut.
+test-deckbau: Alles gut.
+test-begegnungen: Alles gut.
+test-biegungen: Alles gut.
+test-oberflaeche: Alles gut.
+test-karte-ui: Alles gut.
+test-rucksack: Alles gut.
+test-plakette: Alles gut.
+test-stoffbaum: Alles gut (33 Prüfungen).
+texte-pruefen: Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 494, alle als Entwurf markiert.
