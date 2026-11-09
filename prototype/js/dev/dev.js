@@ -19,7 +19,7 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   if(this.an&&!FAST)this.renderBald();},
  kurz(p){if(!p)return'';const o={};for(const k in p){if(k==='why')continue;const v=p[k];if(v&&typeof v==='object'){if(v.n)o[k]=v.n;else if(Array.isArray(v))o[k]=v.length>6?v.length+' Einträge':v.map(x=>x&&x.n||x).join(',');}else o[k]=v;}return JSON.stringify(o).slice(0,140);},
  _t:0,renderBald(){if(this._t)return;this._t=setTimeout(()=>{this._t=0;this.render();},120);},
- render(){if(!this.an||!this.el)return;const tabs=['jetzt','kampf','deck','run','musik','log','cheats'];
+ render(){if(!this.an||!this.el)return;const tabs=['jetzt','kampf','deck','run','tiefe','musik','log','cheats'];
   this.el.innerHTML=`<div class="dt">${tabs.map(t=>`<button data-dtab="${t}" class="${this.tab===t?'an':''}">${t.toUpperCase()}</button>`).join('')}</div><div class="db">${this['t_'+this.tab]()}</div>`;},
  // ----- Reiter Jetzt -----
  t_jetzt(){let h='';const f=S.phase==='fight';
@@ -59,6 +59,12 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   setTimeout(()=>this.kurve(),0);return h;},
  kurve(){const c=document.getElementById('devKurve');if(!c||typeof Music==='undefined')return;this.mk=this.mk||[];const m=Music.state();this.mk.push([m.wucht||0,m.gefahr||0]);if(this.mk.length>320)this.mk.shift();const x=c.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,320,60);
   [['#7affc8',0],['#ff6a5a',1]].forEach(([col,k])=>{x.fillStyle=col;this.mk.forEach((v,i)=>x.fillRect(i,58-v[k]*56,1,1));});},
+ // ----- Reiter Tiefe (Auftrag 3): Schalter der neuen Systeme, Erzwingen. Wächst mit jedem Meilenstein. -----
+ t_tiefe(){const A=BAL.auftrag3||{};const N={regelbiegung:'Regelbiegung',hoeren:'Hören statt sehen',blick:'Sehen und gesehen werden',farbe:'Die Farbe',begegnungen:'Begegnungen',meta:'Metaebene',wuerze:'Würze'};
+  let h=`<h5>Systeme (balance.json → auftrag3)</h5><div>${Object.keys(N).map(k=>`<button data-cheat="a3" data-arg="${k}" class="${A[k]?'an':''}">${N[k]} ${A[k]?'an':'aus'}</button>`).join(' ')}</div><div class="dim">Aus heißt: das Spiel läuft genau wie ohne das System. Gilt bis zum Neuladen; dauerhaft über ?a3aus=farbe,blick</div>`;
+  (this.tiefeTeile||[]).forEach(f=>{h+=f();});return h;},
+ // Meilensteine hängen hier ihre Abschnitte an (Funktion, die HTML liefert)
+ tiefeTeil(f){(this.tiefeTeile=this.tiefeTeile||[]).push(f);},
  // ----- Reiter Log -----
  t_log(){const f=this.filter;return `<div><input id="devFilter" placeholder="Filter (kampf, reaktion, musik, run, meta, effekte oder Text)" value="${esc(f)}"> <button data-cheat="logExport">Export</button></div>
   ${this.log.filter(e=>!f||e.kat===f||(e.n+e.why+e.d).toLowerCase().includes(f.toLowerCase())).slice(0,120).map(e=>`<div class="le"><span class="dim">${e.t}</span> <b>${e.n}</b> <span class="dim">[${e.kat}]</span> ${esc(e.why)} <span class="dim">${esc(e.d)}</span></div>`).join('')}`;},
@@ -77,6 +83,7 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
  markDev(){if(S.route&&!S.dev){S.dev=true;Bus.emit('dev_run',{why:'Cheat benutzt: dieser Run zählt nicht fürs Tagebuch'});}},
  cheatAus(k,a){const sel=document.getElementById('devItem');
   switch(k){
+   case'a3':{BAL.auftrag3=BAL.auftrag3||{};BAL.auftrag3[a]=!BAL.auftrag3[a];this.markDev();Bus.emit('a3_schalter',{k:a,an:BAL.auftrag3[a],why:`Auftrag-3-System ${a} ${BAL.auftrag3[a]?'an':'aus'}`});render();break;}
    case'seedcopy':navigator.clipboard&&navigator.clipboard.writeText(String(S.seed));break;
    case'akt':this.springe('weg',+a);break;
    case'gabel':{const b=a;if(!S.route)return;this.markDev();const i=BIOMES[b].akt;S.route[i]=b;S.routeWhy=[...(S.routeWhy||[]),`Gabelung erzwungen: ${b}`];if(S.akt===i){BU.key='';genWeg();}render();break;}

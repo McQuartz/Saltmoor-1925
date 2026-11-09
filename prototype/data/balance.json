@@ -107,5 +107,19 @@
   "item_chance": 0.25,
   "ueberspringen_gold": 10
  },
-  "elite": {"_doc": "Zugabe: Chance, dass ein schwerer Kampf eine Elite des Bioms bringt (biom.elite / elite_dazu); sie ersetzt so viele normale Gegner", "chance": 0.5, "ersetzt": 2}
+ "elite": {
+  "_doc": "Zugabe: Chance, dass ein schwerer Kampf eine Elite des Bioms bringt (biom.elite / elite_dazu); sie ersetzt so viele normale Gegner",
+  "chance": 0.5,
+  "ersetzt": 2
+ },
+ "auftrag3": {
+  "_doc": "Auftrag 3: Schalter je neuem System (docs/auftrag-3/01-regeln.md Abschnitt 6). false = das Spiel läuft genau wie ohne das System. Im Dev-Reiter TIEFE umschaltbar.",
+  "regelbiegung": true,
+  "blick": true,
+  "farbe": true,
+  "hoeren": true,
+  "begegnungen": true,
+  "meta": true,
+  "wuerze": true
+ }
 }

@@ -4,6 +4,7 @@
 //   ?job=fischer   direkt mit dieser Figur starten (überspringt Titel und Figurwahl)
 //   ?dev=1         Dev-Modus an (Taste D schaltet um)
 //   ?bot=50&seed=1 Autospieler: 50 Runs ab Seed 1, schnell, Tabelle am Ende
+//   ?a3aus=farbe,blick  Auftrag-3-Systeme ausschalten (balance.json → auftrag3), ?a3aus=alle für alle
 //   ?springe=fight|waechter|finale|kraemer|ereignis|rast|werkstatt|wandbild&akt=2  (mit ?job=) direkt zu einem Knoten
 // Ganzzahlige Grundskalierung (--u, Pixel scharf), danach füllt #spiel das Fenster per transform (BU.s), ohne Scrollen.
 // Die Höhe wird gemessen: ohne Leiste (Titel, Figurwahl) ist #spiel nur die Szene hoch und füllt das Fenster trotzdem.
@@ -14,6 +15,7 @@ function skala(){const W=innerWidth,H=innerHeight;const k=Math.max(1,Math.min(Ma
  await paketeEinbinden();
  skala();addEventListener('resize',()=>{skala();render();});new ResizeObserver(()=>skala()).observe(document.getElementById('spiel'));buehneInit();
  const q=new URLSearchParams(location.search);
+ if(q.get('a3aus')&&BAL.auftrag3){const l=q.get('a3aus')==='alle'?Object.keys(BAL.auftrag3).filter(k=>!k.startsWith('_')):q.get('a3aus').split(',');l.forEach(k=>{if(k in BAL.auftrag3)BAL.auftrag3[k]=false;});}
  if(typeof Dev!=='undefined')Dev.init(q);
  if(q.get('bot')){Dev.botLauf(+q.get('bot'),+(q.get('seed')||1));}
  else if(q.get('job')){newRun(q.get('job'),q.get('seed')!=null?+q.get('seed'):neuerSeed(),{dev:!!q.get('springe')});if(q.get('springe'))Dev.springe(q.get('springe'),q.get('akt')!=null?+q.get('akt'):null);}

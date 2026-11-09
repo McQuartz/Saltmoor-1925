@@ -1,0 +1,4 @@
+{
+ "_doc": "Feste Oberflächen-Texte aus texte-basis.json, die Auftrag 3 bewusst entfernt, weil die Anzeige ersetzt wird. Je Eintrag Text und Grund. Wird von tools/texte-pruefen.js gelesen.",
+ "entfernt": []
+}

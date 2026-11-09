@@ -37,4 +37,6 @@ function dropPool(){const b=biom();const extra=(S.metaItems||[]).filter(itemOk);
  if(!pool.length)pool=Object.keys(ITEMS).filter(k=>!ITEMS[k].nodrop&&!ITEMS[k].bases&&!ITEMS[k].rare&&!ITEMS[k].meta);return[...new Set(pool)];}
 function rarePool(){return Object.keys(ITEMS).filter(k=>ITEMS[k].rare&&!ITEMS[k].bases&&!ITEMS[k].nodrop&&(!ITEMS[k].meta||(S.metaItems||[]).includes(k)));}
 const romanN=n=>{const r=[['X',10],['IX',9],['V',5],['IV',4],['I',1]];let s='';for(const[k,v]of r)while(n>=v){s+=k;n-=v;}return s;};
+// Auftrag 3: ist ein neues System eingeschaltet? (balance.json → auftrag3, im Dev-Reiter TIEFE umschaltbar)
+function a3(k){return !!(BAL&&BAL.auftrag3&&BAL.auftrag3[k]);}
 function jobFaehigkeit(){const j=JOBS.find(x=>x.id===S.job);return j&&j.faehigkeit||null;}
