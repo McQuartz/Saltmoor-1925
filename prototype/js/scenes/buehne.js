@@ -85,11 +85,15 @@ function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.fr
  const kampfSzene=S.phase==='fight'||S.phase==='reward';if(kampfSzene){BU.cam.x=0;BU.cam.y=0;}else{const atm=Math.sin(t*.35)*1.2;BU.cam.x+=(((BU.maus.x-240)/240)*4-BU.cam.x)*.05;BU.cam.y+=(((BU.maus.y-135)/135)*2+atm-BU.cam.y)*.05;}
  BU.shake*=Math.pow(.002,dt||.016);const sx=(Math.random()-.5)*BU.shake,sy=(Math.random()-.5)*BU.shake;const cam={x:BU.cam.x+sx,y:BU.cam.y+sy};
  g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.fillStyle='#000';g.fillRect(0,0,SW,SH);
+ // M3: während der Fahrt nach vorne zeichnet Fahrt das Bild (Ebenen mit Tiefe), keine Gegner, kein Wackeln der Szene
+ const fahrtBild=typeof Fahrt!=='undefined'&&Fahrt.zeichne?Fahrt.zeichne(g,sz,now,t):false;
+ if(!fahrtBild){
  zeichneSzene(sz,g,t,cam);
  if(BU.szAlt){const q=(t-BU.szAlt.t0)/.8;if(q>=1||BU.szAlt.sz===sz)BU.szAlt=null;else{g.globalAlpha=Math.ceil((1-q)*4)/4;zeichneSzene(BU.szAlt.sz,g,t,cam);g.globalAlpha=1;}}
  if(S.enemies&&['fight','reward'].includes(S.phase)){const list=[...S.enemies].sort((a,b)=>(enemyBox(a).y-enemyBox(b).y)||(a.x-b.x));list.forEach(e=>zeichneGegner(g,e,dt,t,cam));}
  if(typeof PFX!=='undefined')try{PFX.zeichne(g,dt);}catch(e){}
  try{sz.zeichneVordergrund&&sz.zeichneVordergrund(g,t,cam);}catch(e){}
+ }
  for(let i=FXL.length-1;i>=0;i--){const f=FXL[i];f.t+=dt||.016;const p=f.t/f.dur;if(p>=1){FXL.splice(i,1);continue;}
   if(f.k==='slash'){const s=f.s,dir=f.flip?-1:1;const a=Math.min(1,p*2.2),b=Math.max(0,p*2.2-1.1);g.fillStyle=stc(f.col);for(let k=Math.floor(b*24);k<a*24;k++){const q=k/24;g.fillRect(Math.round(f.x+(q-.5)*s*2*dir),Math.round(f.y+(q-.5)*s*1.3),2,1);}}
   if(f.k==='ring'){const rr=f.r*(1-Math.pow(1-p,3));g.fillStyle=stc(f.col);for(let a=0;a<6.283;a+=1.5/Math.max(8,rr)){g.fillRect(Math.round(f.x+Math.cos(a)*rr),Math.round(f.y+Math.sin(a)*rr*.5),1,1);}}}
@@ -97,6 +101,7 @@ function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.fr
  if(BU.flashA>0){g.globalAlpha=Math.min(.5,BU.flashA);g.fillStyle=BU.flashCol;g.fillRect(0,0,SW,SH);g.globalAlpha=1;BU.flashA-=dt*2.5;}
  if(S.phase==='strand'&&S.ergebnis&&!S.ergebnis.sieg&&t-(BU.strandT||0)<0)0;
  if(BU.stumm){const q=(now-BU.stumm.t0)/BU.stumm.dur;if(q>=1)BU.stumm=null;else stummfilmMalen(g,q);}
+ if(typeof Fahrt!=='undefined'&&Fahrt.deck)Fahrt.deck(g,now,t); // Nebel-Übergang nach der Fahrt
  if(typeof Dev!=='undefined'&&Dev.an)Dev.szene(g,t);
  requestAnimationFrame(frame);}
 const stc=k=>k&&ST&&ST[k]?ST[k].c:(k||'#e8c547');
