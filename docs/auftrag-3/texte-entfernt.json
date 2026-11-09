@@ -16,6 +16,14 @@
   {
    "text": "Klick ein Item, dann den Platz, an den es soll. Rechts siehst du, was das mit deinem Deck macht.",
    "grund": "Spieltest 2026-11-09 (Philip): Tauschen nur noch per Ziehen; ohne gewähltes Item steht rechts jetzt das ganze Deck."
+  },
+  {
+   "text": "Kommt als 1 Karte ins Deck, mit dem Stoff des Items, in das du ihn ritzt",
+   "grund": "Spieltest 2026-11-09 (Philip): Der Hover über Fund, Reliquie und Handgriff zeigt nur noch die echten Karten statt eines Textkastens."
+  },
+  {
+   "text": "Angelegt kommen ins Deck:",
+   "grund": "Spieltest 2026-11-09 (Philip): Der Hover über Fund, Reliquie und Handgriff zeigt nur noch die echten Karten statt eines Textkastens."
   }
  ]
 }
