@@ -9,11 +9,15 @@ const Bot={
  // beste Karte jetzt (für den geklickten Run in tools/selbst-spielen.js): {i,t} oder null
  besteKarte(){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
  // M8: die Farbe binden, wenn es geht: erst eine Karte des Farbe-Items, direkt danach eine Karte mit eigenem Salz
+ // M9 Asche: Salz, dann Feuer ruft einen Verbündeten (der Bot ruft, wenn Asche da ist und kein Verbündeter steht); Das Zeichen spielt er, sobald er es zieht (er gibt der Tiefe nach)
+ ascheWert(c){if(c&&c.zeichen)return 20;if(typeof Asche==='undefined'||!Zettel.hat('asche')||!(S.asche&&S.asche.length)||S.verbuendeter)return 0;const e=Asche.eigene(c);const z=S.zugKarten||[];const vor=z[z.length-1];
+  if(vor&&Asche.eigene(vor).includes('S')&&e.includes('F'))return 10;if(vor&&Asche.eigene(vor).includes('F')&&e.includes('S'))return -6;
+  if(e.includes('S')&&S.hand.some(x=>x!==c&&Asche.eigene(x).includes('F')&&cardCost(x)<=S.energy-cardCost(c)))return 4;return 0;},
  farbeWert(c){if(typeof Farbe==='undefined'||!S.farbe||S.farbe.gebunden)return 0;const salz=x=>!Farbe.karte(x)&&(x.st0||x.st).includes('S');
   const z=S.zugKarten||[];const vor=z[z.length-1];if(salz(c)&&Farbe.karte(vor))return 8;
   if(Farbe.karte(c)&&S.hand.some(x=>x!==c&&salz(x)&&cardCost(x)<=S.energy-cardCost(c)))return 4;return 0;},
  kampfZug(){let guard=0;if(S.begegnung&&typeof Tiefe!=='undefined'){Tiefe.weiter();return;} /* M9: Begegnung, weitergehen */if(S.blickWahl&&typeof Blick!=='undefined')Blick.waehlen(Blick.botWahl()); /* M7: hinsehen, wenn Leben über 60 % */this.biegZugbeginn();while(S.phase==='fight'&&!busy&&guard++<30){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;
-   S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];const bw=this.biegWert(c,inc)+this.farbeWert(c);
+   S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];const bw=this.biegWert(c,inc)+this.farbeWert(c)+this.ascheWert(c);
     ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0)+bw;if(!best||w>best.w)best={i,t,w};});});
    if(!best||best.w<=0)break;playCard(best.i,best.t);}
   if(S.phase==='fight'&&!busy)endTurn();},

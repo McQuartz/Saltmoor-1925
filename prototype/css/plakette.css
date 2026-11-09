@@ -49,8 +49,9 @@
 @keyframes klangPuls{0%{transform:scale(1.35);opacity:1}60%,100%{transform:scale(.9);opacity:.6}}
 @keyframes klangSchwell{0%,100%{transform:scale(.7);opacity:.35}70%{transform:scale(1.25);opacity:1}}
 /* M9 Asche: Spur aus grauen Pixeln links oben an der Plakette (gerufen und wiedergekehrt tragen dieselbe), Verbündeter mit aschgrauem Rahmen */
-.feind .pl-asche{position:absolute;left:calc(var(--u)*-2);top:calc(var(--u)*-2.5);width:calc(var(--u)*1.4);height:calc(var(--u)*1.4);background:#9a948a;
- box-shadow:calc(var(--u)*1.4) 0 #6e6a62,calc(var(--u)*2.8) calc(var(--u)*1.4) #b8b2a6,0 calc(var(--u)*1.4) #5a564f,calc(var(--u)*4.2) 0 #827d74,calc(var(--u)*1.4) calc(var(--u)*2.8) #9a948a}
+.feind .pl-asche{position:absolute;left:calc(var(--u)*-3);top:calc(var(--u)*-3.5);width:calc(var(--u)*2);height:calc(var(--u)*2);background:#b8b2a6;z-index:3;
+ box-shadow:calc(var(--u)*2) 0 #8a857c,calc(var(--u)*4) calc(var(--u)*2) #d0cabe,0 calc(var(--u)*2) #6e6a62,calc(var(--u)*6) 0 #9a948a,calc(var(--u)*2) calc(var(--u)*4) #b8b2a6,calc(var(--u)*8) calc(var(--u)*2) #6e6a62,0 calc(var(--u)*6) #8a857c}
+.feind .pl-verb{font-family:var(--fk);font-size:calc(var(--u)*3.4);letter-spacing:.06em;color:#b8b2a6;margin:calc(var(--u)*-.6) 0 calc(var(--u)*1)}
 .feind.verbuendet{pointer-events:none}
 .feind.verbuendet .pl-box{box-shadow:0 0 0 calc(var(--u)*.7) #8a857c,0 calc(var(--u)*1) calc(var(--u)*5) rgba(0,0,0,.85);background:linear-gradient(#1b1a17,#0d0c0b)}
 .feind.verbuendet .pl-nm span{color:#c8c2b6}

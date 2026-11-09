@@ -122,10 +122,10 @@ function kKnoten(B,n,pal,mini){const{k,r}=pal;const a=n.verloren?.3:1;
  if(n.aktuell)kRing(B,n.x,n.y,n.r+7,pal.gold,1);}
 
 // Spuren (Auftrag 3 M9): Abdrücke, die von unten links auf den Knoten zulaufen. Stufe 0–3: mehr, größer, tiefer. Keine Zahl.
-function kSpuren(B,n,pal){const s=n.spuren;if(s==null||n.r<10)return;const zahl=3+s*2,gr=1.2+s*.9,c=kmix(pal.k[0],[20,14,10],.5),rand=kmix(pal.r[0],pal.k[0],.5),a=n.verloren?.35:1;
- for(let j=0;j<zahl;j++){const t=(j+1)/(zahl+1),d=n.r+8+(zahl-j)*(7+s*2.2);const ang=Math.PI*.82;const x=n.x+Math.cos(ang)*d,y=n.y+Math.sin(ang)*d*.55+((j&1)?-1:1)*(3+s);
+function kSpuren(B,n,pal){const s=n.spuren;if(s==null||n.r<10)return;const zahl=3+s*2,gr=1.6+s*1.1,c=kmix(pal.k[0],[8,6,4],.6),rand=kmix(pal.r[0],pal.k[1],.35),a=n.verloren?.35:1;
+ for(let j=0;j<zahl;j++){const t=(j+1)/(zahl+1),d=n.r+5+(zahl-j)*(6+s*2);const ang=Math.PI*.82;const x=n.x+Math.cos(ang)*d,y=n.y+Math.sin(ang)*d*.55+((j&1)?-1:1)*(3+s);
   const rx=gr*1.4,ry=gr;for(let dy=-Math.ceil(ry)-1;dy<=Math.ceil(ry)+1;dy++)for(let dx=-Math.ceil(rx)-1;dx<=Math.ceil(rx)+1;dx++){const q=(dx/rx)**2+(dy/ry)**2;
-   if(q<=1)kput(B,x+dx,y+dy,c,a*(.55+.45*t));else if(q<=1.7&&s>=2)kput(B,x+dx,y+dy,rand,a*.5*t);}
+   if(q<=1)kput(B,x+dx,y+dy,c,a*(.7+.3*t));else if(q<=1.8)kput(B,x+dx,y+dy,rand,a*(.45+.4*t));}
   if(s>=1)for(let z=-1;z<=1;z++)kput(B,x+rx+1.5,y+z*(gr*.8),c,a*.8*t);}}
 function karteStatisch(B,m,pal){kHintergrund(B,pal,m);m.kanten.forEach(k=>kKante(B,k,pal,m));m.nodes.forEach(n=>kSpuren(B,n,pal));
  if(m.start){kRing(B,m.start.x,m.start.y,m.start.r,pal.gold,1);kRaute(B,m.start.x,m.start.y,m.mini?3:5,pal.gold,pal.gold,1);}

@@ -371,6 +371,6 @@
   "max": 5
  },
  "_doc_akte": "Jeder Akt bietet am Anfang zwei Biome aus seiner Liste zur Wahl (Akt I: die Vorliebe der Figur plus eins per Seed, sonst zwei per Seed). Biome, die es (noch) nicht gibt, werden übersprungen. Gibt es nur eins, entfällt die Wahl.",
- "karten": {"_doc": "Auftrag 3 M9: lose Karten ohne Item (Die Tiefe erkennt dich).", "zeichen": {"n": "Das Zeichen", "c": 0, "t": "Seitenwechsel für den Rest des Runs: Was aus der Tiefe kommt, lässt dich gehen. Die Menschen stellen sich dir in den Weg. Verbraucht.", "img": "assets/karten/zeichen.png", "entwurf": true}},
+ "karten": {"_doc": "Auftrag 3 M9: lose Karten ohne Item (Die Tiefe erkennt dich).", "zeichen": {"n": "Das Zeichen", "c": 0, "t": "Für den Rest des Runs: Die Tiefe lässt dich gehen. Die Menschen nicht.", "img": "assets/karten/zeichen.png", "entwurf": true}},
  "begegnungen": {"_doc": "Auftrag 3 M9: Zeilen der Begegnungen (Seitenwechsel).", "begegnung": {"t": "Sie stehen da und sehen dich an. Keiner hebt die Hand.", "entwurf": true}, "weiter": {"t": "WEITERGEHEN", "entwurf": true}, "kraemer_zu": {"t": "Der Laden ist zu, als du kommst. Hinter dem Glas dreht jemand das Schild um.", "entwurf": true}}
 }

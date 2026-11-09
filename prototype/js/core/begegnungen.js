@@ -40,8 +40,10 @@ const Diener={
 // Früh: leichter Kampf, kleine Beute. Spät: schwerer Kampf, dafür eine Reliquie. Der Gegner ist eine Elite des Bioms (sonst der zäheste normale Gegner), wächst je Stufe (balance.json → spuren).
 const Spuren={
  W(){return BAL.spuren||{hp:[.6,.85,1.1,1.35],atk:[-2,0,2,4],gross:[.9,1,1.1,1.22],beute:['kampf','kampf','schwer','reliquie']};},
- // beim Bauen des Netzes (netzBauen): ein normaler Kampfknoten zwischen der zweiten und der vorletzten Ebene
- markieren(N,r){if(!Zettel.hat('spuren')||N.akt>3)return;const kand=[];N.ebenen.forEach((l,e)=>{if(e>=1&&e<N.ebenen.length-1)l.forEach(v=>{if(v.art==='kampf')kand.push(v);});});
+ // beim Bauen des Netzes (netzBauen): ein normaler Kampfknoten zwischen der zweiten und der vorletzten Ebene;
+ // gibt es dort keinen, ein schwerer Kampf dort, sonst ein Kampf auf einer anderen Ebene außer der letzten (Wächter)
+ markieren(N,r){if(!Zettel.hat('spuren')||N.akt>3)return;const L=N.ebenen.length;const such=(arten,von,bis)=>{const k=[];N.ebenen.forEach((l,e)=>{if(e>=von&&e<bis)l.forEach(v=>{if(arten.includes(v.art))k.push(v);});});return k;};
+  let kand=such(['kampf'],1,L-1);if(!kand.length)kand=such(['kampf_schwer'],1,L-1);if(!kand.length)kand=such(['kampf','kampf_schwer'],0,L-1);
   if(!kand.length)return;const v=r.pick(kand);v.spuren=0;N.folgen.push('spuren');},
  knoten(N){N=N||S.netz;if(!N)return null;for(const l of N.ebenen)for(const v of l)if(v.spuren!=null)return v;return null;},
  // nach jeder Wahl auf der Karte: woanders hingegangen → Spuren wachsen
@@ -69,7 +71,7 @@ const Asche={
  nachKarte(c,vorher){if(!Zettel.hat('asche')||S.phase!=='fight'||!vorher||!(S.asche&&S.asche.length))return;const a=this.eigene(vorher),b=this.eigene(c);
   if(a.includes('S')&&b.includes('F')&&!S.verbuendeter)return this.rufen();
   if(a.includes('F')&&b.includes('S'))return this.aufloesen();},
- rufen(){const a=S.asche.pop();const v=mkEnemy(a.id,0);v.verbuendet=true;v.pendel=true;v.x=v.xa=.09;v.reihe=2;v.ascheVon=a.akt;v.pi=0;v.block=0;S.verbuendeter=v;
+ rufen(){const a=S.asche.pop();const v=mkEnemy(a.id,0);v.verbuendet=true;v.pendel=true;v.x=v.xa=.16;v.reihe=2;v.ascheVon=a.akt;v.pi=0;v.block=0;S.verbuendeter=v;
   (S.ascheRueck=S.ascheRueck||[]).push({id:a.id,akt:S.akt+2});
   Bus.emit('asche',{art:'gerufen',id:a.id,why:`Salz, dann Feuer: ${a.n} steht aus der Asche auf und kämpft an deiner Seite`});Bus.emit('changed');},
  aufloesen(){const a=S.asche.pop();Bus.emit('asche',{art:'aufgeloest',id:a.id,why:`Feuer, dann Salz: die Asche von ${a.n} zerfällt. Sie kommt nicht wieder`});Bus.emit('changed');},

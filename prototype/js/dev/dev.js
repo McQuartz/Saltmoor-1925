@@ -86,6 +86,11 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
    case'a3':{BAL.auftrag3=BAL.auftrag3||{};BAL.auftrag3[a]=!BAL.auftrag3[a];this.markDev();Bus.emit('a3_schalter',{k:a,an:BAL.auftrag3[a],why:`Auftrag-3-System ${a} ${BAL.auftrag3[a]?'an':'aus'}`});render();break;}
    // M5: Regelbiegung. biegNur: nur diese Biegung gilt (wie kern-vergleich.js), biegBeide: Falsche Winkel mit letzter und vorletzter Karte, biegFeld: Biom der Biegung im aktuellen Akt erzwingen
    case'biegNur':{BAL.auftrag3.biegung_nur=BAL.auftrag3.biegung_nur===a?null:a;this.markDev();Bus.emit('a3_schalter',{k:'biegung_nur',an:!!BAL.auftrag3.biegung_nur,why:BAL.auftrag3.biegung_nur?`Nur die Biegung ${a} gilt`:'Alle Biegungen gelten'});render();break;}
+   // M9: Run-Zettel ändern (Begegnung an/aus, höchstens zwei), Zeichen geben, Asche geben, Spuren-Stufe setzen
+   case'zettel':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};const l=z.begegnungen;const i=l.indexOf(a);if(i>=0)l.splice(i,1);else{l.push(a);if(l.length>2)l.shift();}this.markDev();render();break;}
+   case'zeichenGeben':{if(!(S.lose||[]).includes('zeichen')){(S.lose=S.lose||[]).push('zeichen');S.zeichenGegeben=true;}this.markDev();render();break;}
+   case'ascheGeben':{const id=Object.keys(FOES).find(k=>FOES[k].asche&&(biom().gegner||[]).includes(k))||Object.keys(FOES).find(k=>FOES[k].asche);if(id&&(S.asche||[]).length<3)(S.asche=S.asche||[]).push({id,n:FOES[id].n,akt:S.akt});this.markDev();render();break;}
+   case'spurenStufe':{const v=typeof Spuren!=='undefined'&&Spuren.knoten();if(v)v.spuren=+a;this.markDev();render();break;}
    case'biegBeide':{BAL.auftrag3.falsche_winkel_beide=!BAL.auftrag3.falsche_winkel_beide;this.markDev();render();break;}
    case'seedcopy':navigator.clipboard&&navigator.clipboard.writeText(String(S.seed));break;
    case'akt':this.springe('weg',+a);break;
@@ -138,3 +143,11 @@ Dev.tiefeTeil(()=>{if(typeof Bieg==='undefined')return'';const A=BAL.auftrag3||{
  return `<h5>Regelbiegung</h5><div>Jetzt: ${k?esc((k.jetzt||k.b).n)+(k.naechste?' · nächster Zug '+esc(k.naechste.n):'')+(k.zusatz?' · '+k.zusatz:''):'<span class="dim">keine (Akt I/II, Schalter aus oder anderes Biom)</span>'}</div>
  <div>Nur eine Biegung: ${BIEGUNGEN.map(b=>`<button data-cheat="biegNur" data-arg="${b.id}" class="${A.biegung_nur===b.id?'an':''}" title="${esc(b.t)}">${esc(b.n)} (${BIOMES[b.biom]?esc(BIOMES[b.biom].kurz):b.biom})</button>`).join(' ')}</div>
  <div><button data-cheat="biegBeide" class="${A.falsche_winkel_beide?'an':''}">Falsche Winkel: letzte und vorletzte ${A.falsche_winkel_beide?'an':'aus'}</button> <span class="dim">Biom erzwingen im Reiter Cheats → Biom erzwingen</span></div>`;});
+// M9: Run-Zettel (im Spiel unsichtbar, hier sichtbar und änderbar) und Zustand der Begegnungen
+Dev.tiefeTeil(()=>{if(typeof Zettel==='undefined'||!S||!S.route)return'';const z=S.zettel||{begegnungen:[],wuerze:[]};const N={diener:'Die Diener erheben sich',asche:'Asche',spuren:'Spuren',tiefe:'Die Tiefe erkennt dich'};
+ const sv=typeof Spuren!=='undefined'?Spuren.knoten():null;const d=typeof Diener!=='undefined'?Diener.kandidat():null;
+ return `<h5>Run-Zettel</h5><div>Begegnungen (höchstens zwei): ${BEGEGNUNGEN.map(k=>`<button data-cheat="zettel" data-arg="${k}" class="${z.begegnungen.includes(k)?'an':''}">${N[k]}</button>`).join(' ')}</div>
+ <div>Würze: ${(z.wuerze||[]).length?z.wuerze.map(esc).join(', '):'<span class="dim">keine</span>'}</div>
+ <div class="dim">Diener: ${d?esc(d.c.n)+' '+d.n+'-mal':'noch keine Karte mit 8 Einsätzen'}${S.dienerGenutzt?' · schon genutzt':''} · Spuren: ${sv?'Stufe '+(sv.spuren+1)+' von 4'+(sv.besucht?' (betreten)':''):'kein Knoten'} ${sv?[0,1,2,3].map(s=>`<button data-cheat="spurenStufe" data-arg="${s}">${s+1}</button>`).join(''):''}</div>
+ <div class="dim">Asche: ${(S.asche||[]).map(a=>esc(a.n)).join(', ')||'keine'}${S.verbuendeter?' · Verbündeter '+esc(S.verbuendeter.n):''}${(S.ascheRueck||[]).length?' · kommt wieder: '+S.ascheRueck.map(x=>esc(FOES[x.id].n)+' in Akt '+(x.akt+1)).join(', '):''} <button data-cheat="ascheGeben">Asche geben</button></div>
+ <div class="dim">Tiefe: ${S.tiefeZahl||0}-mal nachgegeben${(S.lose||[]).includes('zeichen')?' · Zeichen im Deck':''}${S.tiefeSeite?' · Seite gewechselt':''} <button data-cheat="zeichenGeben">Zeichen geben</button></div>`;});

@@ -150,7 +150,7 @@ function zeichneGegner(g,e,dt,t,cam){const v=visOf(e);if(v.gone)return;const p=e
 const _tmp={};function tmpCanvas(w,h){const k=w+'x'+h;if(!_tmp[k]){const c=document.createElement('canvas');c.width=w;c.height=h;_tmp[k]={c,x:c.getContext('2d',{willReadFrequently:true})};}return _tmp[k];}
 // Unverwundbarer Zug (Musterschritt unverw): halb durchscheinend im Schachbrett-Raster, kühl getönt, am Rand ein wandernder kalter Schimmer (kein Weichzeichner)
 const UNVERW_RAND=[[207,232,255],[120,160,210]],UNVERW_TON=[150,185,230];
-function nachbearbeiten(tc,e,v,p){const w=tc.c.width,h=tc.c.height;const neb=p.nebel||0;const tod=v.dying?Math.min(1,v.dying/.9):0;const ziel=typeof AIM!=='undefined'&&AIM.ei===S.enemies.indexOf(e);
+function nachbearbeiten(tc,e,v,p){const w=tc.c.width,h=tc.c.height;const neb=p.nebel||0;const tod=v.dying?Math.min(1,v.dying/.9):0;const ziel=typeof AIM!=='undefined'&&S.enemies.indexOf(e)>=0&&AIM.ei===S.enemies.indexOf(e);
  const uv=!tod&&e.hp>0&&S.phase==='fight'&&typeof unverwJetzt==='function'&&unverwJetzt(e);
  const gs=!!e.gesehener&&!tod;const gph=Math.floor(BU.t*4)&3; // M7: Gesehene halb durchsichtig im wandernden Bayer-Raster, kühl getönt
  const asch=!!e.verbuendet&&!tod;const aph=Math.floor(BU.t*3); // M9: aus der Asche, grau, oben rieselt es

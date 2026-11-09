@@ -14,8 +14,8 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M5 Die Tiefe biegt die Regeln | fertig | 14 Biegungen, keine mehr als 5 Pp unter „aus“ |
 | M6 Hören statt sehen | fertig | sechs stumme Gegner, drei Einsätze, Klänge als Zeichen |
 | M7 Sehen und gesehen werden | fertig | drei Blick-Items, drei Gesehene, 44 Wächter-Schritte, Wahl zu Kampfbeginn |
-| M8 Die Farbe | nicht begonnen | Stopp nach M6 (Philip) |
-| M9 Begegnungen | nicht begonnen | Stopp nach M6 (Philip) |
+| M8 Die Farbe | fertig | Stoff X #c800ff, Brunnen etwa jeder zweite Run, Wandern, Spur, Binden, Tilgen |
+| M9 Begegnungen | fertig | Run-Zettel, alle vier Begegnungen, `art` für alle 143 Gegner |
 | M10 Metaebene | nicht begonnen | Stopp nach M6 (Philip) |
 | M11 Würze | nicht begonnen | Stopp nach M6 (Philip) |
 | M12 Balance und Abschluss | nicht begonnen | Stopp nach M6 (Philip) |
@@ -285,6 +285,54 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
 - Agenten (alle Sonnet, Worktree): Blick-Items und Icons; Gesehener 1 und 2 (Grund zurückgegeben); Gesehener 3 (zurückgegeben); `gesehen`-Schritte für 44 Wächter. Alle drei Bild-Agenten starteten auf altem `main` und haben sich laut Auftrag selbst auf den Branch gesetzt.
 - Mindestens erfüllt? Mehr: eigene `gesehen`-Schritte für alle Wächter statt des Fallbacks.
 
+### M8 Die Farbe
+
+**Plan.** Kern selbst: `js/core/farbe.js` (planen, Brunnen-Ereignis, annehmen, Stoffe der Karte davor, Binden mit Salz, Wandern nach jedem Sieg, Spur, Tilgen), `def(it)` liest `it.st`, Werkstatt-Aktion „Spur tilgen“, Bot-Strategie. Haiku: Farbton-Prüfung (`tools/farbe-ton.js`). Sonnet: Schimmern, Zeichen X, Kartenrand, Baum-Rahmen, Spur-Linie, Brunnenbild.
+
+**Schritte und Entscheidungen.**
+- **Ton:** #c800ff, Mindestabstand 19,1 dE00 zu allen Zonen- und Biompaletten ([m8-farbton.md](m8-farbton.md), dort auch, warum die Vorlagen im Effekt-Baukasten nicht zählen). Fünf Schimmer-Stufen in `stoffe.json → X`. X steht auf keinem Item.
+- **Ankunft:** `Farbe.planen` würfelt zu Run-Beginn (85 %), ob der Brunnen in Akt II oder III kommt; er ersetzt dann das nächste Ereignis. Mit nur Akt II kam er bei den Bots in 20–28 % der Runs an, darum darf er nach Akt III weiterrutschen: jetzt 19 von 40 (etwa jeder zweite Run, wie verlangt).
+- **Karte nimmt an:** `Farbe.hand()` setzt `c.st` jeder Handkarte des Farbe-Items auf die Stoffe der Karte davor (die erste Karte im Zug behält ihre). So sehen Hand, Baum, Vorschau und Bot dasselbe, ohne zweite Regel.
+- **Binden:** direkt nach einer Karte des Farbe-Items eine Karte mit eigenem Salz. Ein angenommenes Salz zählt nicht.
+- **Wandern und Spur:** nach jedem Sieg auf ein anderes angelegtes Item, nie zurück auf das letzte. Das verlassene Item tauscht einen Stoff (nie X, nie doppelt), `it.spuren` merkt es fürs Tilgen.
+- **Bot:** +8 für eine Salzkarte direkt nach einer Farbe-Karte, +4 für eine Farbe-Karte, wenn danach noch Salz bezahlbar ist.
+
+#### Abnahme M8
+- Abnahmekriterien:
+  - `test-kern.js` (Teil Farbe) grün: ✓ 18 Prüfungen (Ton, Plan, Brunnen nur einmal, Schalter, Annehmen, Stoffe der Karte davor mit Reaktion, Wandern 30-mal nie zurück, Spur, nie X, nur ein Item, Binden, Tilgen, Speicherstand, Bots: Brunnen 19 von 40, 10-mal gebunden)
+  - `test-speicher.js` mit Farbe grün: ✓ (Speicherstand trägt Farbe, Bindung, Spuren; Teil von test-kern und test-speicher)
+  - Fotos, selbst angesehen: ✓ [Farbe auf Item](bilder/M8/01-farbe-auf-item-rucksack.png) ([Zoom](bilder/M8/01b-farbe-auf-item-zoom.png)), [Karte nimmt Stoff an](bilder/M8/04b-karte-nimmt-stoff-an-kampf.png) mit [Baum](bilder/M8/04d-baum-zoom.png) und [Hand](bilder/M8/04c-hand-zoom.png), [Spur im Rucksack](bilder/M8/02-spur-rucksack.png) ([Zoom](bilder/M8/02b-spur-zoom.png)), Tilgen ([Knopf](bilder/M8/06-werkstatt-spur-tilgen-knopf.png), [Wahl](bilder/M8/07-spur-tilgen-wahl.png), [danach](bilder/M8/08-nach-dem-tilgen.png)), [gebunden](bilder/M8/03-gebunden-rucksack.png), [Brunnen](bilder/M8/05-ereignis-brunnen.png). Erzeugt mit `tools/farbe-fotos.js` und `tools/m8-tilgen-foto.js`, keine Konsolenfehler.
+  - Bot-Vergleich aller Kern-Systeme: ✓ `tools/kern-alle.js 100` ([kern-alle-100.txt](bilder/M8/kern-alle-100.txt)): alle aus 51 %, nur Regelbiegung 53 %, nur Hören 51 %, nur Blick 51 %, nur Farbe 57 %, alle an 49 %. Kein System liegt mehr als 5 Pp unter „aus“; alle vier zusammen −2 Pp. Die Farbe hilft dem Bot etwas (+6 Pp), weil Wandern Reaktionen öffnet und der Bot gezielt bindet. Feinabstimmung in M12.
+- Tests: siehe M9 (gleicher Stand), alle grün.
+- Regelprüfung: Tabelle unten, bestanden.
+- Agenten: Haiku (Farbton-Skript), Sonnet (Farbe im Bild, Brunnenbild; eine Rückgabe).
+- Mindestens erfüllt? Ja, alles oben.
+
+### M9 Begegnungen
+
+**Plan.** Kern selbst: `js/core/begegnungen.js` mit Run-Zettel, Diener, Spuren, Asche, Tiefe und der fremden Fassung (`fremdeFassung`, `it.fremd` in `kartenVon`). Einbau in Peilkarte (Spuren), Wächter (Diener), Kampf (Verbündeter, Begegnung), Krämer, Stoff-Baum, Bot. Haiku: `art` für alle Gegner, Asche-Kandidaten, Tiefe-Wahlen vorschlagen; Sonnet prüft gegen die Steckbriefe; ich gebe frei. Sonnet: Bild der Karte „Das Zeichen“.
+
+**Schritte und Entscheidungen.**
+- **Run-Zettel:** `Zettel.wuerfeln` beim Start: zwei der vier Begegnungen (Seed `zettel`), dazu später die Würze. Im Dev-Reiter „Tiefe“ sichtbar und änderbar (höchstens zwei), im Spiel unsichtbar.
+- **Diener:** gezählt je Karte (`uid:s<ci>` oder `uid:h<k>`). Ab 8 Einsätzen kommt beim nächsten Wächter die meistgespielte Karte als Schritt direkt nach dem aktuellen in sein Muster, mit deinen Stoffen. Die Plakette zeigt das Kartenbild und den Schaden. Sieg: −1 Kosten (Schliff), bei 0 Kosten oder schon geschliffen die fremde Fassung.
+- **Spuren:** ein Kampfknoten je Akt I–IV (bevorzugt ein normaler Kampf zwischen zweiter und vorletzter Ebene; fehlt einer, ein schwerer Kampf oder ein Kampf auf einer anderen Ebene außer der Wächter-Ebene). Jeder andere Knoten lässt die Spuren eine Stufe wachsen. Im Bild Abdrücke, die auf den Knoten zulaufen: mehr, größer, tiefer. Der Gegner ist eine Elite des Bioms, sonst der zäheste normale Gegner; Leben, Angriff und Größe je Stufe aus `balance.json → spuren`. Stufe 1–2 normaler Kampf, 3 schwerer, 4 schwerer mit Reliquie.
+- **Asche:** 15 Gegner tragen `asche: true` (je Biom der Akte II–IV einer). Das Gezeitenwerk hat keinen: seine normalen Gegner waren nie Menschen (Ölerin laut Steckbrief „Es gab sie, bevor jemand sie so genannt hätte“). Salz → Feuer (eigene Stoffe) ruft die jüngste Asche. Der Verbündete steht links, gespiegelt und aschgrau, mit eigener Plakette („AUS DER ASCHE · FÜR DICH“). Er greift nach deinem Zug dein Ziel mit den Angriffen seines Musters an. Feuer → Salz löst auf. Gerufene kommen zwei Akte später in einem normalen oder schweren Kampf wieder, mit derselben Asche-Spur an der Plakette. Der Stoff-Baum zeigt „Asche rufen“ / „Asche zerfällt“ als eigenen Ast.
+- **Die Tiefe erkennt dich:** `tiefe: 1` an 11 Ereigniswahlen (Texte unverändert). Nach zwei liegt „Das Zeichen“ lose im Deck (`S.lose`), streichbar wie jede Karte. Gespielt: Seitenwechsel. Kämpfe nur gegen `tiefe`/`nachahmer` werden zur Begegnung (Weitergehen, halbes Gold, kein Item). Kämpfe mit `mensch`/`veraendert` bekommen einen Gegner mehr aus dem Menschen-Pool des Bioms. Der Krämer hat zu. Wächter und Finale bleiben Kämpfe.
+- **`art`:** Haiku schlug 143 Einordnungen vor (11/76/12/44). Sonnet prüfte gegen die Steckbriefe und änderte 12, ich habe die Prüfung gelesen und freigegeben: mensch 17, veraendert 68, nachahmer 14, tiefe 44 ([pruefung.md](m9-vorschlaege/pruefung.md)). Kein Grund nennt Herkunft oder Blut.
+- **Bot:** ruft Asche (Salz, dann Feuer, +10/+4), löst sie nicht absichtlich auf und spielt das Zeichen, sobald er es zieht. In der Begegnung geht er weiter.
+
+#### Abnahme M9
+- Abnahmekriterien:
+  - `test-begegnungen.js` grün: ✓ 48 Prüfungen, 0 Fehler ([test-begegnungen-100.txt](bilder/M9/test-begegnungen-100.txt))
+  - 100 Seeds: höchstens zwei Begegnungen je Run: ✓ jeder Zettel genau zwei. Häufigkeit auf dem Zettel (Seeds 1–100): Diener 47, Asche 35, Spuren 67, Tiefe 51; über 1000 Seeds Diener 486, Asche 481, Spuren 554, Tiefe 479 (gleich verteilt, die 100 schwanken). In den Bot-Runs (100, alle Figuren): Diener erhoben 44, Karte zurück 42; Asche liegt 68, gerufen 22, aufgelöst 7, wiedergekehrt 7; Spuren-Kämpfe 101; das Zeichen kam bei den Bots nie von selbst (zwei Tiefe-Wahlen in einem Run sind selten). Darum ein zweiter Lauf mit Zeichen ab Start (33 Runs): 33 Seitenwechsel, 23 Begegnungen, 77-mal Krämer zu, 7 Siege.
+  - Fotos, selbst angesehen: ✓ [Wächter mit deiner Karte als Absicht](bilder/M9/01-waechter-deine-karte.png), [Asche-Ast im Baum](bilder/M9/02-asche-ast-im-baum.png), [gerufen, Verbündeter](bilder/M9/03-asche-gerufen-verbuendeter.png), [kehrt wieder mit Asche-Spur](bilder/M9/04-asche-kehrt-wieder.png), Spuren in vier Stufen ([1](bilder/M9/05-spuren-stufe-1.png), [2](bilder/M9/06-spuren-stufe-2.png), [3](bilder/M9/07-spuren-stufe-3.png), [4](bilder/M9/08-spuren-stufe-4.png)), Spuren-Kampf [Stufe 1](bilder/M9/10-spuren-kampf-stufe-1.png) und [Stufe 4](bilder/M9/09-spuren-kampf-stufe-4.png), [Das Zeichen](bilder/M9/11-das-zeichen-in-der-hand.png), [Begegnung statt Kampf](bilder/M9/12-begegnung-statt-kampf.png), [Krämer verweigert](bilder/M9/13-kraemer-verweigert.png), [ein Gegner mehr](bilder/M9/14-seitenwechsel-ein-gegner-mehr.png). Erzeugt mit `tools/m9-fotos.js`, keine Konsolenfehler.
+  - Regelprüfung aller vier: Tabellen unten, bestanden.
+- Auffällig für M12: Mit gespieltem Zeichen gewinnen die Bots nur 7 von 33 (sonst etwa die Hälfte). Der Bot spielt es sofort und hat damit in Akt I–III fast nur Kämpfe mit einem Gegner mehr. Ein Spieler wählt den Zeitpunkt selbst. Der Preis ist trotzdem zu hoch, Stellschrauben für M12: ein Gegner mehr erst ab Akt III, Begegnung mit voller Heilung.
+- Tests ([tests.txt](bilder/M9/tests.txt)): `test-kern`, `test-run`, `test-deckbau`, `test-speicher`, `test-biegungen`, `test-oberflaeche`, `test-plakette`, `test-karte-ui`, `test-rucksack` „Alles gut.“, `test-stoffbaum` 33 Prüfungen; `sprites/pruefen.js` 256 Sprites, `icons/pruefen.js` 246 Bilder, je 0 Verstöße
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 299, alle als Entwurf markiert.`
+- Agenten: Haiku (Vorschläge `art`, `asche`, `tiefe`), Sonnet (Prüfung gegen Steckbriefe), Sonnet (Bild „Das Zeichen“, Note 4 ohne Rückgabe).
+- Mindestens erfüllt? Mehr: alle vier Begegnungen an, nicht nur Zettel, Diener und Spuren.
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -366,6 +414,66 @@ Lovecraft-Prinzip: Andeuten statt zeigen (Erich Zann).
 
 Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: wer hinsieht, wird gesehen).
 
+### M8 Die Farbe
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | Die Karten des Items tragen andere Stoffe und öffnen andere Reaktionen; nichts wird schwächer |
+| Das Deck bleibt deins | Ja | Keine Karte kommt dazu oder geht weg; nur Stoffe wandern, und Spuren lassen sich tilgen |
+| Selten ist stark | Ja | Einmal je Run, etwa jeder zweite Run, nur über das eine Ereignis |
+| Kein Fragezeichen | Ja | Der Baum zeigt die angenommenen Stoffe, die Karte zeigt das Zeichen X, die Spur steht im Rucksack |
+| Einwilligung vor Kontrollverlust | Ja | Die Farbe kommt nur, wenn man die Hand in den Brunnen hält; Binden und Tilgen stehen jederzeit offen |
+| Unheimlich, nicht anstrengend | Ja | Eine Regel (Stoffe der Karte davor), sichtbar in der Hand, kein Zähler |
+| Nie Herkunft als Bedrohung | Ja | Eine Farbe aus dem All, kein Mensch, keine Abstammung |
+
+### M9 Die Diener erheben sich
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | Der Wächter bekommt einen Schritt, du verlierst nichts; die Karte kommt besser zurück |
+| Das Deck bleibt deins | Ja | Die Karte bleibt im Deck und spielbar; sie kommt geschliffen oder in der fremden Fassung zurück |
+| Selten ist stark | Ja | Höchstens einmal je Run, nur beim Wächter, nur mit einer Karte, die man achtmal gespielt hat |
+| Kein Fragezeichen | Ja | Die Absicht zeigt das Bild deiner Karte und den Schaden |
+| Einwilligung vor Kontrollverlust | Ja | Man spielt die Karte selbst so oft; kein Kontrollverlust |
+| Unheimlich, nicht anstrengend | Ja | Nichts zu verwalten, die eigene Lieblingskarte steht plötzlich gegenüber |
+| Nie Herkunft als Bedrohung | Ja | Es geht um deine Gewohnheit, nicht um Herkunft |
+
+### M9 Asche
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | Ein Verbündeter für einen Kampf, später ein Gegner mehr; beides verändert, nichts wird abgezogen |
+| Das Deck bleibt deins | Ja | Asche hat keine Karten und keinen Platz |
+| Selten ist stark | Ja | Höchstens drei Aschen, ein Verbündeter, nur auf dem Zettel |
+| Kein Fragezeichen | Ja | Der Baum zeigt „Asche rufen“ mit dem Preis im Tooltip; die Wiederkehr trägt dieselbe Spur |
+| Einwilligung vor Kontrollverlust | Ja | Rufen nur durch eine bewusste Folge Salz → Feuer; Auflösen geht immer |
+| Unheimlich, nicht anstrengend | Ja | Eine Folge von zwei Stoffen, ein sichtbarer Ast |
+| Nie Herkunft als Bedrohung | Ja | Asche aus Gestalten, die einmal Menschen waren; ihre Herkunft spielt keine Rolle |
+
+### M9 Spuren
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | Der Zeitpunkt verändert den Kampf und die Beute, früh leicht und klein, spät schwer mit Reliquie |
+| Das Deck bleibt deins | Ja | Nichts am Deck |
+| Selten ist stark | Ja | Ein Knoten je Akt, nur auf dem Zettel |
+| Kein Fragezeichen | Ja | Die Stufe steht im Bild (Abdrücke), keine Zahl, kein Rätsel; nichts greift unsichtbar an |
+| Einwilligung vor Kontrollverlust | Ja | Man entscheidet selbst, wann (oder ob) man hingeht |
+| Unheimlich, nicht anstrengend | Ja | Eine Spur auf der Karte, die wächst, während man wegsieht |
+| Nie Herkunft als Bedrohung | Ja | Ein Ding, kein Mensch |
+
+### M9 Die Tiefe erkennt dich
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | Seitenwechsel: manche Kämpfe fallen weg, andere werden härter, der Krämer schließt |
+| Das Deck bleibt deins | Ja | Die eine Karte ist streichbar wie jede andere und verschwindet nach dem Spielen |
+| Selten ist stark | Ja | Nur nach zwei bestimmten Entscheidungen, nur auf dem Zettel |
+| Kein Fragezeichen | Ja | Der Kartentext sagt, was passiert |
+| Einwilligung vor Kontrollverlust | Ja | Nie erzwungen: solange man sie nicht spielt, passiert nichts |
+| Unheimlich, nicht anstrengend | Ja | Eine Karte, eine Entscheidung, danach nur Folgen |
+| Nie Herkunft als Bedrohung | Ja | Die Tiefe erkennt dich, weil du ihr gefolgt bist; `art` ordnet nach Körper und Form, kein Grund nennt Herkunft oder Blut |
+
 ## Noten
 
 *Je neues Bild: Name, Note, Bildpfad, Kurzbegründung.*
@@ -388,10 +496,16 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 | Gesehener Grund („Der Umfaltende“) | 4 | `…/gesehener_grund.png`, ebenda | nach Rückgabe (erst 3: flache Lappen, Lückenmuster): geschlossene Klammer, Mund als Brennpunkt, kräftiger Rand |
 | Gesehener Letzt („Der Hohe am Rand“) | 4 | `…/gesehener_letzt.png`, [Kontakt](bilder/M7/gesehen-letzt-kontakt.png) | nach Rückgabe (erst 3: Tausendfüßler aus Fäden): hohe gebeugte Säule mit Haube; Säule etwas flächig |
 
+| Ereignisbild Der Brunnen im Hof | 4 | `prototype/assets/ereignisse/farbe_brunnen.png`, [Foto](bilder/M8/05-ereignis-brunnen.png) | nach Rückgabe (erst 3: flache Fläche im Schacht, Hof zu dunkel): Blick hinunter mit dichter werdendem Schimmer, Hof lesbar |
+| Farbe im Bild (Schimmern, Kristall, Spur-Linie, Zeichen X) | 4 | `prototype/js/ui/farbe.js`, Fotos M8 | Schimmer wandert am Umriss, gebunden starr in Facetten; Kartenrand etwas dick |
+| Karte Das Zeichen | 4 | `prototype/assets/karten/zeichen.png`, [×4](bilder/M9/zeichen-x4.png) | Auge mit Gezeitenstrudel auf nassem Holz, klar lesbar im Bogen; etwas sauber und symmetrisch |
+
 ## Neue Texte (Entwurf)
 
 *Je neuer Text: Datei, ID, erste Worte. Für Philip und Mo.*
 
+- **M9, Daten:** `run.json → karten.zeichen` „Das Zeichen“ („Für den Rest des Runs: Die Tiefe lässt dich gehen. Die Menschen nicht.“), `run.json → begegnungen` „Sie stehen da und sehen dich an. Keiner hebt die Hand.“, „WEITERGEHEN“, „Der Laden ist zu, als du kommst. Hinter dem Glas dreht jemand das Schild um.“ Oberfläche: „AUS DER ASCHE · FÜR DICH“, Baum-Äste „Asche rufen“ / „Asche zerfällt“ mit Tooltips, Meldungen der Begegnungen (Bus `why`).
+- **M8, Daten:** `stoffe.json → X` „Die Farbe“, `events.json → farbe_brunnen` „Der Brunnen im Hof“ mit zwei Wahlen. Oberfläche: „SPUR TILGEN“, „Welches Item bekommt seinen Stoff zurück?“, Meldungen der Farbe.
 - **M7, Daten:** `items.json` Linse (Karte „Brennpunkt“, „Ein Messingring mit einem Glas darin …“), Resonator („Nachklang“, „Eine Stimmgabel auf einem Eisenfuß …“), Lampe aus dem Grab („Schwelen“, „Man gibt sie den Toten mit …“); `foes.json` „Der Danebenhängende“, „Der Umfaltende“, „Der Hohe am Rand“ mit Konzeptsätzen. Oberfläche: „HINSEHEN“, „NICHT HINSEHEN“, „sieht dich“, Eigenschaft „Zu Kampfbeginn: hinsehen oder nicht“.
 - **M6, Oberfläche:** Einstellung „Klänge als Zeichen“, Tooltip „Klang“, Musik-Labor „HÖREN STATT SEHEN“ mit Knöpfen.
 - **M5, `data/biegungen.json`:** 14 Namen und Regeltexte (z. B. „Über Eck: Die erste und die letzte Karte …“), drei Reaktionen (Sole, Pökeln, Gezeitenblut) und Funkspruch. Oberfläche: „Oben: …“, „Handkarte wählen“, „danach …“, „Ebbe“/„Flut“, „Dieser Zug …/Nächster Zug …“ in Tooltips.
@@ -401,6 +515,8 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 ## Entscheidungen unterwegs
 
 - **M7, Fortsetzung:** Mo hat am 2026-11-09 gesagt, nach M6 weiterzumachen („we completed through m6, can you continue from there again?“). Ich habe `claude/project-thread-flvf7e` auf den M6-Stand von `claude/project-thread-hifkqz` vorgespult und arbeite ab M7 dort weiter.
+- **M9:** Gezeitenwerk ohne Asche (kein Gegner war je ein Mensch, `m9-vorschlaege.js` erlaubt 0 nur dann); Begegnung = halbes Gold und kein Item; Spuren weichen auf schwere oder Rand-Kämpfe aus, wenn das Netz keinen normalen Kampf in der Mitte hat; Text der Karte „Das Zeichen“ von mir, nicht von Sonnet (kürzer, damit er auf die Karte passt).
+- **M8:** #c800ff statt des `--alles`-Tons; Brunnen darf bis Akt III rutschen (sonst kam er nur in jedem vierten Run).
 - **M7:** keine Wahl im Finale; Blick-Items erst ab ihrem Akt auch beim Krämer (`blickAb`); Gesehene ohne Tiefenskalierung und nach dem Bot-Vergleich schwächer.
 - **M6, Stopp:** Philip hat am 2026-11-09 gesagt, nach Abnahme und Push von M6 nicht weiterzumachen. M7 bis M12 und die Zugabe sind nicht begonnen.
 - **M4, Übernahme:** Philip hat am 2026-11-09 entschieden, dass ab M4 weitergearbeitet wird. M4 und folgende liegen auf `claude/project-thread-hifkqz` (von dieser Sitzung vorgegeben), aufgebaut auf Mos Branch `claude/project-thread-flvf7e`, als eigener Draft-PR dagegen.
@@ -413,6 +529,7 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 ## Rückgaben an Sub-Agenten
 
+- **M8, Brunnenbild:** Note 3 (flache Fläche im Schacht, Hof zu dunkel, Seil zu kurz) mit fünf Punkten zurück; zweite Runde Note 4.
 - **M7, Gesehene:** Grund (Note 3: flache, bananenförmige Lappen, Lückenmuster) und Letzt (Note 3: unruhige Silhouette aus vielen Fäden, „hoch“ nicht lesbar) mit konkreten Punkten zurück; beide in der zweiten Runde Note 4. Bei allen drei sollten die festen Dither-Lücken raus, weil die Bühne die Durchsichtigkeit selbst macht.
 - **M4, Silhouetten (Sonnet):** Friedhofswärter, Pfarrerin, Detektiv, Kneipenschläger und Veteran kamen in der ersten Runde auf Note 3 (zu glatt, Werkzeuge und Kopfbedeckung nicht lesbar, Haltung steif). Rückgabe mit konkreten Punkten je Figur, zweite Runde je Note 4.
 
