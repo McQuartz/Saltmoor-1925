@@ -4,7 +4,7 @@ const P=path.join(__dirname,'..','prototype');
 function ladeKern(extra=[]){
  const ctx={console,structuredClone,Math,JSON,Date,Set,Map,Object,Array,String,Number,setTimeout,clearTimeout,performance:{now:()=>Date.now()},localStorage:mkStore()};
  vm.createContext(ctx);
- const files=['js/data.js','js/core/rng.js','js/core/bus.js','js/core/state.js','js/core/rules.js','js/core/biegung.js','js/core/hoeren.js','js/core/blick.js','js/core/farbe.js','js/core/begegnungen.js','js/core/combat.js','js/core/run.js','js/core/netz.js','js/core/meta.js','js/core/metaebene.js','js/dev/bot.js',...extra];
+ const files=['js/data.js','js/core/rng.js','js/core/bus.js','js/core/state.js','js/core/rules.js','js/core/biegung.js','js/core/hoeren.js','js/core/blick.js','js/core/farbe.js','js/core/begegnungen.js','js/core/combat.js','js/core/run.js','js/core/netz.js','js/core/meta.js','js/core/metaebene.js','js/core/wuerze.js','js/dev/bot.js',...extra];
  let code='';for(const f of files){const p=path.join(P,f);if(fs.existsSync(p))code+=fs.readFileSync(p,'utf8')+'\n';}
  // let/const im Skript-Kontext sind nicht über ctx sichtbar: Zugriffsfunktion anhängen
  code+='\nthis.__get=n=>eval(n);this.__set=(n,v)=>eval(n+"=v");';

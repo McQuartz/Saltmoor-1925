@@ -5,7 +5,7 @@ function panelHtml(ph){switch(ph){
  case'fight':return'';case'reward':return rewardHtml();case'event':case'event_folge':return eventHtml();case'streichen':return streichenHtml('Welche Karte streichst du?','skipstrike');
  case'kraemer':return kraemerHtml();case'kraemer_streichen':return streichenHtml(`Für ${BAL.shop.streichen_preis} Gold streicht ${esc(biom().kraemer.n)} eine Karte aus deinem Deck. Das Item bleibt angelegt.`,'kstrike0');
  case'werkstatt':return werkstattHtml();case'wahl':return wahlHtml();case'event_hg':case'kraemer_hg':return ritzenHtml('Wohin ritzt du den Handgriff?');case'rast':return rastHtml();case'wandbild':return wandbildHtml();case'fund':return fundHtml();
- case'erbe':return erbeHtml();case'strand':return strandHtml();case'ankunft':return ankunftHtml();case'ende':return endeHtml();}return'';}
+ case'erbe':return erbeHtml();case'brief':return briefHtml();case'strand':return strandHtml();case'ankunft':return ankunftHtml();case'ende':return endeHtml();}return'';}
 const box=(cls,inner)=>`<div class="box ${cls}"><div class="innen">${inner}</div></div>`;
 function titelHtml(){const M=Meta.get();return `<div class="titel"><h1>SALTMOOR</h1><div class="jahr">NEUENGLAND · 1925</div>
  <div class="menue">${hasSave()?'<button class="deco" data-act="fortsetzen">FORTSETZEN</button>':''}<button class="deco" data-act="neu">${hasSave()?'NEUER ABSTIEG':'HINAB'}</button>
@@ -25,7 +25,7 @@ function biomwahlHtml(){const a=RUN.akte[S.akt];const an=S.angebote[S.akt]||[];
  <div class="wege">${an.map((b,i)=>{const B=BIOMES[b];return `<div class="kbiom" data-biom="${i}">${karteMiniHtml(b)}<div class="wn">${esc(B.n).toUpperCase()}</div><div class="hinw">${esc(B.zeit||'')}</div><div class="ank">${esc(B.anreise||(B.weg_hinweise&&B.weg_hinweise.kampf&&B.weg_hinweise.kampf[0])||'')}</div>${karteBiegungHtml(b)}</div>`;}).join('')}</div>`);}
 function uebergangHtml(){const a=RUN.akte[S.akt];const b=biom();let satz=S.akt===0?ausredeVon(JOBS.find(j=>j.id===S.job)):BIOMES[S.route[S.akt-1]].uebergang;
  const fz=typeof Metaebene!=='undefined'&&Metaebene.übergangSatz();if(fz)satz=fz; // M10: Fehlzeit, das Stück davor ist schon gegangen
- return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p><div class="hint spaet">Klicken oder Taste drücken</div></div>`;}
+ return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p>${zeitungHtml()}<div class="hint spaet">Klicken oder Taste drücken</div></div>`;}
 // Auftrag 3 M3: die Phase 'weg' zeigt die Peilkarte (js/ui/karte.js); die alte „1 aus 3“-Wegwahl ist entfernt
 function wegHtml(){return kartenHtml('haupt');}
 function itemPick(id,attr,extra=''){const d=ITEMS[id];const ex=d.st.length>1?BAL.forge.double_cost_extra:0;
@@ -57,6 +57,7 @@ function ritzenHtml(frage){const id=S.hgPending;const H=HANDGRIFFE[id];if(!H)ret
 function wahlHtml(){const w=S.wahl;if(!w)return'';
  // M8: Spur der Farbe tilgen (Werkstatt): je Item der letzte Tausch
  if(w.art==='tilgen')return box('ritzen',`<h2>SPUR TILGEN</h2><p class="lead">Welches Item bekommt seinen Stoff zurück?</p><div class="ritzliste">${Farbe.mitSpur().map(it=>{const D=def(it);const s=it.spuren[it.spuren.length-1];return `<div class="ritz"><img src="${itemBild(it.id)}"><div class="rn"><b>${esc(D.n)}</b> ${D.st.map(k=>gi(k,KZ())).join('')}</div><div class="kerben"><button class="kerbe voll" data-tilgen="${it.uid}">${esc(ST[s.neu].n)} → ${esc(ST[s.alt].n)}</button></div></div>`;}).join('')}</div><button class="deco klein" data-act="wahlAbbruch">LIEBER NICHT</button>`);
+ if(w.art==='trennung'){const Z=((WUERZE.texte||{}).trennung||{}).zusammenhang||{};return box('ritzen zettel',`<h2>${esc((Z.titel||'').toUpperCase())}</h2><p class="lead">${esc(Z.t||'')}</p><p class="hint">${esc(Z.wahl||'')}</p><div class="picks">${Wuerze.handgriffe().map(x=>hgKarteHtml(x.hg,`data-trennen="${x.it.uid}:${x.k}"`,`<div class="hint">${esc(def(x.it).n)}</div>`)).join('')}</div>`);} // M11: Barmherzige Trennung
  if(w.art==='kerbe')return box('ritzen',`<h2>EINE KERBE MEHR</h2><p class="lead">Welches Item bekommt eine weitere Kerbe (höchstens 3)?</p><div class="ritzliste">${besitz().map(({it})=>{const D=def(it);return `<div class="ritz"><img src="${itemBild(it.id)}"><div class="rn"><b>${esc(D.n)}</b> ${kerbenVon(it)} Kerben</div><button class="deco klein" data-kerbe="${it.uid}" ${kerbenVon(it)>=3?'disabled':''}>KERBE</button></div>`;}).join('')}</div><button class="deco klein" data-act="wahlAbbruch">LIEBER NICHT</button>`);
  if(w.art==='schleifen')return box('ritzen',`<h2>SCHLEIFEN</h2><p class="lead">Eine Karte kostet dauerhaft 1 weniger. Jede Karte nur einmal.</p><div class="ritzliste">${besitz().filter(b=>b.an).map(({it})=>{const D=def(it);
   const ks=[...D.cards.map((c,ci)=>({key:'s'+ci,c,n:c.n})),...hgVon(it).map((id,k)=>({key:'h'+k,c:HANDGRIFFE[id],n:HANDGRIFFE[id]&&HANDGRIFFE[id].n}))].filter(x=>x.c);
@@ -98,7 +99,7 @@ function wandbildHtml(){const fr=FRAGS.find(f=>f.id===S.frag);const neu=S.fragNe
  return `<div class="wandbild"><canvas id="relief" width="160" height="100"></canvas><div class="zettel"><h3>${fr?esc(fr.titel):'Eine leere Wand'}</h3><p>${fr?esc(fr.text):'Jemand hat hier etwas weggekratzt.'}</p>
  ${neu.length?`<div class="neu">${neu.map(x=>`Neu: ${esc(x.n)}`).join('<br>')}</div>`:''}</div><button class="deco" data-act="leave">WEITER ›</button></div>`;}
 function fundHtml(){const f=S.fund;return box('fund',`<h2>FUNDSTELLE</h2><p class="lead">${esc((biom().weg_hinweise.fundstelle||[''])[0])}</p>
- ${f.taken?`<p>${f.item?'Eingesteckt: '+esc(ITEMS[f.item].n):''}${f.gold?`+${f.gold} Gold`:''}${f.haken?` · Es hatte einen Haken: −${RUN.fundstelle.haken_schaden} Leben.`:''}</p>`:`<div class="picks">${f.item?itemPick(f.item,'data-act="fund"'):`<div class="pick" data-act="fund"><div class="pn">${f.gold} Gold</div></div>`}</div><p class="hint">Vielleicht hat es einen Haken.</p>`}
+ ${f.taken?`<p>${f.item?'Eingesteckt: '+esc(ITEMS[f.item].n):''}${f.gold?`+${f.gold} Gold`:''}${f.haken?` · Es hatte einen Haken: −${RUN.fundstelle.haken_schaden} Leben.`:''}</p>`:`<div class="picks">${f.item?itemPick(f.item,'data-act="fund"'):`<div class="pick" data-act="fund"><div class="pn">${f.gold} Gold</div></div>`}</div><p class="hint">Vielleicht hat es einen Haken.</p>`}${f.teil?`<p class="teilfund">${esc(((WUERZE.texte||{}).trennung||{}).fund?.t||'')}</p>`:''}
  <button class="deco" data-act="leave">${f.taken?'WEITER ›':'LIEGEN LASSEN ›'}</button>`);}
 // Endbildschirm (nach Strand, Bleiben und Umkehren): Statistik, Weg, Deck, Build, neue Freischaltungen
 function dauerText(ms){const m=Math.max(0,Math.round(ms/60000));return m<60?`${m} min`:`${Math.floor(m/60)} h ${m%60} min`;}
@@ -130,3 +131,8 @@ function erbeHtml(){const e=S.erbeAngebot;const T=(META.erbe||{});const U=META.u
  <div class="zwei"><button class="deco" data-act="erbeNehmen">${esc(T.nehmen||'')}</button><button class="deco klein" data-act="erbeLassen">${esc(T.lassen||'')}</button></div>`);}
 function fehlzeitHtml(){if(typeof Metaebene==='undefined'||!Metaebene.an()||!a3('fehlzeit')||S.dev)return'';const M=Meta.get();if(!M.fehlzeitAngebot)return'';const F=META.fehlzeit||{};
  return `<div class="fehlzeit"><p>${esc(F.t||'')}</p><div class="zwei"><button class="deco klein" data-act="fehlzeitJa">${esc(F.ja||'')}</button><button class="deco klein" data-act="fehlzeitNein">${esc(F.nein||'')}</button></div></div>`;}
+// Auftrag 3 M11: Zeitungsausschnitt im Übergang, Knoten des falschen Briefs
+function zeitungHtml(){const z=typeof Wuerze!=='undefined'&&Wuerze.zeitungJetzt();if(!z)return'';return `<div class="zeitung ${z.vermisst?'vermisst':''}"><div class="zk">${esc(z.kopf||'')}</div><p>${esc(z.t)}</p></div>`;}
+function briefHtml(){const a=S.briefAngebot;const K=(((WUERZE.texte||{}).brief)||{}).knoten||{};const T=(((WUERZE.texte||{}).brief)||{}).ereignis||{};
+ return box('ereignis zettel brief',`<h2>${esc((T.t||'').toUpperCase())}</h2>${a&&a.item?`<p class="evd">${esc(K.mit||'')}</p><div class="picks">${itemPick(a.item,'data-act="briefNehmen"')}</div>
+ <div class="zwei"><button class="deco" data-act="briefNehmen">${esc(K.nehmen||'')}</button><button class="deco klein" data-act="briefLassen">${esc(K.lassen||'')}</button></div>`:`<p class="evd">${esc(K.leer||'')}</p><button class="deco" data-act="briefLassen">WEITER ›</button>`}`);}

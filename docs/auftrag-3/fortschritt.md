@@ -17,7 +17,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M8 Die Farbe | fertig | Stoff X #c800ff, Brunnen etwa jeder zweite Run, Wandern, Spur, Binden, Tilgen |
 | M9 Begegnungen | fertig | Run-Zettel, alle vier Begegnungen, `art` für alle 143 Gegner |
 | M10 Metaebene | fertig | Strand zählt mit, Ausrede in Stufen, Ankunftszeile, Notizen des Vorgängers, Erbe, Fehlzeit, Pause |
-| M11 Würze | nicht begonnen | Stopp nach M6 (Philip) |
+| M11 Würze | fertig | Zeitungsausschnitte, Der falsche Brief, Barmherzige Trennung, Zanns Takt; Grabbeigabe, Licht im Turm, Lügender Kartentext per Schalter aus |
 | M12 Balance und Abschluss | nicht begonnen | Stopp nach M6 (Philip) |
 | Zugabe | nicht begonnen | Stopp nach M6 (Philip) |
 
@@ -360,6 +360,33 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
 - Agenten: Sonnet Texte (eine Änderung), Sonnet Notizen (70 Paare, Belege in [notizen-belege.md](m10-texte/notizen-belege.md)), Sonnet Strand (eine Rückgabe).
 - Mindestens erfüllt? Mehr: auch Fehlzeit und Pause sind an (per Schalter abschaltbar).
 
+### M11 Würze
+
+**Plan.** Kern selbst in `js/core/wuerze.js` (Würfeln der Stücke, Zeitung, Brief, Trennung, Zann), Daten in `data/wuerze.json`. Sonnet: Texte aller Stücke als Entwurf (`m11-texte/wuerze-texte.json`), Sonnet: Bilder (Zanns Geige, drei Trennungs-Karten, Brief-Ereignis), Sonnet: Geigenebene in `js/audio/music.js`. Die 100-Seed-Zählung steckt in `test-wuerze.js`, ein eigener Haiku-Auftrag war dafür nicht nötig.
+
+**Schritte und Entscheidungen.**
+- **Würfeln:** Zu Runbeginn mit `R('wuerze')`, jedes Stück mit seiner Chance (Zeitung 0,6, Brief 0,5, Trennung 0,5, Zann 0,5), höchstens drei, kein Stück aus dem letzten Run (`Meta.wuerzeZuletzt`). Steht auf dem Run-Zettel neben den Begegnungen. Grabbeigabe, Licht im Turm und Lügender Kartentext stehen mit `an: false` in den Daten.
+- **Zeitungsausschnitte:** In jedem zweiten Akt-Übergang ein Ausschnitt (12 Stück) auf dem Zwischentitel. Ab dem 10. Run mit 30 % einmal je Run die Vermisstenanzeige der eigenen Figur.
+- **Der falsche Brief:** Das erste Ereignis in Akt I ist der Brief. Eingesteckt verspricht er ein Biom zwei Akte weiter. Das Biom steht dann sicher in der Biomwahl, und auf der Peilkarte trägt ein Knoten, der kein Kampf ist, einen Umschlag. Dort bietet der Vorgänger (letzter verlorener Run) eines seiner Items an. Gab es keinen, ist der Knoten leer und der Brief wandert ins Tagebuch.
+- **Barmherzige Trennung:** Drei Teile (Relief, Ausschnitt, Aussage) an Fundstellen und Wandbildern, je ein 0-Kosten-Karte. Zwei Teile direkt nacheinander gespielt öffnen nach dem Sieg „Zwei Teile, ein Seil“: Ein Handgriff deiner Wahl liegt von da an in fremder Fassung. Einmal je Run.
+- **Zanns Takt:** In der Glockengießerei ist Zanns Geige die nächste sichere Beute (Talisman, Karte „Der Takt“). Mit der Geige gegen die Ungetaufte gilt: Ein Zug ohne Geigenkarte öffnet das Fenster, und der nächste Schritt des Wächters ist sein stärkster. Mit der Karte bleibt alles wie immer. Musik: eine Geigenebene, die mit dem Takt kommt und beim offenen Fenster abreißt.
+- **Bot:** wertet die Geigenkarte hoch, wenn das Fenster sonst aufginge, spielt Teile nacheinander, trägt die Geige und steckt den Brief ein.
+- **Dev:** Reiter „Tiefe“ mit Abschnitt Würze; Cheats `wuerze` (Stück auf den Zettel) und `wuerzeTun` (Zeitung, Brief, Trennung, Zann sofort).
+- **Schalter:** `auftrag3.wuerze`.
+
+#### Abnahme M11
+- Abnahmekriterien:
+  - Jedes Stück im Dev-Reiter erzwingbar: ✓ ([Foto](bilder/M11/14-dev-wuerze.png)).
+  - `test-wuerze.js` grün: ✓ 34 Prüfungen ([test-wuerze.txt](bilder/M11/test-wuerze.txt)).
+  - 100 Seeds: ✓ höchstens drei je Run (0/1/2/3: 10/45/40/5), Mittel 1,40 (soll etwa 1,5), 0 Wiederholungen in aufeinanderfolgenden Runs; je Stück Zann 29, Trennung 35, Brief 39, Zeitung 37.
+  - 30 Bot-Runs mit allen vier Stücken: ✓ ohne Fehler, 21 Siege (Zeitungen 51, Brief eingesteckt 19, Teile gefunden 83, Trennung ausgelöst 24).
+  - Fotos, selbst angesehen: [Zeitung im Übergang](bilder/M11/01-zeitung-uebergang.png), [Vermisstenanzeige](bilder/M11/02-vermisstenanzeige.png), [Brief-Ereignis](bilder/M11/03-brief-ereignis.png), [Biomwahl](bilder/M11/04-brief-biomwahl.png), [Peilkarte mit Umschlag](bilder/M11/05-brief-peilkarte.png), [Knoten mit dem Vorgänger](bilder/M11/06-brief-knoten-vorgaenger.png), [Teil an der Fundstelle](bilder/M11/07-trennung-fundstelle.png), [Teile in der Hand](bilder/M11/08-trennung-teile-in-der-hand.png), [Wahl](bilder/M11/09-trennung-wahl.png), [fremde Fassung](bilder/M11/10-trennung-fremde-fassung.png), [Geige als Beute](bilder/M11/11-zann-geige-als-beute.png), [Kampf mit Geige](bilder/M11/12-zann-kampf-mit-geige.png), [Fenster offen](bilder/M11/13-zann-fenster-offen.png). Erzeugt mit `tools/m11-fotos.js`, keine Konsolenfehler. Bilder: [Kontaktbogen](bilder/M11/bilder-kontakt.png).
+  - Regelprüfung aller vier: ✓ (unten).
+- Tests: `test-wuerze` 34 Prüfungen, `test-kern`, `test-run`, `test-deckbau`, `test-begegnungen`, `test-biegungen`, `test-meta`, `test-speicher`, `test-oberflaeche`, `test-karte-ui`, `test-rucksack`, `test-plakette` „Alles gut.“, `test-stoffbaum` 33 Prüfungen, `icons/pruefen` 250 Bilder ohne Verstoß.
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 578, alle als Entwurf markiert.`
+- Agenten: Sonnet Texte (ohne Änderung übernommen), Sonnet Bilder (eine Rückgabe), Sonnet Klang (ohne Rückgabe übernommen; Klang ungehört).
+- Mindestens erfüllt: ✓ genau die vier verlangten Stücke; der Rest ist per Schalter aus.
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -513,6 +540,54 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 | Unheimlich, nicht anstrengend | Ja | keine Zahl, keine Leiste; der Strand und die Ausrede ändern sich still |
 | Nie Herkunft als Bedrohung | Ja | Die Texte handeln von Wiederkehr und Spuren, nicht von Abstammung (vom Text-Agenten und von mir geprüft) |
 
+### M11 Zeitungsausschnitte
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | nur Text im Übergang, keine Wirkung auf Werte |
+| Das Deck bleibt deins | Ja | berührt das Deck nicht |
+| Selten ist stark | Ja | in etwa jedem zweiten Übergang, die Vermisstenanzeige erst ab dem 10. Run und höchstens einmal je Run |
+| Kein Fragezeichen | Ja | der Ausschnitt ist lesbar, nichts Verborgenes |
+| Einwilligung vor Kontrollverlust | Ja | kein Kontrollverlust |
+| Unheimlich, nicht anstrengend | Ja | ein Zettel auf dem Zwischentitel, nichts zu tun |
+| Nie Herkunft als Bedrohung | Ja | Texte über Verschwinden und den Ort, nicht über Abstammung |
+
+### M11 Der falsche Brief
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | verspricht ein Biom und gibt im besten Fall ein Item; nimmt nichts |
+| Das Deck bleibt deins | Ja | das Item des Vorgängers wird nur auf Wunsch genommen |
+| Selten ist stark | Ja | höchstens ein Brief je Run, in etwa einem von drei Runs |
+| Kein Fragezeichen | Ja | der Umschlag auf der Peilkarte sagt, wo es ist |
+| Einwilligung vor Kontrollverlust | Ja | einstecken oder liegen lassen; die Biomwahl bleibt deine |
+| Unheimlich, nicht anstrengend | Ja | der Brief kennt dich, der Knoten ist manchmal leer |
+| Nie Herkunft als Bedrohung | Ja | der Absender ist der Vorgänger, nicht eine Familie |
+
+### M11 Barmherzige Trennung
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | der Handgriff wird fremd, behält aber seine Werte |
+| Das Deck bleibt deins | Ja | du wählst den Handgriff; die Teile sind 0-Kosten-Karten, die man liegen lassen kann |
+| Selten ist stark | Ja | einmal je Run, braucht zwei Teile direkt nacheinander |
+| Kein Fragezeichen | Ja | die Wahl zeigt alle Handgriffe offen |
+| Einwilligung vor Kontrollverlust | Ja | ausgelöst nur durch dein eigenes Spielen zweier Teile |
+| Unheimlich, nicht anstrengend | Ja | ein Satz und eine Wahl nach dem Sieg |
+| Nie Herkunft als Bedrohung | Ja | handelt von einem Seil und einer Entscheidung, nicht von Herkunft |
+
+### M11 Zanns Takt
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | die Geige gibt Block; nur das Aussetzen kostet |
+| Das Deck bleibt deins | Ja | die Geige ist ein Item wie jedes, ablegbar |
+| Selten ist stark | Ja | nur in der Glockengießerei und nur gegen die Ungetaufte |
+| Kein Fragezeichen | Ja | die Absicht zeigt den stärksten Schritt offen, eine Meldung sagt „Das Fenster steht offen.“ |
+| Einwilligung vor Kontrollverlust | Ja | wer die Geige nicht anlegt, spielt den Wächter wie immer |
+| Unheimlich, nicht anstrengend | Ja | eine Karte je Zug, die Musik sagt es mit |
+| Nie Herkunft als Bedrohung | Ja | Musik und Fenster, keine Herkunft |
+
 ## Noten
 
 *Je neues Bild: Name, Note, Bildpfad, Kurzbegründung.*
@@ -540,11 +615,18 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 | Strand-Stufen (Fußspuren, Pfad) | 4 | `prototype/js/scenes/world/hafen.js` (`strandSpuren`), [Stufen](bilder/M10/strand-1.png) | nach Rückgabe (erst 2: Abdrücke wie Grabsteine): kleine Mulden in Paaren, Stufe 4 ein Pfad mit Wall; rechte Pfadkante noch etwas hart |
 | Erbe-Rahmen und fremde Fassung | 4 | `prototype/css/meta.css`, [Erbe](bilder/M10/erbe-in-der-hand.png), [fremd](bilder/M10/fehlzeit-fremde-handgriffe.png) | gestrichelt und vergilbt bzw. dunkler und kursiv; die fremde Fassung ist im Spielbild eher leise |
 | Karte Das Zeichen | 4 | `prototype/assets/karten/zeichen.png`, [×4](bilder/M9/zeichen-x4.png) | Auge mit Gezeitenstrudel auf nassem Holz, klar lesbar im Bogen; etwas sauber und symmetrisch |
+| Zanns Geige | 4 | `prototype/assets/items/zanns_geige.png` | nach Rückgabe: Korpus mit Taille, Bogen neben dem Hals, gerissene Saite lesbar |
+| Karte „Das Relief“ | 3 (angenommen, offen) | `prototype/assets/karten/relief.png` | zwei Gestalten und Schnitt lesbar, aber flach und warmbraun statt Stein; für später offen |
+| Karte „Der Ausschnitt“ | 4 | `prototype/assets/karten/ausschnitt.png` | Zeitungsspalte mit Seil, klar |
+| Karte „Die Aussage“ | 4 | `prototype/assets/karten/aussage.png` | nach Rückgabe: klare Zeilen, Teer-Daumenabdruck, Tauknoten; kühler als der Ausschnitt |
+| Brief-Ereignis | 4 | `prototype/assets/ereignisse/falscher_brief.png` | nach Rückgabe: kleineres, geknicktes Blatt mit ansteigender Schrift und Siegelrest, Spiegelung darunter |
+| Geigenebene (Klang) | offen | `prototype/js/audio/music.js` (`Music.geige`), Labor-Knopf „GEIGE AN/AUS“ in `musik.html` | Mechanik geprüft (`musik-pruefen --schnell`: Einsatz auf der Taktgrenze, harter Abbruch in 45 ms mit Kratzer, Wiedereinsatz, Spitze −0,43 dBFS ohne Clipping); in der Cloud nicht gehört, darum keine Note. Lautstärke über `GEIGE_V` |
 
 ## Neue Texte (Entwurf)
 
 *Je neuer Text: Datei, ID, erste Worte. Für Philip und Mo.*
 
+- **M11, Daten (`data/wuerze.json`):** 12 Zeitungsausschnitte (z. B. „Der Kutter Margaret Hale lief im Februar leer in den Hafen ein …“), Kopf „SALTMOOR GAZETTE · Vermisst“ und neun Vermisstenanzeigen (z. B. Fischer „VERMISST seit dem Frühjahr: ein Fischer, wettergegerbt …“), Brief „Ein Brief ohne Marke“ („Unter der Tür steckt ein Umschlag, auf dem dein Name steht …“, „Den Brief einstecken“, „Den Brief liegen lassen“) mit einem Brief je Biom, Trennung „Das Relief“, „Der Ausschnitt“, „Die Aussage“, „Zwei Teile, ein Seil“ („Du siehst, wer gehalten hat und wer gehalten wurde …“), Zanns Geige („Der Bogen ist bis aufs Holz abgespielt …“), Karte „Der Takt“, „Der Takt reißt ab. Das Fenster steht offen.“, „Du spielst wieder. Das Fenster schließt sich.“ Oberfläche: Würze-Zeile auf dem Run-Zettel, Brief-Knoten und Brief-Seite im Tagebuch.
 - **M10, Daten (`data/meta.json`):** Ausrede-Stufen je Figur (z. B. Fischer „Mein Bruder ist nicht zurückgekommen. Das Boot lag am Morgen trocken im Hafen.“), „Ich gehe hinunter.“, Ankunftszeile „Du wachst am Strand auf. Deine Stiefel stehen im Sand, und die Spur dazu fehlt.“, 25 Pausen-Zeilen (z. B. Kapelle „Das Wasser in der Kapelle steht höher als zuletzt …“), Erbe („Dein Griff vom letzten Mal …“, NEHMEN, LIEGEN LASSEN), Fehlzeit („Jemand anderes wird an deiner Stelle gehen …“, ANNEHMEN, SELBST GEHEN, zwei Sätze zum Start), 45 Wächter- und 25 Biom-Notizen je wahr und falsch, Oberfläche „DAS ERBE“, „NOTIZEN“, „Unter dem Stein liegt ein Heft. Die Schrift ist nicht deine.“, „Notizen des Vorgängers“, „Einträge, die du nicht geschrieben hast“.
 - **M9, Daten:** `run.json → karten.zeichen` „Das Zeichen“ („Für den Rest des Runs: Die Tiefe lässt dich gehen. Die Menschen nicht.“), `run.json → begegnungen` „Sie stehen da und sehen dich an. Keiner hebt die Hand.“, „WEITERGEHEN“, „Der Laden ist zu, als du kommst. Hinter dem Glas dreht jemand das Schild um.“ Oberfläche: „AUS DER ASCHE · FÜR DICH“, Baum-Äste „Asche rufen“ / „Asche zerfällt“ mit Tooltips, Meldungen der Begegnungen (Bus `why`).
 - **M8, Daten:** `stoffe.json → X` „Die Farbe“, `events.json → farbe_brunnen` „Der Brunnen im Hof“ mit zwei Wahlen. Oberfläche: „SPUR TILGEN“, „Welches Item bekommt seinen Stoff zurück?“, Meldungen der Farbe.
@@ -556,6 +638,7 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 ## Entscheidungen unterwegs
 
+- **M11:** Grabbeigabe, Licht im Turm und Lügender Kartentext aus (Mindestens verlangt nur die vier anderen); die Geige ist in der Glockengießerei die nächste sichere Beute, sonst sah man Zanns Takt fast nie; Trennungs-Teile auch an Wandbildern, damit drei Teile in einem Run zu finden sind; Mittel 1,40 statt 1,5 gelassen, weil die Sperre für das letzte Stück die Chancen drückt und höhere Chancen zu oft drei Stücke ergaben; „Das Relief“ mit Note 3 angenommen.
 - **M7, Fortsetzung:** Mo hat am 2026-11-09 gesagt, nach M6 weiterzumachen („we completed through m6, can you continue from there again?“). Ich habe `claude/project-thread-flvf7e` auf den M6-Stand von `claude/project-thread-hifkqz` vorgespult und arbeite ab M7 dort weiter.
 - **M10:** Ausrede-Stufe 3 und alle Meta-Texte als Entwurf markiert, auch der Satz aus dem Steckbrief; Fehlzeit-Start fest bei der Kapelle (Steckbrief), nicht per Biomwahl; das Erbe nimmt der Bot immer; Notizen kommen nach der Fehlzeit, damit der Autospieler sie nicht an seiner Rast findet; Pausen-Zeile auf dem Titel statt am Runstart, weil sie dort zuerst gesehen wird.
 - **M9:** Gezeitenwerk ohne Asche (kein Gegner war je ein Mensch, `m9-vorschlaege.js` erlaubt 0 nur dann); Begegnung = halbes Gold und kein Item; Spuren weichen auf schwere oder Rand-Kämpfe aus, wenn das Netz keinen normalen Kampf in der Mitte hat; Text der Karte „Das Zeichen“ von mir, nicht von Sonnet (kürzer, damit er auf die Karte passt).
@@ -572,6 +655,7 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 ## Rückgaben an Sub-Agenten
 
+- **M11, Bilder:** erste Runde Geige, Relief, Aussage und Brief Note 3 (Geige: Bogen über dem Hals, Korpus ohne Taille, Hals grau; Relief: Gestalten ohne Köpfe und Arme, nicht erhaben, oranger Glanz; Aussage: Zeilen und Knoten unklar, Ton wie der Ausschnitt; Brief: Blatt zu groß, Schrift ungleichmäßig, keine Nässe), mit Punkten je Bild zurück; zweite Runde alle Note 4 außer dem Relief (3, angenommen).
 - **M10, Strand:** Note 2 (Abdrücke lasen sich als Grabsteine, zu dunkel, zu groß) mit sechs Punkten zurück; zweite Runde Note 4.
 - **M8, Brunnenbild:** Note 3 (flache Fläche im Schacht, Hof zu dunkel, Seil zu kurz) mit fünf Punkten zurück; zweite Runde Note 4.
 - **M7, Gesehene:** Grund (Note 3: flache, bananenförmige Lappen, Lückenmuster) und Letzt (Note 3: unruhige Silhouette aus vielen Fäden, „hoch“ nicht lesbar) mit konkreten Punkten zurück; beide in der zweiten Runde Note 4. Bei allen drei sollten die festen Dither-Lücken raus, weil die Bühne die Durchsichtigkeit selbst macht.

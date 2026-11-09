@@ -42,7 +42,7 @@ function netzBauen(){const r=R(`netz:${S.akt}:${biomId()}`);const eb=aktDef().eb
  const ebenen=eb.map((_,e)=>netzKnoten(e,R(`weg:${S.akt}:${e}`)));
  let kanten=[];for(let e=0;e+1<ebenen.length;e++)kanten.push(...netzVerbinden(e,ebenen[e].length,ebenen[e+1].length,r));
  const N={akt:S.akt,biom:biomId(),ebenen,kanten,pos:null,gegangen:[],klar:false,folgen:[]};
- netzFolgen(N,r);if(typeof Spuren!=='undefined')Spuren.markieren(N,r); // M9: Spuren (Dunwich)
+ netzFolgen(N,r);if(typeof Spuren!=='undefined')Spuren.markieren(N,r);if(typeof Wuerze!=='undefined')Wuerze.markieren(N,r); // M9: Spuren (Dunwich)
  return N;}
 
 // Folgen auf der Karte, je Akt höchstens zwei verschiedene über den Seed: Brüchiger Gang, Abkürzung, Dunkler Stollen

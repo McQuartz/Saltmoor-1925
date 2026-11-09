@@ -43,7 +43,7 @@ function karteModell(N,o={}){const mini=!!o.mini,W=o.W||KW,H=o.H||KH;
  const nodes=[];
  for(let e=0;e<=sicht;e++)N.ebenen[e].forEach((v,i)=>{const zeigt=netzZeigt(N,e,i);const w=o.wahl&&S.weg?S.weg.findIndex(x=>x.ziel&&x.ziel[0]===e&&x.ziel[1]===i):-1;
   const kn=v.art&&RUN.knoten[v.art];
-  nodes.push({e,i,x:xs(e),y:ys(e,i),r:rv(e),art:zeigt?v.art||null:null,glyph:zeigt&&kn?kn.zeichen:null,zeigt,dunkel:!!v.dunkel,aktuell:!!N.pos&&N.pos[0]===e&&N.pos[1]===i,gegangen:gi_([e,i])>=0,verloren:verloren(e,i),wahl:w,spuren:zeigt&&v.spuren!=null&&!v.besucht?v.spuren:null});});
+  nodes.push({e,i,x:xs(e),y:ys(e,i),r:rv(e),art:zeigt?v.art||null:null,glyph:zeigt&&kn?kn.zeichen:null,zeigt,dunkel:!!v.dunkel,aktuell:!!N.pos&&N.pos[0]===e&&N.pos[1]===i,gegangen:gi_([e,i])>=0,verloren:verloren(e,i),wahl:w,spuren:zeigt&&v.spuren!=null&&!v.besucht?v.spuren:null,brief:zeigt&&!!v.brief&&!v.besucht});});
  const kanten=[];
  const start=!N.pos?{x:xc,y:ym,r:mini?9:16}:null;
  if(start)N.ebenen[0].forEach((v,j)=>{const b=nodes.find(n=>n.e===0&&n.i===j);if(!b)return;
@@ -127,7 +127,7 @@ function kSpuren(B,n,pal){const s=n.spuren;if(s==null||n.r<10)return;const zahl=
   const rx=gr*1.4,ry=gr;for(let dy=-Math.ceil(ry)-1;dy<=Math.ceil(ry)+1;dy++)for(let dx=-Math.ceil(rx)-1;dx<=Math.ceil(rx)+1;dx++){const q=(dx/rx)**2+(dy/ry)**2;
    if(q<=1)kput(B,x+dx,y+dy,c,a*(.7+.3*t));else if(q<=1.8)kput(B,x+dx,y+dy,rand,a*(.45+.4*t));}
   if(s>=1)for(let z=-1;z<=1;z++)kput(B,x+rx+1.5,y+z*(gr*.8),c,a*.8*t);}}
-function karteStatisch(B,m,pal){kHintergrund(B,pal,m);m.kanten.forEach(k=>kKante(B,k,pal,m));m.nodes.forEach(n=>kSpuren(B,n,pal));
+function karteStatisch(B,m,pal){kHintergrund(B,pal,m);m.kanten.forEach(k=>kKante(B,k,pal,m));m.nodes.forEach(n=>{kSpuren(B,n,pal);kBrief(B,n,pal);});
  if(m.start){kRing(B,m.start.x,m.start.y,m.start.r,pal.gold,1);kRaute(B,m.start.x,m.start.y,m.mini?3:5,pal.gold,pal.gold,1);}
  m.nodes.forEach(n=>kKnoten(B,n,pal,m.mini));}
 
@@ -195,3 +195,7 @@ function karteNach(){const sz=document.getElementById('szene');
  if(!sz){}else if(KARTE_AUF){if(!ov){ov=document.createElement('div');ov.id='kartenueber';sz.appendChild(ov);}ov.style.display='block';const h=kartenHtml('ueber');if(ov._h!==h){ov.innerHTML=h;ov._h=h;}}
  else if(ov&&ov.style.display!=='none'){ov.style.display='none';ov.innerHTML='';ov._h=null;}
  document.querySelectorAll('.kartecv').forEach(karteZeichnen);}
+// Auftrag 3 M11: Der falsche Brief, ein kleiner Umschlag rechts oben am Knoten (harte Pixel, Farben der Karte)
+function kBrief(B,n,pal){if(!n.brief||n.r<8)return;const w=Math.round(n.r*.9),h=Math.round(w*.62),x0=Math.round(n.x+n.r*.55),y0=Math.round(n.y-n.r-h*.4);const papier=kmix(pal.r[0],[230,220,190],.55),strich=kmix(pal.k[0],[20,14,10],.5);
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){const rand=x===0||y===0||x===w-1||y===h-1;kput(B,x0+x,y0+y,rand?strich:papier,1);}
+ for(let x=0;x<w;x++){const y=Math.round(Math.min(x,w-1-x)*h/w*1.1);if(y<h)kput(B,x0+x,y0+y,strich,1);}}

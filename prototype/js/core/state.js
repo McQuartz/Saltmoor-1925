@@ -35,8 +35,8 @@ function biomId(){if(!S.route)return'hafen';return S.route[S.akt]||(S.angebote&&
 function biom(){return BIOMES[biomId()]||BIOMES.hafen;}
 function itemOk(id){return !!ITEMS[id];}
 // Fundpool des aktuellen Bioms plus runübergreifend freigeschaltete Items
-function dropPool(){const b=biom();const extra=(S.metaItems||[]).filter(itemOk);let pool=[...(b.fundpool||[]),...extra].filter(id=>itemOk(id)&&!ITEMS[id].nodrop&&!ITEMS[id].bases&&!ITEMS[id].rare);
- if(!pool.length)pool=Object.keys(ITEMS).filter(k=>!ITEMS[k].nodrop&&!ITEMS[k].bases&&!ITEMS[k].rare&&!ITEMS[k].meta);return[...new Set(pool)];}
+function dropPool(){const b=biom();const extra=(S.metaItems||[]).filter(itemOk);const wz=typeof Wuerze!=='undefined'?Wuerze.fundpool():[];let pool=[...(b.fundpool||[]),...extra,...wz].filter(id=>itemOk(id)&&!ITEMS[id].nodrop&&!ITEMS[id].bases&&!ITEMS[id].rare);
+ if(!pool.length)pool=Object.keys(ITEMS).filter(k=>!ITEMS[k].nodrop&&!ITEMS[k].bases&&!ITEMS[k].rare&&!ITEMS[k].meta&&!ITEMS[k].wuerze);return[...new Set(pool)];}
 function rarePool(){return Object.keys(ITEMS).filter(k=>ITEMS[k].rare&&!ITEMS[k].bases&&!ITEMS[k].nodrop&&(!ITEMS[k].meta||(S.metaItems||[]).includes(k))&&blickAb(k)<=(S.akt||0));}
 // M7: Blick-Items (eigen.typ blick) gibt es erst ab dem Akt, in dessen Fundpools sie stehen (Linse Akt II, Resonator Akt III, Lampe Akt IV), auch beim Krämer
 function blickAb(k){const D=ITEMS[k];if(!D||!D.eigen||D.eigen.typ!=='blick')return 0;let a=99;for(const b in BIOMES)if((BIOMES[b].fundpool||[]).includes(k))a=Math.min(a,BIOMES[b].akt??99);return a===99?0:a;}

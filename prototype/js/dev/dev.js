@@ -87,6 +87,13 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
    // M5: Regelbiegung. biegNur: nur diese Biegung gilt (wie kern-vergleich.js), biegBeide: Falsche Winkel mit letzter und vorletzter Karte, biegFeld: Biom der Biegung im aktuellen Akt erzwingen
    case'biegNur':{BAL.auftrag3.biegung_nur=BAL.auftrag3.biegung_nur===a?null:a;this.markDev();Bus.emit('a3_schalter',{k:'biegung_nur',an:!!BAL.auftrag3.biegung_nur,why:BAL.auftrag3.biegung_nur?`Nur die Biegung ${a} gilt`:'Alle Biegungen gelten'});render();break;}
    // M9: Run-Zettel ändern (Begegnung an/aus, höchstens zwei), Zeichen geben, Asche geben, Spuren-Stufe setzen
+   case'wuerze':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};const l=z.wuerze=z.wuerze||[];const i=l.indexOf(a);if(i>=0)l.splice(i,1);else{l.push(a);if(l.length>3)l.shift();}this.markDev();render();break;} // M11
+   case'wuerzeTun':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};z.wuerze=z.wuerze||[];if(!z.wuerze.includes(a))z.wuerze.push(a);this.markDev();
+    if(a==='zeitung'){S.zeitung=null;const r0=WUERZE.zeitung_chance;WUERZE.zeitung_chance=1;S.akt=Math.max(1,S.akt);S.route[S.akt]=S.route[S.akt]||RUN.akte[S.akt].biome.find(b=>BIOMES[b]);enterAct();WUERZE.zeitung_chance=r0;}
+    if(a==='brief'){S.brief=null;S.akt=0;if(Wuerze.briefHier()){S.event='falscher_brief';S.phase='event';S.node={art:'ereignis'};}}
+    if(a==='trennung'){for(let k=0;k<3;k++)Wuerze.teilFinden();}
+    if(a==='zann'){giveItem('zanns_geige','Dev');const b=S.bag.findIndex(x=>x&&x.id==='zanns_geige');if(b>=0)move('bag:'+b,'talisman:0');S.akt=1;S.route[1]='glockengiesserei';startFight(['ungetaufte'],'waechter');}
+    render();break;}
    case'zettel':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};const l=z.begegnungen;const i=l.indexOf(a);if(i>=0)l.splice(i,1);else{l.push(a);if(l.length>2)l.shift();}this.markDev();render();break;}
    case'zeichenGeben':{if(!(S.lose||[]).includes('zeichen')){(S.lose=S.lose||[]).push('zeichen');S.zeichenGegeben=true;}this.markDev();render();break;}
    case'ascheGeben':{const id=Object.keys(FOES).find(k=>FOES[k].asche&&(biom().gegner||[]).includes(k))||Object.keys(FOES).find(k=>FOES[k].asche);if(id&&(S.asche||[]).length<3)(S.asche=S.asche||[]).push({id,n:FOES[id].n,akt:S.akt});this.markDev();render();break;}
@@ -143,6 +150,11 @@ Dev.tiefeTeil(()=>{if(typeof Bieg==='undefined')return'';const A=BAL.auftrag3||{
  return `<h5>Regelbiegung</h5><div>Jetzt: ${k?esc((k.jetzt||k.b).n)+(k.naechste?' · nächster Zug '+esc(k.naechste.n):'')+(k.zusatz?' · '+k.zusatz:''):'<span class="dim">keine (Akt I/II, Schalter aus oder anderes Biom)</span>'}</div>
  <div>Nur eine Biegung: ${BIEGUNGEN.map(b=>`<button data-cheat="biegNur" data-arg="${b.id}" class="${A.biegung_nur===b.id?'an':''}" title="${esc(b.t)}">${esc(b.n)} (${BIOMES[b.biom]?esc(BIOMES[b.biom].kurz):b.biom})</button>`).join(' ')}</div>
  <div><button data-cheat="biegBeide" class="${A.falsche_winkel_beide?'an':''}">Falsche Winkel: letzte und vorletzte ${A.falsche_winkel_beide?'an':'aus'}</button> <span class="dim">Biom erzwingen im Reiter Cheats → Biom erzwingen</span></div>`;});
+// M11: Würze im Zettel und jedes Stück erzwingen
+Dev.tiefeTeil(()=>{if(typeof Wuerze==='undefined'||!S||!S.route)return'';const z=(S.zettel&&S.zettel.wuerze)||[];const N={zeitung:'Zeitungsausschnitte',brief:'Der falsche Brief',trennung:'Barmherzige Trennung',zann:'Zanns Takt'};
+ return `<h5>Würze</h5><div>Auf dem Zettel (höchstens drei): ${Object.keys(N).map(k=>`<button data-cheat="wuerze" data-arg="${k}" class="${z.includes(k)?'an':''}">${N[k]}</button>`).join(' ')}</div>
+ <div>Erzwingen: <button data-cheat="wuerzeTun" data-arg="zeitung">Ausschnitt im nächsten Übergang</button> <button data-cheat="wuerzeTun" data-arg="brief">Brief-Ereignis</button> <button data-cheat="wuerzeTun" data-arg="trennung">drei Teile ins Deck</button> <button data-cheat="wuerzeTun" data-arg="zann">Geige und die Ungetaufte</button></div>
+ <div class="dim">Brief: ${S.brief?(S.brief.angenommen?'eingesteckt, ':'gesehen, ')+esc(BIOMES[S.brief.ziel].kurz)+' in Akt '+(S.brief.akt+1):'–'} · Teile: ${S.trennungTeile||0}/3${S.trennungFertig?' · ausgelöst':''} · Zann: ${S.zannKampf?(S.zannAus?'Fenster offen':'Fenster zu'):'–'} · zuletzt: ${(Meta.get().wuerzeZuletzt||[]).join(', ')||'–'}</div>`;});
 // M9: Run-Zettel (im Spiel unsichtbar, hier sichtbar und änderbar) und Zustand der Begegnungen
 Dev.tiefeTeil(()=>{if(typeof Zettel==='undefined'||!S||!S.route)return'';const z=S.zettel||{begegnungen:[],wuerze:[]};const N={diener:'Die Diener erheben sich',asche:'Asche',spuren:'Spuren',tiefe:'Die Tiefe erkennt dich'};
  const sv=typeof Spuren!=='undefined'?Spuren.knoten():null;const d=typeof Diener!=='undefined'?Diener.kandidat():null;

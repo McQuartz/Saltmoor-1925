@@ -55,7 +55,7 @@ function startFight(ids,art='kampf'){
  if(tk.begegnung){S.begegnung=true;S.blickWahl=null;Bus.emit('tiefe',{art:'begegnung',why:`Begegnung statt Kampf: ${S.enemies.map(e=>e.n).join(', ')} erkennen dich und greifen nicht an`});return;}
  if(typeof Blick!=='undefined')Blick.kampfStart(art);
  if(typeof Diener!=='undefined')Diener.kampfStart(art);
- if(typeof Asche!=='undefined')Asche.kampfStart();if(typeof Tiefe!=='undefined')Tiefe.kampfStart();} // M7: Wahl Hinsehen / Nicht hinsehen vor dem ersten Zug
+ if(typeof Asche!=='undefined')Asche.kampfStart();if(typeof Tiefe!=='undefined')Tiefe.kampfStart();if(typeof Wuerze!=='undefined')Wuerze.kampfStart();} // M7: Wahl Hinsehen / Nicht hinsehen vor dem ersten Zug
 // Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), Pfandschein (gold_energie: ab p.ab Gold), übrige Energie (energie_bleibt)
 function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0)+passive('gold_energie').reduce((s,p)=>s+((S.gold||0)>=(p.ab||100)?(p.v||1):0),0);}
 
@@ -159,6 +159,7 @@ function playCard(i,ei){
  if(typeof Farbe!=='undefined')Farbe.nachKarte(c,(S.zugKarten||[])[(S.zugKarten||[]).length-1]); // M8: Binden mit Salz
  if(typeof Asche!=='undefined')Asche.nachKarte(c,(S.zugKarten||[])[(S.zugKarten||[]).length-1]); // M9: Salz → Feuer ruft, Feuer → Salz löst auf
  if(typeof Tiefe!=='undefined')Tiefe.gespielt(c); // M9: Das Zeichen
+ if(typeof Wuerze!=='undefined'){Wuerze.gespielt(c);Wuerze.karteGespielt(c);} // M11: Barmherzige Trennung, Zanns Takt
  Bieg.nachKarte(c,cost); // setzt S.last (normal: die Stoffe dieser Karte; Falsche Winkel, Der Schlag ändern es)
  Bieg.nachReaktion(c,rx); // Keiner fährt ab
  if(typeof Farbe!=='undefined')Farbe.hand();
@@ -305,6 +306,7 @@ function incoming(sicht){let tot=0;for(const en of alive()){if(sicht&&!absichtSi
 function endTurn(){
  if(S.phase!=='fight'||busy||S.blickWahl||S.begegnung)return;busy=true;S.vorrat=S.energy;
  Bieg.zugEnde(); // Über Eck, Aufgewogen
+ if(typeof Wuerze!=='undefined')Wuerze.zugEnde(); // M11: Zanns Takt
  const bb=passive('ballast_block').reduce((s,p)=>s+(p.v||2),0),bz=S.hand.filter(c=>c.unspielbar).length;if(bb&&bz)addBlock(bb*bz,`Gesangbuch: ${bz} unspielbare Karte(n) auf der Hand, je ${bb} Block`);
  let bleib=S.hand.filter(c=>c.behalten&&!c.unspielbar);
  if(passive('behalten_eine').length){const rest=S.hand.filter(c=>!bleib.includes(c)&&!c.unspielbar).sort((a,b)=>cardCost(b)-cardCost(a));if(rest[0])bleib=[...bleib,rest[0]];}
@@ -314,7 +316,7 @@ function endTurn(){
  const list=alive();let i=0;
  const step=()=>{
   if(S.hp<=0&&!faehrgeld()){busy=false;return runLost();}
-  if(i>=list.length){S.enemies.forEach(en=>{en.pi++;en.turns++;});specials();if(!alive().length){busy=false;checkVictory(700);return;}
+  if(i>=list.length){S.enemies.forEach(en=>{en.pi++;en.turns++;});if(typeof Wuerze!=='undefined')Wuerze.nachGegnerzug();specials();if(!alive().length){busy=false;checkVictory(700);return;}
    S.nachGegnerzug=true;Bus.emit('gegnerzug_ende',{why:'Die Gegner haben gehandelt; ihre neuen Absichten zeigen sich erst mit deinem Zug'});Bus.emit('changed');wait(380,()=>{busy=false;startTurn();});return;}
   const en=list[i++];if(en.hp<=0){step();return;}en.gehandelt=true;
   // Brand tickt und halbiert sich (Eigenschaft brand_haelt: nur −1); Gift tickt und sinkt um 1 (gift_doppelt: tickt zweimal)

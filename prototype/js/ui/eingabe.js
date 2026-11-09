@@ -45,6 +45,7 @@ document.addEventListener('click',e=>{
  const kz=e.target.closest('[data-kzeig]');if(kz&&KOE){KOE.zeig=+kz.dataset.kzeig;koerperRender();return;}
  const hgp=e.target.closest('[data-hg]');if(hgp){takeHandgriff(hgp.dataset.hg);return;}
  const rz=e.target.closest('[data-ritz]');if(rz){const uid=+rz.dataset.ritz;if(rz.dataset.k!=null){S.ueberschreiben={uid,k:+rz.dataset.k,alt:hgVon(itemByUid(uid))[+rz.dataset.k]};render();}else placeHandgriff(uid);return;}
+ const tn=e.target.closest('[data-trennen]');if(tn){const[u,k]=tn.dataset.trennen.split(':');Wuerze.trennen(+u,+k);render();return;} // M11
  const kb=e.target.closest('[data-kerbe]');if(kb){kerbeDazu(+kb.dataset.kerbe);return;}
  const tg=e.target.closest('[data-tilgen]');if(tg){if(Farbe.tilgen(+tg.dataset.tilgen))wahlFertig();return;} // M8
  const sl2=e.target.closest('[data-schleif]');if(sl2){schleifen(+sl2.dataset.schleif,sl2.dataset.key);return;}
@@ -66,7 +67,7 @@ function aktion(k,el){switch(k){
  case'fortsetzen':loadRun();render();break;case'rastHeil':rastHeal();break;case'fund':takeFund();break;
  case'skipstrike':skipStrike();break;case'kstrike0':kraemerStrike(null);break;
  case'buch':zeigeOverlay(buchHtml());break;case'tagebuch':zeigeOverlay(tagebuchHtml());break;case'einst':zeigeOverlay(einstHtml());break;case'zu':closeOv();break;
- case'erbeNehmen':Metaebene.erbeWahl(true);render();break;case'erbeLassen':Metaebene.erbeWahl(false);render();break;case'fehlzeitJa':Metaebene.fehlzeitWahl(true);render();break;case'fehlzeitNein':Metaebene.fehlzeitWahl(false);render();break; // M10
+ case'erbeNehmen':Metaebene.erbeWahl(true);render();break;case'erbeLassen':Metaebene.erbeWahl(false);render();break;case'briefNehmen':Wuerze.briefNehmen(true);render();break;case'briefLassen':Wuerze.briefNehmen(false);render();break;case'fehlzeitJa':Metaebene.fehlzeitWahl(true);render();break;case'fehlzeitNein':Metaebene.fehlzeitWahl(false);render();break; // M10
  case'gleicherSeed':{const sd=S.seed,jb=S.job;newRun(jb,sd,{});render();break;}
  case'bildSpeichern':endbildSpeichern();break;
  case'rucksack':rucksackAuf();break;case'rucksackZu':rucksackZu();break;

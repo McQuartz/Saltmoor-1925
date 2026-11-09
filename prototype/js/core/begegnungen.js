@@ -94,7 +94,7 @@ const Tiefe={
  wahl(o,ev){if(!Zettel.hat('tiefe')||!o||!o.tiefe)return;S.tiefeZahl=(S.tiefeZahl||0)+1;
   Bus.emit('tiefe',{art:'zaehlt',n:S.tiefeZahl,why:`„${o.l}“: du gibst der Tiefe nach (${S.tiefeZahl}-mal in diesem Run)`});
   if(S.tiefeZahl>=2&&!S.zeichenGegeben){S.zeichenGegeben=true;(S.lose=S.lose||[]).push('zeichen');Bus.emit('tiefe',{art:'zeichen',why:'In deinem Deck liegt eine Karte, die du nie gewählt hast: Das Zeichen'});}},
- karte(id){return id==='zeichen'?this.ZEICHEN():null;},
+ karte(id){return id==='zeichen'?this.ZEICHEN():(typeof Wuerze!=='undefined'?Wuerze.karte(id):null);}, // M11: Teile der Barmherzigen Trennung
  gespielt(c){if(!c||!c.zeichen)return;S.tiefeSeite=true;S.lose=(S.lose||[]).filter(x=>x!=='zeichen');
   Bus.emit('tiefe',{art:'seite',why:'Das Zeichen: die Tiefe erkennt dich. Was aus ihr kommt, lässt dich gehen. Die Menschen nicht mehr'});},
  artVon(id){return(FOES[id]&&FOES[id].art)||'tiefe';},

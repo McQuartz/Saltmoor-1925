@@ -10,6 +10,9 @@ const Bot={
  besteKarte(){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
  // M8: die Farbe binden, wenn es geht: erst eine Karte des Farbe-Items, direkt danach eine Karte mit eigenem Salz
  // M9 Asche: Salz, dann Feuer ruft einen Verbündeten (der Bot ruft, wenn Asche da ist und kein Verbündeter steht); Das Zeichen spielt er, sobald er es zieht (er gibt der Tiefe nach)
+ // M11: Zanns Takt (die Geige jeden Zug), Barmherzige Trennung (zwei Teile nacheinander)
+ wuerzeWert(c){if(typeof Wuerze==='undefined'||!c)return 0;let v=0;if(S.zannKampf&&!S.zannZug){const z=Wuerze.zannAktiv();if(z&&c.uid===z.g.uid)v+=25;}
+  if(c.trennung&&S.trVorher&&S.trVorher!==c.trennung&&!S.trennungFertig)v+=15;return v;},
  ascheWert(c){if(c&&c.zeichen)return 20;if(typeof Asche==='undefined'||!Zettel.hat('asche')||!(S.asche&&S.asche.length)||S.verbuendeter)return 0;const e=Asche.eigene(c);const z=S.zugKarten||[];const vor=z[z.length-1];
   if(vor&&Asche.eigene(vor).includes('S')&&e.includes('F'))return 10;if(vor&&Asche.eigene(vor).includes('F')&&e.includes('S'))return -6;
   if(e.includes('S')&&S.hand.some(x=>x!==c&&Asche.eigene(x).includes('F')&&cardCost(x)<=S.energy-cardCost(c)))return 4;return 0;},
@@ -17,7 +20,7 @@ const Bot={
   const z=S.zugKarten||[];const vor=z[z.length-1];if(salz(c)&&Farbe.karte(vor))return 8;
   if(Farbe.karte(c)&&S.hand.some(x=>x!==c&&salz(x)&&cardCost(x)<=S.energy-cardCost(c)))return 4;return 0;},
  kampfZug(){let guard=0;if(S.begegnung&&typeof Tiefe!=='undefined'){Tiefe.weiter();return;} /* M9: Begegnung, weitergehen */if(S.blickWahl&&typeof Blick!=='undefined')Blick.waehlen(Blick.botWahl()); /* M7: hinsehen, wenn Leben über 60 % */this.biegZugbeginn();while(S.phase==='fight'&&!busy&&guard++<30){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;
-   S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];const bw=this.biegWert(c,inc)+this.farbeWert(c)+this.ascheWert(c);
+   S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];const bw=this.biegWert(c,inc)+this.farbeWert(c)+this.ascheWert(c)+this.wuerzeWert(c);
     ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0)+bw;if(!best||w>best.w)best={i,t,w};});});
    if(!best||best.w<=0)break;playCard(best.i,best.t);}
   if(S.phase==='fight'&&!busy)endTurn();},
@@ -35,7 +38,7 @@ const Bot={
  biegZugbeginn(){if(typeof Bieg==='undefined')return;
   // Das Spiegelbild ist voraus: die offene oberste Karte gegen die schwächste Handkarte tauschen, wenn sie klar besser ist
   if(Bieg.spiegelKann()){const top=Bieg.spiegelOffen();let wi=-1,wv=1e9;S.hand.forEach((c,i)=>{const v=this.kartenWert(c);if(v<wv){wv=v;wi=i;}});if(wi>=0&&this.kartenWert(top)>wv+2)Bieg.spiegelTausch(wi);}},
- wertItem(it){const P=this.profil;const d=def(it);return (P&&(P.items||[]).includes(it.id)?12:0)+(P?d.st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+hgVon(it).length*3+(d.eigen?6:0)+d.cards.reduce((s,c)=>s+(c.atk||0)*(c.h||1)*(c.all?1.6:1)+(c.blk||0)+(c.heal||0)+(c.poison||0)*1.5+(c.burn||0)*1.5+(c.draw||0)*3-(c.c||0)*2,0)+(d.hp||0)+(d.passiv?6:0)+d.st.length*2;},
+ wertItem(it){const P=this.profil;const d=def(it);return (ITEMS[it.id]&&ITEMS[it.id].wuerze?20:0)+(P&&(P.items||[]).includes(it.id)?12:0)+(P?d.st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+hgVon(it).length*3+(d.eigen?6:0)+d.cards.reduce((s,c)=>s+(c.atk||0)*(c.h||1)*(c.all?1.6:1)+(c.blk||0)+(c.heal||0)+(c.poison||0)*1.5+(c.burn||0)*1.5+(c.draw||0)*3-(c.c||0)*2,0)+(d.hp||0)+(d.passiv?6:0)+d.st.length*2;},
  ausruesten(){// leere Slots aus dem Rucksack füllen, sonst schwächere Items tauschen (einfach: mehr Karten-Werte)
   const wertItem=it=>this.wertItem(it);
   for(let b=0;b<S.bag.length;b++){const it=S.bag[b];if(!it)continue;const a=def(it).a;
@@ -66,16 +69,18 @@ const Bot={
  schritt(){switch(S.phase){
   case'event_hg':case'kraemer_hg':this.ritzen();break;
   case'wahl':{const w=S.wahl;if(w.art==='schleifen'){let best=null;besitz().filter(b=>b.an).forEach(({it})=>{const D=def(it);D.cards.forEach((c,ci)=>{if(c.c>=1&&!(it.schliff&&it.schliff['s'+ci])&&(!best||c.c>best.c))best={uid:it.uid,key:'s'+ci,c:c.c+.5};});hgVon(it).forEach((h,k)=>{const H=HANDGRIFFE[h];if(H&&H.c>=1&&!(it.schliff&&it.schliff['h'+k])&&(!best||H.c>best.c))best={uid:it.uid,key:'h'+k,c:H.c};});});if(best)schleifen(best.uid,best.key);else wahlAbbrechen();}
+   else if(w.art==='trennung'){const l=Wuerze.handgriffe().sort((a,b)=>this.hgWert(b.hg)-this.hgWert(a.hg));if(l[0])Wuerze.trennen(l[0].it.uid,l[0].k);else wahlAbbrechen();} // M11: der stärkste Handgriff wird fremd
    else if(w.art==='kerbe'){const k=besitz().filter(b=>b.an&&kerbenVon(b.it)<3).sort((a,b)=>kerbenVon(a.it)-kerbenVon(b.it))[0];if(k)kerbeDazu(k.it.uid);else wahlAbbrechen();}
    else wahlAbbrechen();break;}
   case'uebergang':leaveUebergang();break;
-  case'erbe':Metaebene.erbeWahl(true);break; // M10: das Erbe nimmt er immer
+  case'erbe':Metaebene.erbeWahl(true);break;
+  case'brief':Wuerze.briefNehmen(!!(S.briefAngebot&&S.briefAngebot.item&&S.bag.includes(null)));break; // M11 // M10: das Erbe nimmt er immer
   case'biomwahl':{const an=S.angebote[S.akt];const job=JOBS.find(j=>j.id===S.job);let i=an.indexOf(job&&job.vorliebe);if(i<0)i=S.seed%an.length;chooseBiom(i);break;}
   case'weg':this.wegWahl();break;
   case'fight':this.kampfZug();break;
   case'reward':if(S.hgPending&&!S.hgPicked){this.ritzen();break;}
    if(!S.hgPicked){const best=[...S.rewardHg].sort((a,c)=>this.hgWert(c)-this.hgWert(a))[0];if(best&&this.hgWert(best)>2){takeHandgriff(best);break;}skipHandgriff();break;}
-   if(!S.picked&&S.reward.length){const P=this.profil;const w=id=>(P&&(P.items||[]).includes(id)?10:0)+(P?ITEMS[id].st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+(rarOf(ITEMS[id])==='reliquie'?5:rarOf(ITEMS[id])==='selten'?2:0);const best=[...S.reward].sort((a,c)=>w(c)-w(a))[0];takeReward(S.bag.includes(null)?best:'');}this.ausruesten();leaveReward();break;
+   if(!S.picked&&S.reward.length){const P=this.profil;const w=id=>(P&&(P.items||[]).includes(id)?10:0)+(P?ITEMS[id].st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+(rarOf(ITEMS[id])==='reliquie'?5:rarOf(ITEMS[id])==='selten'?2:0)+(ITEMS[id].wuerze?8:0); /* M11: die Geige probiert er aus */const best=[...S.reward].sort((a,c)=>w(c)-w(a))[0];takeReward(S.bag.includes(null)?best:'');}this.ausruesten();leaveReward();break;
   case'event':{const ev=curEvent();let k=ev.o.findIndex(o=>condOk(o.if)&&!(o.fx||[]).some(f=>f.op==='lose_hp'&&S.hp<f.v+10||f.op==='fight'&&S.hp<maxHp()*.5));if(k<0)k=ev.o.findIndex(o=>condOk(o.if));chooseEvent(Math.max(0,k));break;}
   case'streichen':{const t=strikeTargets();const w=t.find(it=>def(it).cards.every(c=>!c.atk&&!c.blk));if(w)strikeItem(w.uid);else skipStrike();break;}
   case'kraemer':{if(S.shop.art==='tausch'){S.shop.items.forEach((o,i)=>{if(o.sold)return;let wl=null,wv=1e9;S.bag.forEach((it,b)=>{if(it){const w=this.wertItem(it);if(w<wv){wv=w;wl='bag:'+b;}}});if(wl&&this.wertItem({id:o.id,uid:-1})>wv+3){S.sel=wl;buy(i);}});S.sel=null;}

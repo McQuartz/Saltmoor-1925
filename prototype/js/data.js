@@ -1,5 +1,5 @@
 // Lädt alle Spieldaten aus data/*.json. Dieselben Dateien soll später die Godot-Version einlesen.
-let HANDGRIFFE={},PAKETE=[],ICONS=new Set(),HG_ICONS=new Set(),ST,SUFFIX,AREAS,AREA_N,ITEMS,ROLES,FOES,JOBS,REACT,VERST,HOCH,EVENTS,BAL,RUN,BIOMES,FRAGS,STELL={},FAHRT={},META={};
+let HANDGRIFFE={},PAKETE=[],ICONS=new Set(),HG_ICONS=new Set(),ST,SUFFIX,AREAS,AREA_N,ITEMS,ROLES,FOES,JOBS,REACT,VERST,HOCH,EVENTS,BAL,RUN,BIOMES,FRAGS,STELL={},FAHRT={},META={},WUERZE={};
 async function loadData(base='data/',fetchJson){
  const get=fetchJson||(async f=>{const r=await fetch(base+f+'.json',{cache:'no-store'});if(!r.ok)throw new Error(f+'.json: '+r.status);return r.json();});
  const opt=async f=>{try{return await get(f);}catch(e){return null;}};
@@ -14,6 +14,8 @@ async function loadData(base='data/',fetchJson){
  const hg=await opt('handgriffe');
  // Auftrag 3 M10: Texte der Metaebene (data/meta.json)
  META=(await opt('meta'))||{};
+ // Auftrag 3 M11: Würze (data/wuerze.json), dazu ihre Items
+ WUERZE=(await opt('wuerze'))||{};
  // Neue Icons (M5): assets/items/index.json und assets/handgriffe/index.json = Listen vorhandener IDs
  const ii=await (async()=>{try{const r=await fetch('assets/items/index.json',{cache:'no-store'});return r.ok?r.json():null;}catch(e){return null;}})();const hi=await (async()=>{try{const r=await fetch('assets/handgriffe/index.json',{cache:'no-store'});return r.ok?r.json():null;}catch(e){return null;}})();
  ICONS=new Set((ii&&(ii.items||ii.ids||ii))||[]);HG_ICONS=new Set((hi&&(hi.handgriffe||hi.ids||hi))||[]);
@@ -24,7 +26,7 @@ async function loadData(base='data/',fetchJson){
  // Ereignisse: id und biom ergänzen, falls alte Einträge sie nicht haben
  // Items, die ein Fragment freischaltet, sind erst danach im Fundpool (meta)
  FRAGS.forEach(f=>{if(f.schaltet&&f.schaltet.art==='item'&&ITEMS[f.schaltet.id])ITEMS[f.schaltet.id].meta=true;});
- HANDGRIFFE=(hg&&hg.handgriffe)||{};PAKETE=packs;let evAll=ev;
+ HANDGRIFFE=(hg&&hg.handgriffe)||{};Object.assign(ITEMS,WUERZE.items||{});PAKETE=packs;let evAll=ev;
  for(const p of packs){
   // Ergänzung eines vorhandenen Bioms (Auftrag 2, M6/M7): {"id":"hafen_plus","ergaenzt":"hafen","gegner_dazu":[…],"gegner_weg":[…],"fundpool_dazu":[…],foes,events,items}
   if(p.ergaenzt){const b=BIOMES[p.ergaenzt];if(!b)continue;const weg=new Set(p.gegner_weg||[]);b.gegner=(b.gegner||[]).filter(g=>!weg.has(g)).concat((p.gegner_dazu||[]).filter(g=>!(b.gegner||[]).includes(g)));

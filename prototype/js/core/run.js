@@ -36,8 +36,9 @@ function newRun(jobId,seed,opt={}){
 // --- Akte und Ebenen ---
 function aktDef(){return RUN.akte[S.akt];}
 function enterAct(){S.ebene=0;if(S.akt>0)leiheZurueck();
- if(!S.route[S.akt]||!BIOMES[S.route[S.akt]]){const an=biomAngebot(S.akt);S.angebote[S.akt]=an.biome;S.routeWhy.push(an.why);
+ if(!S.route[S.akt]||!BIOMES[S.route[S.akt]]){const an=biomAngebot(S.akt);if(typeof Wuerze!=='undefined')Wuerze.angebot(an);/* M11: der Brief nennt ein Biom */S.angebote[S.akt]=an.biome;S.routeWhy.push(an.why);
   if(an.biome.length>1){S.phase='biomwahl';Bus.emit('biomwahl',{biome:an.biome,why:an.why});save();Bus.emit('changed');return;}S.route[S.akt]=an.biome[0];}
+ if(typeof Wuerze!=='undefined'){Wuerze.uebergang();Wuerze.aktEintritt();} // M11: Zeitungsausschnitt, Zanns Geige
  S.phase='uebergang';Bus.emit('act_start',{akt:S.akt,biom:biomId(),why:`${aktDef().n}: ${biom().n}`});Bus.emit('changed');}
 function leaveUebergang(){genWeg();}
 function chooseBiom(i){if(S.phase!=='biomwahl')return;const b=S.angebote[S.akt][i];if(!b)return;S.route[S.akt]=b;S.routeWhy.push(`${RUN.akte[S.akt].n}: ${BIOMES[b].kurz} gewählt`);Bus.emit('biom_gewaehlt',{biom:b,why:`${BIOMES[b].n} gewählt`});enterAct();}
@@ -58,6 +59,7 @@ function chooseWeg(i){if(S.phase!=='weg')return;const o=S.weg[i];if(!o)return;S.
 // --- Knoten ---
 function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.depth}:${o.art}`);S.spurenKampf=null;
  if(typeof Spuren!=='undefined'&&Spuren.istHier(o)){Spuren.starten(o);return;} // M9: Spuren
+ if(typeof Wuerze!=='undefined'&&Wuerze.briefKnoten(o))return; // M11: Der falsche Brief
  switch(o.art){
   case'kampf':startFight(o.foes,'kampf');break;
   case'kampf_schwer':startFight(o.foes,'schwer');break;
@@ -68,6 +70,7 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
    const alle=EVENTS.filter(e=>e.biom==='alle'&&geht(e));const allg=alle.length&&(!fresh.length||r.chance(BAL.ereignis_allgemein!=null?BAL.ereignis_allgemein:.25));
    let ev=r.pick(allg?alle:fresh.length?fresh:EVENTS.filter(e=>!e.if));
    if(typeof Farbe!=='undefined'&&Farbe.ereignisHier()){ev=EVENTS.find(e=>e.id==='farbe_brunnen');S.farbeGesehen=true;} // M8: der Brunnen, einmal je Run
+   else if(typeof Wuerze!=='undefined'&&Wuerze.briefHier())ev=Wuerze.ereignis('falscher_brief'); // M11: Der falsche Brief
    S.stats.events=[...seen,ev.id];S.event=ev.id;S.phase='event';Bus.emit('event',{ev,why:`Ereignis „${ev.t}“ aus ${allg?'allgemein':b.kurz} per Seed`});break;}
   case'kraemer':{const SH=BAL.shop;const o2=[...r.sample(dropPool(),SH.normal_items),...r.sample(rarePool(),SH.rare_items)];
    const hgA=handgriffAngebot(r,'mix',2).map(id=>({id,price:(HANDGRIFFE[id].rar==='selten'?SH.hg_preis_selten:SH.hg_preis)||40,sold:false}));
@@ -85,9 +88,9 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
    Bus.emit('kraemer',{why:`Krämer ${b.kraemer.n}: Sortiment aus dem Fundpool von ${b.kurz}`});break;}
   case'werkstatt':S.forged=false;S.phase='werkstatt';break;
   case'rast':S.rastDone=false;S.phase='rast';if(typeof Metaebene!=='undefined')Metaebene.notizenAnRast();break; // M10: Notizen des Vorgängers
-  case'wandbild':{const fr=nextFragment(r);S.frag=fr?fr.id:null;S.phase='wandbild';if(fr)readFragment(fr);netzKlar();break;}
+  case'wandbild':{const fr=nextFragment(r);S.frag=fr?fr.id:null;S.phase='wandbild';if(fr)readFragment(fr);netzKlar();if(typeof Wuerze!=='undefined')Wuerze.teilFinden();break;} // M11: Barmherzige Trennung
   case'fundstelle':{const F=RUN.fundstelle;const haken=r.chance(F.haken_chance);const item=r.chance(.55)?r.pick(dropPool()):null;const gold=item?0:r.int(F.gold[0],F.gold[1]);
-   S.fund={item,gold,haken,taken:false};S.phase='fund';break;}
+   S.fund={item,gold,haken,taken:false};S.phase='fund';if(typeof Wuerze!=='undefined')S.fund.teil=Wuerze.teilFinden();break;}
  }
  Bus.emit('node',{art:o.art,why:`Knoten ${RUN.knoten[o.art].n} auf Tiefe ${S.depth}`});Bus.emit('changed');}
 
@@ -105,6 +108,7 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  bonuses('after_victory_item').forEach(b=>{giveItem(b.item,'Set Friedhofswärter');Bus.emit('toast',{a:'FRIEDHOFSWÄRTER',b:'Ein Knochen für den Rucksack'});});
  if(typeof Farbe!=='undefined')Farbe.wandern(); // M8: die Farbe springt nach jedem Sieg weiter
  if(typeof Diener!=='undefined')Diener.sieg(); // M9: die Karte kommt geschliffen zurück
+ if(typeof Wuerze!=='undefined')Wuerze.kampfEnde(); // M11: Geige aus
  if(art==='finale'){S.phase='reward';S.reward=[];S.picked=true;S.goldGain=0;finishNode();return;}
  const r=R(`beute:${S.depth}`);const G=BAL.gold_per_victory;
  let gd=art==='waechter'?r.int(BAL.waechter_belohnung.gold[0],BAL.waechter_belohnung.gold[1]):r.int(G.min,G.max)+S.enemies.length*G.per_enemy;
@@ -124,6 +128,7 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  const rare=art==='waechter'||art==='schwer';const pick=items;
  S.beuteSatz=beuteSatzWaehlen(r);
  S.reward=pick;S.picked=!pick.length;S.rewardHg=hg;S.hgPicked=!hg.length;S.hgPending=null;S.phase='reward';S.hand=[];
+ if(typeof Wuerze!=='undefined')Wuerze.nachSieg(); // M11: Barmherzige Trennung, ein Handgriff wird fremd
  Bus.emit('reward',{gold:gd,items:pick,hg,why:`Belohnung: ${gd} Gold, Handgriffe ${hg.map(id=>HANDGRIFFE[id].n).join('/')}${pick.length?', Items '+pick.map(id=>ITEMS[id].n).join('/'):''}${art==='waechter'?' (Reliquien)':''}`});Bus.emit('changed');}
 // Fix 2 (Auftrag 3): Satz über der Beute. Erst der stärkste besiegte Gegner mit eigenem beute_satz, sonst die beute_saetze des Bioms,
 // sonst die Beute-Sätze der Gegner dieses Bioms (Grundbiome haben keine eigenen); per Seed, nie zweimal hintereinander derselbe. null = Ersatztext.
@@ -135,16 +140,16 @@ function beuteSatzWaehlen(r){const vor=S.letzterBeuteSatz||null;const frei=l=>l.
  S.letzterBeuteSatz=satz||vor;return satz;}
 function takeReward(id){if(S.picked)return;if(id){if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}giveItem(id,'Fund nach dem Kampf');Bus.emit('pick');}S.picked=true;Bus.emit('changed');}
 function leaveReward(){if(!S.picked)S.picked=true;finishNode();}
-function runLost(){S.phase='strand';busy=false;S.stats.endeT=Date.now();const res={sieg:false,tiefe:S.depth,akt:S.akt,biom:biomId(),gegner:S.enemies.filter(e=>e.hp>0).map(e=>e.id),job:S.job};
+function runLost(){if(typeof Wuerze!=='undefined')Wuerze.kampfEnde();S.phase='strand';busy=false;S.stats.endeT=Date.now();const res={sieg:false,tiefe:S.depth,akt:S.akt,biom:biomId(),gegner:S.enemies.filter(e=>e.hp>0).map(e=>e.id),job:S.job};
  S.ergebnis=res;Bus.emit('game_over',{...res,why:`Leben 0 auf Tiefe ${S.depth} in ${biom().kurz}`});
  if(typeof Meta!=='undefined'&&!S.dev)S.neu=Meta.runEnde(res,S);clearSave();Bus.emit('changed');}
 function chooseEnde(art){if(S.phase!=='ankunft')return;S.stats.endeT=Date.now();const res={sieg:true,ende:art,tiefe:S.depth,akt:4,biom:'pforte',job:S.job};S.ergebnis=res;S.phase='ende';
  Bus.emit('ende',{art,why:art==='bleiben'?'Du bleibst.':'Du kehrst um.'});if(typeof Meta!=='undefined'&&!S.dev)S.neu=Meta.runEnde(res,S);clearSave();Bus.emit('changed');}
 
 // --- Ereignisse ---
-function curEvent(){return EVENTS.find(e=>e.id===S.event);}
+function curEvent(){return EVENTS.find(e=>e.id===S.event)||(typeof Wuerze!=='undefined'?Wuerze.ereignis(S.event):null);}
 function chooseEvent(i){const ev=curEvent();if(!ev)return;const o=ev.o[i];if(!o||!condOk(o.if))return;
- S.eventChoice=i;if(typeof Tiefe!=='undefined')Tiefe.wahl(o,ev);runFx(o.fx,{why:`Ereignis „${ev.t}“: ${o.l}`});Bus.emit('pick');Bus.emit('event_choice',{ev,i,why:`Entscheidung „${o.l}“`});
+ S.eventChoice=i;if(typeof Tiefe!=='undefined')Tiefe.wahl(o,ev);if(typeof Wuerze!=='undefined')Wuerze.wahl(i,ev);runFx(o.fx,{why:`Ereignis „${ev.t}“: ${o.l}`});Bus.emit('pick');Bus.emit('event_choice',{ev,i,why:`Entscheidung „${o.l}“`});
  S.phase='event_folge';afterEventFx();}
 function afterEventFx(){const p=S.pending||[];if(!p.length){finishNode();return;}
  const nx=p[0];if(nx==='strike'){S.phase='streichen';Bus.emit('changed');return;}

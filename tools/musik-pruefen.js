@@ -129,6 +129,28 @@ const dB = v => (v <= -120 ? '  -∞' : v.toFixed(1).padStart(6));
     hoerErg[k] = { ...h, danach };
   }
 
+  // Geigenebene (Zanns Takt): an, aus (harter Abbruch), wieder an, über Wächter mit Hochreaktion und Feuer. Prüft Schnittstelle (state().geige), Log und Pegel.
+  const geigeErg = {};
+  for (const k of ['kapelle', 'hafen', 'eis']) {
+    await ev(k => { Music.biome(k); Music.scene('waechter'); Music.foeSpawn('glockenmutter'); Music.hp(6, 40); Music.stoff('F'); Music.akt(3); Music.telegraph(); }, k);
+    await bisBiom(k); await warte(2500);
+    await ev(() => { Music.resetPeak(); window.__reset(); Music.geige(true); });
+    const an1 = await ev(() => Music.state().geige);
+    await warte(9000);
+    await ev(() => { Music.reaction(true); sfx.hoch(); sfx.hit(6); sfx.hurt(); });
+    await warte(3000);
+    await ev(() => Music.geige(false));
+    const aus = await ev(() => Music.state().geige);
+    await warte(1500);
+    await ev(() => Music.geige(true));
+    await warte(7000);
+    const m = await ev(() => ({ m: window.__mess(), peakIntern: Music.state().peak, g: Music.state().geige, log: Music.state().log.filter(e => /^geige/.test(e.was)).map(e => e.was) }));
+    await ev(() => { Music.geige(false); Music.victory(); Music.stoff('keiner'); Music.akt(0); Music.hp(40, 40); });
+    await warte(2500);
+    const danach = await ev(() => Music.state().geige);
+    geigeErg[k] = { ...m, an1, aus, danach };
+  }
+
   // Nur Musik (ohne SFX): Kapelle, Wächter, wenig Leben, Hochreaktion. Zeigt den Spielraum vor dem Limiter.
   await ev(() => { Music.biome('kapelle'); Music.scene('waechter'); Music.foeSpawn('glockenmutter'); Music.foeSpawn('chorknabe'); Music.hp(8, 40); Music.telegraph(); });
   await bisBiom('kapelle');
@@ -193,6 +215,12 @@ const dB = v => (v <= -120 ? '  -∞' : v.toFixed(1).padStart(6));
     if (!ok) hoerFehler++;
     console.log(`Hören (${k}): alle drei Einsätze + Boss + Hochreaktion + Feuer: Ausgang ${dB(h.m.peak)} dBFS, vor Limiter ${dB(h.peakIntern)} dBFS, Einsatz-Pegel ${h.h.pegel} dBFS, Layer 2/3 ×${h.h.duck}, danach Layer wieder normal ×${h.danach.h.duck} ${ok ? 'OK' : 'FEHLER'}`);
   });
+  let geigeFehler = 0;
+  Object.entries(geigeErg).forEach(([k, g]) => {
+    const ok = g.an1 === true && g.aus === false && g.g === true && g.danach === false && g.log.includes('geige an') && g.log.includes('geige aus') && g.m.peak < 0;
+    if (!ok) geigeFehler++;
+    console.log(`Geige (${k}): an, hart aus, wieder an, Wächter + Hochreaktion + Feuer: Ausgang ${dB(g.m.peak)} dBFS, vor Limiter ${dB(g.peakIntern)} dBFS, Log ${g.log.join('/')} ${ok ? 'OK' : 'FEHLER'}`);
+  });
   console.log(`Nur Musik (Wächter Kapelle, Hochreaktion, ohne SFX):   Ausgang ${dB(nurMusik.m.peak)} dBFS, vor Limiter ${dB(nurMusik.peakIntern)} dBFS, RMS ${dB(nurMusik.m.rms)}`);
   console.log(`Stoffe, Übergang, Enden, Niederlage:                     Ausgang ${dB(rest.m.peak)} dBFS, vor Limiter ${dB(rest.peakIntern)} dBFS`);
   console.log(`Ende »bleiben« nach 9 s, Layer-Pegel: ${JSON.stringify(nachBleiben)}`);
@@ -208,9 +236,9 @@ const dB = v => (v <= -120 ? '  -∞' : v.toFixed(1).padStart(6));
   const arten = {}; evs.forEach(e => arten[e.was] = (arten[e.was] || 0) + 1);
   console.log('\nENTSCHEIDUNGEN (onEvent): ' + Object.entries(arten).map(([k, v]) => `${k} ${v}`).join(', '));
   console.log('Beispiele: ' + evs.slice(0, 6).map(e => `${e.was} (${e.why})`).join(' | '));
-  const alle = [...zeilen.map(z => z.m.peak), ...Object.values(hoerErg).map(h => h.m.peak), hart.m.peak, nurMusik.m.peak, rest.m.peak, ...stimmen.map(s => s.peak), ...rollen.map(s => s.peak)];
+  const alle = [...zeilen.map(z => z.m.peak), ...Object.values(hoerErg).map(h => h.m.peak), ...Object.values(geigeErg).map(g => g.m.peak), hart.m.peak, nurMusik.m.peak, rest.m.peak, ...stimmen.map(s => s.peak), ...rollen.map(s => s.peak)];
   const spitze = Math.max(...alle);
   console.log(`\nGRÖSSTE SPITZE AM AUSGANG: ${spitze.toFixed(2)} dBFS ${spitze < 0 ? '(kein Clipping)' : '(CLIPPING!)'}`);
   console.log(fehler.length ? 'KONSOLENFEHLER:\n' + fehler.join('\n') : 'Keine Konsolenfehler.');
-  process.exit(spitze >= 0 || tempoFehler || fehler.length || hoerFehler ? 1 : 0);
+  process.exit(spitze >= 0 || tempoFehler || fehler.length || hoerFehler || geigeFehler ? 1 : 0);
 })();
