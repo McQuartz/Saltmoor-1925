@@ -9,17 +9,17 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M0 Einrichten und Basis | fertig | Branch `claude/project-thread-flvf7e` (von der Sitzung vorgegeben), Text-Basis, Schalter, Dev-Reiter TIEFE |
 | M1 Welle 1: sieben Fixes | fertig | Panzer 15 %, Fragmente 75 |
 | M2 Kampf-HUD, Stoff-Baum, Plakette, Aufstellung | fertig | HUD, Baum, Plakette, 100 Stellplätze |
-| M3 Peilkarte und Fahrt nach vorne | offen | |
-| M4 Rucksack am Körper | offen | |
-| M5 Die Tiefe biegt die Regeln | offen | |
-| M6 Hören statt sehen | offen | |
-| M7 Sehen und gesehen werden | offen | |
-| M8 Die Farbe | offen | |
-| M9 Begegnungen | offen | |
-| M10 Metaebene | offen | |
-| M11 Würze | offen | |
-| M12 Balance und Abschluss | offen | |
-| Zugabe | offen | |
+| M3 Peilkarte und Fahrt nach vorne | fertig | Netz, Karte, Fahrt, 75 Weg-Richtungen |
+| M4 Rucksack am Körper | nicht begonnen | Stopp nach M3 (Mo) |
+| M5 Die Tiefe biegt die Regeln | nicht begonnen | Stopp nach M3 (Mo) |
+| M6 Hören statt sehen | nicht begonnen | Stopp nach M3 (Mo) |
+| M7 Sehen und gesehen werden | nicht begonnen | Stopp nach M3 (Mo) |
+| M8 Die Farbe | nicht begonnen | Stopp nach M3 (Mo) |
+| M9 Begegnungen | nicht begonnen | Stopp nach M3 (Mo) |
+| M10 Metaebene | nicht begonnen | Stopp nach M3 (Mo) |
+| M11 Würze | nicht begonnen | Stopp nach M3 (Mo) |
+| M12 Balance und Abschluss | nicht begonnen | Stopp nach M3 (Mo) |
+| Zugabe | nicht begonnen | Stopp nach M3 (Mo) |
 
 ## Basis (M0, unverändertes main)
 
@@ -131,6 +131,39 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
   - Haiku: Stellplätze aller 100 Szenen (`stell.json`)
 - Offen: Die Rückfallregel der Plaketten-Staffelung (Plakette weicht nach unten aus, wenn oben kein Platz ist) kam in keinem Test vor. Stumme Gegner gibt es in den Daten noch nicht (M6).
 
+### M3 Peilkarte im Nebel und Fahrt nach vorne
+
+**Plan.** Kern selbst: `js/core/netz.js` erzeugt beim Betreten eines Akts das ganze Netz aus dem Seed (gleiche Ebenen-Regeln wie das alte `genWeg`, das ersetzt ist), Folgen, Speicherstand, Wandbild hebt Nebel; `test-karte.js`, `test-speicher.js`. Jede Szene meldet ihre Kulisse (`sz.kulisse`), `data/fahrt.json` trägt je Kulisse Weg-Richtung und Zielpunkt, `chooseWeg` ruft die Fahrt (im FAST-Modus übersprungen, reine Animation). Parallel: Sonnet Peilkarte (Ansicht, Biom-Wahl, Taste M), Sonnet Fahrt-Renderer, Haiku Weg-Richtungen der 75 Kulissen. Danach jede Fahrt selbst als Bildfolge prüfen und korrigieren.
+
+**Schritte und Entscheidungen.**
+- **Netz:** je Ebene die Knoten nach `pool`, `wege`, `mindestens`, `verschiedene`, `einer_von`, `fest`, `fest_wahl`; Pfade nur zur nächsten Ebene, ohne Kreuzung, jeder Knoten hat Aus- und Eingang, alle führen zum Wächter. `S.weg` bleibt die Liste der erreichbaren Knoten, darum laufen Bots und Eingabe unverändert über `chooseWeg`.
+- **Folgen** (je Akt höchstens zwei, über den Seed): Abkürzung (überspringt eine Ebene, nur am oberen oder unteren Rand, damit sie nichts kreuzt, führt in einen schweren Kampf), Dunkler Stollen (leere, verschattete Raute bis direkt davor oder bis zum Wandbild), Brüchiger Gang.
+- **Brüchiger Gang:** Der Agent fand, dass ein Gang, der direkt am Ort der Tat hängt, nie hinter dem Nebel einstürzen kann (Sicht = Stelle + 2). Ich habe den Kern geändert: Der Gang hängt an einem Ort (`bruch.ort`, Werkstatt, Krämer oder Rast) und liegt mindestens drei Ebenen dahinter, also beim Einsturz immer im Nebel. Man hört das Rumpeln und sieht den Einsturz erst, wenn der Nebel weicht. `test-karte.js` prüft das für alle Netze aus 150 Seeds. Dadurch kommt der Gang seltener vor (80 statt 197 in 750 Netzen).
+- **Kulisse:** Alle 25 Biome bauen Kampf, Ereignis, Krämer usw. auf drei Hintergründe. `World.build` meldet jetzt `kulisse` (0, 1, 2 oder `waechter`), der Schlüssel für die Fahrt ist `biom:kulisse` (75 Einträge).
+- **Weg-Richtungen:** Haiku schlug 75 vor (32 unsicher). Ich habe alle 75 Bildfolgen (Anfang, Mitte, Ende) angesehen und 14 korrigiert, wo die Fahrt in eine Wand lief: fabrik:1, funkstation:1, glockengiesserei:2, kapelle:2, kurhaus:1, leuchtturm:2, stadt:0/1/2, station:0/1/2 (station:2 jetzt `auf`, die Treppe), wald:1, ziegelgruben:2. gezeitenwerk:2 (Zahnräder ringsum) bleibt `vor`, weil jede Seite gleich zugebaut ist.
+- **Fahrt:** Ebenen mit Nähe je Tiefe, Boden in Streifen zu 2 Zeilen, `links`/`rechts` erst gegenläufige Drehung, dann Drift; danach gedithertes Nebel-Überblenden in den Nebelfarben des Bioms. Einstellung „Übergänge kürzer“ halbiert die Dauer (Kästchen im Einstellungs-Dialog).
+- **Peilkarte:** Canvas 720×405 (Kartenpixel = 2/3 Szenenpixel, also feiner), unsichtbare Knöpfe über den Rauten, Kopfleiste wie im Kampf mit Knopf „Karte“, Taste M und Esc, im Kampf nur lesend. Platz für die Regelbiegung liest `BIOMES[b].biegung` (kommt in M5, bis dahin leer ohne Hinweis).
+- **Entfernt:** die alte Wegwahl (`wegHtml` zeigt die Karte), Überschrift „WOHIN?“ (in `texte-entfernt.json` mit Grund). Alle übrigen Texte der alten Wegwahl stehen wörtlich in der Karte oder ihren Tooltips.
+
+#### Abnahme M3
+- Abnahmekriterien:
+  - `test-karte.js` grün: ✓ `Netze: 750, Knoten: 10313, Folgen: {"bruch":80,"kurz":125,"dunkel":238}` → `Alles gut.`
+  - `test-speicher.js` grün: ✓ 30 Seeds, 240 Prüfungen (Netz, Position, gegangene Wege, Nebel, Einsturz nach Laden gleich, Weiterspielen im selben Netz) → `Alles gut.`
+  - Fotos der Karte neben [karte-b-peilkarte.png](vorlagen/karte-b-peilkarte.png), je in drei Auflösungen: ✓ [Aktanfang](bilder/M3/karte-anfang-1440x900.png), [nach zwei Schritten](bilder/M3/karte-zwei-schritte-1440x900.png), [nach dem Wandbild](bilder/M3/karte-wandbild-1440x900.png), [Einsturz verborgen](bilder/M3/karte-bruch-verborgen-1440x900.png), [Einsturz aufgedeckt](bilder/M3/karte-bruch-sichtbar-1440x900.png), [Dunkler Stollen](bilder/M3/karte-dunkel-1440x900.png), [Biom-Wahl](bilder/M3/karte-biomwahl-1440x900.png), [im Kampf, nur lesend](bilder/M3/karte-im-kampf-1440x900.png)
+  - Bildfolgen der Fahrt je Biom: ✓ [bilder/M3/fahrt/](bilder/M3/fahrt/) (25 Bögen, je Kulisse Anfang, Mitte, Ende), dazu [im Spiel](bilder/M3/fahrt/spiel-2.png)
+  - Autospieler 50 Seeds, Ø Knoten je Run wie Basis (±2): ✓ 48 %, 0 Fehler ([balance-50.txt](bilder/M3/balance-50.txt)); Knoten je vollem Run 31, 31, 31, 31, 31, 30, 31, 31, 31, 28 (Ø 30,6, Basis 31; die Abkürzung spart eine Ebene)
+- Tests ([tests-nachher.txt](bilder/M3/tests-nachher.txt)): test-run → `Alles gut.`; test-deckbau → `Alles gut.`; test-ereignisse → `Alles gut.`; test-vorschau → `Gespielte Karten mit Vorschau: 400, Abweichungen: 0`; test-welle1 → `Alles gut.`; test-stoffbaum → `Alles gut (33 Prüfungen).`; test-karte → `Alles gut.`; test-speicher → `Alles gut.`; test-plakette → `Alles gut.`; test-oberflaeche → `Alles gut.`; test-karte-ui → `Alles gut.` (1500 Karten, 26035 Pfade, keine Kreuzung)
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 237, alle als Entwurf markiert.`
+- Bots: generisch 50 Seeds 48 % (Basis 48 %), Ø 3,9 Züge je Kampf, 0 Fehler.
+- Bilder: oben, selbst angesehen: ja (Karte zwei Schritte, Einsturz aufgedeckt, Biom-Wahl bei 1440×900 neben der Vorlage; alle 25 Fahrt-Bögen und die 14 korrigierten Fahrten erneut)
+- Regelprüfung: Folgen auf der Karte: 7/7 bestanden (Tabelle in „Regelprüfung“)
+- Abweichungen von Vorlage oder Konzept: Nebel gedithert statt weich (Regel: kein Weichzeichner); Brüchiger Gang hängt an einem Ort drei Ebenen davor (Grund oben); das Kurzbild der Biom-Wahl ist ein kleines Netz aus dem Seed, keine Szene; Spuren (M9) fehlen noch.
+- Agenten:
+  - Sonnet: Peilkarte (`karte.js`, `karte.css`, Biom-Wahl, Taste M, `test-karte-ui.js`)
+  - Sonnet: Fahrt-Renderer (`fahrt.js`, `fahrt-bogen.js`)
+  - Haiku: Weg-Richtung und Zielpunkt der 75 Kulissen (`fahrt.json`)
+- Offen: Die Fahrt hat bei großen Verschiebungen dunkle Ränder, wo hinter einer nahen Ebene nichts gemalt ist (nachtzug Gangende), und stehende Dinge kippen am Rand leicht. Die Klänge für Rumpeln und Nebel sind nur im Code geprüft (headless kein Ton).
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -149,6 +182,18 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
 
 Lovecraft-Prinzip: das Unbegreifliche hängt an etwas Sichtbarem (Diener tragen den Schutz), Fix des Konzepts, nicht neue Wucht.
 
+### M3 Folgen auf der Karte (Abkürzung, Brüchiger Gang, Dunkler Stollen)
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | Die Wegwahl wird zur Abwägung über mehrere Ebenen (Abkürzung gegen schweren Kampf, Werkstatt gegen späteren Gang) |
+| Das Deck bleibt deins | Ja | Keine Folge berührt das Deck |
+| Selten ist stark | Ja | Höchstens zwei Folgen je Akt; der Brüchige Gang in rund jedem zehnten Netz |
+| Kein Fragezeichen | Ja | Der Dunkle Stollen ist eine leere Raute ohne „?“; der Riss im Gang ist sichtbar, aber ohne Warnzeichen |
+| Einwilligung vor Kontrollverlust | Ja | Der Einsturz nimmt nur einen von mehreren Wegen, jeder Knoten behält einen Ausgang |
+| Unheimlich, nicht anstrengend | Ja | Man hört ein Rumpeln im Nebel und sieht später den verschütteten Gang; nichts zu zählen |
+| Nie Herkunft als Bedrohung | Nein | Rein räumlich |
+
 ## Noten
 
 *Je neues Bild: Name, Note, Bildpfad, Kurzbegründung.*
@@ -161,9 +206,21 @@ Lovecraft-Prinzip: das Unbegreifliche hängt an etwas Sichtbarem (Diener tragen 
 
 - **M0, Branch:** Die Sitzung gibt `claude/project-thread-flvf7e` vor, darum dieser Name statt `auftrag/run-3` (01-regeln.md Abschnitt 7 erlaubt das).
 - **M0, Ausführung:** Mo hat den Auftrag am 2026-11-09 in einer Projekt-Sitzung gestartet („do it all in succession and in the cloud“).
+- **M3, Umfang:** Mo hat während M3 entschieden, nach M3 aufzuhören („we can stop after m3“). M4 bis M12 und die Zugabe sind nicht begonnen.
+- **M3, Agenten-Arbeitsbäume:** Zwei Worktrees entstanden auf altem `main` statt auf dem Branch; die Agenten haben sie selbst auf den Branch-Stand gebracht. Ihre Änderungen habe ich als Diff gelesen und übernommen.
 
 ## Rückgaben an Sub-Agenten
+
+- Keine Rückgabe nötig. In M3 habe ich zwei Punkte selbst nachgezogen statt zurückzugeben, weil sie außerhalb der erlaubten Dateien lagen: den Einsturz im Nebel (Kern) und das Kästchen „Übergänge kürzer“ (`ueberlagerungen.js`).
 
 ## Probleme
 
 ## Bericht
+
+Stand nach M3 (Stopp auf Wunsch von Mo). Fertig und abgenommen: M0 bis M3.
+
+- **M1:** Alle sieben Fixes sind drin. Dazu gehören 75 Fragmente (54 neu, Entwurf), die Beutesätze ohne Ersatztext und dass nach dem Gegnerzug keine Absicht mehr zu sehen ist. Außerdem: ehrliche Absichten ohne Durchstreichen, die Schraffur im Balken, Verstärkt für Ziehen, Stärke und Gold, und Panzer statt Unverwundbarkeit. Den Panzer habe ich auf 15 % des Lebens gemessen, ein Panzer-Zug verlängert den Kampf damit um etwa 0,9 Züge.
+- **M2:** Das HUD hat Variante 2. Der Stoff-Baum ersetzt das Stoffrad, es gibt eine Gegner-Plakette und 100 Stellplätze für Gegner. Im Kampf gibt es keine Kamera mehr und keine Fragezeichen.
+- **M3:** Die Peilkarte im Nebel ist das ganze Netz des Akts, mit Abkürzung, Brüchigem Gang und Dunklem Stollen. Das Wandbild hebt den Nebel, und das Netz liegt im Speicherstand. Nach jeder Wahl folgt eine Fahrt nach vorne durch die Ebenen, mit geprüfter Weg-Richtung für alle 75 Kulissen.
+- **Bots:** Die Siegrate liegt durchgehend bei 48 % wie die Basis, ohne Fehler.
+- **Für Philip und Mo zum Ansehen:** die neuen Texte (Fragmente, Panzer-Tooltip, Kartenwörter „UNKARTIERT“, „Aufbruch“, „Wähle den nächsten Abschnitt …“, „Übergänge kürzer“) und die Fotos unter `bilder/M1` bis `bilder/M3`.

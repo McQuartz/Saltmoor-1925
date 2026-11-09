@@ -89,14 +89,15 @@ function bauPicks(){S=probeS({phase:'kraemer'});
  $('picks').innerHTML=`<div class="box"><div class="innen"><div class="picks">${ids.map((id,i)=>itemPick(id,'',i===1?`<div class="preis">${BAL.shop.rare_price} GOLD</div>`:i===2?'<div class="preis">28 GOLD</div>':'')).join('')}</div></div></div>`;}
 
 function bauPanels(){const out=[];
- S=probeS({phase:'weg',ebene:2,weg:[{art:'kampf',hint:(BIOMES.hafen.weg_hinweise.kampf||[''])[0]},{art:'ereignis',hint:((BIOMES.hafen.weg_hinweise.ereignis||[''])[0])},{art:'waechter',hint:((BIOMES.hafen.weg_hinweise.waechter||['Der Lotse wartet.'])[0]),foes:[BIOMES.hafen.waechter]}]});
- out.push(spec('Weg-Wahl',`<div class="panelbox">${wegHtml()}</div>`));
+ S=probeS({phase:'weg',ebene:2});S.netz=netzBauen();S.netz.pos=[1,0];S.netz.gegangen=[[0,0],[1,0]];S.ebene=1;S.weg=netzAusgaenge(S.netz,S.netz.pos).map(k=>({...S.netz.ebenen[k.b[0]][k.b[1]],ziel:k.b,kurz:!!k.kurz}));window.kartenS=S;
+ out.push(spec('Weg-Wahl',`<div class="panelbox" style="padding:0"><div style="position:relative;width:calc(var(--u)*480);height:calc(var(--u)*270)">${wegHtml()}</div></div>`));
  const ev=EVENTS.find(e=>e.stummfilm)||EVENTS.find(e=>e.biom==='hafen')||EVENTS[0];
  if(ev){S=probeS({phase:'event',event:ev.id,gold:12});out.push(spec('Ereignis als Zettel'+(ev.o.some(o=>o.if)?' (eine Option gesperrt)':''),`<div class="panelbox" style="width:760px">${eventHtml()}</div>`));}
  const fr=FRAGS.find(f=>f.schaltet&&f.schaltet.art==='item')||FRAGS[0];
  if(fr){S=probeS({phase:'wandbild',frag:fr.id,fragNeu:fr.schaltet&&fr.schaltet.art==='item'?[{n:ITEMS[fr.schaltet.id]?.n||fr.schaltet.id}]:[],route:[fr.biom,'kapelle','salz','eis','pforte']});
   out.push(spec('Wandbild mit Relief und Zettel',`<div class="panelbox">${wandbildHtml()}</div>`));$('panels').innerHTML=out.join('');try{reliefMalen();}catch(e){console.warn('Relief',e);}}
- else $('panels').innerHTML=out.join('');}
+ else $('panels').innerHTML=out.join('');
+ {const alt=S;S=window.kartenS;try{karteNach();}catch(e){console.warn('Karte',e);}S=alt;}}
 
 // ---------- (2) Pixelzeichen ----------
 function bauZeichen(){const kachel=(k,n,col)=>`<div class="zeichen"><div class="gr">${[9,18,36,54].map(s=>gi(k,s,col)).join('')}</div><div class="zn">${esc(n)}</div><div class="zk">${esc(k)}</div></div>`;

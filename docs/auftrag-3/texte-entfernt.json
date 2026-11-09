@@ -1,4 +1,9 @@
 {
  "_doc": "Feste Oberflächen-Texte aus texte-basis.json, die Auftrag 3 bewusst entfernt, weil die Anzeige ersetzt wird. Je Eintrag Text und Grund. Wird von tools/texte-pruefen.js gelesen.",
- "entfernt": []
+ "entfernt": [
+  {
+   "text": "WOHIN?",
+   "grund": "M3: Die Peilkarte ersetzt die alte Wegwahl (05-oberflaeche.md Abschnitt 7); die Überschrift trug ein Fragezeichen (Regel „Kein Fragezeichen“). Steht nur noch im toten render.js."
+  }
+ ]
 }

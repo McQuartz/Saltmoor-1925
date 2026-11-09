@@ -84,3 +84,7 @@ Bus.on('reward',({items,hg})=>{if(FAST)return;const n=(hg||[]).length+(items||[]
 // Mit kniff.klang = 'glocke' (Glockengießerei): ein Glockenschlag statt des Herzschlags, ein Ruck, bronzenes Aufleuchten
 Bus.on('herzschlag',({e,klang})=>{if(FAST)return;if(klang==='glocke'){if(typeof sfx!=='undefined'&&sfx.glocke)sfx.glocke();FX.shake(4);FX.flash('#6a4a1a',.16);return;}
  if(typeof thump==='function'){thump(70,34,.35,.5,0,true);thump(64,30,.3,.38,.24,true);}FX.shake(3);FX.flash('#5a0a0a',.18);setTimeout(()=>FX.shake(2),240);});
+// Peilkarte (M3): Ein brüchiger Gang hinter dem Nebel stürzt ein: nur zu hören, dumpf und tief (kein Bild, keine Meldung). Das Wandbild hebt den Nebel: ein langer Luftzug.
+Bus.on('rumpeln',()=>{thump(54,26,.95,.5,0,true);nzx({f:190,fEnd:70,type:'lowpass',q:.7,v:.26,dur:1.2,a:.08,sat:true});
+ thump(46,24,.75,.34,.42,true);nzx({f:150,fEnd:60,type:'lowpass',q:.7,v:.16,dur:.9,a:.05,delay:.4});nzx({f:2400,type:'highpass',q:.7,v:.03,dur:.3,delay:.5});});
+Bus.on('nebel_weg',()=>{nz(600,1.8,.07,.7,{fEnd:2800,a:.55});nz(1400,1.4,.03,1.2,{fEnd:4200,a:.7,delay:.25});tn(mf(harm().root+12),1.8,'sine',.035,0,.1,{a:.7,pan:-.2});tn(mf(harm().root+19),1.8,'sine',.025,0,.3,{a:.7,pan:.2});});

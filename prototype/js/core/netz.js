@@ -3,7 +3,7 @@
 // Pfade nur zur nächsten Ebene (Ausnahme: Abkürzung), jeder Knoten hat einen Ausgang, Pfade kreuzen sich nicht, alle führen zum Wächter.
 // Das Netz liegt in S.netz (Speicherstand). S.weg bleibt die Liste der jetzt erreichbaren Knoten (für Bot, Tests und Eingabe).
 //
-// S.netz = { akt, biom, ebenen: [[knoten…]…], kanten: [{a:[e,i], b:[e,j], bruch?, weg?, kurz?}], pos: [e,i] | null, gegangen: [[e,i]…],
+// S.netz = { akt, biom, ebenen: [[knoten…]…], kanten: [{a:[e,i], b:[e,j], bruch?:{tat, ort:[e,i], weg}, kurz?}], pos: [e,i] | null, gegangen: [[e,i]…],
 //            klar: bool (Wandbild gelesen: Nebel bis zum Wächter weg), folgen: [art…] }
 // Knoten = { art, hint, foes?, i, dunkel? }
 
@@ -48,10 +48,14 @@ function netzBauen(){const r=R(`netz:${S.akt}:${biomId()}`);const eb=aktDef().eb
 function netzFolgen(N,r){if(N.ebenen.length<5)return;const F=(BAL.karte&&BAL.karte.folgen)||{bruch:.6,kurz:.35,dunkel:.45};
  const moegl=r.shuffle(['bruch','kurz','dunkel']).filter(f=>r.chance(F[f]??.4)).slice(0,2);
  for(const f of moegl){
-  if(f==='bruch'){// ein Pfad von einer Werkstatt, einem Krämer oder einer Rast, der einstürzt, wenn man dort etwas tut; der Knoten behält einen Ausgang
+  if(f==='bruch'){// Brüchiger Gang: wer an einer Werkstatt, einem Krämer oder einer Rast etwas tut (ort), lässt einen Gang weiter vorn einstürzen.
+   // Der Gang liegt mindestens drei Ebenen hinter dem Ort, also im Nebel (Sicht = Stelle + 2): man hört das Rumpeln, sieht den Einsturz erst später.
+   // Der Knoten vor dem Gang behält einen Ausgang, das Ziel einen Eingang.
    const tat={werkstatt:'schmieden',kraemer:'kaufen',rast:'rasten'};
-   const kand=N.kanten.filter(k=>{const v=N.ebenen[k.a[0]][k.a[1]];return tat[v.art]&&N.kanten.filter(l=>l.a[0]===k.a[0]&&l.a[1]===k.a[1]).length>1&&N.kanten.filter(l=>l.b[0]===k.b[0]&&l.b[1]===k.b[1]).length>1;});
-   if(kand.length){const k=r.pick(kand);k.bruch={tat:tat[N.ebenen[k.a[0]][k.a[1]].art],weg:false};N.folgen.push('bruch');}}
+   const orte=[];N.ebenen.forEach((l,e)=>l.forEach((v,i)=>{if(tat[v.art])orte.push([e,i]);}));
+   const frei=k=>N.kanten.filter(l=>l.a[0]===k.a[0]&&l.a[1]===k.a[1]).length>1&&N.kanten.filter(l=>l.b[0]===k.b[0]&&l.b[1]===k.b[1]).length>1&&!k.kurz;
+   const kand=[];for(const o of orte)for(const k of N.kanten)if(frei(k)&&k.a[0]>=o[0]+3)kand.push([o,k]);
+   if(kand.length){const[o,k]=r.pick(kand);k.bruch={tat:tat[N.ebenen[o[0]][o[1]].art],ort:o,weg:false};N.folgen.push('bruch');}}
   if(f==='kurz'){// Abkürzung: ein Pfad überspringt eine Ebene und führt direkt in einen schweren Kampf
    const kand=[];for(let e=0;e+2<N.ebenen.length-1;e++)N.ebenen[e].forEach((v,i)=>N.ebenen[e+2].forEach((w,j)=>{if(w.art==='kampf_schwer')kand.push({a:[e,i],b:[e+2,j],kurz:true});}));
    // nur am oberen oder unteren Rand, damit die Abkürzung keinen Pfad der übersprungenen Ebene kreuzt
@@ -82,8 +86,8 @@ function netzGehe(o){const N=S.netz;if(!N||!o.ziel)return;N.pos=o.ziel;N.gegange
  // verlorene Wege: alle Knoten der verlassenen Ebenen, die nicht gegangen wurden, verblassen in der Ansicht (über gegangen ablesbar)
  if(o.kurz)Bus.emit('abkuerzung',{why:'Abkürzung: eine Ebene übersprungen, direkt in einen schweren Kampf'});}
 
-// Etwas an einem Knoten tun (schmieden, kaufen, rasten): ein brüchiger Gang von hier stürzt ein, man hört es nur
-function netzTat(tat){const N=S.netz;if(!N||!N.pos)return;for(const k of N.kanten)if(k.bruch&&!k.bruch.weg&&k.bruch.tat===tat&&k.a[0]===N.pos[0]&&k.a[1]===N.pos[1]){k.bruch.weg=true;Bus.emit('rumpeln',{why:`Ein Gang hinter dem Nebel stürzt ein (${tat})`});}}
+// Etwas an einem Knoten tun (schmieden, kaufen, rasten): der brüchige Gang, der an diesem Ort hängt, stürzt ein (im Nebel), man hört es nur
+function netzTat(tat){const N=S.netz;if(!N||!N.pos)return;for(const k of N.kanten)if(k.bruch&&!k.bruch.weg&&k.bruch.tat===tat&&k.bruch.ort&&k.bruch.ort[0]===N.pos[0]&&k.bruch.ort[1]===N.pos[1]){k.bruch.weg=true;Bus.emit('rumpeln',{why:`Ein Gang hinter dem Nebel stürzt ein (${tat})`});}}
 
 // Wandbild gelesen: Nebel bis zum Wächter weg
 function netzKlar(){if(S.netz&&!S.netz.klar){S.netz.klar=true;Bus.emit('nebel_weg',{why:'Wandbild gelesen: die Karte ist bis zum Wächter klar'});}}

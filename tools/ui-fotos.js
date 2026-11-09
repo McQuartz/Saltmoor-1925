@@ -39,7 +39,15 @@ const WEG = {
   sackgasse: { s: 'kampf', akt: 1, nach: `S.enemies=biom().gegner.slice(0,2).map(id=>mkEnemy(id));aufstellen(S.enemies);S.last=['F'];S.chainLog=[{turn:S.turn,st:['F'],prev:[],rx:[]}];S.energy=0;S.hand=S.hand.filter(c=>cardCost(c)>0);render();` },
   hochreaktion: { s: 'kampf', akt: 1, nach: `S.enemies=biom().gegner.slice(0,2).map(id=>mkEnemy(id));aufstellen(S.enemies);S.last=['F','G'];S.chainLog=[{turn:S.turn,st:['F','G'],prev:[],rx:[]}];const c=[...S.hand,...S.draw,...S.discard].find(c=>c.st.includes('S'));if(c&&!S.hand.includes(c))S.hand.unshift(c);S.energy=3;render();` },
   schutz: { s: 'waechter', akt: 1, nach: `S.enemies=[mkEnemy('heimleiterin'),mkEnemy('zwillinge')];aufstellen(S.enemies);const b=S.enemies[0];b.pi=b.pat.findIndex(p=>p.unverw);panzerZugbeginn();render();` },
-};
+  // M3 (Peilkarte): feste Seeds, die Folgen werden im Spiel selbst gesucht (wie in tools/test-karte.js)
+  'karte-anfang': { s: 'weg', akt: 0 },
+  'karte-zwei-schritte': { s: 'weg', akt: 0, nach: `(()=>{const schritt=()=>{const i=S.weg.findIndex(o=>o.art==='kampf'||o.art==='ereignis');chooseWeg(i<0?0:i);S.phase='x';finishNode();};schritt();schritt();})();` },
+  'karte-wandbild': { s: 'weg', akt: 0, nach: `(()=>{const i=S.weg.findIndex(o=>o.art==='kampf');chooseWeg(i<0?0:i);S.phase='x';finishNode();netzKlar();render();})();` },
+  'karte-bruch-verborgen': { s: 'weg', akt: 0, nach: `(()=>{for(let s=1;s<700;s++){newRun('fischer',s,{dev:true});S.route=RUN.akte.map(a=>a.biome[0]);S.akt=0;S.ebene=0;S.netz=null;genWeg();const N=S.netz;const k=N.kanten.find(k=>k.bruch);if(!k)continue;N.pos=k.bruch.ort;N.gegangen=[k.bruch.ort];netzTat(k.bruch.tat);genWeg();break;}})();` },
+  'karte-bruch-sichtbar': { s: 'weg', akt: 0, nach: `(()=>{for(let s=1;s<700;s++){newRun('fischer',s,{dev:true});S.route=RUN.akte.map(a=>a.biome[0]);S.akt=0;S.ebene=0;S.netz=null;genWeg();const N=S.netz;const k=N.kanten.find(k=>k.bruch);if(!k)continue;N.pos=k.bruch.ort;N.gegangen=[k.bruch.ort];netzTat(k.bruch.tat);N.pos=[k.a[0]-1,0];N.gegangen.push(N.pos);genWeg();break;}})();` },
+  'karte-dunkel': { s: 'weg', akt: 0, nach: `(()=>{for(let s=1;s<700;s++){newRun('fischer',s,{dev:true});S.route=RUN.akte.map(a=>a.biome[0]);S.akt=0;S.ebene=0;S.netz=null;genWeg();const N=S.netz;let z=null;N.ebenen.forEach((l,e)=>l.forEach((v,i)=>{if(v.dunkel)z=[e,i];}));if(!z)continue;N.pos=[z[0]-2,0];N.gegangen=[N.pos];genWeg();break;}})();` },
+  'karte-biomwahl': { s: null, nach: `S.akt=1;S.route[1]=null;enterAct();render();` },
+  'karte-im-kampf': { s: 'weg', akt: 0, nach: `(()=>{const i=S.weg.findIndex(o=>o.art==='kampf');chooseWeg(i<0?0:i);setTimeout(()=>karteUmschalten(),500);})();`, warte: 2200 },};
 (async () => {
   fs.mkdirSync(out, { recursive: true });
   const b = await chromium.launch(); const fehler = [];

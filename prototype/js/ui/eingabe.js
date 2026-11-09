@@ -21,7 +21,7 @@ document.addEventListener('pointermove',e=>{
   else{d.el.style.transform=`translate(${(e.clientX-d.x0)/(BU.s||1)}px,${(e.clientY-d.y0)/(BU.s||1)}px) rotate(${(e.clientX-d.x0)*.03}deg) scale(1.06)`;$('szene').classList.toggle('drop',inScene(e.clientX,e.clientY));}
   return;}
  if(!down&&e.target.closest){const sl=e.target.closest('.slot[data-loc]');const cd=e.target.closest('[data-card]');
-  const hv=hoverVorschau(e.target);const fd=S.phase==='fight'&&e.target.closest('.feind[data-ei]');if(hv)showTip(hv,e.clientX,e.clientY);else if(fd&&!cd)showTip(feindTip(+fd.dataset.ei),e.clientX,e.clientY);else if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
+  const hv=hoverVorschau(e.target);const fd=S.phase==='fight'&&e.target.closest('.feind[data-ei]');const kt=e.target.closest('.kn,.kstart,.kbieg');const ktt=kt?karteTip(kt):'';if(ktt)showTip(ktt,e.clientX,e.clientY);else if(hv)showTip(hv,e.clientX,e.clientY);else if(fd&&!cd)showTip(feindTip(+fd.dataset.ei),e.clientX,e.clientY);else if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
   const hi=cd?+cd.dataset.card:-1;if(hi!==hoverCard){hoverCard=hi;setVorschau(hi,-1);}}
  if(!down||!down.has)return;if(!down.drag&&Math.hypot(e.clientX-down.x,e.clientY-down.y)>5){down.drag=true;hideTip();$('ghost').src=itemBild(getAt(down.loc).id);$('ghost').style.display='block';}
  if(down.drag){$('ghost').style.left=(e.clientX-20)+'px';$('ghost').style.top=(e.clientY-20)+'px';}});
@@ -39,7 +39,7 @@ document.addEventListener('click',e=>{
  const en=e.target.closest('.feind[data-ei]');if(en&&S.phase==='fight'){S.target=+en.dataset.ei;sfx.click();render();return;}
  const a=e.target.closest('[data-act]');if(a){aktion(a.dataset.act,a);return;}
  const bw=e.target.closest('[data-biom]');if(bw){chooseBiom(+bw.dataset.biom);return;}
- const w=e.target.closest('[data-weg]');if(w){chooseWeg(+w.dataset.weg);return;}
+ const w=e.target.closest('[data-weg]');if(w){hideTip();chooseWeg(+w.dataset.weg);return;}
  const bu=e.target.closest('[data-buy]');if(bu){buy(bu.dataset.buy);return;}
  const rsl=e.target.closest('[data-rs]');if(rsl){rsKlick(rsl.dataset.rs);return;}
  const hgp=e.target.closest('[data-hg]');if(hgp){takeHandgriff(hgp.dataset.hg);return;}
@@ -60,7 +60,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.einst;if(!k)return;const v=e.target.type==='checkbox'?e.target.checked:e.target.tagName==='SELECT'?+e.target.value:+e.target.value;Einst.set(k,v);});
 function aktion(k,el){switch(k){
  case'end':endTurn();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
- case'weiter':leaveUebergang();break;case'neu':S={phase:'figur',wahlStufe:Meta.get().stufe||0};render();break;case'titel':S={phase:'titel'};render();break;
+ case'karte':karteUmschalten();break; case'weiter':leaveUebergang();break;case'neu':S={phase:'figur',wahlStufe:Meta.get().stufe||0};render();break;case'titel':S={phase:'titel'};render();break;
  case'fortsetzen':loadRun();render();break;case'rastHeil':rastHeal();break;case'fund':takeFund();break;
  case'skipstrike':skipStrike();break;case'kstrike0':kraemerStrike(null);break;
  case'buch':zeigeOverlay(buchHtml());break;case'tagebuch':zeigeOverlay(tagebuchHtml());break;case'einst':zeigeOverlay(einstHtml());break;case'zu':closeOv();break;
@@ -77,7 +77,8 @@ function aktion(k,el){switch(k){
 function starteRun(job){const st=S.wahlStufe||0;const q=new URLSearchParams(location.search);const seed=q.get('seed')!=null&&!S.seedUsed?+q.get('seed'):neuerSeed();
  const start=S.wahlStart||null;newRun(job,seed,{dev:typeof Dev!=='undefined'&&Dev.cheat,stufe:st,start});Meta.get().stufe=st;Meta.save();render();}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
- if(e.key==='Escape'){S.sel=null;closeOv();render();}
+ if(e.key==='Escape'){S.sel=null;karteZu();closeOv();render();}
+ if((e.key==='m'||e.key==='M')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.repeat)karteUmschalten();
  if(e.key==='d'||e.key==='D'){if(typeof Dev!=='undefined')Dev.toggle();}
  if((e.key==='r'||e.key==='R')&&S.route&&canEquip()){if(RS){RS=null;closeOv();}else rucksackAuf();}
  if(S.phase==='fight'&&!busy){if(e.key===' '||e.key==='e'){e.preventDefault();endTurn();}const n=+e.key;if(n>=1&&n<=9)playCard(n-1);}

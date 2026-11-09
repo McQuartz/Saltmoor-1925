@@ -49,9 +49,13 @@ let fehler = 0; const ok = (c, m) => { if (!c) { fehler++; if (fehler < 30) cons
   ok(JSON.stringify(g.weg) === JSON.stringify(g.soll), `danach: nur die Ausgänge des Knotens (${JSON.stringify(g.weg)} / ${JSON.stringify(g.soll)})`);
   // Brüchiger Gang: vor der Tat begehbar, danach weg, Rumpeln
   const b = JSON.parse(run(`(()=>{for(let s=1;s<400;s++){newRun('fischer',s,{dev:true});S.route=RUN.akte.map(a=>a.biome[0]);S.akt=0;S.ebene=0;S.netz=null;genWeg();const k=S.netz.kanten.find(k=>k.bruch);if(!k)continue;
-    S.netz.pos=k.a;const vor=netzAusgaenge(S.netz,k.a).includes(k);let rum=0;Bus.on('rumpeln',()=>rum++);netzTat('falsch');const nachFalsch=netzAusgaenge(S.netz,k.a).includes(k);netzTat(k.bruch.tat);
-    const nach=netzAusgaenge(S.netz,k.a).includes(k);return JSON.stringify({s,vor,nachFalsch,nach,rum,rest:netzAusgaenge(S.netz,k.a).length});}return '{}';})()`));
-  ok(b.vor && b.nachFalsch && !b.nach && b.rum === 1 && b.rest >= 1, `Brüchiger Gang (Seed ${b.s}): vorher ${b.vor}, nach anderer Tat ${b.nachFalsch}, nach der Tat ${b.nach}, Rumpeln ${b.rum}, Ausgänge übrig ${b.rest}`);
+    S.netz.pos=k.bruch.ort;const imNebel=k.a[0]>netzSicht(S.netz);const vor=netzAusgaenge(S.netz,k.a).includes(k);let rum=0;Bus.on('rumpeln',()=>rum++);netzTat('falsch');const nachFalsch=netzAusgaenge(S.netz,k.a).includes(k);
+    S.netz.pos=k.a;netzTat(k.bruch.tat);const amGang=netzAusgaenge(S.netz,k.a).includes(k);S.netz.pos=k.bruch.ort;netzTat(k.bruch.tat);
+    const nach=netzAusgaenge(S.netz,k.a).includes(k);return JSON.stringify({s,vor,nachFalsch,amGang,nach,rum,imNebel,rest:netzAusgaenge(S.netz,k.a).length});}return '{}';})()`));
+  ok(b.vor && b.nachFalsch && b.amGang && !b.nach && b.rum === 1 && b.rest >= 1 && b.imNebel, `Brüchiger Gang (Seed ${b.s}): vorher ${b.vor}, nach anderer Tat ${b.nachFalsch}, nach der Tat am Gang selbst ${b.amGang}, nach der Tat am Ort ${b.nach}, Rumpeln ${b.rum}, Ausgänge übrig ${b.rest}, Gang beim Einsturz im Nebel ${b.imNebel}`);
+  // Jeder brüchige Gang liegt beim Einsturz im Nebel (mindestens drei Ebenen hinter dem Ort)
+  { let n = 0, sicht = 0; for (let s = 1; s <= 150; s++) { const r = JSON.parse(run(`(()=>{newRun('fischer',${s},{dev:true});S.route=RUN.akte.map(a=>a.biome[0]);const o=[];for(let a=0;a<4;a++){S.akt=a;S.ebene=0;S.netz=null;genWeg();const k=S.netz.kanten.find(k=>k.bruch);if(k){S.netz.pos=k.bruch.ort;o.push(k.a[0]>netzSicht(S.netz));}}return JSON.stringify(o)})()`)); r.forEach(x => { n++; if (!x) sicht++; }); }
+    ok(n > 0 && sicht === 0, `Brüchige Gänge: ${n}, davon beim Einsturz sichtbar ${sicht} (soll 0)`); }
   // Nebel und Wandbild
   const w = JSON.parse(run(`(()=>{newRun('fischer',11,{dev:true});S.route=RUN.akte.map(a=>a.biome[0]);S.akt=0;S.ebene=0;S.netz=null;genWeg();const a=netzSicht(S.netz);netzKlar();return JSON.stringify({a,b:netzSicht(S.netz),L:S.netz.ebenen.length-1});})()`));
   ok(w.a === 1 && w.b === w.L, `Nebel: am Aktanfang sichtbar bis Ebene ${w.a} (soll 1), nach dem Wandbild bis ${w.b} (soll ${w.L})`);
