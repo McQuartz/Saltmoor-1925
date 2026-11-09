@@ -14,7 +14,7 @@
    "n": "Der Vormund",
    "biom": "waisenhaus",
    "rang": "elite",
-   "hp": 90,
+   "hp": 82,
    "weak": "L",
    "pat": [
     {
@@ -45,13 +45,9 @@
    },
    "kniffe": [
     {
-     "art": "ruf",
-     "gegner": [
-      "zugedeckte",
-      "zwillinge"
-     ],
-     "alle": 3,
-     "why": "Er schlägt den Mantel auf, und eines tritt heraus."
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Er hält den Mantel vor seine Mündel."
     }
    ],
    "beute": "muendelakte",

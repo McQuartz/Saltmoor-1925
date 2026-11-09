@@ -1,0 +1,80 @@
+{
+ "id": "nachtzug_neu",
+ "ergaenzt": "nachtzug",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "geiger"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "kolophonium"
+ ],
+ "foes": {
+  "geiger": {
+   "n": "Der Stehgeiger",
+   "biom": "nachtzug",
+   "rang": "elite",
+   "hp": 72,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 10
+    }
+   ],
+   "sprite": "geiger",
+   "konzept": "Er spielt im Speisewagen, seit der Zug fährt, und er spielt immer das, was eben gesprochen wurde, nur einen Takt später. Der Kopf liegt auf der Geige wie auf einem Kissen, die Augen geschlossen und doch hell, und der Bogen ist so lang wie er selbst.",
+   "stimme": "chorknabe",
+   "kniff": {
+    "art": "kopie",
+    "why": "Er spielt nach, was du eben gespielt hast. Einen Takt später, gegen dich."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Wer im Speisewagen sitzt, hört ihm zu und bleibt sitzen."
+    }
+   ],
+   "beute": "kolophonium",
+   "beute_satz": "Die Geige spielt den letzten Takt allein zu Ende.",
+   "quelle": "skript"
+  }
+ },
+ "events": [],
+ "items": {
+  "kolophonium": {
+   "n": "Kolophonium",
+   "a": "talisman",
+   "st": [
+    "B"
+   ],
+   "spr": "salt",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 40,
+   "eigen": {
+    "typ": "mehrfach_plus1",
+    "t": "Mehrfachtreffer treffen einmal mehr."
+   },
+   "flavor": "Ein Stück Harz in einem Samttuch, abgerieben bis auf eine Rinne. Es riecht nach Wald, den es hier nicht gibt.",
+   "cards": [
+    {
+     "n": "Nachstimmen",
+     "c": 1,
+     "atk": 2,
+     "h": 3
+    }
+   ]
+  }
+ }
+}
