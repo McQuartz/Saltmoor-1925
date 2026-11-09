@@ -35,6 +35,9 @@ const WEG = {
   schraffur: { s: 'kampf', akt: 1, nach: `S.enemies=biom().gegner.slice(0,2).map(id=>mkEnemy(id));aufstellen(S.enemies);S.enemies.forEach(e=>{e.pi=Math.max(0,e.pat.findIndex(x=>x.t==='atk'));});S.block=4;render();` },
   verstaerkt: { s: 'kampf', akt: 1, nach: `S.last=['W'];S.disc.add('Verstärkt');S.hand.unshift({n:'Tiefe Lotung',c:1,st:['W'],draw:2,spr:'rope'});render();` },
   panzer: { s: 'waechter', akt: 1, nach: `S.enemies=[mkEnemy('heimleiterin')];aufstellen(S.enemies);const b=S.enemies[0];b.pi=b.pat.findIndex(p=>p.unverw);panzerZugbeginn();render();` },
+  // M2 (HUD)
+  sackgasse: { s: 'kampf', akt: 1, nach: `S.enemies=biom().gegner.slice(0,2).map(id=>mkEnemy(id));aufstellen(S.enemies);S.last=['F'];S.chainLog=[{turn:S.turn,st:['F'],prev:[],rx:[]}];S.energy=0;S.hand=S.hand.filter(c=>cardCost(c)>0);render();` },
+  hochreaktion: { s: 'kampf', akt: 1, nach: `S.enemies=biom().gegner.slice(0,2).map(id=>mkEnemy(id));aufstellen(S.enemies);S.last=['F','G'];S.chainLog=[{turn:S.turn,st:['F','G'],prev:[],rx:[]}];const c=[...S.hand,...S.draw,...S.discard].find(c=>c.st.includes('S'));if(c&&!S.hand.includes(c))S.hand.unshift(c);S.energy=3;render();` },
   schutz: { s: 'waechter', akt: 1, nach: `S.enemies=[mkEnemy('heimleiterin'),mkEnemy('zwillinge')];aufstellen(S.enemies);const b=S.enemies[0];b.pi=b.pat.findIndex(p=>p.unverw);panzerZugbeginn();render();` },
 };
 (async () => {

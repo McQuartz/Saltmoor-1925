@@ -8,7 +8,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 |---|---|---|
 | M0 Einrichten und Basis | fertig | Branch `claude/project-thread-flvf7e` (von der Sitzung vorgegeben), Text-Basis, Schalter, Dev-Reiter TIEFE |
 | M1 Welle 1: sieben Fixes | fertig | Panzer 15 %, Fragmente 75 |
-| M2 Kampf-HUD, Stoff-Baum, Plakette, Aufstellung | offen | |
+| M2 Kampf-HUD, Stoff-Baum, Plakette, Aufstellung | fertig | HUD, Baum, Plakette, 100 Stellplätze |
 | M3 Peilkarte und Fahrt nach vorne | offen | |
 | M4 Rucksack am Körper | offen | |
 | M5 Die Tiefe biegt die Regeln | offen | |
@@ -99,6 +99,37 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
 - Abweichungen von Vorlage oder Konzept: Fix 2 dritte Stufe (Gegner-Sätze des Bioms), Grund oben. Fix 5 Block als Streifen unter dem Balken statt im Balken, bis M2 den Balken neu baut. Kein Haiku für die Suche (ein `grep`).
 - Agenten: Sonnet: Fragmente Akt-Gruppe I–II; Sonnet: Fragmente Akt-Gruppe III; Sonnet: Fragmente Akt-Gruppe IV–V; Sonnet: Relief-Maler (13 Motive, ohne Motiv pixelgleich, 125 Canvas-Hashes verglichen)
 - Offen: Reliefs malen je Motiv eine allgemeine Komposition, keine Fragment-Einzelheiten (Farben der Lichter, Wachshände). Von 25 Biomen lädt `index.html` nur 7 Szenen-Skripte vorab; die übrigen kommen über die Pakete, das Relief nimmt die Palette des geladenen Bioms.
+
+### M2 Kampf-HUD, Stoff-Baum, Plakette, Aufstellung
+
+**Plan.** Zuerst `oberflaeche.js` in Module teilen (`oberflaeche.js` Kopf/Spieler/render, `kampf.js`, `bildschirme.js`, `ueberlagerungen.js`) und mit `ui-fotos.js --dom` belegen, dass das HTML aller Ansichten gleich bleibt. Dann das HUD-Gerüst selbst (Kopfleiste, Footer als Tisch, eigener Balken mit Block und Schraffur, Reaktions-Band an der Karte, keine Kamera im Kampf, keine Fragezeichen). Parallel in eigenen Worktrees: Sonnet Stoff-Baum (nur über `reactionsFor`), Sonnet Gegner-Plakette (nur der Gegner-Abschnitt von `kampf.js`), Haiku Stellplätze `stell.json` für alle 100 Szenen. Danach Kontaktbögen im Spiel (`tools/stell-bogen.js`), `tools/test-oberflaeche.js`, Fotos, Bots.
+
+**Schritte und Entscheidungen.**
+- **Aufteilung:** HTML aller 13 Ansichten vor und nach der Teilung gleich (`ui-fotos.js --dom`), Tests grün (Commit 0c69dc3).
+- **Reaktionen immer mit Namen:** Das Band an der Karte, der Stoff-Baum, das Ritzen und die Rucksack-Vorschau nennen jede Reaktion, auch unentdeckte. „Kein Fragezeichen“ geht vor dem Verstecken. Das Buch listet nur entdeckte Reaktionen; die alten Zeilen „? ? ?“ stehen nur noch im toten `render.js`.
+- **Band an der Karte:** hängt unten an der Karte und wächst nach unten, bricht um, wenn es breiter als die Karte wäre (bei drei Reaktionen sonst über der Nachbarkarte, im Foto gesehen und behoben).
+- **Plakette:** vom Sonnet-Agenten übernommen (`plaketteHtml`, `js/ui/plakette.js` ordnet die Höhen per MutationObserver nach jedem Einsetzen, `css/plakette.css`). Die alten Regeln `.feind .info/.nm/.zl/.sts` in `spiel.css` habe ich entfernt, die Galerie zeigt Zustände jetzt in der Plakette. Block steht als blauer Wert am Balkenende, nicht als proportional lange Verlängerung (lesbarer bei kleinen Werten). Verwundbar nutzt das Zeichen `atk2` in Orange.
+- **Stellplätze:** 100 Szenen aus dem Haiku-Vorschlag. Alle 25 Kontaktbögen im Spiel (je Szene 1, 2, 3 Gegner) selbst angesehen, zum Teil verkleinert als Bogen zu sechst: kein Gegner schwebt, steht in einer Wand oder verdeckt einen anderen. Keine Korrektur nötig. `aufstellen` setzt `platzWunsch` (großer Gegner Platz 0; einer [0]; zwei [1,2]; sonst [0..4]), die Zeichenreihenfolge folgt der Tiefe.
+- **Kamera:** im Kampf fest bei 0 (kein Mausfolgen, kein Atmen), das Wackeln bei Treffern bleibt.
+- **Tests:** Plaketten werden einen Zeitschlitz nach `render()` geordnet; `test-oberflaeche.js` wartet darum vor dem Messen.
+
+#### Abnahme M2
+- Abnahmekriterien:
+  - `test-oberflaeche.js` grün: ✓ 3 Auflösungen × 4 Biome × Kampf/Wächter × 1 bis 3 Gegner, keine Überlappung (Plaketten, Balken, Karten), Baum = `reactionsFor`, kein Fragezeichen, keine Kamera, keine Konsolenfehler → `Alles gut.`
+  - Fotos aller drei Auflösungen: ✓ [1 Gegner](bilder/M2/kampf-1440x900.png), [2](bilder/M2/kampf2-1440x900.png), [3](bilder/M2/kampf3-1440x900.png), [Wächter](bilder/M2/waechter-1440x900.png), [Sackgasse](bilder/M2/sackgasse-1440x900.png), [Hochreaktion](bilder/M2/hochreaktion-1440x900.png), [nach dem Gegnerzug](bilder/M2/gegnerzug-1440x900.png), je auch `-1280x720` und `-1920x1080`. Neben der Vorlage: [vergleich-vorlage-1440x900.png](bilder/M2/vergleich-vorlage-1440x900.png)
+  - Kontaktbögen der Stellplätze aller 25 Biome: ✓ [bilder/M2/stell-spiel/](bilder/M2/stell-spiel/)
+  - Autospieler 50 Seeds ohne Fehler: ✓ 48 %, 0 Fehler ([balance-50.txt](bilder/M2/balance-50.txt))
+- Tests ([tests-nachher.txt](bilder/M2/tests-nachher.txt)): test-run → `Alles gut.`; test-deckbau → `Alles gut.`; test-ereignisse → `Alles gut.`; test-vorschau → `Gespielte Karten mit Vorschau: 400, Abweichungen: 0`; test-welle1 → `Alles gut.`; test-stoffbaum → `Alles gut (33 Prüfungen).`; test-plakette → `Alles gut.`; test-oberflaeche → `Alles gut.`
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 162, alle als Entwurf markiert.`
+- Bots: generisch 50 Seeds 48 % (Basis 48 %), Ø 3,9 Züge je Kampf, 0 Fehler. Je Build nicht neu gemessen: M2 ändert keine Regel.
+- Bilder: oben, dazu [Plakette](bilder/M2/plakette-3-gegner.png) und [Stoff-Baum](bilder/M2/baum-3-lang.png) vom Agenten, selbst angesehen: ja (Plakette 2, 3, 4 Gegner, Wächter, Block, Panzer, Geschwächt, Vorschau, Verborgen, Stumm; HUD alle sieben Ansichten bei 1440×900, Fußleiste von Hochreaktion auch bei 1280×720)
+- Regelprüfung: keine neue Mechanik in M2.
+- Abweichungen von Vorlage oder Konzept: Block am Gegner als Wert statt proportionaler Verlängerung; Plakette etwas breiter als in der Vorlage, weil sie den Namen trägt; Reaktionen auch unentdeckt mit Namen (Grund oben). Der Baum zeigt zu Zugbeginn nur den leeren Ausgangspunkt.
+- Agenten:
+  - Sonnet: Stoff-Baum (`stoffbaum.js`, `stoffbaum.css`, `test-stoffbaum.js`)
+  - Sonnet: Gegner-Plakette (`plakette.js`, `plakette.css`, Gegner-Abschnitt von `kampf.js`, `test-plakette.js`)
+  - Haiku: Stellplätze aller 100 Szenen (`stell.json`)
+- Offen: Die Rückfallregel der Plaketten-Staffelung (Plakette weicht nach unten aus, wenn oben kein Platz ist) kam in keinem Test vor. Stumme Gegner gibt es in den Daten noch nicht (M6).
 
 ## Regelprüfung
 
