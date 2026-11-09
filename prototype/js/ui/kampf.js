@@ -51,9 +51,14 @@ const GZ=()=>9*U(),KZ=()=>9*Math.max(1,Math.round(U()/2));
 
 // ---------- Untere Leiste im Kampf (Footer als Tisch): eigener Balken und Stoff-Baum, Hand, Energie ----------
 function leisteKampf(){const n=S.hand.length;
- return `<div id="links"><div id="spieler2">${spielerHtml()}</div><div id="baum">${stoffBaumHtml()}</div></div>${blickWahlHtml()}${begegnungHtml()}<div id="hand" class="${S.blickWahl||S.begegnung?'verdeckt':''}" style="--ov:${S.hand.length>6?((S.hand.length-6)*59/(S.hand.length-1)).toFixed(2):0}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
+ return `<div id="links"><div id="spieler2">${spielerHtml()}</div><div id="baum">${stoffBaumHtml()}</div><div id="letzteRx">${letzteRxHtml()}</div></div>${blickWahlHtml()}${begegnungHtml()}<div id="hand" class="${S.blickWahl||S.begegnung?'verdeckt':''}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
  <div id="rechts"><div class="en-l">ENERGIE</div><div class="rauten">${[...Array(Math.max(BAL.energy_per_turn,S.energy))].map((_,i)=>`<i class="${i<S.energy?'voll':''}"></i>`).join('')}</div>
  <button id="endBtn" class="deco" data-act="end" ${busy||S.blickWahl||S.begegnung?'disabled':''}>ZUG<br>BEENDEN</button>${stapelHtml()}${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
+// Spieltest 2026-11-09: die letzte Reaktion steht unten links unter dem Stoff-Baum, bis die nächste kommt (statt oben als Meldung).
+// LETZTE_RX setzt feedback.js beim Bus-Ereignis „reaction“, ein neuer Kampf leert sie.
+let LETZTE_RX=null;
+function letzteRxHtml(){const x=LETZTE_RX;if(!x)return'';const c=(ST[x.keys[0]]||{}).c||'#e8c547';
+ return `<div class="lrx${x.hoch?' hoch':''}${x.neu?' neu':''}" style="--c:${c}" title="${esc(x.n+': '+x.t)}"><span class="lrx-k">${x.keys.map(k=>gi(k,KZ())).join('<i>+</i>')}<b>${esc(x.n.toUpperCase())}</b>${x.hoch?'<em>HOCH</em>':''}${x.neu?'<em>NEU</em>':''}</span>${esc(x.t)}</div>`;}
 // M9: Begegnung nach dem Seitenwechsel: die Wesen stehen da, man geht weiter (halbe Beute)
 function begegnungHtml(){if(!S.begegnung)return'';const B=RUN.begegnungen;return `<div class="blickwahl begegnung"><p>${esc(B.begegnung.t)}</p><button class="deco haupt" data-act="weitergehen" autofocus>${esc(B.weiter.t)}</button></div>`;}
 // M7: Wahl zu Kampfbeginn mit Blick-Item, liegt über der Hand, bis gewählt ist (Standard: Nicht hinsehen)
@@ -86,6 +91,4 @@ function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.s
 // ---------- Ausrüstung unter der Szene ----------
 function slotHtml(loc,locked){const it=locked?null:getAt(loc);const d=it?def(it):null;const ibi=it?itemBild(it.id):'';
  return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${ibi}" alt="" data-fuid="${it.uid}">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}<span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;}
-// Auftrag 3 M4: die alte Itemleiste ist entfernt. Außerhalb des Kampfes liegt unten nur der Tisch mit dem Weg zum Rucksack „Am Körper“ (js/ui/rucksack.js).
-function tischHtml(){const an=allActive();return `<div class="tischreihe"><div class="tangelegt">${an.map(it=>`<img src="${itemBild(it.id)}" alt="${esc(def(it).n)}" title="${esc(def(it).n)}" draggable="false" data-fuid="${it.uid}">`).join('')}</div><button class="deco" data-act="rucksack">AM KÖRPER (R)</button><span class="hint">${S.bag.filter(Boolean).length} im Rucksack</span></div>`;}
 

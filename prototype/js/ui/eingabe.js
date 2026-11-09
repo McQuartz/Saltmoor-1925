@@ -34,7 +34,8 @@ document.addEventListener('pointerup',e=>{
  const t=document.elementFromPoint(e.clientX,e.clientY);const sl=t&&t.closest('[data-loc]');
  if(d.drag){if(sl)move(d.loc,sl.dataset.loc);S.sel=null;render();return;}
  if(!sl||sl.dataset.loc!==d.loc)return;const loc=d.loc;
- if(S.sel){const s=S.sel;S.sel=null;if(s!==loc)move(s,loc);else render();}else if(loc!=='trash'&&getAt(loc)){S.sel=loc;sfx.click();render();}});
+ // Spieltest 2026-11-09: Tauschen nur noch per Ziehen. Ein Klick wählt nur aus (zeigt das Item rechts, Verkaufen beim Krämer).
+ if(S.sel===loc){S.sel=null;render();}else if(loc!=='trash'&&getAt(loc)){S.sel=loc;sfx.click();render();}});
 document.addEventListener('click',e=>{
  const en=e.target.closest('.feind[data-ei]');if(en&&S.phase==='fight'){S.target=+en.dataset.ei;sfx.click();render();return;}
  const a=e.target.closest('[data-act]');if(a){aktion(a.dataset.act,a);return;}

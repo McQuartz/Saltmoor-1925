@@ -65,8 +65,10 @@ Bus.on('reaction',({r,k,isNew,keys,live,hoch})=>{if(FAST)return;
  if(hoch)pfx('hochreaktion',{x:240,y:150,palette:keys[0],seed:k});else if(!pfx('reaktion',{x:lp.x,y:lp.y-Math.round(lp.h*.5),palette:keys[0],seed:k})){FX.ring(keys[0],live);if(keys[1])setTimeout(()=>FX.ring(keys[1],live),90);}
  if(keys[1]&&!hoch)setTimeout(()=>pfx('reaktion',{x:lp.x,y:lp.y-Math.round(lp.h*.5),palette:keys[1],seed:k+7}),120);
  if(hoch){FX.flash(ST[keys[0]].c,.35);FX.shake(8);sfx.hoch();zwischentitel(r.n.toUpperCase()+'!');}else sfx.react(k);
- toast((hoch?'HOCHREAKTION · ':'')+r.n.toUpperCase()+(isNew?' · NEU':''),keys.map(k2=>gi(k2,16)).join(' + ')+' '+esc(r.t),hoch);
+ // Spieltest 2026-11-09: statt der Meldung oben steht die Reaktion unten links unter dem Stoff-Baum, bis die nächste kommt
+ LETZTE_RX={n:r.n,t:r.t||'',keys:[...keys],hoch:!!hoch,neu:!!isNew};const lx=document.getElementById('letzteRx');if(lx){lx.innerHTML=letzteRxHtml();const d=lx.firstElementChild;if(d)d.classList.add('frisch');}
  if(isNew)setTimeout(sfx.disc,150);if(typeof Music!=='undefined'&&audioOn)try{Music.reaction(hoch);}catch(x){}});
+Bus.on('fight_start',()=>{LETZTE_RX=null;});
 Bus.on('boss_phase',({e})=>{FX.flash('#ff6ad8',.3);FX.shake(10);toast(String(e.n||'').toUpperCase(),'verändert sich',true);});
 Bus.on('victory',()=>{sfx.win();if(typeof Music!=='undefined'&&audioOn)try{Music.victory();}catch(x){}});
 // M8: die Farbe meldet sich mit einem kurzen Hinweis (wohin sie springt, gebunden, Spur getilgt)
