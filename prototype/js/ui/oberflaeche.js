@@ -22,10 +22,12 @@ function kopfHtml(){const f=S.phase==='fight';const m=maxHp();const inc=f?incomi
  <div class="sub">${esc(biom().n)} · ${S.gold} Gold · <a data-act="buch">Buch ${S.disc.size}/${total}</a></div>
  ${f?'':`<div class="du">DU · ${esc(S.jobN).toUpperCase()}</div>${barHtml(S.hp,m,0,null,'gross')}<div class="zahlen">${S.hp}/${m}</div>`}`;}
 // Spieler-Lebensbalken unten mittig über der Hand: Block als Schild links, angekündigter Schaden als roter Schatten im Balken
-function spielerHtml(){const m=maxHp(),inc=incomingSichtbar(),lose=Math.min(S.hp,Math.max(0,inc-S.block));const W=v=>Math.max(0,Math.min(100,v/m*100)).toFixed(1)+'%';
+// Fix 5 (Auftrag 3): keine Zeile „−x Leben“ mehr. Der drohende Verlust steht im Balken: Block (blau) bricht zuerst, der rote Rest ist schraffiert.
+// Die Worte stehen nur noch im Tooltip des Balkens.
+function spielerHtml(){const m=maxHp(),inc=incomingSichtbar(),lose=Math.min(S.hp,Math.max(0,inc-S.block)),bricht=Math.min(S.block,inc);const W=v=>Math.max(0,Math.min(100,v/m*100)).toFixed(3)+'%';
+ const tip=alive().some(e=>absichtSichtbar(e)&&e.kniff&&e.kniff.art==='verborgen'&&e.pat[e.pi%e.pat.length].t==='atk')?`${inc} und mehr kommen, wie viel, siehst du nicht`:inc?`${inc} kommen → ${lose?'−'+lose+' Leben':'alles geblockt'}`:'nichts kommt';
  return `<div class="schild ${S.block?'an':''}" title="Block">${gi('blk',GZ())}<b>${S.block}</b></div>
- <div class="sbar"><i class="hp" style="width:${W(S.hp-lose)}"></i>${lose?`<i class="schatten" style="width:${W(lose)}"></i>`:''}<span>${esc(S.jobN).toUpperCase()} · ${S.hp}/${m}</span></div>
- <div class="swarn">${alive().some(e=>e.kniff&&e.kniff.art==='verborgen'&&e.pat[e.pi%e.pat.length].t==='atk')?`${inc} und mehr kommen, wie viel, siehst du nicht`:inc?`${inc} kommen → ${lose?'−'+lose+' Leben':'alles geblockt'}`:'nichts kommt'}</div>`;}
+ <div class="sbar" title="${esc(tip)}"><i class="hp" style="width:${W(S.hp-lose)}"></i>${lose?`<i class="schraffur" style="width:${W(lose)}"></i>`:''}<span>${esc(S.jobN).toUpperCase()} · ${S.hp}/${m}</span>${S.block?`<div class="sblock">${bricht?`<i class="bricht" style="width:${W(bricht)}"></i>`:''}<i class="bk" style="width:${W(S.block-bricht)}"></i></div>`:''}</div>`;}
 // Lebensbalken mit Block-Schraffur direkt hinter dem Leben; pv = Vorschau {d, ab}
 function barHtml(hp,max,block,pv,cls=''){const W=v=>Math.max(0,Math.min(100,v/max*100)).toFixed(1)+'%';const d=pv?Math.min(hp,pv.d):0,ab=pv?Math.min(block,pv.ab):0;
  return `<div class="bar ${cls}"><i class="hp" style="width:${W(hp-d)}"></i>${d?`<i class="pv" style="width:${W(d)}"></i>`:''}${block-ab>0?`<i class="bk" style="width:${W(block-ab)}"></i>`:''}${ab?`<i class="pvb" style="width:${W(ab)}"></i>`:''}</div>`;}
@@ -43,12 +45,12 @@ function naechsteSchwach(e){const k=kniffeVon(e).find(k=>k.art==='wechsel'&&k.st
 function feindTip(i){const e=S.enemies[i];if(!e||e.hp<=0)return'';const ks=[e.kniff,...(e.kniffe||[])].filter(k=>k&&KNIFF_TEXT[k.art]);
  const nw=naechsteSchwach(e);const pu=e.pat[e.pi%e.pat.length];
  const ruf=rufeVon(e);
- return `<b>${esc(e.n)}</b>${ruf.length?`<br>◆ Ruft im nächsten Gegnerzug: ${esc(ruf.map(id=>FOES[id].n).join(', '))}`:''}${pu&&pu.unverw?`<br>◆ Diesen Zug unverwundbar${pu.why?`<br><i class="hint">${esc(pu.why)}</i>`:''}`:''}${e.weak?`<br>Schwachstelle: ${gi(e.weak,KZ())} ${ST[e.weak].n} (×1,5)`:''}${nw&&nw!==e.weak?`<br>Danach: ${gi(nw,KZ())} ${ST[nw].n}`:''}${ks.map(k=>`<br>◆ ${esc(KNIFF_TEXT[k.art](k))}${k.why?`<br><i class="hint">${esc(k.why)}</i>`:''}`).join('')}${e.besonders&&BES_TEXT[e.besonders.art]?`<br>◆ ${esc(BES_TEXT[e.besonders.art](e.besonders))}`:''}${e.vuln>0?`<br>Verwundbar ${e.vuln} (+50 %)`:''}`;}
+ return `<b>${esc(e.n)}</b>${ruf.length?`<br>◆ Ruft im nächsten Gegnerzug: ${esc(ruf.map(id=>FOES[id].n).join(', '))}`:''}${pu&&unverwJetzt(e)?`<br>◆ Diesen Zug unverwundbar${pu.why?`<br><i class="hint">${esc(pu.why)}</i>`:''}`:''}${e.weak?`<br>Schwachstelle: ${gi(e.weak,KZ())} ${ST[e.weak].n} (×1,5)`:''}${nw&&nw!==e.weak?`<br>Danach: ${gi(nw,KZ())} ${ST[nw].n}`:''}${ks.map(k=>`<br>◆ ${esc(KNIFF_TEXT[k.art](k))}${k.why?`<br><i class="hint">${esc(k.why)}</i>`:''}`).join('')}${e.besonders&&BES_TEXT[e.besonders.art]?`<br>◆ ${esc(BES_TEXT[e.besonders.art](e.besonders))}`:''}${e.weak2?'<br>Geschwächt: halber Schaden':''}${e.panzer>0&&BAL.panzer?`<br>◆ ${esc(BAL.panzer.t)}`:''}${e.vuln>0?`<br>Verwundbar ${e.vuln} (+50 %)`:''}`;}
 // Absicht mit Zusatzzeichen: „unverwundbar“ (Musterschritt unverw) und „ruft“ (holt im nächsten Gegnerzug Verstärkung, rufAnsage in combat.js)
 const rufeVon=e=>e&&e.uid&&typeof rufAnsage==='function'&&S.enemies&&S.enemies.includes(e)?rufAnsage(e):[];
-function absicht(e){const r=absicht0(e);const it=e.pat[e.pi%e.pat.length];if(it.unverw)r.html+=' <small class="unverw">unverwundbar</small>';
+function absicht(e){const r=absicht0(e);if(unverwJetzt(e))r.html+=' <small class="unverw">unverwundbar</small>';
  const ruf=rufeVon(e);if(ruf.length)r.html+=` <small class="ruft" title="Ruft: ${esc(ruf.map(id=>FOES[id].n).join(', '))}">ruft</small>`;return r;}
-function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==='verborgen'){const k=it.t==='atk'?'atk':it.t==='blk'?'blk':'buff';return{k,html:`${gi(k,GZ())}?`};}if(it.t==='atk'){const v=it.v+e.str;const h=it.h?'×'+it.h:'';if(e.weak2){const n=Math.floor(v/2);return{k:'atk',html:`${gi('atk',GZ())}<s>${v}</s>${n}${h}`};}return{k:'atk',html:`${gi('atk',GZ())}${v}${h}`};}
+function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==='verborgen'){const k=it.t==='atk'?'atk':it.t==='blk'?'blk':'buff';return{k,html:`${gi(k,GZ())}?`};}if(it.t==='atk'){const v=it.v+e.str;const h=it.h?'×'+it.h:'';if(e.weak2){const n=Math.floor(v/2);return{k:'atk',html:`<span class="geschw" title="Geschwächt: halber Schaden">${gi('atk',GZ())}${n}${h}</span>`};}return{k:'atk',html:`${gi('atk',GZ())}${v}${h}`};}
  if(it.t==='blk')return{k:'blk',html:`${gi('blk',GZ())}${it.v}`};
  // Ansage: lädt, dann großer Schlag; zeigt die Wucht und wie viele Züge noch
  if(it.t==='laedt'){let n=1,j=e.pi+1;while(n<9&&e.pat[j%e.pat.length].t==='laedt'){n++;j++;}const s=e.pat[j%e.pat.length];const v=(s.v||0)+e.str;return{k:'atk',html:`<span class="laedt">${gi('atk',GZ())}${v} <small>in ${n}</small></span>`};}
@@ -56,9 +58,12 @@ function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==
 function gegnerHtml(f){return S.enemies.map((e,i)=>{if(e.hp<=0)return'';const b={...enemyBox(e)};if(e.pendel)b.x=Math.round(e.x*SW);const pv=vorschau&&vorschau.foes[i];const tg=f&&i===S.target;
   const st=[e.burn&&['burn',e.burn],e.poison&&['poison',e.poison],e.weak2&&['weak',1],e.str&&['buff',e.str]].filter(Boolean);
   return `<div class="feind ${tg?'ziel':''} ${e.rang}" data-ei="${i}" style="left:${(b.x/SW*100).toFixed(2)}%;top:${(b.kopf/SH*100).toFixed(2)}%;--fh:${(b.y-b.kopf)/SH*100}">
-   ${f?`<div class="abs">${absicht(e).html}</div>`:''}<div class="treffer" style="height:calc(var(--u)*${b.y-b.kopf})"></div>
+   ${f&&absichtSichtbar(e)?`<div class="abs">${absicht(e).html}</div>`:''}<div class="treffer" style="height:calc(var(--u)*${b.y-b.kopf})"></div>
    <div class="info"><div class="nm"><span>${esc(e.n).toUpperCase()}</span>${e.weak?gi(e.weak,GZ()):''}${e.kniff||e.besonders?'<b class="knf" title="Kniff: Maus darüber">◆</b>':''}</div>${barHtml(e.hp,e.max,e.block,pv)}
-   <div class="zl"><span>${e.hp}/${e.max}${e.block?` <b class="blk">+${e.block}</b>`:''}${pv&&(pv.d||pv.ab)?` <b class="pvt">−${pv.d}</b>`:''}</span><span class="sts">${st.map(([k,v])=>`${gi(k,GZ())}${v}`).join(' ')}</span></div></div></div>`;}).join('');}
+   <div class="zl"><span>${e.hp}/${e.max}${e.block?` <b class="blk">+${e.block}</b>`:''}${e.panzer>0?` <b class="panzer" title="${esc((BAL.panzer&&BAL.panzer.t)||'')}">${gi('blk',GZ())}${e.panzer}</b>`:''}${pv&&(pv.d||pv.ab)?` <b class="pvt">−${pv.d}</b>`:''}</span><span class="sts">${st.map(([k,v])=>`${gi(k,GZ())}${v}`).join(' ')}</span></div></div></div>`;}).join('')+(f?schutzLinien():'');}
+// Fix 7: im Unverwundbar-Zug je eine dünne Linie von der Plakette des Bosses zu jedem Diener, an dem der Schutz hängt
+function schutzLinien(){if(typeof unverwJetzt!=='function')return'';const l=[];for(const e of alive())if(unverwJetzt(e)){const a=enemyBox(e),ax=e.pendel?Math.round(e.x*SW):a.x;for(const d of dienerVon(e)){const b=enemyBox(d),bx=d.pendel?Math.round(d.x*SW):b.x;l.push(`<line x1="${ax}" y1="${a.y}" x2="${bx}" y2="${b.y}"/>`);}}
+ return l.length?`<svg class="schutz" viewBox="0 0 ${SW} ${SH}" preserveAspectRatio="none">${l.join('')}</svg>`:'';}
 const U=()=>BU.k;
 // Pixelzeichen immer ganzzahlig: GROSS = 9 px × Skala, KLEIN = halb so groß (mindestens 9 px)
 const GZ=()=>9*U(),KZ=()=>9*Math.max(1,Math.round(U()/2));
@@ -68,19 +73,20 @@ function leisteKampf(){const n=S.hand.length;
  return `<div id="rad">${radSvg()}</div><div id="hand" style="--ov:${S.hand.length>6?((S.hand.length-6)*59/(S.hand.length-1)).toFixed(2):0}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
  <div id="rechts"><div class="en-l">ENERGIE</div><div class="rauten">${[...Array(Math.max(BAL.energy_per_turn,S.energy))].map((_,i)=>`<i class="${i<S.energy?'voll':''}"></i>`).join('')}</div>
  <button id="endBtn" class="deco" data-act="end" ${busy?'disabled':''}>ZUG<br>BEENDEN</button><div class="stapel">Stapel ${S.draw.length} · Ablage ${S.discard.length}</div>${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
-function cardText(c){if(c.unspielbar)return typeof werfbar==='function'&&werfbar(c)?`Über Bord werfen: ${passive('ballast_werfen').map(p=>fxKurz(p.fx)).join(', ')}.`:'Unspielbar.';const p=[];const kw=[];if(c.funke)kw.push('Funke');if(c.zoll)kw.push(`Zoll ${c.zoll}`);if(c.behalten)kw.push('Behalten');if(c.x)kw.push('X');if(c.kette)kw.push(`Kette ${c.kette}`);if(c.opfer)kw.push(`Opfer ${c.opfer}`);
- if(c.atk)p.push(`${c.atk}${c.x?'×X':c.h?'×'+c.h:''} Schaden${c.all?' an allen':''}`);if(c.blk)p.push(`${c.blk} Block`);if(c.heal)p.push(`+${c.heal} Leben`);if(c.poison)p.push(`Gift ${c.poison}`);if(c.burn)p.push(`Brand ${c.burn}`);if(c.weak)p.push('Geschwächt');if(c.vuln)p.push(`Verwundbar ${c.vuln}`);if(c.str)p.push(`Stärke ${c.str}`);if(c.strip)p.push('Block weg');if(c.draw)p.push(`Ziehe ${c.draw}`);if(c.en)p.push(`+${c.en} Energie`);if(c.self)p.push(`−${c.self} Leben`);if(c.gold)p.push(`+${c.gold} Gold`);
+// m: Reaktionsfaktor, den die Karte jetzt bekäme (Fix 6: Ziehen, Stärke und Gold zeigen den verstärkten Wert)
+function cardText(c,m=1){const vs=v=>typeof verstaerkt==='function'?verstaerkt(v,m):v;if(c.unspielbar)return typeof werfbar==='function'&&werfbar(c)?`Über Bord werfen: ${passive('ballast_werfen').map(p=>fxKurz(p.fx)).join(', ')}.`:'Unspielbar.';const p=[];const kw=[];if(c.funke)kw.push('Funke');if(c.zoll)kw.push(`Zoll ${c.zoll}`);if(c.behalten)kw.push('Behalten');if(c.x)kw.push('X');if(c.kette)kw.push(`Kette ${c.kette}`);if(c.opfer)kw.push(`Opfer ${c.opfer}`);
+ if(c.atk)p.push(`${c.atk}${c.x?'×X':c.h?'×'+c.h:''} Schaden${c.all?' an allen':''}`);if(c.blk)p.push(`${c.blk} Block`);if(c.heal)p.push(`+${c.heal} Leben`);if(c.poison)p.push(`Gift ${c.poison}`);if(c.burn)p.push(`Brand ${c.burn}`);if(c.weak)p.push('Geschwächt');if(c.vuln)p.push(`Verwundbar ${c.vuln}`);if(c.str)p.push(`Stärke ${vs(c.str)}`);if(c.strip)p.push('Block weg');if(c.draw)p.push(`Ziehe ${vs(c.draw)}`);if(c.en)p.push(`+${c.en} Energie`);if(c.self)p.push(`−${c.self} Leben`);if(c.gold)p.push(`+${c.gold} Gold`.replace(String(c.gold),String(vs(c.gold))));
  if(c.sonder&&c.sonder.t)p.push(c.sonder.t);
  let s=(kw.length?kw.join(', ')+'. ':'')+(p.join(', ')||(c.t&&!c.atk&&!c.blk?'':'–'));if(c.eroeffnung)s+=`. Eröffnung: ${Object.entries(c.eroeffnung).map(([k,v])=>k==='atk'?`+${v} Schaden`:k==='blk'?`+${v} Block`:k==='draw'?`ziehe ${v}`:k==='heal'?`+${v} Leben`:k==='en'?`+${v} Energie`:k==='burn'?`Brand ${v}`:k==='poison'?`Gift ${v}`:`${k} ${v}`).join(', ')}`;if(c.verbraucht)s+='. Verbraucht';return s;}
 function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.st);const self=c.st.length>1?rx.filter(r=>r.k&&[...r.k].every(k=>c.st.includes(k))):[];const vor=rx.filter(r=>!self.includes(r));
- const known=r=>S.disc.has(r.n);let rxl='';
+ const known=r=>S.disc.has(r.n);let rxl='';const km=rx.length&&rx.every(known)?rx.reduce((m,r)=>m*(r.pre&&r.pre.mult||1),1):1;
  if(vor.length)rxl=vor.every(known)?`<div class="rx">${vor.map(r=>r.n.toUpperCase()).join(' + ')}</div>`:`<div class="rx un">? ? ?</div>`;
  if(self.length)rxl+=`<div class="rx in">IN SICH: ${self.map(r=>known(r)?r.n.toUpperCase():'???').join(' + ')}</div>`;
  const rot=((i*37)%5-2)*1.3+(i-(n-1)/2)*.6,dy=((i*53)%3)*1.2;
  return `<div class="karte ${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''}" data-card="${i}" style="--r:${rot.toFixed(1)}deg;--dy:${dy}px;${dealAnim?`animation-delay:${i*60}ms`:'animation:none'}">
   <div class="kost${c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?' hoch':' tief'):''}"><span>${cost>=99?'–':cost}</span></div><div class="kst">${c.st.map(k=>gi(k,KZ())).join('')}</div>
   <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen"><img src="${c.img||spr(c.spr)}" alt="">${c.hg?'<span class="hgm" title="Handgriff">✋</span>':''}${c.schliff?'<span class="schl" title="geschliffen">◇</span>':''}</div>
-  <div class="kt">${esc(cardText(c))}</div>${rxl}</div>`;}
+  <div class="kt${km!==1&&(c.draw||c.str||c.gold)?' verst':''}">${esc(cardText(c,km))}</div>${rxl}</div>`;}
 // Stoffrad: in der Mitte der zuletzt gespielte Stoff, Linien nur zu Stoffen, die jetzt reagieren
 function radSvg(){const K=Object.keys(ST);const s=60*U()/2,cx=s,cy=s,R=s*.72,nr=s*.15;const last=S.last||[];let lines='',nodes='';
  const reacts=k=>{if(!last.length)return null;const rx=reactionsFor(last,[k]).filter(r=>!r.s);return rx.length?rx:null;};
@@ -237,7 +243,7 @@ function zeigeOverlay(html){if(typeof hideTip==='function')hideTip();const o=$('
 function closeOv(){$('overlay').classList.remove('an');}
 // Wandbild-Relief zeichnen (prozedural; im Stil der Hintergründe, sobald World.relief da ist)
 function reliefMalen(){const c=$('relief');if(!c)return;const x=c.getContext('2d');x.imageSmoothingEnabled=false;
- if(typeof World!=='undefined'&&World.relief){try{const r=World.relief(biomId(),hashStr(S.frag||'x'));x.drawImage(r,0,0,160,100);return;}catch(e){}}
+ if(typeof World!=='undefined'&&World.relief){try{const fr=FRAGS.find(f=>f.id===S.frag);const r=World.relief(biomId(),hashStr(S.frag||'x'),fr&&fr.motiv);x.drawImage(r,0,0,160,100);return;}catch(e){}}
  const B=biom();const r=new Rng(hashStr(S.frag||'leer'));x.fillStyle=B.koerper[2];x.fillRect(0,0,160,100);
  for(let i=0;i<9;i++){const cx=14+i*16+r.int(-3,3),cy=50+r.int(-6,6),h=r.int(18,34);x.fillStyle=B.koerper[0];x.fillRect(cx,cy-h/2,2,h);x.fillRect(cx-4,cy-h/2+4,10,2);x.fillStyle=B.rand[0];x.fillRect(cx+2,cy-h/2,1,h);}
  x.fillStyle=B.rand[1];x.fillRect(78,12,4,4);}

@@ -34,7 +34,7 @@ function runFx(list,ctx={}){for(const f of list||[]){const tg=ctx.tg&&ctx.tg.hp>
   case'heal':healP(f.v,why);break;
   case'energy':S.energy+=f.v;Bus.emit('energy',{v:f.v,why});break;
   case'break_block':tos.forEach(e=>{e.block=0;Bus.emit('enemy_status',{e,status:'block_weg',why});});break;
-  case'poison_burst':tos.forEach(e=>{if(e.poison){const d=e.poison*f.mult;e.poison=0;hit(e,d,1,'V',why);}});break;
+  case'poison_burst':tos.forEach(e=>{if(e.poison){const d=e.poison*f.mult;e.poison=0;hit(e,d,1,'V',why,{dot:true});}});break;
   case'poison_mult':tos.forEach(e=>{e.poison*=f.mult;Bus.emit('enemy_status',{e,status:'poison',why});});break;
   // Ereignis-Effekte (außerhalb des Kampfes)
   case'give_random':giveItem(rs('fund').pick(dropPool()),why);break;
@@ -62,3 +62,5 @@ function condOk(c){if(!c)return true;if(c.item&&!besitz().some(b=>b.it.id===c.it
 
 // Deckgröße einer Startfigur (angelegte Items × Kopien + Start-Handgriffe), für Figurwahl und Artboard
 function deckGroesse(ids,job){return ids.reduce((s,id)=>{const D=ITEMS[id];return D?s+D.cards.length*(BAL.card_copies||1):s;},0)+(job&&job.hg?Object.entries(job.hg).filter(([id])=>ids.includes(id)).reduce((s,[,l])=>s+l.length,0):0);}
+// Fix 6 (Auftrag 3): ein Wert mal Reaktionsfaktor, gerundet wie Schaden und Block (×1,5 aus 2 → 3, aus 1 → 2)
+function verstaerkt(v,mult){return mult&&mult!==1?Math.round(v*mult):v;}

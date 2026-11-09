@@ -208,9 +208,11 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 #spieler .schild.an{color:#cfe0ff;opacity:1;text-shadow:0 0 calc(var(--u)*3) #000}
 #spieler .sbar{position:relative;flex:1;height:calc(var(--u)*8);background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20,0 0 calc(var(--u)*6) rgba(0,0,0,.8);display:flex}
 #spieler .sbar i{display:block;height:100%}#spieler .sbar .hp{background:linear-gradient(#d0463e,#9a2a24)}
-#spieler .sbar .schatten{background:repeating-linear-gradient(-45deg,#5a0e0a 0 3px,#300806 3px 6px);animation:puls .9s infinite alternate}
+#spieler .sbar .schraffur{background:repeating-linear-gradient(-45deg,#c8463a 0 2px,#3a0a08 2px 5px);box-shadow:inset 0 0 0 1px #ff8a7a55}
+#spieler .sblock{position:absolute;left:0;right:0;bottom:calc(var(--u)*-3);height:calc(var(--u)*2);display:flex}#spieler .sblock i{display:block;height:100%}#spieler .sblock .bk{background:#5a8ad0}#spieler .sblock .bricht{background:repeating-linear-gradient(-45deg,#9ac0ff 0 2px,#2a4a80 2px 5px)}
+#gegner .schutz{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}#gegner .schutz line{stroke:#9ad0ff;stroke-width:1.5;stroke-dasharray:3 2;opacity:.9;vector-effect:non-scaling-stroke}
+.zl .panzer{color:#cfe0ff}.geschw{color:#cfc0a0}
 #spieler .sbar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fk);font-size:calc(var(--u)*5);letter-spacing:.08em;color:#fff4e0;text-shadow:1px 1px 0 #000,0 0 3px #000}
-#spieler .swarn{width:100%;text-align:center;font-size:calc(var(--u)*5);color:#ff8a7a;text-shadow:1px 1px 0 #000,0 0 4px #000}
 .zwischentitel .spaet{opacity:0;animation:spaet .5s 1.5s forwards}@keyframes spaet{to{opacity:.8}}
 /* Meldungszeile: höchstens zwei nebeneinander, nie gestapelt */
 #toast{flex-direction:row!important;justify-content:center;width:70%!important;pointer-events:auto;cursor:pointer}
@@ -253,3 +255,4 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 
 /* Mehr als 6 Handkarten (Ballast, Strandbuch, Wahrsagerin): Karten überlappen, damit die Hand nie aus dem Bild läuft; die Karte unter der Maus liegt oben */
 #hand .karte+.karte{margin-left:calc(var(--u)*-1*var(--ov,0))}#hand .karte:hover{z-index:5}
+.kt.verst{color:#ffe08a}

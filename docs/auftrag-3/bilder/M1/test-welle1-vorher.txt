@@ -1,0 +1,27 @@
+FEHLER Fix 1: jedes Biom hat genau 3 Fragmente (falsch: fabrik=0, kurhaus=0, nachtzug=0, leuchtturm=0, kloster=0, grotte=0, glockengiesserei=0, waisenhaus=0, wald=0, gezeitenwerk=0, ziegelgruben=0, station=0, walkathedrale=0, glasmeer=0, mond=0, funkstation=0, ufer=0, waage=0)
+FEHLER Fix 1: 75 Fragmente insgesamt (21)
+FEHLER Fix 1: 176 Wandbild-Knoten in 50 Runs, davon leer: 87
+FEHLER Fix 1: drei neue Fragmente () schalten eine Figur frei (3 → 3)
+FEHLER Fix 2: 596 Belohnungen, Ersatztext 596 (100.0 %, Ziel < 5 %)
+ok    Fix 2: kein Satz zweimal hintereinander (0)
+FEHLER Fix 3: nach dem Gegnerzug ist keine Absicht sichtbar ([true])
+FEHLER Fix 3: Schadensvorschau nach dem Gegnerzug 0 (-1)
+FEHLER Fix 3: ReferenceError: absichtSichtbar is not defined
+FEHLER Fix 6: „ziehe 2“ mit Verstärkt zieht 3 (2)
+FEHLER Fix 6: „ziehe 1“ mit Verstärkt zieht 2 (1)
+ok    Fix 6: „+1 Energie“ mit Verstärkt gibt 1 (1)
+FEHLER Fix 6: „+4 Gold“ mit Verstärkt gibt 6 (4)
+FEHLER Fix 6: „Stärke 2“ mit Verstärkt gibt 3 (2)
+FEHLER Fix 6: Vorschau zeigt 3 gezogene Karten (undefined)
+FEHLER Fix 7: Boss allein bekommt Panzer 45 (40 % von 108, auf 5 gerundet): 0
+FEHLER Fix 7: Gift trifft den Boss trotz Panzer (108 → 108)
+FEHLER Fix 7: Panzer fängt direkten Schaden ab (Leben 108, Panzer 0)
+ok    Fix 7: mit Diener unverwundbar, ohne Panzer (Leben 108 → 108 → 108)
+FEHLER Fix 7: Diener stirbt im selben Zug, der Schutz fällt sofort (108 → 108)
+FEHLER Fix 4: kein <s>/<del>/line-through in Absicht, Karte oder Balken ({"s":true,"st":1,"tip":""})
+FEHLER Fix 4: der Grund steht im Tooltip der Plakette (fehlt)
+FEHLER Fix 5: kein Text „−x Leben“ unter dem Balken
+FEHLER Fix 5: Schraffur-Breite -1.000 = max(0, eingehend − Block) / max. Leben 0.135
+FEHLER Fix 3: im DOM nach dem Gegnerzug keine Absicht, keine Schraffur ({"abs":-1,"sch":true})
+ok    Browser ohne Fehler
+22 FEHLER

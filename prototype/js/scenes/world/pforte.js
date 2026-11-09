@@ -446,5 +446,5 @@ function reliefPforte(seed) {
 }
 // World.relief kennt nur die Stil-Parameter; für die Pforte ein eigenes Bild (Vorschlag an den Kern: Haken reliefBild je Biom)
 const reliefAlt = World.relief;
-World.relief = function (biom, seed) { if (biom === 'pforte') return reliefPforte(seed || 1); return reliefAlt(biom, seed); };
+World.relief = function (biom, seed, motiv) { if (biom === 'pforte') return reliefPforte(seed || 1); return reliefAlt(biom, seed, motiv); };
 })();

@@ -50,18 +50,18 @@ function startFight(ids,art='kampf'){
 // Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), Pfandschein (gold_energie: ab p.ab Gold), übrige Energie (energie_bleibt)
 function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0)+passive('gold_energie').reduce((s,p)=>s+((S.gold||0)>=(p.ab||100)?(p.v||1):0),0);}
 
-function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=rs('kampf').shuffle(S.discard);S.discard=[];}const c=S.draw.pop();S.hand.push(c);
+function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=rs('kampf').shuffle(S.discard);S.discard=[];}const c=S.draw.pop();S.hand.push(c);S.gezogen=(S.gezogen||0)+1;
  // Eigenschaft ballast_ziehen (Strandbuch): eine unspielbare Karte gezogen → eine nach und Block, höchstens 4-mal je Zug
  if(c.unspielbar&&S.phase==='fight'){const bz=passive('ballast_ziehen');if(bz.length&&(S.bzZug||0)<4){S.bzZug=(S.bzZug||0)+1;n+=bz.reduce((s,p)=>s+(p.v||1),0);const b=bz.reduce((s,p)=>s+(p.blk||0),0);if(b)addBlock(b,`Strandbuch: „${c.n}“ gezogen, ${b} Block und eine Karte nach`);}}}}
 function handSize(){return Math.max(BAL.hand_size,...bonuses('hand_size').map(b=>b.amount))+passive('hand_plus').reduce((s,p)=>s+(p.v||1),0)-passive('energie_plus').filter(p=>p.preis==='hand').length;}
-function startTurn(){S.rxZug=passive('kette_start').reduce((s,p)=>s+(p.v||1),0);S.bzZug=0;S.joker=null;S.vorherKarte=null;if(S.stats&&!DRY)S.stats.zuege=(S.stats.zuege||0)+1;
+function startTurn(){S.nachGegnerzug=false;(S.enemies||[]).forEach(e=>{e.gehandelt=false;});S.rxZug=passive('kette_start').reduce((s,p)=>s+(p.v||1),0);S.bzZug=0;S.joker=null;S.vorherKarte=null;if(S.stats&&!DRY)S.stats.zuege=(S.stats.zuege||0)+1;
  // Block: verfällt, außer Bannkreis (ward) und Eigenschaft block_haelt_halb
  const halb=passive('block_haelt_halb').length?Math.floor((S.block||0)/2):0;S.block=S.ward+halb;S.ward=0;
  const gbk=goldStufe('gold_block');if(gbk){S.block+=gbk;Bus.emit('player_block',{v:gbk,why:`Opferstock: ${gbk} Block für ${S.gold} Gold im Beutel`});}
  const bleibt=Math.min(S.vorrat||0,passive('energie_bleibt').reduce((s,p)=>s+(p.v||1),0));S.energy=energieJeZug()+bleibt;S.vorrat=0;
  S.last=[];S.played=0;S.hochUsed=new Set();S.hochZahl=0;S.turnNo=(S.turnNo||0)+1;
  drawCards(handSize());
- kniffeZugbeginn();ansagenZugbeginn();
+ kniffeZugbeginn();panzerZugbeginn();ansagenZugbeginn();
  // Falsches Detail der Pforte: Im Finale kosten zufällige Karten diese Runde 1 weniger oder 1 mehr
  if(S.kampfArt==='finale'){const r=rs('pforte');S.hand.forEach(c=>{c.mod=0;if(r.chance(.35))c.mod=r.chance(.5)?-1:1;});const m=S.hand.filter(c=>c.mod);if(m.length)Bus.emit('pforte_mod',{why:`Die Regeln biegen sich: ${m.map(c=>c.n+(c.mod>0?' +1':' −1')).join(', ')}`});}
  Bus.emit('deal');Bus.emit('turn_start',{turn:S.turnNo,why:`Zug ${S.turnNo}: ${handSize()} Karten, ${S.energy} Energie`+(S.block?`, ${S.block} Block aus dem Bannkreis`:'')});Bus.emit('changed');}
@@ -70,7 +70,10 @@ function addBlock(v,why=''){S.block+=v;Bus.emit('player_block',{v,why});}
 function addSlot(a){if(S.slots[a]<BAL.max_slots){S.slots[a]++;log(`Neuer Slot: ${AREA_N[a]}`);Bus.emit('slot',{a,why:'Ereignis'});}}
 function tgt(){let e=S.enemies[S.target];if(!e||e.hp<=0){e=alive()[0];S.target=S.enemies.indexOf(e);}return e;}
 // Schaden an einem Gegner. Block fängt zuerst. Gibt den echten Schaden zurück.
-function hit(e,dmg,k=1,col,why=''){if(!e||e.hp<=0)return 0;const pu=e.pat&&e.pat[e.pi%e.pat.length];if(pu&&pu.unverw){Bus.emit('enemy_hit',{e,d:0,ab:0,col,why:`${e.n} ist diesen Zug unverwundbar${pu.why?' ('+pu.why+')':''}`});return 0;}let d=Math.max(0,Math.round(dmg));const brandVorher=e.burn;let ab=0;if(e.block>0){ab=Math.min(e.block,d);e.block-=ab;d-=ab;}
+// opts.dot: Gift und Brand (wirken auch durch Unverwundbarkeit nicht, aber am Panzer vorbei). Fix 7 (Auftrag 3): unverw nur, solange ein Diener lebt.
+function hit(e,dmg,k=1,col,why='',opts){if(!e||e.hp<=0)return 0;const dot=!!(opts&&opts.dot);if(unverwJetzt(e)){const pu=e.pat[e.pi%e.pat.length];Bus.emit('enemy_hit',{e,d:0,ab:0,col,why:`${e.n} ist diesen Zug unverwundbar${pu.why?' ('+pu.why+')':''}, solange ${dienerVon(e).map(o=>o.n).join(' und ')} lebt`});return 0;}let d=Math.max(0,Math.round(dmg));const brandVorher=e.burn;let ab=0;
+ if(!dot&&e.panzer>0){const pz=Math.min(e.panzer,d);e.panzer-=pz;d-=pz;ab+=pz;if(pz)Bus.emit('panzer',{e,v:pz,rest:e.panzer,why:`Panzer von ${e.n} fängt ${pz} (noch ${e.panzer})`});}
+ if(e.block>0){const b=Math.min(e.block,d);e.block-=b;d-=b;ab+=b;}
  e.hp=Math.max(0,e.hp-d);if(S.stats&&!DRY){S.stats.schadenRaus=(S.stats.schadenRaus||0)+d;if(d>(S.stats.maxTreffer||0))S.stats.maxTreffer=d;}Bus.emit('enemy_hit',{e,d,ab,col,why});
  if(e.hp<=0){log(`${e.n} fällt.`);Bus.emit('enemy_die',{e,why:`${e.n} hat kein Leben mehr`});nachTod(e,brandVorher);}
  else checkPhase(e);return d;}
@@ -93,9 +96,9 @@ function checkVictory(delay=900){if(DRY)return;if(!alive().length&&!busy&&S.phas
 // Gibt je Gegner {d (Lebensverlust), ab (verlorener Block)} und für den Spieler {block, heal, self} zurück. Gleiche Rechnung wie das echte Spielen.
 function previewCard(i,ei){const keep=S,kb=busy,kf=FAST,ku=uidc;let out=null;
  try{S=structuredClone(S);busy=false;FAST=true;DRY=true;Bus.muted=true;
-  const before=S.enemies.map(e=>({hp:e.hp,block:e.block,poison:e.poison,burn:e.burn,vuln:e.vuln||0,weak2:e.weak2}));const p0={hp:S.hp,block:S.block,en:S.energy,str:S.pstr||0,gold:S.gold||0};
+  const before=S.enemies.map(e=>({hp:e.hp,block:e.block,poison:e.poison,burn:e.burn,vuln:e.vuln||0,weak2:e.weak2}));const p0={hp:S.hp,block:S.block,en:S.energy,str:S.pstr||0,gold:S.gold||0};S.gezogen=0;
   playCard(i,ei);
-  out={foes:S.enemies.map((e,k)=>({d:before[k]?before[k].hp-e.hp:0,ab:before[k]?Math.max(0,before[k].block-e.block):0,kill:!!before[k]&&before[k].hp>0&&e.hp<=0,gift:before[k]?e.poison-before[k].poison:0,brand:before[k]?e.burn-before[k].burn:0,vuln:before[k]?(e.vuln||0)-before[k].vuln:0,weak:before[k]?!!e.weak2&&!before[k].weak2:false,hp:e.hp})),block:S.block-p0.block,hp:S.hp-p0.hp,energy:S.energy-p0.en,str:(S.pstr||0)-p0.str,gold:(S.gold||0)-p0.gold,rx:S.chainLog.length?S.chainLog[S.chainLog.length-1].rx:[]};
+  out={foes:S.enemies.map((e,k)=>({d:before[k]?before[k].hp-e.hp:0,ab:before[k]?Math.max(0,before[k].block-e.block):0,kill:!!before[k]&&before[k].hp>0&&e.hp<=0,gift:before[k]?e.poison-before[k].poison:0,brand:before[k]?e.burn-before[k].burn:0,vuln:before[k]?(e.vuln||0)-before[k].vuln:0,weak:before[k]?!!e.weak2&&!before[k].weak2:false,hp:e.hp})),block:S.block-p0.block,hp:S.hp-p0.hp,energy:S.energy-p0.en,str:(S.pstr||0)-p0.str,gold:(S.gold||0)-p0.gold,draw:S.gezogen||0,rx:S.chainLog.length?S.chainLog[S.chainLog.length-1].rx:[]};
  }catch(err){console.warn('Vorschau',err);}
  finally{S=keep;busy=kb;FAST=kf;DRY=false;Bus.muted=false;uidc=ku;}return out;}
 
@@ -164,15 +167,16 @@ function applyMain(c,ctx,mult,flat,multWhy=[],kette=0){
  const blkW=c.blk?c.blk+(c.atk?0:kette):0;
  if(blkW)addBlock(Math.round((blkW+flat)*mult),`${c.n}: ${c.blk}${kette&&!c.atk?' +'+kette+' Kette':''}${flat?' +'+flat:''}${mult!==1?' ×'+mult:''} Block`);
  if(c.heal)healP(Math.round(c.heal*mult),`${c.n} heilt`);
- if(c.str){S.pstr=(S.pstr||0)+c.str;Bus.emit('player_buff',{v:c.str,why:`${c.n}: Stärke +${c.str} (jetzt ${S.pstr}) bis Kampfende`});}
+ // Fix 6 (Auftrag 3): der Reaktionsfaktor wirkt auch auf Stärke, Ziehen und Gold (gleiche Rundung), nicht auf Energie
+ if(c.str){const sv=verstaerkt(c.str,mult);S.pstr=(S.pstr||0)+sv;Bus.emit('player_buff',{v:sv,why:`${c.n}: Stärke +${sv}${sv!==c.str?' (×'+mult+')':''} (jetzt ${S.pstr}) bis Kampfende`});}
  const t=ctx.tg&&ctx.tg.hp>0?ctx.tg:alive()[0];
  if(c.poison&&t){const reinH=t.kniff&&t.kniff.art==='rein';if(reinH)Bus.emit('enemy_status',{e:t,status:'rein',why:`${t.n} ist rein: Gift wirkt nur halb`});{const g=reinH?Math.floor(c.poison*mult/2):Math.round(c.poison*mult);t.poison+=g;Bus.emit('enemy_status',{e:t,status:'poison',why:`${c.n}: Gift ${g}${reinH?' (halb, rein)':''}`});}}
  if(c.burn&&t){t.burn+=Math.round(c.burn*mult);Bus.emit('enemy_status',{e:t,status:'burn',why:`${c.n}: Brand ${Math.round(c.burn*mult)}`});}
  if(c.weak&&t){t.weak2=1;Bus.emit('enemy_status',{e:t,status:'weak',why:`${c.n}: ${t.n} geschwächt`});}
  if(c.sonder)sonderWirkung(c,t,mult);
- if(c.draw)drawCards(c.draw);
+ if(c.draw)drawCards(verstaerkt(c.draw,mult));
  if(c.en){S.energy+=c.en;Bus.emit('energy',{v:c.en,why:c.n});}
- if(c.gold){S.gold+=c.gold;if(S.stats&&!DRY)S.stats.gold=(S.stats.gold||0)+c.gold;Bus.emit('gold',{v:c.gold,why:`${c.n}: +${c.gold} Gold`});}}
+ if(c.gold){const gv=verstaerkt(c.gold,mult);S.gold+=gv;if(S.stats&&!DRY)S.stats.gold=(S.stats.gold||0)+gv;Bus.emit('gold',{v:gv,why:`${c.n}: +${gv} Gold${gv!==c.gold?' (×'+mult+')':''}`});}}
 // Leben zahlen (Opfer, Karten mit self, Reaktion Opfer); Eigenschaft opfer_staerke gibt dafür Stärke
 function zahleLeben(v,why){S.hp=Math.max(1,S.hp-v);Bus.emit('self_damage',{v,why});if(passive('opfer_staerke').length){S.pstr=(S.pstr||0)+1;Bus.emit('player_buff',{v:1,why:'Herz im Glas: Leben gezahlt, Stärke +1'});}}
 // Sonderwirkungen der Handgriffe (docs/auftrag-2/handgriffe.md, 12 Arten)
@@ -253,7 +257,12 @@ function rufAnsage(e){if(!e||e.hp<=0)return[];const platz=4-alive().length;if(pl
  if(b&&b.art==='phasen'&&b.ruft){const R2=typeof b.ruft==='string'?{gegner:b.ruft,alle:3,anzahl:1}:b.ruft;if(FOES[R2.gegner]&&e.phase>=1&&t%(R2.alle||3)===0)for(let k=0;k<(R2.anzahl||1);k++)out.push(R2.gegner);}
  return out.slice(0,platz);}
 // Ist der Gegner in diesem Zug unverwundbar (Musterschritt mit unverw, so wie hit() es prüft)?
-function unverwJetzt(e){const p=e&&e.pat&&e.pat.length?e.pat[e.pi%e.pat.length]:null;return !!(p&&p.unverw);}
+function unverwSchritt(e){const p=e&&e.pat&&e.pat.length?e.pat[e.pi%e.pat.length]:null;return !!(p&&p.unverw);}
+// Diener: alle anderen lebenden Gegner (gerufen oder mitgebracht)
+function dienerVon(e){return alive().filter(o=>o!==e);}
+function unverwJetzt(e){return unverwSchritt(e)&&dienerVon(e).length>0;}
+// Fix 7: Ist der Boss im unverw-Schritt allein, bekommt er zu deinem Zugbeginn Panzer (balance.json → panzer), der nur direkten Schaden fängt
+function panzerZugbeginn(){const an=BAL.panzer?BAL.panzer.anteil??.4:.4;for(const e of alive()){e.panzer=0;if(an>0&&unverwSchritt(e)&&!dienerVon(e).length){e.panzer=Math.max(5,Math.round(e.max*an/5)*5);Bus.emit('panzer_an',{e,v:e.panzer,why:`${e.n} ist allein: Panzer ${e.panzer} statt Unverwundbarkeit (${Math.round(an*100)} % von ${e.max} Leben, auf 5 gerundet); Gift und Brand gehen durch`});}}}
 // Zu Zugbeginn: Ansagen melden, die die Absicht zeigt (ruft, unverwundbar)
 function ansagenZugbeginn(){for(const e of alive()){
  const r=rufAnsage(e);if(r.length)Bus.emit('ruf_ansage',{e,gegner:r,why:`${e.n} ruft im nächsten Gegnerzug ${r.map(id=>FOES[id].n).join(' und ')} (Absicht „ruft“)`});
@@ -267,8 +276,10 @@ function gegnerTrifft(en,v,why){let d=Math.max(0,Math.round(v));if(en.weak2)d=Ma
 // Angekündigter Schaden aller Gegner im nächsten Zug (für Warnung und Musik)
 function kniffNachAngriff(en,tot){if(tot>0)S.stats.todesursache=en.n;}
 // was der Spieler sieht: verborgene Angriffe zählen nicht mit
-function incomingSichtbar(){const v=alive().filter(e=>e.kniff&&e.kniff.art==='verborgen');if(!v.length)return incoming();const keep=v.map(e=>e.pat);v.forEach(e=>{e.pat=e.pat.map(p=>p.t==='atk'?{...p,v:-e.str,h:1}:p);});const r=incoming();v.forEach((e,i)=>e.pat=keep[i]);return Math.max(0,r);}
-function incoming(){let tot=0;for(const en of alive()){if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
+// Fix 3 (Auftrag 3): wer in diesem Gegnerzug schon gehandelt hat, zeigt keine Absicht mehr, bis dein Zug beginnt
+function absichtSichtbar(e){return !!e&&e.hp>0&&!e.gehandelt&&!S.nachGegnerzug;}
+function incomingSichtbar(){const v=alive().filter(e=>e.kniff&&e.kniff.art==='verborgen');if(!v.length)return incoming(true);const keep=v.map(e=>e.pat);v.forEach(e=>{e.pat=e.pat.map(p=>p.t==='atk'?{...p,v:-e.str,h:1}:p);});const r=incoming(true);v.forEach((e,i)=>e.pat=keep[i]);return Math.max(0,r);}
+function incoming(sicht){let tot=0;for(const en of alive()){if(sicht&&!absichtSichtbar(en))continue;if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
 
 function endTurn(){
  if(S.phase!=='fight'||busy)return;busy=true;S.vorrat=S.energy;
@@ -279,12 +290,13 @@ function endTurn(){
  const list=alive();let i=0;
  const step=()=>{
   if(S.hp<=0&&!faehrgeld()){busy=false;return runLost();}
-  if(i>=list.length){S.enemies.forEach(en=>{en.pi++;en.turns++;});specials();busy=false;if(!alive().length){checkVictory(700);return;}startTurn();return;}
-  const en=list[i++];if(en.hp<=0){step();return;}
+  if(i>=list.length){S.enemies.forEach(en=>{en.pi++;en.turns++;});specials();if(!alive().length){busy=false;checkVictory(700);return;}
+   S.nachGegnerzug=true;Bus.emit('gegnerzug_ende',{why:'Die Gegner haben gehandelt; ihre neuen Absichten zeigen sich erst mit deinem Zug'});Bus.emit('changed');wait(380,()=>{busy=false;startTurn();});return;}
+  const en=list[i++];if(en.hp<=0){step();return;}en.gehandelt=true;
   // Brand tickt und halbiert sich (Eigenschaft brand_haelt: nur −1); Gift tickt und sinkt um 1 (gift_doppelt: tickt zweimal)
   const giftMal=passive('gift_doppelt').length?2:1;const dot=en.burn+en.poison*giftMal;
-  if(dot){hit(en,dot,1,en.burn?'F':'V',`Brand ${en.burn} + Gift ${en.poison}${giftMal>1?' ×2':''} am Zugbeginn von ${en.n}`);if(en.burn)en.burn=passive('brand_haelt').length?en.burn-1:Math.floor(en.burn/2);if(en.poison)en.poison--;if(en.hp<=0){wait(450,step);return;}}
-  const it=en.pat[en.pi%en.pat.length];en.block=0;
+  if(dot){hit(en,dot,1,en.burn?'F':'V',`Brand ${en.burn} + Gift ${en.poison}${giftMal>1?' ×2':''} am Zugbeginn von ${en.n}`,{dot:true});if(en.burn)en.burn=passive('brand_haelt').length?en.burn-1:Math.floor(en.burn/2);if(en.poison)en.poison--;if(en.hp<=0){wait(450,step);return;}}
+  const it=en.pat[en.pi%en.pat.length];en.block=0;en.panzer=0;
   if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'&&S.block){Bus.emit('kniff',{e:en,why:`${en.n} zerbricht deinen Block (${S.block})`});S.block=0;}
    Bus.emit('enemy_lunge',{e:en});const W=BAL.wucht||{};const hits=it.h||1,halb=!!en.weak2;let nr=0,tot=0,abs=0;
    // Jeder Treffer einzeln (Anlauf, dann im Abstand), damit 4×3 auch dreimal zu sehen und zu hören ist

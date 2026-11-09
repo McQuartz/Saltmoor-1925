@@ -124,8 +124,17 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  // Gegner-Beute: kleine Chance auf das eigene Stück eines Gegners (Kniff „nachlass: item“ sicher)
  const beute=S.enemies.map(e=>FOES[e.id].beute).filter(id=>id&&ITEMS[id]);if(S.sicheresBeute&&ITEMS[S.sicheresBeute]){items[0]=S.sicheresBeute;S.sicheresBeute=null;}else if(beute.length&&r.chance(.15)){items[0]=r.pick(beute);}
  const rare=art==='waechter'||art==='schwer';const pick=items;
+ S.beuteSatz=beuteSatzWaehlen(r);
  S.reward=pick;S.picked=!pick.length;S.rewardHg=hg;S.hgPicked=!hg.length;S.hgPending=null;S.phase='reward';S.hand=[];
  Bus.emit('reward',{gold:gd,items:pick,hg,why:`Belohnung: ${gd} Gold, Handgriffe ${hg.map(id=>HANDGRIFFE[id].n).join('/')}${pick.length?', Items '+pick.map(id=>ITEMS[id].n).join('/'):''}${art==='waechter'?' (Reliquien)':''}`});Bus.emit('changed');}
+// Fix 2 (Auftrag 3): Satz über der Beute. Erst der stärkste besiegte Gegner mit eigenem beute_satz, sonst die beute_saetze des Bioms,
+// sonst die Beute-Sätze der Gegner dieses Bioms (Grundbiome haben keine eigenen); per Seed, nie zweimal hintereinander derselbe. null = Ersatztext.
+function beuteSatzWaehlen(r){const vor=S.letzterBeuteSatz||null;const frei=l=>l.filter((x,i)=>x&&x!==vor&&l.indexOf(x)===i);
+ const g=frei([...S.enemies].sort((a,b)=>(b.max||0)-(a.max||0)).map(e=>FOES[e.id]&&FOES[e.id].beute_satz));
+ const B=biom();let satz=g[0]||null;
+ if(!satz){const l=frei(B.beute_saetze||[]);if(l.length)satz=r.pick(l);}
+ if(!satz){const bi=biomId();const l=frei(Object.keys(FOES).filter(id=>FOES[id].biom===bi||(B.gegner||[]).includes(id)).map(id=>FOES[id].beute_satz));if(l.length)satz=r.pick(l);}
+ S.letzterBeuteSatz=satz||vor;return satz;}
 function takeReward(id){if(S.picked)return;if(id){if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}giveItem(id,'Fund nach dem Kampf');Bus.emit('pick');}S.picked=true;Bus.emit('changed');}
 function leaveReward(){if(!S.picked)S.picked=true;finishNode();}
 function runLost(){S.phase='strand';busy=false;S.stats.endeT=Date.now();const res={sieg:false,tiefe:S.depth,akt:S.akt,biom:biomId(),gegner:S.enemies.filter(e=>e.hp>0).map(e=>e.id),job:S.job};

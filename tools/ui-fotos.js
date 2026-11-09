@@ -26,6 +26,16 @@ const WEG = {
   kraemer: { s: 'kraemer', akt: 1 },
   werkstatt: { s: 'werkstatt', akt: 1 },
   rast: { s: 'rast', akt: 1 },
+  // M1 (Welle 1)
+  wandbild_fabrik: { s: 'wandbild', akt: 1, nach: `S.frag='fabrik_2';render();if(typeof reliefMalen==='function')reliefMalen();` },
+  wandbild_waage: { s: 'wandbild', akt: 1, nach: `S.frag='waage_3';render();if(typeof reliefMalen==='function')reliefMalen();` },
+  wandbild_leuchtturm: { s: 'wandbild', akt: 1, nach: `S.frag='leuchtturm_1';render();if(typeof reliefMalen==='function')reliefMalen();` },
+  gegnerzug: { s: 'kampf', akt: 1, nach: `S.enemies=biom().gegner.slice(0,2).map(id=>mkEnemy(id));aufstellen(S.enemies);render();Bus.on('gegnerzug_ende',()=>{FAST=false;window.__halt=1;});window.wait=(ms,f)=>{if(window.__halt)return;setTimeout(f,ms);};S.hand=[];endTurn();`, warte: 6000 },
+  geschwaecht: { s: 'kampf', akt: 1, nach: `const e=S.enemies[0];e.pi=Math.max(0,e.pat.findIndex(x=>x.t==='atk'));e.weak2=1;S.block=0;render();` },
+  schraffur: { s: 'kampf', akt: 1, nach: `S.enemies=biom().gegner.slice(0,2).map(id=>mkEnemy(id));aufstellen(S.enemies);S.enemies.forEach(e=>{e.pi=Math.max(0,e.pat.findIndex(x=>x.t==='atk'));});S.block=4;render();` },
+  verstaerkt: { s: 'kampf', akt: 1, nach: `S.last=['W'];S.disc.add('Verstärkt');S.hand.unshift({n:'Tiefe Lotung',c:1,st:['W'],draw:2,spr:'rope'});render();` },
+  panzer: { s: 'waechter', akt: 1, nach: `S.enemies=[mkEnemy('heimleiterin')];aufstellen(S.enemies);const b=S.enemies[0];b.pi=b.pat.findIndex(p=>p.unverw);panzerZugbeginn();render();` },
+  schutz: { s: 'waechter', akt: 1, nach: `S.enemies=[mkEnemy('heimleiterin'),mkEnemy('zwillinge')];aufstellen(S.enemies);const b=S.enemies[0];b.pi=b.pat.findIndex(p=>p.unverw);panzerZugbeginn();render();` },
 };
 (async () => {
   fs.mkdirSync(out, { recursive: true });

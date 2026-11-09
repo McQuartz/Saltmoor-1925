@@ -1,0 +1,28 @@
+=== node tools/test-run.js
+Angebotene Biome: leuchtturm, moor, waisenhaus, kloster, gezeitenwerk, ziegelgruben, funkstation, glasmeer, ufer, pforte, fabrik, glockengiesserei, salz, wald, mond, waage, hafen, nachtzug, station, eis, walkathedrale, grotte, stadt, kurhaus, kapelle
+Ebenen geprüft: 3100
+Knoten je vollem Run: 31, 31, 31, 31, 31, 31, 31, 31, 31, 31
+Alles gut.
+=== node tools/test-deckbau.js
+ok    takt mit klang: glocke („Netzflickerin schlägt im Takt (Glockenschlag)“), ohne klang herz
+ok    Zweite Wächter: über 30 Seeds beide (glockenmutter, lotse), je Run fest, Dev erzwingt glockenmutter
+ok    Eliten: in 29 von 60 schweren Kämpfen, nie im normalen Kampf, Dev erzwingt (oberzoellner, salzmann)
+Alles gut.
+=== node tools/test-ereignisse.js
+Ereignisse je Biom: {"alle":15,"hafen":6,"moor":5,"kapelle":6,"salz":5,"stadt":5,"eis":6,"grotte":7,"kurhaus":6,"nachtzug":7,"kloster":6,"fabrik":7,"gezeitenwerk":6,"wald":6,"ufer":3,"glasmeer":6,"walkathedrale":6,"leuchtturm":7,"glockengiesserei":6,"ziegelgruben":6,"mond":6,"waage":6,"funkstation":6,"waisenhaus":6,"station":6}
+Wahlen gespielt: 490
+Alles gut.
+=== node tools/test-vorschau.js
+Gespielte Karten mit Vorschau: 336, Abweichungen: 0
+=== node tools/test-meta.js
+| 19 | fischer | Sieg | 31 | 44 | Fragment „Der Glockenguss“, Spieluhr, Fragment „Der Lampenjunge“ |
+| 20 | friedhofswaerter | Sieg | 31 | 45 | Fragment „Der Umriss“ |
+
+Fragmente gespeichert: 45, nach Reset: 0
+=== node tools/sprites/pruefen.js
+ok     zwillinge_a          96x120 · waisenhaus · Rand oben rechts 91 % · Umriss schwarz 31 % · Idle-Wechsel 8 %
+ok     zwillinge_b          96x120 · waisenhaus · Rand oben rechts 89 % · Umriss schwarz 35 % · Idle-Wechsel 8 %
+
+253 Sprites geprüft, 0 Verstöße.
+=== node tools/icons/pruefen.js
+242 Bilder geprüft, 0 Verstöße.

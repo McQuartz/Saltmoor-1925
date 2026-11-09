@@ -1,0 +1,27 @@
+ok    Fix 1: jedes Biom hat genau 3 Fragmente
+ok    Fix 1: 75 Fragmente insgesamt (75)
+ok    Fix 1: 176 Wandbild-Knoten in 50 Runs, davon leer: 0
+ok    Fix 1: drei neue Fragmente (fabrik_1, fabrik_2, fabrik_3) schalten eine Figur frei (3 → 4)
+ok    Fix 2: 612 Belohnungen, Ersatztext 0 (0.0 %, Ziel < 5 %)
+ok    Fix 2: kein Satz zweimal hintereinander (0)
+ok    Fix 3: nach dem Gegnerzug ist keine Absicht sichtbar ([false,false])
+ok    Fix 3: Schadensvorschau nach dem Gegnerzug 0 (0)
+ok    Fix 3: zum Zugbeginn ist die neue Absicht wieder sichtbar
+ok    Fix 6: „ziehe 2“ mit Verstärkt zieht 3 (3)
+ok    Fix 6: „ziehe 1“ mit Verstärkt zieht 2 (2)
+ok    Fix 6: „+1 Energie“ mit Verstärkt gibt 1 (1)
+ok    Fix 6: „+4 Gold“ mit Verstärkt gibt 6 (6)
+ok    Fix 6: „Stärke 2“ mit Verstärkt gibt 3 (3)
+ok    Fix 6: Vorschau zeigt 3 gezogene Karten (3)
+ok    Fix 7: Boss allein bekommt Panzer 45 (40 % von 108, auf 5 gerundet): 45
+ok    Fix 7: Gift trifft den Boss trotz Panzer (108 → 103)
+ok    Fix 7: Panzer fängt direkten Schaden ab (Leben 103, Panzer 39)
+ok    Fix 7: mit Diener unverwundbar, ohne Panzer (Leben 108 → 108 → 108)
+ok    Fix 7: Diener stirbt im selben Zug, der Schutz fällt sofort (108 → 102)
+ok    Fix 4: kein <s>/<del>/line-through in Absicht, Karte oder Balken ({"s":false,"st":0,"tip":""})
+ok    Fix 4: der Grund steht im Tooltip der Plakette (Geschwächt …)
+ok    Fix 5: kein Text „−x Leben“ unter dem Balken
+ok    Fix 5: Schraffur-Breite 0.134 = max(0, eingehend − Block) / max. Leben 0.135
+ok    Fix 3: im DOM nach dem Gegnerzug keine Absicht, keine Schraffur ({"abs":0,"sch":false})
+ok    Browser ohne Fehler
+Alles gut.

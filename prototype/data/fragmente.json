@@ -223,5 +223,515 @@
   "schaltet": {
    "art": "satz"
   }
+ },
+ {
+  "id": "fabrik_1",
+  "biom": "fabrik",
+  "titel": "Das Akkordbuch",
+  "text": "Im Akkordbuch der Packhalle ist jede Schicht in der Handschrift der Vorarbeiterin abgerechnet, Dosen je Stunde, Spalte um Spalte. Die Datumsspalte ist ausgefüllt wie alle anderen. Sie steht jeden Tag einen Tag vor dem Kalender, und die Summen stimmen auf die Dose.",
+  "relief": "Ein großes Zahnrad, in dessen Zähnen kleine gleiche Dosen sitzen, jede mit demselben Stempelfleck.",
+  "motiv": "rad",
+  "entwurf": true
+ },
+ {
+  "id": "fabrik_2",
+  "biom": "fabrik",
+  "titel": "Der Heizer vom Kesselhaus",
+  "text": "Der Heizer sagt, er habe den Schornstein nie von unten gesehen, nur so, wie man auf einen Wasserfall sieht. Er füttert den Kessel nach Gehör: Läuft der Rauch am Mauerwerk herab, stimmt der Druck. Seine Schicht endet, wenn der Rauch den Hof verlassen hat, und diesen Morgen hat er noch nicht erlebt.",
+  "relief": "Ein hoher Schornstein, aus dem ein breites Band nach unten fließt, an seinem Fuß kleine Gestalten mit Schaufeln.",
+  "motiv": "turm",
+  "schaltet": {
+   "art": "item",
+   "id": "gasmask"
+  },
+  "entwurf": true
+ },
+ {
+  "id": "fabrik_3",
+  "biom": "fabrik",
+  "titel": "Die Striche in der Retortentür",
+  "text": "Die Retortentür ist von innen beschrieben, Striche in Fünferbündeln, Schicht um Schicht, bis zum Strich für heute. Danach geht die Reihe weiter, in derselben Schrift, ein ganzes Blatt Eisen voll. Die Striche nach heute sind nicht gekratzt. Sie sind gestempelt.",
+  "relief": "Eine Eisentür voller Strichbündel, die an ihrem Rand nicht enden, sondern auf der Wand daneben weiterlaufen.",
+  "motiv": "tuer",
+  "entwurf": true
+ },
+ {
+  "id": "kurhaus_1",
+  "biom": "kurhaus",
+  "titel": "Das Messbuch des Bademeisters",
+  "text": "Dreißig Jahre lang hat der Bademeister die Wellenhöhe ins Messbuch geschrieben, morgens und abends, in Zentimetern. Seit dem Sommer 1900 steht in jeder Zeile eine Null. Daneben führt er Buch, wie viele Gäste unter der Kuppel ausgeatmet haben. Die Spalte ist leer, die Scheibe darüber beschlagen.",
+  "relief": "Ein glattes Becken unter einer runden Kuppel, auf dem Wasser keine Welle, an der Kuppel innen dicke Tropfen.",
+  "motiv": "welle",
+  "entwurf": true
+ },
+ {
+  "id": "kurhaus_2",
+  "biom": "kurhaus",
+  "titel": "Die Fliesen am Beckenrand",
+  "text": "Die Badefrau trocknet jeden Abend die Fliesen, und jeden Morgen sind sie wieder nass: Fußspuren, vom Becken weg bis zur Schwelle. Sie zählt sie nicht mehr. Sie hat aufgehört zu fragen, wohin sie gehen, seit ihr aufgefallen ist, dass keine einzige zum Wasser zurückführt.",
+  "relief": "Nasse Fußabdrücke, die aus einem stillen Becken über Fliesen bis zu einer Schwelle führen, keiner in die andere Richtung.",
+  "motiv": "prozession",
+  "entwurf": true
+ },
+ {
+  "id": "kurhaus_3",
+  "biom": "kurhaus",
+  "titel": "Das Blatt der Oberschwester",
+  "text": "Die Oberschwester hat die Treibenden auf einem eigenen Blatt geführt, nach Lage im Becken, von der Treppe an gezählt. Bei jedem steht dasselbe: Zustand unverändert, Besserung abzuwarten. Der Platz am Treppenrand ist vorgemerkt, mit Bleistift: Rückenlage, Gesicht nach oben.",
+  "relief": "Eine Reihe Köpfe auf stillem Wasser, alle Augen zur Kuppel gerichtet, am Treppenrand eine freie Lücke.",
+  "motiv": "auge",
+  "entwurf": true
+ },
+ {
+  "id": "nachtzug_1",
+  "biom": "nachtzug",
+  "titel": "Der Aushang im Gang",
+  "text": "Der Aushang führt keine Stationen auf. Er zeigt nur die Strecke, mit Bleistift gezogen, eine einzige Kurve an einem Hang, und darunter die Fahrzeit: so lange, wie man hinsieht. Auf der Rückseite hat jemand die Telegrafenmasten gezählt, einen je Fenster, und ist bei jedem Fenster auf denselben gekommen.",
+  "relief": "Ein Gleis in einer einzigen Kurve um einen Hang, am Rand ein Mast und ein Eisenrad.",
+  "motiv": "rad",
+  "entwurf": true
+ },
+ {
+  "id": "nachtzug_2",
+  "biom": "nachtzug",
+  "titel": "Der Vorhang des Schaffners",
+  "text": "Im Dienstbuch des Schaffners steht, das erleuchtete Haus am Hang gehe in allen Fenstern des Zuges im selben Augenblick an und aus, auch in denen auf der anderen Seite. Er hat einen Vorhang zugezogen. Das Licht ging auf dem Vorhang an.",
+  "relief": "Eine Reihe Zugfenster, in jedem dasselbe Haus mit einem Licht, und vor einem Fenster ein Vorhang, auf dem das Licht ebenfalls brennt.",
+  "motiv": "tuer",
+  "entwurf": true
+ },
+ {
+  "id": "nachtzug_3",
+  "biom": "nachtzug",
+  "titel": "Die Tür nach vorn",
+  "text": "Der Gepäckmeister sagt, der Zug habe vorn keine Lok und hinten auch nicht. Man geht durch alle Wagen bis zur Tür nach vorn, und dahinter steht die Stirn der Lok, die Lampe zum Zug gewandt. Ihr Licht fällt auf die Plätze. Auf jedem, den es trifft, sitzt jemand, der schon einmal eingestiegen ist.",
+  "relief": "Eine Kette aus Wagen, die an beiden Enden in dieselbe Lok mündet, deren Lampe in die Fenster hineinscheint.",
+  "motiv": "kette",
+  "entwurf": true
+ },
+ {
+  "id": "leuchtturm_1",
+  "biom": "leuchtturm",
+  "titel": "Die Tafel der Positionslichter",
+  "text": "In der Wachstube hängt die Tafel, die jeder Lotse lernt: Rot links, Grün rechts, und wer beide zugleich sieht, hat den Bug vor sich. Darunter steht in fremder Hand eine Reihe von Abenden, jeder mit einem Strich. Die Reihe reicht bis heute und hat keinen Anfang.",
+  "relief": "Eine Linie aus Schiffen, an jedem ein Paar Lichter, rot und grün, alle auf einen einzelnen Turm gerichtet.",
+  "motiv": "schiff",
+  "entwurf": true
+ },
+ {
+  "id": "leuchtturm_2",
+  "biom": "leuchtturm",
+  "titel": "Der Stein im Hof",
+  "text": "Der Lampenputzer hat den Strahl einmal mit Winkel und Schnur nachgemessen. Er fällt senkrecht auf einen einzelnen Pflasterstein im Hof, und der Stein ist trocken, bei jedem Wetter. Der Oberwärter sah sich die Zahlen an und sagte nur, der Stein sei richtig.",
+  "relief": "Ein Turm, dessen Strahl senkrecht auf einen einzelnen Pflasterstein fällt, daneben ein Schnurlot.",
+  "motiv": "auge",
+  "entwurf": true
+ },
+ {
+  "id": "leuchtturm_3",
+  "biom": "leuchtturm",
+  "titel": "Die Kerben in der Brüstung",
+  "text": "Der Wärter von 1917 hat die Schiffe gewarnt, bis ihm auffiel, wohin ihr rotes und grünes Licht zielte. Nicht auf das Feuer, sondern auf das Fenster daneben, in dem er stand. Sein letztes Signal hat er mit dem Messer in die Brüstung geschnitten: Verstanden. Die Kerben sind frisch, der Wind hat sie nicht gerundet.",
+  "relief": "Ein Turm, auf dessen Brüstung ein Messer Zeichen kerbt, davor Lichterpaare, die auf ein einzelnes Fenster zeigen.",
+  "motiv": "turm",
+  "entwurf": true
+ },
+ {
+  "id": "kloster_1",
+  "biom": "kloster",
+  "titel": "Die Regel über der Tür",
+  "text": "Über der Tür des Skriptoriums steht die Regel in den Stein geschnitten: Es wird abgeschrieben, nicht verbessert. Wer ein Wort ausließ, schrieb das Blatt neu, so ist es überliefert. Für den, der eines hinzufügte, ist keine Strafe vermerkt, nur der Satz, die Abschrift gelte dann als die Vorlage.",
+  "relief": "Eine Hand mit Feder über einer Zeile, die über den Rand des Blattes hinaus auf den Stein weiterläuft.",
+  "motiv": "hand",
+  "entwurf": true
+ },
+ {
+  "id": "kloster_2",
+  "biom": "kloster",
+  "titel": "Der Krabbenfischer",
+  "text": "Ein Krabbenfischer, der bei Ebbe die Priele quert, sagt, sie lägen nicht, wie Priele liegen, verästelt und krumm, sondern in Zeilen, parallel, mit Absätzen. Einmal sah er am Ende einer Zeile ein Wort, in den Schlick gespült. Seither tritt er auf jeden Buchstaben, den er findet, damit nichts gelesen wird.",
+  "relief": "Ein Watt mit Prielen in parallelen Zeilen wie eine beschriebene Seite, mitten in einem Wort ein einzelner Fußabdruck.",
+  "motiv": "welle",
+  "entwurf": true
+ },
+ {
+  "id": "kloster_3",
+  "biom": "kloster",
+  "titel": "Der Kreidestrich",
+  "text": "Der Bibliothekar hat einen Kreidestrich gezogen, damit niemand auf die Zeilen tritt, die vom Buchblock auf die Platten laufen. Der Strich ist überschrieben. Die letzte Zeile endet an deinen Füßen, mitten im Satz, und das Wort, das fehlt, wird erst gebraucht, wenn du stehen bleibst.",
+  "relief": "Eine Zeile, die den Buchblock wie Stufen hinabläuft, über Steinplatten bis zu einem Paar Füße.",
+  "motiv": "treppe",
+  "entwurf": true
+ },
+ {
+  "id": "grotte_1",
+  "biom": "grotte",
+  "titel": "Das Verzeichnis des Mesners",
+  "text": "Seit 1618 führt der Mesner das Verzeichnis der Gaben: Hand, Fuß, Auge, Herz, mit Namen, Tag und Gewicht. Wiegt er nach, ist jede ein Quentchen schwerer als bei der Aufnahme, und die Waage ist richtig. Er prüft sie mit dem Handrücken, wie ein Bäcker den Teig.",
+  "relief": "Eine Balkenwaage, auf einer Schale Wachshände, auf der anderen nichts, und der Balken neigt sich zu den Händen.",
+  "motiv": "waage",
+  "entwurf": true
+ },
+ {
+  "id": "grotte_2",
+  "biom": "grotte",
+  "titel": "Eintrag im Pilgerbuch",
+  "text": "Eine Pilgerin schrieb 1888, sie habe die Nacht über gewacht und die Wachshaufen atmen gehört, langsam, im Takt der Kerzen. Je tiefer sie atmeten, desto dunkler wurden die Kerzen und desto heller die Haufen. Es sei wie in einem Stall, schrieb sie, kurz bevor das Tier aufsteht.",
+  "relief": "Wachshaufen, aus denen Hände ragen und die von innen glimmen, davor eine einzelne Kerze, die erlischt.",
+  "motiv": "auge",
+  "schaltet": {
+   "art": "item",
+   "id": "veil"
+  },
+  "entwurf": true
+ },
+ {
+  "id": "grotte_3",
+  "biom": "grotte",
+  "titel": "Die letzte Eintragung der Chronik",
+  "text": "Nach dem Namen der letzten Pilgerin steht in der Wallfahrtschronik nur noch ein Satz: Die Madonna hat sich gedreht, zur Wand, damit sie besser hört. Die Wand ist warm wie ein Leib. Die Wachshände auf dem Boden haben sich nach ihr ausgerichtet, alle Finger zur Wand.",
+  "relief": "Eine Tropfsteinfigur mit dem Rücken zum Betrachter vor einer Wand, davor Reihen von Wachshänden, alle Finger zur Wand gestreckt.",
+  "motiv": "prozession",
+  "entwurf": true
+ },
+ {
+  "id": "glockengiesserei_1",
+  "biom": "glockengiesserei",
+  "titel": "Die Rechnung des Meisters",
+  "text": "Die Rechnung für die Glocke von 1641 führt Kupfer, Zinn, Holzkohle und Lehm auf, jedes mit Pfund und Preis. Die letzte Zeile heißt „Läuter, 1 Stück, neun Schilling“. Sie ist quittiert, mit demselben Federstrich wie das Brennholz.",
+  "relief": "Eine Waage, auf der einen Schale Kohle und Erz, auf der anderen ein Mann mit angezogenen Knien, und über beiden eine Glocke, unter deren Rand zwei Füße ragen.",
+  "motiv": "waage",
+  "entwurf": true
+ },
+ {
+  "id": "glockengiesserei_2",
+  "biom": "glockengiesserei",
+  "titel": "Der Küsterzettel",
+  "text": "An der Schachtwand hängt eine Läutordnung, mit Nägeln befestigt. Bei Hochwasser wird nicht gezogen, steht da, man stellt sich in den Kirchhof und zählt. Daneben ein zweiter Zettel in anderer Hand: Es sind immer so viele Schläge, wie Glocken hängen, und einer, den keine Glocke macht.",
+  "relief": "Männer am Rand eines Schachts, die an langen Seilen eine Glocke hochziehen, und an jedem Seil ein kleiner Strich pro Schlag.",
+  "motiv": "kette",
+  "entwurf": true
+ },
+ {
+  "id": "glockengiesserei_3",
+  "biom": "glockengiesserei",
+  "titel": "Der letzte Guss",
+  "text": "Die Glocke ist zu schwer für jeden Klöppel aus Eisen, hat der Geselle ins Lehmbrett geritzt. Der Meister sagte, sie brauche keinen, und wurde am Morgen nicht mehr gesehen. Unter dem Rand der großen Glocke hängt ein Paar Schnallenschuhe, wie er sie trug. Die Schnallen sind frisch geputzt.",
+  "relief": "Eine hohe Glocke im halben Lehmmantel, darunter ein Paar Schnallenschuhe, und davor ein Mann, der mit dem Rücken zu ihr eine Hand hebt.",
+  "motiv": "glocke",
+  "entwurf": true
+ },
+ {
+  "id": "waisenhaus_1",
+  "biom": "waisenhaus",
+  "titel": "Die Hausordnung",
+  "text": "Sie hängt hinter Glas an der Tür zum Schlafsaal, in Paragraphen, mit Tinte. Das Zählen nach dem Zapfenstreich ist Sache der Schwester. Kinder, die nachts antworten, ohne gerufen zu sein, sind nicht zu bestrafen und nicht anzusehen. Das Glas ist von innen beschlagen.",
+  "relief": "Eine schmale Tür mit einer Tafel voller Paragraphen, und unter dem Türspalt ein Streifen Wasser, der bis zu einem Paar nackter Füße reicht.",
+  "motiv": "tuer",
+  "entwurf": true
+ },
+ {
+  "id": "waisenhaus_2",
+  "biom": "waisenhaus",
+  "titel": "Das Appellbuch",
+  "text": "Seit der Sturmflut 1913 stehen in jeder Zeile mehr Kreuze, als Betten im Saal sind. Die Heimleiterin hat die Summe jeden Morgen mit Bleistift durchgestrichen und eine kleinere darunter gesetzt. Die Kreuze sind nicht wegzuradieren, das Papier ist an den Stellen gewellt, wie nach Regen.",
+  "relief": "Eine lange Reihe kleiner Gestalten im Nachthemd, die sich nach hinten verjüngt, und über jeder ein Kreuz, das mit Tropfen unten am Blatt hängt.",
+  "motiv": "prozession",
+  "entwurf": true
+ },
+ {
+  "id": "waisenhaus_3",
+  "biom": "waisenhaus",
+  "titel": "Die Kreidezeichnung",
+  "text": "Jemand hat mit Kreide das Haus von der Deichseite an die Kalkwand gezeichnet, alle Fenster hell, in jedem ein Kopf. Davor auf dem Deich stehen Striche, und sie gehen auf die Tür zu. Über dem Dach steht in Blockbuchstaben „VOLL“, darunter, mit anderem Kreidestumpf: „noch einer“.",
+  "relief": "Ein Haus mit erleuchteten Fenstern, in jedem ein runder Kopf mit weit offenen Augen, und vor der Tür eine Reihe Strichmännchen mit nassen Haaren.",
+  "motiv": "auge",
+  "entwurf": true
+ },
+ {
+  "id": "wald_1",
+  "biom": "wald",
+  "titel": "Die Wachstafel des Vermessers",
+  "text": "Ein Vermesser der Legion hat die Ringe eines Stumpfs gezählt und jeden Abend die Zahl in sein Wachs gedrückt. Jeden Abend ist sie kleiner. Beim letzten Eintrag steht nur noch ein Strich, und der Stumpf daneben hat eine Spanne Rinde angesetzt.",
+  "relief": "Ein gekappter Stamm mit einer Reihe Kerben auf einer Wachstafel davor, und aus dem Stumpf schiebt sich ein dünner heller Trieb nach unten.",
+  "motiv": "baum",
+  "entwurf": true
+ },
+ {
+  "id": "wald_2",
+  "biom": "wald",
+  "titel": "Das Lot an der Brücke",
+  "text": "Von der Hängebrücke fällt eine Schnur ins Dunkel, mit einem Bleilot am Ende. Die Legion hat jede Woche einen Knoten gesetzt, in Reihen, bis die Reihen aufhören. Die letzten Knoten sind aus Hanf, der noch nach Feld riecht, und die Schnur ist straff, als hielte unten jemand das Lot.",
+  "relief": "Eine Hängebrücke, an ihr eine Schnur mit Knoten in Reihen, die weit nach unten läuft und dort in einer kleinen offenen Hand endet.",
+  "motiv": "kette",
+  "schaltet": {
+   "art": "item",
+   "id": "boardaxe"
+  },
+  "entwurf": true
+ },
+ {
+  "id": "wald_3",
+  "biom": "wald",
+  "titel": "Der Stein, der falsch herum steht",
+  "text": "Am Straßenrand steht ein Grabstein der Legion auf dem Kopf. Man setzte hier die Toten kopfüber bei, weil im Wald alles nach unten wächst. Das Todesjahr liegt in der Zukunft, der Name beginnt mit dem Buchstaben, mit dem du deinen schreibst, und der Stein ist unten schon von Wurzeln gefasst.",
+  "relief": "Ein Grabstein, der mit der Schrift nach unten im Boden steckt, und aus seinem Fuß wachsen Wurzeln, die sich wie Finger um eine Hand legen.",
+  "motiv": "hand",
+  "entwurf": true
+ },
+ {
+  "id": "gezeitenwerk_1",
+  "biom": "gezeitenwerk",
+  "titel": "Die Tafel am Schaltrad",
+  "text": "Neben dem Schaltrad sind Handgriffe in Reihen in die Bronze graviert, Schritt für Schritt, ohne ein Wort. Jede Hand hat sieben Finger, und beim vierten Schritt biegt sich der zweite zurück, in einer Richtung, die kein Gelenk kennt. Jemand hat mit Kreide daneben geschrieben: geht nicht.",
+  "relief": "Eine Reihe gravierter Hände mit je sieben Fingern, deren zweiter Finger von Hand zu Hand weiter nach hinten knickt, und darunter ein Kreidestrich.",
+  "motiv": "hand",
+  "entwurf": true
+ },
+ {
+  "id": "gezeitenwerk_2",
+  "biom": "gezeitenwerk",
+  "titel": "Das Gefälle",
+  "text": "Der Ingenieur hat die Kanäle mit der Wasserwaage geprüft und einen Pfeil ins Notizbuch gezeichnet, der nach oben weist. Darunter steht: Es läuft hinauf, um herunterzukommen, wann es will. An der Rinne hat das Wasser eine Salzkante hinterlassen, sieben Finger breit über dem Pegel.",
+  "relief": "Ein Kanal, in dem Wellen bergauf an einer Steilwand laufen, und an seinem Rand eine Wasserwaage mit zwei entgegengesetzten Pfeilen.",
+  "motiv": "welle",
+  "entwurf": true
+ },
+ {
+  "id": "gezeitenwerk_3",
+  "biom": "gezeitenwerk",
+  "titel": "Der letzte Griff",
+  "text": "Hinter dem Regulator hängt ein Hebel an einer Kette, die durchhängt und trotzdem trägt. Die Mulden im Griff sind für sieben Finger, aber die blanke Spur zeigt fünf, und die Bronze ist dort bis auf das Licht durchgerieben. Es ist die rechte Hand. Es ist die, die du zuerst nehmen würdest.",
+  "relief": "Ein Bronzehebel an einer durchhängenden Kette, an seinem Griff fünf blanke Fingerspuren, und dahinter zwei leere Mulden, die glimmen.",
+  "motiv": "kette",
+  "entwurf": true
+ },
+ {
+  "id": "ziegelgruben_1",
+  "biom": "ziegelgruben",
+  "titel": "Die Brennlisten",
+  "text": "Die Listen der neununddreißigsten Legion verzeichnen Brenner, Träger und Heizer, und jeder hat statt einer Unterschrift einen Fingerabdruck in Wachs gedrückt. Es sind tausend Zeilen und tausendmal derselbe Finger, ein linker Ringfinger mit Narbe. Der Schreiber vermerkt am Rand, das sei sparsam.",
+  "relief": "Eine lange Reihe Männer mit Körben, die nacheinander einen Finger in eine Wachstafel drücken, und alle Abdrücke haben denselben Querstrich.",
+  "motiv": "prozession",
+  "entwurf": true
+ },
+ {
+  "id": "ziegelgruben_2",
+  "biom": "ziegelgruben",
+  "titel": "Die Holzform",
+  "text": "Die Form für die Rohlinge ist aus Eiche und hat einen Griff, in den eine Mulde geschliffen ist, von einer einzigen Hand. Quer durch die Mulde läuft eine Rille, wie ein Wasserlauf, glatt vom Gebrauch. Der Griff ist viel zu tief für das, was ein Leben hergibt.",
+  "relief": "Ein hölzerner Formkasten mit einem Griff, in dessen Mulde ein Finger liegt, und von dort laufen Rillen wie Furchen über das ganze Brett.",
+  "motiv": "hand",
+  "entwurf": true
+ },
+ {
+  "id": "ziegelgruben_3",
+  "biom": "ziegelgruben",
+  "titel": "Die Striche an den Kammern",
+  "text": "Wer den Ringofen entlanggeht und die Kammern zählt, kommt an einer Tür an, vor der schon Striche in Kohle stehen. Neben dem letzten Strich ist ein Finger in den Ruß gedrückt, mit Narbe, und der Ruß ist noch weich. Die Striche sind nicht die der Legion. Sie haben die Abstände, die du machst.",
+  "relief": "Eine Kurve aus Ofentüren, die in sich zurückläuft, und vor einer Tür Kohlestriche in gleichen Abständen, darunter ein Fingerabdruck im Ruß.",
+  "motiv": "rad",
+  "entwurf": true
+ },
+ {
+  "id": "station_1",
+  "biom": "station",
+  "titel": "Das Abnahmeprotokoll",
+  "text": "Das Protokoll ist unterschrieben und gestempelt: Kacheln gezählt, Lampen geprüft, Sperre gängig. Unter „Ausfahrt“ steht „vermauert, von der Innenseite, vorschriftsmäßig“. Die Menge Mörtel auf der Rechnung reicht für zwei Mann, die in einem Tunnel stehen und nicht herauskommen müssen.",
+  "relief": "Ein Tunnelmund, zugemauert mit Ziegeln, an dem der Mörtel wulstig nach außen quillt, und davor ein Blatt mit Stempel und zwei Unterschriften.",
+  "motiv": "tuer",
+  "entwurf": true
+ },
+ {
+  "id": "station_2",
+  "biom": "station",
+  "titel": "Die Strichliste des Vorstehers",
+  "text": "Jeden Tag stehen in der Spalte „Einstieg“ viele Striche und in der Spalte „Ausstieg“ eine Null. Der Vorsteher hat die Null mit den Monaten kleiner geschrieben und die Striche größer, bis beide auf eine Kachel passten. Auf der letzten ist nur noch die Null, mit einem Kreis darum, und der Kreis ist aus Mörtel gezogen.",
+  "relief": "Eine Reihe Gestalten, die an einer leeren Sperre vorbei in einen Wagen steigen, und auf der Kachel darüber eine einzelne Null in einem Ring.",
+  "motiv": "prozession",
+  "schaltet": {
+   "art": "item",
+   "id": "pick"
+  },
+  "entwurf": true
+ },
+ {
+  "id": "station_3",
+  "biom": "station",
+  "titel": "Die oberste Stufe",
+  "text": "Die Treppe in der Vorhalle endet an der Decke. Die oberste Stufe ist am tiefsten abgetreten, obwohl sie nirgends hinführt. Im Kalk der Decke stehen Handabdrücke, flach, mit gespreizten Fingern, wie von jemandem, der lange dagegen gedrückt hat. Sie stammen alle von derselben Seite, und es ist die, auf der du stehst.",
+  "relief": "Eine Treppe, die gegen eine Decke läuft, auf der Decke Handabdrücke in Reihen, und unter ihnen eine Stufe, die bis auf den Stein abgenutzt ist.",
+  "motiv": "treppe",
+  "entwurf": true
+ },
+ {
+  "id": "walkathedrale_1",
+  "biom": "walkathedrale",
+  "titel": "Das Maßbuch des Zimmermanns",
+  "text": "Der Zimmermann der Expedition musste den Bohlenweg zweimal breiter legen. Nicht die Bohlen waren zu schmal, die Rippen hatten sich über Nacht eine Handbreit zum Weg hin gebogen, auf beiden Seiten gleich, wie Finger, die sich langsam schließen. Seine ersten Kreidemarken sind in den Knochen eingewachsen und stehen jetzt innen, wo kein Knochen angefasst wurde.",
+  "relief": "Rippen, die sich wie Äste zum Gang hin krümmen, und an ihrem Fuß, vom Knochen halb überwachsen, eine Reihe Kreidestriche.",
+  "motiv": "baum",
+  "entwurf": true
+ },
+ {
+  "id": "walkathedrale_2",
+  "biom": "walkathedrale",
+  "titel": "Der Lampenjunge",
+  "text": "Alle zehn Schritte hing eine Tranlampe an einem Harpunenschaft, und der Junge der Expedition füllte sie abends nach. Er schrieb auf, welche erloschen waren, und es waren immer die hintersten zuerst, nie die vordersten, obwohl Docht und Tran überall dieselben sind. Der letzte Eintrag lautet: Sie gehen mir nach.",
+  "relief": "Eine Reihe von Männern mit Lampen zwischen Rippen, die vorderen Lampen hell, die hinteren schon erloschen und rauchend.",
+  "motiv": "prozession",
+  "entwurf": true
+ },
+ {
+  "id": "walkathedrale_3",
+  "biom": "walkathedrale",
+  "titel": "Die Zeichnung am Ende",
+  "text": "Der Zimmermann hat die Abstände der Rippen auf den Bohlenweg übertragen und ausgerechnet, dass der Gang vor dem Herzen in vier Wochen genau eine Mannsbreite haben wird. Er hat nachgemessen, mit seinem eigenen Körper, und den Umriss danebengezeichnet. Der Umriss ist schraffiert, wie man auf Plänen schraffiert, was gefüllt wird.",
+  "relief": "Zwei Reihen Rippen, die sich bis auf Körperbreite zu einem Tor schließen, und im Tor ein kleiner, schraffierter Umriss.",
+  "motiv": "tuer",
+  "entwurf": true
+ },
+ {
+  "id": "glasmeer_1",
+  "biom": "glasmeer",
+  "titel": "Die Uhr im Glas",
+  "text": "Der Steuermann der Expedition trug zwei Uhren, eine für die Heimat und eine für das Eis. Im Glas liegt eine dritte, auf dem Rücken, mit offenem Deckel. Ihr Spiegelbild geht einen Pendelschlag vor, und er hat in sein Heft geschrieben, welche von beiden die richtige Zeit zeigt.",
+  "relief": "Eine Taschenuhr auf schwarzem Glas und unter ihr ihr Spiegelbild, dessen Zeiger eine Stelle weiter stehen.",
+  "motiv": "rad",
+  "entwurf": true
+ },
+ {
+  "id": "glasmeer_2",
+  "biom": "glasmeer",
+  "titel": "Die Aussage des Hundeführers",
+  "text": "Die Hunde bellten nie die Gestalt an, die wir sahen, sagte der Hundeführer in Tromsø zu Protokoll, nur die, die wir nicht sahen. Die steht im Boden, sagte er, mit zu langen Armen und zu kleinem Kopf, und auf dem Glas über ihr steht niemand. Danach hat er nichts mehr gesagt, was das Protokoll hätte aufnehmen können.",
+  "relief": "Eine schmale Gestalt kopfüber im Glas, ihre Arme reichen bis unter die Sohlen eines kleinen Menschen, der nicht hinabsieht.",
+  "motiv": "hand",
+  "schaltet": {
+   "art": "item",
+   "id": "woolcoat"
+  },
+  "entwurf": true
+ },
+ {
+  "id": "glasmeer_3",
+  "biom": "glasmeer",
+  "titel": "Noch ein Schritt",
+  "text": "Auf dem Schlittenbrett steht in Kreide die Strecke bis zum nächsten Depot, jeden Abend neu geschrieben: noch ein Schritt. Wochenlang derselbe Eintrag, und niemand hat widersprochen. Das Depot steht im Glas, aufrecht, die Kiste ist offen, und sie ist gepackt für eine Person, nach Maß.",
+  "relief": "Eine Kette von Kreidefußspuren auf einem Schlittenbrett, jede einen Schritt weiter als die vorige, die letzte kopfüber.",
+  "motiv": "kette",
+  "entwurf": true
+ },
+ {
+  "id": "mond_1",
+  "biom": "mond",
+  "titel": "Das Heft des Gehilfen",
+  "text": "Im Notizheft stehen die Krater der Nachtseite mit den Namen, die der Gehilfe ihnen gab: nach seiner Mutter, seinem Hund, dem Wirt. Neben jedem steht eine Uhrzeit, es sind die Zeiten, zu denen sie geblinzelt haben. Der letzte hat keinen Namen und keine Uhrzeit, nur einen Haken, wie man ihn setzt, wenn jemand zurückgesehen hat.",
+  "relief": "Eine Mondkarte mit beschrifteten Kratern, jeder mit einer Uhrzeit am Rand, und ein Krater mit angedeutetem Lid.",
+  "motiv": "auge",
+  "entwurf": true
+ },
+ {
+  "id": "mond_2",
+  "biom": "mond",
+  "titel": "Karte an die Schwester",
+  "text": "Ich halte die Leiter, schrieb der Gehilfe auf einer Karte, die nie ankam. Wenn ich die Augen schließe, wird es nicht dunkler, sondern wärmer, wie wenn ein Gesicht ganz nah ist. Ich habe die Karte hier gelassen, weil sie auf dem Weg nach unten nasser würde.",
+  "relief": "Zwei Hände um die Holme einer Leiter, die im Dunkel endet, und darüber ein halb geschlossenes Lid aus Mondstaub.",
+  "motiv": "hand",
+  "entwurf": true
+ },
+ {
+  "id": "mond_3",
+  "biom": "mond",
+  "titel": "Der Krater ohne Rand",
+  "text": "Die Zeichnungen des nächsten Kraters ändern sich von Blatt zu Blatt: erst ein Kreis, dann ein Kreis mit Punkt, der Punkt jedes Mal größer, wie eine Pupille, wenn es dunkler wird. Auf dem letzten Blatt gibt es keinen Rand mehr, nur noch den Punkt. Das Papier ist an dieser Stelle rund eingedrückt, als hätte es jemand von unten angesehen.",
+  "relief": "Ein Ringwall, in dem sich eine bleiche Pupille öffnet, und davor, winzig, die Spitze einer Feder.",
+  "motiv": "auge",
+  "entwurf": true
+ },
+ {
+  "id": "funkstation_1",
+  "biom": "funkstation",
+  "titel": "Das Eingangsbuch",
+  "text": "Der Telegrafist der Station führte das Eingangsbuch mit Uhrzeit, und die Antworten stehen vor den Anfragen, jedes Mal um dieselben vier Minuten. Er schrieb an den Rand, die Uhr gehe falsch, und stellte sie. Die vier Minuten blieben, und die Peilung zeigt auf keine Himmelsrichtung: Die Nadel steht senkrecht und zittert nach unten.",
+  "relief": "Ein Peilkompass im Schnee, dessen Nadel senkrecht ins Eis weist, daneben ein aufgeschlagenes Buch mit Uhrzeiten.",
+  "motiv": "rad",
+  "entwurf": true
+ },
+ {
+  "id": "funkstation_2",
+  "biom": "funkstation",
+  "titel": "Der Streifen im Schnee",
+  "text": "Der Papierstreifen des Schreibempfängers lag morgens nicht neben dem Apparat, sondern draußen, in einer geraden Linie bis zum Eis. Der Funker holte ihn jeden Morgen herein und hängte ihn über die Leine, und jeden Morgen war er länger. Einmal hat er das Ende festgehalten, und der Streifen hat gezogen, nicht stark, so wie man zieht, wenn man ein Blatt Papier zurückhaben will.",
+  "relief": "Ein Papierstreifen voller Punkte und Striche, der aus einer Hüttentür über den Schnee zu einem runden Loch im Eis läuft.",
+  "motiv": "kette",
+  "entwurf": true
+ },
+ {
+  "id": "funkstation_3",
+  "biom": "funkstation",
+  "titel": "Die Skizze des Funkers",
+  "text": "Unter dem Eis blinken Lichter in Kurz und Lang, in einer Reihe, und der Funker hat sie auf die Rückseite eines Formulars gezeichnet. Die Reihe läuft auf die Hütte zu, und er hat die Abstände gemessen: Jeden Abend sind sie um einen Schritt kürzer. Der letzte Eintrag lautet, das Licht stehe jetzt unter der Schwelle und warte, bis er mit dem Zuhören fertig sei.",
+  "relief": "Unter einer Eisdecke eine Reihe kleiner Lichter, kurz und lang, die auf eine Hütte mit hellem Fenster zuläuft.",
+  "motiv": "prozession",
+  "entwurf": true
+ },
+ {
+  "id": "ufer_1",
+  "biom": "ufer",
+  "titel": "Die Dienstkarte",
+  "text": "Der Strandwärter harkt jeden Morgen die Spuren glatt, so steht es auf der Dienstkarte in seiner Badehütte. Die Spur, die zur Säule führt, hat er nie angerührt. Daneben steht mit Bleistift: Gast, noch nicht abgemeldet.",
+  "relief": "Eine Reihe nackter Fußabdrücke im Sand, die vor einer Wassersäule endet, daneben eine Harke, die nur bis zum ersten Abdruck reicht.",
+  "motiv": "kette",
+  "entwurf": true
+ },
+ {
+  "id": "ufer_2",
+  "biom": "ufer",
+  "titel": "Die Badeordnung",
+  "text": "An der Badehütte hängt die Ordnung, und ein Satz ist umgeschrieben: Baden nur bei ablaufender Flut. Das Wasser läuft hier tatsächlich ab, in langen Bahnen nach oben, jede Welle mit einer Lippe aus Schaum an der Unterkante. Darunter hängt ein Zettel mit einem Strich für jeden Gast, der heute noch zurückkommt, und er ist leer.",
+  "relief": "Eine Tafel mit Badeordnung unter einer Decke aus Wellen, die nach unten brechen, ein Strichzettel ohne Striche.",
+  "motiv": "welle",
+  "entwurf": true
+ },
+ {
+  "id": "ufer_3",
+  "biom": "ufer",
+  "titel": "Vor der Wand",
+  "text": "Der Strandwärter hat die Spuren vermessen, jeden Morgen mit dem Zollstock. Es ist immer derselbe Fuß, und jeden Morgen kommen ein paar dazu, von einer anderen Seite. Heute sind sie bis an die Hütte gekommen. Vor der Wand, wo keine Tür ist, stehen sie dicht an dicht, und sie sind nass.",
+  "relief": "Fußspuren, die von allen Seiten auf eine Hütte ohne Tür zulaufen und sich vor der Wand drängen.",
+  "motiv": "tuer",
+  "entwurf": true
+ },
+ {
+  "id": "waage_1",
+  "biom": "waage",
+  "titel": "Das Eichprotokoll",
+  "text": "Der Eichmeister vermerkt, die Zunge der Waage stehe auf Null, solange er daneben steht. Tritt er zur Seite, neigt sich der Balken zu der Stelle, an der er stand. Er hat mit Kreide zwei Fußumrisse auf die Fliesen gezeichnet, um es zu prüfen, und der Balken neigt sich seither zu ihnen, auch wenn er fort ist.",
+  "relief": "Ein Waagebalken, der sich zu einer leeren Stelle neigt, auf den Fliesen davor zwei Kreideumrisse von Füßen.",
+  "motiv": "waage",
+  "entwurf": true
+ },
+ {
+  "id": "waage_2",
+  "biom": "waage",
+  "titel": "Die Dienstregel",
+  "text": "In der Dienstordnung der Zöllner steht eine Regel, die in keiner anderen Behörde gilt: Die leere Schale gilt als die schwerere. Die Beamten haben sich darüber nie gewundert. Einer hat darunter mit Bleistift ausgerechnet, um wie viel sie tiefer hängt als die volle, und es ist genau das Gewicht dessen, der gerade davorsteht.",
+  "relief": "Eine Hand mit Bleistift über einer Rechnung, daneben zwei Schalen, die leere tiefer als die volle.",
+  "motiv": "waage",
+  "schaltet": {
+   "art": "item",
+   "id": "bible"
+  },
+  "entwurf": true
+ },
+ {
+  "id": "waage_3",
+  "biom": "waage",
+  "titel": "Der Eichschein",
+  "text": "An der Säule hängt der Eichschein, ein Vordruck mit Stempel: Gerade nach Beendigung der Abfertigung, beide Schalen leer. Das Datum ist offen. Die Fliesen unter der tiefen Schale sind rund abgetreten, in der Größe zweier Schuhsohlen, und es sind genau die, auf denen du stehst. Unter der hohen Schale glänzen sie wie neu.",
+  "relief": "Zwei leere Schalen, die eine tief, die andere hoch, darunter Fliesen, die unter der tiefen abgetreten sind und unter der hohen unberührt.",
+  "motiv": "waage",
+  "entwurf": true
  }
 ]
