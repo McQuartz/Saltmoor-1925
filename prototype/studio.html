@@ -40,7 +40,7 @@ button.on{border-color:var(--gold);color:var(--gold)}
 .zeile canvas{width:120px;height:26px;display:block}
 .zeile .len{color:var(--dim);text-align:right;font-size:16px}
 .detail{position:sticky;top:10px}
-.detail canvas.gross{width:100%;height:150px;background:#070a09;border:2px solid #1f2826;display:block}
+.detail canvas.gross{cursor:ew-resize;width:100%;height:150px;background:#070a09;border:2px solid #1f2826;display:block}
 .status{font-family:var(--fd);font-size:9px;line-height:1.6;min-height:16px;color:var(--gold)}
 .takes{display:flex;flex-direction:column;gap:3px}
 .take{display:grid;grid-template-columns:auto 1fr auto auto auto;gap:6px;align-items:center;font-size:17px;border:2px solid #1a2120;padding:3px 6px}
@@ -54,7 +54,7 @@ button.on{border-color:var(--gold);color:var(--gold)}
 <div id="st">
  <h1>Aufnahme-Studio</h1>
  <p>Alle Soundeffekte des Spiels. Links aussuchen, rechts Original anhören und mit dem Mund nachmachen. Jede Aufnahme wird sofort gespeichert, die neueste ist die gewählte. Mit „Im Spiel benutzen“ spielt das Spiel deine Aufnahmen statt der Originale.</p>
- <p class="hinweis">Tasten: <kbd>Leertaste</kbd> aufnehmen / stoppen · <kbd>O</kbd> Original · <kbd>P</kbd> deine Aufnahme · <kbd>A</kbd> erst Original, dann deine · <kbd>↑</kbd><kbd>↓</kbd> Sound wechseln</p>
+ <p class="hinweis">Tasten: <kbd>Leertaste</kbd> aufnehmen / stoppen · <kbd>O</kbd> Original · <kbd>P</kbd> deine Aufnahme · <kbd>A</kbd> erst Original, dann deine · <kbd>Z</kbd> beide zusammen · <kbd>,</kbd><kbd>.</kbd> Spur schieben (mit Umschalt mehr) · <kbd>↑</kbd><kbd>↓</kbd> Sound wechseln</p>
 
  <div class="oben">
   <div class="panel">
@@ -62,6 +62,7 @@ button.on{border-color:var(--gold);color:var(--gold)}
    <div class="reihe"><button id="mikAn" class="sm">Mikro einschalten</button><select id="geraet" disabled><option>(erst Mikro einschalten)</option></select></div>
    <div class="reihe"><label>Kanal <select id="kanal"><option value="0">Eingang 1 (links)</option><option value="1">Eingang 2 (rechts)</option><option value="m">beide gemischt</option></select></label></div>
    <div class="reihe"><div class="meter"><i id="pegel"></i><b id="schwelleStrich"></b></div><span class="dbz" id="pegelDb">– dB</span></div>
+   <p class="hinweis" id="technik"></p>
    <p class="hinweis">SM7B am Apollo Solo: Mikro steckt meist an Eingang 1. Gain am Apollo so, dass laute Sounds gelb werden, aber nie rot. Echo- und Rauschunterdrückung des Browsers sind aus.</p>
   </div>
   <div class="panel">
@@ -87,14 +88,20 @@ button.on{border-color:var(--gold);color:var(--gold)}
    <h2 id="dName">–</h2>
    <p id="dWo"></p>
    <canvas class="gross" id="welle" width="1200" height="300"></canvas>
-   <div class="hinweis">Gold: Original · Grün: deine gewählte Aufnahme · Strich: Ende des Originals</div>
+   <div class="hinweis">Gold: Original · Grün: deine gewählte Aufnahme (blass: Luft davor und danach) · Strich: Ende des Originals</div>
    <div class="status" id="status"></div>
    <div class="reihe">
     <button id="bOrig" class="sm">▶ Original</button>
     <button id="bRec" class="sm rec">● Aufnehmen</button>
     <button id="bTake" class="sm">▶ Deine</button>
     <button id="bAB" class="sm">A/B</button>
+    <button id="bZus" class="sm">▶ Zusammen</button>
    </div>
+   <div class="reihe"><span class="hinweis">Spur schieben:</span>
+    <button class="sm" data-schieb="-0.05">◀◀</button><button class="sm" data-schieb="-0.01">◀</button>
+    <button class="sm" data-schieb="0.01">▶</button><button class="sm" data-schieb="0.05">▶▶</button>
+    <button class="sm" id="bAuto">Einsatz automatisch</button><span class="hinweis" id="versatz"></span></div>
+   <div class="hinweis">Oder in der Welle ziehen. ◀ schiebt deine Spur nach links (früher), ▶ nach rechts (später). Vor und nach dem Ausschnitt ist immer Luft mit aufgenommen (blass).</div>
    <div class="reihe"><label>Pegel der gewählten Aufnahme <input type="range" id="tPegel" min="-24" max="12" step="1" value="0"></label><span id="tPegelWert">0 dB</span></div>
    <h2>Aufnahmen</h2>
    <div class="takes" id="takes"></div>

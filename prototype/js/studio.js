@@ -29,28 +29,40 @@ async function rendere(e){
  ORIG[e.key]={pcm:pcm.slice(0,Math.ceil(dauer*sr)),sr,dauer,spitze:sp};}
 
 // ---------- Mikro ----------
-let mik=null; // {strom, quelle, knoten}
-const VORLAUF=.25; // Sekunden vor dem Einsatz, die mitgeschnitten werden
+// Eigener AudioContext fürs Mikro, mit der Abtastrate des Eingangs (kein Umrechnen zwischen Apollo und Wiedergabe).
+// Dazu eine Messung, wie viele Samples pro Sekunde wirklich ankommen: weicht das ab, gilt die gemessene Rate.
+let mik=null; // {strom, quelle, knoten, cap}
+let CAP=null,capRate=0; // Aufnahme-Kontext und die Rate, mit der gespeichert wird
+const VORLAUF=.6;  // Sekunden vor dem Einsatz, die beim Start per Schwelle mitgeschnitten werden (Luft zum Schieben)
+const NACHLAUF=1.0; // Sekunden nach der Originallänge, die zusätzlich mitlaufen
 let vorl=[],vorlN=0; // letzte Blöcke (Mono, nach Kanalwahl)
 let aufn=null; // laufende Aufnahme: {key, bloecke, n, ziel, phase:'wartet'|'zaehlt'|'nimmt', ...}
-let pegelSpitze=0;
+let pegelSpitze=0,clip=false;
+let mess={t0:0,n:0,rate:0};
 const WORKLET=`class Abgriff extends AudioWorkletProcessor{process(i){const x=i[0];if(x&&x.length)this.port.postMessage(x.map(c=>c.slice(0)));return true;}}registerProcessor('abgriff',Abgriff);`;
+async function mikroAus(){if(!mik)return;mik.strom.getTracks().forEach(t=>t.stop());try{mik.quelle.disconnect();mik.knoten.disconnect();}catch(e){}
+ try{await mik.cap.close();}catch(e){}mik=null;CAP=null;}
 async function mikroAn(){
- au();if(!AC){status('Kein Audio im Browser.',true);return;}if(AC.state==='suspended')await AC.resume();
- if(mik){mik.strom.getTracks().forEach(t=>t.stop());try{mik.quelle.disconnect();mik.knoten.disconnect();}catch(e){}mik=null;}
+ au();if(AC&&AC.state==='suspended')await AC.resume(); // Wiedergabe-Kontext (sfx.js) im selben Klick wecken
+ await mikroAus();
  const c={echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:{ideal:2}};
  if(ST.geraet)c.deviceId={exact:ST.geraet};
  let strom;
  try{strom=await navigator.mediaDevices.getUserMedia({audio:c});}
  catch(e){if(ST.geraet){ST.geraet='';merke();return mikroAn();}status('Mikro nicht freigegeben: '+e.message,true);return;}
  await geraeteListe(strom);
- if(!mikroAn.geladen){await AC.audioWorklet.addModule(URL.createObjectURL(new Blob([WORKLET],{type:'application/javascript'})));mikroAn.geladen=true;}
- const quelle=AC.createMediaStreamSource(strom),knoten=new AudioWorkletNode(AC,'abgriff',{numberOfInputs:1,numberOfOutputs:1,channelCountMode:'explicit',channelCount:2});
- const stumm=AC.createGain();stumm.gain.value=0;quelle.connect(knoten).connect(stumm).connect(AC.destination);
- knoten.port.onmessage=ev=>block(ev.data);
- mik={strom,quelle,knoten};$('mikAn').textContent='Mikro neu verbinden';
  const tr=strom.getAudioTracks()[0],s=tr.getSettings?tr.getSettings():{};
- status(`Mikro an: ${tr.label||'Eingang'} · ${s.channelCount||'?'} Kanal · ${AC.sampleRate} Hz`);}
+ let cap;try{cap=s.sampleRate?new AudioContext({sampleRate:s.sampleRate,latencyHint:'interactive'}):new AudioContext({latencyHint:'interactive'});}
+ catch(e){cap=new AudioContext({latencyHint:'interactive'});}
+ if(cap.state==='suspended')await cap.resume();
+ await cap.audioWorklet.addModule(URL.createObjectURL(new Blob([WORKLET],{type:'application/javascript'})));
+ const quelle=cap.createMediaStreamSource(strom),knoten=new AudioWorkletNode(cap,'abgriff',{numberOfInputs:1,numberOfOutputs:1,channelCountMode:'explicit',channelCount:2});
+ const stumm=cap.createGain();stumm.gain.value=0;quelle.connect(knoten).connect(stumm).connect(cap.destination);
+ knoten.port.onmessage=ev=>block(ev.data);
+ CAP=cap;capRate=cap.sampleRate;mess={t0:0,n:0,rate:0};vorl=[];vorlN=0;
+ mik={strom,quelle,knoten,cap};$('mikAn').textContent='Mikro neu verbinden';
+ mik.info=`${tr.label||'Eingang'} · ${s.channelCount||'?'} Kanal · Eingang ${s.sampleRate||'?'} Hz · Aufnahme ${cap.sampleRate} Hz · Wiedergabe ${AC?AC.sampleRate:'?'} Hz`;
+ status('Mikro an: '+mik.info);$('technik').textContent=mik.info;}
 async function geraeteListe(strom){
  const l=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='audioinput');
  const akt=strom&&strom.getAudioTracks()[0].getSettings().deviceId;
@@ -58,72 +70,87 @@ async function geraeteListe(strom){
  sel.innerHTML=l.map(d=>`<option value="${d.deviceId}"${d.deviceId===(ST.geraet||akt)?' selected':''}>${(d.label||'Eingang').replace(/</g,'&lt;')}</option>`).join('');}
 function mono(kanaele){const k=ST.kanal;if(kanaele.length<2||k==='0')return kanaele[0];if(k==='1')return kanaele[1];
  const a=kanaele[0],b=kanaele[1],o=new Float32Array(a.length);for(let i=0;i<a.length;i++)o[i]=(a[i]+b[i])*.5;return o;}
+// Wie viele Samples pro Sekunde kommen wirklich an? (nach 1 s Einschwingen, gemittelt über die Zeit)
+function messe(n){const jetzt=performance.now();if(!mess.t0){mess.t0=jetzt;mess.start=jetzt;return;}
+ if(jetzt-mess.start<1000){mess.t0=jetzt;mess.n=0;return;}mess.n+=n;const dt=(jetzt-mess.t0)/1000;
+ if(dt>2){mess.rate=mess.n/dt;const ab=Math.abs(mess.rate/capRate-1);
+  $('technik').textContent=(mik?mik.info:'')+` · gemessen ${Math.round(mess.rate)} Hz`+(ab>.03?' · ABWEICHUNG, nehme gemessene Rate':'');
+  $('technik').classList.toggle('warn',ab>.03);}}
+function rateFuerTake(){if(mess.rate&&Math.abs(mess.rate/capRate-1)>.03){const std=[8000,11025,16000,22050,24000,32000,44100,48000,88200,96000,176400,192000];
+  return std.reduce((a,b)=>Math.abs(b-mess.rate)<Math.abs(a-mess.rate)?b:a);}return capRate;}
 function block(kanaele){
  const x=mono(kanaele);let sp=0;for(let i=0;i<x.length;i++){const a=Math.abs(x[i]);if(a>sp)sp=a;}
- if(sp>pegelSpitze)pegelSpitze=sp;
- vorl.push(x);vorlN+=x.length;const max=AC.sampleRate*VORLAUF+x.length;while(vorlN-vorl[0].length>max){vorlN-=vorl.shift().length;}
+ messe(x.length);
+ if(sp>pegelSpitze)pegelSpitze=sp;if(sp>=.99)clip=true;
+ const sr=capRate;
+ vorl.push(x);vorlN+=x.length;const max=sr*VORLAUF+x.length;while(vorlN-vorl[0].length>max){vorlN-=vorl.shift().length;}
  if(!aufn)return;
- if(aufn.phase==='wartet'&&dbV(sp)>=ST.schwelle){aufn.phase='nimmt';aufn.bloecke=vorl.slice();aufn.n=vorlN;status('● Aufnahme läuft …');return;}
- if(aufn.phase!=='nimmt')return;
- aufn.bloecke.push(x);aufn.n+=x.length;const sr=AC.sampleRate;
+ if(aufn.phase==='wartet'&&dbV(sp)>=ST.schwelle){aufn.phase='nimmt';aufn.bloecke=vorl.slice();aufn.n=vorlN;aufn.los=vorlN;aufn.clip=false;status('● Aufnahme läuft …');knopf();return;}
+ if(aufn.phase!=='nimmt'&&aufn.phase!=='zaehlt')return;
+ aufn.bloecke.push(x);aufn.n+=x.length;if(sp>=.99)aufn.clip=true;
+ if(aufn.phase==='zaehlt')return;
  if(dbV(sp)>ST.schwelle-12)aufn.zuletztLaut=aufn.n;
- const fertig=ST.laenge==='wie'?aufn.n>=aufn.ziel*sr:(aufn.n>=8*sr||(aufn.zuletztLaut&&aufn.n-aufn.zuletztLaut>.6*sr));
+ const ab=aufn.n-(aufn.los||0);
+ const fertig=ST.laenge==='wie'?ab>=aufn.ziel*sr:(ab>=8*sr||(aufn.zuletztLaut&&aufn.n-aufn.zuletztLaut>.8*sr));
  if(fertig)aufnahmeEnde();}
 // Pegelanzeige (fällt langsam ab)
 let pegelAnz=0;
 (function zeige(){const v=dbV(pegelSpitze);pegelSpitze=0;pegelAnz=Math.max(v,pegelAnz-1.2);
- const p=Math.max(0,Math.min(1,(pegelAnz+60)/60));$('pegel').style.width=(p*100)+'%';$('pegelDb').textContent=mik?(pegelAnz<=-60?'–∞ dB':de(pegelAnz,0)+' dB'):'– dB';
+ const p=Math.max(0,Math.min(1,(pegelAnz+60)/60));$('pegel').style.width=(p*100)+'%';$('pegelDb').textContent=mik?(clip?'ÜBERSTEUERT':pegelAnz<=-60?'–∞ dB':de(pegelAnz,0)+' dB'):'– dB';
+ $('pegelDb').classList.toggle('warn',clip);
  requestAnimationFrame(zeige);})();
+setInterval(()=>{clip=false;},2500);
 function schwelleStrich(){$('schwelleStrich').style.left=((ST.schwelle+60)/60*100)+'%';$('schwelleWert').textContent=ST.schwelle+' dB';}
 
 // ---------- Aufnahme ----------
+// Es wird immer mehr aufgenommen als nötig: davor (Vorlauf bzw. das ganze Einzählen) und danach (Nachlauf).
+// Gespeichert wird alles; „start“ sagt, wo der benutzte Ausschnitt beginnt, „laenge“, wie lang er ist. Verschieben ändert nur „start“.
 const warte=ms=>new Promise(r=>setTimeout(r,ms));
 async function aufnahme(){
  if(aufn){aufn.phase==='nimmt'?aufnahmeEnde():abbruch();return;}
  if(!mik){await mikroAn();if(!mik)return;}
  const e=K[ST.sel],o=ORIG[e.key];if(!o)return;
- const zug={key:e.key,phase:'vorher',bloecke:[],n:0,ziel:o.dauer+(ST.ausloeser==='stimme'?VORLAUF+.1:1.2),zuletztLaut:0};aufn=zug;knopf();
+ const zug={key:e.key,phase:'vorher',bloecke:[],n:0,ziel:o.dauer+NACHLAUF,zuletztLaut:0,clip:false};aufn=zug;knopf();
  if(ST.vorher){status('▶ Original …');spieleOrig();await warte(o.dauer*1000+350);if(aufn!==zug)return;}
- if(ST.ausloeser==='zaehlen'){zug.phase='zaehlt';
+ if(ST.ausloeser==='zaehlen'){zug.phase='zaehlt';zug.bloecke=[];zug.n=0;knopf(); // Einzählen läuft schon mit (Luft davor)
   for(const z of ['3','2','1']){if(aufn!==zug)return;status(z+' …');tn(z==='1'?1320:880,.05,'square',.05,0,0,{lp:3000});await warte(600);}
-  if(aufn!==zug)return;zug.phase='nimmt';zug.n=0;zug.bloecke=[];status('● Aufnahme läuft …');}
+  if(aufn!==zug)return;zug.los=zug.n;zug.phase='nimmt';status('● Aufnahme läuft …');}
  else{zug.phase='wartet';status('● bereit: mach den Sound (Leertaste bricht ab)');}
  knopf();}
 function abbruch(){aufn=null;knopf();status('abgebrochen');}
 async function aufnahmeEnde(){
  const z=aufn;aufn=null;knopf();if(!z||!z.n)return;
- const sr=AC.sampleRate,roh=new Float32Array(z.n);let p=0;z.bloecke.forEach(b=>{roh.set(b,p);p+=b.length;});
- const o=ORIG[z.key],pcm=bearbeite(roh,sr,o);
- if(!pcm){status('Nichts gehört. Gain am Apollo höher oder Schwelle tiefer.',true);return;}
- const t={key:z.key,sr,pcm,dauer:pcm.length/sr,zeit:Date.now(),pegel:0};
+ const sr=rateFuerTake(),roh=new Float32Array(z.n);let p=0;z.bloecke.forEach(b=>{roh.set(b,p);p+=b.length;});
+ const o=ORIG[z.key],r=bearbeite(roh,sr,o);
+ if(!r){status('Nichts gehört. Gain am Apollo höher oder Schwelle tiefer.',true);return;}
+ const t={key:z.key,sr,pcm:r.pcm,start:r.start,laenge:r.laenge,dauer:r.laenge,zeit:Date.now(),pegel:0};
  t.id=await A.neuerTake(t);
  await aufDiePlatte(t,true);
- status(`✓ gespeichert (${de(t.dauer)} s)${ordner?' · '+dateiName(t)+' im Ordner':''}`);
+ status(`✓ gespeichert (${de(t.laenge)} s)${ordner?' · '+dateiName(t)+' im Ordner':''}${z.clip?' · ACHTUNG: übersteuert, Gain am Apollo runter':''}`,z.clip);
  await lade();zeichne();
  if(ST.weiter&&ST.sel<K.length-1){waehle(ST.sel+1);}else{Mund.spiele(t);}}
-// Einsatz suchen, schneiden, Gleichanteil weg, ein-/ausblenden, angleichen
+// Gleichanteil weg, Einsatz suchen (= Vorschlag für „start“), Länge festlegen, Pegel angleichen. Geschnitten wird erst beim Abspielen/Speichern.
 function bearbeite(x,sr,o){
  let m=0;for(let i=0;i<x.length;i++)m+=x[i];m/=x.length||1;for(let i=0;i<x.length;i++)x[i]-=m;
  let sp=0;for(let i=0;i<x.length;i++){const a=Math.abs(x[i]);if(a>sp)sp=a;}
  if(sp<1e-4)return null;
- let ein=0;for(let i=0;i<x.length;i++)if(Math.abs(x[i])>sp*.08){ein=i;break;}
- const a=Math.max(0,ein-Math.round(.008*sr));
- let e;
- if(ST.laenge==='wie')e=Math.min(x.length,a+Math.round(o.dauer*sr));
- else{e=a;for(let i=x.length-1;i>a;i--)if(Math.abs(x[i])>sp*.02){e=Math.min(x.length,i+Math.round(.06*sr));break;}}
- const y=x.slice(a,e);if(!y.length)return null;
- const fi=Math.min(y.length,Math.round(.003*sr)),fo=Math.min(y.length,Math.round(.03*sr));
- for(let i=0;i<fi;i++)y[i]*=i/fi;for(let i=0;i<fo;i++)y[y.length-1-i]*=i/fo;
- let s2=0;for(let i=0;i<y.length;i++){const v=Math.abs(y[i]);if(v>s2)s2=v;}
- const ziel=ST.angleich?Math.min(.95,Math.max(.2,o.spitze)):.89;const g=Math.min(100,ziel/(s2||1));
- for(let i=0;i<y.length;i++)y[i]*=g;
- return y;}
+ const ein=einsatz(x,sp),a=Math.max(0,ein-Math.round(.008*sr));
+ let laenge;
+ if(ST.laenge==='wie')laenge=o.dauer;
+ else{let e=a;for(let i=x.length-1;i>a;i--)if(Math.abs(x[i])>sp*.02){e=Math.min(x.length,i+Math.round(.06*sr));break;}laenge=Math.max(.05,(e-a)/sr);}
+ // Angleichen an der Spitze im benutzten Ausschnitt
+ let s2=0;const b=Math.min(x.length,a+Math.round(laenge*sr));for(let i=a;i<b;i++){const v=Math.abs(x[i]);if(v>s2)s2=v;}
+ const ziel=ST.angleich?Math.min(.95,Math.max(.2,o.spitze)):.89;const g=Math.min(100,ziel/(s2||sp));
+ for(let i=0;i<x.length;i++)x[i]*=g;
+ return {pcm:x,start:a/sr,laenge};}
+function einsatz(x,sp){for(let i=0;i<x.length;i++)if(Math.abs(x[i])>sp*.08)return i;return 0;}
 
 // ---------- Abspielen ----------
 let TAKES={},WAHL={}; // key -> [takes], key -> take-id
 function gewaehlt(key){const id=WAHL[key];return (TAKES[key]||[]).find(t=>t.id===id)||null;}
 function spieleOrig(){au();if(AC&&AC.state==='suspended')AC.resume();const e=K[ST.sel];(Mund.original&&Mund.original[e.sfx]||sfx[e.sfx])(e.arg);}
 function spieleTake(){const t=gewaehlt(K[ST.sel].key);if(!t){status('Noch keine Aufnahme.');return;}Mund.spiele(t);}
+function zusammen(){spieleOrig();spieleTake();}
 async function ab(){spieleOrig();await warte(ORIG[K[ST.sel].key].dauer*1000+300);spieleTake();}
 
 // ---------- Ordner und Dateien ----------
@@ -139,7 +166,7 @@ async function aufDiePlatte(t,neu){if(!ordner)return;
  try{const tk=await ordner.getDirectoryHandle('takes',{create:true});const bytes=wav(t.pcm,t.sr);
   if(neu)await schreibe(tk,`${t.key}_${t.id}.wav`,bytes);await schreibe(ordner,dateiName(t),applyPegel(t));}
  catch(e){status('Ordner: '+e.message,true);}}
-function applyPegel(t){if(!t.pegel)return wav(t.pcm,t.sr);const g=Math.pow(10,t.pegel/20),y=t.pcm.map(v=>v*g);return wav(y,t.sr);}
+function applyPegel(t){return wav(Mund.ausschnitt(t),t.sr);} // benutzter Ausschnitt mit Pegel (takes\ enthält die ganze Aufnahme mit Luft)
 async function ordnerVerbinden(){
  if(!window.showDirectoryPicker){status('Dieser Browser kann keine Ordner. Chrome oder Edge nehmen, sonst ZIP.',true);return;}
  try{const alt=await A.meta('ordner');
@@ -172,29 +199,47 @@ function zipLaden(){const d=[];K.forEach(e=>{const t=gewaehlt(e.key);if(t)d.push
 // ---------- Anzeige ----------
 async function lade(){const alle=await A.alleTakes();TAKES={};alle.forEach(t=>(TAKES[t.key]=TAKES[t.key]||[]).push(t));
  for(const k in TAKES)TAKES[k].sort((a,b)=>b.zeit-a.zeit);WAHL=await A.wahl();}
-function welle(cv,lagen,dauer,strich){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.clearRect(0,0,W,H);
+// Wellenbild. lagen: [{pcm, sr, ab (Sekunde in pcm, die bei 0 liegt), farbe, fenster (Länge des benutzten Teils, sonst alles hell)}]
+// Zeitachse von -vor bis bis (Sekunden). Strich = Ende des Originals.
+function welle(cv,lagen,bis,strich,vor=0){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.clearRect(0,0,W,H);
+ const span=bis+vor,px2s=p=>p/W*span-vor,s2px=s=>(s+vor)/span*W;
  x.fillStyle='#1a2120';x.fillRect(0,H/2,W,1);
- let top=1e-4;lagen.forEach(({pcm})=>{for(let i=0;i<pcm.length;i++){const v=Math.abs(pcm[i]);if(v>top)top=v;}}); // jede Welle auf die lauteste der beiden skaliert
- lagen.forEach(({pcm,sr,farbe})=>{if(!pcm)return;x.fillStyle=farbe;const n=pcm.length,proPx=dauer*sr/W;
-  for(let px=0;px<W;px++){const a=Math.floor(px*proPx),b=Math.min(n,Math.floor((px+1)*proPx));if(a>=n)break;let mx=0;
-   for(let i=a;i<b;i++){const v=Math.abs(pcm[i]);if(v>mx)mx=v;}const h=Math.max(1,mx/top*H*.46);x.fillRect(px,H/2-h,1,h*2);}});
- if(strich){x.fillStyle='#e8c547';x.fillRect(Math.min(W-2,strich/dauer*W),0,2,H);}}
+ if(vor){x.fillStyle='#2a3330';x.fillRect(s2px(0),0,1,H);}
+ let top=1e-4;lagen.forEach(({pcm,sr,ab=0,fenster})=>{const a=Math.max(0,Math.round(ab*sr)),b=fenster?Math.min(pcm.length,a+Math.round(fenster*sr)):pcm.length;
+  for(let i=a;i<b;i++){const v=Math.abs(pcm[i]);if(v>top)top=v;}}); // auf die lauteste Stelle der benutzten Teile skaliert
+ lagen.forEach(({pcm,sr,ab=0,farbe,dunkel,fenster})=>{if(!pcm)return;const n=pcm.length;
+  for(let px=0;px<W;px++){const t0=px2s(px)+ab,t1=px2s(px+1)+ab;let a=Math.floor(t0*sr),b=Math.floor(t1*sr);if(b<=0||a>=n)continue;a=Math.max(0,a);b=Math.min(n,Math.max(a+1,b));
+   let mx=0;for(let i=a;i<b;i++){const v=Math.abs(pcm[i]);if(v>mx)mx=v;}const h=Math.max(1,Math.min(1,mx/top)*H*.46);
+   const drin=!fenster||(px2s(px)>=0&&px2s(px)<=fenster);x.fillStyle=drin?farbe:(dunkel||farbe);x.fillRect(px,H/2-h,1,h*2);}});
+ if(strich){x.fillStyle='#e8c547';x.fillRect(Math.min(W-2,s2px(strich)),0,2,H);}}
 function liste(){let h='',gr='';
  K.forEach((e,i)=>{if(e.gruppe!==gr){gr=e.gruppe;h+=`<div class="gr">${gr}</div>`;}const n=(TAKES[e.key]||[]).length;
   h+=`<div class="zeile${i===ST.sel?' sel':''}" data-i="${i}"><span class="${n?'ok':'nein'}">${n?'✓':'○'}</span><div>${e.n}<small>${e.wo}</small></div><canvas width="240" height="52" data-w="${i}"></canvas><span class="len">${ORIG[e.key]?de(ORIG[e.key].dauer)+' s':''}</span></div>`;});
  $('liste').innerHTML=h;
  K.forEach((e,i)=>{const cv=document.querySelector(`canvas[data-w="${i}"]`),o=ORIG[e.key],t=gewaehlt(e.key);if(!o)return;
-  const d=Math.max(o.dauer,t?t.dauer:0);welle(cv,[{pcm:o.pcm,sr:o.sr,farbe:'rgba(232,197,71,.55)'},t&&{pcm:t.pcm,sr:t.sr,farbe:'rgba(122,255,200,.65)'}].filter(Boolean),d);});
+  const f=t&&Mund.fenster(t),d=Math.max(o.dauer,f?f.len:0);welle(cv,[{pcm:o.pcm,sr:o.sr,farbe:'rgba(232,197,71,.55)'},t&&{pcm:t.pcm,sr:t.sr,ab:f.st,fenster:f.len,farbe:'rgba(122,255,200,.65)',dunkel:'rgba(0,0,0,0)'}].filter(Boolean),d);});
  const fertig=K.filter(e=>(TAKES[e.key]||[]).length).length;$('fort').textContent=`${fertig} von ${K.length} aufgenommen`;}
 function detail(){const e=K[ST.sel],o=ORIG[e.key],t=gewaehlt(e.key);
  $('dName').textContent=e.n;$('dWo').textContent=e.wo+(o?` · Original ${de(o.dauer)} s`:'');
- if(o){const d=Math.max(o.dauer,t?t.dauer:0)*1.05;welle($('welle'),[{pcm:o.pcm,sr:o.sr,farbe:'rgba(232,197,71,.5)'},t&&{pcm:t.pcm,sr:t.sr,farbe:'rgba(122,255,200,.7)'}].filter(Boolean),d,o.dauer);}
+ grossWelle();
  $('tPegel').disabled=!t;$('tPegel').value=t?t.pegel||0:0;$('tPegelWert').textContent=(t?t.pegel||0:0)+' dB';
  const l=TAKES[e.key]||[];
- $('takes').innerHTML=l.length?l.map((x,i)=>`<div class="take${x.id===WAHL[e.key]?' aktiv':''}"><span>${x.id===WAHL[e.key]?'★':'·'}</span><span>Aufnahme ${l.length-i} · ${de(x.dauer)} s · ${new Date(x.zeit).toLocaleTimeString('de-DE')}</span>
+ $('takes').innerHTML=l.length?l.map((x,i)=>`<div class="take${x.id===WAHL[e.key]?' aktiv':''}"><span>${x.id===WAHL[e.key]?'★':'·'}</span><span>Aufnahme ${l.length-i} · ${de(Mund.fenster(x).len)} s · ${new Date(x.zeit).toLocaleTimeString('de-DE')}</span>
    <button class="sm" data-play="${x.id}">▶</button><button class="sm" data-wahl="${x.id}"${x.id===WAHL[e.key]?' disabled':''}>wählen</button><button class="sm" data-weg="${x.id}">löschen</button></div>`).join('')
   :'<div class="hinweis">Noch keine. <kbd>Leertaste</kbd> drücken.</div>';
  knopf();}
+// Große Welle: 0,5 s Luft links und rechts, damit man die Aufnahme sieht, die außerhalb des benutzten Teils liegt
+const LUFT=.5;
+function grossWelle(){const e=K[ST.sel],o=ORIG[e.key],t=gewaehlt(e.key);if(!o)return;const f=t&&Mund.fenster(t);
+ welle($('welle'),[{pcm:o.pcm,sr:o.sr,farbe:'rgba(232,197,71,.5)'},t&&{pcm:t.pcm,sr:t.sr,ab:f.st,fenster:f.len,farbe:'rgba(122,255,200,.75)',dunkel:'rgba(122,255,200,.18)'}].filter(Boolean),Math.max(o.dauer,f?f.len:0)+LUFT,o.dauer,LUFT);
+ $('versatz').textContent=t?`Einsatz bei ${de(f.st,3)} s der Aufnahme`:'';}
+// Verschieben: ändert nur, wo der benutzte Ausschnitt in der Aufnahme beginnt (größer = deine Spur kommt früher, wandert nach links)
+let schiebZeit=null;
+function schiebe(ds,absolut){const t=gewaehlt(K[ST.sel].key);if(!t)return;const n=t.pcm.length/t.sr;
+ t.start=Math.max(0,Math.min(n-.02,absolut!=null?absolut:(t.start||0)+ds));grossWelle();liste();
+ clearTimeout(schiebZeit);schiebZeit=setTimeout(async()=>{await A.aendere(t);await aufDiePlatte(t,false);},350);}
+function autoEinsatz(){const t=gewaehlt(K[ST.sel].key);if(!t)return;let sp=0;for(const v of t.pcm){const a=Math.abs(v);if(a>sp)sp=a;}
+ schiebe(0,Math.max(0,einsatz(t.pcm,sp)/t.sr-.008));}
 function knopf(){const b=$('bRec');b.classList.toggle('an',!!aufn);
  b.textContent=!aufn?'● Aufnehmen':aufn.phase==='nimmt'?'■ Stopp':'✕ Abbrechen';$('bTake').disabled=!gewaehlt(K[ST.sel].key);}
 function zeichne(){liste();detail();}
@@ -209,7 +254,14 @@ $('takes').addEventListener('click',async ev=>{const b=ev.target.closest('button
  if(b.dataset.weg){if(!confirm('Diese Aufnahme löschen?'))return;const id=+b.dataset.weg;await A.loesche(id);
   if(ordner){try{(await ordner.getDirectoryHandle('takes')).removeEntry(`${key}_${id}.wav`);}catch(e){}}
   await lade();const t=gewaehlt(key);if(ordner){try{t?await aufDiePlatte(t,false):await ordner.removeEntry(`${key}.wav`);}catch(e){}}zeichne();}});
-$('bOrig').onclick=spieleOrig;$('bRec').onclick=aufnahme;$('bTake').onclick=spieleTake;$('bAB').onclick=ab;
+$('bOrig').onclick=spieleOrig;$('bRec').onclick=aufnahme;$('bTake').onclick=spieleTake;$('bAB').onclick=ab;$('bZus').onclick=zusammen;$('bAuto').onclick=autoEinsatz;
+document.querySelectorAll('[data-schieb]').forEach(b=>b.onclick=()=>schiebe(-(+b.dataset.schieb)));
+// In der großen Welle ziehen: nach rechts ziehen = Spur später
+{const cv=$('welle');let zug=null;
+ cv.addEventListener('pointerdown',ev=>{const t=gewaehlt(K[ST.sel].key),o=ORIG[K[ST.sel].key];if(!t||!o)return;cv.setPointerCapture(ev.pointerId);
+  const span=Math.max(o.dauer,Mund.fenster(t).len)+2*LUFT;zug={x:ev.clientX,st:t.start||0,sproPx:span/cv.clientWidth};});
+ cv.addEventListener('pointermove',ev=>{if(!zug)return;schiebe(0,zug.st-(ev.clientX-zug.x)*zug.sproPx);});
+ cv.addEventListener('pointerup',()=>{if(zug){zug=null;zusammen();}});}
 $('mikAn').onclick=mikroAn;
 $('geraet').onchange=e=>{ST.geraet=e.target.value;merke();mikroAn();};
 $('kanal').onchange=e=>{ST.kanal=e.target.value;merke();};
@@ -238,6 +290,9 @@ document.addEventListener('keydown',ev=>{const k=ev.key;
  else if(k==='o'||k==='O')spieleOrig();
  else if(k==='p'||k==='P')spieleTake();
  else if(k==='a'||k==='A')ab();
+ else if(k==='z'||k==='Z')zusammen();
+ else if(k===','||k===';')schiebe(ev.shiftKey?.05:.01);
+ else if(k==='.'||k===':')schiebe(ev.shiftKey?-.05:-.01);
  else if(k==='ArrowDown'){ev.preventDefault();waehle(ST.sel+1);}
  else if(k==='ArrowUp'){ev.preventDefault();waehle(ST.sel-1);}});
 if(navigator.mediaDevices)navigator.mediaDevices.addEventListener('devicechange',()=>{if(mik)geraeteListe(mik.strom);});

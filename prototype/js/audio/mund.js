@@ -72,9 +72,19 @@ const Mund=(()=>{
  const bufCache=new Map(); // take-id -> AudioBuffer
  function puffer(t){if(!AC)return null;let b=bufCache.get(t.id);if(b&&b.sampleRate===t.sr)return b;
   b=AC.createBuffer(1,t.pcm.length,t.sr);b.copyToChannel(t.pcm instanceof Float32Array?t.pcm:new Float32Array(t.pcm),0);bufCache.set(t.id,b);return b;}
+ // Eine Aufnahme enthält Luft davor und danach. Benutzt wird der Ausschnitt start … start+laenge (Sekunden),
+ // mit kurzem Ein- und Ausblenden. Alte Aufnahmen ohne start/laenge: alles.
+ const FADE_EIN=.004,FADE_AUS=.03;
+ function fenster(t){const n=t.pcm.length/t.sr,st=Math.max(0,Math.min(n,t.start||0));return {st,len:Math.max(.01,Math.min(n-st,t.laenge||n-st))};}
  function spiele(t,o={}){au();if(!AC||!t)return null;if(AC.state==='suspended')AC.resume();
   const s=AC.createBufferSource();s.buffer=puffer(t);const st=o.streuung??0;if(st)s.playbackRate.value=1+(Math.random()*2-1)*st;
-  const g=AC.createGain();g.gain.value=Math.pow(10,(t.pegel||0)/20);s.connect(g).connect(SFXB);s.start();return s;}
+  const {st:a,len}=fenster(t),g=AC.createGain(),n=AC.currentTime+(o.wann||0),v=Math.pow(10,(t.pegel||0)/20),dur=len/s.playbackRate.value;
+  g.gain.setValueAtTime(0,n);g.gain.linearRampToValueAtTime(v,n+FADE_EIN);g.gain.setValueAtTime(v,n+Math.max(FADE_EIN,dur-FADE_AUS));g.gain.linearRampToValueAtTime(0,n+dur);
+  s.connect(g).connect(SFXB);s.start(n,a,len+.01);return s;}
+ // Der benutzte Ausschnitt als eigene Samples (für WAV-Dateien), Pegel eingerechnet
+ function ausschnitt(t){const {st,len}=fenster(t),a=Math.round(st*t.sr),n=Math.round(len*t.sr),y=new Float32Array(n),v=Math.pow(10,(t.pegel||0)/20);
+  const fi=Math.round(FADE_EIN*t.sr),fo=Math.round(FADE_AUS*t.sr);
+  for(let i=0;i<n;i++){let g=v;if(i<fi)g*=i/fi;if(i>n-fo)g*=(n-i)/fo;y[i]=(t.pcm[a+i]||0)*g;}return y;}
 
  // --- Im Spiel: sfx-Funktionen umhüllen ---
  let geladen={},original=null; // key -> take
@@ -101,5 +111,5 @@ const Mund=(()=>{
  if(!window.MUND_STUDIO){try{const q=new URLSearchParams(location.search).get('mund');if(q==='1')setze('aktiv',true);if(q==='0')setze('aktiv',false);}catch(e){}
   installiere();}
 
- return {optionen,setze,ablage,spiele,ladeGewaehlte,installiere,KATALOG:MUND_KATALOG,get original(){return original;}};
+ return {optionen,setze,ablage,spiele,ausschnitt,fenster,ladeGewaehlte,installiere,KATALOG:MUND_KATALOG,get original(){return original;}};
 })();
