@@ -58,7 +58,7 @@ function leisteKampf(){const n=S.hand.length;
 // LETZTE_RX setzt feedback.js beim Bus-Ereignis „reaction“, ein neuer Kampf leert sie.
 let LETZTE_RX=null;
 function letzteRxHtml(){const x=LETZTE_RX;if(!x)return'';const c=(ST[x.keys[0]]||{}).c||'#e8c547';
- return `<div class="lrx${x.hoch?' hoch':''}${x.neu?' neu':''}" style="--c:${c}" title="${esc(x.n+': '+x.t)}"><span class="lrx-k">${x.keys.map(k=>gi(k,KZ())).join('<i>+</i>')}<b>${esc(x.n.toUpperCase())}</b>${x.hoch?'<em>HOCH</em>':''}${x.neu?'<em>NEU</em>':''}</span>${esc(x.t)}</div>`;}
+ return `<div class="lrx${x.hoch?' hoch':''}${x.neu?' neu':''}" style="--c:${c}" title="${esc(x.n+': '+x.t)}"><span class="lrx-k">${x.keys.map(k=>gi(k,KZ())).join('<i>+</i>')}<b>${esc(x.n.toUpperCase())}</b>${x.hoch?'<em>HOCHREAKTION</em>':''}${x.neu?'<em>NEU</em>':''}</span>${esc(x.t)}</div>`;}
 // M9: Begegnung nach dem Seitenwechsel: die Wesen stehen da, man geht weiter (halbe Beute)
 function begegnungHtml(){if(!S.begegnung)return'';const B=RUN.begegnungen;return `<div class="blickwahl begegnung"><p>${esc(B.begegnung.t)}</p><button class="deco haupt" data-act="weitergehen" autofocus>${esc(B.weiter.t)}</button></div>`;}
 // M7: Wahl zu Kampfbeginn mit Blick-Item, liegt über der Hand, bis gewählt ist (Standard: Nicht hinsehen)

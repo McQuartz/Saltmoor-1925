@@ -4,6 +4,14 @@
   {
    "text": "WOHIN?",
    "grund": "M3: Die Peilkarte ersetzt die alte Wegwahl (05-oberflaeche.md Abschnitt 7); die Überschrift trug ein Fragezeichen (Regel „Kein Fragezeichen“). Steht nur noch im toten render.js."
+  },
+  {
+   "text": "HOCHREAKTION ·",
+   "grund": "Spieltest 2026-11-09 (Philip): Reaktionen erscheinen nicht mehr als Meldung oben, sondern bleiben unten links unter dem Stoff-Baum stehen, bis die nächste kommt. Dort steht HOCHREAKTION als Marke ohne Punkt."
+  },
+  {
+   "text": "· Ziehen oder anklicken zum Tauschen.",
+   "grund": "Spieltest 2026-11-09 (Philip): Tauschen im Rucksack nur noch per Ziehen, Anklicken wählt nur aus. Hinweis lautet jetzt „· Ziehen zum Tauschen.“"
   }
  ]
 }
