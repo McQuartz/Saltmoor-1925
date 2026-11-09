@@ -60,8 +60,8 @@ let fehler = 0; const ok = (c, m) => { console.log((c ? 'ok    ' : 'FEHLER ') + 
       const bs=S.enemies[0];bs.pi=bs.pat.findIndex(p=>p.unverw);S.enemies.forEach(e=>e.block=0);if(typeof panzerZugbeginn==="function")panzerZugbeginn();`;
     const allein = JSON.parse(run(`(()=>{${setup(false)}const b=S.enemies[0];const hp0=b.hp,p0=b.panzer||0;
       b.poison=5;hit(b,5,1,'V','Gift',{dot:true});const nachGift=b.hp;hit(b,6,1,null,'Schlag');const nachSchlag=b.hp;return JSON.stringify({hp0,p0,nachGift,nachSchlag,panzer:b.panzer||0,max:b.max});})()`));
-    const soll = Math.round(allein.max * .4 / 5) * 5;
-    ok(allein.p0 === soll, `Fix 7: Boss allein bekommt Panzer ${soll} (40 % von ${allein.max}, auf 5 gerundet): ${allein.p0}`);
+    const an = +run('BAL.panzer.anteil'); const soll = Math.max(5, Math.round(allein.max * an / 5) * 5); // Höhe aus balance.json → panzer.anteil
+    ok(allein.p0 === soll, `Fix 7: Boss allein bekommt Panzer ${soll} (${Math.round(an * 100)} % von ${allein.max}, auf 5 gerundet): ${allein.p0}`);
     ok(allein.nachGift === allein.hp0 - 5, `Fix 7: Gift trifft den Boss trotz Panzer (${allein.hp0} → ${allein.nachGift})`);
     ok(allein.nachSchlag === allein.nachGift && allein.panzer === soll - 6, `Fix 7: Panzer fängt direkten Schaden ab (Leben ${allein.nachSchlag}, Panzer ${allein.panzer})`);
     const mit = JSON.parse(run(`(()=>{${setup(true)}const b=S.enemies[0];const hp0=b.hp;hit(b,6,1,null,'Schlag');const a=b.hp;b.poison=3;hit(b,3,1,'V','Gift',{dot:true});const g=b.hp;

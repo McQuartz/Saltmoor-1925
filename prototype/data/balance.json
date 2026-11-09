@@ -112,7 +112,7 @@
   "chance": 0.5,
   "ersetzt": 2
  },
- "panzer": {"_doc": "Auftrag 3, Fix 7: Boss im unverw-Schritt ohne Diener bekommt Panzer = anteil × max. Leben, auf 5 gerundet. Fängt nur direkten Schaden, fällt im Zug des Bosses.", "anteil": 0.4, "t": "Panzer: fängt Schläge ab, nicht Gift und Brand. Fällt, wenn er handelt.", "entwurf": true},
+ "panzer": {"_doc": "Auftrag 3, Fix 7: Boss im unverw-Schritt ohne Diener bekommt Panzer = anteil × max. Leben, auf 5 gerundet. Fängt nur direkten Schaden, fällt im Zug des Bosses.", "anteil": 0.15, "t": "Panzer: fängt Schläge ab, nicht Gift und Brand. Fällt, wenn er handelt.", "entwurf": true},
   "auftrag3": {
   "_doc": "Auftrag 3: Schalter je neuem System (docs/auftrag-3/01-regeln.md Abschnitt 6). false = das Spiel läuft genau wie ohne das System. Im Dev-Reiter TIEFE umschaltbar.",
   "regelbiegung": true,
