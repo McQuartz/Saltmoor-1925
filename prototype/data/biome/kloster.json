@@ -43,7 +43,8 @@
    "veil",
    "lantern",
    "cross",
-   "watch"
+   "watch",
+   "linse"
   ],
   "kraemer": {
    "n": "Der Bibliothekar",
@@ -141,6 +142,10 @@
      "v": 2
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 21
+   },
    "sprite": "adlerpult",
    "varianten": [
     "adlerpult",
@@ -377,6 +382,10 @@
      "h": 5
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 15
+   },
    "sprite": "abschreiber",
    "varianten": [
     "abschreiber"

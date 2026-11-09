@@ -1922,5 +1922,81 @@
     "verbraucht": true
    }
   ]
+ },
+ "linse": {
+  "n": "Linse",
+  "a": "talisman",
+  "st": [
+   "L"
+  ],
+  "spr": "compass",
+  "rar": "selten",
+  "rare": 1,
+  "kerben": 2,
+  "preis": 54,
+  "eigen": {
+   "typ": "blick"
+  },
+  "entwurf": true,
+  "flavor": "Ein Messingring mit einem Glas darin, aus dem Nachlass eines Landvermessers. Durch sie sieht der Raum ein wenig bewohnter aus.",
+  "cards": [
+   {
+    "n": "Brennpunkt",
+    "c": 1,
+    "atk": 6,
+    "vuln": 1
+   }
+  ]
+ },
+ "resonator": {
+  "n": "Resonator",
+  "a": "talisman",
+  "st": [
+   "E"
+  ],
+  "spr": "anchorchain",
+  "rar": "selten",
+  "rare": 1,
+  "kerben": 2,
+  "preis": 54,
+  "eigen": {
+   "typ": "blick"
+  },
+  "entwurf": true,
+  "flavor": "Eine Stimmgabel auf einem Eisenfuß. Schlägt man sie an, antwortet etwas, das nicht der Raum ist.",
+  "cards": [
+   {
+    "n": "Nachklang",
+    "c": 1,
+    "atk": 3,
+    "h": 2,
+    "blk": 4
+   }
+  ]
+ },
+ "grablampe": {
+  "n": "Lampe aus dem Grab",
+  "a": "talisman",
+  "st": [
+   "V"
+  ],
+  "spr": "lantern",
+  "rar": "selten",
+  "rare": 1,
+  "kerben": 2,
+  "preis": 56,
+  "eigen": {
+   "typ": "blick"
+  },
+  "entwurf": true,
+  "flavor": "Man gibt sie den Toten mit, damit sie den Weg sehen. Jemand hat sie wieder herausgeholt, und sie brennt grün.",
+  "cards": [
+   {
+    "n": "Schwelen",
+    "c": 1,
+    "poison": 4,
+    "blk": 3
+   }
+  ]
  }
 }

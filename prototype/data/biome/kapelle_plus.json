@@ -25,6 +25,10 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 24
+   },
    "sprite": "prediger",
    "varianten": [
     "prediger"

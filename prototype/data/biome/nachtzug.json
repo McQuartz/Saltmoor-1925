@@ -292,6 +292,10 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 24
+   },
    "sprite": "uhrmacher",
    "varianten": [
     "uhrmacher"
@@ -347,6 +351,10 @@
      "v": 20
     }
    ],
+   "gesehen": {
+    "t": "buff",
+    "v": 4
+   },
    "sprite": "oberkellner",
    "varianten": [
     "oberkellner",

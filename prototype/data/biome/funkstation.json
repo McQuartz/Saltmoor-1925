@@ -46,7 +46,8 @@
    "flaregun",
    "minerlamp",
    "dynamite",
-   "smellingsalts"
+   "smellingsalts",
+   "grablampe"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -296,6 +297,11 @@
      "v": 13
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
    "sprite": "sender",
    "varianten": [
     "sender"
@@ -380,6 +386,10 @@
      "v": 13
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 15
+   },
    "sprite": "kastendrachen",
    "varianten": [
     "kastendrachen"

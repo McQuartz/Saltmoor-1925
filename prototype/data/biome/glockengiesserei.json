@@ -14,7 +14,7 @@
   "gegner": ["giesser", "formerin", "kloeppelmann", "gussnaht"],
   "waechter": "ungetaufte",
   "waechter_alt": ["tretrad"],
-  "fundpool": ["giesskelle", "lehmmaske", "stimmeisen", "candle", "cross", "rosary", "minerlamp", "shovel", "pick", "tartorch"],
+  "fundpool": ["giesskelle", "lehmmaske", "stimmeisen", "candle", "cross", "rosary", "minerlamp", "shovel", "pick", "tartorch", "linse"],
   "ereignisse": [],
   "kraemer": {
    "n": "Der Wandergießer",
@@ -89,6 +89,11 @@
      "v": 19
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 7,
+    "h": 4
+   },
    "sprite": "tretrad",
    "varianten": [
     "tretrad"
@@ -154,6 +159,7 @@
   "ungetaufte": {
    "n": "Die Ungetaufte", "biom": "glockengiesserei", "rang": "waechter", "hp": 76, "weak": "W",
    "pat": [{"t": "atk", "v": 11}, {"t": "atk", "v": 3, "h": 4}, {"t": "blk", "v": 12}, {"t": "atk", "v": 16}, {"t": "buff", "v": 2}],
+   "gesehen": {"t": "blk", "v": 18},
    "sprite": "ungetaufte", "varianten": ["ungetaufte"],
    "konzept": "Die große Glocke für St. Brendan, so hoch wie ein Haus, nie geweiht, nie hinaufgezogen. Sie hängt am Galgen über ihrer Grube, halb noch im Lehmmantel. Aus ihrem glühenden Mund hängen zwei nackte Füße, groß wie Ruderblätter.",
    "stimme": "glockenmutter",

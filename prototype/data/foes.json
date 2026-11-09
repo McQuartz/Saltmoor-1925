@@ -126,6 +126,10 @@
     "v": 14
    }
   ],
+  "gesehen": {
+   "t": "blk",
+   "v": 15
+  },
   "biom": "hafen",
   "rang": "waechter",
   "sprite": "lotse",
@@ -257,6 +261,10 @@
     "v": 15
    }
   ],
+  "gesehen": {
+   "t": "buff",
+   "v": 3
+  },
   "biom": "moor",
   "rang": "waechter",
   "sprite": "opfernde",
@@ -366,6 +374,10 @@
     "v": 13
    }
   ],
+  "gesehen": {
+   "t": "blk",
+   "v": 15
+  },
   "biom": "kapelle",
   "rang": "waechter",
   "sprite": "glockenmutter",
@@ -498,6 +510,11 @@
     "v": 16
    }
   ],
+  "gesehen": {
+   "t": "atk",
+   "v": 6,
+   "h": 4
+  },
   "biom": "salz",
   "rang": "waechter",
   "sprite": "wurm",
@@ -609,6 +626,11 @@
     "v": 9
    }
   ],
+  "gesehen": {
+   "t": "atk",
+   "v": 5,
+   "h": 5
+  },
   "biom": "stadt",
   "rang": "waechter",
   "sprite": "windgestalt",
@@ -712,6 +734,10 @@
     "v": 18
    }
   ],
+  "gesehen": {
+   "t": "blk",
+   "v": 20
+  },
   "biom": "eis",
   "rang": "waechter",
   "sprite": "chor",

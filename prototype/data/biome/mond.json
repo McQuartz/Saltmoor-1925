@@ -46,7 +46,8 @@
    "minerlamp",
    "sealskin",
    "flaregun",
-   "smellingsalts"
+   "smellingsalts",
+   "grablampe"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -301,6 +302,11 @@
      "v": 13
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
    "sprite": "rueckseite",
    "varianten": [
     "rueckseite"
@@ -403,6 +409,11 @@
      "v": 15
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
    "sprite": "mondmann",
    "varianten": [
     "mondmann",

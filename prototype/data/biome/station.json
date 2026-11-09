@@ -45,7 +45,8 @@
    "shovel",
    "musicbox",
    "smellingsalts",
-   "uhr_ohne_zeiger"
+   "uhr_ohne_zeiger",
+   "resonator"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -297,6 +298,10 @@
      "v": 14
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 20
+   },
    "sprite": "einfahrt",
    "varianten": [
     "einfahrt"
@@ -388,6 +393,11 @@
      "v": 3
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 4,
+    "h": 6
+   },
    "sprite": "menge",
    "varianten": [
     "menge"

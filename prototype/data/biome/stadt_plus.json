@@ -120,6 +120,10 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 15
+   },
    "sprite": "getragene",
    "varianten": [
     "getragene"

@@ -78,6 +78,11 @@
      "v": 19
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 7,
+    "h": 4
+   },
    "sprite": "moorpferd",
    "varianten": [
     "moorpferd"

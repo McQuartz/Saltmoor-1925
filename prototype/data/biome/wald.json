@@ -42,7 +42,8 @@
    "minerlamp",
    "shovel",
    "candle",
-   "boardaxe"
+   "boardaxe",
+   "resonator"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -291,6 +292,10 @@
      "h": 3
     }
    ],
+   "gesehen": {
+    "t": "buff",
+    "v": 3
+   },
    "sprite": "wurzelstock",
    "varianten": [
     "wurzelstock"
@@ -388,6 +393,11 @@
      "v": 3
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 5
+   },
    "sprite": "kronengaenger",
    "varianten": [
     "kronengaenger"

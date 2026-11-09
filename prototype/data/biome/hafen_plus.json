@@ -77,6 +77,10 @@
      "v": 17
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 25
+   },
    "sprite": "galionsfigur",
    "varianten": [
     "galionsfigur",

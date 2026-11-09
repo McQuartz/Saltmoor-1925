@@ -46,7 +46,8 @@
    "tarot",
    "divinghelm",
    "salt",
-   "knife"
+   "knife",
+   "grablampe"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -303,6 +304,11 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 6,
+    "h": 4
+   },
    "sprite": "voraus",
    "varianten": [
     "voraus"
@@ -342,6 +348,10 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 15
+   },
    "sprite": "lichtqualle",
    "varianten": [
     "lichtqualle"

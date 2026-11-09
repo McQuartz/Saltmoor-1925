@@ -296,6 +296,10 @@
      "v": 14
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 22
+   },
    "sprite": "linse",
    "varianten": [
     "linse"
@@ -364,6 +368,10 @@
      "v": 19
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 28
+   },
    "sprite": "nebelhorn",
    "varianten": [
     "nebelhorn"

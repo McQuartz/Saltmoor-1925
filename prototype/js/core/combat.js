@@ -49,7 +49,8 @@ function startFight(ids,art='kampf'){
  // Ballast-Reliquien (eigen.ballast_start): n unspielbare Karten in den Ziehstapel, bevor die erste Hand gezogen wird
  allActive().forEach(it=>{const e=def(it).eigen;if(e&&e.ballast_start)ballastMischen(e.ballast_start,'stapel',e.ballast_karte,def(it).n);});
  startTurn();if(pb){S.block+=pb;Bus.emit('player_block',{v:pb,why:'Eigenschaft: Block zu Kampfbeginn'});}
- passive('kampfstart_fx').forEach(p=>runFx(p.fx,{why:'Eigenschaft zu Kampfbeginn'}));}
+ passive('kampfstart_fx').forEach(p=>runFx(p.fx,{why:'Eigenschaft zu Kampfbeginn'}));
+ if(typeof Blick!=='undefined')Blick.kampfStart(art);} // M7: Wahl Hinsehen / Nicht hinsehen vor dem ersten Zug
 // Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), Pfandschein (gold_energie: ab p.ab Gold), übrige Energie (energie_bleibt)
 function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0)+passive('gold_energie').reduce((s,p)=>s+((S.gold||0)>=(p.ab||100)?(p.v||1):0),0);}
 
@@ -107,7 +108,7 @@ function previewCard(i,ei){const keep=S,kb=busy,kf=FAST,ku=uidc;let out=null;
  finally{S=keep;busy=kb;FAST=kf;DRY=false;Bus.muted=false;uidc=ku;}return out;}
 
 function playCard(i,ei){
- if(S.phase!=='fight'||busy)return false;const c=S.hand[i];if(!c)return false;const cost=cardCost(c);
+ if(S.phase!=='fight'||busy||S.blickWahl)return false;const c=S.hand[i];if(!c)return false;const cost=cardCost(c);
  // Ballaststein (ballast_werfen): unspielbare Karten gehen für 0 über Bord und lösen die fx der Eigenschaft aus. Kein Stoff, keine Reaktion, zählt nicht als gespielte Karte.
  if(werfbar(c)){if(ei!=null&&S.enemies[ei]&&S.enemies[ei].hp>0)S.target=ei;ueberBord(c,'geworfen');passive('ballast_werfen').forEach(p=>runFx(p.fx,{tg:tgt(),why:`Ballaststein: „${c.n}“ über Bord`}));Bus.emit('changed');checkVictory();return true;}
  if(c.unspielbar||c.frost){Bus.emit('bad',{a:'UNSPIELBAR',b:c.frost?'Eingefroren für diesen Zug':c.n});return false;}
@@ -285,11 +286,12 @@ function kniffNachAngriff(en,tot){if(tot>0)S.stats.todesursache=en.n;}
 // Fix 3 (Auftrag 3): wer in diesem Gegnerzug schon gehandelt hat, zeigt keine Absicht mehr, bis dein Zug beginnt
 // M6: stumme Gegner zeigen keine Absicht (man hört sie, hoeren.js)
 function absichtSichtbar(e){return !!e&&e.hp>0&&!e.gehandelt&&!S.nachGegnerzug&&!(typeof Hoeren!=='undefined'&&Hoeren.istStumm(e));}
-function incomingSichtbar(){const v=alive().filter(e=>e.kniff&&e.kniff.art==='verborgen');if(!v.length)return incoming(true);const keep=v.map(e=>e.pat);v.forEach(e=>{e.pat=e.pat.map(p=>p.t==='atk'?{...p,v:-e.str,h:1}:p);});const r=incoming(true);v.forEach((e,i)=>e.pat=keep[i]);return Math.max(0,r);}
+function incomingSichtbar(){const v=typeof Blick!=='undefined'&&Blick.aktiv()?[]:alive().filter(e=>e.kniff&&e.kniff.art==='verborgen'); // M7: mit Hinsehen ist nichts verborgen
+if(!v.length)return incoming(true);const keep=v.map(e=>e.pat);v.forEach(e=>{e.pat=e.pat.map(p=>p.t==='atk'?{...p,v:-e.str,h:1}:p);});const r=incoming(true);v.forEach((e,i)=>e.pat=keep[i]);return Math.max(0,r);}
 function incoming(sicht){let tot=0;for(const en of alive()){if(sicht&&!absichtSichtbar(en))continue;if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
 
 function endTurn(){
- if(S.phase!=='fight'||busy)return;busy=true;S.vorrat=S.energy;
+ if(S.phase!=='fight'||busy||S.blickWahl)return;busy=true;S.vorrat=S.energy;
  Bieg.zugEnde(); // Über Eck, Aufgewogen
  const bb=passive('ballast_block').reduce((s,p)=>s+(p.v||2),0),bz=S.hand.filter(c=>c.unspielbar).length;if(bb&&bz)addBlock(bb*bz,`Gesangbuch: ${bz} unspielbare Karte(n) auf der Hand, je ${bb} Block`);
  let bleib=S.hand.filter(c=>c.behalten&&!c.unspielbar);

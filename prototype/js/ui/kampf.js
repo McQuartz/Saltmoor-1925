@@ -9,7 +9,7 @@ const KNIFF_TEXT={dornen:k=>`Dornen: jeder Treffer an ihm kostet dich ${k.v||2}`
 const BES_TEXT={ruft:b=>`Ruft alle ${b.alle||3} Züge Verstärkung: ${FOES[b.gegner]?FOES[b.gegner].n:'?'}`,schwach_wechsel:b=>`Schwachstelle wechselt: ${(b.stoffe||[]).map(x=>ST[x]?ST[x].n:x).join(' → ')}`,phasen:()=>'Verwandelt sich, wenn es schwächer wird'};
 // Nächste Schwachstelle bei Kniff „wechsel“ oder Besonderheit „schwach_wechsel“ (so wie combat.js sie am Zugende setzt)
 function naechsteSchwach(e){const k=kniffeVon(e).find(k=>k.art==='wechsel'&&k.stoffe);if(k)return k.stoffe[(e.turns+1)%k.stoffe.length];const b=e.besonders;if(b&&b.art==='schwach_wechsel'&&b.stoffe)return b.stoffe[(e.turns+1)%b.stoffe.length];return null;}
-function feindTip(i){const e=S.enemies[i];if(!e||e.hp<=0)return'';const ks=[e.kniff,...(e.kniffe||[])].filter(k=>k&&KNIFF_TEXT[k.art]);
+function feindTip(i){const e=S.enemies[i];if(!e||e.hp<=0)return'';const bl=typeof Blick!=='undefined'&&Blick.aktiv();const ks=[e.kniff,...(e.kniffe||[])].filter(k=>k&&KNIFF_TEXT[k.art]&&!(bl&&k.art==='verborgen')); // M7: mit Hinsehen ist nichts verborgen
  const nw=naechsteSchwach(e);const pu=e.pat[e.pi%e.pat.length];
  const ruf=rufeVon(e);
  const stumm=typeof Hoeren!=='undefined'&&Hoeren.istStumm(e); // M6: kein Hinweis auf die Absicht, auch nicht im Tooltip
@@ -18,7 +18,7 @@ function feindTip(i){const e=S.enemies[i];if(!e||e.hp<=0)return'';const ks=[e.kn
 const rufeVon=e=>e&&e.uid&&typeof rufAnsage==='function'&&S.enemies&&S.enemies.includes(e)?rufAnsage(e):[];
 function absicht(e){const r=absicht0(e);if(unverwJetzt(e))r.html+=' <small class="unverw">unverwundbar</small>';
  const ruf=rufeVon(e);if(ruf.length)r.html+=` <small class="ruft" title="Ruft: ${esc(ruf.map(id=>FOES[id].n).join(', '))}">ruft</small>`;return r;}
-function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==='verborgen'){const k=it.t==='atk'?'atk':it.t==='blk'?'blk':'buff';return{k,html:`${gi(k,GZ())}`};}if(it.t==='atk'){const v=it.v+e.str;const h=it.h?'×'+it.h:'';if(e.weak2){const n=Math.floor(v/2);return{k:'atk',html:`<span class="geschw" title="Geschwächt: halber Schaden">${gi('atk',GZ())}${n}${h}</span>`};}return{k:'atk',html:`${gi('atk',GZ())}${v}${h}`};}
+function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==='verborgen'&&!(typeof Blick!=='undefined'&&Blick.aktiv())){const k=it.t==='atk'?'atk':it.t==='blk'?'blk':'buff';return{k,html:`${gi(k,GZ())}`};}if(it.t==='atk'){const v=it.v+e.str;const h=it.h?'×'+it.h:'';if(e.weak2){const n=Math.floor(v/2);return{k:'atk',html:`<span class="geschw" title="Geschwächt: halber Schaden">${gi('atk',GZ())}${n}${h}</span>`};}return{k:'atk',html:`${gi('atk',GZ())}${v}${h}`};}
  if(it.t==='blk')return{k:'blk',html:`${gi('blk',GZ())}${it.v}`};
  // Ansage: lädt, dann großer Schlag; zeigt die Wucht und wie viele Züge noch
  if(it.t==='laedt'){let n=1,j=e.pi+1;while(n<9&&e.pat[j%e.pat.length].t==='laedt'){n++;j++;}const s=e.pat[j%e.pat.length];const v=(s.v||0)+e.str;return{k:'atk',html:`<span class="laedt">${gi('atk',GZ())}${v} <small>in ${n}</small></span>`};}
@@ -46,9 +46,12 @@ const GZ=()=>9*U(),KZ=()=>9*Math.max(1,Math.round(U()/2));
 
 // ---------- Untere Leiste im Kampf (Footer als Tisch): eigener Balken und Stoff-Baum, Hand, Energie ----------
 function leisteKampf(){const n=S.hand.length;
- return `<div id="links"><div id="spieler2">${spielerHtml()}</div><div id="baum">${stoffBaumHtml()}</div></div><div id="hand" style="--ov:${S.hand.length>6?((S.hand.length-6)*59/(S.hand.length-1)).toFixed(2):0}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
+ return `<div id="links"><div id="spieler2">${spielerHtml()}</div><div id="baum">${stoffBaumHtml()}</div></div>${blickWahlHtml()}<div id="hand" class="${S.blickWahl?'verdeckt':''}" style="--ov:${S.hand.length>6?((S.hand.length-6)*59/(S.hand.length-1)).toFixed(2):0}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
  <div id="rechts"><div class="en-l">ENERGIE</div><div class="rauten">${[...Array(Math.max(BAL.energy_per_turn,S.energy))].map((_,i)=>`<i class="${i<S.energy?'voll':''}"></i>`).join('')}</div>
- <button id="endBtn" class="deco" data-act="end" ${busy?'disabled':''}>ZUG<br>BEENDEN</button>${stapelHtml()}${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
+ <button id="endBtn" class="deco" data-act="end" ${busy||S.blickWahl?'disabled':''}>ZUG<br>BEENDEN</button>${stapelHtml()}${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
+// M7: Wahl zu Kampfbeginn mit Blick-Item, liegt über der Hand, bis gewählt ist (Standard: Nicht hinsehen)
+function blickWahlHtml(){if(!S.blickWahl)return'';const its=allActive().filter(it=>{const d=def(it);return d.eigen&&d.eigen.typ==='blick';});
+ return `<div class="blickwahl"><div class="bw-items">${its.map(it=>`<img src="${itemBild(it.id)}" alt="${esc(def(it).n)}" title="${esc(def(it).n)}" draggable="false">`).join('')}</div><button class="deco" data-act="hinsehen">HINSEHEN</button><button class="deco haupt" data-act="wegsehen" autofocus>NICHT HINSEHEN</button></div>`;}
 // Stapel und Ablage; Regelbiegungen ändern, was man davon sieht (M5): Spiegelbild (oberste Karte offen, Tausch), Keiner fährt ab (zurückgekommene Karte oben), Wellen von oben (keine Ablage)
 let spiegelWahl=false;
 function stapelHtml(){const B=typeof Bieg!=='undefined';const top=S.draw.length?S.draw[S.draw.length-1]:null;

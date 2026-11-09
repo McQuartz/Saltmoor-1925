@@ -42,7 +42,8 @@
    "rosary",
    "veil",
    "swordcane",
-   "cross"
+   "cross",
+   "linse"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -139,6 +140,10 @@
      "v": 15
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 22
+   },
    "sprite": "ungeheilter",
    "varianten": [
     "ungeheilter",
@@ -365,6 +370,10 @@
      "v": 12
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 15
+   },
    "sprite": "erhoerte",
    "varianten": [
     "erhoerte"

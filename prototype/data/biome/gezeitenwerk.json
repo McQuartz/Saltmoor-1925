@@ -43,7 +43,8 @@
    "oilcoat",
    "deepscale",
    "minerlamp",
-   "boathook"
+   "boathook",
+   "resonator"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -293,6 +294,11 @@
      "v": 9
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
    "sprite": "regulator",
    "varianten": [
     "regulator"
@@ -345,6 +351,10 @@
      "v": 2
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 20
+   },
    "sprite": "griff",
    "varianten": [
     "griff"

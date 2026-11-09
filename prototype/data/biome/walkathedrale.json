@@ -46,7 +46,8 @@
    "rum",
    "laudanum",
    "minerlamp",
-   "trench"
+   "trench",
+   "grablampe"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -298,6 +299,10 @@
      "h": 2
     }
    ],
+   "gesehen": {
+    "t": "buff",
+    "v": 3
+   },
    "sprite": "herz",
    "varianten": [
     "herz"
@@ -343,6 +348,11 @@
      "v": 14
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
    "sprite": "kalb",
    "varianten": [
     "kalb",

@@ -302,6 +302,11 @@
      "h": 4
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 7,
+    "h": 4
+   },
    "sprite": "schicht",
    "varianten": [
     "schicht"
@@ -351,6 +356,10 @@
      "v": 18
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 18
+   },
    "sprite": "fang",
    "varianten": [
     "fang",

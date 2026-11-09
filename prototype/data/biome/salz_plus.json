@@ -77,6 +77,10 @@
      "v": 18
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 21
+   },
    "sprite": "eingesalzene",
    "varianten": [
     "eingesalzene"

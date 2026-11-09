@@ -102,11 +102,12 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  gd+=passive('gold_bonus').reduce((s,p)=>s+p.v,0);S.gold+=gd;S.stats.gold+=gd;S.goldGain=gd;
  // Handgriff 1 aus 3 (zwei passend zum Deck, einer frei), Item je nach Knoten, Wächter: Reliquie 1 aus 3
  const RW=BAL.belohnung||{};const glueck=passive('glueck').length?1:0;
- const hg=handgriffAngebot(r,art==='waechter'?'selten':art==='schwer'?'mix':'gewoehnlich',3);
+ const blickB=typeof Blick!=='undefined'&&Blick.aktiv(); // M7: nach Hinsehen 1 aus 4 und das Item-Angebot sicher
+ const hg=handgriffAngebot(r,art==='waechter'?'selten':art==='schwer'?'mix':'gewoehnlich',blickB?4:3);
  let items=[];
  if(art==='waechter'){items=reliquienAngebot(r,3+glueck);}
  else if(art==='schwer'){items=r.sample(dropPool(),2+glueck);const rp=rarePool();if(rp.length)items.push(r.pick(rp));}
- else if(r.chance(RW.item_chance??.25)){items=r.sample(dropPool(),2+glueck);}
+ else if(r.chance(RW.item_chance??.25)||blickB){items=r.sample(dropPool(),2+glueck);}
  // Gegner-Beute: kleine Chance auf das eigene Stück eines Gegners (Kniff „nachlass: item“ sicher)
  const beute=S.enemies.map(e=>FOES[e.id].beute).filter(id=>id&&ITEMS[id]);if(S.sicheresBeute&&ITEMS[S.sicheresBeute]){items[0]=S.sicheresBeute;S.sicheresBeute=null;}else if(beute.length&&r.chance(.15)){items[0]=r.pick(beute);}
  const rare=art==='waechter'||art==='schwer';const pick=items;

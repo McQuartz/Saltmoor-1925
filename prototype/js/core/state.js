@@ -35,7 +35,9 @@ function itemOk(id){return !!ITEMS[id];}
 // Fundpool des aktuellen Bioms plus runübergreifend freigeschaltete Items
 function dropPool(){const b=biom();const extra=(S.metaItems||[]).filter(itemOk);let pool=[...(b.fundpool||[]),...extra].filter(id=>itemOk(id)&&!ITEMS[id].nodrop&&!ITEMS[id].bases&&!ITEMS[id].rare);
  if(!pool.length)pool=Object.keys(ITEMS).filter(k=>!ITEMS[k].nodrop&&!ITEMS[k].bases&&!ITEMS[k].rare&&!ITEMS[k].meta);return[...new Set(pool)];}
-function rarePool(){return Object.keys(ITEMS).filter(k=>ITEMS[k].rare&&!ITEMS[k].bases&&!ITEMS[k].nodrop&&(!ITEMS[k].meta||(S.metaItems||[]).includes(k)));}
+function rarePool(){return Object.keys(ITEMS).filter(k=>ITEMS[k].rare&&!ITEMS[k].bases&&!ITEMS[k].nodrop&&(!ITEMS[k].meta||(S.metaItems||[]).includes(k))&&blickAb(k)<=(S.akt||0));}
+// M7: Blick-Items (eigen.typ blick) gibt es erst ab dem Akt, in dessen Fundpools sie stehen (Linse Akt II, Resonator Akt III, Lampe Akt IV), auch beim Krämer
+function blickAb(k){const D=ITEMS[k];if(!D||!D.eigen||D.eigen.typ!=='blick')return 0;let a=99;for(const b in BIOMES)if((BIOMES[b].fundpool||[]).includes(k))a=Math.min(a,BIOMES[b].akt??99);return a===99?0:a;}
 const romanN=n=>{const r=[['X',10],['IX',9],['V',5],['IV',4],['I',1]];let s='';for(const[k,v]of r)while(n>=v){s+=k;n-=v;}return s;};
 // Auftrag 3: ist ein neues System eingeschaltet? (balance.json → auftrag3, im Dev-Reiter TIEFE umschaltbar)
 function a3(k){return !!(BAL&&BAL.auftrag3&&BAL.auftrag3[k]);}

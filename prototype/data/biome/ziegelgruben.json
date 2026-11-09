@@ -43,7 +43,8 @@
    "dynamite",
    "tartorch",
    "legionsaxt",
-   "compass"
+   "compass",
+   "resonator"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -293,6 +294,10 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 24
+   },
    "sprite": "brennofen",
    "varianten": [
     "brennofen"
@@ -374,6 +379,10 @@
      "h": 4
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 20
+   },
    "sprite": "neununddreissigste",
    "varianten": [
     "neununddreissigste"

@@ -8,7 +8,7 @@ const Bot={
   v+=(p.str||0)*4;const offen=Math.max(0,inc-S.block);v+=Math.min(p.block,offen)*1.3+p.block*.1;v+=Math.max(0,p.hp)*.8;if(p.hp<0)v+=p.hp*(S.hp<15?2:.6);v+=p.energy*3;v+=(p.gold||0)*(this.profil&&this.profil.gold_rest?.3:.15);return v;},
  // beste Karte jetzt (für den geklickten Run in tools/selbst-spielen.js): {i,t} oder null
  besteKarte(){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
- kampfZug(){let guard=0;this.biegZugbeginn();while(S.phase==='fight'&&!busy&&guard++<30){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;
+ kampfZug(){let guard=0;if(S.blickWahl&&typeof Blick!=='undefined')Blick.waehlen(Blick.botWahl()); /* M7: hinsehen, wenn Leben über 60 % */this.biegZugbeginn();while(S.phase==='fight'&&!busy&&guard++<30){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;
    S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];const bw=this.biegWert(c,inc);
     ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0)+bw;if(!best||w>best.w)best={i,t,w};});});
    if(!best||best.w<=0)break;playCard(best.i,best.t);}

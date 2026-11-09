@@ -293,6 +293,10 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 18
+   },
    "sprite": "oberschwester",
    "varianten": [
     "oberschwester"
@@ -372,6 +376,11 @@
      "v": 20
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 7,
+    "h": 4
+   },
    "sprite": "badekarren",
    "varianten": [
     "badekarren"

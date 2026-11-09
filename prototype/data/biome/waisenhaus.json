@@ -14,7 +14,7 @@
   "gegner": ["nachtschwester", "turnlehrer", "zugedeckte", "zwillinge"],
   "waechter": "heimleiterin",
   "waechter_alt": ["fotograf"],
-  "fundpool": ["trillerpfeife", "schluesselbund", "nachthemd", "musicbox", "candle", "bible", "rosary", "lantern", "laudanum", "smellingsalts"],
+  "fundpool": ["trillerpfeife", "schluesselbund", "nachthemd", "musicbox", "candle", "bible", "rosary", "lantern", "laudanum", "smellingsalts", "linse"],
   "ereignisse": [],
   "kraemer": {
    "n": "Der Hausmeister",
@@ -88,6 +88,11 @@
      "v": 20
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 6,
+    "h": 5
+   },
    "sprite": "fotograf",
    "varianten": [
     "fotograf",
@@ -180,6 +185,7 @@
   "heimleiterin": {
    "n": "Die Heimleiterin", "biom": "waisenhaus", "rang": "waechter", "hp": 80, "weak": "F",
    "pat": [{"t": "atk", "v": 10}, {"t": "atk", "v": 3, "h": 4}, {"t": "buff", "v": 2, "unverw": true, "why": "Nachtruhe. Alle schlafen, und wer schläft, dem tut man nichts."}, {"t": "atk", "v": 16}, {"t": "blk", "v": 10}],
+   "gesehen": {"t": "buff", "v": 3},
    "sprite": "heimleiterin", "varianten": ["heimleiterin"],
    "konzept": "Hoch und schmal im schwarzen Kleid von 1890, mit Keulenärmeln und Stehkragen. Sie hält Appell: das Aufnahmebuch aufgeschlagen auf dem Arm, in der Hand die Feder. Hinter ihr stehen die Kinder in einer Reihe, nach hinten kleiner, und es sind mehr, als Betten da sind. Alle haben nasses Haar.",
    "stimme": "glockenmutter",
