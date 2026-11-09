@@ -47,7 +47,9 @@ function rollFoes(art,r){const b=biom();const z=RUN.kaempfe.zahl[S.akt];let n=z[
 
 function chooseWeg(i){if(S.phase!=='weg')return;const o=S.weg[i];if(!o)return;S.cur=o;S.depth++;S.weg=null;S.phase='knoten';netzGehe(o);
  save(); // vor dem Betreten sichern: Fortsetzen betritt denselben Knoten neu (gleicher Seed = gleicher Inhalt)
- Bus.emit('weg_gewaehlt',{art:o.art,why:`Weg gewählt: ${RUN.knoten[o.art].n} („${o.hint}“), Tiefe ${S.depth}`});enterNode(o);}
+ Bus.emit('weg_gewaehlt',{art:o.art,why:`Weg gewählt: ${RUN.knoten[o.art].n} („${o.hint}“), Tiefe ${S.depth}`});
+ // M3: Fahrt nach vorne durch die aktuelle Szene, dann der Knoten (reine Animation, im FAST-Modus übersprungen)
+ if(!FAST&&typeof Fahrt!=='undefined'&&Fahrt.start)Fahrt.start(()=>enterNode(o));else enterNode(o);}
 
 // --- Knoten ---
 function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.depth}:${o.art}`);

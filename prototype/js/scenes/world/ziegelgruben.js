@@ -375,6 +375,7 @@ function form(K, x, y) {
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'rast' ? 2 : art === 'kraemer' ? 0 : art === 'werkstatt' || art === 'ereignis' || art === 'fund' ? 1 : (o.seed + v) % 3;
+  K.kulisse = art === 'waechter' ? 'waechter' : v; // M3: welche Kulisse die Szene zeigt (Schlüssel für die Fahrt, data/fahrt.json)
   let info;
   if (art === 'waechter') info = vorDerTuer(K, {});
   else if (art === 'uebergang') info = vorDerTuer(K, { ende: true });

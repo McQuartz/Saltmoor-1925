@@ -368,7 +368,7 @@ B.szene = function (K) {
     w: W, h: H, rand: M,
     ebenen: [0, 1, 2, 3, 4].map(i => ({ canvas: can[i], parallax: par[i], x: -M, y: -M })),
     vorne: { canvas: can[5], parallax: par[5], x: -M, y: -M },
-    reihen: K.reihen, lichter: K.lichter, biom: K.o.biom, variante: K.o.variante, art: K.o.art,
+    reihen: K.reihen, lichter: K.lichter, biom: K.o.biom, variante: K.o.variante, art: K.o.art, kulisse: K.kulisse,
     zeichneEbene(ctx, i, kam) { const L = i < 5 ? S.ebenen[i] : S.vorne; const [ox, oy] = off(kam, L.parallax); ctx.drawImage(L.canvas, ox - M, oy - M); },
     zeichneAnimiert(ctx, t, kam) { ctx.imageSmoothingEnabled = false; for (const a of K.anim) { const [ox, oy] = off(kam, a.p); a.f(ctx, t, ox, oy); } },
     zeichneVordergrund(ctx, t, kam, ohneEbene5) {

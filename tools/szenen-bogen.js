@@ -1,7 +1,8 @@
 // Auftrag 3, M2: Kontaktbogen der Kampfszenen für die Stellplätze (05-oberflaeche.md Abschnitt 4).
 // Je Biom ein PNG mit den vier Kampfszenen (kampf Variante 0, 1, 2 und waechter), zweifach vergrößert, mit Raster alle 20 px (Szene 480 × 270),
 // den alten Bodenreihen (dünn, grau) und den Stellplätzen aus prototype/data/stell.json (Kreis mit Nummer, Strich in Gegnerhöhe × Maßstab).
-// node tools/szenen-bogen.js [ordner=docs/auftrag-3/bilder/M2/stell] [biom,…] [--ohne-raster]
+// node tools/szenen-bogen.js [ordner=docs/auftrag-3/bilder/M2/stell] [biom,…] [--ohne-raster] [--szenen=kampf:0,kampf:1,kampf:2,waechter:0]
+// M3: --szenen wählt andere Szenen (art:variante), z. B. für die Weg-Richtung der Fahrt
 // Bedient prototype/ selbst über einen eigenen Server (freier Port) und lädt alle Biom-Szenen nach.
 const { chromium } = require('playwright'); const fs = require('fs'), path = require('path'), http = require('http');
 (async () => {
@@ -18,8 +19,9 @@ const { chromium } = require('playwright'); const fs = require('fs'), path = req
   const biome = pos[1] ? pos[1].split(',') : await p.evaluate(() => Object.keys(BIOMES));
   const stell = JSON.parse(fs.readFileSync(path.join(wurzel, 'data/stell.json'), 'utf8').toString() || '{}').szenen || {};
   const raster = !a.includes('--ohne-raster');
+  const szenen = ((a.find(x => x.startsWith('--szenen=')) || '').split('=')[1] || 'kampf:0,kampf:1,kampf:2,waechter:0').split(',');
   for (const bi of biome) {
-    const bilder = await p.evaluate(([bi, stell, raster]) => ['kampf:0', 'kampf:1', 'kampf:2', 'waechter:0'].map(k => {
+    const bilder = await p.evaluate(([bi, stell, raster, szenen]) => szenen.map(k => {
       const [art, v] = k.split(':'); let sz; try { sz = World.build(bi, { art, variante: +v, seed: 7 }); } catch (e) { return { k, f: String(e) }; }
       const c = document.createElement('canvas'); c.width = 960; c.height = 540; const g = c.getContext('2d'); g.imageSmoothingEnabled = false;
       const t = document.createElement('canvas'); t.width = 480; t.height = 270; const h = t.getContext('2d');
@@ -31,7 +33,7 @@ const { chromium } = require('playwright'); const fs = require('fs'), path = req
       const l = stell[bi + ':' + art + ':' + v] || stell[bi + ':' + art] || [];
       l.forEach((s, i) => { const hh = 80 * (s.s || 1) * 2; g.strokeStyle = '#3cf'; g.lineWidth = 3; g.beginPath(); g.moveTo(s.x * 2, s.y * 2); g.lineTo(s.x * 2, s.y * 2 - hh); g.stroke(); g.beginPath(); g.arc(s.x * 2, s.y * 2, 9, 0, 7); g.fillStyle = '#036'; g.fill(); g.stroke(); g.fillStyle = '#fff'; g.font = 'bold 12px monospace'; g.fillText(i + 1, s.x * 2 - 4, s.y * 2 + 4); g.lineWidth = 1; });
       return { k, d: c.toDataURL(), n: l.length };
-    }), [bi, stell, raster]);
+    }), [bi, stell, raster, szenen]);
     const q = await b.newPage({ viewport: { width: 1960, height: 1200 } });
     await q.setContent(`<html><body style="margin:0;background:#0b0c0e;color:#e8dcc0;font:14px monospace;padding:12px"><div style="margin-bottom:8px">${bi}: Kampfszenen 480×270, zweifach. Raster 20 px, gestrichelt = alte Bodenreihen, blau = Stellplätze (Strich = Höhe eines 80-px-Gegners × Maßstab)</div><div style="display:grid;grid-template-columns:960px 960px;gap:12px">${bilder.map(x => `<div><div>${x.k}${x.f ? ' FEHLER ' + x.f : ''} · ${x.n || 0} Stellplätze</div>${x.d ? `<img src="${x.d}" width="960" height="540">` : ''}</div>`).join('')}</div></body></html>`);
     const f = path.join(out, bi + '.png'); await q.screenshot({ path: f, fullPage: true }); await q.close(); console.log(path.relative(process.cwd(), f));

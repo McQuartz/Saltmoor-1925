@@ -373,6 +373,7 @@ function abstieg(K, x, y) {
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante, info;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'kraemer' ? 0 : art === 'rast' || art === 'uebergang' ? 1 : art === 'ereignis' || art === 'fund' ? 0 : (o.seed + v) % 3;
+  K.kulisse = art === 'waechter' ? 'waechter' : v; // M3: welche Kulisse die Szene zeigt (Schlüssel für die Fahrt, data/fahrt.json)
   if (art === 'waechter') info = hauptband(K);
   else info = [k => packhalle(k, { ohneTurm: art === 'kraemer' }), kesselhaus, hof][v](K, {});
   if (art === 'kraemer') spinde(K, 300, 206);

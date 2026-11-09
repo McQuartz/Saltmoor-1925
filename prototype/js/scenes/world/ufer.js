@@ -325,6 +325,7 @@ function strandtreppe(K, P) {
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante, info;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'rast' ? 2 : art === 'uebergang' ? 0 : (o.seed + v) % 3;
+  K.kulisse = art === 'waechter' ? 'waechter' : v; // M3: welche Kulisse die Szene zeigt (Schlüssel für die Fahrt, data/fahrt.json)
   if (art === 'waechter') info = finale(K);
   else if (art === 'ankunft') info = flutlinie(K, { ruhig: true, ohneSaeule: true });
   else info = [k => flutlinie(k, { ohneRand: art === 'uebergang' }), brecher, strandkorbSzene][v](K);

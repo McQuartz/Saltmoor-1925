@@ -1,0 +1,4 @@
+{
+  "_doc": "Auftrag 3, M3: Fahrt nach vorne (05-oberflaeche.md Abschnitt 6). Schlüssel biom:kulisse (kulisse = Hintergrund 0, 1, 2 eines Bioms, siehe sz.kulisse aus World.build). r = vor | links | rechts | ab | auf; ziel = [x, y] in der Szene 480×270, auf den die Fahrt zuläuft.",
+  "szenen": {}
+}
