@@ -30,7 +30,7 @@ function uebergangHtml(){const a=RUN.akte[S.akt];const b=biom();let satz=S.akt==
 function wegHtml(){return kartenHtml('haupt');}
 function itemPick(id,attr,extra=''){const d=ITEMS[id];const ex=d.st.length>1?BAL.forge.double_cost_extra:0;
  return `<div class="pick ${rarOf(d)!=='gewoehnlich'?'selten':''} ${rarOf(d)==='reliquie'?'reliquie':''}" ${attr}><img src="${itemBild(id)}"><div class="pn">${esc(d.n)}</div><div class="pst">${d.st.map(k=>gi(k,KZ())).join('')}</div>
- <div class="ps">${AREA_N[d.a]}${d.hp?` · +${d.hp} Leben`:''}${d.passiv?' · passiv':''}<br>${d.cards.map(c=>`${esc(c.n)} (${c.c+ex}): ${esc(cardText(c))}`).join('<br>')}${d.passiv?esc(passivText(d.passiv)):''}${d.eigen?`${d.cards.length?'<br>':''}<i>${esc(eigenText(d.eigen))}</i>`:''}</div>${extra}</div>`;}
+ <div class="ps">${AREA_N[d.a]}</div>${extra}</div>`;} // Spieltest 2026-11-09: Karten, Leben und Eigenschaft stehen im Hover (hoverVorschau)
 // Kurztext für Effektlisten (Ballaststein, Korkweste: was ein Wurf über Bord bewirkt)
 function fxKurz(fx){return(fx||[]).map(f=>f.op==='damage'?`${f.v} Schaden${f.to==='all'?' an allen':''}`:f.op==='block'?`${f.v} Block`:f.op==='ward'?`Schutz ${f.v}`:f.op==='heal'?`+${f.v} Leben`:f.op==='status'?`${({burn:'Brand',poison:'Gift',vuln:'Verwundbar',weak:'Geschwächt'})[f.status]||f.status} ${f.v}${f.to==='all'?' an allen':''}`:f.op==='ballast'?`${f.n||1} Ballast`:f.op).join(', ');}
 // Eigenschaft eines Items in einem Satz: eigener Text (eigen.t) oder aus dem Typ

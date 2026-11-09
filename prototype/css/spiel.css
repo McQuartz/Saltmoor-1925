@@ -312,3 +312,10 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 #devBtn{z-index:90}
 /* Spruch des Handgriffs steht nach dem Nehmen (Ritzen), nicht mehr auf jeder Auswahlkarte */
 .hgspruch{font-size:calc(var(--u)*6);color:#d8ccb0;max-width:calc(var(--u)*260);margin:calc(var(--u)*2) auto calc(var(--u)*5);padding:calc(var(--u)*3) 0;border-top:1px solid #3a2c18;border-bottom:1px solid #3a2c18}
+/* Hover über Fund, Reliquie, Handgriff: die echten Karten (vorschauKartenReihe) */
+#tip:has(.tipkarten){background:transparent;border:0;padding:0;max-width:none}
+#tip .tipkarten{display:flex;gap:calc(var(--u)*3);padding:calc(var(--u)*2)}
+#tip .tkw{position:relative}
+#tip .tkw .anz{position:absolute;right:calc(var(--u)*-2);top:calc(var(--u)*-3);font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*6);color:var(--gold);text-shadow:0 0 calc(var(--u)*2) #000,1px 1px 0 #000}
+#tip .karte.vorschau{animation:none;transform:none;cursor:default;box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px #3a2c18,0 calc(var(--u)*2) calc(var(--u)*6) #000}
+#tip .tipzusatz{margin-top:4px;background:#000;border:1px solid var(--messing);padding:6px 10px;color:#e8d8a0;font-size:15px;max-width:420px}

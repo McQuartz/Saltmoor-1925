@@ -89,7 +89,7 @@ document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
  if(S.phase==='fight'&&!busy){if(e.key===' '||e.key==='e'){e.preventDefault();endTurn();}const n=+e.key;if(n>=1&&n<=9)playCard(n-1);}
  if(S.phase==='uebergang'&&!['Shift','Control','Alt','Meta','d','D'].includes(e.key))leaveUebergang();});
 // Tooltips
-function showTip(h,x,y){const tip=$('tip');tip.innerHTML=h;tip.style.display='block';const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
+function showTip(h,x,y){const tip=$('tip');tip.innerHTML=h;tip.style.display='block';if(tip.querySelector('.karte')&&typeof kartenEinpassen==='function')kartenEinpassen();const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
 function hideTip(){$('tip').style.display='none';}
 function itemTip(loc){const it=getAt(loc);if(!it)return'';const d=def(it);const[k]=loc.split(':');
  let h=`<div class="tn">${esc(d.n)}</div><div>${d.st.map(k=>gi(k,18)).join('')}</div><div class="hint">${AREA_N[d.a]}${d.hp?' · +'+d.hp+' max. Leben':''}</div>`;
