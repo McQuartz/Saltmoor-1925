@@ -50,7 +50,8 @@ function startFight(ids,art='kampf'){
  allActive().forEach(it=>{const e=def(it).eigen;if(e&&e.ballast_start)ballastMischen(e.ballast_start,'stapel',e.ballast_karte,def(it).n);});
  startTurn();if(pb){S.block+=pb;Bus.emit('player_block',{v:pb,why:'Eigenschaft: Block zu Kampfbeginn'});}
  passive('kampfstart_fx').forEach(p=>runFx(p.fx,{why:'Eigenschaft zu Kampfbeginn'}));
- if(typeof Blick!=='undefined')Blick.kampfStart(art);} // M7: Wahl Hinsehen / Nicht hinsehen vor dem ersten Zug
+ if(typeof Blick!=='undefined')Blick.kampfStart(art);
+ if(typeof Diener!=='undefined')Diener.kampfStart(art);} // M7: Wahl Hinsehen / Nicht hinsehen vor dem ersten Zug
 // Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), Pfandschein (gold_energie: ab p.ab Gold), übrige Energie (energie_bleibt)
 function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0)+passive('gold_energie').reduce((s,p)=>s+((S.gold||0)>=(p.ab||100)?(p.v||1):0),0);}
 
@@ -149,6 +150,7 @@ function playCard(i,ei){
  S.rxZug=(S.rxZug||0)+rx.length;if(!DRY&&S.stats&&S.rxZug>(S.stats.maxKette||0))S.stats.maxKette=S.rxZug;if(!DRY&&S.stats)S.stats.reaktionen=(S.stats.reaktionen||0)+rx.length;
  // Gegenlauf: merkt sich die Stoffe der Karte davor für die nächste Karte
  S.joker=S.jokerNaechste?prevSt:null;S.jokerNaechste=false;S.vorherKarte=c.sonder&&c.sonder.art==='wiederholen'?S.vorherKarte:c;
+ if(typeof Diener!=='undefined')Diener.gespielt(c); // M9: mitzählen
  if(typeof Farbe!=='undefined')Farbe.nachKarte(c,(S.zugKarten||[])[(S.zugKarten||[]).length-1]); // M8: Binden mit Salz
  Bieg.nachKarte(c,cost); // setzt S.last (normal: die Stoffe dieser Karte; Falsche Winkel, Der Schlag ändern es)
  Bieg.nachReaktion(c,rx); // Keiner fährt ab
@@ -291,7 +293,7 @@ function kniffNachAngriff(en,tot){if(tot>0)S.stats.todesursache=en.n;}
 function absichtSichtbar(e){return !!e&&e.hp>0&&!e.gehandelt&&!S.nachGegnerzug&&!(typeof Hoeren!=='undefined'&&Hoeren.istStumm(e));}
 function incomingSichtbar(){const v=typeof Blick!=='undefined'&&Blick.aktiv()?[]:alive().filter(e=>e.kniff&&e.kniff.art==='verborgen'); // M7: mit Hinsehen ist nichts verborgen
 if(!v.length)return incoming(true);const keep=v.map(e=>e.pat);v.forEach(e=>{e.pat=e.pat.map(p=>p.t==='atk'?{...p,v:-e.str,h:1}:p);});const r=incoming(true);v.forEach((e,i)=>e.pat=keep[i]);return Math.max(0,r);}
-function incoming(sicht){let tot=0;for(const en of alive()){if(sicht&&!absichtSichtbar(en))continue;if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
+function incoming(sicht){let tot=0;for(const en of alive()){if(sicht&&!absichtSichtbar(en))continue;if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='karte'&&typeof Diener!=='undefined'){tot+=Diener.schaden(en,it);continue;}if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
 
 function endTurn(){
  if(S.phase!=='fight'||busy||S.blickWahl)return;busy=true;S.vorrat=S.energy;
@@ -321,6 +323,7 @@ function endTurn(){
     if(!letzter){wait(W.mehrfach_abstand_ms||120,einer);return;}
     if(en.weak2)en.weak2=0;log(`${en.n} trifft: ${tot}`);kniffNachAngriff(en,tot);kniffGegnerzug(en);if(en.vuln>0)en.vuln--;Bus.emit('changed');wait(560,step);};
    wait(W.anlauf_gegner_ms||330,einer);return;}
+  else if(it.t==='karte'){const K=it.karte;const d=Diener.schaden(en,it);if(d)gegnerTrifft(en,d,`${en.n} spielt deine Karte „${K.n}“ gegen dich`);if(K.blk){en.block+=K.blk;Bus.emit('enemy_block',{e:en,why:`${en.n} spielt „${K.n}“: +${K.blk} Block`});}Bus.emit('diener',{art:'gespielt',e:en,karte:K.n,why:`${en.n} spielt „${K.n}“ (Ziehen und Energie verfallen)`});if(S.hp<=0&&!faehrgeld()){busy=false;return runLost();}} // M9: Die Diener erheben sich
   else if(it.t==='blk'){en.block+=it.v;Bus.emit('enemy_block',{e:en,why:`${en.n} schützt sich (+${it.v} Block)`});log(`${en.n} schützt sich (+${it.v})`);}
   else if(it.t==='buff'){en.str+=it.v;Bus.emit('enemy_buff',{e:en,why:`${en.n} wird stärker (+${it.v} Stärke)`});log(`${en.n} wird stärker (+${it.v})`);}
   else if(it.t==='laedt'){Bus.emit('enemy_buff',{e:en,why:`${en.n} lädt (Ansage): bald ein großer Schlag`});}

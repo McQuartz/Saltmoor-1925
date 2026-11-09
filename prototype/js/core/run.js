@@ -28,6 +28,7 @@ function newRun(jobId,seed,opt={}){
  log(job.ausrede);
  Bus.emit('run_start',{seed,job:job.id,why:`Seed ${seed}, ${job.n}`});
  if(typeof Farbe!=='undefined')Farbe.planen(); // M8: ob und wo die Farbe kommt
+ if(typeof Zettel!=='undefined')Zettel.wuerfeln(); // M9: Run-Zettel (zwei Begegnungen, Würze)
  enterAct();}
 
 // --- Akte und Ebenen ---
@@ -53,7 +54,8 @@ function chooseWeg(i){if(S.phase!=='weg')return;const o=S.weg[i];if(!o)return;S.
  if(!FAST&&typeof Fahrt!=='undefined'&&Fahrt.start)Fahrt.start(()=>enterNode(o));else enterNode(o);}
 
 // --- Knoten ---
-function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.depth}:${o.art}`);
+function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.depth}:${o.art}`);S.spurenKampf=null;
+ if(typeof Spuren!=='undefined'&&Spuren.istHier(o)){Spuren.starten(o);return;} // M9: Spuren
  switch(o.art){
   case'kampf':startFight(o.foes,'kampf');break;
   case'kampf_schwer':startFight(o.foes,'schwer');break;
@@ -99,6 +101,7 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  const hb=Math.round(maxHp()*BAL.victory_heal_pct)+passive('heil_nach_sieg').reduce((s,p)=>s+p.v,0);healP(hb,`Sieg: ${Math.round(BAL.victory_heal_pct*100)} % von ${maxHp()} Leben`);
  bonuses('after_victory_item').forEach(b=>{giveItem(b.item,'Set Friedhofswärter');Bus.emit('toast',{a:'FRIEDHOFSWÄRTER',b:'Ein Knochen für den Rucksack'});});
  if(typeof Farbe!=='undefined')Farbe.wandern(); // M8: die Farbe springt nach jedem Sieg weiter
+ if(typeof Diener!=='undefined')Diener.sieg(); // M9: die Karte kommt geschliffen zurück
  if(art==='finale'){S.phase='reward';S.reward=[];S.picked=true;S.goldGain=0;finishNode();return;}
  const r=R(`beute:${S.depth}`);const G=BAL.gold_per_victory;
  let gd=art==='waechter'?r.int(BAL.waechter_belohnung.gold[0],BAL.waechter_belohnung.gold[1]):r.int(G.min,G.max)+S.enemies.length*G.per_enemy;
@@ -108,7 +111,7 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  const blickB=typeof Blick!=='undefined'&&Blick.aktiv(); // M7: nach Hinsehen 1 aus 4 und das Item-Angebot sicher
  const hg=handgriffAngebot(r,art==='waechter'?'selten':art==='schwer'?'mix':'gewoehnlich',blickB?4:3);
  let items=[];
- if(art==='waechter'){items=reliquienAngebot(r,3+glueck);}
+ if(art==='waechter'||(S.spurenKampf&&S.spurenKampf.beute==='reliquie')){items=reliquienAngebot(r,3+glueck);} // M9: späte Spuren bringen eine Reliquie
  else if(art==='schwer'){items=r.sample(dropPool(),2+glueck);const rp=rarePool();if(rp.length)items.push(r.pick(rp));}
  else if(r.chance(RW.item_chance??.25)||blickB){items=r.sample(dropPool(),2+glueck);}
  // Gegner-Beute: kleine Chance auf das eigene Stück eines Gegners (Kniff „nachlass: item“ sicher)

@@ -69,6 +69,9 @@ Bus.on('reaction',({r,k,isNew,keys,live,hoch})=>{if(FAST)return;
  if(isNew)setTimeout(sfx.disc,150);if(typeof Music!=='undefined'&&audioOn)try{Music.reaction(hoch);}catch(x){}});
 Bus.on('boss_phase',({e})=>{FX.flash('#ff6ad8',.3);FX.shake(10);toast(String(e.n||'').toUpperCase(),'verändert sich',true);});
 Bus.on('victory',()=>{sfx.win();if(typeof Music!=='undefined'&&audioOn)try{Music.victory();}catch(x){}});
+// M8: die Farbe meldet sich mit einem kurzen Hinweis (wohin sie springt, gebunden, Spur getilgt)
+Bus.on('farbe',p=>{if(FAST)return;const it=p.uid!=null&&typeof itemByUid==='function'?itemByUid(p.uid):null;const n=it?def(it).n:'';
+ toast({an:'DIE FARBE',wandert:'DIE FARBE WANDERT',gebunden:'GEBUNDEN',getilgt:'SPUR GETILGT'}[p.art]||'DIE FARBE',p.art==='getilgt'?n:n);});
 Bus.on('forged',({name})=>{sfx.forge();toast('VERBESSERT',name);});
 Bus.on('game_over',()=>{sfx.die();if(typeof Music!=='undefined'&&audioOn)try{Music.niederlage?Music.niederlage():Music.scene('menu');}catch(x){}});
 Bus.on('act_start',()=>{if(S.akt>0)pfx('uebergang',{palette:biomId(),seed:S.akt});if(typeof Music!=='undefined'&&audioOn)try{Music.uebergang&&Music.uebergang();}catch(x){}});
