@@ -56,7 +56,8 @@
    ],
    "beute": "leimtopf",
    "beute_satz": "Unter dem letzten Etikett ist noch eins. Darauf steht dein Name.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -80,7 +81,8 @@
      "blk": 5,
      "weak": 1
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }

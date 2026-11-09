@@ -53,7 +53,8 @@
    ],
    "beute": "glasperle",
    "beute_satz": "Von der Blase ist eine einzige Perle übrig. Das Nordlicht ist darin.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -82,7 +83,8 @@
      "draw": 1,
      "verbraucht": true
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }

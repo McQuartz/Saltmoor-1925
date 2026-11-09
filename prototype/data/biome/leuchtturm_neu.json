@@ -48,7 +48,8 @@
    },
    "beute": "lantern",
    "beute_satz": "Die Kannen sind leer. Er hat sie trotzdem bis oben getragen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   },
   "inspektor": {
    "n": "Der Feuerinspektor",
@@ -101,7 +102,8 @@
    ],
    "beute": "pruefbuch",
    "beute_satz": "Das Glas ist leer. Im Prüfbuch steht unter heute schon: ordnungsgemäß.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -129,7 +131,8 @@
      "blk": 5,
      "draw": 1
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }

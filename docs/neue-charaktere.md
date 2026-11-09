@@ -44,7 +44,7 @@ Nur vorhandene Kniffe, keine neuen Systeme. Keine Störkarten ins Deck (Deck nie
 | Funkstation | 19/20 | 17/20 | |
 | Glasmeer | | 10/10 | 10/10 |
 
-- Gesamttests (`sh tools/alle-tests.sh`): siehe PR. `test-karte` meldet auf der Basis schon dieselben 48 Fehler, das kommt nicht von hier.
+- Gesamttests (`sh tools/alle-tests.sh`): alles gut, außer `test-karte` (48 Fehler) und `test-klangzeichen` (bricht ab). Beide verhalten sich auf der Basis genauso, kommen also nicht von hier. Alle neuen Texte tragen `"entwurf": true`, `texte-pruefen` ist grün.
 
 ## Noten (eigene Einschätzung, Bewertungsbogen 1–5)
 

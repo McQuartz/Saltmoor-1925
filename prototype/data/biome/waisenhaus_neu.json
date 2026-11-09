@@ -52,7 +52,8 @@
    ],
    "beute": "muendelakte",
    "beute_satz": "Der Mantel fällt leer zusammen. Die Augen darin sind schon woanders.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -80,7 +81,8 @@
      "blk": 4,
      "str": 1
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }

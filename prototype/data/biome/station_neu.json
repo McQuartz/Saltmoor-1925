@@ -56,7 +56,8 @@
    ],
    "beute": "befehlskelle",
    "beute_satz": "Die Uhr steht. Fünf vor zwölf, wie immer, nur jetzt still.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -84,7 +85,8 @@
      "atk": 7,
      "vuln": 1
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }

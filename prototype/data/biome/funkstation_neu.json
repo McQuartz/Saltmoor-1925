@@ -55,7 +55,8 @@
    ],
    "beute": "expeditionsfahne",
    "beute_satz": "Die Röhren in der Kapuze glühen nach. Das Signal ist noch nicht zu Ende.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -84,7 +85,8 @@
      "atk": 5,
      "str": 1
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }

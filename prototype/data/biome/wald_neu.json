@@ -53,7 +53,8 @@
    ],
    "beute": "holzkohle",
    "beute_satz": "Der Meiler glimmt weiter, ohne sie. Er hat Zeit.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -80,7 +81,8 @@
      "burn": 4,
      "blk": 3
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }

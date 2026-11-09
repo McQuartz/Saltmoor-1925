@@ -52,7 +52,8 @@
    ],
    "beute": "falzbein",
    "beute_satz": "Der Turm steht noch, ohne sie. Die Kerze oben ist nicht ausgegangen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -75,7 +76,8 @@
      "atk": 6,
      "weak": 1
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }

@@ -47,7 +47,8 @@
    ],
    "beute": "kolophonium",
    "beute_satz": "Die Geige spielt den letzten Takt allein zu Ende.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -74,7 +75,8 @@
      "atk": 2,
      "h": 3
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }

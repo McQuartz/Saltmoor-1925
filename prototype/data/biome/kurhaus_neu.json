@@ -55,7 +55,8 @@
    ],
    "beute": "hoerrohr",
    "beute_satz": "Die Trichter horchen weiter in den Boden. Einer hat etwas gehört.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "entwurf": true
   }
  },
  "events": [],
@@ -84,7 +85,8 @@
      "draw": 1,
      "vuln": 1
     }
-   ]
+   ],
+   "entwurf": true
   }
  }
 }
