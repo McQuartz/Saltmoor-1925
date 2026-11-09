@@ -19,7 +19,7 @@ Wird vom Agenten geführt. Neueste Einträge oben in jedem Abschnitt.
 | M10 Metaebene | fertig | Strand zählt mit, Ausrede in Stufen, Ankunftszeile, Notizen des Vorgängers, Erbe, Fehlzeit, Pause |
 | M11 Würze | fertig | Zeitungsausschnitte, Der falsche Brief, Barmherzige Trennung, Zanns Takt; Grabbeigabe, Licht im Turm, Lügender Kartentext per Schalter aus |
 | M12 Balance und Abschluss | fertig | generisch 53 %, Builds 40–62 %, kein Akt über 35 %; geklickter Run (114 Stationen), Galerie, Artboard, Daten-README, Bericht |
-| Zugabe | nicht begonnen | Stopp nach M6 (Philip) |
+| Zugabe | fertig | keine Mindestens-Lücke offen; Krämer mit tausend Masken (Probe); 14 Ereignisse zu den Regelbiegungen mit Bildern; zweite Fassung aller 70 Notizen; 30 Zeitungsausschnitte |
 
 ## Basis (M0, unverändertes main)
 
@@ -413,6 +413,23 @@ Basis-Fotos 1440×900: [Kampf](bilder/M0/kampf-1440x900.png), [Wegwahl](bilder/M
   - texte-pruefen: ✓ `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 578, alle als Entwurf markiert.`
 - Agenten: Sonnet Galerie/Artboard (zwei Nachbesserungen von mir), Sonnet README (ohne Änderung übernommen).
 
+### Zugabe
+
+**Plan.** Liste aus 03-meilensteine.md: (1) fehlende Mindestens-Punkte, (2) Krämer mit tausend Masken als Probe, (3) je tiefem Biom ein Ereignis zur Regelbiegung, (4) mehr Notizen und Zeitungsausschnitte. Kern (Krämer, Notiz-Fassungen) selbst, Texte und Bilder Sonnet.
+
+**Schritte und Entscheidungen.**
+- **(1) Mindestens:** Alle Abnahmen M1 bis M11 haben „Mindestens erfüllt“ (M7–M10 sogar mehr). Nichts nachzuholen.
+- **(2) Der Krämer mit tausend Masken (Probe):** fünftes Würze-Stück `masken` mit eigenem Schalter `auftrag3.masken` (Dev-Reiter TIEFE), Chance 0,25. Der erste Krämer in Akt II bis IV hat ein anderes Gesicht und denselben Ring: Ein Stück aus seinem Sortiment gibt es ohne Gold („ANSCHREIBEN“, einmal je Run). Am Anfang des nächsten Akts wartet er am Übergang und nimmt einen Handgriff deiner Wahl mit (fest eingeritzte ausgenommen); hast du keinen, nimmt er das Stück zurück. Kein Masken-Krämer, wenn der Krämer zu ist (Seitenwechsel) oder ein Tausch-Krämer. Bot: schreibt das beste Stück an, gibt den schwächsten Handgriff. Code in `wuerze.js` (Abschnitt Masken), Hooks in `run.js` (Krämer-Knoten, `enterAct`), Oberfläche `maskenHtml` und Wahl „Der Ring“ in `bildschirme.js`.
+- **(3) 14 Ereignisse**, eines je Biom mit Regelbiegung (Übersicht in [zugabe/ereignisse-biegung.md](zugabe/ereignisse-biegung.md)). Sie spielen über Text und Folgen mit der Regel (z. B. Über Eck: zwei Hemden, deren Ärmel sich über die Gasse fast berühren; Aufgewogen: der Schalter für Reste), nur mit vorhandenen `fx`. Zehn nach „Der Geruch zuerst“, eines mit `tiefe: 1` (Der Restposten; die übrigen drei habe ich gestrichen, weil M9 höchstens zwölf solche Wahlen vorsieht). Die Pforte hatte bisher kein eigenes Ereignis; `pforte_nebentueren` kommt über die Ebene „Rast oder Ereignis“ in Akt V.
+- **(4) Notizen und Zeitung:** Jede der 70 Notizen (45 Wächter, 25 Biome) hat eine zweite Fassung in `mehr` (wahr und falsch, Belege in [zugabe/notizen-belege.md](zugabe/notizen-belege.md)); `Metaebene.notizenAnRast` wählt per Seed eine Fassung. 18 neue Zeitungsausschnitte (jetzt 30), sechs nach „Der Geruch zuerst“.
+
+#### Abnahme Zugabe
+- `test-wuerze.js` 43 Prüfungen grün, davon 9 für den Krämer (Angebot, ohne Gold, nur eins, kassiert am Anfang des nächsten Akts, ein Handgriff weniger, nur einmal, ohne Zettel nichts, Schalter aus); 100 Seeds mit fünf Stücken: höchstens drei, Mittel 1,58, keine Wiederholung; 30 Bot-Runs mit allen fünf Stücken ohne Fehler.
+- `test-ereignisse.js` grün (534 Wahlen gespielt, alle 14 neuen dabei), `test-meta.js` 30 grün, `test-run.js` grün.
+- Fotos, selbst angesehen: Krämer [Angebot](bilder/Zugabe/masken-1-angebot.png), [angeschrieben](bilder/Zugabe/masken-2-angeschrieben.png), [Der Ring kassiert](bilder/Zugabe/masken-3-der-ring-kassiert.png); die 14 Ereignisse im Spiel `bilder/Zugabe/ereignis-*.png` (`tools/zugabe-fotos.js`); Bilder [Kontaktbogen](bilder/Zugabe/ereignisse-kontakt.png).
+- texte-pruefen: `Texte unverändert: 3653 aus Daten, 120 aus der Oberfläche. Neue Texte: 849, alle als Entwurf markiert.`
+- Agenten: Sonnet Ereignisse (ohne Änderung übernommen), Sonnet Notizen und Zeitung (ohne Änderung übernommen; Stichprobe Lotse gegen `foes.json` stimmt), Sonnet Bilder (eine Rückgabe).
+
 ## Regelprüfung
 
 *Je Mechanik eine Tabelle mit den sieben Prüffragen aus [01-regeln.md](01-regeln.md) Abschnitt 3: Ja/Nein und Halbsatz.*
@@ -614,6 +631,18 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 | Unheimlich, nicht anstrengend | Ja | eine Karte je Zug, die Musik sagt es mit |
 | Nie Herkunft als Bedrohung | Ja | Musik und Fenster, keine Herkunft |
 
+### Zugabe: Der Krämer mit tausend Masken (Probe)
+
+| Regel | Ja/Nein | Begründung |
+|---|---|---|
+| Verändern statt schwächen | Ja | gibt jetzt ein Stück und nimmt später einen Handgriff; ein Tausch, keine Schwächung |
+| Das Deck bleibt deins | Ja | du wählst, ob du anschreibst und welchen Handgriff er nimmt |
+| Selten ist stark | Ja | Würze-Stück mit Chance 0,25, einmal je Run |
+| Kein Fragezeichen | Ja | Preis und Zeitpunkt stehen vor dem Anschreiben da |
+| Einwilligung vor Kontrollverlust | Ja | nur nach „ANSCHREIBEN“; ohne Klick passiert nichts |
+| Unheimlich, nicht anstrengend | Ja | ein Satz, ein Knopf, eine Wahl am Übergang |
+| Nie Herkunft als Bedrohung | Ja | Gesicht und Ring, keine Herkunft |
+
 ## Noten
 
 *Je neues Bild: Name, Note, Bildpfad, Kurzbegründung.*
@@ -647,11 +676,26 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 | Karte „Die Aussage“ | 4 | `prototype/assets/karten/aussage.png` | nach Rückgabe: klare Zeilen, Teer-Daumenabdruck, Tauknoten; kühler als der Ausschnitt |
 | Brief-Ereignis | 4 | `prototype/assets/ereignisse/falscher_brief.png` | nach Rückgabe: kleineres, geknicktes Blatt mit ansteigender Schrift und Siegelrest, Spiegelung darunter |
 | Geigenebene (Klang) | offen | `prototype/js/audio/music.js` (`Music.geige`), Labor-Knopf „GEIGE AN/AUS“ in `musik.html` | Mechanik geprüft (`musik-pruefen --schnell`: Einsatz auf der Taktgrenze, harter Abbruch in 45 ms mit Kratzer, Wiedereinsatz, Spitze −0,43 dBFS ohne Clipping); in der Cloud nicht gehört, darum keine Note. Lautstärke über `GEIGE_V` |
+| Ereignis Die Probe | 4 | `prototype/assets/ereignisse/salz_probe.png` | drei Gläser Salz, Wasser, Blut auf dem Zinntisch, klar |
+| Ereignis Die Wäscheleine | 4 | `prototype/assets/ereignisse/stadt_waescheleine.png` | nach Rückgabe: Hemden mit Kragen, Lichtstreif genau in der Lücke |
+| Ereignis Der Stumpf | 4 | `prototype/assets/ereignisse/wald_stumpf.png` | Ringe wachsen aus dem Schnitt, Axt lesbar |
+| Ereignis Das Staubecken | 4 | `prototype/assets/ereignisse/gezeitenwerk_staubecken.png` | Schütz, Handrad, Pegel am Wasserspiegel |
+| Ereignis Der Ringgang | 4 | `prototype/assets/ereignisse/ziegelgruben_ringgang.png` | Gang in Flucht, glühendes Ende, Stempelziegel |
+| Ereignis Die Abfahrtstafel | 4 | `prototype/assets/ereignisse/station_abfahrt.png` | Tafel, offener Wagen, Koffer |
+| Ereignis Die Peilung | 4 | `prototype/assets/ereignisse/eis_peilung.png` | Dreibein, zwei Stangen hintereinander |
+| Ereignis Der dritte Schlag | 4 | `prototype/assets/ereignisse/walkathedrale_dritter_schlag.png` | nach Rückgabe (erst 2): drei wachsende Mulden, Kreide am Pfeiler |
+| Ereignis Der Rucksack unter dem Glas | 4 | `prototype/assets/ereignisse/glasmeer_vorrat.png` | nach Rückgabe: Rucksack klar unter heller Glaskante |
+| Ereignis Der zweite Schatten | 3 | `prototype/assets/ereignisse/mond_zweiter_schatten.png` | angenommen: Fels und kurzer Schatten klar, der lange weiche Schatten nur schwach lesbar |
+| Ereignis Dreimal kurz | 4 | `prototype/assets/ereignisse/funkstation_dreimal.png` | Lautsprecher, Röhren, drei Kreidestriche |
+| Ereignis Die Nebentüren | 4 | `prototype/assets/ereignisse/pforte_nebentueren.png` | vier Türen, je eine Herkunft, Plan am Boden |
+| Ereignis Die Brandung | 4 | `prototype/assets/ereignisse/ufer_brandung.png` | Meer fällt als Vorhang, Gegenstände in Reihe |
+| Ereignis Der Restposten | 4 | `prototype/assets/ereignisse/waage_restposten.png` | Rechenmaschine, Lade mit Röllchen |
 
 ## Neue Texte (Entwurf)
 
 *Je neuer Text: Datei, ID, erste Worte. Für Philip und Mo.*
 
+- **Zugabe, Daten:** `wuerze.json → texte.masken` (Krämer mit tausend Masken: „Hinter dem Tresen steht ein anderer als beim letzten Mal …“, „ANSCHREIBEN“, „Der Ring“, „Du schuldest mir noch etwas.“), 18 neue Zeitungsausschnitte (z. B. „Es roch nach Lampenöl und kaltem Salz …“), zweite Fassung aller 70 Notizen in `meta.json → notizen.*.mehr`, 14 Ereignisse (Liste in [zugabe/ereignisse-biegung.md](zugabe/ereignisse-biegung.md), z. B. `stadt_waescheleine` „Die Wäscheleine“, `waage_restposten` „Der Restposten“).
 - **M11, Daten (`data/wuerze.json`):** 12 Zeitungsausschnitte (z. B. „Der Kutter Margaret Hale lief im Februar leer in den Hafen ein …“), Kopf „SALTMOOR GAZETTE · Vermisst“ und neun Vermisstenanzeigen (z. B. Fischer „VERMISST seit dem Frühjahr: ein Fischer, wettergegerbt …“), Brief „Ein Brief ohne Marke“ („Unter der Tür steckt ein Umschlag, auf dem dein Name steht …“, „Den Brief einstecken“, „Den Brief liegen lassen“) mit einem Brief je Biom, Trennung „Das Relief“, „Der Ausschnitt“, „Die Aussage“, „Zwei Teile, ein Seil“ („Du siehst, wer gehalten hat und wer gehalten wurde …“), Zanns Geige („Der Bogen ist bis aufs Holz abgespielt …“), Karte „Der Takt“, „Der Takt reißt ab. Das Fenster steht offen.“, „Du spielst wieder. Das Fenster schließt sich.“ Oberfläche: Würze-Zeile auf dem Run-Zettel, Brief-Knoten und Brief-Seite im Tagebuch.
 - **M10, Daten (`data/meta.json`):** Ausrede-Stufen je Figur (z. B. Fischer „Mein Bruder ist nicht zurückgekommen. Das Boot lag am Morgen trocken im Hafen.“), „Ich gehe hinunter.“, Ankunftszeile „Du wachst am Strand auf. Deine Stiefel stehen im Sand, und die Spur dazu fehlt.“, 25 Pausen-Zeilen (z. B. Kapelle „Das Wasser in der Kapelle steht höher als zuletzt …“), Erbe („Dein Griff vom letzten Mal …“, NEHMEN, LIEGEN LASSEN), Fehlzeit („Jemand anderes wird an deiner Stelle gehen …“, ANNEHMEN, SELBST GEHEN, zwei Sätze zum Start), 45 Wächter- und 25 Biom-Notizen je wahr und falsch, Oberfläche „DAS ERBE“, „NOTIZEN“, „Unter dem Stein liegt ein Heft. Die Schrift ist nicht deine.“, „Notizen des Vorgängers“, „Einträge, die du nicht geschrieben hast“.
 - **M9, Daten:** `run.json → karten.zeichen` „Das Zeichen“ („Für den Rest des Runs: Die Tiefe lässt dich gehen. Die Menschen nicht.“), `run.json → begegnungen` „Sie stehen da und sehen dich an. Keiner hebt die Hand.“, „WEITERGEHEN“, „Der Laden ist zu, als du kommst. Hinter dem Glas dreht jemand das Schild um.“ Oberfläche: „AUS DER ASCHE · FÜR DICH“, Baum-Äste „Asche rufen“ / „Asche zerfällt“ mit Tooltips, Meldungen der Begegnungen (Bus `why`).
@@ -664,6 +708,7 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 ## Entscheidungen unterwegs
 
+- **Zugabe:** Krämer mit tausend Masken als Würze-Stück statt als eigenes System (Zettel, Chance, Sperre gelten mit), mit eigenem Probe-Schalter; er kassiert am Anfang des nächsten Akts, nicht beim nächsten Krämer, damit die Schuld sicher fällig wird. Pforten-Ereignis in `events.json` mit `biom: pforte`. Notiz-Fassungen als `mehr` am Eintrag statt eigener Liste, damit alte Daten gültig bleiben.
 - **M12:** Ausgleich über `waechter_faktor` 1,5 und neuen `boss_faktor` 1,2 statt über Leben je Tiefe, weil nur so Akt V auf allen drei Seed-Bereichen unter 35 % blieb; `boss_faktor` braucht eine Zeile in `combat.js`, der Wert steht in `balance.json`. Der geklickte Run lässt den Autospieler in der Seite entscheiden statt echter Mausklicks (siehe M12). Seed per Suche statt per Dev-Zettel.
 - **M11:** Grabbeigabe, Licht im Turm und Lügender Kartentext aus (Mindestens verlangt nur die vier anderen); die Geige ist in der Glockengießerei die nächste sichere Beute, sonst sah man Zanns Takt fast nie; Trennungs-Teile auch an Wandbildern, damit drei Teile in einem Run zu finden sind; Mittel 1,40 statt 1,5 gelassen, weil die Sperre für das letzte Stück die Chancen drückt und höhere Chancen zu oft drei Stücke ergaben; „Das Relief“ mit Note 3 angenommen.
 - **M7, Fortsetzung:** Mo hat am 2026-11-09 gesagt, nach M6 weiterzumachen („we completed through m6, can you continue from there again?“). Ich habe `claude/project-thread-flvf7e` auf den M6-Stand von `claude/project-thread-hifkqz` vorgespult und arbeite ab M7 dort weiter.
@@ -682,6 +727,7 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 ## Rückgaben an Sub-Agenten
 
+- **Zugabe, Ereignisbilder:** erste Runde Dritter Schlag Note 2 (keine Schläge zu sehen), Rucksack unter dem Glas, Wäscheleine und Zweiter Schatten Note 3, mit Punkten je Bild zurück; zweite Runde drei davon Note 4, der Zweite Schatten 3 (angenommen).
 - **M11, Bilder:** erste Runde Geige, Relief, Aussage und Brief Note 3 (Geige: Bogen über dem Hals, Korpus ohne Taille, Hals grau; Relief: Gestalten ohne Köpfe und Arme, nicht erhaben, oranger Glanz; Aussage: Zeilen und Knoten unklar, Ton wie der Ausschnitt; Brief: Blatt zu groß, Schrift ungleichmäßig, keine Nässe), mit Punkten je Bild zurück; zweite Runde alle Note 4 außer dem Relief (3, angenommen).
 - **M10, Strand:** Note 2 (Abdrücke lasen sich als Grabsteine, zu dunkel, zu groß) mit sechs Punkten zurück; zweite Runde Note 4.
 - **M8, Brunnenbild:** Note 3 (flache Fläche im Schacht, Hof zu dunkel, Seil zu kurz) mit fünf Punkten zurück; zweite Runde Note 4.
@@ -694,7 +740,7 @@ Lovecraft-Prinzip: Wissen ist irreversibel und hat seinen Preis (From Beyond: we
 
 ## Bericht
 
-Stand nach M12. Fertig und abgenommen: M0 bis M12 (M4 bis M6 von Philip auf `claude/project-thread-hifkqz`, hier vorgespult). Die Zugabe folgt.
+Stand nach der Zugabe. Fertig und abgenommen: M0 bis M12 und die Zugabe (M4 bis M6 von Philip auf `claude/project-thread-hifkqz`, hier vorgespult). Zugabe: keine Mindestens-Lücke offen; **Probe:** Der Krämer mit tausend Masken (Schalter `auftrag3.masken`, Würze-Stück, schreibt ein Stück an und kassiert einen Handgriff); 14 Ereignisse zu den Regelbiegungen mit Bildern; zweite Fassung aller 70 Notizen; 30 statt 12 Zeitungsausschnitte.
 
 ### Kernsysteme
 

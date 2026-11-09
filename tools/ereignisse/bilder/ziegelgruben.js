@@ -15,6 +15,7 @@ const LAMPE = ['#a06a20', '#ffd27a'];
 
 // ---------- eigene Bausteine ----------
 const fr = t => t - Math.floor(t);
+const TAU = Math.PI * 2;
 // Ziegelverband (u längs, v hoch, in Pixeln): Helligkeitsbeitrag mit Fugen
 function verband(B, u, v, ch, bl, sd) {
   const lage = Math.floor(v / ch), fv = fr(v / ch), uu = u / bl + (lage % 2) * .5, nr = Math.floor(uu), fu = fr(uu);
@@ -306,6 +307,53 @@ module.exports = {
       K.kante(fig, fx, top, 60, RAND_A, { min: .5 });
       K.lichtquelle(fx, top);
       K.vignette(.55, { cx: 80, cy: 48 });
+    },
+
+    // Ein runder, gewölbter Ofengang aus rußigen Ziegeln in Flucht, links und rechts die Kammertüren mit Restglut, am Ende ein Schein; im Vordergrund ein Ziegel mit sichtbarem Stempel.
+    ziegelgruben_ringgang(K) {
+      const { B } = K;
+      const vx = 82, vy = 40, dz = .95;
+      const g = gang(K, { vx, vy, f: 62, boden: .62 });
+      const C = (x, y) => g[Math.max(0, Math.min(89, Math.floor(y))) * 160 + Math.max(0, Math.min(159, Math.floor(x)))];
+      // Wand und Gewölbe: Ziegel in Ringlagen, nach hinten heller (der Schein am Ende), Ruß an der Decke
+      K.feld(0, 0, 160, 90, ZIEGEL, (x, y) => {
+        const c = C(x, y); if (c.art === 'boden') return -1;
+        const nah = Math.min(1, (c.Z - 1) / 9), amp = Math.max(0, 1 - c.Z / 7);
+        let t = .16 + Math.pow(nah, .9) * .5 - Math.max(0, -c.Y) * .1;
+        t += verband(B, c.Z * 6, c.w * 13, 4, 8, 3).t * 1.3 * amp;
+        if (fr(c.Z / dz) < .09) t -= .14 * amp + .04;
+        return t;
+      });
+      // Boden: Asche, in der Mitte vom Schein gestreift
+      K.feld(0, 0, 160, 90, ASCHE, (x, y) => {
+        const c = C(x, y); if (c.art !== 'boden') return -1;
+        const nah = Math.min(1, (c.Z - 1) / 9);
+        return .03 + Math.pow(nah, 1.2) * .4 * Math.max(.25, 1 - Math.abs(c.X) * .8) + (B.fbm(x * .1, y * .5, 2, 2) - .5) * .06;
+      });
+      // Kammertüren in beiden Wänden, je eine pro Rippenabstand: dunkle Öffnungen mit Restglut
+      const tuer = K.maske();
+      tuer.fn(0, 0, 160, 90, (x, y) => { const c = C(x, y); return c.art === 'wand' && Math.abs(c.X) > .72 && c.Y > -.28 && c.Y < .6 && fr(c.Z / dz) > .2 && fr(c.Z / dz) < .66 && c.Z > 1.6 && c.Z < 8; });
+      K.feld(0, 0, 160, 90, GLUT, (x, y) => tuer.has(x, y) ? .04 + Math.min(1, C(x, y).Z / 8) * .14 + (B.hash(x, y, 5) > .85 ? .08 : 0) : -1);
+      // Rippen als helle Kante des Gewölbes (Fugenlicht)
+      // Das Ende: ein kleiner Bogen mit weißer Glut, die hellste Stelle
+      ofentuer(K, vx, vy + 8, 8, 13, 1, { hof: 56, setzung: false });
+      K.licht(vx, vy + 2, 36, '#3a0e06', .9, { oval: 1.1 });
+      // Der Ziegel im Vordergrund: groß, quer auf dem Boden, der Stempel mittig in der oberen Fläche
+      const lx = vx, ly = vy;
+      const ob = K.maske(); ob.poly([[46, 70], [114, 70], [122, 83], [38, 83]]);
+      const vorn = K.maske(); vorn.rect(38, 83, 84, 6);
+      const seite = K.maske(); seite.poly([[114, 70], [117, 72], [126, 85], [122, 83]]);
+      K.form(vorn, 0, { k: ZIEGEL.slice(0, 7), r: RAND_Z, ton: 1.6, fase: 1, rand: 1, lichtVon: [lx, ly], schatten: 2, verlaufX: 1.2 });
+      K.form(ob, 0, { k: ZIEGEL.slice(1, 9), r: RAND_Z, ton: 3, fase: 1, rand: 1, lichtVon: [lx, ly - 30], verlauf: -.6, muster: (x, y) => (B.hash(x, y, 6) > .8 ? .3 : (B.rausch2(x * .2, y * .5, 4) - .5) * .5) });
+      // Stempel: Ring mit zwölf Zähnen und einer Mitte, eingedrückt (dunkel) und an der unteren Kante hell
+      const sx = 80, sy = 76.5, rx = 14, ry = 4.6;
+      const ring = K.maske(); ring.ell(sx, sy, rx, ry); ring.ell(sx, sy, rx - 2.2, ry - 1.2, 0);
+      for (let i = 0; i < 12; i++) { const a = i / 12 * TAU; ring.kap(sx + Math.cos(a) * (rx - 3), sy + Math.sin(a) * (ry - 1.4), sx + Math.cos(a) * (rx - 6.5), sy + Math.sin(a) * (ry - 2.6), .6, .5); }
+      ring.ell(sx, sy, 2.2, .9);
+      for (let y = ring.y0; y <= ring.y1; y++) for (let x = ring.x0; x <= ring.x1; x++) if (ring.has(x, y)) { K.set(x, y, '#1a0a07'); if (!ring.has(x, y + 1) || !ring.has(x + 1, y + 1)) K.set(x, y + 1, '#8a4a30'); }
+      // Kantenlicht vom Schein her auf dem Ziegel
+      K.kante(ob, lx, ly, 120, RAND_Z, { min: .4 });
+      K.vignette(.3, { cx: 82, cy: 44, innen: .7 });
     },
   },
 };

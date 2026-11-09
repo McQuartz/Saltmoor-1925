@@ -272,5 +272,45 @@ module.exports = {
       }
       K.vignette(.8, { cx: 80, cy: 52 });
     },
+
+    // Hellgraue Mondebene unter schwarzem Himmel mit wenigen Sternen, klarer Horizont mit fahlem Schein links; ein kantiger Fels mit Facetten wirft einen kurzen, harten, schwarzen Schatten nach rechts und einen langen, weichen grauen Verlauf nach links zum Licht und bis zum Horizont.
+    mond_zweiter_schatten(K) {
+      const { B } = K;
+      const kante = horizont(K, 46, 5);
+      K.fuell(['#010101', '#030303', '#050505'], () => .3);
+      K.sterne(14, 40, ['#6a6a62', '#c8c6b8']);
+      schein(K, 12, 46, 80, 26, .8, { nurUeber: (x, y) => y < kante(x) });
+      // Boden: hellgrauer Mondstaub, zum Horizont und zum Licht hin heller
+      K.feld(0, 0, 160, 90, STAUB.slice(3, 13), (x, y) => { const k = kante(x); if (y < k) return -1; const d = y - k; return .44 + Math.exp(-d / 16) * .3 * Math.exp(-(((x - 12) / 100) ** 2)) - d * .0015 + (B.fbm(x * .06, y * .16, K.seed, 2) - .5) * .12 + (B.hash(x >> 1, y, 31) < .04 ? -.1 : 0); });
+      for (let x = 0; x < 160; x++) { const k = Math.round(kante(x)), v = Math.exp(-(((x - 12) / 70) ** 2)); K.set(x, k, v > .5 ? '#f0ecd8' : '#b0ac9c'); K.set(x, k - 1, v > .5 ? '#c8bc78' : '#4a4840'); }
+      K.lichtquelle(6, 46);
+      // Langer weicher Schatten: grauer Verlauf vom Fuß des Felsens bis zum Horizont links, nach außen heller
+      const bx0 = 76, by0 = 72, bx1 = -4, by1 = 47;
+      K.dith(0, 44, 84, 80, '#26251f', (x, y) => {
+        const t = (bx0 - x) / (bx0 - bx1); if (t < 0 || t > 1.05) return 0;
+        const cy = by0 + (by1 - by0) * t, w = 9 - t * 5, d = Math.abs(y - cy) / w;
+        return d > 1 ? 0 : Math.pow(1 - d, .8) * (.95 - t * .35);
+      });
+      // Der Fels: kantig, drei Facetten, links hell, oben am hellsten, rechts dunkel
+      const fl = (pts, k, ton) => { const m = K.maske(); m.poly(pts); K.form(m, 0, { k, r: [], ton, fase: 0, rand: 0 }); return m; };
+      const kurz = K.maske(); kurz.poly([[103, 74], [100, 70], [112, 69], [124, 72], [118, 76]]);
+      K.form(kurz, 0, { k: ['#000000', '#030303'], r: [], ton: .2, fase: 0, rand: 0 });
+      fl([[74, 74], [77, 60], [88, 48], [89, 64], [84, 74]], ['#6e6a5e', '#888478', '#a19c8e'], 1.2);
+      fl([[89, 64], [99, 53], [104, 74], [84, 74]], ['#1c1b18', '#25241f', '#302e29'], 1);
+      fl([[77, 60], [88, 48], [99, 53], [89, 64]], ['#a8a396', '#c4bfae', '#dedaca'], 1.2);
+      // Kanten der Facetten
+      K.linie(88, 48, 89, 64, '#14130f'); K.linie(89, 64, 84, 74, '#14130f'); K.linie(77, 60, 89, 64, '#4a483f'); K.linie(99, 53, 89, 64, '#8a8678');
+      K.linie(74, 74, 77, 60, '#f0ecd8'); K.linie(77, 60, 88, 48, '#fffbe8'); K.linie(88, 48, 99, 53, '#dedaca');
+      K.set(82, 55, '#fffbe8'); K.set(83, 55, '#e8e4d4'); K.set(80, 66, '#bab4a4');
+      // zwei kleine Brocken mit demselben Doppelschatten
+      const stein = (x, yb, s) => {
+        const sk = K.maske(); sk.poly([[x + 3 * s, yb - 1], [x + 12 * s, yb], [x + 4 * s, yb + 2]]);
+        K.form(sk, 0, { k: ['#000000', '#030303'], r: [], ton: .2, fase: 0, rand: 0 });
+        K.dith(x - 30 * s, yb - 2 * s - 2, x, yb + 3, '#26251f', (px, py) => Math.max(0, 1 - (x - px) / (30 * s)) * (Math.abs(py - (yb - 1 - (x - px) * .12)) < 2.2 ? .85 : 0));
+        fl([[x - 4 * s, yb], [x - 3 * s, yb - 3 * s], [x, yb - 4 * s], [x + 3 * s, yb - 1 * s], [x + 3 * s, yb]], ['#6e6a5e', '#a19c8e', '#d2ccba'], 1);
+      };
+      stein(128, 80, 1); stein(30, 78, .8); stein(142, 86, 1.3);
+      K.vignette(.5, { cx: 84, cy: 56 });
+    },
   },
 };

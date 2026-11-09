@@ -314,5 +314,51 @@ module.exports = {
       K.kante(ms, hx, hyy, 30, [NORD[4], NORD[6]], { min: .2 });
       K.vignette(.75, { cx: 80, cy: 50 });
     },
+
+    // Eine klare Glasplatte mit heller Kante und Spiegelung über dunklem Wasser, darunter ein offener Rucksack (Trapez mit Klappe, zwei Riemen, Schnalle) mit brennender Laterne obenauf, auf dem Glas darüber ein kleiner, scharf umrissener Atemfleck.
+    glasmeer_vorrat(K) {
+      const { B } = K;
+      const lx = 64, ly = 52;
+      // Eisrand oben, dann die Glasplatte: helle Kante, darunter Spiegelung des Eises
+      K.feld(0, 0, 160, 12, EIS.slice(0, 8), (x, y) => .12 + y / 12 * .25 + B.fbm(x * .08, y * .2, K.seed, 2) * .14);
+      glas(K, 13, (x, y) => Math.max(0, 1 - Math.hypot((x - lx) / 80, (y - 60) / 40)) * .8);
+      spiegeln(K, 12, 26, .55, { abfall: 1 });
+      for (let x = 0; x < 160; x++) { K.set(x, 12, '#9ad0bc'); K.set(x, 13, '#d4f4e4'); K.set(x, 14, B.bay(x, 1) < .6 ? '#6aa890' : '#3a6a5a'); }
+      // Rucksack unter Wasser: kühle Farben
+      const KALTLEDER = ['#05080b', '#0b1217', '#14202a', '#203444', '#325064'];
+      const klappe = K.maske(); klappe.poly([[lx - 15, 55], [lx + 15, 55], [lx + 12, 38], [lx - 12, 38]]);
+      K.form(klappe, .2, { k: KALTLEDER, r: ['#4a7a90', '#a8d8e8'], ton: 2.6, fase: 1, rand: 1, lichtVon: [lx, ly], verlauf: -.3, muster: (x, y) => (Math.abs(x - lx) < 1 ? -.7 : (y === 40 ? -.6 : 0)) });
+      const koerper = K.maske(); koerper.poly([[lx - 28, 82], [lx + 28, 82], [lx + 22, 56], [lx - 22, 56]]);
+      K.form(koerper, .2, { k: KALTLEDER, r: ['#4a7a90', '#a8d8e8'], ton: 3, fase: 1, rand: 1, lichtVon: [lx, ly], verlauf: .5, schatten: 2 });
+      // zwei Riemen mit Schnalle (heller Pixel)
+      for (const sx of [lx - 12, lx + 12]) {
+        const r = K.maske(); r.poly([[sx - 2, 58], [sx + 2, 58], [sx + 3, 81], [sx - 3, 81]]);
+        K.form(r, .2, { k: ['#0e1a22', '#1c2e3a', '#2e4656', '#4a6a7e'], r: ['#6a9ab0', '#c8ecf8'], ton: 2.2, fase: 0, rand: 1, lichtVon: [lx, ly] });
+        K.rect(sx - 2, 68, 5, 3, '#6a8a98'); K.set(sx, 69, '#fff4c8'); K.set(sx - 1, 69, '#d8e8e0');
+      }
+      // Öffnung, Decke und Flasche
+      const oeff = K.maske(); oeff.ell(lx, 56, 20, 4.5);
+      K.form(oeff, 0, { k: ['#010203', '#03060a'], r: [], ton: .5, fase: 0, rand: 0 });
+      const rolle = K.maske(); rolle.kap(lx - 17, 55, lx - 8, 54, 2.6, 2.6);
+      K.form(rolle, .2, { k: TUCH, r: [GLAS[6], '#a8d8e8'], ton: 2, fase: 1, rand: 1, lichtVon: [lx, ly], muster: (x) => ((x + 1) % 4 === 0 ? -.6 : 0) });
+      const fl = K.maske(); fl.kap(lx + 13, 56, lx + 15, 48, 2, 1.1);
+      K.form(fl, 0, { k: ['#0a1c18', '#14382e', '#2a6a54', '#5eb08c'], r: [NORD[5], '#e8fff0'], ton: 1.8, fase: 0, rand: 1, lichtVon: [lx, ly] });
+      // Laterne obenauf, brennt; Randlicht warm auf Klappe und Körper
+      K.licht(lx, 52, 40, '#5a3a14', .8, { oval: 1.3, maske: (x, y) => koerper.has(x, y) || klappe.has(x, y) });
+      K.laterne(lx, 58, 1.25, { hof: 50, staerke: .9 });
+      K.kante(klappe, lx, ly, 40, ['#8a5a20', '#ffd27a'], { min: .3, nah: .5 });
+      K.kante(koerper, lx, ly, 46, ['#6a4416', '#ffd27a'], { min: .35, nah: .5 });
+      K.lichtquelle(lx, ly);
+      // Atemfleck: klein, scharf umrissen, direkt über der Laterne auf dem Glas
+      const fx = lx + 4, fy = 28, frx = 15, fry = 5.5;
+      K.dith(fx - frx - 2, fy - fry - 2, fx + frx + 2, fy + fry + 2, '#9ab8aa', (x, y) => {
+        const q = Math.hypot((x - fx) / frx, (y - fy) / fry); return q > 1 ? 0 : (q > .86 ? 1 : .55 + (1 - q) * .3);
+      });
+      for (let a = 0; a < 6.28; a += .12) K.set(Math.round(fx + Math.cos(a) * frx), Math.round(fy + Math.sin(a) * fry), '#e4fff2');
+      for (let i = 0; i < 10; i++) { const a = B.hash(i, 1, 4) * 6.28, r = Math.sqrt(B.hash(i, 2, 4)) * .8; K.set(Math.round(fx + Math.cos(a) * r * frx), Math.round(fy + Math.sin(a) * r * fry), '#f4fff8'); }
+      // Spiegelstreifen auf dem Glas
+      K.dith(0, 15, 160, 90, '#6a9a88', (x, y) => { const d = ((x * 1.1 + y * .8) % 70); return (d < 2 ? .25 : d > 7 && d < 8.5 ? .15 : 0) * Math.max(0, 1 - Math.hypot(x - 128, y - 24) / 80); });
+      K.vignette(.55, { cx: 72, cy: 52, innen: .65 });
+    },
   },
 };

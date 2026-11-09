@@ -303,5 +303,58 @@ module.exports = {
       for (let i = 0; i < 5; i++) K.schrift(bx + 2, by + 2 + i * 2, bx + 18, '#1a1208', { min: 1, max: 3 });
       K.vignette(.5, { cx: 88, cy: 48 });
     },
+
+    // Ein breiter Stumpf mit frischem, hellem Schnitt, aus dem Rindenringe wie ein Turm in die Höhe wachsen; rechts steckt die Axt im Holz, am Boden rollen Späne zum Stumpf zurück.
+    wald_stumpf(K) {
+      const { B } = K;
+      const cx = 66, lx = 66, ly = 24;
+      waldgrund(K, lx, ly + 8, 130, { st: .5, staemme: [[16, 6], [40, 4], [120, 7], [148, 5], [98, 3]], stammUnten: 58 });
+      // Boden: dunkler Basalt, ruhig
+      K.feld(0, 70, 160, 90, BASALT, (x, y) => ruhig(.06 + (y - 70) / 20 * .1 + Math.pow(Math.max(0, 1 - Math.hypot(x - cx, (y - 78) * 1.6) / 90), 1.4) * .7, BASALT.length - 1) + (B.hash(x, y, 7) > .97 ? .1 : 0));
+      // Schatten unter dem Stumpf
+      const sch = K.maske(); sch.ell(cx + 4, 78, 40, 6);
+      K.form(sch, 0, { k: ['#050505', '#080808'], r: [], ton: .3, fase: 0, rand: 0 });
+      // Turm aus Zylindern: je höher, desto schmaler; Seite Rinde, oben frischer Schnitt mit Ringen
+      const zyl = (yTop, rx, ry, h, hell) => {
+        const seite = K.maske(); seite.rect(cx - rx, yTop, 2 * rx, h); seite.ell(cx, yTop + h, rx, ry); seite.ell(cx, yTop, rx, ry);
+        K.form(seite, 0, { k: RINDE, r: RAND, ton: 1.9, fase: 1, rand: 1, lichtVon: [lx, ly], verlaufX: 1.2, schatten: 2,
+          muster: (x, y) => (Math.sin(x * 1.3 + B.rausch2(x * .1, y * .3, 3) * 3) > .55 ? -.6 : (y > yTop + h - 1 ? -.4 : 0)) });
+        const oben = K.maske(); oben.ell(cx, yTop, rx - 1, ry - .5);
+        const LF = (x, y) => Math.pow(Math.max(0, 1 - Math.hypot(x - lx, (y - ly) * 1.4) / 80), 1.1);
+        K.feld(oben.x0, oben.y0, oben.x1 + 1, oben.y1 + 1, FRISCH, (x, y) => {
+          if (!oben.has(x, y)) return -1;
+          const q = Math.hypot((x - cx) / (rx - 1), (y - yTop) / (ry - .5)), w = q * (rx / 3.2), f = w % 1;
+          return hell + LF(x, y) * .35 + (f < .25 ? -.16 : 0) + (B.hash(Math.floor(w), 0, 4) - .5) * .06;
+        });
+      };
+      zyl(52, 32, 9, 24, .5);
+      zyl(44, 25, 7, 9, .58);
+      zyl(36, 18, 5, 9, .66);
+      zyl(28, 11, 3.2, 9, .76);
+      K.set(cx, 28, '#6a4a28');   // das Mark ganz oben
+      // Harz an der Rinde: eine Träne unten am großen Zylinder, die Lichtquelle des Bildes
+      harztraene(K, cx - 10, 62, 3, { hof: 70 });
+      // Rinde kriecht an der Seite nach oben: schmale helle Striemen, die zur Spitze zeigen
+      for (const [x, y0, l] of [[cx - 22, 70, 14], [cx + 14, 72, 18], [cx + 24, 66, 10]]) for (let j = 0; j < l; j++) if (B.hash(x, j, 5) > .15) K.set(x + (j % 7 === 3 ? 1 : 0), y0 - j, j > l - 4 ? HARZ[6] : '#3c372e');
+      // Die Axt: steckt rechts im zweiten Ring, Blatt nach innen, der Stiel steigt nach rechts oben
+      const ax = cx + 21, ay = 45;
+      const stiel = K.maske(); stiel.kap(ax + 1, ay - 1, ax + 40, 12, 1.9, 1.5);
+      K.form(stiel, 0, { k: ['#0a0705', '#1c130c', '#33241a', '#56402a'], r: ['#a88050', '#ffd89a'], ton: 1.6, fase: 0, rand: 1, lichtVon: [lx, ly], muster: (x, y) => (B.rausch2(x * .3, y * .06, 5) - .5) * .6 });
+      const kopf = K.maske(); kopf.poly([[ax - 4, ay - 6], [ax + 3, ay - 7], [ax + 4, ay - 2], [ax - 3, ay - 1]]);
+      K.form(kopf, 0, { k: ['#0a0b0d', '#1a1d22', '#343a42', '#5a626c'], r: ['#8a949c', '#f0f6fa'], ton: 1.8, fase: 1, rand: 1, lichtVon: [lx, ly] });
+      // Schnittfuge im Holz, halb zugewachsen: dunkle Linie, an den Lippen helles Holz
+      K.linie(ax - 6, ay - 1, ax + 5, ay, '#1a1008'); K.linie(ax - 5, ay, ax + 4, ay + 1, '#d8ac6c', .8);
+      K.set(ax - 7, ay - 1, '#6e4c26'); K.set(ax - 8, ay - 1, '#3a2814');
+      // Späne am Boden: Locken mit gepunkteter Spur hinter sich, alle auf den Stumpf zu
+      const span = (x, y, d) => {
+        const s = K.maske(); s.ell(x, y, 3, 1.6); s.kap(x + d * 2, y, x + d * 4.5, y - 1.6, .8, .7);
+        K.form(s, 0, { k: FRISCH.slice(1), r: [], ton: 1.6, fase: 0, rand: 0, lichtVon: [lx, ly] });
+        K.set(x - d, y, '#050505');
+        for (let i = 1; i < 5; i++) if (B.hash(x + i * d, y, 3) > .3) K.set(x - d * (4 + i * 3), y + (i % 2) * 0, FRISCH[1 + (i & 1)]);
+      };
+      span(24, 80, 1); span(40, 84, 1); span(14, 86, 1); span(116, 82, -1); span(134, 86, -1); span(104, 87, -1); span(148, 80, -1);
+      K.licht(cx, 30, 84, HARZG, .8, { oval: 1.2 });
+      K.vignette(.5, { cx: 70, cy: 48 });
+    },
   },
 };

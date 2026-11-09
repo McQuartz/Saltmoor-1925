@@ -24,3 +24,5 @@ Notizbuch-Motive sind lose angelehnt (Nummern aus `quellen/r3-notizbuch.md`, Tei
 | waage_restposten | waage | Aufgewogen | Eine Lade mit Resten, die nicht verfallen, sondern verrechnet werden | ja | Nr. 8, eine Verpflichtung, die bleibt |
 
 Geruch zuerst bei 10 von 14; bei Gezeitenwerk, Station, Mond und Funkstation steht der Klang zuerst. Optional `"tiefe": 1`: glasmeer_vorrat, mond_zweiter_schatten, pforte_nebentueren, waage_restposten (vier von 14).
+
+**Nachtrag Dirigent:** `tiefe: 1` bleibt nur bei `waage_restposten`; bei glasmeer_vorrat, mond_zweiter_schatten und pforte_nebentueren gestrichen, weil M9 höchstens zwölf solche Wahlen vorsieht (test-begegnungen).

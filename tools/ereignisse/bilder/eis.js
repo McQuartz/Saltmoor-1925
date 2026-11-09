@@ -304,5 +304,54 @@ module.exports = {
       K.vignette(.8, { cx: lx, cy: 52 });
     },
 
+
+    // Eine weite schwarze Eisfläche, zwei Peilstangen mit rotem Tuch hintereinander, vorn links ein Dreibein mit Messinginstrument und in das Eis gekratzte Winkellinien.
+    eis_peilung(K) {
+      const { B } = K;
+      const hy = 52;
+      K.himmel(hy, NACHT, { steil: .6, gx: 112, gb: 60, basis: .12 });
+      K.sterne(16, 38, ['#1a2a44', '#3a5a80']);
+      nordlicht(K, [[40, 16], [78, 9], [116, 14], [152, 24]], '#2a7088', .5, 14);
+      eisFlaeche(K, hy, { horizont: .45, basis: .1 });
+      spiegeln(K, hy, 90, .5);
+      for (let x = 0; x < 160; x++) if (B.hash(x >> 2, 1, 3) < .7) K.set(x, hy, '#26405e');
+      // Die Stangen: nahe groß, ferne klein, beide mit rotem Tuch an der Spitze
+      const ROT = ['#2a0a08', '#5a1612', '#a02a24', '#e0584a'];
+      const stange = (x, yb, yt, fw, fh) => {
+        const s = K.maske(); s.kap(x, yb, x, yt, 1.3, 1); K.form(s, 0, { k: DUNKEL, r: KALT, ton: 1.2, fase: 0, rand: 1, L: [-1, -.3] });
+        const t = K.maske(); t.poly([[x + 1, yt + 1], [x + 1 + fw, yt + 2], [x + 1 + fw * .8, yt + 2 + fh], [x + 1, yt + 1 + fh]]);
+        K.form(t, 0, { k: ROT, r: ['#e0584a', '#ffb8a8'], ton: 1.8, fase: 0, rand: 1, L: [-1, -.4], muster: (px, py) => Math.sin((px - x) * .9 + py * .2) * .3 });
+        spiegeln(K, yb, 90, .4, { x0: x - fw - 3, x1: x + fw + 3 });
+        K.licht(x, yb, 10, '#0e1828', .8, { oval: 3, maske: (px, py) => py >= hy });
+      };
+      // Linien im Eis zuerst (unter den Stangen): Winkel mit Messkreuzen, jeder ein Stück falsch
+      const ritz = (a, b, c, d, col, al) => K.linie(a, b, c, d, col, al);
+      const T0 = [30, 82], P1 = [74, 80], P2 = [100, 57];
+      ritz(T0[0], T0[1], P1[0], P1[1], '#5a80a8', .8); ritz(P1[0], P1[1], P2[0], P2[1], '#5a80a8', .8); ritz(T0[0], T0[1], P2[0], P2[1], '#3a5a80', .8);
+      // Bogenstücke an den Ecken
+      for (const [c, r, a0, a1] of [[T0, 14, -.5, -.05], [P1, 9, -2.9, -1.3], [P2, 7, 1.7, 3.1]]) for (let a = a0; a < a1; a += .05) K.set(Math.round(c[0] + Math.cos(a) * r), Math.round(c[1] + Math.sin(a) * r * .5), '#7aa0c8');
+      // Strichmarken an den Seiten
+      for (let i = 1; i < 8; i++) { const q = i / 8, x = T0[0] + (P1[0] - T0[0]) * q, y = T0[1] + (P1[1] - T0[1]) * q; K.linie(x, y, x, y + (i % 2 ? 3 : 2), '#5a80a8'); }
+      for (let i = 1; i < 6; i++) { const q = i / 6, x = P1[0] + (P2[0] - P1[0]) * q, y = P1[1] + (P2[1] - P1[1]) * q; K.linie(x, y, x + 2, y + 1, '#5a80a8'); }
+      stange(100, 57, 40, 6, 4);
+      stange(74, 80, 26, 13, 9);
+      // Das Dreibein: drei Beine, oben der Kopf, darauf das Messinginstrument mit Fernrohr zu den Stangen
+      const bein = K.maske(); bein.kap(30, 54, 14, 88, 1.2, 1.4); bein.kap(30, 54, 42, 88, 1.2, 1.4); bein.kap(30, 54, 30, 85, 1.1, 1.3);
+      K.form(bein, 0, { k: ['#05080c', '#0e141c', '#1c2432', '#2c384a'], r: KALT, ton: 1.4, fase: 0, rand: 1, L: [-.6, -.8] });
+      const BR = ['#2a2210', '#4a3a1a', '#7a6230', '#a8823e', '#e6c88a'];
+      const kopf = K.maske(); kopf.ell(30, 53, 5, 2.2); kopf.kap(30, 53, 30, 46, 1.6, 1.4);
+      K.form(kopf, 0, { k: BR, r: ['#a8823e', '#fff0c0'], ton: 1.8, fase: 0, rand: 1, L: [-.5, -.8] });
+      const kreis = K.maske(); kreis.ell(30, 44, 8, 3.2); kreis.ell(30, 44, 6, 2.2, 0);
+      K.form(kreis, 0, { k: BR, r: ['#a8823e', '#fff0c0'], ton: 2.2, fase: 0, rand: 1, L: [-.5, -.8] });
+      for (let a = 0; a < 6.28; a += .35) K.set(Math.round(30 + Math.cos(a) * 7), Math.round(44 + Math.sin(a) * 2.7), '#1a1308');
+      const rohr = K.maske(); rohr.kap(26, 41, 49, 33, 2.8, 2.2);
+      K.form(rohr, 0, { k: BR, r: ['#a8823e', '#fff0c0'], ton: 2.2, fase: 1, rand: 1, L: [-.2, -1] });
+      const lins = K.maske(); lins.ell(49, 33, 1.6, 2.8); K.form(lins, 0, { k: ['#0a1018', '#1e2c3c', '#6a9ab8'], ton: 1.4, fase: 0, rand: 0 });
+      const okul = K.maske(); okul.kap(22, 43, 26, 41, 1.6, 1.4); K.form(okul, 0, { k: ['#0a0805', '#1a1308', '#2a2210'], ton: 1.2, fase: 0, rand: 1 });
+      // das warme Glimmen, das hier nicht hingehört: ein Messingglanz am Fernrohr
+      K.set(38, 37, '#fff0c0'); K.set(39, 36, '#ffd27a'); K.set(37, 38, '#e6c88a');
+      K.licht(40, 36, 14, '#4a3010', .8, { oval: 1.2 });
+      K.vignette(.7, { cx: 78, cy: 50 });
+    },
   },
 };
