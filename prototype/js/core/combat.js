@@ -40,6 +40,8 @@ function aufstellen(list){const r=rs('aufstellung');const n=list.length;
  const plan=big?[1,2,3,4]:n===1?[0]:n===2?[1,2]:[0,1,2,3,4];rest.forEach((e,i)=>{e.platzWunsch=plan[i]??null;e.platz=null;});if(big)big.platz=null;}
 
 function startFight(ids,art='kampf'){
+ if(typeof Asche!=='undefined')ids=Asche.kampfIds(ids,art); // M9: Gerufene kehren zurück
+ const tk=typeof Tiefe!=='undefined'?Tiefe.kampf(ids,art):{ids};ids=tk.ids;S.begegnung=false; // M9: Seitenwechsel
  S.enemies=ids.map((id,i)=>mkEnemy(id,i));aufstellen(S.enemies);if(typeof Hoeren!=='undefined')Hoeren.begrenzen(S.enemies); // M6: höchstens ein stummer Gegner
  S.kampfArt=art;S.target=0;S.phase='fight';S.chainLog=[];S.pstr=passive('start_staerke').reduce((s,p)=>s+(p.v||1),0);S.vorrat=0;S.blockVorher=0;S.frost=null;S.turnNo=0;S.draw=buildDeck();S.hand=[];S.discard=[];S.exhaust=[];S.ward=0;S.compassUsed=false;S.kampfLog=[];S.faehrgeld=false;S.ballastWeg=0;S.biegFolge=null;S.zuletztGespielt=null;S.vorzugLetzt=null;S.flutHand=0;S.zugSt=[];
  const pb=passive('start_block').reduce((s,p)=>s+p.v,0);
@@ -50,8 +52,10 @@ function startFight(ids,art='kampf'){
  allActive().forEach(it=>{const e=def(it).eigen;if(e&&e.ballast_start)ballastMischen(e.ballast_start,'stapel',e.ballast_karte,def(it).n);});
  startTurn();if(pb){S.block+=pb;Bus.emit('player_block',{v:pb,why:'Eigenschaft: Block zu Kampfbeginn'});}
  passive('kampfstart_fx').forEach(p=>runFx(p.fx,{why:'Eigenschaft zu Kampfbeginn'}));
+ if(tk.begegnung){S.begegnung=true;S.blickWahl=null;Bus.emit('tiefe',{art:'begegnung',why:`Begegnung statt Kampf: ${S.enemies.map(e=>e.n).join(', ')} erkennen dich und greifen nicht an`});return;}
  if(typeof Blick!=='undefined')Blick.kampfStart(art);
- if(typeof Diener!=='undefined')Diener.kampfStart(art);} // M7: Wahl Hinsehen / Nicht hinsehen vor dem ersten Zug
+ if(typeof Diener!=='undefined')Diener.kampfStart(art);
+ if(typeof Asche!=='undefined')Asche.kampfStart();if(typeof Tiefe!=='undefined')Tiefe.kampfStart();} // M7: Wahl Hinsehen / Nicht hinsehen vor dem ersten Zug
 // Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), Pfandschein (gold_energie: ab p.ab Gold), übrige Energie (energie_bleibt)
 function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0)+passive('gold_energie').reduce((s,p)=>s+((S.gold||0)>=(p.ab||100)?(p.v||1):0),0);}
 
@@ -86,6 +90,7 @@ function hit(e,dmg,k=1,col,why='',opts){if(!e||e.hp<=0)return 0;const dot=!!(opt
  else checkPhase(e);return d;}
 // Was beim Tod eines Gegners passiert: Kniff „nachlass“, Eigenschaft brand_springt
 function nachTod(e,brand){const k=e.kniff;
+ if(typeof Asche!=='undefined')Asche.tod(e); // M9: Asche bleibt
  if(e.wandert&&e.poison>0){const z=alive().sort((a,b)=>a.poison-b.poison)[0];if(z){z.poison+=e.poison;z.wandert=true;Bus.emit('enemy_status',{e:z,status:'poison',why:`Ansteckung: Gift ${e.poison} wandert von ${e.n} zu ${z.n}`});}}
  passive('gold_je_tod').forEach(p=>{const v=p.v||5;S.gold+=v;if(S.stats&&!DRY)S.stats.gold=(S.stats.gold||0)+v;Bus.emit('gold',{v,why:`Lohntüte: ${e.n} fällt, +${v} Gold`});});
  if(brand>0&&passive('brand_springt').length){alive().forEach(o=>{o.burn+=brand;Bus.emit('enemy_status',{e:o,status:'burn',why:`Brand springt über: ${e.n} stirbt mit Brand ${brand}`});});}
@@ -110,7 +115,7 @@ function previewCard(i,ei){const keep=S,kb=busy,kf=FAST,ku=uidc;let out=null;
  finally{S=keep;busy=kb;FAST=kf;DRY=false;Bus.muted=false;uidc=ku;}return out;}
 
 function playCard(i,ei){
- if(S.phase!=='fight'||busy||S.blickWahl)return false;const c=S.hand[i];if(!c)return false;const cost=cardCost(c);
+ if(S.phase!=='fight'||busy||S.blickWahl||S.begegnung)return false;const c=S.hand[i];if(!c)return false;const cost=cardCost(c);
  // Ballaststein (ballast_werfen): unspielbare Karten gehen für 0 über Bord und lösen die fx der Eigenschaft aus. Kein Stoff, keine Reaktion, zählt nicht als gespielte Karte.
  if(werfbar(c)){if(ei!=null&&S.enemies[ei]&&S.enemies[ei].hp>0)S.target=ei;ueberBord(c,'geworfen');passive('ballast_werfen').forEach(p=>runFx(p.fx,{tg:tgt(),why:`Ballaststein: „${c.n}“ über Bord`}));Bus.emit('changed');checkVictory();return true;}
  if(c.unspielbar||c.frost){Bus.emit('bad',{a:'UNSPIELBAR',b:c.frost?'Eingefroren für diesen Zug':c.n});return false;}
@@ -152,6 +157,8 @@ function playCard(i,ei){
  S.joker=S.jokerNaechste?prevSt:null;S.jokerNaechste=false;S.vorherKarte=c.sonder&&c.sonder.art==='wiederholen'?S.vorherKarte:c;
  if(typeof Diener!=='undefined')Diener.gespielt(c); // M9: mitzählen
  if(typeof Farbe!=='undefined')Farbe.nachKarte(c,(S.zugKarten||[])[(S.zugKarten||[]).length-1]); // M8: Binden mit Salz
+ if(typeof Asche!=='undefined')Asche.nachKarte(c,(S.zugKarten||[])[(S.zugKarten||[]).length-1]); // M9: Salz → Feuer ruft, Feuer → Salz löst auf
+ if(typeof Tiefe!=='undefined')Tiefe.gespielt(c); // M9: Das Zeichen
  Bieg.nachKarte(c,cost); // setzt S.last (normal: die Stoffe dieser Karte; Falsche Winkel, Der Schlag ändern es)
  Bieg.nachReaktion(c,rx); // Keiner fährt ab
  if(typeof Farbe!=='undefined')Farbe.hand();
@@ -296,13 +303,14 @@ if(!v.length)return incoming(true);const keep=v.map(e=>e.pat);v.forEach(e=>{e.pa
 function incoming(sicht){let tot=0;for(const en of alive()){if(sicht&&!absichtSichtbar(en))continue;if(en.kniff&&en.kniff.art==='voraus'){const c=S.draw[S.draw.length-1];if(c&&c.atk)tot+=(c.atk+en.str)*(c.h||1);}const it=en.pat[en.pi%en.pat.length];if(it.t==='karte'&&typeof Diener!=='undefined'){tot+=Diener.schaden(en,it);continue;}if(it.t==='atk'){if(en.kniff&&en.kniff.art==='brecher'){tot+=S.block||0;}let v=it.v+en.str;if(en.weak2)v=Math.floor(v/2);tot+=v*(it.h||1);}}return tot;}
 
 function endTurn(){
- if(S.phase!=='fight'||busy||S.blickWahl)return;busy=true;S.vorrat=S.energy;
+ if(S.phase!=='fight'||busy||S.blickWahl||S.begegnung)return;busy=true;S.vorrat=S.energy;
  Bieg.zugEnde(); // Über Eck, Aufgewogen
  const bb=passive('ballast_block').reduce((s,p)=>s+(p.v||2),0),bz=S.hand.filter(c=>c.unspielbar).length;if(bb&&bz)addBlock(bb*bz,`Gesangbuch: ${bz} unspielbare Karte(n) auf der Hand, je ${bb} Block`);
  let bleib=S.hand.filter(c=>c.behalten&&!c.unspielbar);
  if(passive('behalten_eine').length){const rest=S.hand.filter(c=>!bleib.includes(c)&&!c.unspielbar).sort((a,b)=>cardCost(b)-cardCost(a));if(rest[0])bleib=[...bleib,rest[0]];}
  if(Bieg.handBleibt())bleib=S.hand.filter(c=>!c.unspielbar); // Ebbe und Flut: in der Flut bleibt die Hand
  bleib.forEach(c=>{if(c.sonder&&c.sonder.art==='zugende_hand')runFx(c.sonder.fx,{tg:alive()[0],why:`${c.n} am Zugende auf der Hand`});});Bieg.abwerfen(S.hand.filter(c=>!bleib.includes(c)).filter(c=>!(c.unspielbar&&c.verbraucht&&c.cid&&String(c.cid).startsWith('stoer')&&c.hand)));S.hand=bleib;Bieg.zugAus();S.hand.forEach(c=>{c.frost=false;c.teuer=0;});S.discard.forEach(c=>{c.frost=false;c.teuer=0;});S.behaltenNaechster=bleib.length;Bus.emit('changed');
+ if(typeof Asche!=='undefined'&&S.verbuendeter){Asche.handeln();if(!alive().length){busy=false;checkVictory(700);return;}} // M9: der Verbündete handelt nach deinem Zug
  const list=alive();let i=0;
  const step=()=>{
   if(S.hp<=0&&!faehrgeld()){busy=false;return runLost();}

@@ -78,6 +78,7 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
    if(kart==='leihe')S.shop.items.forEach(o=>{o.price=Math.max(5,Math.round(o.price*(SH.leih_anteil||.3)));o.leihe=true;});
    if(kart==='spiegel'){const alt=(S.letzterKraemer&&S.letzterKraemer.length?S.letzterKraemer:o2).filter(id=>ITEMS[id]);S.shop.items=alt.map(id=>({id:spiegelItem(id),price:ITEMS[id].rare?SH.rare_price:r.int(SH.normal_price[0],SH.normal_price[1]),sold:false}));}
    else S.letzterKraemer=S.shop.items.map(o=>o.id);
+   if(typeof Tiefe!=='undefined'&&Tiefe.kraemerZu()){S.shop={items:[],hg:[],heal:true,strike:true,zu:true,art:null};S.phase='kraemer';Bus.emit('kraemer',{zu:true,why:`${b.kraemer.n} verweigert dich: die Tiefe hat dich erkannt`});break;} // M9: Seitenwechsel
    S.phase='kraemer';
    Bus.emit('kraemer',{why:`Krämer ${b.kraemer.n}: Sortiment aus dem Fundpool von ${b.kurz}`});break;}
   case'werkstatt':S.forged=false;S.phase='werkstatt';break;
@@ -105,6 +106,7 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  if(art==='finale'){S.phase='reward';S.reward=[];S.picked=true;S.goldGain=0;finishNode();return;}
  const r=R(`beute:${S.depth}`);const G=BAL.gold_per_victory;
  let gd=art==='waechter'?r.int(BAL.waechter_belohnung.gold[0],BAL.waechter_belohnung.gold[1]):r.int(G.min,G.max)+S.enemies.length*G.per_enemy;
+ if(S.halbeBeute)gd=Math.floor(gd/2); // M9: Begegnung, halbe Beute
  gd+=passive('gold_bonus').reduce((s,p)=>s+p.v,0);S.gold+=gd;S.stats.gold+=gd;S.goldGain=gd;
  // Handgriff 1 aus 3 (zwei passend zum Deck, einer frei), Item je nach Knoten, Wächter: Reliquie 1 aus 3
  const RW=BAL.belohnung||{};const glueck=passive('glueck').length?1:0;
@@ -115,7 +117,8 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  else if(art==='schwer'){items=r.sample(dropPool(),2+glueck);const rp=rarePool();if(rp.length)items.push(r.pick(rp));}
  else if(r.chance(RW.item_chance??.25)||blickB){items=r.sample(dropPool(),2+glueck);}
  // Gegner-Beute: kleine Chance auf das eigene Stück eines Gegners (Kniff „nachlass: item“ sicher)
- const beute=S.enemies.map(e=>FOES[e.id].beute).filter(id=>id&&ITEMS[id]);if(S.sicheresBeute&&ITEMS[S.sicheresBeute]){items[0]=S.sicheresBeute;S.sicheresBeute=null;}else if(beute.length&&r.chance(.15)){items[0]=r.pick(beute);}
+ if(S.halbeBeute)items=[];
+ const beute=S.halbeBeute?[]:S.enemies.map(e=>FOES[e.id].beute).filter(id=>id&&ITEMS[id]);if(S.sicheresBeute&&ITEMS[S.sicheresBeute]){items[0]=S.sicheresBeute;S.sicheresBeute=null;}else if(beute.length&&r.chance(.15)){items[0]=r.pick(beute);}
  const rare=art==='waechter'||art==='schwer';const pick=items;
  S.beuteSatz=beuteSatzWaehlen(r);
  S.reward=pick;S.picked=!pick.length;S.rewardHg=hg;S.hgPicked=!hg.length;S.hgPending=null;S.phase='reward';S.hand=[];
@@ -139,7 +142,7 @@ function chooseEnde(art){if(S.phase!=='ankunft')return;S.stats.endeT=Date.now();
 // --- Ereignisse ---
 function curEvent(){return EVENTS.find(e=>e.id===S.event);}
 function chooseEvent(i){const ev=curEvent();if(!ev)return;const o=ev.o[i];if(!o||!condOk(o.if))return;
- S.eventChoice=i;runFx(o.fx,{why:`Ereignis „${ev.t}“: ${o.l}`});Bus.emit('pick');Bus.emit('event_choice',{ev,i,why:`Entscheidung „${o.l}“`});
+ S.eventChoice=i;if(typeof Tiefe!=='undefined')Tiefe.wahl(o,ev);runFx(o.fx,{why:`Ereignis „${ev.t}“: ${o.l}`});Bus.emit('pick');Bus.emit('event_choice',{ev,i,why:`Entscheidung „${o.l}“`});
  S.phase='event_folge';afterEventFx();}
 function afterEventFx(){const p=S.pending||[];if(!p.length){finishNode();return;}
  const nx=p[0];if(nx==='strike'){S.phase='streichen';Bus.emit('changed');return;}
@@ -151,7 +154,9 @@ function afterEventFx(){const p=S.pending||[];if(!p.length){finishNode();return;
 
 // --- Karte streichen (Krämer, Ereignis): Item bleibt angelegt, gibt aber keine Karte mehr ---
 function strikeTargets(){return allActive().filter(it=>!it.x&&def(it).cards.length);}
-function strikeItem(uid){const it=allActive().find(x=>x.uid===uid);if(!it||it.x)return;it.x=1;log(`Gestrichen: ${def(it).n}`);Bus.emit('strike',{it,why:`Karte von ${def(it).n} gestrichen, das Item zählt weiter für Leben und Sets`});
+function strikeItem(uid){if(typeof uid==='string'&&uid.startsWith('lose:')){const id=uid.slice(5);const i=(S.lose||[]).indexOf(id);if(i>=0){S.lose.splice(i,1);const c=Tiefe.karte(id);log(`Gestrichen: ${c?c.n:id}`);Bus.emit('strike',{why:`${c?c.n:id} aus dem Deck gestrichen`});}
+  if(S.phase==='streichen'){S.pending.shift();afterEventFx();}else Bus.emit('changed');return;} // M9: lose Karten (Das Zeichen)
+ const it=allActive().find(x=>x.uid===uid);if(!it||it.x)return;it.x=1;log(`Gestrichen: ${def(it).n}`);Bus.emit('strike',{it,why:`Karte von ${def(it).n} gestrichen, das Item zählt weiter für Leben und Sets`});
  if(S.phase==='streichen'){S.pending.shift();afterEventFx();}else Bus.emit('changed');}
 function skipStrike(){if(S.phase==='streichen'){S.pending.shift();afterEventFx();}}
 function transformRandom(why){const list=allActive().filter(it=>!def(it).bases);if(!list.length)return;const r=rs('fund');const it=r.pick(list);const a=def(it).a;

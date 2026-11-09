@@ -1,0 +1,12 @@
+[
+ {"ereignis": "hafen_leiter", "datei": "biome/hafen_plus.json", "wahl": 2, "l": "Hinunterrufen, wie spät es ist: +14 Gold. Von unten antwortet jemand mit einem Datum aus dem Jahr 1919.", "grund": "Man ruft in die Tiefe, und die Tiefe antwortet"},
+ {"ereignis": "eis_name", "datei": "events.json", "wahl": 0, "l": "Antworten: +1 Talisman-Slot, −8 max. Leben", "grund": "Man antwortet dem Ruf, der den eigenen Namen sagt"},
+ {"ereignis": "funkstation_antwort", "datei": "biome/funkstation.json", "wahl": 0, "l": "Antworten. Was du schreibst, weißt du nachher nicht mehr: +1 Energie auf Dauer, −12 max. Leben", "grund": "Man antwortet dem Sender und verliert dafür etwas von sich"},
+ {"ereignis": "alle_laterne_spricht", "datei": "events.json", "wahl": 0, "l": "Dem Licht folgen: lerne einen Handgriff, -6 Leben", "grund": "Man folgt einem Ruf aus der Laterne"},
+ {"ereignis": "gezeitenwerk_schleuse", "datei": "biome/gezeitenwerk.json", "wahl": 2, "l": "Ein Item ins Wasser legen und sehen, was es hinaufträgt: ein Item verwandeln, −4 Leben", "grund": "Man opfert ein Item dem Wasser und nimmt zurück, was herauf kommt"},
+ {"ereignis": "kapelle_taufe", "datei": "events.json", "wahl": 1, "l": "Eine Gabe hineinwerfen: −15 Gold, ein seltenes Item steigt auf", "grund": "Man gibt dem Becken etwas und bekommt es in fremder Form zurück"},
+ {"ereignis": "walkathedrale_tran", "datei": "biome/walkathedrale.json", "wahl": 1, "l": "Trinken, wie die Männer es taten: +6 max. Leben, aber etwas kommt, um auch zu trinken", "grund": "Man trinkt vom Tran des Wals und öffnet sich dem, was mit trinkt"},
+ {"ereignis": "station_zug", "datei": "biome/station.json", "wahl": 0, "l": "Einsteigen und sitzen bleiben, bis die Türen schließen: eine zufällige Reliquie, −10 max. Leben", "grund": "Man steigt in den Zug, der nie abfährt, und folgt ihm"},
+ {"ereignis": "grotte_stimme", "datei": "biome/grotte.json", "wahl": 0, "l": "Ja sagen: ein Item tauschen, +10 max. Leben", "grund": "Man sagt ja zur Stimme aus der Quelle"},
+ {"ereignis": "fabrik_rauch", "datei": "biome/fabrik.json", "wahl": 0, "l": "Hineinknien und einatmen: dauerhaft +1 Energie, −10 max. Leben", "grund": "Man atmet den Rauch der Tiefe ein und öffnet sich ihm"}
+]

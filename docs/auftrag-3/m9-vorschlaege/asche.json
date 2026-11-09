@@ -1,0 +1,18 @@
+[
+ {"gegner": "ertrunkener", "biom": "kapelle", "akt": 2, "grund": "Mann, der im Wasser umlernte; die Asche bleibt als Rest des Salzes im Becken"},
+ {"gegner": "kreuzgangwaechter", "biom": "kloster", "akt": 2, "grund": "Mönch, der zur Säule wurde; von ihm bleibt nur Asche am Kapitell"},
+ {"gegner": "quellwaerter", "biom": "grotte", "akt": 2, "grund": "Quellwärter, der in der Schale steht; die Asche sinkt ins Wasser"},
+ {"gegner": "giesser", "biom": "glockengiesserei", "akt": 2, "grund": "Gießer, der 1641 selbst am Feuer stand"},
+ {"gegner": "nachtschwester", "biom": "waisenhaus", "akt": 2, "grund": "Diakonisse, unverändert, die zählt; die Asche ist die letzte Zählung"},
+ {"gegner": "salzmann", "biom": "salz", "akt": 3, "grund": "Hauer, den das Salz bewahrt hat; Asche und Salz gehören zusammen"},
+ {"gegner": "bote", "biom": "stadt", "akt": 3, "grund": "Postbote, dem unten geantwortet wurde; die Asche ist die Antwort"},
+ {"gegner": "holzfaeller", "biom": "wald", "akt": 3, "grund": "Legionär, der seit neunzehnhundert Jahren fällt; seine Asche liegt im Holz"},
+ {"gegner": "oelerin", "biom": "gezeitenwerk", "akt": 3, "grund": "Ölerin, deren Kopf eine Ölkanne ist; Öl und Asche brennen zusammen (Grenzfall)"},
+ {"gegner": "brennmeister", "biom": "ziegelgruben", "akt": 3, "grund": "Brennmeister, der die Glut hütet; seine Asche ist der Rest des Ofens"},
+ {"gegner": "wartende", "biom": "station", "akt": 3, "grund": "Frau, die 1925 jemanden abholen wollte; die Asche liegt auf dem Strauß"},
+ {"gegner": "fahnentraeger", "biom": "eis", "akt": 4, "grund": "Expeditionsmann von 1903; seine Asche ist das, was vom Eis übrig bleibt"},
+ {"gegner": "echo", "biom": "walkathedrale", "akt": 4, "grund": "Harpunier, dessen Leine in seiner Brust steckt; die Asche läuft die Leine hinab"},
+ {"gegner": "glasschwimmer", "biom": "glasmeer", "akt": 4, "grund": "Schwimmer von 1925; seine Asche bleibt als Glasperle in der Luft"},
+ {"gegner": "astronom", "biom": "mond", "akt": 4, "grund": "Gelehrter von 1890; seine Asche steht in der Armillarsphäre"},
+ {"gegner": "funker", "biom": "funkstation", "akt": 4, "grund": "Funker von 1912; die Asche bleibt im Kopfhörer, der ihm eingewachsen ist"}
+]

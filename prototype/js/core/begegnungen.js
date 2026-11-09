@@ -56,3 +56,55 @@ const Spuren={
   const e=S.enemies[0];e.hp=e.max=Math.max(6,Math.round(e.max*W.hp[st]));e.pat=e.pat.map(p=>p.t==='atk'?{...p,v:Math.max(1,p.v+W.atk[st])}:p);e.spuren=st;
   Bus.emit('spuren',{stufe:st,kampf:true,why:`Spuren, Stufe ${st+1} von 4: ${e.n} mit ${e.max} Leben${W.beute[st]==='reliquie'?', dafür eine Reliquie':''}`});Bus.emit('changed');}
 };
+// Asche (Charles Dexter Ward): Gegner mit asche: true hinterlassen beim Tod Asche im Rucksack (S.asche, ohne Platz, ohne Karten, höchstens 3).
+// Salz, direkt danach Feuer (eigene Stoffe der Karten): die jüngste Asche wird gerufen und kämpft diesen Kampf an deiner Seite (S.verbuendeter).
+// Feuer, direkt danach Salz: sie löst sich auf. Wer gerufen wurde, kommt zwei Biome später als Gegner zurück (S.ascheRueck), mit Asche-Spur an der Plakette.
+// Die Reihenfolge zählt: eine eigene Prüfung nach der Karte, keine Reaktion.
+const Asche={
+ MAX:3,
+ tod(e){if(!Zettel.hat('asche')||!e||e.ascheSpur||!FOES[e.id]||!FOES[e.id].asche)return;S.asche=S.asche||[];if(S.asche.length>=this.MAX)return;
+  S.asche.push({id:e.id,n:FOES[e.id].n,akt:S.akt});Bus.emit('asche',{art:'liegt',id:e.id,why:`Von ${FOES[e.id].n} bleibt Asche. Sie liegt jetzt im Rucksack`});},
+ eigene(c){return c?(c.st0||c.st||[]):[];},
+ // nach jeder gespielten Karte: Salz → Feuer ruft, Feuer → Salz löst auf
+ nachKarte(c,vorher){if(!Zettel.hat('asche')||S.phase!=='fight'||!vorher||!(S.asche&&S.asche.length))return;const a=this.eigene(vorher),b=this.eigene(c);
+  if(a.includes('S')&&b.includes('F')&&!S.verbuendeter)return this.rufen();
+  if(a.includes('F')&&b.includes('S'))return this.aufloesen();},
+ rufen(){const a=S.asche.pop();const v=mkEnemy(a.id,0);v.verbuendet=true;v.ascheVon=a.akt;v.pi=0;v.block=0;S.verbuendeter=v;
+  (S.ascheRueck=S.ascheRueck||[]).push({id:a.id,akt:S.akt+2});
+  Bus.emit('asche',{art:'gerufen',id:a.id,why:`Salz, dann Feuer: ${a.n} steht aus der Asche auf und kämpft an deiner Seite`});Bus.emit('changed');},
+ aufloesen(){const a=S.asche.pop();Bus.emit('asche',{art:'aufgeloest',id:a.id,why:`Feuer, dann Salz: die Asche von ${a.n} zerfällt. Sie kommt nicht wieder`});Bus.emit('changed');},
+ // der nächste Angriff aus dem Muster des Verbündeten (Schritte ohne Angriff überspringt er)
+ naechster(v){v=v||S.verbuendeter;if(!v)return null;const n=v.pat.length;for(let j=0;j<n;j++){const p=v.pat[(v.pi+j)%n];if(p.t==='atk')return{p,j};}return null;},
+ // nach deinem Zug, vor den Gegnern: er greift dein Ziel an
+ handeln(){const v=S.verbuendeter;if(!v)return;const z=this.naechster(v);if(!z){v.pi++;return;}const e=tgt();if(!e)return;
+  Bus.emit('verbuendeter',{v,e,why:`${v.n} greift für dich an: ${z.p.v}${(z.p.h||1)>1?'×'+z.p.h:''} auf ${e.n}`});
+  hit(e,z.p.v,z.p.h||1,null,`${v.n} (aus der Asche) greift ${e.n} an`);v.pi+=z.j+1;},
+ // Kampfbeginn: kein Verbündeter aus dem letzten Kampf; Gerufene kehren zwei Biome später zurück (nicht bei Wächter und Finale)
+ kampfIds(ids,art){S.verbuendeter=null;if(!Zettel.hat('asche')||art==='waechter'||art==='finale'||!S.ascheRueck||!S.ascheRueck.length)return ids;
+  const i=S.ascheRueck.findIndex(x=>x.akt===S.akt&&FOES[x.id]);if(i<0||ids.length>=4)return ids;const x=S.ascheRueck.splice(i,1)[0];S.ascheKommt=x.id;return[...ids,x.id];},
+ kampfStart(){if(!S.ascheKommt)return;const e=S.enemies.find(q=>q.id===S.ascheKommt&&!q.ascheSpur);S.ascheKommt=null;if(!e)return;e.ascheSpur=true;
+  Bus.emit('asche',{art:'zurueck',e,why:`${e.n} ist wieder da. Dieselbe Asche-Spur: du hast ihn zwei Biome früher gerufen`});}
+};
+// Die Tiefe erkennt dich (Innsmouth, umgedeutet: weil du ihr gefolgt bist). Ereignis-Wahlen mit tiefe: 1 zählen (S.tiefeZahl).
+// Nach zwei liegt „Das Zeichen“ lose im Deck (S.lose). Spielt man es: Seitenwechsel für den Rest des Runs (S.tiefeSeite).
+const Tiefe={
+ ZEICHEN(){const K=(RUN.karten&&RUN.karten.zeichen)||{n:'Das Zeichen',c:0,t:''};return{n:K.n,c:K.c||0,st:[],verbraucht:true,sonder:{art:'zeichen',t:K.t},src:K.n,img:K.img||'',cid:'lose:zeichen',lose:'zeichen',zeichen:true};},
+ wahl(o,ev){if(!Zettel.hat('tiefe')||!o||!o.tiefe)return;S.tiefeZahl=(S.tiefeZahl||0)+1;
+  Bus.emit('tiefe',{art:'zaehlt',n:S.tiefeZahl,why:`„${o.l}“: du gibst der Tiefe nach (${S.tiefeZahl}-mal in diesem Run)`});
+  if(S.tiefeZahl>=2&&!S.zeichenGegeben){S.zeichenGegeben=true;(S.lose=S.lose||[]).push('zeichen');Bus.emit('tiefe',{art:'zeichen',why:'In deinem Deck liegt eine Karte, die du nie gewählt hast: Das Zeichen'});}},
+ karte(id){return id==='zeichen'?this.ZEICHEN():null;},
+ gespielt(c){if(!c||!c.zeichen)return;S.tiefeSeite=true;S.lose=(S.lose||[]).filter(x=>x!=='zeichen');
+  Bus.emit('tiefe',{art:'seite',why:'Das Zeichen: die Tiefe erkennt dich. Was aus ihr kommt, lässt dich gehen. Die Menschen nicht mehr'});},
+ artVon(id){return(FOES[id]&&FOES[id].art)||'tiefe';},
+ // vor dem Kampf: Begegnung statt Kampf (alle Gegner tiefe oder nachahmer) oder ein Gegner mehr (mensch oder veraendert dabei)
+ kampf(ids,art){if(!S.tiefeSeite||!Zettel.hat('tiefe')||art==='waechter'||art==='finale')return{ids};
+  const arten=ids.map(id=>this.artVon(id));if(arten.every(a=>a==='tiefe'||a==='nachahmer'))return{ids,begegnung:true};
+  if(arten.some(a=>a==='mensch'||a==='veraendert')&&ids.length<4){const b=biom();const pool=(b.gegner||[]).filter(id=>FOES[id]&&(FOES[id].rang||'normal')==='normal'&&['mensch','veraendert'].includes(this.artVon(id)));
+   if(pool.length){const id=R(`tiefe-mehr:${S.depth}`).pick(pool);S.tiefeMehr=id;return{ids:[...ids,id]};}}
+  return{ids};},
+ kampfStart(){if(S.tiefeMehr){const id=S.tiefeMehr;S.tiefeMehr=null;Bus.emit('tiefe',{art:'mehr',why:`Die Menschen erkennen dich auch: ${FOES[id].n} kommt dazu`});}},
+ // Begegnung: die Wesen stehen da und greifen nicht an; Weitergehen gibt die halbe Beute
+ weiter(){if(!S.begegnung||S.phase!=='fight')return;S.begegnung=false;S.halbeBeute=true;
+  Bus.emit('tiefe',{art:'weiter',why:'Sie sehen dir nach. Du gehst weiter (halbe Beute)'});fightWon();S.halbeBeute=false;},
+ kraemerZu(){return !!(S.tiefeSeite&&Zettel.hat('tiefe'));}
+};

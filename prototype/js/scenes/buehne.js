@@ -49,7 +49,10 @@ function visOf(e){let v=BU.vis.get(e.uid);if(!v){v={hit:0,kx:0,lunge:0,dying:0,g
 function stellListe(){const w=szenenWahl();return STELL[`${w.biom}:${w.art}:${w.variante||0}`]||STELL[`${w.biom}:${w.art}`]||null;}
 function stellPlatz(e,l){if(e.platz!=null&&e.platz<l.length)return e.platz;const belegt=new Set((S.enemies||[]).filter(o=>o!==e&&o.hp>0&&o.platz!=null).map(o=>o.platz));
  const frei=[...l.keys()].filter(i=>!belegt.has(i));const wunsch=e.platzWunsch!=null&&frei.includes(e.platzWunsch)?e.platzWunsch:frei[0];e.platz=wunsch??0;return e.platz;}
-function enemyBox(e){const sz=BU.sz||szeneHolen();const sl=!e.pendel&&typeof STELL!=='undefined'?stellListe():null;
+// M9 Spuren: der Gegner wächst mit der Stufe sichtbar (balance.json → spuren.gross)
+function enemyBox(e){const b=enemyBox0(e);if(e.spuren==null||typeof Spuren==='undefined')return b;const f=Spuren.W().gross[e.spuren]||1;
+ return{...b,sk:b.sk*f,w:Math.round(b.w*f),h:Math.round(b.h*f),kopf:b.y-Math.round((b.y-b.kopf)*f)};}
+function enemyBox0(e){const sz=BU.sz||szeneHolen();const sl=!e.pendel&&typeof STELL!=='undefined'?stellListe():null;
  if(sl&&sl.length){const P=sl[stellPlatz(e,sl)];const sp=e.sprite&&SPRITES[e.sprite];let w=96,h=120;if(sp&&sp.meta){w=sp.meta.w;h=sp.meta.h;}else if(e.spr==='boss'){w=160;h=140;}else{w=64;h=80;}
   const sk=e.rang==='normal'?P.s:e.rang==='boss'?.92:Math.max(P.s,.95);const nebel=P.s<.85?.3:P.s<.97?.12:0;
   return{x:P.x,y:P.y,w:Math.round(w*sk),h:Math.round(h*sk),sk,nebel,kopf:sp&&sp.meta&&sp.meta.kopf!=null?P.y-Math.round((sp.meta.fuss[1]-(Array.isArray(sp.meta.kopf)?sp.meta.kopf[1]:sp.meta.kopf))*sk):P.y-Math.round(h*sk*.92)};}

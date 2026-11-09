@@ -54,7 +54,7 @@ document.addEventListener('click',e=>{
  const en3=e.target.closest('[data-entf]');if(en3){entferneHandgriff(+en3.dataset.entf,+en3.dataset.k);return;}
  const tk=e.target.closest('[data-take]');if(tk){takeReward(tk.dataset.take);return;}
  const ev=e.target.closest('[data-ev]');if(ev&&!ev.disabled){chooseEvent(+ev.dataset.ev);return;}
- const st=e.target.closest('[data-strike]');if(st){const uid=+st.dataset.strike;if(S.phase==='kraemer_streichen')kraemerStrike(uid);else strikeItem(uid);return;}
+ const st=e.target.closest('[data-strike]');if(st){const sv=st.dataset.strike;const uid=sv.startsWith('lose:')?sv:+sv;if(S.phase==='kraemer_streichen')kraemerStrike(uid);else strikeItem(uid);return;}
  const j=e.target.closest('[data-job]');if(j){starteRun(j.dataset.job);return;}
  const sv=e.target.closest('[data-start]');if(sv){S.wahlStart=sv.dataset.start||null;render();return;}
  const sf=e.target.closest('[data-stufe]');if(sf){S.wahlStufe=+sf.dataset.stufe;render();return;}
