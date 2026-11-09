@@ -51,14 +51,19 @@ function koeRechts(){const b=koeItemByUid(KOE.zeig);let oben='';
   ${D.eigen?`<div class="kie"><i>${esc(eigenText(D.eigen))}</i></div>`:''}${D.passiv?`<div class="kie">${esc(passivText(D.passiv))}</div>`:''}${rs2.length?`<div class="kia">Teil von: ${rs2.map(r=>esc(r.n)).join(', ')}</div>`:''}
   ${ort?`<div class="kia">${ort}</div>`:''}<div class="kkarten">${einm.map(o=>`<div class="kkw">${koeKarte(o.c)}${o.anz>1?`<span class="anz">×${o.anz}</span>`:''}</div>`).join('')}</div>
   ${D.flavor?`<div class="kfl">${esc(D.flavor)}</div>`:''}</div>`;}
- else oben=`<p class="klead">Klick ein Item, dann den Platz, an den es soll. Rechts siehst du, was das mit deinem Deck macht.</p>`;
+ else oben=koeDeckListe(); // Spieltest 2026-11-09: ohne gewähltes Item steht hier das ganze Deck
  // Deck: Kartenzahl, Stoff-Balken, Änderung seit dem Öffnen
  const deck=deckListe();const z={};let summe=0;deck.forEach(c=>c.st.forEach(k=>{z[k]=(z[k]||0)+1;summe++;}));const ks=Object.keys(ST).filter(k=>z[k]);
  const{rein,raus}=koeDiff();const nm=k=>esc(k.split('\u0001')[0]);
- return `<div class="krechts">${oben}<div class="kdeck"><div class="kdz">DECK <b>${deck.length}</b> KARTEN</div>
+ return `<div class="krechts">${oben}<div class="kdeck"><div class="kdz">DECK <b>${deck.length}</b> KARTEN${b?' <button class="deco klein kganz" data-act="koeDeck">GANZES DECK</button>':''}</div>
  <div class="kbalken">${ks.map(k=>`<i style="flex:${z[k]};background:${ST[k].c}" title="${esc(ST[k].n)} ${z[k]}"></i>`).join('')||'<i style="flex:1;background:#2a2218"></i>'}</div>
  <div class="kleg">${ks.map(k=>`<span>${gi(k,KZ())}${z[k]}</span>`).join('')}</div>
  ${rein.length||raus.length?`<div class="kdiff">${rein.map(r=>`<span class="gr">+ ${nm(r.k)}${r.n>1?' ×'+r.n:''}</span>`).join('')}${raus.map(r=>`<span class="rt">− ${nm(r.k)}${r.n>1?' ×'+r.n:''}</span>`).join('')}</div>`:''}</div></div>`;}
+
+// Spieltest 2026-11-09: das ganze Deck auf einen Blick, gleiche Karten zusammengefasst, nach Kosten sortiert. Die Wirkung steht im Tooltip.
+function koeDeckListe(){const g=new Map();for(const c of deckListe()){const k=c.n+'\u0001'+(c.hg||'')+'\u0001'+c.st.join('');const o=g.get(k);if(o)o.anz++;else g.set(k,{c,anz:1});}
+ const L=[...g.values()].sort((a,b)=>(cardCost(a.c)-cardCost(b.c))||a.c.n.localeCompare(b.c.n,'de'));
+ return `<div class="kdeckliste"><div class="kdlk">DEIN DECK</div>${L.map(({c,anz})=>{const k=cardCost(c);return `<div class="kdr${c.hg?' hg':''}${c.fremd?' fremd':''}" title="${esc(c.n+': '+cardText(c))}"><span class="kdc">${k>=99?'–':c.x?'X':k}</span><span class="kds">${c.st.map(s=>gi(s,KZ())).join('')}</span><span class="kdn">${esc(c.n)}</span>${anz>1?`<span class="anz">×${anz}</span>`:''}</div>`;}).join('')}</div>`;}
 
 // Linien von den Fächern zu den Anschlusspunkten der Figur (Szenen-Pixel)
 function koeLinien(){const J=koeFigur();const K=J.koerper||{hals:[55,62],leib:[58,92],hand:[24,106]};

@@ -35,7 +35,7 @@ document.addEventListener('pointerup',e=>{
  if(d.drag){if(sl)move(d.loc,sl.dataset.loc);S.sel=null;render();return;}
  if(!sl||sl.dataset.loc!==d.loc)return;const loc=d.loc;
  // Spieltest 2026-11-09: Tauschen nur noch per Ziehen. Ein Klick wählt nur aus (zeigt das Item rechts, Verkaufen beim Krämer).
- if(S.sel===loc){S.sel=null;render();}else if(loc!=='trash'&&getAt(loc)){S.sel=loc;sfx.click();render();}});
+ if(S.sel===loc){S.sel=null;if(typeof KOE!=='undefined'&&KOE)KOE.zeig=null;render();}else if(loc!=='trash'&&getAt(loc)){S.sel=loc;sfx.click();render();}});
 document.addEventListener('click',e=>{
  const en=e.target.closest('.feind[data-ei]');if(en&&S.phase==='fight'){S.target=+en.dataset.ei;sfx.click();render();return;}
  const a=e.target.closest('[data-act]');if(a){aktion(a.dataset.act,a);return;}
@@ -72,7 +72,7 @@ function aktion(k,el){switch(k){
  case'erbeNehmen':Metaebene.erbeWahl(true);render();break;case'erbeLassen':Metaebene.erbeWahl(false);render();break;case'briefNehmen':Wuerze.briefNehmen(true);render();break;case'briefLassen':Wuerze.briefNehmen(false);render();break;case'fehlzeitJa':Metaebene.fehlzeitWahl(true);render();break;case'fehlzeitNein':Metaebene.fehlzeitWahl(false);render();break; // M10
  case'gleicherSeed':{const sd=S.seed,jb=S.job;newRun(jb,sd,{});render();break;}
  case'bildSpeichern':endbildSpeichern();break;
- case'rucksack':rucksackAuf();break;case'rucksackZu':rucksackZu();break;
+ case'rucksack':rucksackAuf();break;case'koeDeck':if(KOE){KOE.zeig=null;S.sel=null;render();}break;case'rucksackZu':rucksackZu();break;
  case'hgSkip':skipHandgriff();break;case'hgVerwerfen':hgVerwerfen();break;
  case'ueberJa':{const u=S.ueberschreiben;S.ueberschreiben=null;placeHandgriff(u.uid,u.k);break;}case'ueberNein':S.ueberschreiben=null;render();break;
  case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;case'wsTilgen':wahlStart('tilgen','werkstatt');break;

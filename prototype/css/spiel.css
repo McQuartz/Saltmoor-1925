@@ -310,3 +310,5 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 @keyframes lrxEin{0%{background-color:rgba(232,197,71,.28);transform:translateX(calc(var(--u)*-3))}100%{background-color:transparent;transform:none}}
 /* DEV-Knopf liegt über dem Dev-Menü, damit man es wieder zu bekommt */
 #devBtn{z-index:90}
+/* Spruch des Handgriffs steht nach dem Nehmen (Ritzen), nicht mehr auf jeder Auswahlkarte */
+.hgspruch{font-size:calc(var(--u)*6);color:#d8ccb0;max-width:calc(var(--u)*260);margin:calc(var(--u)*2) auto calc(var(--u)*5);padding:calc(var(--u)*3) 0;border-top:1px solid #3a2c18;border-bottom:1px solid #3a2c18}

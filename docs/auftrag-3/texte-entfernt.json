@@ -12,6 +12,10 @@
   {
    "text": "· Ziehen oder anklicken zum Tauschen.",
    "grund": "Spieltest 2026-11-09 (Philip): Tauschen im Rucksack nur noch per Ziehen, Anklicken wählt nur aus. Hinweis lautet jetzt „· Ziehen zum Tauschen.“"
+  },
+  {
+   "text": "Klick ein Item, dann den Platz, an den es soll. Rechts siehst du, was das mit deinem Deck macht.",
+   "grund": "Spieltest 2026-11-09 (Philip): Tauschen nur noch per Ziehen; ohne gewähltes Item steht rechts jetzt das ganze Deck."
   }
  ]
 }
