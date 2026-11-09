@@ -36,7 +36,9 @@ function baumDaten(){
  if(B&&B.id==='falsche_winkel')quelle=n>=2?[n-2]:[];
  if(B&&B.id==='schlag'&&n===2)quelle=[0,1];
  if(B&&B.id==='ueber_eck'&&n>=2){const rx=n>=3?Bieg.ueberEckRx():[];eck={rx:rx.map(r=>r.n),t:rx.map(r=>r.t),zu:n>=3,leuchtet:!!(S.ueberEck&&S.ueberEck.turn===S.turnNo)};}
- return{pfad,letzter:last,aeste,sackgasse,quelle,eck};}
+ // Glieder, die von Karten des Farbe-Items stammen (zugKarten läuft parallel zur Kette dieses Zuges)
+ const zk=S.zugKarten||[];const farbe=typeof Farbe!=='undefined'&&zk.length===pfad.length?zk.map(c=>Farbe.karte(c)):[];
+ return{pfad,farbe,letzter:last,aeste,sackgasse,quelle,eck};}
 
 // ---------- HTML ----------
 const SB_H=48,SB_PX=46,SB_AX=77; // Maße in u: Höhe, Anfang der Bögen, Anfang der Astzeichen (Breite 150)
@@ -55,7 +57,7 @@ function stoffBaumHtml(){
  sbPfadLaenge=len;
  // Pfad: Kette von Gliedern, das letzte mit Rahmen in Stofffarbe
  const kette=!pfad.length?'<i class="sb-punkt"></i>':pfad.map((g,i)=>{const letzt=d.quelle&&d.pfad.length?d.quelle.includes(i):i===pfad.length-1;
-  return (i?'<i class="sb-ver"></i>':'')+`<span class="sb-glied${letzt?' letzt':''}" style="--c:${ST[g[0]]?ST[g[0]].c:'#fff'}">${g.map(sbZeichen).join('')}</span>`;}).join('');
+  return (i?'<i class="sb-ver"></i>':'')+`<span class="sb-glied${letzt?' letzt':''}${len&&d.farbe[i]?' farbe':''}" style="--c:${ST[g[0]]?ST[g[0]].c:'#fff'}">${g.map(sbZeichen).join('')}</span>`;}).join('');
  // Äste
  const mitte=SB_H/2,n=d.aeste.length;
  let bogen='',aeste='',sack='';
