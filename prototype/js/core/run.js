@@ -27,6 +27,7 @@ function newRun(jobId,seed,opt={}){
  const sr=Rng.of(seed,'schreck');const J=BAL.jumpscare;S.scareAt=(J.fenster_min[0]+sr.next()*(J.fenster_min[1]-J.fenster_min[0]))*60000;S.scares=0;
  log(job.ausrede);
  Bus.emit('run_start',{seed,job:job.id,why:`Seed ${seed}, ${job.n}`});
+ if(typeof Farbe!=='undefined')Farbe.planen(); // M8: ob und wo die Farbe kommt
  enterAct();}
 
 // --- Akte und Ebenen ---
@@ -61,7 +62,8 @@ function enterNode(o){S.node={art:o.art};const b=biom();const r=R(`knoten:${S.de
   case'ereignis':{const seen=S.stats.events||[];const geht=e=>!seen.includes(e.id)&&condOk(e.if);const fresh=EVENTS.filter(e=>e.biom===biomId()&&geht(e));
    // biomübergreifende Ereignisse: in einem Viertel der Fälle (BAL.ereignis_allgemein), sonst nur, wenn das Biom leer ist
    const alle=EVENTS.filter(e=>e.biom==='alle'&&geht(e));const allg=alle.length&&(!fresh.length||r.chance(BAL.ereignis_allgemein!=null?BAL.ereignis_allgemein:.25));
-   const ev=r.pick(allg?alle:fresh.length?fresh:EVENTS.filter(e=>!e.if));
+   let ev=r.pick(allg?alle:fresh.length?fresh:EVENTS.filter(e=>!e.if));
+   if(typeof Farbe!=='undefined'&&Farbe.ereignisHier()){ev=EVENTS.find(e=>e.id==='farbe_brunnen');S.farbeGesehen=true;} // M8: der Brunnen, einmal je Run
    S.stats.events=[...seen,ev.id];S.event=ev.id;S.phase='event';Bus.emit('event',{ev,why:`Ereignis „${ev.t}“ aus ${allg?'allgemein':b.kurz} per Seed`});break;}
   case'kraemer':{const SH=BAL.shop;const o2=[...r.sample(dropPool(),SH.normal_items),...r.sample(rarePool(),SH.rare_items)];
    const hgA=handgriffAngebot(r,'mix',2).map(id=>({id,price:(HANDGRIFFE[id].rar==='selten'?SH.hg_preis_selten:SH.hg_preis)||40,sold:false}));
@@ -96,6 +98,7 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  Bus.emit('victory',{art,why:`Alle Gegner besiegt (${S.turnNo} Züge)`});
  const hb=Math.round(maxHp()*BAL.victory_heal_pct)+passive('heil_nach_sieg').reduce((s,p)=>s+p.v,0);healP(hb,`Sieg: ${Math.round(BAL.victory_heal_pct*100)} % von ${maxHp()} Leben`);
  bonuses('after_victory_item').forEach(b=>{giveItem(b.item,'Set Friedhofswärter');Bus.emit('toast',{a:'FRIEDHOFSWÄRTER',b:'Ein Knochen für den Rucksack'});});
+ if(typeof Farbe!=='undefined')Farbe.wandern(); // M8: die Farbe springt nach jedem Sieg weiter
  if(art==='finale'){S.phase='reward';S.reward=[];S.picked=true;S.goldGain=0;finishNode();return;}
  const r=R(`beute:${S.depth}`);const G=BAL.gold_per_victory;
  let gd=art==='waechter'?r.int(BAL.waechter_belohnung.gold[0],BAL.waechter_belohnung.gold[1]):r.int(G.min,G.max)+S.enemies.length*G.per_enemy;

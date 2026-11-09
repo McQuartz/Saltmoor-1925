@@ -1,4 +1,4 @@
-// Auftrag 3: Tests der Kern-Systeme (docs/auftrag-3/06-lovecraft-kern.md Abschnitt 8). Teil Hören (M6), Teil Blick (M7); Farbe kommt dazu.
+// Auftrag 3: Tests der Kern-Systeme (docs/auftrag-3/06-lovecraft-kern.md Abschnitt 8). Teil Hören (M6), Teil Blick (M7), Teil Farbe (M8).
 // Läuft im Kern (Node). node tools/test-kern.js
 const { ladeKern } = require('./kern');
 let fehler = 0; const ok = (c, m) => { console.log((c ? 'ok    ' : 'FEHLER ') + m); if (!c) fehler++; };
@@ -95,6 +95,54 @@ let fehler = 0; const ok = (c, m) => { console.log((c ? 'ok    ' : 'FEHLER ') + 
     const bot = J(`(()=>{const o=[];for(const q of [.9,.5]){T.blick('kloster',[BIOMES.kloster.gegner[0]]);S.hp=Math.round(maxHp()*q);Bot.kampfZug();o.push(!!S.hinsehen);}return o;})()`);
     ok(bot[0] && !bot[1], `Bot: bei 90 % hinsehen, bei 50 % nicht (${bot})`);
   } catch (e) { ok(false, 'Blick: ' + String(e).split('\n')[0]); }
+
+  // ---------- Die Farbe (M8) ----------
+  try {
+    // Testaufbau: Run mit drei angelegten Items mit Stoff, Farbe auf dem ersten
+    run(`T.farbe=function(seed=5){BAL.auftrag3.farbe=true;newRun('fischer',seed,{dev:true});S.route=['hafen','kloster'];S.akt=1;S.depth=8;const ids=['knife','holywater','lantern'].filter(id=>ITEMS[id]);ids.forEach((id,i)=>{const a=ITEMS[id].a;S.slots[a]=Math.max(S.slots[a],1);const f=S.areas[a].findIndex((x,k)=>k<S.slots[a]&&!x);S.areas[a][f<0?0:f]=mk(id);});return allActive().filter(it=>(ITEMS[it.id].st||[]).length).map(it=>it.uid);};`);
+    const x = J(`{st:ST.X,leer:Object.values(ITEMS).every(d=>!(d.st||[]).includes('X'))}`);
+    ok(x.st && x.st.n === 'Die Farbe' && x.leer, `neunter Stoff X „${x.st && x.st.n}“ (${x.st && x.st.c}), auf keinem Item in den Daten`);
+    const plan = J(`(()=>{let n=0;for(let s=1;s<=200;s++){newRun('fischer',s,{dev:true});if(S.farbePlan!=null&&[1,2].includes(S.farbePlan))n++;}return n;})()`);
+    ok(plan >= 150 && plan <= 190, `geplant in ${plan} von 200 Runs für Akt II oder III (ankommen tut er in etwa jedem zweiten, siehe Bots unten)`);
+    const ev = J(`(()=>{newRun('fischer',3,{dev:true});S.farbePlan=1;S.akt=1;S.route[1]='kloster';S.depth=8;FAST=true;enterNode({art:'ereignis'});const a=S.event;S.phase='weg';enterNode({art:'ereignis'});return[a,S.event];})()`);
+    ok(ev[0] === 'farbe_brunnen' && ev[1] !== 'farbe_brunnen', `das nächste Ereignis im Akt ist der Brunnen, nur einmal (${ev})`);
+    const aus = J(`(()=>{newRun('fischer',3,{dev:true});S.farbePlan=1;S.akt=1;BAL.auftrag3.farbe=false;const r=Farbe.ereignisHier();BAL.auftrag3.farbe=true;return r;})()`);
+    ok(!aus, 'Schalter aus: kein Brunnen');
+    const an = J(`(()=>{const u=T.farbe();runFx([{op:'farbe_annehmen'}],{why:'Test'});return{f:S.farbe,an:allActive().some(it=>it.uid===S.farbe.uid)};})()`);
+    ok(an.f && an.an && !an.f.gebunden, `annehmen: sitzt auf einem angelegten Item (${an.f && an.f.uid})`);
+    // Annehmen der Stoffe im Kampf
+    const k = J(`(()=>{const u=T.farbe();S.farbe={uid:u[0],letzte:null,gebunden:false};FAST=true;startFight(['nachgeher'].filter(id=>FOES[id]).concat(Object.keys(FOES).filter(k=>FOES[k].rang==='normal').slice(0,1)).slice(0,1),'kampf');S.enemies[0].hp=S.enemies[0].max=999;
+      const fc={...kartenVon(itemByUid(u[0]))[0],c:0};const fremd=kartenVon(itemByUid(u[1]))[0];const andere={...fremd,c:0};S.hand=[fc,andere];S.energy=9;S.played=0;S.zugSt=[];S.zugKarten=[];S.last=[];Farbe.hand();const erst=[...S.hand[0].st];
+      playCard(1,0);const nachher=[...S.hand[0].st];const log0=S.chainLog.length;playCard(0,0);const rx=S.chainLog[S.chainLog.length-1].rx.map(r=>r.n);return{eigen:ITEMS[itemByUid(u[0]).id].st,erst,fremd:fremd.st,nachher,rx};})()`);
+    ok(JSON.stringify(k.erst) === JSON.stringify(k.eigen), `erste Karte im Zug behält ihre Stoffe (${k.erst})`);
+    ok(JSON.stringify(k.nachher) === JSON.stringify(k.fremd), `danach nimmt die Karte den Stoff der Karte davor an (${k.nachher} = ${k.fremd})`);
+    ok(k.rx.includes('Verstärkt'), `und reagiert damit: ${k.rx.join(', ')}`);
+    // Wandern und Spur
+    const w = J(`(()=>{const u=T.farbe(7);S.farbe={uid:u[0],letzte:null,gebunden:false};const vorSt=[...def(itemByUid(u[0])).st];S.stats.kaempfe=1;Farbe.wandern();const it0=itemByUid(u[0]);const nach=[...def(it0).st];const ziel=S.farbe.uid;const spuren=JSON.parse(JSON.stringify(it0.spuren||null));const karten=kartenVon(it0)[0].st;
+      const z=[];for(let i=0;i<30;i++){const vor=S.farbe.uid,letzte=S.farbe.letzte;S.stats.kaempfe++;Farbe.wandern();z.push([vor,letzte,S.farbe.uid]);}
+      const st=allActive().map(it=>def(it).st);return{vorSt,nach,ziel,u,spuren,z,st,karten};})()`);
+    ok(w.ziel !== w.u[0] && w.u.includes(w.ziel), `wandert nach dem Kampf auf ein anderes angelegtes Item (${w.u[0]} → ${w.ziel})`);
+    ok(w.spuren && w.spuren.length === 1 && w.vorSt.length === w.nach.length && w.vorSt.filter((s, i) => s !== w.nach[i]).length === 1, `Spur: genau ein Stoff getauscht (${w.vorSt} → ${w.nach})`);
+    ok(JSON.stringify(w.karten) === JSON.stringify(w.nach), `die Karten des Items tragen die Spur (${w.karten})`);
+    ok(w.z.every(([vor, letzte, neu]) => neu !== vor && neu !== letzte), `30-mal gewandert, nie geblieben, nie zurück auf das letzte`);
+    ok(w.st.every(s => !s.includes('X') && new Set(s).size === s.length), `nie X, nie zweimal derselbe Stoff (${w.st.map(s => s.join('')).join(' ')})`);
+    const eins = J(`(()=>{const u=T.farbe();allActive().slice(1).forEach(it=>{for(const a of AREAS){const i=S.areas[a].indexOf(it);if(i>=0)S.areas[a][i]=null;}});const it=allActive()[0];S.farbe={uid:it.uid,letzte:null,gebunden:false};Farbe.wandern();return[S.farbe.uid===it.uid,!it.spuren];})()`);
+    ok(eins[0] && eins[1], 'nur ein Item angelegt: sie bleibt und hinterlässt nichts');
+    // Binden mit Salz
+    const b = J(`(()=>{const u=T.farbe();const salzId=Object.keys(ITEMS).find(k=>ITEMS[k].st&&ITEMS[k].st.join()==='S'&&ITEMS[k].cards&&!ITEMS[k].bases);const it=mk(salzId);const a=ITEMS[salzId].a;S.slots[a]=Math.max(S.slots[a],2);S.areas[a][1]=it;S.farbe={uid:u[0],letzte:null,gebunden:false};FAST=true;
+      startFight([Object.keys(FOES).find(k=>FOES[k].rang==='normal')],'kampf');S.enemies[0].hp=S.enemies[0].max=999;const fc={...kartenVon(itemByUid(u[0]))[0],c:0},sc={...kartenVon(it)[0],c:0};S.hand=[fc,sc];S.energy=9;S.played=0;S.zugSt=[];S.zugKarten=[];Farbe.hand();playCard(0,0);playCard(0,0);
+      const g=S.farbe.gebunden;const vor=JSON.stringify(allActive().map(i=>def(i).st));for(let i=0;i<5;i++){S.stats.kaempfe++;Farbe.wandern();}return{salzId,g,bleibt:S.farbe.uid===u[0],spur:JSON.stringify(allActive().map(i=>def(i).st))===vor};})()`);
+    ok(b.g && b.bleibt && b.spur, `Salz direkt nach der Farbe (${b.salzId}): gebunden, bleibt auf dem Item, keine Spuren mehr`);
+    // Tilgen in der Werkstatt
+    const t = J(`(()=>{const u=T.farbe(9);S.farbe={uid:u[0],letzte:null,gebunden:false};const it=itemByUid(u[0]);const alt=[...def(it).st];S.stats.kaempfe=1;Farbe.wandern();const mit=[...def(it).st];S.phase='werkstatt';S.forged=false;wahlStart('tilgen','werkstatt');const ok1=Farbe.tilgen(it.uid);wahlFertig();return{alt,mit,nach:def(it).st,forged:S.forged,ohne:!it.spuren&&!it.st};})()`);
+    ok(JSON.stringify(t.nach) === JSON.stringify(t.alt) && t.mit.join() !== t.alt.join() && t.forged && t.ohne, `Spur tilgen: ${t.mit} → ${t.nach}, kostet die Werkstatt-Aktion`);
+    // Speicherstand
+    const sp = J(`(()=>{const u=T.farbe(11);S.farbe={uid:u[0],letzte:null,gebunden:false};S.stats.kaempfe=1;Farbe.wandern();S.farbe.gebunden=true;S.dev=false;S.phase='weg';save(true);const vor=JSON.stringify({f:S.farbe,st:allActive().map(it=>[it.uid,it.st||null,it.spuren||null])});newRun('pfarrerin',99,{dev:true});loadRun();const nach=JSON.stringify({f:S.farbe,st:allActive().map(it=>[it.uid,it.st||null,it.spuren||null])});clearSave();return[vor===nach,vor];})()`);
+    ok(sp[0], `Speicherstand trägt Farbe, Bindung und Spuren`);
+    // Bots: nehmen an und binden, wenn sie können
+    const bot = J(`(()=>{let an=0,geb=0,spur=0,n=0;const h=p=>{if(p.art==='an')an++;if(p.art==='gebunden')geb++;if(p.art==='wandert'&&p.spur)spur++;};Bus.on('farbe',h);for(let i=0;i<40;i++){const r=Bot.spiele(JOBS[i%JOBS.length].id,300+i,{});n++;}return{an,geb,spur,n};})()`);
+    ok(bot.an >= 12 && bot.an <= 28 && bot.geb >= 1, `Bots in 40 Runs: Brunnen ${bot.an}-mal (etwa jeder zweite Run) und angenommen, ${bot.geb}-mal gebunden, ${bot.spur} Spuren`);
+  } catch (e) { ok(false, 'Farbe: ' + String(e).split('\n')[0]); }
 
   console.log(fehler ? `${fehler} Fehler.` : 'Alles gut.');
   process.exit(fehler ? 1 : 0);

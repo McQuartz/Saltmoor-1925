@@ -41,6 +41,7 @@ function runFx(list,ctx={}){for(const f of list||[]){const tg=ctx.tg&&ctx.tg.hp>
   case'poison_burst':tos.forEach(e=>{if(e.poison){const d=e.poison*f.mult;e.poison=0;hit(e,d,1,'V',why,{dot:true});}});break;
   case'poison_mult':tos.forEach(e=>{e.poison*=f.mult;Bus.emit('enemy_status',{e,status:'poison',why});});break;
   // Ereignis-Effekte (außerhalb des Kampfes)
+  case'farbe_annehmen':if(typeof Farbe!=='undefined')Farbe.annehmen(why);break;
   case'give_random':giveItem(rs('fund').pick(dropPool()),why);break;
   case'give_rare':{const p=rarePool();if(p.length)giveItem(rs('fund').pick(p),why);break;}
   case'give_item':if(ITEMS[f.item])giveItem(f.item,why);break;

@@ -24,7 +24,7 @@ function vorgaengerDef(f){const r=rs('kampf');let v=typeof Meta!=='undefined'&&!
  const F=f.atk_faktor||1.6;const atk=cards.filter(c=>c.atk).sort((a,b)=>b.atk*(b.h||1)-a.atk*(a.h||1)).slice(0,3).map(c=>({t:'atk',v:Math.round(c.atk*F),...(c.h>1?{h:c.h}:{}),karte:c.n}));
  const blk=cards.filter(c=>c.blk&&!c.atk).sort((a,b)=>b.blk-a.blk).slice(0,1).map(c=>({t:'blk',v:Math.round(c.blk*F),karte:c.n}));
  const pat=[...atk,...blk];if(atk.length<2)pat.push(...f.pat.filter(p=>p.t!=='blk'||!blk.length));
- const st={};ids.forEach(id=>(ITEMS[id].st||[]).forEach(k=>st[k]=(st[k]||0)+1));const alle=Object.keys(ST);const weak=alle.filter(k=>!st[k]).sort()[0]||f.weak;
+ const st={};ids.forEach(id=>(ITEMS[id].st||[]).forEach(k=>st[k]=(st[k]||0)+1));const alle=Object.keys(ST).filter(k=>k!=='X');const weak=alle.filter(k=>!st[k]).sort()[0]||f.weak;
  if(ids.length)S.sicheresBeute=r.pick(ids);
  return{...f,n:`${f.n} (${job?job.n:'?'})`,pat,weak,vorgaengerJob:v.job};}
 // Kniff „ansage“: lädt n Züge (Absicht „lädt“), dann ein großer Schlag
@@ -54,7 +54,7 @@ function startFight(ids,art='kampf'){
 // Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), Pfandschein (gold_energie: ab p.ab Gold), übrige Energie (energie_bleibt)
 function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0)+passive('gold_energie').reduce((s,p)=>s+((S.gold||0)>=(p.ab||100)?(p.v||1):0),0);}
 
-function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=Bieg.mischen(S.discard);S.discard=[];}const c=S.draw.pop();c.zurueck=false;S.hand.push(c);S.gezogen=(S.gezogen||0)+1;
+function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=Bieg.mischen(S.discard);S.discard=[];}const c=S.draw.pop();c.zurueck=false;S.hand.push(c);if(S.farbe&&typeof Farbe!=='undefined')Farbe.hand();S.gezogen=(S.gezogen||0)+1;
  // Eigenschaft ballast_ziehen (Strandbuch): eine unspielbare Karte gezogen → eine nach und Block, höchstens 4-mal je Zug
  if(c.unspielbar&&S.phase==='fight'){const bz=passive('ballast_ziehen');if(bz.length&&(S.bzZug||0)<4){S.bzZug=(S.bzZug||0)+1;n+=bz.reduce((s,p)=>s+(p.v||1),0);const b=bz.reduce((s,p)=>s+(p.blk||0),0);if(b)addBlock(b,`Strandbuch: „${c.n}“ gezogen, ${b} Block und eine Karte nach`);}}}}
 function handSize(){return Math.max(BAL.hand_size,...bonuses('hand_size').map(b=>b.amount))+passive('hand_plus').reduce((s,p)=>s+(p.v||1),0)-passive('energie_plus').filter(p=>p.preis==='hand').length;}
@@ -66,6 +66,7 @@ function startTurn(){S.nachGegnerzug=false;(S.enemies||[]).forEach(e=>{e.gehande
  S.last=[];S.played=0;S.hochUsed=new Set();S.hochZahl=0;S.turnNo=(S.turnNo||0)+1;
  Bieg.zugStart(); // Regelbiegung: Zugbuchhaltung, Ringofen setzt S.last auf die letzte Karte des Vorzugs
  Bieg.ziehen(); // normal: drawCards(handSize()); Rückwärts gewachsen, Ebbe und Flut ändern es
+ if(typeof Farbe!=='undefined')Farbe.hand(); // M8: Karten des Farbe-Items tragen die Stoffe, die sie jetzt annehmen
  kniffeZugbeginn();panzerZugbeginn();ansagenZugbeginn();
  // Falsches Detail der Pforte: Im Finale kosten zufällige Karten diese Runde 1 weniger oder 1 mehr
  if(S.kampfArt==='finale'){const r=rs('pforte');S.hand.forEach(c=>{c.mod=0;if(r.chance(.35))c.mod=r.chance(.5)?-1:1;});const m=S.hand.filter(c=>c.mod);if(m.length)Bus.emit('pforte_mod',{why:`Die Regeln biegen sich: ${m.map(c=>c.n+(c.mod>0?' +1':' −1')).join(', ')}`});}
@@ -148,8 +149,10 @@ function playCard(i,ei){
  S.rxZug=(S.rxZug||0)+rx.length;if(!DRY&&S.stats&&S.rxZug>(S.stats.maxKette||0))S.stats.maxKette=S.rxZug;if(!DRY&&S.stats)S.stats.reaktionen=(S.stats.reaktionen||0)+rx.length;
  // Gegenlauf: merkt sich die Stoffe der Karte davor für die nächste Karte
  S.joker=S.jokerNaechste?prevSt:null;S.jokerNaechste=false;S.vorherKarte=c.sonder&&c.sonder.art==='wiederholen'?S.vorherKarte:c;
+ if(typeof Farbe!=='undefined')Farbe.nachKarte(c,(S.zugKarten||[])[(S.zugKarten||[]).length-1]); // M8: Binden mit Salz
  Bieg.nachKarte(c,cost); // setzt S.last (normal: die Stoffe dieser Karte; Falsche Winkel, Der Schlag ändern es)
  Bieg.nachReaktion(c,rx); // Keiner fährt ab
+ if(typeof Farbe!=='undefined')Farbe.hand();
  Bus.emit('changed');checkVictory();return true;}
 
 function applyMain(c,ctx,mult,flat,multWhy=[],kette=0){

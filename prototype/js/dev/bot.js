@@ -8,8 +8,12 @@ const Bot={
   v+=(p.str||0)*4;const offen=Math.max(0,inc-S.block);v+=Math.min(p.block,offen)*1.3+p.block*.1;v+=Math.max(0,p.hp)*.8;if(p.hp<0)v+=p.hp*(S.hp<15?2:.6);v+=p.energy*3;v+=(p.gold||0)*(this.profil&&this.profil.gold_rest?.3:.15);return v;},
  // beste Karte jetzt (für den geklickten Run in tools/selbst-spielen.js): {i,t} oder null
  besteKarte(){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0);if(!best||w>best.w)best={i,t,w};});});return best&&best.w>0?best:null;},
+ // M8: die Farbe binden, wenn es geht: erst eine Karte des Farbe-Items, direkt danach eine Karte mit eigenem Salz
+ farbeWert(c){if(typeof Farbe==='undefined'||!S.farbe||S.farbe.gebunden)return 0;const salz=x=>!Farbe.karte(x)&&(x.st0||x.st).includes('S');
+  const z=S.zugKarten||[];const vor=z[z.length-1];if(salz(c)&&Farbe.karte(vor))return 8;
+  if(Farbe.karte(c)&&S.hand.some(x=>x!==c&&salz(x)&&cardCost(x)<=S.energy-cardCost(c)))return 4;return 0;},
  kampfZug(){let guard=0;if(S.blickWahl&&typeof Blick!=='undefined')Blick.waehlen(Blick.botWahl()); /* M7: hinsehen, wenn Leben über 60 % */this.biegZugbeginn();while(S.phase==='fight'&&!busy&&guard++<30){const inc=typeof incomingGehoert==='function'?incomingGehoert():incoming();/* M6: der Bot hört stumme Gegner wie ein Spieler */let best=null;
-   S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];const bw=this.biegWert(c,inc);
+   S.hand.forEach((c,i)=>{if(cardCost(c)>S.energy)return;const ts=needsTarget(c)?alive().map(e=>S.enemies.indexOf(e)):[null];const bw=this.biegWert(c,inc)+this.farbeWert(c);
     ts.forEach(t=>{const p=previewCard(i,t);const w=this.wert(p,inc)-cardCost(c)*.5+(p&&p.rx.length?2:0)+bw;if(!best||w>best.w)best={i,t,w};});});
    if(!best||best.w<=0)break;playCard(best.i,best.t);}
   if(S.phase==='fight'&&!busy)endTurn();},

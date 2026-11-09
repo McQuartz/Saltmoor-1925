@@ -5,7 +5,9 @@ let S={phase:'titel'};let busy=false;
 // FAST: Autospieler und Schadens-Vorschau, alles läuft ohne Wartezeiten synchron durch.
 let FAST=false,DRY=false;
 function wait(ms,f){if(FAST)f();else setTimeout(f,ms);}
-const def=it=>ITEMS[it.id];
+// M8: Spuren der Farbe (it.st) überlagern die Stoffe des Items; sonst die Daten selbst
+const _defSpur=new WeakMap();
+const def=it=>{const D=ITEMS[it.id];if(!it.st||!D)return D;let c=_defSpur.get(it);if(!c||c.st.join()!==it.st.join()){c={...D,st:[...it.st]};_defSpur.set(it,c);}return c;};
 function act(a){return S.areas[a].slice(0,S.slots[a]).filter(Boolean);}
 function allActive(){return AREAS.flatMap(act);}
 function bases(it){const d=def(it);return d.bases||[it.id];}

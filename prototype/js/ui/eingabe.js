@@ -46,6 +46,7 @@ document.addEventListener('click',e=>{
  const hgp=e.target.closest('[data-hg]');if(hgp){takeHandgriff(hgp.dataset.hg);return;}
  const rz=e.target.closest('[data-ritz]');if(rz){const uid=+rz.dataset.ritz;if(rz.dataset.k!=null){S.ueberschreiben={uid,k:+rz.dataset.k,alt:hgVon(itemByUid(uid))[+rz.dataset.k]};render();}else placeHandgriff(uid);return;}
  const kb=e.target.closest('[data-kerbe]');if(kb){kerbeDazu(+kb.dataset.kerbe);return;}
+ const tg=e.target.closest('[data-tilgen]');if(tg){if(Farbe.tilgen(+tg.dataset.tilgen))wahlFertig();return;} // M8
  const sl2=e.target.closest('[data-schleif]');if(sl2){schleifen(+sl2.dataset.schleif,sl2.dataset.key);return;}
  const uq=e.target.closest('[data-umquelle]');if(uq){S.umritzQuelle={uid:+uq.dataset.umquelle,k:+uq.dataset.k};render();return;}
  const uz=e.target.closest('[data-umziel]');if(uz){const q=S.umritzQuelle;S.umritzQuelle=null;umritzen(q.uid,q.k,+uz.dataset.umziel);return;}
@@ -70,7 +71,7 @@ function aktion(k,el){switch(k){
  case'rucksack':rucksackAuf();break;case'rucksackZu':rucksackZu();break;
  case'hgSkip':skipHandgriff();break;case'hgVerwerfen':hgVerwerfen();break;
  case'ueberJa':{const u=S.ueberschreiben;S.ueberschreiben=null;placeHandgriff(u.uid,u.k);break;}case'ueberNein':S.ueberschreiben=null;render();break;
- case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;
+ case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;case'wsTilgen':wahlStart('tilgen','werkstatt');break;
  case'rastSchleifen':wahlStart('schleifen','rast');break;case'rastUmritzen':S.umritzQuelle=null;wahlStart('umritzen','rast');break;case'wahlAbbruch':S.umritzQuelle=null;wahlAbbrechen();break;
  case'verkaufen':if(S.sel){verkaufen(S.sel);S.sel=null;render();}break;
  case'devToggle':if(typeof Dev!=='undefined')Dev.toggle();break;}}

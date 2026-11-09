@@ -1525,5 +1525,27 @@
     ]
    }
   ]
+ },
+ {
+  "id": "farbe_brunnen",
+  "biom": "farbe",
+  "entwurf": true,
+  "t": "Der Brunnen im Hof",
+  "d": "Ein Hof zwischen Mauern, in denen niemand mehr wohnt. Im Brunnen liegt etwas in einem Ton, den du nicht benennen kannst. Es ist kein Licht, und es ist nicht still.",
+  "bild": "Ein Ziehbrunnen in einem leeren Hof, das Seil gerissen, und unten im Schacht ein Schimmer in einer Farbe, die es sonst nirgends gibt.",
+  "o": [
+   {
+    "l": "Die Hand hineinhalten: die Farbe setzt sich auf eines deiner Items",
+    "fx": [
+     {
+      "op": "farbe_annehmen"
+     }
+    ]
+   },
+   {
+    "l": "Den Deckel auflegen und weitergehen",
+    "fx": []
+   }
+  ]
  }
 ]
