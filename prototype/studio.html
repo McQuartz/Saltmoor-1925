@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saltmoor Aufnahme-Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Aufnahme-Studio: alle Soundeffekte des Spiels anhören und mit dem Mund (oder sonstwie) neu aufnehmen. */
+body{overflow-y:auto;user-select:text;-webkit-user-select:text}
+#st{max-width:1280px;margin:0 auto;padding:20px 16px 80px}
+#st h1{font-family:var(--fd);font-size:18px;color:var(--parch);margin:0 0 8px;line-height:1.5}
+#st h2{font-family:var(--fd);font-size:10px;color:var(--parch);margin:0 0 6px;line-height:1.5}
+#st p{color:var(--dim);margin:0 0 6px;font-size:19px;line-height:1.1}
+kbd{font-family:var(--fd);font-size:8px;border:1px solid #39443f;padding:2px 4px;color:var(--txt);background:#111716}
+.panel{background:#0b0f0e;border:2px solid #1f2826;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.oben{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));margin:12px 0}
+.reihe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:18px}
+.reihe label{display:flex;gap:6px;align-items:center}
+select,input[type=range]{font-family:var(--fb);font-size:18px;background:#111716;color:var(--txt);border:2px solid #2e3a35;padding:2px 4px;max-width:100%}
+select{min-width:0;flex:1}
+button.sm{font-size:8px;padding:7px 9px}
+button.rec{border-color:#d0453a;color:#ff8a7a}
+button.rec.an{background:#3a0f0c;color:#fff;border-color:#ff5a4a}
+button.on{border-color:var(--gold);color:var(--gold)}
+.meter{position:relative;height:16px;background:#111716;border:2px solid #2e3a35;overflow:hidden;flex:1;min-width:160px}
+.meter i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#2f8a5a 0 70%,#e8c547 70% 88%,#d0453a 88%)}
+.meter b{position:absolute;top:0;bottom:0;width:2px;background:#e8c547}
+.dbz{font-size:18px;width:72px;text-align:right;color:var(--dim)}
+.haupt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:12px;align-items:start}
+@media(max-width:900px){.haupt{grid-template-columns:1fr}}
+.liste{display:flex;flex-direction:column;gap:3px}
+.gr{font-family:var(--fd);font-size:9px;color:var(--parch);margin:10px 0 4px}
+.zeile{display:grid;grid-template-columns:22px minmax(0,1fr) 120px 52px;gap:8px;align-items:center;padding:4px 8px;border:2px solid #1a2120;cursor:pointer;font-size:18px}
+.zeile:hover{border-color:#39443f}
+.zeile.sel{border-color:var(--gold);background:#141a14}
+.zeile .ok{color:#7affc8}.zeile .nein{color:#4a4f48}
+.zeile small{display:block;color:var(--dim);font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zeile canvas{width:120px;height:26px;display:block}
+.zeile .len{color:var(--dim);text-align:right;font-size:16px}
+.detail{position:sticky;top:10px}
+.detail canvas.gross{cursor:ew-resize;width:100%;height:150px;background:#070a09;border:2px solid #1f2826;display:block}
+.status{font-family:var(--fd);font-size:9px;line-height:1.6;min-height:16px;color:var(--gold)}
+.takes{display:flex;flex-direction:column;gap:3px}
+.take{display:grid;grid-template-columns:auto 1fr auto auto auto;gap:6px;align-items:center;font-size:17px;border:2px solid #1a2120;padding:3px 6px}
+.take.aktiv{border-color:#7affc8}
+.fort{font-family:var(--fd);font-size:9px;color:var(--dim)}
+.hinweis{font-size:17px;color:var(--dim)}
+.warn{color:#ff8a7a}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div id="st">
+ <h1>Aufnahme-Studio</h1>
+ <p>Alle Soundeffekte des Spiels. Links aussuchen, rechts Original anhören und mit dem Mund nachmachen. Jede Aufnahme wird sofort gespeichert, die neueste ist die gewählte. Mit „Im Spiel benutzen“ spielt das Spiel deine Aufnahmen statt der Originale.</p>
+ <p class="hinweis">Tasten: <kbd>Leertaste</kbd> aufnehmen / stoppen · <kbd>O</kbd> Original · <kbd>P</kbd> deine Aufnahme · <kbd>A</kbd> erst Original, dann deine · <kbd>Z</kbd> beide zusammen · <kbd>,</kbd><kbd>.</kbd> Spur schieben (mit Umschalt mehr) · <kbd>↑</kbd><kbd>↓</kbd> Sound wechseln</p>
+
+ <div class="reihe" style="margin-top:10px">
+  <button id="mEff" class="sm">Effekte</button><button id="mMus" class="sm">Musik</button>
+  <span class="nurMusik reihe"><select id="biom"></select>
+   <label><input type="checkbox" id="vorlage"> Vorlage beim Aufnehmen</label>
+   <label><input type="checkbox" id="klick"> Klick</label>
+   <label><input type="checkbox" id="mitspielen"> deine anderen Spuren mitspielen</label>
+   <button id="mix" class="sm">▶ Deine Musik (alle Spuren)</button></span>
+ </div>
+ <p class="hinweis nurMusik">Musik: Jede Spur ist ein Loop über 8 Takte bei 80 BPM (24 s). Mit Kopfhörern aufnehmen. Ein Takt wird eingezählt. Die Vorlage spielt den Layer so, wie das Spiel ihn erzeugt. Im Spiel ersetzen deine Spuren im Mund-Modus die Layer dieses Bioms, das Tempo bleibt dort dann fest bei 80.</p>
+ <div class="oben">
+  <div class="panel">
+   <h2>Eingang</h2>
+   <div class="reihe"><button id="mikAn" class="sm">Mikro einschalten</button><select id="geraet" disabled><option>(erst Mikro einschalten)</option></select></div>
+   <div class="reihe"><label>Kanal <select id="kanal"><option value="0">Eingang 1 (links)</option><option value="1">Eingang 2 (rechts)</option><option value="m">beide gemischt</option></select></label></div>
+   <div class="reihe"><div class="meter"><i id="pegel"></i><b id="schwelleStrich"></b></div><span class="dbz" id="pegelDb">– dB</span></div>
+   <p class="hinweis" id="technik"></p>
+   <p class="hinweis">SM7B am Apollo Solo: Mikro steckt meist an Eingang 1. Gain am Apollo so, dass laute Sounds gelb werden, aber nie rot. Echo- und Rauschunterdrückung des Browsers sind aus.</p>
+  </div>
+  <div class="panel">
+   <h2>Aufnahme</h2>
+   <div class="reihe nurEffekte"><label>Start <select id="ausloeser"><option value="stimme">sobald du lauter als die Schwelle bist</option><option value="zaehlen">nach Einzählen (3, 2, 1)</option></select></label></div>
+   <div class="reihe nurEffekte"><label>Schwelle <input type="range" id="schwelle" min="-60" max="-6" step="1" value="-36"></label><span id="schwelleWert">-36 dB</span></div>
+   <div class="reihe nurEffekte"><label>Länge <select id="laenge"><option value="wie">genau wie das Original</option><option value="frei">frei (bis Stille, höchstens 8 s)</option></select></label></div>
+   <div class="reihe"><label class="nurEffekte"><input type="checkbox" id="vorher" checked> Original vorher abspielen</label><label><input type="checkbox" id="angleich" checked> Lautstärke ans Original angleichen</label><label class="nurEffekte"><input type="checkbox" id="weiter"> danach zum nächsten Sound</label></div>
+  </div>
+  <div class="panel">
+   <h2>Speichern und Spiel</h2>
+   <div class="reihe"><button id="ordner" class="sm">Ordner verbinden</button><span id="ordnerName" class="hinweis">Aufnahmen liegen im Browser. Mit Ordner zusätzlich als WAV auf der Platte.</span></div>
+   <div class="reihe"><button id="zip" class="sm">Alle gewählten als ZIP</button><span class="fort" id="fort"></span></div>
+   <div class="reihe"><label><input type="checkbox" id="mundAn"> Im Spiel benutzen</label><label>Fehlt eine Aufnahme <select id="fehlt"><option value="original">Original spielen</option><option value="stumm">still bleiben</option></select></label></div>
+   <div class="reihe"><label><input type="checkbox" id="musikAus"> Musik im Spiel ganz aus</label><label>Tonhöhe streuen <select id="streuung"><option value="0">nein</option><option value="0.03">leicht</option><option value="0.07">deutlich</option></select></label></div>
+   <div class="reihe"><button id="spiel" class="sm">Spiel mit Mund-Sounds öffnen</button></div>
+  </div>
+ </div>
+
+ <div class="haupt">
+  <div class="panel"><div class="liste" id="liste"></div></div>
+  <div class="panel detail" id="detail">
+   <h2 id="dName">–</h2>
+   <p id="dWo"></p>
+   <canvas class="gross" id="welle" width="1200" height="300"></canvas>
+   <div class="hinweis">Gold: Original · Grün: deine gewählte Aufnahme (blass: Luft davor und danach) · Strich: Ende des Originals</div>
+   <div class="status" id="status"></div>
+   <div class="reihe">
+    <button id="bOrig" class="sm">▶ Original</button>
+    <button id="bRec" class="sm rec">● Aufnehmen</button>
+    <button id="bTake" class="sm">▶ Deine</button>
+    <button id="bAB" class="sm">A/B</button>
+    <button id="bZus" class="sm">▶ Zusammen</button>
+   </div>
+   <div class="reihe"><span class="hinweis">Spur schieben:</span>
+    <button class="sm" data-schieb="-0.05">◀◀</button><button class="sm" data-schieb="-0.01">◀</button>
+    <button class="sm" data-schieb="0.01">▶</button><button class="sm" data-schieb="0.05">▶▶</button>
+    <button class="sm" id="bAuto">Einsatz automatisch</button><span class="hinweis" id="versatz"></span></div>
+   <div class="hinweis">Oder in der Welle ziehen. ◀ schiebt deine Spur nach links (früher), ▶ nach rechts (später). Vor und nach dem Ausschnitt ist immer Luft mit aufgenommen (blass).</div>
+   <div class="reihe"><label>Pegel der gewählten Aufnahme <input type="range" id="tPegel" min="-24" max="12" step="1" value="0"></label><span id="tPegelWert">0 dB</span></div>
+   <h2>Aufnahmen</h2>
+   <div class="takes" id="takes"></div>
+  </div>
+ </div>
+</div>
+<script>window.MUND_STUDIO=true;</script>
+<script src="js/audio/sfx.js"></script>
+<script src="js/audio/music.js"></script>
+<script src="js/audio/mund.js"></script>
+<script src="js/studio.js"></script>
+</body>
+</html>

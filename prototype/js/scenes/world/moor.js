@@ -243,6 +243,7 @@ function kapelleFern(K, eb, x, yb) {
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'kraemer' ? 0 : art === 'rast' ? 1 : art === 'wandbild' ? 2 : (o.seed + v) % 3;
+  K.kulisse = art === 'waechter' ? 'waechter' : v; // M3: welche Kulisse die Szene zeigt (Schlüssel für die Fahrt, data/fahrt.json)
   let info;
   if (art === 'waechter') info = steinkreis(K, true);
   else if (art === 'uebergang') info = bohlenweg(K, { uebergang: true });

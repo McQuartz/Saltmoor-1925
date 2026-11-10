@@ -286,6 +286,7 @@ function abstieg(K, x, y) {
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante, info;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'kraemer' ? 1 : art === 'rast' ? 0 : art === 'werkstatt' ? 2 : art === 'ereignis' || art === 'fund' ? 0 : art === 'uebergang' ? 3 : (o.seed + v) % 3;
+  K.kulisse = art === 'waechter' ? 'waechter' : v; // M3: welche Kulisse die Szene zeigt (Schlüssel für die Fahrt, data/fahrt.json)
   if (art === 'waechter' || v === 3) info = kammer(K, {});
   else info = [schiff, flanke, krypta][v](K, {});
   if (art === 'kraemer') kraemerStand(K, 330, 210);

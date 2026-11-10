@@ -13,10 +13,10 @@ const {ladeKern}=require('./kern');
  // 2. Gleicher Seed → gleiches Angebot und gleiche Weg-Wahl
  const zug=s=>{run(`newRun('fischer',${s},{dev:true});if(S.phase==='biomwahl')chooseBiom(0);leaveUebergang();`);return run('JSON.stringify([S.route,S.weg])');};
  ok(zug(77)===zug(77),'gleicher Seed ergibt anderen Weg');
- // 3. Ebenen-Regeln für 100 Seeds
+ // 3. Ebenen-Regeln für 100 Seeds (Auftrag 3 M3: die Regeln gelten für jede Ebene des Netzes, S.netz.ebenen, statt für die alte 1-aus-3-Wahl)
  let geprueft=0;
  for(let s=1;s<=100;s++){run(`newRun('pfarrerin',${s},{dev:true});for(let i=0;i<5;i++)S.route[i]=RUN.akte[i].biome.find(b=>BIOMES[b]);`);
-  for(let akt=0;akt<5;akt++){const eb=RUN.akte[akt].ebenen;for(let e=0;e<eb.length;e++){run(`S.akt=${akt};S.ebene=${e};genWeg()`);const arten=JSON.parse(run('JSON.stringify(S.weg.map(o=>o.art))'));const E=RUN.ebenen[eb[e]];geprueft++;
+  for(let akt=0;akt<5;akt++){const eb=RUN.akte[akt].ebenen;for(let e=0;e<eb.length;e++){run(`S.akt=${akt};S.ebene=${e};S.netz=null;genWeg()`);const arten=JSON.parse(run(`JSON.stringify(S.netz.ebenen[${e}].map(o=>o.art))`));const E=RUN.ebenen[eb[e]];geprueft++;
    if(E.fest)ok(arten.length===1&&arten[0]===E.fest,`Seed ${s} Akt ${akt} Ebene ${e}: fest ${E.fest}, ist ${arten}`);
    else if(E.fest_wahl)ok(JSON.stringify(arten)===JSON.stringify(E.fest_wahl),`Vorraum falsch ${arten}`);
    else{ok(arten.length>=E.wege[0]&&arten.length<=E.wege[1],`Seed ${s} ${eb[e]}: ${arten.length} Wege`);

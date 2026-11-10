@@ -1,0 +1,52 @@
+ok    100 Seeds: jeder Zettel hat genau zwei Begegnungen (nie mehr)
+ok    Häufigkeit je Begegnung: diener 47, asche 35, spuren 67, tiefe 51
+ok    gleicher Seed, gleicher Zettel
+ok    Schalter aus: keine Begegnung möglich
+ok    was nicht auf dem Zettel steht, kann nicht auftreten
+ok    fremde Fassung ×1,5 außer Kosten, Energie, Trefferzahl (6/8/5/2, Kosten 2, h 2)
+ok    Kandidat erst ab 8 gespielten Einsätzen (8)
+ok    Wächter bekommt „Harpunieren“ als Schritt direkt nach dem aktuellen (Stelle 1)
+ok    mit deinen Stoffen (W)
+ok    der Schritt trifft dich (9 Schaden, verloren 9)
+ok    höchstens einmal je Run
+ok    nie im normalen Kampf, nie im Finale
+ok    Sieg: geschliffen zurück (Kosten 2 → 1)
+ok    schon geschliffen: fremde Fassung (Angriff 9 → 14)
+ok    Speicherstand trägt Zähler und Diener
+ok    je Akt I–IV genau ein Spuren-Knoten auf einem Kampf, nie auf der Wächter-Ebene
+ok    in Akt V keine Spuren
+ok    Spuren wachsen je Knoten, an dem man vorbeigeht, bis Stufe 4 von 4 (1 2 3 3 3)
+ok    Leben wächst mit der Stufe (25 < 36 < 46 < 57), Gegner kreuzgangwaechter
+ok    früh leichter Kampf, spät schwerer Kampf mit Reliquie (kampf/kampf, kampf/kampf, schwer/schwer, schwer/reliquie)
+ok    sichtbar größer im Bild (Faktor 0.9 → 1 → 1.1 → 1.22)
+ok    Stufe 4: die Beute ist ein Reliquien-Angebot
+ok    beim Wächter ist das Ding nicht dabei
+ok    Kloster hat einen Asche-Gegner (kreuzgangwaechter)
+ok    beim Tod bleibt Asche, höchstens drei im Rucksack (3: Der Kreuzgangwächter, Der Kreuzgangwächter, Der Kreuzgangwächter)
+ok    Feuer, dann Salz: die Asche zerfällt
+ok    Salz, dann Feuer: Der Kreuzgangwächter wird gerufen
+ok    höchstens ein Verbündeter auf einmal
+ok    er greift nach deinem Zug an (12 Schaden) und steht nicht bei den Gegnern
+ok    Preis: kommt zwei Biome später wieder (Akt 4)
+ok    Karte mit beiden Stoffen nach einer mit beiden: Rufen geht vor
+ok    zwei Biome später als Gegner mit Asche-Spur (nicht beim Wächter)
+ok    kein Verbündeter aus dem letzten Kampf
+ok    11 Ereignis-Wahlen tragen tiefe: 1
+ok    jeder Gegner hat art (0 ohne)
+ok    nach zwei Entscheidungen liegt „Das Zeichen“ im Deck, genau einmal
+ok    Das Zeichen kostet 0
+ok    nie erzwungen: solange man es nicht spielt, passiert nichts
+ok    man kann es streichen wie jede Karte
+ok    gespielt: Seitenwechsel, die Karte ist danach weg
+ok    Kampf nur gegen tiefe/nachahmer wird zur Begegnung (keine Karte spielbar)
+ok    Weitergehen: halbe Beute (9 statt 18 Gold)
+ok    Kampf mit mensch/veraendert: ein Gegner mehr (2)
+ok    Wächter bleibt ein Kampf
+ok    der Krämer verweigert dich
+ok    Bots in 100 Runs ohne Fehler (51 Siege)
+      Zettel: spuren 67, tiefe 51, diener 47, asche 35
+      Diener erhoben 44, zurück 42; Asche liegt 68, gerufen 22, aufgelöst 7, wiedergekehrt 7; Spuren-Kämpfe 101; Zeichen 0, Seitenwechsel 0, Begegnungen 0, Krämer zu 0
+ok    Diener, Spuren und Asche kommen bei den Bots vor, Asche wird gerufen
+      Mit Zeichen ab Start (33 Runs, 7 Siege): Seitenwechsel 33, Begegnungen 23, Krämer zu 77
+ok    Seitenwechsel, Begegnungen und Krämer laufen bei den Bots ohne Fehler
+Alles gut.

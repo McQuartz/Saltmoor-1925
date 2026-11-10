@@ -159,6 +159,8 @@ Rollen-Sets: `n` Name, `i` die drei Item-IDs, `t` Text, `bonus` Wirkung, wenn al
 
 Die sechs Startfiguren. `id` (Schlüssel, auch für die Musik), `n` Name, `d` Kurztext, `set` Name des Sets in roles.json, `ausrede` (Startzeile), `wahrheit` (Schlusszeile bei der Ankunft), `vorliebe` (`hafen` oder `moor`: Einstieg mit 70 %), `instrument`, `musik` (Rollen-Schlüssel in music.js), `frei_ab` (Zahl gelesener Fragmente, ab der die Figur wählbar ist), Start-Items je Bereich (`w`, `k`, `t`) und im Rucksack (`bag`).
 
+**Auftrag 3 (M4):** `koerper` = Anschlusspunkte der Fächer im Rucksack „Am Körper“ in Pixeln der Silhouette (`assets/figuren/<id>.png`, 110 × 172): `hals` (Talismane), `leib` (Kleidung), `hand` (Waffen und Schilde). Die Silhouetten baut `node tools/sprites/figuren.js` aus `tools/sprites/figuren/<id>.js`, das Werkzeug schreibt dieselben Punkte nach `assets/figuren/<id>.json`; `tools/test-rucksack.js` prüft, dass sie auf der Figur liegen.
+
 ## run.json
 
 Aufbau eines Runs (`js/core/run.js`).
@@ -293,3 +295,152 @@ Jede Figur startet mit drei angelegten Items (Waffe, Kleidung, Talisman), der Re
 ### builds.json
 
 Profile der sechs Build-Bots (`tools/build-bots.js`): je Build bevorzugte `items`, `handgriffe`, `stoffe`, optional `figuren`. Herkunft: `docs/auftrag-2/builds.md`.
+
+## Auftrag 3: Die Tiefe verändert das Spiel
+
+Neue Systeme, jedes mit eigenem Schalter in `balance.json → auftrag3` (siehe unten). Alle neuen Namen, Sätze und Zahlen sind Entwürfe und tragen `"entwurf": true` (am Datensatz oder an einem Vorfahren); `node tools/texte-pruefen.js` verlangt das für jeden Text, der nicht schon im alten Spiel stand. `data.js → loadData` liest alle neuen Dateien beim Start; fehlt eine, läuft das Spiel ohne sie weiter (`opt`).
+
+### Neue Dateien
+
+| Datei | Inhalt | Geladen in |
+|---|---|---|
+| `biegungen.json` | die 14 Regelbiegungen | `data.js → loadData` → `BIEGUNGEN` |
+| `stell.json` | Stellplätze der Gegner | `data.js → loadData` → `STELL` |
+| `fahrt.json` | Richtung und Zielpunkt der Fahrt | `data.js → loadData` → `FAHRT` |
+| `meta.json` | Texte der Metaebene | `data.js → loadData` → `META` |
+| `wuerze.json` | Daten und Texte der Würze | `data.js → loadData` → `WUERZE` |
+
+`fragmente.json` gibt es schon (siehe oben), hat aber jetzt 75 statt 21 Einträge (Abschnitt weiter unten).
+
+### biegungen.json
+
+Genau eine Regelbiegung je Biom in Akt III bis V, sie gilt in allen Kämpfen des Bioms. Eine Liste unter `biegungen` (14 Einträge). `loadData` hängt jede Biegung als `BIOMES[<biom>].biegung = <id>` ans Biom; in `biomes.json` und in den Biom-Paketen steht dafür nichts.
+
+| Feld | Bedeutung |
+|---|---|
+| `id`, `biom` | ID und Biom, in dem sie gilt |
+| `n`, `t` | Name und Regeltext. Beides zeigen Kopfleiste, Tooltip, Peilkarte und Biom-Wahl (`js/ui/oberflaeche.js → biegKopfHtml`, `js/ui/karte.js`) |
+| `zeichen` | Name des Pixelzeichens in `js/ui/zeichen-biegung.js` (`gi(zeichen, …)`) |
+| `art` | Einhakpunkt in `js/core/biegung.js`: `extra_reaktionen`, `zug_ende`, `ziehen`, `quelle`, `ablage`, `absichten`, `wechsel`. Der Code verzweigt nach `id`; allein `wechsel` (Außerhalb der Zeit) wird als `art` abgefragt (`Bieg.aktiv`, `Bieg.wechselListe`, `Bieg.kopf`) |
+| `reaktionen` | nur Alte Stoffe erinnern sich: zusätzliche Paare `k`, `n`, `t`, `fx` wie in `reactions.json`. `rules.js → rxPaare` hängt sie an `REACT`, solange die Biegung gilt (`Bieg.extraReaktionen`) |
+| `reaktion` | nur Funkspruch: die eine Sonderreaktion mit `n`, `t`, `pre` (`Bieg.funkspruch`) |
+
+Die 14 (Biom → Biegung): Salz → Alte Stoffe erinnern sich, Stadt → Über Eck, Wald → Rückwärts gewachsen, Gezeitenwerk → Ebbe und Flut, Ziegelgruben → Der Ringofen, Station → Keiner fährt ab, Eis → Falsche Winkel, Walkathedrale → Der Schlag, Glasmeer → Das Spiegelbild ist voraus, Mond → Die Rückseite, Funkstation → Funkspruch, Pforte → Außerhalb der Zeit, Ufer → Die Wellen kommen von oben, Waage → Aufgewogen.
+
+In den `fx` der Reaktionen kommt der Effekt `draw` mit `v` (Karten ziehen, nur im Kampf) dazu (`rules.js → runFx`; Sole nutzt ihn). Gezeitenblut nutzt `status` mit `vuln`.
+
+### stell.json
+
+Stellplätze der Gegner je Kampfszene (`szenen`, 100 Einträge: 25 Biome, je Kampf 0 bis 2 und Wächter 0). Schlüssel `biom:art:variante` (`art` = `kampf` oder `waechter`) oder `biom:art` für alle Varianten. Jeder Eintrag ist eine Liste von Plätzen `{x, y, s}`: `x`, `y` Bodenlinie in der Szene (480 × 270), `s` Maßstab. Die Reihenfolge ist „vorn Mitte zuerst“. Gelesen von `js/scenes/buehne.js → stellListe`, `stellPlatz`, `enemyBox0`; ohne Eintrag gelten die alten Reihen der Szene.
+
+### fahrt.json
+
+Die Fahrt nach vorne nach jeder Wahl auf der Peilkarte (`szenen`, 75 Einträge). Schlüssel `biom:kulisse`, `kulisse` = Hintergrund 0, 1 oder 2 des Bioms (so meldet es `World.build` als `sz.kulisse`).
+
+| Feld | Bedeutung |
+|---|---|
+| `r` | Richtung: `vor`, `links`, `rechts`, `ab`, `auf` (Dauer je Richtung in `js/scenes/fahrt.js → DAUER`) |
+| `ziel` | `[x, y]` in der Szene (480 × 270), auf den die Fahrt zuläuft |
+| `grund` | Arbeitsnotiz, im Spiel nicht sichtbar |
+| `sicher` | `true`: Bildfolge der Fahrt angesehen und geprüft (alle 75) |
+
+Gelesen von `js/scenes/fahrt.js → eintrag`. Fehlt ein Eintrag oder ist `r` ungültig, fährt die Szene `vor` auf den Fluchtpunkt zu.
+
+### meta.json
+
+Texte der Metaebene; gelesen von `js/core/metaebene.js` (`Metaebene.T()`) und von `bildschirme.js` / `ueberlagerungen.js` (`META.erbe`, `META.ui`).
+
+| Feld | Bedeutung |
+|---|---|
+| `ausrede.<job-id>` | Liste mit zwei Stufen je Figur (`t`): Stufe 1 ab dem 3., Stufe 2 ab dem 8. Run mit der Figur. Stufe 0 ist `jobs.json → ausrede` (`Metaebene.ausredeStufe`, `ausrede`) |
+| `ausrede_ende` | Stufe 3 ab dem 15. Run mit der Figur, für alle gleich: „Ich gehe hinunter.“ |
+| `ankunft_nach_umkehren` | einmalige Zeile auf der Figurwahl nach dem ersten Umkehren überhaupt (`Metaebene.ankunftZeile`) |
+| `pause.<biom>` | je Biom eine Zeile für die Rückkehr nach mehr als 14 Tagen; welche, bestimmt das Biom, in dem der letzte Run endete (`Metaebene.sitzung`) |
+| `erbe` | `t` Satz, `nehmen`, `lassen` Beschriftungen des Erbe-Angebots (`bildschirme.js → erbeHtml`) |
+| `fehlzeit` | `t` Angebot, `ja`, `nein` Knöpfe, `start` und `tot` Zwischentitel-Sätze (`Metaebene.übergangSatz`) |
+| `notizen.waechter.<id>`, `notizen.biome.<id>` | je Wächter (45) und je Biom (25) eine `wahr` und eine `falsch` formulierte Notiz des Vorgängers (`Metaebene.notizenAnRast`) |
+| `ui` | Überschriften: `erbe_titel`, `notizen_titel`, `notizen_rast`, `seite_vorgaenger`, `seite_fehlzeit` |
+
+### wuerze.json
+
+Seltene Einzelstücke; gelesen von `js/core/wuerze.js` (`Wuerze.D()`, `Wuerze.T()`).
+
+| Feld | Bedeutung |
+|---|---|
+| `stuecke` | Liste `{id, ort, chance, an}`. `chance` je Run, `an: false` = Stück ist aus (`Wuerze.stuecke`, `wuerfeln`). An sind `zeitung`, `brief`, `trennung`, `zann`; aus sind `grabbeigabe`, `licht`, `luegt` |
+| `zeitung_chance` | Chance je Akt-Übergang für einen Ausschnitt (`Wuerze.uebergang`) |
+| `zann_biom`, `zann_waechter` | Biom und Wächter von Zanns Takt (`Wuerze.fundpool`, `zannAktiv`) |
+| `brief_bild` | Bild des Brief-Ereignisses (`Wuerze.ereignis`) |
+| `karten` | Wirkung der drei Teile der Barmherzigen Trennung `relief`, `ausschnitt`, `aussage` (Kartenfelder, `img`); Name und Text stehen in `texte.trennung` (`Wuerze.karte`) |
+| `items` | Zanns Geige (Item-Format wie `items.json`, dazu `wuerze: "zann"`). `data.js` mischt sie in `ITEMS`; `dropPool` und `Wuerze.imPool` lassen sie nur im Fundpool der Glockengießerei zu, wenn `zann` auf dem Run-Zettel steht |
+| `texte.zeitung` | `ausschnitte` (12, je `id`, `kopf`, `t`), `vermisst` (eine Anzeige je Figur), `vermisst_kopf` |
+| `texte.brief` | `ereignis` (`t`, `d`, `bild`, `ja`, `nein`), `briefe` (ein Satz je Biom), `knoten` (`bildschirme.js → briefHtml`), `tagebuch` (`Wuerze.briefKnoten`) |
+| `texte.trennung` | je Teil `n`, `t`; `zusammenhang` („Zwei Teile, ein Seil“), `fund` |
+| `texte.zann` | `geige`, `offen`, `zu` (Meldungen) |
+
+### balance.json (Auftrag 3)
+
+| Feld | Bedeutung |
+|---|---|
+| `auftrag3` | Ein Schalter je System: `regelbiegung`, `blick`, `farbe`, `hoeren`, `begegnungen`, `meta`, `fehlzeit`, `pause`, `wuerze`. `false` = das Spiel läuft genau wie ohne das System. Lesen mit `state.js → a3(k)`; umschaltbar im Dev-Reiter TIEFE oder mit `?a3aus=farbe,blick` (`?a3aus=alle`) in der Adresse (`js/main.js`) |
+| `auftrag3.biegung_nur` | nur für Vergleichsläufe, nicht in der Datei: eine Biegungs-ID, dann gilt nur diese (`Bieg.vomBiom`; Dev-Reiter) |
+| `auftrag3.falsche_winkel_beide` | nur für Vergleichsläufe, nicht in der Datei: Falsche Winkel nimmt letzte und vorletzte Karte (`Bieg.quelleReaktion`) |
+| `panzer` | `anteil` (Panzer = Anteil × maximales Leben, auf 5 gerundet, mindestens 5), `t` Tooltip-Satz. Ein Wächter oder Boss im unverwundbaren Schritt ohne Diener trägt Panzer statt Unverwundbarkeit (`combat.js → panzerZugbeginn`, Anzeige `kampf.js`) |
+| `spuren` | je Spuren-Stufe 0 bis 3: `hp` Faktor, `atk` Zuschlag, `gross` Bildgröße, `beute` (`kampf`, `kampf`, `schwer`, `reliquie`) (`begegnungen.js → Spuren.W`, `buehne.js → enemyBox`) |
+
+### stoffe.json (Auftrag 3)
+
+`stoffe.X` ist der neunte Stoff „Die Farbe“: `n`, `s` (`FA`), `c` (`#c800ff`) und `schimmer`, fünf Stufen, in denen das Bild wandert (`js/ui/farbe.js`). X steht auf keinem Item in `items.json`: Karten des Farbe-Items nehmen die Stoffe der Karte davor an (`core/farbe.js → Farbe.stoffeJetzt`, `hand`). `Farbe.spur` tauscht nie gegen X.
+
+### items.json (Auftrag 3)
+
+* `eigen.typ: "blick"` (Linse, Resonator, Lampe aus dem Grab; je `rare`, `kerben: 2`, eine Karte). Wer eines angelegt hat, wählt zu Kampfbeginn Hinsehen oder nicht (`js/core/blick.js → Blick.traegt`, `kampfStart`; `state.js → passive`).
+* Die drei stehen in den Fundpools `biomes.json → fundpool` (Linse Akt II, Resonator Akt III, Lampe Akt IV) und in den Paketen. Weil sie `rare` sind, kämen sie sonst beim Krämer schon früher vor: `state.js → blickAb(id)` liefert den Akt, ab dem ein Blick-Item vorkommen darf (frühester Akt, in dessen Fundpool es steht; `rarePool` prüft es).
+* `wuerze` (nur Zanns Geige in `wuerze.json → items`): `"zann"`; kommt nur über die Würze in einen Pool (`state.js → dropPool`).
+
+### foes.json und Biom-Pakete (Auftrag 3)
+
+Neue Felder an Gegnern (in `foes.json` und im Block `foes` der Pakete `biome/<id>.json`):
+
+| Feld | Bedeutung |
+|---|---|
+| `art` | alle 143 Gegner: `mensch` (17), `veraendert` (68), `nachahmer` (14), `tiefe` (44). Ordnet nach Körper und Form, nie nach Herkunft. Gelesen von `begegnungen.js → Tiefe.artVon`, `Tiefe.kampf` (Seitenwechsel: nur `tiefe`/`nachahmer` = Begegnung statt Kampf; `mensch`/`veraendert` = ein Gegner mehr). Fehlt `art`, gilt `tiefe` |
+| `asche` | `true` an 15 Gegnern (je Biom der Akte II bis IV einer, nicht im Gezeitenwerk): beim Tod bleibt Asche im Rucksack (`Asche.tod`, `kampfIds`, `rufen`) |
+| `stumm` | `true` an 6 Gegnern (Rufer, Echo, Splitterchor, Astronom, Rauschen, Tarierte): zeigt keine Absicht, man hört sie. Gilt nur bei normalen Gegnern in Akt IV und V, höchstens einer je Kampf (`combat.js → mkEnemy`, `hoeren.js → Hoeren.istStumm`, `begrenzen`) |
+| `gesehen` | an allen 44 Wächtern ein Musterschritt (`{t, v, h}` wie in `pat`): kommt beim Hinsehen direkt nach dem aktuellen Schritt ins Muster, `v` wird wie die übrigen Angriffe skaliert (`blick.js → Blick.waechterZusatz`). Ohne Eintrag: der stärkste Schritt noch einmal |
+| `gesehener` | `true` an den drei Gesehenen (`gesehener_tief`, `gesehener_grund`, `gesehener_letzt`). Sie stehen in keinem Biom-Pool; nur `Blick.gesehenerDazu` stellt den des Akts auf (Akt I bis III Tief, IV Grund, V Letzt, `Blick.gesehenerId`). Bühne: halb durchsichtig und schwebend (`buehne.js`) |
+| `ohne_tiefe` | `true`: Leben und Angriff wachsen nicht mit der Tiefe (`combat.js → mkEnemy`). Die drei Gesehenen und `augen` |
+
+`stimme: "schatten"` der Gesehenen ist die Gegnerstimme, die für sie gespielt wird. Der Panzer ist kein Feld am Gegner, sondern kommt aus `balance.json → panzer`.
+
+### events.json (Auftrag 3)
+
+* `tiefe: 1` an einer Option: gibt der Spieler dieser Option nach, zählt die Tiefe mit (`begegnungen.js → Tiefe.wahl`, aufgerufen aus `run.js → chooseEvent`). 11 Optionen tragen es. Nach zwei liegt „Das Zeichen“ lose im Deck. Der Text der Option bleibt unverändert.
+* `farbe_brunnen` (`biom: "farbe"`): der Brunnen im Hof. Das Biom `farbe` gibt es nicht, darum zieht ihn keine normale Ereigniswahl; `Farbe.ereignisHier` setzt ihn einmal je Run ein, in Akt II oder III, wenn `Farbe.planen` ihn zu Runbeginn vorgesehen hat (`run.js`, Knoten `ereignis`). Option 1 hat den neuen Effekt `farbe_annehmen` (`rules.js → runFx` → `Farbe.annehmen`).
+* Der falsche Brief (`wuerze.json`) ist ein Ereignis, das `Wuerze.ereignis` zur Laufzeit baut; er steht nicht in `events.json`.
+
+### run.json (Auftrag 3)
+
+| Feld | Bedeutung |
+|---|---|
+| `karten.zeichen` | die lose Karte „Das Zeichen“: `n`, `c` Kosten (0), `t` Text, `img` (`begegnungen.js → Tiefe.ZEICHEN`). Wird sie gespielt, gilt der Seitenwechsel |
+| `begegnungen` | Zeilen der Begegnungen: `begegnung.t` (Begegnung statt Kampf), `weiter.t` (Knopf), `kraemer_zu.t` (Krämer ist zu) (`kampf.js → begegnungHtml`, `bildschirme.js`) |
+
+### fragmente.json (Auftrag 3)
+
+75 Fragmente, drei je Biom in 25 Biomen (statt 21 in sieben). Die 54 neuen haben zusätzlich:
+
+| Feld | Bedeutung |
+|---|---|
+| `motiv` | eines von `rad`, `turm`, `tuer`, `welle`, `prozession`, `auge`, `kette`, `schiff`, `hand`, `treppe`, `waage`, `glocke`, `baum`: bestimmt die Komposition des Reliefs (`ueberlagerungen.js` → `World.relief(biom, seed, motiv)`). Fehlt es, gilt `prozession` |
+| `entwurf` | `true` |
+
+`schaltet` kennt wie bisher `item`, `figur` und `satz`; jetzt 18 Items, 3 Figuren, 6 Sätze, die übrigen 48 schalten nichts.
+
+### jobs.json (Auftrag 3)
+
+`koerper` (Anschlusspunkte `hals`, `leib`, `hand` je Figur, 9 Figuren) steht schon oben bei `jobs.json`. Gelesen von `js/ui/rucksack.js → koeLinien`.
+
+### Was nicht in den Daten steht
+
+Nicht aus Dateien, sondern aus Code und Seed: die Reihenfolge der Biegung in der Pforte (`Bieg.wechselZug`), die Auswahl der Begegnungen und der Würze auf dem Run-Zettel (`Zettel.wuerfeln`, `Wuerze.wuerfeln`), die Farbe (`Farbe.planen`), alle Zähler der Metaebene (`js/core/meta.js`, Fassung `v: 2` im Speicherstand `saltmoor.meta.v1`, Feldliste im Kopf von `meta.js → leer`).

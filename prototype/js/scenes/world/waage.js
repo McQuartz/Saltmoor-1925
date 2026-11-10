@@ -401,6 +401,7 @@ function stand(K, x, y) { asservaten(K, x, y, { gitter: true }); }
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante, info;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'rast' ? 0 : art === 'kraemer' ? 2 : art === 'werkstatt' ? 1 : (o.seed + v) % 3;
+  K.kulisse = art === 'waechter' ? 'waechter' : v; // M3: welche Kulisse die Szene zeigt (Schlüssel für die Fahrt, data/fahrt.json)
   if (art === 'waechter' || art === 'ankunft') info = zunge(K, { ankunft: art === 'ankunft' });
   else if (art === 'uebergang') { info = halle(K, { ohneVorne: true }); amtstreppe(K); }
   else info = [halle, schalterhalle, unterDerSchale][v](K, { ohneVorne: art === 'kraemer' || art === 'rast' });

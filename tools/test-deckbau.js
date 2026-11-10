@@ -48,7 +48,8 @@ const {ladeKern}=require('./kern');
  const le=kr('leihe');ok(le.sold&&le.gold>0&&le.zurueck,`Leih-Krämer: billig (${le.gold} Gold), im nächsten Akt zurück`);
  const sp=kr('spiegel');ok(sp.ids[0]==='sp_knife'&&sp.ids[1]==='sp_lantern',`Spiegel-Krämer: Waren des letzten Krämers gespiegelt (${sp.ids.join(', ')}; Stoffe ${JSON.stringify(sp.st)})`);
  // 10. Zugabe: unverwundbarer Zug (Neumond), ruf mit Liste, Störkarten-Name aus dem Kniff
- const u1=kn(null,`e.pat=[{t:'blk',v:8,unverw:true},{t:'atk',v:5}];e.pi=0;S.hand=[{...HANDGRIFFE._t_schlag,st:[]}];const vor=e.hp;playCard(0,0);const a=vor-e.hp;e.pi=1;S.hand=[{...HANDGRIFFE._t_schlag,st:[]}];const v2=e.hp;playCard(0,0);return JSON.stringify({a,b:v2-e.hp})`);ok(u1.a===0&&u1.b===5,`unverw: im Neumond-Zug 0 Schaden (${u1.a}), danach wieder ${u1.b}`);
+ // Auftrag 3, Fix 7: unverw gilt nur mit Diener, darum steht ein Tiefling daneben (allein: Panzer, test-welle1.js)
+ const u1=kn(null,`const d=mkEnemy('tiefling');S.enemies.push(d);e.pat=[{t:'blk',v:8,unverw:true},{t:'atk',v:5}];e.pi=0;S.hand=[{...HANDGRIFFE._t_schlag,st:[]}];const vor=e.hp;playCard(0,0);const a=vor-e.hp;e.pi=1;S.hand=[{...HANDGRIFFE._t_schlag,st:[]}];const v2=e.hp;playCard(0,0);return JSON.stringify({a,b:v2-e.hp})`);ok(u1.a===0&&u1.b===5,`unverw: im Neumond-Zug 0 Schaden (${u1.a}), danach wieder ${u1.b}`);
  const u2=kn({art:'ruf',gegner:['kurgast','netzflickerin'],alle:3},`const ids=[];for(const t of [2,5]){e.turns=t;S.enemies=S.enemies.slice(0,1);kniffGegnerzug(e);ids.push(S.enemies[1]&&S.enemies[1].id);}return JSON.stringify({ids})`);ok(u2.ids[0]==='kurgast'&&u2.ids[1]==='netzflickerin',`ruf mit Liste: ruft der Reihe nach ${u2.ids.join(', dann ')}`);
  const u3=kn({art:'waechst',v:1},`e.kniffe=[{art:'abschrift',n:1,karte:'Seewasser'}];S.discard=[];kniffGegnerzug(e);return JSON.stringify({n:S.discard.map(c=>c.n)})`);ok(u3.n[0]==='Seewasser',`Störkarte aus kniffe[] heißt nach ihrem Kniff (${u3.n[0]})`);
  // 11. Zugabe 4: Ballast (unspielbare Karten als Treibstoff) und Kollekte (Gold als Treibstoff)
@@ -94,7 +95,7 @@ const {ladeKern}=require('./kern');
  const r4=kn({art:'ruf',gegner:'kurgast',alle:3},`__ev.length=0;e.turns=2;startTurn();const ev=__ev.filter(x=>x.n==='ruf_ansage');e.turns=0;__ev.length=0;startTurn();return JSON.stringify({ev,nach:__ev.filter(x=>x.n==='ruf_ansage').length})`);
  ok(r4.ev.length===1&&/ruft im nächsten Gegnerzug/.test(r4.ev[0].why)&&r4.ev[0].gegner[0]==='kurgast'&&r4.nach===0,`Bus ruf_ansage mit why zu Zugbeginn: „${r4.ev[0]&&r4.ev[0].why}“`);
  // unverw: unverwJetzt folgt dem angezeigten Musterschritt, Bus unverw_zug zu Zugbeginn
- const v1=kn(null,`e.pat=[{t:'atk',v:5},{t:'blk',v:8,unverw:true,why:'Neumond'}];e.pi=0;const a=unverwJetzt(e);__ev.length=0;e.pi=1;const b=unverwJetzt(e);startTurn();const ev=__ev.filter(x=>x.n==='unverw_zug');return JSON.stringify({a,b,ev})`);
+ const v1=kn(null,`const d=mkEnemy('tiefling');S.enemies.push(d);e.pat=[{t:'atk',v:5},{t:'blk',v:8,unverw:true,why:'Neumond'}];e.pi=0;const a=unverwJetzt(e);__ev.length=0;e.pi=1;const b=unverwJetzt(e);startTurn();const ev=__ev.filter(x=>x.n==='unverw_zug');return JSON.stringify({a,b,ev})`);
  ok(!v1.a&&v1.b&&v1.ev.length===1&&/Neumond/.test(v1.ev[0].why),`unverw sichtbar: unverwJetzt ${v1.a}→${v1.b}, Bus unverw_zug „${v1.ev[0]&&v1.ev[0].why}“`);
  // Störkarten-Bild: kniff.spr (Item-Icon, Handgriff-Icon oder 12×12-Sprite), Rückfall bone
  const s1=kn({art:'abschrift',n:1,karte:'Abdruck',spr:'gipsabdruck'},`ICONS.add('gipsabdruck');HG_ICONS.add('zittern');S.discard=[];kniffGegnerzug(e);const a=S.discard[0];

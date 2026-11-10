@@ -1,11 +1,21 @@
 // Lädt alle Spieldaten aus data/*.json. Dieselben Dateien soll später die Godot-Version einlesen.
-let HANDGRIFFE={},PAKETE=[],ICONS=new Set(),HG_ICONS=new Set(),ST,SUFFIX,AREAS,AREA_N,ITEMS,ROLES,FOES,JOBS,REACT,VERST,HOCH,EVENTS,BAL,RUN,BIOMES,FRAGS;
+let HANDGRIFFE={},PAKETE=[],ICONS=new Set(),HG_ICONS=new Set(),ST,SUFFIX,AREAS,AREA_N,ITEMS,ROLES,FOES,JOBS,REACT,VERST,HOCH,EVENTS,BAL,RUN,BIOMES,FRAGS,STELL={},FAHRT={},META={},WUERZE={};
 async function loadData(base='data/',fetchJson){
  const get=fetchJson||(async f=>{const r=await fetch(base+f+'.json',{cache:'no-store'});if(!r.ok)throw new Error(f+'.json: '+r.status);return r.json();});
  const opt=async f=>{try{return await get(f);}catch(e){return null;}};
  const[st,items,roles,foes,jobs,rx,ev,bal,run,biomes]=await Promise.all(['stoffe','items','roles','foes','jobs','reactions','events','balance','run','biomes'].map(get));
  const frags=await opt('fragmente');
+ // Auftrag 3 M5: Regelbiegungen (data/biegungen.json), je Biom höchstens eine
+ const bieg=await opt('biegungen');
+ // Auftrag 3 M2: Stellplätze der Gegner je Kampfszene (data/stell.json → szenen["biom:art:variante"])
+ const stell=await opt('stell');STELL=(stell&&stell.szenen)||{};
+ // Auftrag 3 M3: Weg-Richtung und Zielpunkt der Fahrt je Kulisse (data/fahrt.json → szenen["biom:kulisse"])
+ const fahrt=await opt('fahrt');FAHRT=(fahrt&&fahrt.szenen)||{};
  const hg=await opt('handgriffe');
+ // Auftrag 3 M10: Texte der Metaebene (data/meta.json)
+ META=(await opt('meta'))||{};
+ // Auftrag 3 M11: Würze (data/wuerze.json), dazu ihre Items
+ WUERZE=(await opt('wuerze'))||{};
  // Neue Icons (M5): assets/items/index.json und assets/handgriffe/index.json = Listen vorhandener IDs
  const ii=await (async()=>{try{const r=await fetch('assets/items/index.json',{cache:'no-store'});return r.ok?r.json():null;}catch(e){return null;}})();const hi=await (async()=>{try{const r=await fetch('assets/handgriffe/index.json',{cache:'no-store'});return r.ok?r.json():null;}catch(e){return null;}})();
  ICONS=new Set((ii&&(ii.items||ii.ids||ii))||[]);HG_ICONS=new Set((hi&&(hi.handgriffe||hi.ids||hi))||[]);
@@ -16,7 +26,7 @@ async function loadData(base='data/',fetchJson){
  // Ereignisse: id und biom ergänzen, falls alte Einträge sie nicht haben
  // Items, die ein Fragment freischaltet, sind erst danach im Fundpool (meta)
  FRAGS.forEach(f=>{if(f.schaltet&&f.schaltet.art==='item'&&ITEMS[f.schaltet.id])ITEMS[f.schaltet.id].meta=true;});
- HANDGRIFFE=(hg&&hg.handgriffe)||{};PAKETE=packs;let evAll=ev;
+ HANDGRIFFE=(hg&&hg.handgriffe)||{};Object.assign(ITEMS,WUERZE.items||{});PAKETE=packs;let evAll=ev;
  for(const p of packs){
   // Ergänzung eines vorhandenen Bioms (Auftrag 2, M6/M7): {"id":"hafen_plus","ergaenzt":"hafen","gegner_dazu":[…],"gegner_weg":[…],"fundpool_dazu":[…],foes,events,items}
   if(p.ergaenzt){const b=BIOMES[p.ergaenzt];if(!b)continue;const weg=new Set(p.gegner_weg||[]);b.gegner=(b.gegner||[]).filter(g=>!weg.has(g)).concat((p.gegner_dazu||[]).filter(g=>!(b.gegner||[]).includes(g)));
@@ -25,6 +35,7 @@ async function loadData(base='data/',fetchJson){
    if(p.elite_dazu)b.elite=[...new Set((b.elite||[]).concat(p.elite_dazu))];
    Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.ergaenzt,...e})));continue;}
   BIOMES[p.id]={...p.biom,akt:p.akt};Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.id,...e})));}
+ if(typeof BIEGUNGEN!=='undefined'){BIEGUNGEN.length=0;for(const b of (bieg&&bieg.biegungen)||[]){BIEGUNGEN.push(b);if(BIOMES[b.biom])BIOMES[b.biom].biegung=b.id;(b.reaktionen||[]).forEach(r=>r.biegung=b.id);if(b.reaktion)b.reaktion.biegung=b.id;}}
  EVENTS=evAll.map((e,i)=>({id:e.id||('alt_'+i),biom:e.biom||'alle',...e}));
 }
 const chip=k=>`<span class="st" style="background:${ST[k].c}" title="${ST[k].n}">${ST[k].s}</span>`;

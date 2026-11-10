@@ -10,7 +10,7 @@ const path = require('path');
 const L = require('./lib');
 
 const W = L.WURZEL;
-const ZIEL = { items: path.join(W, 'prototype/assets/items'), handgriffe: path.join(W, 'prototype/assets/handgriffe') };
+const ZIEL = { items: path.join(W, 'prototype/assets/items'), handgriffe: path.join(W, 'prototype/assets/handgriffe'), karten: path.join(W, 'prototype/assets/karten') };
 const VORSCHAU = path.join(__dirname, 'vorschau');
 
 // Item-Daten: items.json und alle Biom-Pakete (Stoffe und Seltenheit kommen von dort)
@@ -43,10 +43,10 @@ function eins(art, id, daten) {
   const def = require(f);
   const d = daten[id] || {};
   // Handgriffe haben keinen eigenen Stoff: der Akzent kommt aus 'stoffe' (Gewichtung) oder dem Skript
-  const st = art === 'items' ? (d.st || def.st || []) : (def.st || L.FAMILIE_ST[d.build] || d.stoffe || []);
-  const rar = art === 'items' ? (d.rar || def.rar || 'gewoehnlich') : 'gewoehnlich';
+  const st = art !== 'handgriffe' ? (d.st || def.st || []) : (def.st || L.FAMILIE_ST[d.build] || d.stoffe || []);
+  const rar = art !== 'handgriffe' ? (d.rar || def.rar || 'gewoehnlich') : 'gewoehnlich';
   const b = L.bauen(def, { st, rar });
-  if (b.W !== (art === 'items' ? 48 : 48) || b.H !== (art === 'items' ? 48 : 32)) throw new Error(`${id}: falsche Größe ${b.W}×${b.H}`);
+  if (b.W !== 48 || b.H !== (art === 'handgriffe' ? 32 : 48)) throw new Error(`${id}: falsche Größe ${b.W}×${b.H}`);
   L.S.pngSchreiben(path.join(ZIEL[art], id + '.png'), b.W, b.H, b.rgba);
   vorschau(path.join(VORSCHAU, art + '-' + id + '.png'), b);
   return b;
@@ -65,14 +65,15 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   for (const d of [...Object.values(ZIEL), VORSCHAU]) fs.mkdirSync(d, { recursive: true });
   const it = itemDaten(), hg = hgDaten();
-  const sI = skripte('items'), sH = skripte('handgriffe');
-  let wahlI = sI, wahlH = sH;
+  const sI = skripte('items'), sH = skripte('handgriffe'), sK = skripte('karten');
+  let wahlI = sI, wahlH = sH, wahlK = sK;
   const namen = args.filter(a => !a.startsWith('--'));
-  if (args.includes('--items')) wahlH = []; if (args.includes('--handgriffe')) wahlI = [];
-  if (namen.length) { wahlI = sI.filter(i => namen.includes(i)); wahlH = sH.filter(i => namen.includes(i)); const fehlt = namen.filter(n => !sI.includes(n) && !sH.includes(n)); if (fehlt.length) console.log('Kein Skript für:', fehlt.join(' ')); }
+  if (args.includes('--items')) { wahlH = []; wahlK = []; } if (args.includes('--handgriffe')) { wahlI = []; wahlK = []; }
+  if (namen.length) { wahlI = sI.filter(i => namen.includes(i)); wahlH = sH.filter(i => namen.includes(i)); wahlK = sK.filter(i => namen.includes(i)); const fehlt = namen.filter(n => !sI.includes(n) && !sH.includes(n) && !sK.includes(n)); if (fehlt.length) console.log('Kein Skript für:', fehlt.join(' ')); }
   let fehler = 0;
   for (const id of wahlI) { try { eins('items', id, it); } catch (e) { fehler++; console.log('FEHLER item', id, e.stack.split('\n').slice(0, 3).join(' | ')); } }
   for (const id of wahlH) { try { eins('handgriffe', id, hg); } catch (e) { fehler++; console.log('FEHLER handgriff', id, e.stack.split('\n').slice(0, 3).join(' | ')); } }
+  for (const id of wahlK) { try { eins('karten', id, {}); } catch (e) { fehler++; console.log('FEHLER karte', id, e.stack.split('\n').slice(0, 3).join(' | ')); } }
   const ii = index('items'), hi = index('handgriffe');
   // Abdeckung: welche Items/Handgriffe aus den Daten haben noch kein Bild?
   const ohneI = Object.keys(it).filter(k => !/^m\d/.test(k) && !ii.includes(k));

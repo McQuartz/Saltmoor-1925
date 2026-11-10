@@ -7,6 +7,6 @@ function jumpscare(){if(S.phase==='start'||document.hidden)return;const c=$('sca
  ln(x,27,37,25,52,1,'#101010');ln(x,53,37,56,50,1,'#101010');ln(x,31,37,32,46,1,'#202020');
  el(x,40,50,10,9,'#030303');x.fillStyle='#d8d0b0';for(let i=32;i<48;i+=2){x.fillRect(i,42,1,3);x.fillRect(i+1,56,1,2);}
  ln(x,44,12,48,22,1,'#4a5a60');ln(x,48,22,46,26,1,'#4a5a60');
- au();if(AC){nz(1800,.9,1.2,.4);nz(300,1.1,1,.5);tn(70,1.1,'sawtooth',.5,.5);tn(1250,.7,'square',.18,1.6);tn(1330,.7,'square',.15,1.5);}
+ au();if(AC)sfx.schreck();
  const sc=$('scare');sc.classList.add('on');FX.shake(14);setTimeout(()=>{sc.classList.remove('on');FX.flash('#000',1);},650);}
 setInterval(()=>{if(!S.scares||!S.scares.length||S.phase==='start'||document.hidden)return;if(performance.now()>S.scares[0]){S.scares.shift();jumpscare();}},1000);

@@ -6,7 +6,15 @@
 <title>Saltmoor Galerie</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&family=Limelight&family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/spiel.css">
+<link rel="stylesheet" href="css/farbe.css">
+<link rel="stylesheet" href="css/meta.css">
+<link rel="stylesheet" href="css/wuerze.css">
+<link rel="stylesheet" href="css/stoffbaum.css">
+<link rel="stylesheet" href="css/plakette.css">
+<link rel="stylesheet" href="css/karte.css">
+<link rel="stylesheet" href="css/rucksack.css">
 <link rel="stylesheet" href="css/galerie.css">
+<link rel="stylesheet" href="css/schau.css">
 </head>
 <body>
 <!-- pixel.js holt sich document.getElementById('scene') (altes 320×180-Erbe für zones.js und foes.js), darum hier versteckt -->
@@ -18,9 +26,9 @@
   <p>Jeder Baustein einzeln und so, wie das Spiel ihn zeichnet: Oberfläche (Variante A), Pixelzeichen, alle Gegner mit ihren Animationen, die sieben Biome als Szenen und ganz unten die alten Zeichner. Alles kommt aus denselben Dateien wie das Spiel; die Beispiele laufen über einen kleinen Beispielzustand <code>S</code>.</p>
   <p>Zum Spiel: <a href="index.html">index.html</a> · Der ganze Inhalt als Liste: <a href="artboard.html">artboard.html</a> · Hintergrund-Labor: <a href="hintergrund.html">hintergrund.html</a></p>
  </header>
- <nav class="sprung"><a href="#ui">Oberfläche</a><a href="#zeichen">Pixelzeichen</a><a href="#gegner">Gegner</a><a href="#biome">Biome</a><a href="#alt">Alt</a><a href="artboard.html" class="hell">Artboard ›</a></nav>
+ <nav class="sprung"><a href="#ui">Oberfläche</a><a href="#zeichen">Pixelzeichen</a><a href="#gegner">Gegner</a><a href="#silhouetten">Silhouetten</a><a href="#gesehene">Gesehene</a><a href="#biegungen">Biegungs-Zeichen</a><a href="#farbe">Farbe</a><a href="#neues">Neue Items und Karten</a><a href="#strand">Strand-Stufen</a><a href="#biome">Biome</a><a href="#alt">Alt</a><a href="artboard.html" class="hell">Artboard ›</a></nav>
 
- <section class="abschnitt" id="ui"><h2>OBERFLÄCHE <small>js/ui/oberflaeche.js · css/spiel.css</small></h2>
+ <section class="abschnitt" id="ui"><h2>OBERFLÄCHE <small>js/ui/oberflaeche.js, kampf.js, bildschirme.js, ueberlagerungen.js · css/spiel.css</small></h2>
   <p class="einl">Zuerst alles zusammen, wie im Kampf: Szene aus <code>World.build</code>, Gegner aus den Sheets (Bühne <code>js/scenes/buehne.js</code>), darüber <code>gegnerHtml()</code> und <code>kopfHtml()</code>, darunter <code>leisteKampf()</code>. Darunter jeder Baustein einzeln in seinen Zuständen. Maßstab: 1 Szenenpixel = 2 Bildschirmpixel (wie bei 1280 × 720).</p>
   <div id="demo" class="demo"></div>
   <h3 class="unter">KARTEN <small>cardHtml()</small></h3><div class="kartenreihe" id="karten"></div>
@@ -28,7 +36,7 @@
   <h3 class="unter">ABSICHTEN <small>absicht(gegner)</small></h3><div class="reihe" id="absichten"></div>
   <h3 class="unter">ZUSTÄNDE <small>gi(zustand) + Zahl, wie unter dem Gegner</small></h3><div class="reihe" id="zustaende"></div>
   <h3 class="unter">ENERGIE, KNÖPFE, STOFFRAD</h3><div class="reihe" id="knoepfe"></div><div class="reihe" id="raeder"></div>
-  <h3 class="unter">AUSRÜSTUNG <small>gearHtml(), slotHtml()</small></h3><div id="gear"></div>
+  <h3 class="unter">AUSRÜSTUNG <small>rucksack.js, koerperHtml()</small></h3><div id="gear"></div>
   <h3 class="unter">FUNDE <small>itemPick()</small></h3><div class="panelbox" id="picks"></div>
   <h3 class="unter">WEG-WAHL, ZETTEL, WANDBILD <small>wegHtml(), eventHtml(), wandbildHtml()</small></h3><div class="reihe oben" id="panels"></div>
  </section>
@@ -41,6 +49,34 @@
   <p class="einl">Alle Sheets mit allen Animationen (Format: <code>docs/auftrag/sprites.md</code>), 2× vergrößert, auf dem Nebel ihres Bioms. Die Augen glühen wie im Spiel nachträglich. Knöpfe schalten die Animation je Gegner um, oben für alle. Konzepte ausführlich: <code>docs/auftrag/gegner.md</code>.</p>
   <div class="animknoepfe" id="alleAnim" style="margin-bottom:12px"></div>
   <div id="gegnerBox"></div></section>
+
+ <section class="abschnitt" id="silhouetten"><h2>SILHOUETTEN <small>assets/figuren/*.png · *.json · tools/sprites/figuren.js</small></h2>
+  <p class="einl">Die neun Figuren, 110 × 172 Pixel, 2× vergrößert. Die Punkte sind die Anschlusspunkte aus der Datei neben dem Bild: Fuß (grün), Hals, Leib und Hand (gelb, rot, blau, hier die Plätze für Talisman, Kleidung und Waffe) und die Augen (weiß). An ihnen hängt der Rucksack „Am Körper“.</p>
+  <div class="animknoepfe" style="margin-bottom:8px"><button id="silhPunkte" class="an">Punkte</button></div>
+  <div class="silh" id="silhBox"></div></section>
+
+ <section class="abschnitt" id="gesehene"><h2>DIE GESEHENEN <small>data/foes.json · gesehener, gesehen · js/core/blick.js</small></h2>
+  <p class="einl">Drei Gegner, die nur der Blick aufstellt: Akt I bis III, Akt IV und Akt V. Sie stehen in keinem Biom, haben Werte ohne Tiefe und schweben im Kampf halb durchsichtig (siehe die Szene oben unter OBERFLÄCHE, der vierte Gegner von links, und die Wahl „HINSEHEN“ über der Hand). Darunter der zusätzliche Schritt, den jeder Wächter beim Hinsehen bekommt.</p>
+  <div id="gesehBox"></div>
+  <h3 class="unter">ZUSATZSCHRITT DER WÄCHTER <small>FOES.gesehen, absicht()</small></h3><div class="reihe oben" id="gesehSchritt"></div></section>
+
+ <section class="abschnitt" id="biegungen"><h2>ZEICHEN DER REGELBIEGUNGEN <small>data/biegungen.json · js/ui/zeichen-biegung.js · biegKopfHtml()</small></h2>
+  <p class="einl">Vierzehn Biegungen, je ein 9 × 9-Zeichen (hier 1×, 2×, 4× und 6×). Daneben die Kopfleiste, wie das Spiel sie im Kampf in dem Biom zeigt, und der Tooltip mit dem Regeltext.</p>
+  <div class="raster breit" id="biegBox"></div></section>
+
+ <section class="abschnitt" id="farbe"><h2>DIE FARBE <small>data/stoffe.json → X · js/ui/farbe.js · data/events.json → farbe_brunnen</small></h2>
+  <p class="einl">Der neunte Stoff X trägt keine Reihenfolge und steht auf keinem Item. Er sitzt auf einem angelegten Item (Schimmer in fünf Stufen) und nimmt in der Hand die Stoffe der Karte davor an (Zeichen X an der Karte). Mit Salz wird er gebunden (starr, kantig), jedes verlassene Item trägt eine Spur (Linie quer durchs Bild).</p>
+  <div class="animknoepfe" style="margin-bottom:8px"><button id="farbeFrei" class="an">sitzt frei</button><button id="farbeGebunden">gebunden</button></div>
+  <div id="farbeBox"></div></section>
+
+ <section class="abschnitt" id="neues"><h2>NEUE ITEMS UND KARTEN <small>items.json · wuerze.json · run.json → karten</small></h2>
+  <p class="einl">Die drei Blick-Items (Linse, Resonator, Lampe aus dem Grab) und Zanns Geige als Fund (<code>itemPick()</code>) mit ihren Karten (<code>cardHtml()</code>), dazu die losen Karten ohne Item: Das Zeichen und die drei Teile der Barmherzigen Trennung.</p>
+  <h3 class="unter">FUNDE <small>itemPick()</small></h3><div class="panelbox" id="neuPicks"></div>
+  <h3 class="unter">KARTEN <small>cardHtml()</small></h3><div class="kartenreihe" id="neuKarten"></div></section>
+
+ <section class="abschnitt" id="strand"><h2>STRAND-STUFEN <small>js/scenes/world/hafen.js → strand(o) · o.spuren 0 bis 4</small></h2>
+  <p class="einl">Der Strand zählt mit, wie oft man schon hinuntergegangen ist (<code>Metaebene.strandStufe()</code>): keine Spur, eine Spur, mehrere, viele mit Trittflecken, ein ausgetretener Pfad. Keine Zahl im Bild.</p>
+  <div class="szenen strandzeile" id="strandBox"></div></section>
 
  <section class="abschnitt" id="biome"><h2>BIOME <small>World.build(biom, {variante, seed, fremdheit, art})</small></h2>
   <p class="einl">Je Biom die drei Kampf-Varianten und die Wächter-Szene mit ihrem Wächter auf der vorderen Reihe. Die Szenen werden nacheinander gebaut und nur animiert, solange sie zu sehen sind.</p>
@@ -57,9 +93,17 @@
 <script src="js/core/bus.js"></script>
 <script src="js/core/state.js"></script>
 <script src="js/core/rules.js"></script>
+<script src="js/core/biegung.js"></script>
+<script src="js/core/hoeren.js"></script>
+<script src="js/core/blick.js"></script>
+<script src="js/core/farbe.js"></script>
+<script src="js/core/begegnungen.js"></script>
 <script src="js/core/combat.js"></script>
 <script src="js/core/run.js"></script>
+<script src="js/core/netz.js"></script>
 <script src="js/core/meta.js"></script>
+<script src="js/core/metaebene.js"></script>
+<script src="js/core/wuerze.js"></script>
 <script src="js/scenes/pixel.js"></script>
 <script src="js/sprites/items.js"></script>
 <script src="js/sprites/foes.js"></script>
@@ -73,9 +117,20 @@
 <script src="js/scenes/world/eis.js"></script>
 <script src="js/scenes/world/pforte.js"></script>
 <script src="js/scenes/buehne.js"></script>
+<script src="js/scenes/fahrt.js"></script>
 <script src="js/ui/zeichen.js"></script>
+<script src="js/ui/farbe.js"></script>
+<script src="js/ui/zeichen-biegung.js"></script>
+<script src="js/ui/klangzeichen.js"></script>
 <script src="js/ui/einstellungen.js"></script>
 <script src="js/ui/oberflaeche.js"></script>
+<script src="js/ui/kampf.js"></script>
+<script src="js/ui/plakette.js"></script>
+<script src="js/ui/stoffbaum.js"></script>
+<script src="js/ui/karte.js"></script>
+<script src="js/ui/bildschirme.js"></script>
+<script src="js/ui/ueberlagerungen.js"></script>
+<script src="js/ui/rucksack.js"></script>
 <script src="js/gallery.js"></script>
 </body>
 </html>

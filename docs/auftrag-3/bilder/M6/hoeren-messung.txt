@@ -1,0 +1,87 @@
+MESSUNG HÖREN STATT SEHEN (Auftrag 3, M6), erzeugt von tools/hoeren-aufnahme.js, 2026-11-09
+Kampf-Stück des Bioms mit einem Gegner (Duell, Layer 1 bis 3 und Gegnerstimme an), dazu genau ein Einsatz. Messung über etwa drei Takte.
+RMS E / Spitze E: Pegel des Einsatz-Busses vor der Kette (dBFS). Kurz E: lauteste 46-ms-Stelle. RMS Rest: Summe aller übrigen Layer vor der Kette, Mittel. Abstand = RMS E minus RMS Rest.
+Abstand kurz = Kurz E minus RMS Rest. Band = Einsatz gegen Rest in einer Oktave um die Grundfrequenz. Grundton: gemessene Grundfrequenz(en) mit Abweichung in Cent; ✓ = auf einem Ton der Biom-Leiter (Moll bzw. phrygisch, Leitton), höchstens 35 Cent daneben.
+Zentroid und stärkste Frequenz aus dem über die Messung gemittelten Spektrum des Einsatz-Busses. Ausgang = Spitzenpegel am Lautsprecher (hinter dem Limiter).
+Hörbar: ja, wenn Abstand kurz ≥ -6 dB oder Band-Abstand ≥ 0 dB (der Einsatz sticht an seiner Stelle aus dem Rest heraus).
+
+Biom           Einsatz     RMS E  Spitze E  Kurz E  RMS Rest  Abst.  Abst.kurz  Band   stärkste Hz  Zentroid Hz  Grundton (Cent)           Ausgang  Hörbar
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+eis            angriff 1   -25.4    -4.8   -15.1   -17.7    -7.7     2.6      -13.7       740         1849     D2 +6✓ F♯2 +6✓ H2 -3✓       -1.1   ja
+eis            angriff 2   -23.8    -3.8   -14.6   -17.1    -6.7     2.5      -12.3       554         1799     D2 +0✓ H2 -2✓ C♯3 -2✓       -1.2   ja
+eis            angriff 3   -21.7    -4.4   -14.5   -17.1    -4.6     2.6      -11.8       554         1776     D2 +6✓ F♯2 +1✓ H2 -6✓ C♯3 +1✓  -1.1   ja
+eis            schutz      -25.6    -6.2   -13.2   -17.5    -8.1     4.3       -1.5       740          886     D5 +0✓ F♯5 -0✓ C♯6 -0✓      -1.2   ja
+eis            zauber      -22.1    -7.1   -12.7   -17.4    -4.7     4.7        4.2       440          615     F♯4 +2✓ A4 +2✓ D5 -3✓       -1.8   ja
+eis            (ohne)                                        -16.7                                                                                            -2.2
+glasmeer       angriff 1   -25.4    -4.2   -14.3   -17.7    -7.7     3.4      -11.5       104         1613     E2 -5✓ G♯2 -5✓ C♯3 -0✓      -1.1   ja
+glasmeer       angriff 2   -23.8    -3.9   -13.6   -17.3    -6.5     3.7      -11.3       693         1666     E2 +1✓ C♯3 +3✓ E♭3 -4✓      -1.1   ja
+glasmeer       angriff 3   -21.1    -3.8   -14.2   -17.4    -3.7     3.2       -7.5       104         1556     E2 -2✓ G♯2 -2✓ C♯3 +1✓ E♭3 -5✓  -1.1   ja
+glasmeer       schutz      -26.4    -6.3   -13.2   -17.6    -8.8     4.4        2.5       659          994     E5 -0✓ G♯5 +0✓ E♭6 -0✓      -1.3   ja
+glasmeer       zauber      -19.2    -3.3    -7.7   -17.7    -1.5    10.0        5.9       495          537     G♯4 -1✓ H4 +2✓ E5 +1✓       -1.6   ja
+glasmeer       (ohne)                                        -16.1                                                                                            -2.0
+walkathedrale  angriff 1   -23.9    -4.7   -14.4   -17.9    -6.0     3.5      -14.8       494         2162     F1 +10✓ A1 -11✓ E2 +1✓      -1.2   ja
+walkathedrale  angriff 2   -22.3    -4.8   -14.3   -17.0    -5.4     2.7      -15.9      1396         2126     F1 +9✓ A1 -10✓ D2 -4✓       -1.1   ja
+walkathedrale  angriff 3   -19.7    -3.6   -13.7   -17.2    -2.5     3.5      -13.2       495         2114     F1 +5✓ D2 -3✓ E2 -3✓        -1.1   ja
+walkathedrale  schutz      -26.5    -6.3   -13.2   -17.6    -8.9     4.4        1.3       440          613     A4 -0✓ D5 +0✓ E5 -0✓        -1.2   ja
+walkathedrale  zauber      -20.6    -6.3   -12.1   -17.3    -3.3     5.2        6.0       522          557     C4 -1✓ G♯4 -1✓ A4 +2✓       -2.0   ja
+walkathedrale  (ohne)                                        -16.5                                                                                            -2.3
+mond           angriff 1   -24.5    -3.9   -14.1   -17.9    -6.6     3.8      -12.7        52         1914     G♯1 -1✓ C2 -8✓ F2 -2✓       -1.1   ja
+mond           angriff 2   -22.7    -4.5   -14.5   -17.8    -4.9     3.3      -12.5        51         1824     G♯1 -3✓ F2 +3✓ G2 +3✓       -1.2   ja
+mond           angriff 3   -20.8    -2.9   -13.3   -18.4    -2.4     5.1      -11.6       392         1922     G♯1 -3✓ C2 +0✓ F2 -3✓ G2 +10✓  -1.1   ja
+mond           schutz      -25.8    -6.3   -13.1   -18.3    -7.5     5.1        6.9       524          626     G♯4 -0✓ C5 -0✓ G5 -0✓       -1.2   ja
+mond           zauber      -20.3    -3.3    -7.8   -18.2    -2.1    10.5       10.9       494          536     C4 +1✓ E♭4 -1✓ G♯4 -1✓      -1.7   ja
+mond           (ohne)                                        -17.4                                                                                            -1.3
+funkstation    angriff 1   -25.6    -4.8   -15.0   -18.0    -7.7     2.9      -11.2       583         2069     B1 -12✓ D2 -6✓ A2 -6✓ D3 +0✓  -1.1   ja
+funkstation    angriff 2   -23.0    -4.8   -14.7   -17.8    -5.2     3.1      -14.4        98         1964     B1 +1✓ D2 -5✓ G2 +0✓ D3 +0✓  -1.1   ja
+funkstation    angriff 3   -20.8    -3.7   -14.1   -17.9    -2.9     3.8      -12.4       583         1915     B1 +9✓ G2 -3✓ A2 -8✓        -1.1   ja
+funkstation    schutz      -25.5    -6.3   -13.2   -18.1    -7.4     4.9        3.1       880          818     D5 +0✓ G5 -0✓ A5 -0✓        -1.2   ja
+funkstation    zauber      -20.6    -7.2   -10.4   -17.7    -2.9     7.3        8.3       553          582     D4 -2✓ F4 -2✓ C♯5 -2✓       -1.9   ja
+funkstation    (ohne)                                        -17.8                                                                                            -2.7
+pforte         angriff 1   -25.7    -4.5   -15.1   -18.1    -7.6     3.0      -14.2       311         1908     E♭2 +4✓ E2 -2✓ B2 -1✓       -1.1   ja
+pforte         angriff 2   -23.3    -4.4   -15.1   -17.8    -5.5     2.7      -15.5      1038         1894     E♭2 +6✓ E2 -4✓ G♯2 -6✓      -1.1   ja
+pforte         angriff 3   -21.2    -4.1   -14.5   -18.0    -3.2     3.5      -13.7      1039         1961     E2 -3✓ G♯2 -0✓ B2 -5✓       -1.0   ja
+pforte         schutz      -26.0    -6.2   -13.4   -17.9    -8.1     4.4        8.5       830          867     E♭5 +0✓ G♯5 -0✓ B5 -0✓      -1.2   ja
+pforte         zauber      -21.2    -3.3    -7.8   -18.1    -3.2    10.3       14.7       495          550     F♯4 +1✓ G♯4 -0✓ D5 -2✓      -1.4   ja
+pforte         (ohne)                                        -17.6                                                                                            -1.4
+ufer           angriff 1   -24.2    -3.9   -14.1   -18.4    -5.8     4.3      -14.6      1245         2126     G♯1 -4✓ A1 +7✓ E♭2 -7✓      -1.2   ja
+ufer           angriff 2   -22.2    -3.9   -14.0   -18.1    -4.1     4.1      -12.6        70         2105     G♯1 -9✓ A1 +5✓ C♯2 +3✓      -1.1   ja
+ufer           angriff 3   -19.5    -3.3   -13.5   -17.7    -1.8     4.1       -8.9        70         1923     A1 -5✓ C♯2 +1✓ E♭2 -10✓     -1.1   ja
+ufer           schutz      -26.3    -6.3   -13.2   -18.7    -7.6     5.6        8.8       554          579     G♯4 -0✓ C♯5 -0✓ E♭5 +0✓     -1.2   ja
+ufer           zauber      -22.5    -7.0   -13.4   -19.1    -3.3     5.7        6.9       495          533     H3 +0✓ C♯4 +0✓ G4 -0✓       -1.6   ja
+ufer           (ohne)                                        -17.8                                                                                            -1.5
+waage          angriff 1   -23.4    -3.2   -14.5   -18.0    -5.4     3.5      -12.6      1109         2004     F1 -12✓ C2 +6✓ C♯2 +0✓      -1.0   ja
+waage          angriff 2   -21.5    -4.8   -14.2   -17.7    -3.7     3.6      -13.6       408         2055     F1 -9✓ B1 +0✓ C♯2 +4✓       -1.1   ja
+waage          angriff 3   -19.1    -3.1   -13.4   -17.7    -1.4     4.2      -11.4       408         2067     F1 +2✓ B1 +1✓ C2 +2✓ C♯2 +1✓  -1.1   ja
+waage          schutz      -26.6    -6.2   -13.5   -18.7    -7.9     5.2        3.3       524          487     F4 +0✓ B4 +0✓ C5 -0✓        -1.3   ja
+waage          zauber      -24.7    -9.6   -15.2   -18.4    -6.3     3.2        0.7       416          554     E4 +1✓ F4 -2✓ G♯4 -1✓       -2.9   ja
+waage          (ohne)                                        -17.5                                                                                            -1.8
+
+RMS Rest in der Zeile (ohne) = Summe ohne Einsatz (Grundlinie), zum Vergleich mit dem abgesenkten Rest oben (Layer 2, 3, Stimmen um 25 % = rund -2,5 dB).
+
+HÄRTETEST: alle drei Einsätze (Angriff 3, Schutz, Zauber) zugleich, Boss (volle Layer, Tutti), 4 Leben, Stoff Feuer, 2 Hochreaktionen mit Effekten (sfx)
+Biom           Ausgang dBFS   vor Limiter dBFS   Layer-Tore       Duck
+eis              -0.7           2.6         true,true,true,true,true 0.75
+glasmeer         -0.7           3.0         true,true,true,true,false 0.75
+walkathedrale    -0.6           1.8         true,true,true,true,false 0.75
+mond             -0.6           1.4         true,true,true,true,false 0.75
+funkstation      -0.8           2.8         true,true,true,true,false 0.75
+pforte           -0.8           2.2         true,true,true,true,false 0.75
+ufer             -0.6           2.3         true,true,true,true,false 0.75
+waage            -0.6           2.5         true,true,true,true,false 0.75
+
+TEMPO: 80 bis 88 BPM, größter Sprung 1 BPM pro Takt, Verstöße 0
+GRÖSSTE SPITZE AM AUSGANG: Einzelmessungen -1.0 dBFS, Härtetest -0.6 dBFS (vor dem Limiter 3.0 dBFS)  (kein Clipping)
+TONART: alle Grundfrequenzen auf Tönen der Biom-Leiter
+Log je Biom (note 'hoeren'), Beispiel: Einsätze: angriff Stufe 1 (vorher keine), Layer 2, 3 und Stimmen um 25 % zurück
+Layer-Duck nach Ende der Einsätze: eis ×1, glasmeer ×1, walkathedrale ×1, mond ×1, funkstation ×1, pforte ×1, ufer ×1, waage ×1
+
+URTEIL JE BIOM (hört man den Einsatz heraus?)
+eis: angriff 1 ja (-7.7 / kurz 2.6 / Band -13.7 dB); angriff 2 ja (-6.7 / kurz 2.5 / Band -12.3 dB); angriff 3 ja (-4.6 / kurz 2.6 / Band -11.8 dB); schutz ja (-8.1 / kurz 4.3 / Band -1.5 dB); zauber ja (-4.7 / kurz 4.7 / Band 4.2 dB)
+glasmeer: angriff 1 ja (-7.7 / kurz 3.4 / Band -11.5 dB); angriff 2 ja (-6.5 / kurz 3.7 / Band -11.3 dB); angriff 3 ja (-3.7 / kurz 3.2 / Band -7.5 dB); schutz ja (-8.8 / kurz 4.4 / Band 2.5 dB); zauber ja (-1.5 / kurz 10.0 / Band 5.9 dB)
+walkathedrale: angriff 1 ja (-6.0 / kurz 3.5 / Band -14.8 dB); angriff 2 ja (-5.4 / kurz 2.7 / Band -15.9 dB); angriff 3 ja (-2.5 / kurz 3.5 / Band -13.2 dB); schutz ja (-8.9 / kurz 4.4 / Band 1.3 dB); zauber ja (-3.3 / kurz 5.2 / Band 6.0 dB)
+mond: angriff 1 ja (-6.6 / kurz 3.8 / Band -12.7 dB); angriff 2 ja (-4.9 / kurz 3.3 / Band -12.5 dB); angriff 3 ja (-2.4 / kurz 5.1 / Band -11.6 dB); schutz ja (-7.5 / kurz 5.1 / Band 6.9 dB); zauber ja (-2.1 / kurz 10.5 / Band 10.9 dB)
+funkstation: angriff 1 ja (-7.7 / kurz 2.9 / Band -11.2 dB); angriff 2 ja (-5.2 / kurz 3.1 / Band -14.4 dB); angriff 3 ja (-2.9 / kurz 3.8 / Band -12.4 dB); schutz ja (-7.4 / kurz 4.9 / Band 3.1 dB); zauber ja (-2.9 / kurz 7.3 / Band 8.3 dB)
+pforte: angriff 1 ja (-7.6 / kurz 3.0 / Band -14.2 dB); angriff 2 ja (-5.5 / kurz 2.7 / Band -15.5 dB); angriff 3 ja (-3.2 / kurz 3.5 / Band -13.7 dB); schutz ja (-8.1 / kurz 4.4 / Band 8.5 dB); zauber ja (-3.2 / kurz 10.3 / Band 14.7 dB)
+ufer: angriff 1 ja (-5.8 / kurz 4.3 / Band -14.6 dB); angriff 2 ja (-4.1 / kurz 4.1 / Band -12.6 dB); angriff 3 ja (-1.8 / kurz 4.1 / Band -8.9 dB); schutz ja (-7.6 / kurz 5.6 / Band 8.8 dB); zauber ja (-3.3 / kurz 5.7 / Band 6.9 dB)
+waage: angriff 1 ja (-5.4 / kurz 3.5 / Band -12.6 dB); angriff 2 ja (-3.7 / kurz 3.6 / Band -13.6 dB); angriff 3 ja (-1.4 / kurz 4.2 / Band -11.4 dB); schutz ja (-7.9 / kurz 5.2 / Band 3.3 dB); zauber ja (-6.3 / kurz 3.2 / Band 0.7 dB)
+Keine Konsolenfehler.

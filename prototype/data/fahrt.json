@@ -1,0 +1,681 @@
+{
+ "_doc": "Auftrag 3, M3: Fahrt nach vorne (05-oberflaeche.md Abschnitt 6). Schlüssel biom:kulisse (kulisse = Hintergrund 0, 1, 2 eines Bioms, siehe sz.kulisse aus World.build). r = vor | links | rechts | ab | auf; ziel = [x, y] in der Szene 480×270, auf den die Fahrt zuläuft. grund ist eine Arbeitsnotiz (nicht im Spiel sichtbar), sicher = vom Dirigenten in der Bildfolge geprüft.",
+ "entwurf": true,
+ "szenen": {
+  "eis:0": {
+   "r": "vor",
+   "ziel": [
+    250,
+    175
+   ],
+   "grund": "offene Eisfläche, Weg führt zwischen Eisrücken in die Tiefe",
+   "sicher": true
+  },
+  "eis:1": {
+   "r": "vor",
+   "ziel": [
+    290,
+    190
+   ],
+   "grund": "Eisrücken links und rechts, Weg schmal zur Mitte",
+   "sicher": true
+  },
+  "eis:2": {
+   "r": "vor",
+   "ziel": [
+    240,
+    180
+   ],
+   "grund": "freie Eisfläche in der Mitte, Zelt rechts als Hindernis",
+   "sicher": true
+  },
+  "fabrik:0": {
+   "r": "vor",
+   "ziel": [
+    260,
+    185
+   ],
+   "grund": "Gang mit Geländer führt in die Tiefe, Lampen an der Decke",
+   "sicher": true
+  },
+  "fabrik:1": {
+   "r": "rechts",
+   "ziel": [
+    400,
+    215
+   ],
+   "grund": "Maschinenwand vorn, am Boden entlang nach rechts",
+   "sicher": true
+  },
+  "fabrik:2": {
+   "r": "rechts",
+   "ziel": [
+    420,
+    230
+   ],
+   "grund": "hohes Gebäude links, Steg führt schräg nach rechts",
+   "sicher": true
+  },
+  "funkstation:0": {
+   "r": "vor",
+   "ziel": [
+    300,
+    185
+   ],
+   "grund": "offene Mondebene, Weg führt auf den Turm zu",
+   "sicher": true
+  },
+  "funkstation:1": {
+   "r": "rechts",
+   "ziel": [
+    440,
+    185
+   ],
+   "grund": "Rückwand vorn, Tür rechts",
+   "sicher": true
+  },
+  "funkstation:2": {
+   "r": "vor",
+   "ziel": [
+    330,
+    185
+   ],
+   "grund": "Ebene bei Nacht, Weg führt geradeaus zwischen Haus und Trümmern",
+   "sicher": true
+  },
+  "gezeitenwerk:0": {
+   "r": "vor",
+   "ziel": [
+    300,
+    150
+   ],
+   "grund": "Zahnräder vorn, Kanal führt schräg nach hinten",
+   "sicher": true
+  },
+  "gezeitenwerk:1": {
+   "r": "vor",
+   "ziel": [
+    235,
+    145
+   ],
+   "grund": "Kanal läuft zwischen Torbögen in die Tiefe",
+   "sicher": true
+  },
+  "gezeitenwerk:2": {
+   "r": "vor",
+   "ziel": [
+    300,
+    175
+   ],
+   "grund": "Zahnräder überlagern, Kanal führt schräg nach hinten",
+   "sicher": true
+  },
+  "glasmeer:0": {
+   "r": "vor",
+   "ziel": [
+    260,
+    185
+   ],
+   "grund": "Glasfläche mit Spiegelungen, Weg zwischen Kristallen",
+   "sicher": true
+  },
+  "glasmeer:1": {
+   "r": "rechts",
+   "ziel": [
+    330,
+    200
+   ],
+   "grund": "schwarzer Kristall in der Mitte, Weg geht rechts weiter",
+   "sicher": true
+  },
+  "glasmeer:2": {
+   "r": "links",
+   "ziel": [
+    150,
+    210
+   ],
+   "grund": "schwarzer Kristall rechts, Gang links weiter",
+   "sicher": true
+  },
+  "glockengiesserei:0": {
+   "r": "vor",
+   "ziel": [
+    300,
+    170
+   ],
+   "grund": "Bodenbahnen laufen auf einen Punkt zu, Glut an den Seiten",
+   "sicher": true
+  },
+  "glockengiesserei:1": {
+   "r": "vor",
+   "ziel": [
+    300,
+    195
+   ],
+   "grund": "lange Glutbahn schräg links, Weg mittig nach hinten",
+   "sicher": true
+  },
+  "glockengiesserei:2": {
+   "r": "rechts",
+   "ziel": [
+    370,
+    180
+   ],
+   "grund": "Ofenwand mit Glocke vorn, rechter Bogen offen",
+   "sicher": true
+  },
+  "grotte:0": {
+   "r": "vor",
+   "ziel": [
+    260,
+    190
+   ],
+   "grund": "Höhlenboden läuft nach hinten, Felsen seitlich",
+   "sicher": true
+  },
+  "grotte:1": {
+   "r": "vor",
+   "ziel": [
+    250,
+    150
+   ],
+   "grund": "Höhlenöffnung im Fels, Weg führt in den Bogen",
+   "sicher": true
+  },
+  "grotte:2": {
+   "r": "links",
+   "ziel": [
+    150,
+    185
+   ],
+   "grund": "Felsspitze mitten im Bild, Weg links am Ufer entlang",
+   "sicher": true
+  },
+  "hafen:0": {
+   "r": "vor",
+   "ziel": [
+    290,
+    185
+   ],
+   "grund": "Gasse zwischen Häusern führt nach hinten",
+   "sicher": true
+  },
+  "hafen:1": {
+   "r": "vor",
+   "ziel": [
+    280,
+    180
+   ],
+   "grund": "Straße zwischen Häusern nach hinten",
+   "sicher": true
+  },
+  "hafen:2": {
+   "r": "vor",
+   "ziel": [
+    290,
+    185
+   ],
+   "grund": "Kai führt zwischen Lagerhäusern nach hinten",
+   "sicher": true
+  },
+  "kapelle:0": {
+   "r": "vor",
+   "ziel": [
+    240,
+    175
+   ],
+   "grund": "Kirchenschiff, Bankreihe im Mittelgrund",
+   "sicher": true
+  },
+  "kapelle:1": {
+   "r": "vor",
+   "ziel": [
+    230,
+    175
+   ],
+   "grund": "Gang führt auf den Altar zu, Fenster am Ende",
+   "sicher": true
+  },
+  "kapelle:2": {
+   "r": "links",
+   "ziel": [
+    30,
+    215
+   ],
+   "grund": "Balustrade quer, links an ihr vorbei",
+   "sicher": true
+  },
+  "kloster:0": {
+   "r": "links",
+   "ziel": [
+    200,
+    175
+   ],
+   "grund": "große Mauer mitten, Arkaden links führen nach hinten",
+   "sicher": true
+  },
+  "kloster:1": {
+   "r": "vor",
+   "ziel": [
+    230,
+    190
+   ],
+   "grund": "Tische und Stühle an den Seiten, Weg mittig nach hinten",
+   "sicher": true
+  },
+  "kloster:2": {
+   "r": "vor",
+   "ziel": [
+    250,
+    160
+   ],
+   "grund": "Uferweg führt zwischen Mauer und Wasser nach hinten",
+   "sicher": true
+  },
+  "leuchtturm:0": {
+   "r": "vor",
+   "ziel": [
+    300,
+    170
+   ],
+   "grund": "Wiese führt zwischen Häusern und Leuchtturm nach hinten",
+   "sicher": true
+  },
+  "leuchtturm:1": {
+   "r": "vor",
+   "ziel": [
+    300,
+    175
+   ],
+   "grund": "Wiese, Uferkante links, Weg zum Leuchtturm rechts",
+   "sicher": true
+  },
+  "leuchtturm:2": {
+   "r": "vor",
+   "ziel": [
+    150,
+    180
+   ],
+   "grund": "Lücke zwischen Leuchtturm und Haus",
+   "sicher": true
+  },
+  "mond:0": {
+   "r": "rechts",
+   "ziel": [
+    440,
+    190
+   ],
+   "grund": "Mondkugel vorn, Weg geht rechts am Rand weiter",
+   "sicher": true
+  },
+  "mond:1": {
+   "r": "vor",
+   "ziel": [
+    230,
+    175
+   ],
+   "grund": "Krater und Hügelrücken am Horizont",
+   "sicher": true
+  },
+  "mond:2": {
+   "r": "vor",
+   "ziel": [
+    250,
+    175
+   ],
+   "grund": "flache Ebene, Grat im Hintergrund",
+   "sicher": true
+  },
+  "moor:0": {
+   "r": "vor",
+   "ziel": [
+    290,
+    180
+   ],
+   "grund": "Moorboden führt zwischen Bäumen nach hinten",
+   "sicher": true
+  },
+  "moor:1": {
+   "r": "vor",
+   "ziel": [
+    230,
+    170
+   ],
+   "grund": "Pfad schräg, Ast-Wand im Vordergrund",
+   "sicher": true
+  },
+  "moor:2": {
+   "r": "vor",
+   "ziel": [
+    300,
+    200
+   ],
+   "grund": "Moor führt zwischen Stämmen nach hinten",
+   "sicher": true
+  },
+  "nachtzug:0": {
+   "r": "vor",
+   "ziel": [
+    268,
+    115
+   ],
+   "grund": "Wagengang mit rotem Teppich läuft auf den Fluchtpunkt zu",
+   "sicher": true
+  },
+  "nachtzug:1": {
+   "r": "vor",
+   "ziel": [
+    175,
+    120
+   ],
+   "grund": "Wagengang mit Teppich, Fluchtpunkt in der Mitte",
+   "sicher": true
+  },
+  "nachtzug:2": {
+   "r": "vor",
+   "ziel": [
+    260,
+    170
+   ],
+   "grund": "dunkle Tür im Hintergrund, Trümmer links und rechts",
+   "sicher": true
+  },
+  "pforte:0": {
+   "r": "vor",
+   "ziel": [
+    250,
+    195
+   ],
+   "grund": "Gelände zwischen Pfeilern führt nach hinten",
+   "sicher": true
+  },
+  "pforte:1": {
+   "r": "vor",
+   "ziel": [
+    215,
+    175
+   ],
+   "grund": "Durchgang zwischen den Pfeilern nach hinten",
+   "sicher": true
+  },
+  "pforte:2": {
+   "r": "vor",
+   "ziel": [
+    300,
+    190
+   ],
+   "grund": "Pfeiler stehen dicht, Durchgang zwischen den Säulen unklar",
+   "sicher": true
+  },
+  "salz:0": {
+   "r": "vor",
+   "ziel": [
+    330,
+    185
+   ],
+   "grund": "Salzsäulen links und rechts, Weg führt in die Ebene",
+   "sicher": true
+  },
+  "salz:1": {
+   "r": "vor",
+   "ziel": [
+    300,
+    130
+   ],
+   "grund": "Torweg führt in den Gang hinter dem Tor",
+   "sicher": true
+  },
+  "salz:2": {
+   "r": "vor",
+   "ziel": [
+    270,
+    185
+   ],
+   "grund": "Salzkristalle links und rechts, Weg führt geradeaus",
+   "sicher": true
+  },
+  "stadt:0": {
+   "r": "rechts",
+   "ziel": [
+    460,
+    190
+   ],
+   "grund": "Reliefwand vorn, dunkle Lücke am rechten Rand",
+   "sicher": true
+  },
+  "stadt:1": {
+   "r": "links",
+   "ziel": [
+    20,
+    200
+   ],
+   "grund": "Fassade vorn, Durchgang am linken Rand",
+   "sicher": true
+  },
+  "stadt:2": {
+   "r": "rechts",
+   "ziel": [
+    440,
+    215
+   ],
+   "grund": "Mauer vorn, Rampe rechts",
+   "sicher": true
+  },
+  "station:0": {
+   "r": "rechts",
+   "ziel": [
+    450,
+    175
+   ],
+   "grund": "Bahnsteigwand vorn, Tunnelbogen rechts",
+   "sicher": true
+  },
+  "station:1": {
+   "r": "rechts",
+   "ziel": [
+    460,
+    190
+   ],
+   "grund": "Zug vorn, Bahnsteig rechts weiter",
+   "sicher": true
+  },
+  "station:2": {
+   "r": "auf",
+   "ziel": [
+    240,
+    160
+   ],
+   "grund": "Treppe in der Mitte hinauf",
+   "sicher": true
+  },
+  "ufer:0": {
+   "r": "vor",
+   "ziel": [
+    260,
+    185
+   ],
+   "grund": "Strand führt geradeaus, Felsnadel rechts",
+   "sicher": true
+  },
+  "ufer:1": {
+   "r": "vor",
+   "ziel": [
+    250,
+    185
+   ],
+   "grund": "Strand führt in die Tiefe, Ufer hinten",
+   "sicher": true
+  },
+  "ufer:2": {
+   "r": "vor",
+   "ziel": [
+    270,
+    190
+   ],
+   "grund": "Strand führt geradeaus, Hütte links",
+   "sicher": true
+  },
+  "waage:0": {
+   "r": "vor",
+   "ziel": [
+    300,
+    190
+   ],
+   "grund": "Platz führt zwischen Waage und Geländer nach hinten",
+   "sicher": true
+  },
+  "waage:1": {
+   "r": "vor",
+   "ziel": [
+    250,
+    185
+   ],
+   "grund": "Platz führt nach hinten, Gebäude links",
+   "sicher": true
+  },
+  "waage:2": {
+   "r": "vor",
+   "ziel": [
+    240,
+    190
+   ],
+   "grund": "Platz führt zwischen Boot und Bänken nach hinten",
+   "sicher": true
+  },
+  "waisenhaus:0": {
+   "r": "vor",
+   "ziel": [
+    255,
+    150
+   ],
+   "grund": "Gang mit Lichtfluchtpunkt führt nach hinten",
+   "sicher": true
+  },
+  "waisenhaus:1": {
+   "r": "rechts",
+   "ziel": [
+    390,
+    200
+   ],
+   "grund": "Tür links, Geländer rechts, Weg zieht nach rechts",
+   "sicher": true
+  },
+  "waisenhaus:2": {
+   "r": "vor",
+   "ziel": [
+    290,
+    165
+   ],
+   "grund": "Gang mit Regal links führt nach hinten",
+   "sicher": true
+  },
+  "wald:0": {
+   "r": "vor",
+   "ziel": [
+    320,
+    150
+   ],
+   "grund": "Steinweg führt auf das Bogentor zu",
+   "sicher": true
+  },
+  "wald:1": {
+   "r": "links",
+   "ziel": [
+    25,
+    205
+   ],
+   "grund": "liegender Stamm quer, links um das Stammende",
+   "sicher": true
+  },
+  "wald:2": {
+   "r": "vor",
+   "ziel": [
+    260,
+    200
+   ],
+   "grund": "Wurzelwand am Hintergrund, Weg führt darunter",
+   "sicher": true
+  },
+  "walkathedrale:0": {
+   "r": "vor",
+   "ziel": [
+    250,
+    140
+   ],
+   "grund": "Orangefarbener Pfad läuft in den Gang zwischen Rippenbögen",
+   "sicher": true
+  },
+  "walkathedrale:1": {
+   "r": "links",
+   "ziel": [
+    150,
+    200
+   ],
+   "grund": "schräger Pfad links unten, Rippen als Wand rechts",
+   "sicher": true
+  },
+  "walkathedrale:2": {
+   "r": "vor",
+   "ziel": [
+    290,
+    150
+   ],
+   "grund": "Rampe steigt zur Mitte, Rippen seitlich",
+   "sicher": true
+  },
+  "ziegelgruben:0": {
+   "r": "vor",
+   "ziel": [
+    300,
+    170
+   ],
+   "grund": "Tunnel führt auf das helle Tor zu",
+   "sicher": true
+  },
+  "ziegelgruben:1": {
+   "r": "vor",
+   "ziel": [
+    240,
+    170
+   ],
+   "grund": "Bodenplatten in Streifen, Ende am Horizont",
+   "sicher": true
+  },
+  "ziegelgruben:2": {
+   "r": "rechts",
+   "ziel": [
+    460,
+    205
+   ],
+   "grund": "glühende Gitterwand vorn, rechts am Regal vorbei",
+   "sicher": true
+  },
+  "kurhaus:0": {
+   "r": "links",
+   "ziel": [
+    90,
+    200
+   ],
+   "grund": "Fassade quer am Hintergrund, Weg links um die Ecke",
+   "sicher": true
+  },
+  "kurhaus:1": {
+   "r": "rechts",
+   "ziel": [
+    440,
+    195
+   ],
+   "grund": "Fassade quer, Terrasse rechts zur Kuppel",
+   "sicher": true
+  },
+  "kurhaus:2": {
+   "r": "vor",
+   "ziel": [
+    280,
+    190
+   ],
+   "grund": "Felsklippe rechts, Ruinen links, Weg führt auf Mitte",
+   "sicher": true
+  }
+ }
+}

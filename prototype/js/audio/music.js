@@ -122,17 +122,29 @@ const AKT_GEFAHR=.03; // Grundgefahr je Akt: der Ruf wird mit der Tiefe hörbar
 const S={scene:'menu',biome:'hafen',hp:40,hpMax:40,foes:[],role:'fischer',stoff:'keiner',akt:0,
  wucht:0,gefahr:0,momentum:0,spike:0,telegraph:false,bpm:80,
  gate:[true,false,false,false,false],drive:false,chord:0,bar:0,slot:null,duel:false,
- chain:0,lastReact:-99,dark:false,nextBiome:null,anschlag:false,pendingAns:[],dropStep:-1,hitStep:-1,bellStep:-1,victory:false,abgesang:[],
+ chain:0,lastReact:-99,geige:false,dark:false,nextBiome:null,anschlag:false,pendingAns:[],dropStep:-1,hitStep:-1,bellStep:-1,victory:false,abgesang:[],
  lastAbgesang:null,fin:null,finPending:null,peak:0,log:[]};
 
 let ctx=null,NBUF=null,timer=null,running=false,step=0,nextT=0,lastUpd=0;
+let MP=[],MM=[],TAKT=[],FEST=0; // Mund-Modus: prozedurale Layer-Schalter, Eingänge für Aufnahmen, Takt-Zuhörer, festes Tempo
 let dropF,drones=[],dissO,flirrO=[],tuned=[],master,duckG,dropG,shaper,driveG,toneF,pkF,hsF,dryG,wetG,hall,comp,L=[],voiceBus,flirrG,dissG,droneG;
 let beds={},farIn,echoIn,echoD,peakA,peakBuf;
+// Hören statt sehen (M6): eigener Bus für die Einsätze (hoerG), Messknoten am Bus (hoerA) und an der Summe vor der Kette (sumA)
+let hoerG,hoerA,sumA,hoerBuf;
+const HOER_DUCK=.75; // übrige Layer (2, 3, Stimmen) treten um 25 % zurück, solange Einsätze laufen
+const H={cur:{angriff:0,schutz:false,zauber:false},next:{angriff:0,schutz:false,zauber:false},duck:1,pegel:-120};
 const listeners=[];
+// Geigenebene (Würze-Stück »Zanns Takt«): eine einzelne Geigenstimme über dem Wächter-Stück. Einsatz auf der Taktgrenze,
+// Abbruch hart und sofort (nur hier ausdrücklich gewollt): in 45 ms auf null, mit kurzem Kratzer. gEin = Bus-Eingang, gCut = Abbruch-Gain.
+const G={on:false,i:0,cutAt:-99,live:[]};
+let gEin,gCut,gBus;
 // Layer-Pegel selbst mitrechnen: Chrome rechnet die Automation stummer Knoten nicht weiter, gain.value bleibt dann stehen
 const LV={0:{v0:1,tgt:1,t0:0,tc:1},1:{v0:0,tgt:0,t0:0,tc:1},2:{v0:0,tgt:0,t0:0,tc:1},3:{v0:0,tgt:0,t0:0,tc:1},4:{v0:0,tgt:0,t0:0,tc:1},v:{v0:0,tgt:0,t0:0,tc:1}};
+Object.values(LV).forEach(e=>e.raw=e.tgt);
 function lvAt(k,t){const e=LV[k];return t<=e.t0?e.v0:e.tgt+(e.v0-e.tgt)*Math.exp(-(t-e.t0)/e.tc);}
-function lv(k,tgt,t,tc){LV[k]={v0:lvAt(k,t),tgt,t0:t,tc};(k==='v'?voiceBus:L[k]).gain.setTargetAtTime(tgt,t,tc);}
+// raw = Wunschpegel des Dirigenten; tgt = tatsächlicher Pegel (bei laufenden Einsätzen sind Layer 2, 3 und Stimmen leicht abgesenkt)
+const duckF=k=>(k===2||k===3||k==='v')?H.duck:1;
+function lv(k,raw,t,tc){const tgt=raw*duckF(k);LV[k]={v0:lvAt(k,t),tgt,raw,t0:t,tc};(k==='v'?voiceBus:L[k]).gain.setTargetAtTime(tgt,t,tc);if(k!=='v'&&MM[k])MM[k].gain.setTargetAtTime(tgt,t,tc);}
 const mtof=m=>440*Math.pow(2,(m-69)/12);
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const spb=()=>60/S.bpm/4; // Sekunden pro 16tel
@@ -175,8 +187,17 @@ function build(){
  comp.connect(master).connect(out);
  // Pegelmessung am gemeinsamen Ausgang (Musik + SFX, vor dem Limiter)
  peakA=ctx.createAnalyser();peakA.fftSize=2048;peakBuf=new Float32Array(peakA.fftSize);out.connect(peakA);
- for(let i=0;i<5;i++){const g=ctx.createGain();g.gain.value=i===0?1:0;g.connect(dropG);L.push(g);}
+ for(let i=0;i<5;i++){const g=ctx.createGain();g.gain.value=i===0?1:0;L.push(g);
+  // Mund-Modus (mund.js): P = prozedurale Fassung an/aus, M = eigene Aufnahmen mit demselben Gate wie L
+  const p=ctx.createGain();g.connect(p).connect(dropG);MP.push(p);const m=ctx.createGain();m.gain.value=g.gain.value;m.connect(dropG);MM.push(m);}
+ hoerG=ctx.createGain();hoerG.gain.value=1;hoerG.connect(dropG); // Einsätze der stummen Gegner
+ hoerA=ctx.createAnalyser();hoerA.fftSize=32768;hoerA.smoothingTimeConstant=0;hoerBuf=new Float32Array(32768);hoerG.connect(hoerA);
+ sumA=ctx.createAnalyser();sumA.fftSize=32768;sumA.smoothingTimeConstant=0;dropG.connect(sumA); // Summe aller Layer und Einsätze vor der Kette
  voiceBus=ctx.createGain();voiceBus.gain.value=0;voiceBus.connect(dropG);
+ // Geige: Holzkörper aus drei Resonanzen (Brust 300 Hz, Formanten um 1,1 und 2,5 kHz), dann Abbruch-Gain, dann in die Kette
+ gEin=ctx.createBiquadFilter();gEin.type='lowpass';gEin.frequency.value=5200;gEin.Q.value=.5;
+ {const fs=[[300,3,2.5],[1100,5,3.5],[2500,4,4]];let k=gEin;fs.forEach(([f,gn,q])=>{const b=ctx.createBiquadFilter();b.type='peaking';b.frequency.value=f;b.gain.value=gn;b.Q.value=q;k.connect(b);k=b;});
+  gCut=ctx.createGain();gCut.gain.value=1;gBus=ctx.createGain();gBus.gain.value=GEIGE_V;k.connect(gCut).connect(gBus).connect(dropG);}
  // Echo für den Boten (punktierte Achtel, folgt dem Tempo)
  echoIn=ctx.createGain();echoD=ctx.createDelay(2);echoD.delayTime.value=spb()*3;const eFb=ctx.createGain();eFb.gain.value=.38;
  const eF=ctx.createBiquadFilter();eF.type='lowpass';eF.frequency.value=1800;const eOut=ctx.createGain();eOut.gain.value=.6;
@@ -275,6 +296,55 @@ function formant(dest,t,f,dur,vow,o={}){
  if(br){const s=ctx.createBufferSource();s.buffer=NBUF;const bg=ctx.createGain();bg.gain.value=br*2.2;s.connect(bg).connect(src);s.start(t,Math.random()*1.5);s.stop(t+dur+.05);}
 }
 
+// ---------- Geigenebene ----------
+// Melodie über 8 Takte: [Schritt, Stufe über dem Akkordgrundton (degSemi), Länge in 16teln, Doppelgriff (Stufen darunter)].
+// Lange Töne, weite Sprünge, Septime und Sekunde: fremd, aber nur Töne der Tonleiter. Takt 8 ist Atempause.
+const GEIGE_V=.5;
+const GEIGE_MEL=[
+ [[0,4,13]],
+ [[0,6,8],[8,4,8]],
+ [[2,2,14,2]],
+ [[0,1,6],[6,0,10]],
+ [[0,7,16]],
+ [[0,4,10],[10,2,6]],
+ [[4,6,12,2]],
+ []
+];
+// Ein Geigenton: zwei leicht verstimmte Sägezähne, Bogenansatz (von unten, mit Reibungsrauschen), Vibrato ab Tonmitte.
+// Alle Knoten werden in G.live gemerkt, damit der Abbruch sie wirklich beendet.
+function geigeTon(t,m,dur,v){
+ const f=mtof(m),a=.09,r=Math.min(.16,dur*.3),g=ctx.createGain();
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+a);g.gain.setValueAtTime(v,t+Math.max(a,dur-r));g.gain.linearRampToValueAtTime(0,t+dur);g.connect(gEin);
+ const vib=ctx.createOscillator();vib.frequency.value=5.2;const vg=ctx.createGain();vg.gain.setValueAtTime(0,t);vg.gain.setValueAtTime(0,t+dur*.35);vg.gain.linearRampToValueAtTime(f*.0055,t+dur*.7);vib.connect(vg);vib.start(t);vib.stop(t+dur+.05);G.live.push(vib);
+ [-5,5].forEach(det=>{const o=ctx.createOscillator();o.type='sawtooth';o.detune.value=det;
+  o.frequency.setValueAtTime(f*.985,t);o.frequency.exponentialRampToValueAtTime(f,t+.05);vg.connect(o.frequency);
+  const og=ctx.createGain();og.gain.value=.5;o.connect(og).connect(g);o.start(t);o.stop(t+dur+.05);G.live.push(o);});
+ const n=ctx.createBufferSource();n.buffer=NBUF;const nf=ctx.createBiquadFilter();nf.type='bandpass';nf.frequency.value=Math.min(6000,f*3);nf.Q.value=2;
+ const ng=ctx.createGain();ng.gain.setValueAtTime(0,t);ng.gain.linearRampToValueAtTime(.12*v,t+.02);ng.gain.exponentialRampToValueAtTime(.0001,t+.14);
+ n.connect(nf).connect(ng).connect(g);n.start(t,Math.random()*1.5);n.stop(t+.16);G.live.push(n);
+}
+// Harter Abbruch: Gain in 45 ms auf null, alle Töne enden, Bogen rutscht ab (kurzer Rausch-Kratzer, nicht über den Abbruch-Gain)
+function geigeAbbruch(why){
+ if(!G.on)return;G.on=false;if(!ctx)return;const n=ctx.currentTime;G.cutAt=n;
+ gCut.gain.cancelScheduledValues(n);gCut.gain.setValueAtTime(1,n);gCut.gain.linearRampToValueAtTime(0,n+.045);
+ G.live.forEach(o=>{try{o.stop(n+.06);}catch(e){}});G.live=[];
+ noise(gBus,n,.07,{type:'bandpass',f:1800,fEnd:4200,q:2.5,v:.3,a:.004});
+ note('geige aus',why);
+}
+function geigeSchedule(s,t,ch,root){
+ if(!ctx)return;
+ const darf=S.geige&&!S.fin&&(combat()||S.solo);
+ if(s===0){
+  if(!darf){G.on=false;}
+  else if(!G.on&&t>=G.cutAt+.35){G.on=true;gCut.gain.cancelScheduledValues(t);gCut.gain.setValueAtTime(1,t);note('geige an','Einsatz auf der Taktgrenze');}
+ }
+ if(!G.on||!darf)return;
+ if(s===0)G.bar=G.i++%8;
+ const lift=S.gefahr>.5?2:0; // bei Gefahr steigt die Linie um zwei Stufen
+ GEIGE_MEL[G.bar].forEach(([ps,dg,len,dbl])=>{if(ps!==s)return;
+  const d=len*spb(),m=root+24+degSemi(ch,dg+lift);
+  geigeTon(t,m,d,.1);if(dbl)geigeTon(t,root+24+degSemi(ch,dg+lift-dbl),d,.07);});
+}
 const heart=(t,v)=>{const k=(STOFFE[S.stoff].heart||1);tone(L[1],t,88,.32,{glide:.45,v:v*k});noise(L[1],t,.03,{f:180,q:.8,v:v*.25*k});};
 const bassNote=(t,m,dur)=>{tone(L[1],t,mtof(m),dur,{type:'triangle',v:.13,a:.03,pad:true,r:.35,rot:false});tone(L[1],t,mtof(m),dur,{type:'sawtooth',v:.035,a:.03,pad:true,r:.35,lp:280,rot:false});};
 // Rhythmus-Instrument des Bioms (Layer 2), auf 2 und 4 bzw. als Achtel in der treibenden Fassung
@@ -379,6 +449,36 @@ function bigBell(t){const r=BIOME[S.biome].root,b=ctx.createGain();b.gain.value=
  [[-24,.11,7],[-12,.08,5.5],[-9,.035,4],[-5,.03,3.2],[0,.026,2.6],[7,.01,1.8]].forEach(([iv,v,d])=>tone(b,t,mtof(r+iv),d,{v,a:.003,rot:false}));
  noise(b,t,.09,{f:1600,q:.8,v:.09});}
 
+// ---------- Hören statt sehen (M6) ----------
+// Drei Einsätze, einer je Absicht-Art, alle über hoerG. Töne kommen aus Akkord bzw. Bass des aktuellen Takts, also aus der Tonart des Bioms.
+// Angriff: tiefer gezupfter Puls (Kontrabass, Karplus-Strong ohne Verstimmung) auf dem Bass des Akkords; 1, 2 oder 4 Schläge je Takt (Stufe 1 bis 3).
+function hoerZupf(t,m,v){const k=ksBuf(m),s=ctx.createBufferSource();s.buffer=k.b;s.playbackRate.value=k.rate;
+ const g=ctx.createGain();g.gain.value=v*1.7;s.connect(g).connect(hoerG);s.start(t);s.stop(t+1.2);
+ tone(hoerG,t,mtof(m),.55,{type:'triangle',v:v*.55,a:.006,lp:520,rot:false});   // Körper des Basses
+ tone(hoerG,t,mtof(m+12),.3,{v:v*.2,a:.004,rot:false});                           // Oktave obenauf, damit man ihn auch klein hört
+ noise(hoerG,t,.03,{f:1100,type:'lowpass',q:.7,v:v*.3});}                         // Anzupfen des Fingers
+// Schutz: eine einzelne Glocke auf der Eins (Grundton des Akkords, zwei Oktaven höher; Teiltöne Oktave und Duodezime bleiben in der Tonart)
+function hoerGlocke(t,m,v){const f=mtof(m);tone(hoerG,t,f,2,{v,a:.003,rot:false});tone(hoerG,t,f*2,1.1,{v:v*.35,a:.003,rot:false});tone(hoerG,t,f*3,.5,{v:v*.18,a:.003,rot:false});}
+// Zauber: Harmonium-Ton (Formant »oh«, Terz des Akkords), der über den ganzen Takt langsam aufschwillt
+function hoerHarmonium(t,m,len,v){formant(hoerG,t,mtof(m),len,'oh',{v,voices:2,a:len*.86,r:len*.12,breath:.06});}
+function hoerSchedule(s,t,bar,ch,barLen,root){
+ const a=H.cur.angriff;
+ if(a&&s%4===0){const erlaubt=a===1?s===0:a===2?(s===0||s===8):true;
+  if(erlaubt)hoerZupf(t,root-12+ch.bass,s===0?.34:.28);}
+ if(H.cur.schutz&&s===0)hoerGlocke(t,root+24+ch.c[0],.32);
+ if(H.cur.zauber&&s===0){let m=root+12+ch.c[1];while(m<58)m+=12;hoerHarmonium(t,m,barLen,1.4);} // Terz des Akkords, nie unter A3 (sonst verschwindet der Formant-Ton im Rest)
+}
+// Neue Lage der Einsätze auf einer Taktgrenze übernehmen: Einsätze an, übrige Layer treten zurück (und wieder vor)
+function hoerenUebernehmen(t){
+ const n=H.next,c=H.cur;if(n.angriff===c.angriff&&n.schutz===c.schutz&&n.zauber===c.zauber)return;
+ const vor=[c.angriff?'angriff '+c.angriff:'',c.schutz?'schutz':'',c.zauber?'zauber':''].filter(Boolean).join(', ')||'keine';
+ H.cur={angriff:n.angriff,schutz:n.schutz,zauber:n.zauber};
+ const jetzt=[n.angriff?'angriff Stufe '+n.angriff:'',n.schutz?'schutz':'',n.zauber?'zauber':''].filter(Boolean).join(', ')||'keine';
+ const an=!!(n.angriff||n.schutz||n.zauber);H.duck=an?HOER_DUCK:1;
+ if(ctx)[2,3,'v'].forEach(k=>lv(k,LV[k].raw,t,.4));
+ note('hoeren',an?`Einsätze: ${jetzt} (vorher ${vor}), Layer 2, 3 und Stimmen um ${Math.round((1-HOER_DUCK)*100)} % zurück`:`Einsätze vorbei (vorher ${vor}), Layer wieder normal`);
+}
+
 // Ortsklang-Ereignisse (Layer 0): selten, zufällig (reine Kosmetik), tonale Klänge aus dem aktuellen Akkord
 function ambEvent(t,s,bar,ch){
  const b=BIOME[S.biome],r=b.root,k=lvAt(0,t);if(k<.05)return;const R=Math.random,dry=L[0];
@@ -446,13 +546,15 @@ function update(){
  if(!S.fin){dissG.gain.setTargetAtTime(S.gefahr*.045,now,.5);flirrG.gain.setTargetAtTime(S.gefahr>.55?(S.gefahr-.55)*.03:0,now,.5);}
  // Spitzenpegel am Ausgang
  peakA.getFloatTimeDomainData(peakBuf);let m=0;for(let i=0;i<peakBuf.length;i++){const a=Math.abs(peakBuf[i]);if(a>m)m=a;}if(m>S.peak)S.peak=m;
+ // Pegel des Einsatz-Busses: RMS der letzten 2048 Samples (der Analyser liefert die neuesten fftSize Samples)
+ if(hoerA&&(H.cur.angriff||H.cur.schutz||H.cur.zauber||H.pegel>-119)){hoerA.getFloatTimeDomainData(hoerBuf);let q=0;for(let i=hoerBuf.length-2048;i<hoerBuf.length;i++)q+=hoerBuf[i]*hoerBuf[i];H.pegel=q>1e-12?10*Math.log10(q/2048):-120;}
 }
 function bedLevels(t){const b=BIOME[S.biome],menu=S.scene==='menu',nl=S.fin==='niederlage';
  Object.entries(beds).forEach(([k,g])=>{let v=nl?(k==='meer'?.15:0):(b.amb[k]||0)*(menu?.75:1);g.gain.setTargetAtTime(v,t,1.2);});}
 function barStart(t,bar){
  S.bar=bar;S.chord=bar%4;
  // Tempo: kleine Spanne (80 bis 88), höchstens 1 BPM pro Takt, damit man es spürt statt hört
- const bt=S.solo?80:Math.round(80+8*S.gefahr);S.bpm=clamp(S.bpm+Math.sign(bt-S.bpm),80,88);
+ const bt=S.solo?80:Math.round(80+8*S.gefahr);S.bpm=FEST||clamp(S.bpm+Math.sign(bt-S.bpm),80,88);
  echoD.delayTime.setTargetAtTime(spb()*3,t,.3);
  // Harmonie kippt nur auf Taktgrenzen, mit Hysterese
  if(S.finPending){S.fin=S.finPending;S.finPending=null;finish(t,S.fin);}
@@ -463,6 +565,7 @@ function barStart(t,bar){
  if(S.dark!==was&&!S.solo)note(S.dark?'kippt':'löst sich',S.fin?'Ende: '+S.fin:(S.dark?`Gefahr ${z(S.gefahr)} > 0,50`:`Gefahr ${z(S.gefahr)} < 0,42`));
  if(S.nextBiome&&S.nextBiome!==S.biome){const alt=S.biome;S.biome=S.nextBiome;retune(t);note('biom',`${BIOME[alt].n} → ${BIOME[S.biome].n}, Überblendung auf der Taktgrenze`);}
  S.nextBiome=null;
+ hoerenUebernehmen(t);
  bedLevels(t);
  S.spike=Math.max(0,S.spike-.25);
  if(S.fin){S.chord=S.fin==='umkehren'?1:0;S.slot=null;S.duel=false;return;} // Schlussakkord bleibt stehen (auch für tonale SFX)
@@ -521,11 +624,11 @@ function finish(t,art){
 }
 function clearFin(){if(!S.fin&&!S.finPending)return;const n=ctx?ctx.currentTime:0;S.fin=null;S.finPending=null;
  if(!ctx)return;dropF.frequency.cancelScheduledValues(n);dropF.frequency.setTargetAtTime(18000,n,.4);dropG.gain.cancelScheduledValues(n);dropG.gain.setTargetAtTime(1,n,.3);
- droneG.gain.cancelScheduledValues(n);droneG.gain.setTargetAtTime(.05,n,1);L[0].gain.cancelScheduledValues(n);lv(0,1,n,1);flirrG.gain.cancelScheduledValues(n);bedLevels(n);}
+ droneG.gain.cancelScheduledValues(n);droneG.gain.setTargetAtTime(.05,n,1);L[0].gain.cancelScheduledValues(n);if(MM[0])MM[0].gain.cancelScheduledValues(n);lv(0,1,n,1);flirrG.gain.cancelScheduledValues(n);bedLevels(n);}
 
 function schedule(st,t){
  const s=st%16,bar=Math.floor(st/16),root=BIOME[S.biome].root;
- if(s===0)barStart(t,bar);
+ if(s===0){barStart(t,bar);}
  if(st===S.bellStep){bigBell(t);S.bellStep=-1;}
  if(S.fin){S.dropStep=S.hitStep=-1;if(S.fin==='umkehren'&&s===0)ambEvent(t,s,bar,chordNow());return;}
  const ch=chordNow(),barLen=spb()*16;
@@ -535,6 +638,8 @@ function schedule(st,t){
   noise(duckG,t,beat,{f:300,fEnd:4000,q:1.8,v:.09,a:beat*.95});note('atemholen','Hochreaktion: ein Schlag halb leise und dumpf');}
  if(st===S.hitStep){dropG.gain.cancelScheduledValues(t);dropG.gain.setValueAtTime(.45,t);dropG.gain.linearRampToValueAtTime(1,t+.05);dropF.frequency.cancelScheduledValues(t);dropF.frequency.setValueAtTime(420,t);dropF.frequency.exponentialRampToValueAtTime(18000,t+.2);
   S.spike=1;S.wucht=1;for(let i=1;i<5;i++){const vor=S.gate[i];S.gate[i]=false;setGate(i,true,t,'Hochreaktion',vor);}S.drive=true;tutti(t,ch.c);}
+ // Hören statt sehen: Einsätze der stummen Gegner
+ if(H.cur.angriff||H.cur.schutz||H.cur.zauber)hoerSchedule(s,t,bar,ch,barLen,root);
  // Layer 0: Ortsklang-Ereignisse
  if(!S.solo||S.solo.layer===0)ambEvent(t,s,bar,ch);
  // Layer 1: Herzschlag (lub-dub), bei Wucht doppelt; Bass auf der Eins
@@ -551,6 +656,8 @@ function schedule(st,t){
  MEL[bar%8].forEach(([ps,ci,len])=>{if(ps===s){const iv=ch.c[ci%3]+12*Math.floor(ci/3);melNote(t,root+12+iv,len*spb());}});
  // Layer 4: Paukenwirbel in den letzten Schlag und Akzent auf der Eins
  if(S.gate[4]){if(s===0&&st!==S.hitStep)tutti(t,ch.c);if(s>=12)pauke(L[4],t,.1+(s-12)*.06);}
+ // Geigenebene (nur nach Music.geige(true))
+ if(S.geige||G.on)geigeSchedule(s,t,ch,root);
  // Gegnerstimmen: Frage/Antwort, Duell = jeden Takt, oktaviert, lauter. Wächter: Stimme des Bioms, Oktave tiefer, gedoppelt
  if(S.slot&&combat())voice(S.slot,s,t,ch,root,S.duel?1.25:1);
  // Abgesang eines verstorbenen Typs: fallende Figur auf der nächsten Zählzeit
@@ -578,7 +685,7 @@ function victoryCadence(t){
 }
 function tick(){
  update();
- while(nextT<ctx.currentTime+.12){schedule(step,nextT);nextT+=spb();step++;}
+ while(nextT<ctx.currentTime+.12){schedule(step,nextT);if(step%16===0&&TAKT.length){const z={t:nextT,bar:Math.floor(step/16),barLen:spb()*16,biome:S.biome,dark:S.dark,drive:S.drive,wucht:S.wucht,gate:[...S.gate],fin:S.fin};TAKT.forEach(f=>{try{f(z);}catch(e){}});}nextT+=spb();step++;}
 }
 // nächste Zählzeit (Viertel) im Planungsraster
 const nextBeat=()=>Math.ceil((step+1)/4)*4;
@@ -632,7 +739,27 @@ return {
   S.hp=S.hpMax;S.telegraph=false;S.momentum=0;S.spike=0;S.pendingAns=[];S.abgesang=[];
   const fk=foeId(o.foe);if(o.layer==='voice'&&fk){S.scene=FOES[fk].rang==='normal'?'kampf':(FOES[fk].rang==='boss'?'boss':'waechter');S.foes=[{type:fk}];}else{S.scene='karte';S.foes=[];}},
  biome(k){if(BIOME[k]&&k!==S.biome)S.nextBiome=k;else if(k===S.biome)S.nextBiome=null;}, // wechselt auf der nächsten Taktgrenze
+ // Hören statt sehen (M6): Liste der hörbaren Absichten stummer Gegner [{art:'angriff'|'schutz'|'zauber', stufe:1..3, uid}].
+ // Die Einsätze setzen auf der nächsten Taktgrenze ein, laufen jeden Takt weiter und enden auf einer Taktgrenze, wenn die Liste sie nicht mehr enthält.
+ hoeren(liste){const n={angriff:0,schutz:false,zauber:false};
+  (Array.isArray(liste)?liste:[]).forEach(a=>{if(!a)return;if(a.art==='angriff')n.angriff=Math.max(n.angriff,clamp(Math.round(+a.stufe||1),1,3));else if(a.art==='schutz')n.schutz=true;else if(a.art==='zauber')n.zauber=true;});
+  const p=H.next;if(n.angriff===p.angriff&&n.schutz===p.schutz&&n.zauber===p.zauber)return;
+  H.next=n;if(!ctx||!running)hoerenUebernehmen(ctx?ctx.currentTime:0);}, // ohne laufende Musik sofort, sonst auf der nächsten Taktgrenze
+ // Geigenebene für »Zanns Takt«: an = true setzt auf der nächsten Taktgrenze ein, an = false bricht sofort hart ab (Kratzer, dann Stille).
+ geige(an,why){an=!!an;if(an===S.geige)return;S.geige=an;
+  if(an){if(!ctx||!running)note('geige an',why||'angefordert, setzt mit der Musik ein');else note('geige angefordert',why||'Einsatz auf der nächsten Taktgrenze');}
+  else{if(G.on)geigeAbbruch(why||'Zug ausgesetzt');else note('geige aus',why||'zurückgenommen');}},
+ // Messknoten für Labor und Prüfung: Analyser am Einsatz-Bus und an der Summe vor der Kette
+ hoerenMessung(){return ctx?{einsatz:hoerA,summe:sumA,gain:hoerG}:null;},
  // Für tonale SFX: Grundton und aktueller Akkord, damit Effekte in der Tonart klingen
+ // Mund-Modus (mund.js / studio.html): eigene Aufnahmen statt prozeduraler Layer
+ mund:{
+  eingang(k){if(!ctx)build();return MM[k]||null;},            // hier hängen die Loops eines Layers dran (gleiches Gate wie der Layer)
+  prozedural(k,an){if(!ctx)build();const p=MP[k];if(p)p.gain.setTargetAtTime(an?1:0,ctx.currentTime,.05);},
+  takt(fn){TAKT.push(fn);return ()=>{const i=TAKT.indexOf(fn);if(i>=0)TAKT.splice(i,1);};}, // fn({t,bar,barLen,biome,dark,drive,wucht,gate}) zu jedem Taktanfang, kurz vorher
+  tempo(bpm){FEST=bpm?clamp(bpm,40,200):0;if(FEST)S.bpm=FEST;},
+  ctx(){if(!ctx)build();return ctx;}
+ },
  harmony(){const c=chordNow();return {root:BIOME[S.biome].root,chord:c.c,scale:c.scale};},
  stoff(k){if(!STOFFE[k])return;if(k!==S.stoff)note('stoff',STOFFE[k].n);S.stoff=k;if(!ctx)return;const st=STOFFE[k],n=ctx.currentTime;
   toneF.frequency.setTargetAtTime(st.lp,n,.4);wetG.gain.setTargetAtTime(st.wet,n,.4);shaper.curve=curve(st.drive);driveG.gain.setTargetAtTime(1/(1+st.drive*.45),n,.2);
@@ -643,9 +770,10 @@ return {
  onEvent(fn){if(typeof fn!=='function')return ()=>{};listeners.push(fn);return ()=>{const i=listeners.indexOf(fn);if(i>=0)listeners.splice(i,1);};},
  state(){const c=ctx&&running?chordNow():{name:'–'},cur=Math.max(0,step-1);
   return {scene:S.scene,wucht:S.wucht,gefahr:S.gefahr,bpm:S.bpm,gate:[...S.gate],drive:S.drive,
-  chord:c.name,biome:S.biome,dark:S.dark,slot:S.slot,duel:S.duel,foes:S.foes.map(f=>f.type),hp:S.hp,hpMax:S.hpMax,chain:S.chain,telegraph:S.telegraph,momentum:S.momentum,
+  chord:c.name,biome:S.biome,geige:S.geige,dark:S.dark,slot:S.slot,duel:S.duel,foes:S.foes.map(f=>f.type),hp:S.hp,hpMax:S.hpMax,chain:S.chain,telegraph:S.telegraph,momentum:S.momentum,
   bar:Math.floor(cur/16),beat:Math.floor((cur%16)/4)+1,akt:S.akt,role:S.role,stoff:S.stoff,abgesang:S.lastAbgesang,ende:S.fin,
   layerLevels:[0,1,2,3,4].map(i=>+clamp(lvAt(i,ctx?ctx.currentTime:0)).toFixed(3)),voiceLevel:+clamp(lvAt('v',ctx?ctx.currentTime:0)).toFixed(3),
+  hoeren:{angriff:H.cur.angriff,schutz:H.cur.schutz,zauber:H.cur.zauber,pegel:+H.pegel.toFixed(1),gain:hoerG?+hoerG.gain.value.toFixed(2):1,duck:H.duck},
   peak:S.peak>0?+(20*Math.log10(S.peak)).toFixed(2):-120,log:S.log.slice()};}
 };
 })();

@@ -244,5 +244,83 @@ module.exports = {
       kerze(K, kx, ky, { hof: 60 });
       K.vignette(.5, { cx: 80, cy: 48 });
     },
+
+    // Eine schmale Gasse zwischen zwei hohen Lehmhäusern mit Fugen, Rissen, Fensterladen; quer eine dünne Leine mit zwei Klammern, zwei Hemden mit Kragen und Knopfleiste strecken die Ärmel zueinander, genau in der Lücke zwischen den Ärmelspitzen steht ein schmaler Lichtstreif vom Gassenende.
+    stadt_waescheleine(K) {
+      const { B } = K;
+      // Hintergrund: Dämmerschein am Gassenende
+      const GLOW = ['#0a0404', '#1c0c08', '#3a1a10', '#60301a', '#8e4e2a', '#be7a44', '#e8a868'];
+      K.feld(26, 0, 134, 90, GLOW, (x, y) => ruhig(Math.max(0, .9 - Math.pow(y / 80, 1.5) * 1.1) * Math.max(.3, 1 - Math.abs(x - 80) / 70) + (B.fbm(x * .05, y * .1, K.seed, 2) - .5) * .1, GLOW.length - 1, .22));
+      for (const [x0, x1, y0] of [[40, 62, 72], [62, 84, 68], [84, 104, 74], [104, 126, 70]]) {
+        const f = K.maske(); f.rect(x0, y0, x1 - x0, 90 - y0);
+        K.form(f, .3, { k: ['#0a0404', '#160a08', '#26130e'], r: RAND, ton: 1, fase: 0, rand: 1, lichtVon: [80, 6] });
+      }
+      sandboden(K, 76, 90, (x, y) => Math.max(0, .45 - (y - 76) / 30) * Math.max(.2, 1 - Math.abs(x - 80) / 50));
+      // Der Lichtstreif: schmal, senkrecht, aus dem Gassenende, genau zwischen den Ärmelspitzen
+      for (let y = 4; y < 76; y++) {
+        const q = 1 - y / 76;
+        for (let x = 78; x <= 82; x++) {
+          const kern = x >= 79 && x <= 81;
+          if (kern || B.bay(x, y) < .5 + q * .3) K.set(x, y, kern ? (q > .35 ? '#fff0d0' : '#ffd8a0') : '#e8a868');
+        }
+      }
+      K.licht(80, 30, 26, '#60301a', .8, { oval: .5 });
+      // Die nahen Häuser: Lehmputz mit Fugen und Putzflicken, Risse
+      const lw = K.maske(); lw.poly([[0, 0], [30, 0], [34, 18], [34, 76], [28, 90], [0, 90]]);
+      const rw = K.maske(); rw.poly([[160, 0], [130, 0], [126, 18], [126, 76], [132, 90], [160, 90]]);
+      const licht = (x, y) => .24 + Math.max(0, 1 - Math.hypot(x - 80, (y - 14) * .9) / 120) * .5;
+      steinwand(K, 0, 0, 36, 90, licht, { zh: 7, bw: 14, basis: .1, maske: (x, y) => lw.has(x, y) });
+      steinwand(K, 124, 0, 160, 90, licht, { zh: 7, bw: 14, basis: .1, maske: (x, y) => rw.has(x, y) });
+      for (const [x, y, w, h, sd] of [[2, 52, 12, 9, 1], [20, 8, 10, 8, 2], [138, 8, 12, 9, 3], [142, 62, 14, 8, 4]]) K.dith(x, y, x + w, y + h, SAND[4], (px, py) => .5 + B.hash(px, py, sd) * .1);
+      for (const [x0, y0, x1, y1] of [[24, 18, 21, 34], [6, 66, 10, 80], [132, 22, 137, 40], [150, 50, 146, 64]]) {
+        let px = x0, py = y0; const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0));
+        for (let k = 0; k <= n; k++) { px = x0 + (x1 - x0) * k / n + (k % 3 === 1 ? 1 : 0); py = y0 + (y1 - y0) * k / n; K.set(Math.round(px), Math.round(py), '#0a0404'); }
+      }
+      // Fenster: links ein Fensterladen mit Lamellen, schief; rechts schwarze Öffnungen mit Sturz
+      { const x = 5, y = 32, w = 15, h = 20;
+        K.feld(x, y, x + w, y + h, DUNKEL, () => 0);
+        const ladenL = K.maske(); ladenL.poly([[x - 2, y - 1], [x + 8, y], [x + 8, y + h], [x - 2, y + h + 2]]);
+        K.form(ladenL, 0, { k: ['#12090a', '#26120e', '#3c1e14', '#5a3020'], r: RAND, ton: 1.8, fase: 0, rand: 1, lichtVon: [80, 10], muster: (px, py) => ((py - y) % 3 === 0 ? -.8 : 0) });
+        K.set(x + 6, y + 9, '#c0a060'); }
+      for (const [x, y, w, h] of [[4, 62, 11, 12], [146, 28, 11, 15], [146, 56, 11, 12]]) {
+        K.feld(x, y, x + w, y + h, DUNKEL, () => 0);
+        const s = K.maske(); s.rect(x - 1, y - 2, w + 2, 2); s.rect(x - 1, y + h, w + 2, 2);
+        K.form(s, 0, { k: STEIN.slice(2, 8), r: RAND, ton: 1.8, fase: 0, rand: 1, lichtVon: [80, 10] });
+      }
+      // Leine: dünn, mit Durchhang, an Haken in den Wänden
+      const hx0 = 33, hy0 = 24, hx1 = 127, hy1 = 26;
+      const lin = x => hy0 + (hy1 - hy0) * (x - hx0) / (hx1 - hx0) + Math.sin((x - hx0) / (hx1 - hx0) * Math.PI) * 4;
+      for (let x = hx0; x <= hx1; x++) { K.set(x, Math.round(lin(x)), '#0a0404'); if (x % 4 === 0) K.set(x, Math.round(lin(x)) - 1, '#c08a50'); }
+      K.set(hx0 - 1, hy0, '#d8b070'); K.set(hx0 - 2, hy0, '#6a4a28'); K.set(hx1 + 1, hy1, '#d8b070'); K.set(hx1 + 2, hy1, '#6a4a28');
+      // Hemd: Kragen, Knopfleiste, Falten, ein Ärmel zur Mitte gestreckt, der andere hängt
+      const LIN = ['#2a1c14', '#5a4030', '#98744c', '#d4b080', '#f0d4a4'];
+      const hemd = (cx, d, zeit) => {
+        const y0 = Math.round(lin(cx)) + 1, m = K.maske();
+        m.poly([[cx - 8, y0 + 1], [cx + 8, y0 + 1], [cx + 8.5, y0 + 6], [cx + 7, y0 + 27], [cx - 7, y0 + 27], [cx - 8.5, y0 + 6]]);
+        const ax = cx + d * 7, ay = y0 + 4, sx = cx + d * 29, sy = y0 + 7 + zeit;
+        m.kap(ax, ay, sx, sy, 2.7, 2.2);
+        m.kap(cx - d * 7, y0 + 4, cx - d * 9, y0 + 19, 2.3, 1.9);
+        K.form(m, 0, { k: LIN, r: ['#e8c490', '#fff0d0'], ton: 1.7, fase: 1, rand: 1, lichtVon: [80, 30], verlauf: .3,
+          muster: (x, y) => ((x === cx - 4 || x === cx + 3) && y > y0 + 8 ? -.6 : 0) + (x === cx + 5 && y > y0 + 12 ? -.3 : 0) + (y === y0 + 12 && Math.abs(x - cx) < 7 ? -.3 : 0) });
+        // Kragen: zwei helle Spitzen und ein dunkler V-Ausschnitt
+        const kr = K.maske(); kr.poly([[cx - 6, y0 + 1], [cx - 1, y0 + 1], [cx, y0 + 6], [cx - 3, y0 + 8]]); kr.poly([[cx + 6, y0 + 1], [cx + 1, y0 + 1], [cx, y0 + 6], [cx + 3, y0 + 8]]);
+        K.form(kr, 0, { k: LIN.slice(1), r: ['#f0d4a4', '#ffffff'], ton: 2.2, fase: 0, rand: 1, lichtVon: [80, 20] });
+        K.set(cx, y0 + 2, '#1a0c08'); K.set(cx, y0 + 3, '#1a0c08'); K.set(cx, y0 + 4, '#1a0c08');
+        // Knopfleiste: senkrechte Naht mit vier Knöpfen
+        K.linie(cx, y0 + 9, cx, y0 + 26, '#3a2a1c', .8);
+        for (let i = 0; i < 4; i++) K.set(cx, y0 + 11 + i * 4, '#fff4d8');
+        // Manschette und Tropfen
+        const mx = Math.round(sx);
+        K.rect(mx - 1, sy - 2, 2, 5, '#f4dcb0'); K.set(mx, sy + 3, '#8a6a44');
+        K.set(mx - d, sy + 5, '#c8d8e8'); K.set(mx - d, sy + 9, '#e8f0f8'); K.set(mx - d, sy + 10, '#a8b8c8');
+        // zwei Klammern an der Leine, an den Schultern
+        for (const dx of [-5, 5]) { K.set(cx + dx, y0, '#c0a060'); K.set(cx + dx, y0 - 1, '#e8d098'); K.set(cx + dx, y0 + 1, '#6a4a28'); }
+        return [mx, sy];
+      };
+      hemd(48, 1, 0);
+      hemd(112, -1, 0);
+      for (const x of [79, 83]) { K.set(x - 1, 88, '#2a1812'); K.set(x, 88, '#6a7a8a'); K.set(x + 1, 88, '#2a1812'); }
+      K.vignette(.5, { cx: 80, cy: 40, innen: .7 });
+    },
   },
 };

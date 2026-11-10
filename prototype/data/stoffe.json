@@ -39,6 +39,19 @@
    "n": "Fäulnis",
    "s": "FÄ",
    "c": "#86c062"
+  },
+  "X": {
+   "n": "Die Farbe",
+   "s": "FA",
+   "c": "#c800ff",
+   "schimmer": [
+    "#8c00b3",
+    "#aa00d9",
+    "#c800ff",
+    "#d026ff",
+    "#d84dff"
+   ],
+   "entwurf": true
   }
  },
  "suffix": {

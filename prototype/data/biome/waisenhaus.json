@@ -14,7 +14,7 @@
   "gegner": ["nachtschwester", "turnlehrer", "zugedeckte", "zwillinge"],
   "waechter": "heimleiterin",
   "waechter_alt": ["fotograf"],
-  "fundpool": ["trillerpfeife", "schluesselbund", "nachthemd", "musicbox", "candle", "bible", "rosary", "lantern", "laudanum", "smellingsalts"],
+  "fundpool": ["trillerpfeife", "schluesselbund", "nachthemd", "musicbox", "candle", "bible", "rosary", "lantern", "laudanum", "smellingsalts", "linse"],
   "ereignisse": [],
   "kraemer": {
    "n": "Der Hausmeister",
@@ -64,6 +64,7 @@
   "ort": "Schlafsaal bei Sturm, der Wind am Deich, Regen an hohen Fenstern, vierzig Kinder, die atmen", "rhyN": "Atem im Takt, sehr leise, wie Schlafende"},
  "foes": {
   "fotograf": {
+   "art": "mensch",
    "n": "Der Fotograf von 1913",
    "biom": "waisenhaus",
    "rang": "waechter",
@@ -88,6 +89,11 @@
      "v": 20
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 6,
+    "h": 5
+   },
    "sprite": "fotograf",
    "varianten": [
     "fotograf",
@@ -138,6 +144,7 @@
    "quelle": "skript"
   },
   "nachtschwester": {
+   "art": "mensch", "asche": true,
    "n": "Die Nachtschwester", "biom": "waisenhaus", "rang": "normal", "hp": 25, "weak": "G",
    "pat": [{"t": "atk", "v": 8}, {"t": "blk", "v": 6}, {"t": "atk", "v": 4, "h": 2}],
    "sprite": "nachtschwester_a", "varianten": ["nachtschwester_a", "nachtschwester_b"],
@@ -148,6 +155,7 @@
    "quelle": "skript"
   },
   "turnlehrer": {
+   "art": "veraendert",
    "n": "Der Turnlehrer", "biom": "waisenhaus", "rang": "normal", "hp": 27, "weak": "B",
    "pat": [{"t": "atk", "v": 9}, {"t": "buff", "v": 2}, {"t": "atk", "v": 4, "h": 2}],
    "sprite": "turnlehrer_a", "varianten": ["turnlehrer_a", "turnlehrer_b"],
@@ -158,6 +166,7 @@
    "quelle": "skript"
   },
   "zugedeckte": {
+   "art": "mensch",
    "n": "Das Zugedeckte", "biom": "waisenhaus", "rang": "normal", "hp": 25, "weak": "S",
    "pat": [{"t": "atk", "v": 3, "h": 3}, {"t": "blk", "v": 7}, {"t": "atk", "v": 6}],
    "sprite": "zugedeckte_a", "varianten": ["zugedeckte_a", "zugedeckte_b"],
@@ -168,6 +177,7 @@
    "quelle": "skript"
   },
   "zwillinge": {
+   "art": "mensch",
    "n": "Die Zwillinge", "biom": "waisenhaus", "rang": "normal", "hp": 28, "weak": "L",
    "pat": [{"t": "atk", "v": 5, "h": 2}, {"t": "atk", "v": 10}, {"t": "blk", "v": 6}],
    "sprite": "zwillinge_a", "varianten": ["zwillinge_a", "zwillinge_b"],
@@ -178,8 +188,10 @@
    "quelle": "skript"
   },
   "heimleiterin": {
+   "art": "mensch",
    "n": "Die Heimleiterin", "biom": "waisenhaus", "rang": "waechter", "hp": 80, "weak": "F",
    "pat": [{"t": "atk", "v": 10}, {"t": "atk", "v": 3, "h": 4}, {"t": "buff", "v": 2, "unverw": true, "why": "Nachtruhe. Alle schlafen, und wer schläft, dem tut man nichts."}, {"t": "atk", "v": 16}, {"t": "blk", "v": 10}],
+   "gesehen": {"t": "buff", "v": 3},
    "sprite": "heimleiterin", "varianten": ["heimleiterin"],
    "konzept": "Hoch und schmal im schwarzen Kleid von 1890, mit Keulenärmeln und Stehkragen. Sie hält Appell: das Aufnahmebuch aufgeschlagen auf dem Arm, in der Hand die Feder. Hinter ihr stehen die Kinder in einer Reihe, nach hinten kleiner, und es sind mehr, als Betten da sind. Alle haben nasses Haar.",
    "stimme": "glockenmutter",

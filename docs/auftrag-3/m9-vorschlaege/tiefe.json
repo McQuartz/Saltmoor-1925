@@ -1,0 +1,13 @@
+[
+ {"ereignis": "eis_name", "datei": "events.json", "wahl": 0, "l": "Antworten: +1 Talisman-Slot, −8 max. Leben", "grund": "Man antwortet dem Ruf, der den eigenen Namen sagt"},
+ {"ereignis": "funkstation_antwort", "datei": "biome/funkstation.json", "wahl": 0, "l": "Antworten. Was du schreibst, weißt du nachher nicht mehr: +1 Energie auf Dauer, −12 max. Leben", "grund": "Man antwortet dem Sender und verliert dafür etwas von sich"},
+ {"ereignis": "alle_laterne_spricht", "datei": "events.json", "wahl": 0, "l": "Dem Licht folgen: lerne einen Handgriff, -6 Leben", "grund": "Man folgt einem Ruf aus der Laterne"},
+ {"ereignis": "gezeitenwerk_schleuse", "datei": "biome/gezeitenwerk.json", "wahl": 2, "l": "Ein Item ins Wasser legen und sehen, was es hinaufträgt: ein Item verwandeln, −4 Leben", "grund": "Man opfert ein Item dem Wasser und nimmt zurück, was herauf kommt"},
+ {"ereignis": "gezeitenwerk_hauptrad", "datei": "biome/gezeitenwerk.json", "wahl": 0, "l": "Dich in die Lücke legen und mitfahren: +1 Kerbe an einem Item, −8 Leben", "grund": "Man legt sich selbst ins Wasser der Lücke und fährt mit dem Rad"},
+ {"ereignis": "kapelle_taufe", "datei": "events.json", "wahl": 0, "l": "Dich taufen lassen: +6 max. Leben, ein angelegtes Item verwandelt sich", "grund": "Man gibt sich dem bodenlosen Becken hin"},
+ {"ereignis": "stadt_wind", "datei": "events.json", "wahl": 0, "l": "Dich mitziehen lassen: +10 max. Leben, −14 Leben", "grund": "Man lässt sich vom einatmenden Abgrund ziehen"},
+ {"ereignis": "station_zug", "datei": "biome/station.json", "wahl": 0, "l": "Einsteigen und sitzen bleiben, bis die Türen schließen: eine zufällige Reliquie, −10 max. Leben", "grund": "Man steigt in den Zug, der nie abfährt, und folgt ihm"},
+ {"ereignis": "grotte_stimme", "datei": "biome/grotte.json", "wahl": 0, "l": "Ja sagen: ein Item tauschen, +10 max. Leben", "grund": "Man sagt ja zur Stimme aus der Quelle"},
+ {"ereignis": "fabrik_rauch", "datei": "biome/fabrik.json", "wahl": 0, "l": "Hineinknien und einatmen: dauerhaft +1 Energie, −10 max. Leben", "grund": "Man atmet den Rauch aus dem zweiten Hof darunter ein und öffnet sich ihm"},
+ {"ereignis": "mond_rand", "datei": "biome/mond.json", "wahl": 0, "l": "Einen Schritt hinüber: eine zufällige Reliquie, −9 max. Leben", "grund": "Man tritt über die Linie in das Graue, das wie Lider klingt"}
+]

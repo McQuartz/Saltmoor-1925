@@ -36,14 +36,7 @@ a[data-act]{color:inherit;cursor:pointer;pointer-events:auto;text-decoration:und
 .feind{position:absolute;transform:translateX(-50%);width:calc(var(--u)*64);pointer-events:auto}
 .feind .abs{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-family:var(--fp);font-size:calc(var(--u)*5);color:#fff;white-space:nowrap;margin-bottom:calc(var(--u)*2);
  text-shadow:1px 0 #000,-1px 0 #000,0 1px #000,0 -1px #000,1px 1px #000,-1px -1px #000,2px 2px 0 #000;display:flex;align-items:center;gap:calc(var(--u)*1.5)}
-.feind .abs s{font-size:.7em;opacity:.7;margin-right:.2em}
 .feind .treffer{width:100%}
-.feind .info{width:100%;text-shadow:1px 1px 0 #000,0 0 3px #000}
-.feind .nm{display:flex;justify-content:space-between;align-items:center;font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.08em;color:#e8dcc0}
-.feind .zl{display:flex;justify-content:space-between;font-size:calc(var(--u)*5);color:#d8ccb0}.feind .zl b{font-weight:normal}.feind .blk{color:var(--blau)}.feind .pvt{color:#ffb070}
-.feind .sts{display:flex;gap:calc(var(--u)*1.5);align-items:center}
-.feind.ziel .nm span{color:#ffd8a0;text-decoration:underline;text-underline-offset:3px}
-.feind.waechter,.feind.boss{width:calc(var(--u)*90)}
 
 /* ---------- Toasts, Zwischentitel ---------- */
 #toast{left:50%;top:calc(var(--u)*8);transform:translateX(-50%);display:flex;flex-direction:column;gap:calc(var(--u)*2);align-items:center;width:45%;z-index:5}
@@ -60,8 +53,6 @@ a[data-act]{color:inherit;cursor:pointer;pointer-events:auto;text-decoration:und
 /* ---------- Untere Leiste ---------- */
 #leiste{position:relative;height:calc(var(--u)*92);background:#000;display:flex;align-items:flex-start;justify-content:space-between}
 #leiste.kampf{padding:0 calc(var(--u)*4)}
-#rad{width:calc(var(--u)*64);padding-top:calc(var(--u)*8)}
-#rad .radl{font-family:var(--fk);font-size:calc(var(--u)*3.6);fill:#a89c80;letter-spacing:.1em}
 #hand{flex:1;display:flex;justify-content:center;gap:calc(var(--u)*3);margin-top:calc(var(--u)*-14)}
 #rechts{width:calc(var(--u)*76);display:flex;flex-direction:column;align-items:center;padding-top:calc(var(--u)*4);gap:calc(var(--u)*3)}
 .en-l{font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.16em;color:#c8b890}
@@ -197,8 +188,6 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .fig{width:calc(var(--u)*92)}
 /* Lesbarkeit auf hellen Orten (Salzstollen): dezente dunkle Unterlage, keine Box */
 #kopf{background:radial-gradient(ellipse at 30% 40%,rgba(0,0,0,.62),rgba(0,0,0,.35) 60%,transparent 75%);padding:calc(var(--u)*3);margin:calc(var(--u)*-3)}
-.feind .info{background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.55) 25%,rgba(0,0,0,.55) 80%,rgba(0,0,0,0));padding:calc(var(--u)*1) calc(var(--u)*2)}
-.feind .abs{background:radial-gradient(ellipse,rgba(0,0,0,.45),transparent 70%)}
 .ankunft{background:rgba(0,0,0,.78);border-top:1px solid var(--messing);border-bottom:1px solid var(--messing);padding:calc(var(--u)*10) calc(var(--u)*24);max-width:calc(var(--u)*360)}
 .ankunft .neu{font-size:calc(var(--u)*5);line-height:1.35;margin:calc(var(--u)*4) 0 calc(var(--u)*6)}
 /* Auftrag 2, M1: Spieler-Lebensbalken unten mittig über der Hand */
@@ -208,9 +197,11 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 #spieler .schild.an{color:#cfe0ff;opacity:1;text-shadow:0 0 calc(var(--u)*3) #000}
 #spieler .sbar{position:relative;flex:1;height:calc(var(--u)*8);background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20,0 0 calc(var(--u)*6) rgba(0,0,0,.8);display:flex}
 #spieler .sbar i{display:block;height:100%}#spieler .sbar .hp{background:linear-gradient(#d0463e,#9a2a24)}
-#spieler .sbar .schatten{background:repeating-linear-gradient(-45deg,#5a0e0a 0 3px,#300806 3px 6px);animation:puls .9s infinite alternate}
+#spieler .sbar .schraffur{background:repeating-linear-gradient(-45deg,#c8463a 0 2px,#3a0a08 2px 5px);box-shadow:inset 0 0 0 1px #ff8a7a55}
+#spieler .sblock{position:absolute;left:0;right:0;bottom:calc(var(--u)*-3);height:calc(var(--u)*2);display:flex}#spieler .sblock i{display:block;height:100%}#spieler .sblock .bk{background:#5a8ad0}#spieler .sblock .bricht{background:repeating-linear-gradient(-45deg,#9ac0ff 0 2px,#2a4a80 2px 5px)}
+#gegner .schutz{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}#gegner .schutz line{stroke:#9ad0ff;stroke-width:1.5;stroke-dasharray:3 2;opacity:.9;vector-effect:non-scaling-stroke}
+.zl .panzer{color:#cfe0ff}.geschw{color:#cfc0a0}
 #spieler .sbar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fk);font-size:calc(var(--u)*5);letter-spacing:.08em;color:#fff4e0;text-shadow:1px 1px 0 #000,0 0 3px #000}
-#spieler .swarn{width:100%;text-align:center;font-size:calc(var(--u)*5);color:#ff8a7a;text-shadow:1px 1px 0 #000,0 0 4px #000}
 .zwischentitel .spaet{opacity:0;animation:spaet .5s 1.5s forwards}@keyframes spaet{to{opacity:.8}}
 /* Meldungszeile: höchstens zwei nebeneinander, nie gestapelt */
 #toast{flex-direction:row!important;justify-content:center;width:70%!important;pointer-events:auto;cursor:pointer}
@@ -245,7 +236,6 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .pick.selten{border-color:var(--messing)}.pick.reliquie{border-color:var(--gold);animation:aufdecken .45s backwards,glanz 3.2s ease-in-out .5s infinite}
 @keyframes glanz{0%,100%{box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.15)}50%{box-shadow:0 0 calc(var(--u)*9) rgba(232,197,71,.45)}}
 
-.feind .nm .knf{color:#e8c070;margin-left:.3em;font-size:.8em}
 .abs .unverw{font-size:.8em;color:#d8ecff;background:rgba(20,30,45,.75);padding:0 .3em;border:1px solid rgba(200,225,255,.45);border-radius:2px}.abs .ruft{font-size:.8em;color:#ffe2b0;background:rgba(45,28,12,.78);padding:0 .3em;border:1px solid rgba(255,205,140,.5);border-radius:2px}.abs .laedt{opacity:.75}.abs .laedt small{font-size:.6em;opacity:.8}
 .hgpick .hgimg{display:block;margin:4px auto 2px;width:calc(var(--u,3px)*32);height:auto;image-rendering:pixelated}
 /* Belohnung mit Handgriff und Reliquie: etwas dichter, damit „Nichts nehmen“ ohne Scrollen sichtbar bleibt (seit Reliquien ihren Eigenschaftstext zeigen) */
@@ -253,3 +243,83 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 
 /* Mehr als 6 Handkarten (Ballast, Strandbuch, Wahrsagerin): Karten überlappen, damit die Hand nie aus dem Bild läuft; die Karte unter der Maus liegt oben */
 #hand .karte+.karte{margin-left:calc(var(--u)*-1*var(--ov,0))}#hand .karte:hover{z-index:5}
+.kt.verst{color:#ffe08a}
+/* ---------- Auftrag 3 M2: Kampf-HUD Variante 2 (05-oberflaeche.md Abschnitt 1) ---------- */
+#kopf{right:calc(var(--u)*8);width:auto}
+#kopf .tz .sub{display:inline;margin-left:calc(var(--u)*5);font-family:var(--fs,inherit);font-weight:400;letter-spacing:0;font-size:calc(var(--u)*5.5)}
+#kopf .kr{position:absolute;right:0;top:0;display:flex;align-items:baseline;gap:calc(var(--u)*7);font-size:calc(var(--u)*6);color:#e6dcc0}
+#kopf .kr b{font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*6.5);color:#efe4c8}
+#kopf .kr .gold b{color:#e8c547}#kopf .kr .gold img{vertical-align:middle}
+#kopf .kr a{text-decoration:none}
+#leiste.kampf{background:linear-gradient(#17120c,#0b0907 30%,#060504);border-top:1px solid var(--messing);box-shadow:inset 0 1px 0 #5a4626,0 calc(var(--u)*-1) calc(var(--u)*3) rgba(0,0,0,.7);padding:0 calc(var(--u)*8)}
+#links{width:calc(var(--u)*118);padding-top:calc(var(--u)*9);display:flex;flex-direction:column;gap:calc(var(--u)*4);margin-right:calc(var(--u)*8)}
+#spieler2{pointer-events:auto}
+#spieler2 .skopf{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:calc(var(--u)*1.5)}
+#spieler2 .snm{font-family:var(--fk);font-size:calc(var(--u)*4.2);letter-spacing:.18em;color:#a89c80}
+#spieler2 .shp{font-family:var(--fk);font-size:calc(var(--u)*4.5);color:#a89c80}#spieler2 .shp b{font-size:calc(var(--u)*7.5);color:#efe4c8;font-weight:700}
+#spieler2 .szeile{display:flex;align-items:center;height:calc(var(--u)*6)}
+#spieler2 .sbar{position:relative;flex:1;height:100%;background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20;display:flex}
+#spieler2 .sbar i{display:block;height:100%}#spieler2 .sbar .hp{background:linear-gradient(#d0463e,#9a2a24)}
+#spieler2 .sbar .schraffur{background:repeating-linear-gradient(-45deg,#c8463a 0 2px,#3a0a08 2px 5px);box-shadow:inset 0 0 0 1px #ff8a7a55}
+#spieler2 .sblock{height:100%;width:calc(var(--u)*0.9*var(--bw));min-width:calc(var(--u)*3);display:flex;border:1px solid #000;border-left:0;box-shadow:0 0 0 1px #2a4a80}
+#spieler2 .sblock i{display:block;height:100%}#spieler2 .sblock .bk{background:linear-gradient(#6a9ae0,#3a64a8)}#spieler2 .sblock .bricht{background:repeating-linear-gradient(-45deg,#9ac0ff 0 2px,#2a4a80 2px 5px)}
+#spieler2 .schild{display:flex;align-items:center;margin-left:calc(var(--u)*-1);font-family:var(--fp);font-size:calc(var(--u)*4.5);color:#cfe0ff;text-shadow:0 0 calc(var(--u)*2) #000}
+#baum{flex:1;min-height:calc(var(--u)*40)}
+#hand{margin-top:calc(var(--u)*-16)}
+.karte .rx{position:absolute;left:50%;top:calc(100% - var(--u)*3);transform:translateX(-50%);white-space:normal;width:max-content;max-width:calc(100% - var(--u)*2);box-sizing:border-box;text-align:center;background:#0b0907;border:1px solid var(--c,var(--gold));padding:0 calc(var(--u)*2.5);color:var(--c,var(--gold));font-size:calc(var(--u)*3.6);letter-spacing:.1em;line-height:calc(var(--u)*5.5)}
+.karte .rx.in{bottom:calc(var(--u)*3);border-color:var(--blau);color:var(--blau)}
+.karte.reagiert{border-color:var(--c,var(--gold));box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px var(--c,#7a5a20),0 0 calc(var(--u)*7) calc(var(--u)*-1) var(--c,rgba(232,197,71,.6)),2px 3px 0 #000}
+/* Auftrag 3 M5: Regelbiegung in der Kopfleiste, zweite Absicht (Die Rückseite), Spiegelbild am Stapel */
+#kopf .kopfbieg{display:inline-flex;vertical-align:middle;margin-left:calc(var(--u)*5);gap:calc(var(--u)*1.5);font-size:calc(var(--u)*4.6);letter-spacing:.04em;font-weight:400;min-height:0;color:#d8c890;cursor:help}
+#kopf .kopfbieg .ico{width:calc(var(--u)*7);height:calc(var(--u)*7)}
+#kopf .kopfbieg .bz{font-family:var(--ft);font-style:italic;color:var(--dim);font-size:calc(var(--u)*4.2);letter-spacing:0;margin-left:calc(var(--u)*1)}
+.feind .plakette .abs.abs2{font-size:calc(var(--u)*4);min-height:calc(var(--u)*6);opacity:.7;margin-top:calc(var(--u)*-1);font-family:var(--fk);letter-spacing:.04em}
+.feind .plakette .abs.abs2 .ico{width:calc(var(--u)*5)!important;height:calc(var(--u)*5)!important}
+.voraus.spiegel{cursor:pointer;pointer-events:auto;color:#cfe6ff;text-decoration:underline dotted}
+.voraus.spiegel.wahl{color:#fff;text-shadow:0 0 calc(var(--u)*2) #9fc4ff}
+.voraus.spiegel.aus{cursor:default;opacity:.55;text-decoration:none}
+/* M7: Wahl zu Kampfbeginn (Blick-Item), liegt über der Hand */
+#leiste .blickwahl{position:absolute;left:50%;top:calc(var(--u)*-26);transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:calc(var(--u)*4);padding:calc(var(--u)*4) calc(var(--u)*6);background:rgba(0,0,0,.88);border:1px solid #3a3326}
+#leiste .blickwahl .bw-items{display:flex;gap:calc(var(--u)*1)}#leiste .blickwahl .bw-items img{width:calc(var(--u)*16);height:calc(var(--u)*16);image-rendering:pixelated}
+#hand.verdeckt{opacity:.35;pointer-events:none;filter:grayscale(.6)}
+.abs .gesehen{font-size:.8em;color:#d8f5ea;background:rgba(18,30,28,.8);padding:0 .3em;border:1px solid rgba(188,217,207,.5);border-radius:2px}
+.abs .diener{display:inline-flex;align-items:center;gap:.2em}.abs .diener .dk{width:calc(var(--u)*12);height:calc(var(--u)*12);image-rendering:pixelated;border:1px solid #d8c493;background:#120f0a}
+#leiste .blickwahl.begegnung p{margin:0;max-width:calc(var(--u)*150);font-family:var(--fk);font-size:calc(var(--u)*5);color:#d8ccb0;font-style:italic}
+
+/* ---------- Spieltest 2026-11-09 ---------- */
+/* Unten wird nur im Kampf Platz für Hand und Leiste reserviert. Sonst ist #spiel nur die Szene hoch (16:9) und füllt den Bildschirm.
+   Der Rucksack „Am Körper“ braucht die volle Höhe (480 × 362), solange er offen ist. */
+#leiste:empty{display:none}
+#spiel.koe{height:calc(var(--u)*362)}
+#kopf .kr .amk{color:#e6dcc0;border-bottom:1px solid #8a6e3a;cursor:pointer;pointer-events:auto}#kopf .kr .amk:hover{color:#fff;border-color:var(--messing2)}
+/* Hand: rückt per kartenEinpassen() zusammen, der rechte Block (Energie, ZUG BEENDEN) bleibt fest */
+#hand{min-width:0}#rechts{flex:none}
+/* Kartentitel: Platz links für die Kosten-Raute, rechts für die Stoffzeichen, bis zu zwei Zeilen, lange Wörter werden kleiner */
+.karte{padding-top:calc(var(--u)*6)}
+.karte .kn{position:static;transform:none;border-radius:0;margin:0;padding:0 calc(var(--u)*5);width:100%;box-sizing:border-box;justify-content:center;overflow:hidden;height:calc(var(--u)*10);min-height:0;white-space:normal;word-break:keep-all}
+/* Letzte Reaktion unten links unter dem Stoff-Baum */
+#links{padding-top:calc(var(--u)*4);gap:calc(var(--u)*2)}
+#letzteRx{height:calc(var(--u)*13)}
+#letzteRx .lrx{font-family:var(--ft);font-size:calc(var(--u)*4.8);color:var(--txt);line-height:1.12;max-height:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;border-top:1px solid #3a2c18;border-left:calc(var(--u)*1) solid var(--c);background:linear-gradient(90deg,#0c0a08,rgba(12,10,8,0));padding:calc(var(--u)*1.2) calc(var(--u)*3);pointer-events:auto}
+#letzteRx .lrx-k{display:inline-flex;align-items:center;gap:calc(var(--u)*1);vertical-align:-.15em;margin-right:calc(var(--u)*1.5)}
+#letzteRx .lrx-k b{font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*4.8);letter-spacing:.1em;color:var(--gold);margin-left:calc(var(--u)*.5)}
+#letzteRx .lrx-k i{font-style:normal;color:#8f8672;font-weight:400}
+#letzteRx .lrx-k em{font-style:normal;font-weight:400;font-size:calc(var(--u)*3.6);letter-spacing:.14em;color:#efe4c8;border:1px solid #8a6e3a;padding:0 calc(var(--u)*1.2);margin-left:calc(var(--u)*1)}
+#letzteRx .lrx.hoch{border-left-color:#ffe9a8;background:linear-gradient(90deg,#2a2010,rgba(12,10,8,0))}
+#letzteRx .lrx.frisch{animation:lrxEin .5s ease-out}
+@keyframes lrxEin{0%{background-color:rgba(232,197,71,.28);transform:translateX(calc(var(--u)*-3))}100%{background-color:transparent;transform:none}}
+/* DEV-Knopf liegt über dem Dev-Menü, damit man es wieder zu bekommt */
+#devBtn{z-index:90}
+/* Spruch des Handgriffs steht nach dem Nehmen (Ritzen), nicht mehr auf jeder Auswahlkarte */
+.hgspruch{font-size:calc(var(--u)*6);color:#d8ccb0;max-width:calc(var(--u)*260);margin:calc(var(--u)*2) auto calc(var(--u)*5);padding:calc(var(--u)*3) 0;border-top:1px solid #3a2c18;border-bottom:1px solid #3a2c18}
+/* Hover über Fund, Reliquie, Handgriff: die echten Karten (vorschauKartenReihe) */
+#tip:has(.tipkarten){background:transparent;border:0;padding:0;max-width:none}
+#tip .tipkarten{display:flex;gap:calc(var(--u)*3);padding:calc(var(--u)*2)}
+#tip .tkw{position:relative}
+#tip .tkw .anz{position:absolute;right:calc(var(--u)*-2);top:calc(var(--u)*-3);font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*6);color:var(--gold);text-shadow:0 0 calc(var(--u)*2) #000,1px 1px 0 #000}
+#tip .karte.vorschau{animation:none;transform:none;cursor:default;box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px #3a2c18,0 calc(var(--u)*2) calc(var(--u)*6) #000}
+#tip .tipzusatz{margin-top:4px;background:#000;border:1px solid var(--messing);padding:6px 10px;color:#e8d8a0;font-size:15px;max-width:420px}
+
+/* Spieltest 2026-11-10: Vertiefen und Preis im Handgriff-Angebot */
+.hgpick .hgmark{font-family:var(--fk);font-size:calc(var(--u)*3.8);letter-spacing:.1em;margin-top:calc(var(--u)*2)}.hgpick .hgmark.tief{color:var(--eld)}.hgpick .hgmark.preis{color:#ff8a7a}.pick.vertiefen{border-color:var(--eld)}
+.picks.einzeln .hgpick{width:calc(var(--u)*96);padding:calc(var(--u)*5)}.picks.einzeln .hgpick .hgimg{width:calc(var(--u)*40)}.picks.einzeln .hgpick .ps{font-size:calc(var(--u)*5)}

@@ -5,13 +5,13 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
  init(q){try{this.an=q.get('dev')==='1'||localStorage.getItem('saltmoor.dev')==='1';}catch(e){}if(q.get('dev')==='0')this.an=false;
   document.getElementById('devBtn').onclick=()=>this.toggle();
   const el=document.createElement('div');el.id='dev';document.body.appendChild(el);this.el=el;
-  el.addEventListener('click',e=>{const t=e.target.closest('[data-dtab]');if(t){this.tab=t.dataset.dtab;this.render();return;}const c=e.target.closest('[data-cheat]');if(c){this.cheatAus(c.dataset.cheat,c.dataset.arg);}});
+  el.addEventListener('click',e=>{if(e.target.closest('[data-dzu]')){this.toggle();return;}const t=e.target.closest('[data-dtab]');if(t){this.tab=t.dataset.dtab;this.render();return;}const c=e.target.closest('[data-cheat]');if(c){this.cheatAus(c.dataset.cheat,c.dataset.arg);}});
   el.addEventListener('input',e=>{if(e.target.id==='devFilter'){this.filter=e.target.value;this.render();}});
   Bus.on('*',(n,p)=>this.hoer(n,p));
   if(typeof Music!=='undefined'&&Music.onEvent)Music.onEvent(ev=>{this.musikLog.unshift({t:Date.now(),...ev});this.musikLog.length=Math.min(this.musikLog.length,40);this.hoer('musik',{why:ev.why||ev.was,was:ev.was});});
   this.stil();this.show();},
  toggle(){this.an=!this.an;try{localStorage.setItem('saltmoor.dev',this.an?'1':'0');}catch(e){}this.show();render();},
- show(){this.el.style.display=this.an?'block':'none';document.body.classList.toggle('dev',this.an);document.getElementById('devBtn').style.color=this.an?'#7affc8':'';if(this.an)this.render();},
+ show(){this.el.style.display=this.an?'block':'none';document.body.classList.toggle('dev',this.an);if(typeof skala==='function')skala();document.getElementById('devBtn').style.color=this.an?'#7affc8':'';if(this.an)this.render();},
  kat(n){return /reaction|discover/.test(n)?'reaktion':/musik|einst/.test(n)?'musik':/run|weg|act|node|event|reward|kraemer|fragment|load|ende|finale|strand|game_over/.test(n)?'run':/unlock|meta/.test(n)?'meta':/stummfilm|jumpscare/.test(n)?'effekte':'kampf';},
  hoer(n,p){if(['changed','deal','click','pick','attack'].includes(n))return;const why=p&&p.why;const e={t:new Date().toLocaleTimeString(),n,why:why||'',kat:this.kat(n),d:this.kurz(p)};this.log.unshift(e);if(this.log.length>400)this.log.length=400;
   if(n==='damage_calc'||n==='player_hurt'||n==='player_blocked')this.treffer.unshift({n,why,...(p.parts?{parts:p.parts}:{})}),this.treffer.length=Math.min(this.treffer.length,10);
@@ -19,8 +19,8 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   if(this.an&&!FAST)this.renderBald();},
  kurz(p){if(!p)return'';const o={};for(const k in p){if(k==='why')continue;const v=p[k];if(v&&typeof v==='object'){if(v.n)o[k]=v.n;else if(Array.isArray(v))o[k]=v.length>6?v.length+' Einträge':v.map(x=>x&&x.n||x).join(',');}else o[k]=v;}return JSON.stringify(o).slice(0,140);},
  _t:0,renderBald(){if(this._t)return;this._t=setTimeout(()=>{this._t=0;this.render();},120);},
- render(){if(!this.an||!this.el)return;const tabs=['jetzt','kampf','deck','run','musik','log','cheats'];
-  this.el.innerHTML=`<div class="dt">${tabs.map(t=>`<button data-dtab="${t}" class="${this.tab===t?'an':''}">${t.toUpperCase()}</button>`).join('')}</div><div class="db">${this['t_'+this.tab]()}</div>`;},
+ render(){if(!this.an||!this.el)return;const tabs=['jetzt','kampf','deck','run','tiefe','musik','log','cheats'];
+  this.el.innerHTML=`<div class="dt">${tabs.map(t=>`<button data-dtab="${t}" class="${this.tab===t?'an':''}">${t.toUpperCase()}</button>`).join('')}<button data-dzu title="Dev-Menü schließen (D)" class="dzu">✕</button></div><div class="db">${this['t_'+this.tab]()}</div>`;},
  // ----- Reiter Jetzt -----
  t_jetzt(){let h='';const f=S.phase==='fight';
   h+=`<h5>Letztes Warum</h5><div class="why">${esc(this.warum)||'–'}</div>`;
@@ -59,6 +59,12 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   setTimeout(()=>this.kurve(),0);return h;},
  kurve(){const c=document.getElementById('devKurve');if(!c||typeof Music==='undefined')return;this.mk=this.mk||[];const m=Music.state();this.mk.push([m.wucht||0,m.gefahr||0]);if(this.mk.length>320)this.mk.shift();const x=c.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,320,60);
   [['#7affc8',0],['#ff6a5a',1]].forEach(([col,k])=>{x.fillStyle=col;this.mk.forEach((v,i)=>x.fillRect(i,58-v[k]*56,1,1));});},
+ // ----- Reiter Tiefe (Auftrag 3): Schalter der neuen Systeme, Erzwingen. Wächst mit jedem Meilenstein. -----
+ t_tiefe(){const A=BAL.auftrag3||{};const N={regelbiegung:'Regelbiegung',hoeren:'Hören statt sehen',blick:'Sehen und gesehen werden',farbe:'Die Farbe',begegnungen:'Begegnungen',meta:'Metaebene',fehlzeit:'Fehlzeit',pause:'Pause',wuerze:'Würze',masken:'Krämer mit tausend Masken (Probe)'};
+  let h=`<h5>Systeme (balance.json → auftrag3)</h5><div>${Object.keys(N).map(k=>`<button data-cheat="a3" data-arg="${k}" class="${A[k]?'an':''}">${N[k]} ${A[k]?'an':'aus'}</button>`).join(' ')}</div><div class="dim">Aus heißt: das Spiel läuft genau wie ohne das System. Gilt bis zum Neuladen; dauerhaft über ?a3aus=farbe,blick</div>`;
+  (this.tiefeTeile||[]).forEach(f=>{h+=f();});return h;},
+ // Meilensteine hängen hier ihre Abschnitte an (Funktion, die HTML liefert)
+ tiefeTeil(f){(this.tiefeTeile=this.tiefeTeile||[]).push(f);},
  // ----- Reiter Log -----
  t_log(){const f=this.filter;return `<div><input id="devFilter" placeholder="Filter (kampf, reaktion, musik, run, meta, effekte oder Text)" value="${esc(f)}"> <button data-cheat="logExport">Export</button></div>
   ${this.log.filter(e=>!f||e.kat===f||(e.n+e.why+e.d).toLowerCase().includes(f.toLowerCase())).slice(0,120).map(e=>`<div class="le"><span class="dim">${e.t}</span> <b>${e.n}</b> <span class="dim">[${e.kat}]</span> ${esc(e.why)} <span class="dim">${esc(e.d)}</span></div>`).join('')}`;},
@@ -77,6 +83,23 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
  markDev(){if(S.route&&!S.dev){S.dev=true;Bus.emit('dev_run',{why:'Cheat benutzt: dieser Run zählt nicht fürs Tagebuch'});}},
  cheatAus(k,a){const sel=document.getElementById('devItem');
   switch(k){
+   case'a3':{BAL.auftrag3=BAL.auftrag3||{};BAL.auftrag3[a]=!BAL.auftrag3[a];this.markDev();Bus.emit('a3_schalter',{k:a,an:BAL.auftrag3[a],why:`Auftrag-3-System ${a} ${BAL.auftrag3[a]?'an':'aus'}`});render();break;}
+   // M5: Regelbiegung. biegNur: nur diese Biegung gilt (wie kern-vergleich.js), biegBeide: Falsche Winkel mit letzter und vorletzter Karte, biegFeld: Biom der Biegung im aktuellen Akt erzwingen
+   case'biegNur':{BAL.auftrag3.biegung_nur=BAL.auftrag3.biegung_nur===a?null:a;this.markDev();Bus.emit('a3_schalter',{k:'biegung_nur',an:!!BAL.auftrag3.biegung_nur,why:BAL.auftrag3.biegung_nur?`Nur die Biegung ${a} gilt`:'Alle Biegungen gelten'});render();break;}
+   // M9: Run-Zettel ändern (Begegnung an/aus, höchstens zwei), Zeichen geben, Asche geben, Spuren-Stufe setzen
+   case'wuerze':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};const l=z.wuerze=z.wuerze||[];const i=l.indexOf(a);if(i>=0)l.splice(i,1);else{l.push(a);if(l.length>3)l.shift();}this.markDev();render();break;} // M11
+   case'wuerzeTun':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};z.wuerze=z.wuerze||[];if(!z.wuerze.includes(a))z.wuerze.push(a);this.markDev();
+    if(a==='zeitung'){S.zeitung=null;const r0=WUERZE.zeitung_chance;WUERZE.zeitung_chance=1;S.akt=Math.max(1,S.akt);S.route[S.akt]=S.route[S.akt]||RUN.akte[S.akt].biome.find(b=>BIOMES[b]);enterAct();WUERZE.zeitung_chance=r0;}
+    if(a==='masken'){S.masken=null;S.akt=Math.max(1,Math.min(3,S.akt));this.springe('kraemer');}
+    if(a==='brief'){S.brief=null;S.akt=0;if(Wuerze.briefHier()){S.event='falscher_brief';S.phase='event';S.node={art:'ereignis'};}}
+    if(a==='trennung'){for(let k=0;k<3;k++)Wuerze.teilFinden();}
+    if(a==='zann'){giveItem('zanns_geige','Dev');const b=S.bag.findIndex(x=>x&&x.id==='zanns_geige');if(b>=0)move('bag:'+b,'talisman:0');S.akt=1;S.route[1]='glockengiesserei';startFight(['ungetaufte'],'waechter');}
+    render();break;}
+   case'zettel':{const z=S.zettel=S.zettel||{begegnungen:[],wuerze:[]};const l=z.begegnungen;const i=l.indexOf(a);if(i>=0)l.splice(i,1);else{l.push(a);if(l.length>2)l.shift();}this.markDev();render();break;}
+   case'zeichenGeben':{if(!(S.lose||[]).includes('zeichen')){(S.lose=S.lose||[]).push('zeichen');S.zeichenGegeben=true;}this.markDev();render();break;}
+   case'ascheGeben':{const id=Object.keys(FOES).find(k=>FOES[k].asche&&(biom().gegner||[]).includes(k))||Object.keys(FOES).find(k=>FOES[k].asche);if(id&&(S.asche||[]).length<3)(S.asche=S.asche||[]).push({id,n:FOES[id].n,akt:S.akt});this.markDev();render();break;}
+   case'spurenStufe':{const v=typeof Spuren!=='undefined'&&Spuren.knoten();if(v)v.spuren=+a;this.markDev();render();break;}
+   case'biegBeide':{BAL.auftrag3.falsche_winkel_beide=!BAL.auftrag3.falsche_winkel_beide;this.markDev();render();break;}
    case'seedcopy':navigator.clipboard&&navigator.clipboard.writeText(String(S.seed));break;
    case'akt':this.springe('weg',+a);break;
    case'gabel':{const b=a;if(!S.route)return;this.markDev();const i=BIOMES[b].akt;S.route[i]=b;S.routeWhy=[...(S.routeWhy||[]),`Gabelung erzwungen: ${b}`];if(S.akt===i){BU.key='';genWeg();}render();break;}
@@ -117,9 +140,27 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
  szene(g,t){if(!S.enemies||S.phase!=='fight')return;g.save();g.font='5px monospace';S.enemies.forEach(e=>{if(e.hp<=0)return;const b=enemyBox(e);const it=e.pat[e.pi%e.pat.length];g.fillStyle='rgba(0,0,0,.6)';g.fillRect(b.x-24,b.y+3,48,7);g.fillStyle='#7affc8';g.fillText(`${e.id} ${it.t}${it.v} ${['h','m','v'][e.reihe]}`,b.x-23,b.y+8);});
   if(this.warum&&performance.now()-this.warumT<4000){g.fillStyle='rgba(0,0,0,.7)';g.fillRect(100,0,280,8);g.fillStyle='#7affc8';g.fillText(this.warum.slice(0,90),102,6);}g.restore();},
  stil(){const s=document.createElement('style');s.textContent=`#dev{position:fixed;right:0;top:0;bottom:0;width:360px;background:#050807ee;border-left:1px solid #1e3a30;color:#b8d8c8;font:11px/1.35 ui-monospace,monospace;z-index:80;overflow:auto;display:none}
-  #dev .dt{display:flex;flex-wrap:wrap;position:sticky;top:0;background:#050807}#dev .dt button{flex:1;background:#0a1210;border:1px solid #1e3a30;color:#7a9a8a;font:10px monospace;padding:5px 2px;cursor:pointer}#dev .dt button.an{color:#7affc8;border-color:#7affc8}
+  #dev .dt{display:flex;flex-wrap:wrap;position:sticky;top:0;background:#050807}#dev .dt button{flex:1;background:#0a1210;border:1px solid #1e3a30;color:#7a9a8a;font:10px monospace;padding:5px 2px;cursor:pointer}#dev .dt button.an{color:#7affc8;border-color:#7affc8}#dev .dt button.dzu{flex:none;width:26px;color:#e8a89a;border-color:#5a2a24}#dev .dt button.dzu:hover{color:#fff;background:#3a1410}
   #dev .db{padding:8px}#dev h5{margin:10px 0 3px;color:#7affc8;font-size:11px}#dev .why{color:#fff}#dev .dim{color:#5a7a6a}#dev .un{color:#c8a0ff}#dev .next{color:#ffd23f;font-weight:bold}#dev .sel{user-select:all}
   #dev table{border-collapse:collapse;width:100%}#dev td,#dev th{border-bottom:1px solid #12201a;padding:2px;vertical-align:top}#dev .le{border-bottom:1px solid #0e1814;padding:2px 0}
   #dev button{background:#0a1210;border:1px solid #2a4a3a;color:#b8d8c8;font:10px monospace;margin:1px;cursor:pointer}#dev input,#dev select{background:#000;color:#cfc;border:1px solid #2a4a3a;font:10px monospace}#dev .ge{border:1px solid #12201a;padding:4px;margin:3px 0}
   #dev .bt td{font-size:10px}body.dev .karte:after{content:attr(data-dev);}`;document.head.appendChild(s);}
 };
+// M5: Abschnitt Regelbiegung im Reiter TIEFE
+Dev.tiefeTeil(()=>{if(typeof Bieg==='undefined')return'';const A=BAL.auftrag3||{};const k=S&&S.route?Bieg.kopf():null;
+ return `<h5>Regelbiegung</h5><div>Jetzt: ${k?esc((k.jetzt||k.b).n)+(k.naechste?' · nächster Zug '+esc(k.naechste.n):'')+(k.zusatz?' · '+k.zusatz:''):'<span class="dim">keine (Akt I/II, Schalter aus oder anderes Biom)</span>'}</div>
+ <div>Nur eine Biegung: ${BIEGUNGEN.map(b=>`<button data-cheat="biegNur" data-arg="${b.id}" class="${A.biegung_nur===b.id?'an':''}" title="${esc(b.t)}">${esc(b.n)} (${BIOMES[b.biom]?esc(BIOMES[b.biom].kurz):b.biom})</button>`).join(' ')}</div>
+ <div><button data-cheat="biegBeide" class="${A.falsche_winkel_beide?'an':''}">Falsche Winkel: letzte und vorletzte ${A.falsche_winkel_beide?'an':'aus'}</button> <span class="dim">Biom erzwingen im Reiter Cheats → Biom erzwingen</span></div>`;});
+// M11: Würze im Zettel und jedes Stück erzwingen
+Dev.tiefeTeil(()=>{if(typeof Wuerze==='undefined'||!S||!S.route)return'';const z=(S.zettel&&S.zettel.wuerze)||[];const N={zeitung:'Zeitungsausschnitte',brief:'Der falsche Brief',trennung:'Barmherzige Trennung',zann:'Zanns Takt',masken:'Krämer mit tausend Masken (Probe)'};
+ return `<h5>Würze</h5><div>Auf dem Zettel (höchstens drei): ${Object.keys(N).map(k=>`<button data-cheat="wuerze" data-arg="${k}" class="${z.includes(k)?'an':''}">${N[k]}</button>`).join(' ')}</div>
+ <div>Erzwingen: <button data-cheat="wuerzeTun" data-arg="zeitung">Ausschnitt im nächsten Übergang</button> <button data-cheat="wuerzeTun" data-arg="brief">Brief-Ereignis</button> <button data-cheat="wuerzeTun" data-arg="trennung">drei Teile ins Deck</button> <button data-cheat="wuerzeTun" data-arg="zann">Geige und die Ungetaufte</button> <button data-cheat="wuerzeTun" data-arg="masken">Krämer mit tausend Masken (Probe)</button></div>
+ <div class="dim">Brief: ${S.brief?(S.brief.angenommen?'eingesteckt, ':'gesehen, ')+esc(BIOMES[S.brief.ziel].kurz)+' in Akt '+(S.brief.akt+1):'–'} · Teile: ${S.trennungTeile||0}/3${S.trennungFertig?' · ausgelöst':''} · Zann: ${S.zannKampf?(S.zannAus?'Fenster offen':'Fenster zu'):'–'} · zuletzt: ${(Meta.get().wuerzeZuletzt||[]).join(', ')||'–'}</div>`;});
+// M9: Run-Zettel (im Spiel unsichtbar, hier sichtbar und änderbar) und Zustand der Begegnungen
+Dev.tiefeTeil(()=>{if(typeof Zettel==='undefined'||!S||!S.route)return'';const z=S.zettel||{begegnungen:[],wuerze:[]};const N={diener:'Die Diener erheben sich',asche:'Asche',spuren:'Spuren',tiefe:'Die Tiefe erkennt dich'};
+ const sv=typeof Spuren!=='undefined'?Spuren.knoten():null;const d=typeof Diener!=='undefined'?Diener.kandidat():null;
+ return `<h5>Run-Zettel</h5><div>Begegnungen (höchstens zwei): ${BEGEGNUNGEN.map(k=>`<button data-cheat="zettel" data-arg="${k}" class="${z.begegnungen.includes(k)?'an':''}">${N[k]}</button>`).join(' ')}</div>
+ <div>Würze: ${(z.wuerze||[]).length?z.wuerze.map(esc).join(', '):'<span class="dim">keine</span>'}</div>
+ <div class="dim">Diener: ${d?esc(d.c.n)+' '+d.n+'-mal':'noch keine Karte mit 8 Einsätzen'}${S.dienerGenutzt?' · schon genutzt':''} · Spuren: ${sv?'Stufe '+(sv.spuren+1)+' von 4'+(sv.besucht?' (betreten)':''):'kein Knoten'} ${sv?[0,1,2,3].map(s=>`<button data-cheat="spurenStufe" data-arg="${s}">${s+1}</button>`).join(''):''}</div>
+ <div class="dim">Asche: ${(S.asche||[]).map(a=>esc(a.n)).join(', ')||'keine'}${S.verbuendeter?' · Verbündeter '+esc(S.verbuendeter.n):''}${(S.ascheRueck||[]).length?' · kommt wieder: '+S.ascheRueck.map(x=>esc(FOES[x.id].n)+' in Akt '+(x.akt+1)).join(', '):''} <button data-cheat="ascheGeben">Asche geben</button></div>
+ <div class="dim">Tiefe: ${S.tiefeZahl||0}-mal nachgegeben${(S.lose||[]).includes('zeichen')?' · Zeichen im Deck':''}${S.tiefeSeite?' · Seite gewechselt':''} <button data-cheat="zeichenGeben">Zeichen geben</button></div>`;});

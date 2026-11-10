@@ -1,0 +1,58 @@
+/* Gegner-Plakette (Auftrag 3, M2). Überschreibt die alten Regeln für .feind/.abs/.info in spiel.css (die der Dirigent später entfernt).
+   Alle Maße in var(--u) = 1 Szenenpixel. Rot und Schrift wie der eigene Balken (#spieler .sbar). */
+.feind{width:calc(var(--u)*64)}
+.feind.waechter,.feind.boss{width:calc(var(--u)*90)}
+.feind .plakette{position:absolute;left:50%;bottom:100%;margin-bottom:calc(var(--u)*3);padding:0 calc(var(--u)*11);width:calc(var(--u)*66);box-sizing:content-box;
+ transform:translate(calc(-50% + var(--u)*var(--dx,0)),calc(var(--u)*var(--dy,0)*-1));pointer-events:auto;z-index:2}
+.feind .pl-box{position:relative;background:linear-gradient(#17110a,#0b0806);border:1px solid #000;box-shadow:0 0 0 calc(var(--u)*.7) var(--messing),0 calc(var(--u)*1) calc(var(--u)*5) rgba(0,0,0,.85);
+ padding:calc(var(--u)*2) calc(var(--u)*2.5) calc(var(--u)*2.5)}
+.feind.ziel .pl-box{box-shadow:0 0 0 calc(var(--u)*1) var(--messing2),0 0 calc(var(--u)*6) rgba(255,214,140,.55),inset 0 0 calc(var(--u)*4) rgba(255,214,140,.18);background:linear-gradient(#271b0e,#120d07)}
+.feind .abs{position:static;transform:none;background:none;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*1.5);min-height:calc(var(--u)*10);
+ font-family:var(--fp);font-size:calc(var(--u)*8);line-height:1;color:#fff;white-space:nowrap;text-shadow:1px 1px 0 #000;margin:0 0 calc(var(--u)*1.5)}
+.feind .abs .ico{flex:none}
+.feind .abs small{font-family:var(--fk);font-size:calc(var(--u)*3.6)}
+.feind .abs .unverw,.feind .abs .ruft{padding:calc(var(--u)*.4) calc(var(--u)*1)}
+.feind .abs .laedt small{font-size:calc(var(--u)*4)}
+.feind .pl-nm{display:flex;align-items:center;gap:calc(var(--u)*1.5);font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.04em;color:#d8ccb0;line-height:1.15;margin-bottom:calc(var(--u)*1.2);text-shadow:1px 1px 0 #000}
+.feind .pl-nm span{min-width:0;overflow-wrap:anywhere}
+.feind.ziel .pl-nm span{color:#ffd8a0}
+.feind .pl-nm .ico{flex:none}
+.feind .knf{position:absolute;right:calc(var(--u)*-2.5);top:calc(var(--u)*-3);width:calc(var(--u)*7);height:calc(var(--u)*7);display:flex;align-items:center;justify-content:center;
+ font-size:calc(var(--u)*4.6);line-height:1;color:#1a1208;background:var(--messing2);border:1px solid #000;border-radius:50%;margin:0;text-shadow:none}
+.feind .pl-bar{position:relative;display:flex;height:calc(var(--u)*8);background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20}
+.feind .pl-bar i{display:block;height:100%}
+.feind .pl-bar .hp{background:linear-gradient(#d0463e,#9a2a24)}
+.feind .pl-bar .pv{background:repeating-linear-gradient(-45deg,#ffd0a0 0 2px,#7a2a20 2px 4px);animation:puls .8s infinite alternate}
+.feind .pl-bar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fk);font-size:calc(var(--u)*5);letter-spacing:.08em;color:#fff4e0;text-shadow:1px 1px 0 #000,0 0 3px #000;white-space:nowrap}
+.feind .pl-bar .pvt{font-style:normal;color:#ffb070;margin-left:.4em}
+/* Block als blaue Verlängerung am rechten Ende des Balkens, Panzer als eigener blauer Wert darunter */
+.feind .pl-ext{position:absolute;left:100%;top:calc(var(--u)*-1);display:flex;flex-direction:column;gap:calc(var(--u)*.8);margin-left:2px;z-index:1}
+.feind .pl-blk,.feind .pl-pz{display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*.6);min-width:calc(var(--u)*8);height:calc(var(--u)*8);padding:0 calc(var(--u)*1.2);box-sizing:border-box;
+ font-family:var(--fk);font-weight:normal;font-size:calc(var(--u)*5);color:#fff;border:1px solid #000;box-shadow:0 0 0 1px #9ad0ff;text-shadow:1px 1px 0 #000;white-space:nowrap}
+.feind .pl-blk{background:linear-gradient(#5a8ad0,#2a4a80)}
+.feind .pl-blk.pvb{background:repeating-linear-gradient(-45deg,#c0d8ff 0 2px,#1a2a50 2px 4px);animation:puls .8s infinite alternate}
+.feind .pl-pz{background:#10182a;color:#cfe0ff;box-shadow:0 0 0 1px #6a9ad8}
+.feind .sts{display:flex;justify-content:center;flex-wrap:wrap;gap:calc(var(--u)*1.5);margin-top:calc(var(--u)*1.5);font-family:var(--fk);font-size:calc(var(--u)*5);color:#e8dcc0;text-shadow:1px 1px 0 #000,0 0 3px #000}
+.feind .sts span{display:inline-flex;align-items:center;gap:calc(var(--u)*.4);background:rgba(0,0,0,.6);padding:0 calc(var(--u)*1.2);border-radius:2px}
+/* Spitze unten zeigt auf den Kopf; ist die Plakette hochgerückt, verlängert eine feine Leitlinie sie bis zum Kopf */
+.feind .spitze{position:absolute;left:calc(50% - var(--u)*var(--dx,0));top:100%;width:0;height:calc(var(--u)*(3 + max(var(--dy,0),0)));border-left:1px solid var(--messing);pointer-events:none}
+.feind .spitze::after{content:"";position:absolute;left:calc(var(--u)*-2.5);bottom:calc(var(--u)*-.5);border:calc(var(--u)*2.5) solid transparent;border-top:calc(var(--u)*3) solid var(--messing);border-bottom:0;margin-left:-.5px}
+.feind.ziel .spitze{border-left-color:var(--messing2)}.feind.ziel .spitze::after{border-top-color:var(--messing2)}
+.feind .treffer{width:100%}
+.feind .abs .geschw,.feind .abs .laedt{display:inline-flex;align-items:center;gap:calc(var(--u)*1.5)}
+/* M6: „Klänge als Zeichen“ — Notenzeichen neben der Plakette stummer Gegner, Dauer je Puls in --kt (aus dem Takt der Musik) */
+.feind .klang{position:absolute;right:calc(100% + var(--u)*2);top:calc(var(--u)*1);width:calc(var(--u)*11);height:calc(var(--u)*11);display:flex;align-items:center;justify-content:center;
+ background:rgba(0,0,0,.72);border:1px solid #000;box-shadow:0 0 0 1px var(--kf);border-radius:50%;pointer-events:auto;transform-origin:center}
+.feind .klang .ico{display:block;filter:drop-shadow(0 0 calc(var(--u)*1.5) var(--kf))}
+.feind .klang.angriff,.feind .klang.schutz{animation:klangPuls var(--kt) ease-out infinite}
+.feind .klang.zauber{animation:klangSchwell var(--kt) ease-in-out infinite}
+@keyframes klangPuls{0%{transform:scale(1.35);opacity:1}60%,100%{transform:scale(.9);opacity:.6}}
+@keyframes klangSchwell{0%,100%{transform:scale(.7);opacity:.35}70%{transform:scale(1.25);opacity:1}}
+/* M9 Asche: Spur aus grauen Pixeln links oben an der Plakette (gerufen und wiedergekehrt tragen dieselbe), Verbündeter mit aschgrauem Rahmen */
+.feind .pl-asche{position:absolute;left:calc(var(--u)*-3);top:calc(var(--u)*-3.5);width:calc(var(--u)*2);height:calc(var(--u)*2);background:#b8b2a6;z-index:3;
+ box-shadow:calc(var(--u)*2) 0 #8a857c,calc(var(--u)*4) calc(var(--u)*2) #d0cabe,0 calc(var(--u)*2) #6e6a62,calc(var(--u)*6) 0 #9a948a,calc(var(--u)*2) calc(var(--u)*4) #b8b2a6,calc(var(--u)*8) calc(var(--u)*2) #6e6a62,0 calc(var(--u)*6) #8a857c}
+.feind .pl-verb{font-family:var(--fk);font-size:calc(var(--u)*3.4);letter-spacing:.06em;color:#b8b2a6;margin:calc(var(--u)*-.6) 0 calc(var(--u)*1)}
+.feind.verbuendet{pointer-events:none}
+.feind.verbuendet .pl-box{box-shadow:0 0 0 calc(var(--u)*.7) #8a857c,0 calc(var(--u)*1) calc(var(--u)*5) rgba(0,0,0,.85);background:linear-gradient(#1b1a17,#0d0c0b)}
+.feind.verbuendet .pl-nm span{color:#c8c2b6}
+.feind.verbuendet .plakette{pointer-events:none}

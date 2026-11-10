@@ -46,7 +46,8 @@
    "rum",
    "laudanum",
    "minerlamp",
-   "trench"
+   "trench",
+   "grablampe"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -154,12 +155,14 @@
    },
    "beute": "walzahnmesser",
    "beute_satz": "Das Gewölbe fällt in sich zusammen, Bogen auf Bogen. Darunter ist nur noch der Abdruck von Händen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "echo": {
    "n": "Das Walfänger-Echo",
    "biom": "walkathedrale",
    "rang": "normal",
+   "stumm": true,
    "hp": 18,
    "weak": "G",
    "pat": [
@@ -191,7 +194,9 @@
    },
    "beute": "echoharpune",
    "beute_satz": "Die Leine erschlafft. Am anderen Ende, weit drinnen im Wal, zieht niemand mehr.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "markfresser": {
    "n": "Der Markfresser",
@@ -228,7 +233,8 @@
    },
    "beute": "tranlampe",
    "beute_satz": "Die Ringe erlöschen einer nach dem anderen, von hinten nach vorn. Zuletzt der Knochen in seiner Hand.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "seepockenmann": {
    "n": "Der Seepockenmann",
@@ -265,7 +271,8 @@
    },
    "beute": "fischbeinkorsett",
    "beute_satz": "Die Lichter in den Seepocken gehen aus, alle zugleich. Sie zeigen weiter zum Herzen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "herz": {
    "n": "Das Herz",
@@ -297,6 +304,10 @@
      "h": 2
     }
    ],
+   "gesehen": {
+    "t": "buff",
+    "v": 3
+   },
    "sprite": "herz",
    "varianten": [
     "herz"
@@ -315,7 +326,8 @@
    },
    "beute": "herztuer",
    "beute_satz": "Das Herz schlägt noch einmal, ganz leise, als hätte es sich verzählt. Dann steht die Tür offen, und drinnen ist es warm.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "kalb": {
    "n": "Das Kalb",
@@ -342,6 +354,11 @@
      "v": 14
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
    "sprite": "kalb",
    "varianten": [
     "kalb",
@@ -390,7 +407,8 @@
    },
    "beute": "fischbeinkorsett",
    "beute_satz": "Die Hände öffnen sich, einer nach dem anderen die Finger. Die Schnur schaukelt noch lange, und oben im Dunkeln schlägt das Herz einmal zu viel.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [
@@ -654,6 +672,55 @@
      ]
     }
    ]
+  },
+  {
+   "id": "walkathedrale_dritter_schlag",
+   "t": "Der dritte Schlag",
+   "d": "Der Boden wird angeschlagen, zweimal leise, dann ein dritter, der die beiden mitnimmt. Es riecht nach Tran und feuchtem Holz, und die Rippen über dir schwingen mit, eine nach der anderen. Jemand hat mit Kreide an den Pfeiler geschrieben, dass man das erste nach dem dritten nicht mehr zählen kann.",
+   "bild": "Ein Gang zwischen Rippenbögen, am Boden drei Abdrücke von Schlägen, der dritte tiefer als die anderen, an einem Pfeiler eine Kreideschrift.",
+   "o": [
+    {
+     "l": "Auf den dritten Schlag mit der flachen Hand antworten: einen Handgriff lernen, −6 Leben",
+     "fx": [
+      {
+       "op": "handgriff",
+       "zufall": true
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 8
+     }
+    },
+    {
+     "l": "Zwischen dem zweiten und dem dritten Schlag atmen: +1 Kerbe an einem Item, −5 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ]
+    },
+    {
+     "l": "Das Ohr an die Rippe legen und alle drei zählen: eine Reaktion entdecken, −4 max. Leben",
+     "fx": [
+      {
+       "op": "discover"
+      },
+      {
+       "op": "max_hp",
+       "v": -4
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

@@ -113,6 +113,13 @@ input[type=range]{width:100%;accent-color:#d0453a}
    </div>
   </section>
 
+  <section class="panel wide" id="hoerSec">
+   <h2>HÖREN STATT SEHEN</h2>
+   <p class="hint">Stumme Gegner (Akt IV und V) zeigen keine Absicht, man hört sie. Jede Absicht-Art hat einen Einsatz über dem Kampf-Stück des Bioms: <b>Angriff</b> = tiefer gezupfter Bass auf dem Bass des Akkords, Stufe 1/2/3 = 1, 2 oder 4 Schläge je Takt; <b>Schutz</b> (Block, Schutz, Heilung) = eine einzelne Glocke auf der Eins; <b>Zauber</b> (Status, Ruf, Laden) = Harmonium-Ton, der über den Takt aufschwillt. Die Einsätze setzen auf der nächsten Taktgrenze ein, die Layer 2 und 3 und die Gegnerstimme treten dafür um 25 % zurück. Ein Klick startet das Kampf-Stück des Bioms mit genau diesem Einsatz.</p>
+   <div class="facts"><span>Einsätze <b id="hS">keine</b></span><span>Pegel Einsatz-Bus <b id="hP">–</b> dBFS</span><span>Layer 2/3 und Stimmen <b id="hD">×1,00</b></span></div>
+   <div class="btns"><button class="sm" id="hAus">ALLE EINSÄTZE AUS</button><button class="sm" id="hAlle">ALLE DREI ZUSAMMEN (Biom oben)</button><button class="sm" id="bGeige">GEIGE AN/AUS</button></div>
+   <div id="hGrid" style="display:grid;gap:6px"></div>
+  </section>
   <section class="panel wide">
    <h2>ENTSCHEIDUNGEN DES DIRIGENTEN</h2>
    <p class="hint">Die letzten 20 Entscheidungen mit Grund (wie im Dev-Modus über <code>Music.onEvent</code>).</p>
@@ -225,6 +232,40 @@ $('bDemo').onclick=()=>{
  ];
  steps.forEach(([sec,txt,fn])=>demoT.push(setTimeout(()=>{if(txt)story(txt);fn();},sec*1000)));
 };
+</script>
+<script>
+// Abschnitt „Hören statt sehen": Biom-Fassungen aus Akt IV und V. Eis und Pforte sind eingebaut, die übrigen kommen aus den Biom-Paketen (wie im Spiel über addBiome).
+(()=>{
+const HB=['eis','glasmeer','walkathedrale','mond','funkstation','pforte','ufer','waage'];
+const EINS=[['angriff',1,'ANGRIFF 1'],['angriff',2,'ANGRIFF 2'],['angriff',3,'ANGRIFF 3'],['schutz',0,'SCHUTZ'],['zauber',0,'ZAUBER']];
+// Gegnerstimme fürs Kampf-Stück: ein Gegner des Bioms, sonst einer aus dem Biom, dessen Ortsklang es leiht
+const foeFuer=k=>{const nach=b=>Object.keys(Music.FOES).find(f=>Music.FOES[f].biom===b&&Music.FOES[f].rang==='normal');return nach(k)||nach(Music.BIOME[k].detail)||'rufer';};
+let aktiv=null;
+const liste=(art,st)=>[{art,stufe:st||1,uid:1}];
+function kampf(k){ensure();Music.solo(null);Music.stoff('keiner');Music.hp(40,40);Music.biome(k);if(Music.state().scene!=='kampf')Music.scene('kampf');
+ if(!Music.state().foes.length)Music.foeSpawn(foeFuer(k));}
+function los(k,art,st,btn){kampf(k);Music.hoeren(art==='alle'?[{art:'angriff',stufe:st||2,uid:1},{art:'schutz',uid:2},{art:'zauber',uid:3}]:liste(art,st));
+ document.querySelectorAll('#hGrid button').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');aktiv=k;}
+async function laden(){
+ for(const id of HB){if(Music.BIOME[id])continue;
+  try{const p=await (await fetch('data/biome/'+id+'.json')).json();Music.addBiome((p.biom&&p.biom.musik)||p.id||id,p.musik);}catch(e){console.warn('Biom-Paket fehlt: '+id);}}
+ HB.forEach(k=>{const b=Music.BIOME[k];if(!b)return;
+  if(![...$('sBiome').options].some(o=>o.value===k))$('sBiome').add(new Option(b.n+' · '+b.key,k));
+  const row=document.createElement('div');row.style.cssText='display:flex;flex-wrap:wrap;gap:6px;align-items:center';
+  const n=document.createElement('span');n.style.cssText='min-width:230px;font-size:18px;color:var(--parch)';n.textContent=b.n+' · '+b.key+(b.phryg?' (phrygisch)':'');row.appendChild(n);
+  EINS.forEach(([art,st,t])=>{const bt=document.createElement('button');bt.className='sm';bt.textContent=t;bt.dataset.k=k;bt.onclick=()=>los(k,art,st,bt);row.appendChild(bt);});
+  $('hGrid').appendChild(row);});
+}
+$('hAus').onclick=()=>{ensure();Music.hoeren([]);document.querySelectorAll('#hGrid button').forEach(b=>b.classList.remove('on'));};
+$('bGeige').onclick=()=>{ensure();const an=!Music.state().geige;if(an&&!Music.state().foes.length){Music.solo(null);Music.scene('waechter');Music.hp(40,40);Music.foeSpawn(foeFuer(Music.state().biome));}Music.geige(an,'Labor');$('bGeige').classList.toggle('on',an);};
+$('hAlle').onclick=()=>{const k=Music.state().biome;los(HB.includes(k)?k:'eis','alle',2,null);};
+function zeig(){const h=Music.state().hoeren;
+ $('hS').textContent=[h.angriff?'Angriff '+h.angriff:'',h.schutz?'Schutz':'',h.zauber?'Zauber':''].filter(Boolean).join(' + ')||'keine';
+ $('hP').textContent=h.pegel<=-119?'–':h.pegel.toFixed(1);$('hD').textContent='×'+h.duck.toFixed(2).replace('.',',');
+ requestAnimationFrame(zeig);}
+requestAnimationFrame(zeig);
+laden();
+})();
 </script>
 </body>
 </html>

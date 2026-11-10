@@ -1,0 +1,6 @@
+Lauf                        Siege   Ø Tiefe  Züge/Kampf  hingesehen  nicht  Gesehene besiegt  Wächter+  Schatten  Fehler
+Blick aus                    50 %     25.4        3.87           0      0                 0         0         0  0
+Blick an                     50 %     25.4        3.88           5      0                 3         2         0  0
+Blick aus, Linse ab Start    53 %     26.6        3.60           0      0                 0         0         0  0
+Blick an, Linse ab Start     43 %     23.4        4.25         284     19               208        76         6  0
+[{"name":"Blick aus","siege":0.5,"tiefe":25.45,"zk":3.8699551569506725,"ja":0,"nein":0,"ges":0,"wz":0,"schatten":0,"fehler":0},{"name":"Blick an","siege":0.5,"tiefe":25.45,"zk":3.8789237668161434,"ja":5,"nein":0,"ges":3,"wz":2,"schatten":0,"fehler":0},{"name":"Blick aus, Linse ab Start","siege":0.525,"tiefe":26.65,"zk":3.6,"ja":0,"nein":0,"ges":0,"wz":0,"schatten":0,"fehler":0},{"name":"Blick an, Linse ab Start","siege":0.425,"tiefe":23.375,"zk":4.247549019607843,"ja":284,"nein":19,"ges":208,"wz":76,"schatten":6,"fehler":0}]

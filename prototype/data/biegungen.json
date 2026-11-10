@@ -1,0 +1,25 @@
+{
+ "_doc": "Auftrag 3 M5: Regelbiegungen der Biome in Akt III bis V (docs/auftrag-3/06-lovecraft-kern.md Abschnitt 3). Je Biom genau eine, gilt in allen Kämpfen des Bioms. id, biom, n (Name), t (Regeltext), zeichen (Pixelzeichen in js/ui/zeichen.js), art (Einhakpunkt in js/core/biegung.js). Namen und Texte sind Entwürfe. Schalter: balance.json → auftrag3.regelbiegung.",
+ "biegungen": [
+  {"id": "alte_stoffe", "biom": "salz", "n": "Alte Stoffe erinnern sich", "t": "Salz, Wasser und Blut reagieren hier miteinander: drei uralte Reaktionen, die es oben nicht gibt. Junge Stoffe bleiben, wie sie sind.", "zeichen": "bg_alte_stoffe", "art": "extra_reaktionen", "entwurf": true,
+   "reaktionen": [
+    {"k": "SW", "n": "Sole", "t": "+6 Block und eine Karte ziehen.", "fx": [{"op": "block", "v": 6}, {"op": "draw", "v": 1}]},
+    {"k": "BS", "n": "Pökeln", "t": "6 Schaden am Ziel, du heilst 3.", "fx": [{"op": "damage", "to": "target", "v": 6}, {"op": "heal", "v": 3}]},
+    {"k": "BW", "n": "Gezeitenblut", "t": "Alle Gegner verwundbar 1 Zug (+50 % Schaden).", "fx": [{"op": "status", "to": "all", "status": "vuln", "v": 1}]}
+   ]},
+  {"id": "ueber_eck", "biom": "stadt", "n": "Über Eck", "t": "Die erste und die letzte Karte eines Zuges reagieren miteinander, wenn du den Zug beendest. Ab drei Karten schließt sich der Zug zum Kreis.", "zeichen": "bg_ueber_eck", "art": "zug_ende", "entwurf": true},
+  {"id": "rueckwaerts", "biom": "wald", "n": "Rückwärts gewachsen", "t": "Am Zugbeginn kommt die zuletzt gespielte Karte aus der Ablage zurück auf die Hand. Die übrigen Karten ziehst du wie immer.", "zeichen": "bg_rueckwaerts", "art": "ziehen", "entwurf": true},
+  {"id": "gezeiten", "biom": "gezeitenwerk", "n": "Ebbe und Flut", "t": "Jeder zweite Zug ist Flut: Die Hand wird am Zugende nicht abgeworfen, du ziehst nur bis zur Handgröße auf.", "zeichen": "bg_gezeiten", "art": "zug_ende", "entwurf": true},
+  {"id": "ringofen", "biom": "ziegelgruben", "n": "Der Ringofen", "t": "Die Kette reißt am Zugende nicht ab: Die erste Karte eines Zuges reagiert mit der letzten des vorigen.", "zeichen": "bg_ringofen", "art": "quelle", "entwurf": true},
+  {"id": "keiner_faehrt", "biom": "station", "n": "Keiner fährt ab", "t": "Eine Karte, die eine Reaktion auslöst, legt sich oben auf den Stapel statt auf die Ablage. Höchstens zwei Karten je Zug.", "zeichen": "bg_keiner_faehrt", "art": "ablage", "entwurf": true},
+  {"id": "falsche_winkel", "biom": "eis", "n": "Falsche Winkel", "t": "Jede Karte reagiert mit der vorletzten Karte statt mit der letzten.", "zeichen": "bg_falsche_winkel", "art": "quelle", "entwurf": true},
+  {"id": "schlag", "biom": "walkathedrale", "n": "Der Schlag", "t": "Die dritte Karte eines Zuges reagiert mit allen Karten, die in diesem Zug davor lagen, nicht nur mit der letzten.", "zeichen": "bg_schlag", "art": "quelle", "entwurf": true},
+  {"id": "spiegelbild", "biom": "glasmeer", "n": "Das Spiegelbild ist voraus", "t": "Die oberste Karte des Stapels liegt offen. Einmal je Zug darfst du eine Handkarte gegen sie tauschen: erst den Stapel anklicken, dann die Handkarte.", "zeichen": "bg_spiegelbild", "art": "ziehen", "entwurf": true},
+  {"id": "rueckseite", "biom": "mond", "n": "Die Rückseite", "t": "Jeder Gegner zeigt zwei Absichten: diesen Zug und den nächsten.", "zeichen": "bg_rueckseite", "art": "absichten", "entwurf": true},
+  {"id": "funkspruch", "biom": "funkstation", "n": "Funkspruch", "t": "Drei Karten mit gleichen Kosten direkt nacheinander: Die dritte ist verstärkt, egal welcher Stoff. Einmal je Zug.", "zeichen": "bg_funkspruch", "art": "extra_reaktionen", "entwurf": true,
+   "reaktion": {"n": "Funkspruch", "t": "Drei Karten mit gleichen Kosten nacheinander: Die dritte wirkt 50 % stärker.", "pre": {"mult": 1.5}}},
+  {"id": "ausser_zeit", "biom": "pforte", "n": "Außerhalb der Zeit", "t": "Jeden Zug gilt die Regelbiegung eines anderen Bioms, nie zweimal dieselbe hintereinander. Du siehst auch die des nächsten Zuges.", "zeichen": "bg_ausser_zeit", "art": "wechsel", "entwurf": true},
+  {"id": "wellen_oben", "biom": "ufer", "n": "Die Wellen kommen von oben", "t": "Gespielte und abgeworfene Karten gehen unter den Stapel statt auf die Ablage. Es wird nie gemischt.", "zeichen": "bg_wellen_oben", "art": "ablage", "entwurf": true},
+  {"id": "aufgewogen", "biom": "waage", "n": "Aufgewogen", "t": "Energie, die am Zugende übrig ist, verfällt nicht, sondern liegt als Block in der Schale: 3 Block je Energie.", "zeichen": "bg_aufgewogen", "art": "zug_ende", "entwurf": true}
+ ]
+}

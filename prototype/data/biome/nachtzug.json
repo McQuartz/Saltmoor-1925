@@ -150,7 +150,8 @@
    },
    "beute": "reiseplaid",
    "beute_satz": "Seine Zeitung ist von morgen. Die Seite mit den Todesanzeigen fehlt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "gepaeck": {
    "n": "Das Gepäckstück",
@@ -186,7 +187,8 @@
    },
    "beute": "kohlenschaufel",
    "beute_satz": "Im Koffer lag ordentlich gefaltet ein Mantel. Er hat deine Größe.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "kontrolleurin": {
    "n": "Die Kontrolleurin",
@@ -223,7 +225,8 @@
    },
    "beute": "fahrkartenzange",
    "beute_satz": "Ihr Fahrscheinheft ist voll. Auf jedem Abschnitt steht dein Name.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "schlafwagenkind": {
    "n": "Das Schlafwagenkind",
@@ -261,7 +264,8 @@
    },
    "beute": null,
    "beute_satz": "Wo das Kind stand, liegt eine Bahnsteigkarte für einen Bahnhof, den es nicht gibt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "uhrmacher": {
    "n": "Der Uhrmacher im Speisewagen",
@@ -292,6 +296,10 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 24
+   },
    "sprite": "uhrmacher",
    "varianten": [
     "uhrmacher"
@@ -316,7 +324,8 @@
      "v": 1,
      "why": "Er stellt deine Uhr nach: eine Karte kostet diesen Zug mehr Zeit."
     }
-   ]
+   ],
+   "art": "mensch"
   },
   "oberkellner": {
    "n": "Der Oberkellner",
@@ -347,6 +356,10 @@
      "v": 20
     }
    ],
+   "gesehen": {
+    "t": "buff",
+    "v": 4
+   },
    "sprite": "oberkellner",
    "varianten": [
     "oberkellner",
@@ -394,7 +407,8 @@
    },
    "beute": "pfandschein",
    "beute_satz": "Die Glocke rollt unter den Tisch. Auf dem Teller liegt nur noch die Rechnung, und sie ist auf deinen Namen ausgestellt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   }
  },
  "items": {

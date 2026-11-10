@@ -46,7 +46,8 @@
    "tarot",
    "divinghelm",
    "salt",
-   "knife"
+   "knife",
+   "grablampe"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -157,12 +158,15 @@
    },
    "beute": "glasscherbe",
    "beute_satz": "Er taucht nicht wieder auf. Die Bugwelle vor seinem Kopf bleibt stehen, wo sie war.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch",
+   "asche": true
   },
   "splitterchor": {
    "n": "Der Splitterchor",
    "biom": "glasmeer",
    "rang": "normal",
+   "stumm": true,
    "hp": 16,
    "weak": "L",
    "pat": [
@@ -194,7 +198,8 @@
    },
    "beute": "spiegelscherbe",
    "beute_satz": "Die letzte Scherbe hört mitten im Ton auf. Auf ihr ist jetzt ein Gesicht mehr.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   },
   "vorhergehende": {
    "n": "Der Vorhergehende",
@@ -234,7 +239,8 @@
    },
    "beute": "schneebrille",
    "beute_satz": "Er fällt. Sein Spiegelbild liegt schon eine Weile.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "mensch"
   },
   "leithund": {
    "n": "Der Leithund",
@@ -271,7 +277,8 @@
    },
    "beute": "polarlicht",
    "beute_satz": "Die Leine hinter ihm wird schlaff. Im Glas zieht etwas sie langsam ein.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "voraus": {
    "n": "Der Voraus",
@@ -302,6 +309,11 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 6,
+    "h": 4
+   },
    "sprite": "voraus",
    "varianten": [
     "voraus"
@@ -314,7 +326,8 @@
    },
    "beute": "taschenspiegel",
    "beute_satz": "Er zerspringt, und in jeder Scherbe stehst du, einen Schritt hinter ihm. Dann holst du auf.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   },
   "lichtqualle": {
    "n": "Die Lichtqualle",
@@ -341,6 +354,10 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 15
+   },
    "sprite": "lichtqualle",
    "varianten": [
     "lichtqualle"
@@ -358,7 +375,8 @@
    },
    "beute": "polarlicht",
    "beute_satz": "Die Glocke sinkt ins Glas zurück, langsam, wie sie gekommen ist. Unten weht das Licht weiter, und für einen Augenblick siehst du darin den Schlitten, der weiterfährt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [
@@ -632,6 +650,47 @@
      ]
     }
    ]
+  },
+  {
+   "id": "glasmeer_vorrat",
+   "t": "Der Rucksack unter dem Glas",
+   "d": "Unter dem Glas liegt dein Rucksack, geöffnet, und obenauf der Gegenstand, den du als Nächstes brauchen wirst. Er ist schon dort. Es riecht nach kaltem Metall und Pfefferminz, und dein Atem beschlägt das Glas an der Stelle, wo er liegt, einen Atemzug bevor du ausatmest.",
+   "bild": "Eine klare Glasplatte über dunklem Wasser, darunter ein offener Rucksack mit einer Laterne obenauf, darüber der Abdruck eines Atems.",
+   "o": [
+    {
+     "l": "Einen Gegenstand gegen sein Spiegelbild tauschen: ein Item wird getauscht",
+     "fx": [
+      {
+       "op": "item_tausch"
+      }
+     ]
+    },
+    {
+     "l": "Durch das Glas greifen und nehmen, was oben liegt: ein zufälliges Item, −7 Leben",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "lose_hp",
+       "v": 7
+      }
+     ],
+     "if": {
+      "hp_min": 9
+     }
+    },
+    {
+     "l": "Das Glas nicht berühren und warten, bis es weiß, was du willst: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

@@ -338,5 +338,54 @@ module.exports = {
       buch(K, Math.round(p0.x), Math.round(p0.y - 4), 16, { leer: true, ton: 3, L: [0, -1] });
       K.vignette(.8, { cx: 80, cy: 56 });
     },
+
+    // Kamera dicht am Eisboden: drei Mulden in einer Reihe, von links nach rechts wachsend (10, 16, 24 px), jede mit hellem Randlicht oben und dunklem Grund, Risse dazwischen; oben nur Rippenbögen als Rahmen, fern ein kleines rotes Glimmen; links ein heller Knochenpfeiler mit drei Kreidestrichen.
+    walkathedrale_dritter_schlag(K) {
+      const { B } = K;
+      const vx = 84, vy = 34;
+      eisWand(K, vx, vy, .3);
+      eisBoden(K, 46, { tf: (x, y) => .08 + Math.max(0, 1 - Math.hypot((x - 80) / 90, (y - 70) / 30)) * .22 });
+      schiff(K, vx, vy, { n: 4, b: 74, h: 50, d: 3.6, f: .66, tiefe: .2, ton: 1.5, boden: 52 });
+      herz(K, vx, vy + 4, 2, 1);
+      K.lichtquelle(vx, vy);
+      // Kaltes Licht von oben auf den Boden, damit Randlicht und Risse lesbar sind
+      K.licht(80, 66, 80, KALT_G, .8, { oval: 2, maske: (x, y) => y > 48 });
+      // Risse zuerst: von der dritten Mulde nach links durch die zweite und erste, kleine Zweige
+      const rng = B.rng(41);
+      const riss2 = (x0, y0, x1, y1) => {
+        let x = x0, y = y0; const n = Math.ceil(Math.hypot(x1 - x0, y1 - y0));
+        for (let k = 0; k < n; k++) { const q = k / n; x = x0 + (x1 - x0) * q + rng.j(.9); y = y0 + (y1 - y0) * q + rng.j(.6); K.set(Math.round(x), Math.round(y), k % 4 ? '#4a6a94' : '#9cc0e8'); K.set(Math.round(x), Math.round(y) + 1, '#0a101c'); }
+      };
+      riss2(96, 78, 80, 77); riss2(80, 77, 74, 74); riss2(58, 74, 50, 73); riss2(96, 80, 78, 83); riss2(60, 76, 52, 80); riss2(34, 74, 22, 72); riss2(40, 76, 30, 80);
+      riss2(104, 70, 100, 62); riss2(118, 72, 128, 66);
+      // Die drei Mulden: dunkler Grund, heller Rand oben (die Lippe), Eisbrocken an der Kante
+      const mulde = (cx, cy, rx, ry, tiefe) => {
+        const m = K.maske(); m.ell(cx, cy, rx, ry);
+        K.form(m, 0, { k: ['#000103', '#01040a', '#030812', '#070f1c'].slice(0, 2 + tiefe), r: [], ton: .7, fase: 0, rand: 0, verlauf: -.8 });
+        // heller Rand oben, 2 px breit, und schwacher Rand an den Seiten
+        for (let x = Math.round(cx - rx) - 1; x <= cx + rx + 1; x++) {
+          const u = (x - cx) / rx; if (Math.abs(u) > 1) continue; const yo = Math.round(cy - ry * Math.sqrt(1 - u * u));
+          K.set(x, yo - 1, '#d4ecff'); K.set(x, yo, '#7aa8d8'); if (Math.abs(u) < .75) K.set(x, yo + 1, '#33496a');
+        }
+        for (let j = 0; j < 6; j++) { const a = -Math.PI * (.1 + j * .16), x = Math.round(cx + Math.cos(a) * (rx + 1)), y = Math.round(cy + Math.sin(a) * (ry + 1)); K.set(x, y - 1, '#e8f6ff'); K.set(x + 1, y - 1, '#8ab0d8'); }
+        // unterer Rand: nur ein feiner Strich, damit die Mulde Tiefe hat
+        for (let x = Math.round(cx - rx * .6); x <= cx + rx * .6; x++) K.set(x, Math.round(cy + ry) + 1, '#1a2a44');
+      };
+      mulde(40, 76, 5, 2, 1);
+      mulde(68, 76, 8, 3.4, 2);
+      mulde(108, 77, 12, 5.5, 4);
+      // Pfeiler links, hell vom Randlicht, aus Knochen; Kreide: drei Striche
+      const pf = K.maske(); pf.poly([[0, 0], [30, 0], [27, 36], [25, 90], [0, 90]]);
+      K.form(pf, 0, knochen(K, 3.2, { L: [1, -.1], verlauf: -.2, lichtVon: [80, 40] }));
+      K.kante(pf, 80, 50, 200, KN_RAND, { min: .2, nah: .6 });
+      K.licht(26, 40, 40, '#2e3a52', .5, { maske: (x, y) => pf.has(x, y) });
+      const KR = '#f0ead8', KRd = '#9a9684';
+      for (const [x, y0, y1, d] of [[8, 22, 40, false], [14, 22, 40, false], [20, 18, 44, true]]) {
+        K.linie(x, y0, x, y1, KR);
+        if (d) { K.linie(x + 1, y0, x + 1, y1, KR); K.linie(x - 1, y0 + 1, x - 1, y1, KRd, .6); }
+      }
+      for (let i = 0; i < 12; i++) { const x = 4 + rng.i(0, 22), y = 86 + rng.i(0, 3); if (B.bay(x, y) < .7) K.set(x, y, i % 3 ? KRd : KR); }
+      K.vignette(.5, { cx: 86, cy: 54 });
+    },
   },
 };

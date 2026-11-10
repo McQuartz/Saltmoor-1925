@@ -43,7 +43,8 @@
    "dynamite",
    "tartorch",
    "legionsaxt",
-   "compass"
+   "compass",
+   "resonator"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -153,7 +154,9 @@
    },
    "beute": "probeziegel",
    "beute_satz": "Die Brennprobe hängt noch an der Kette und glüht weiter, als hätte sie es nicht gemerkt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert",
+   "asche": true
   },
   "ziegeltraeger": {
    "n": "Der Ziegelträger",
@@ -190,7 +193,8 @@
    },
    "beute": "traegerreff",
    "beute_satz": "Der Stapel steht noch, als er schon nicht mehr steht.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "stempel": {
    "n": "Der Stempel",
@@ -226,7 +230,8 @@
    },
    "beute": null,
    "beute_satz": "Im Boden, wo er fiel, ist ein Abdruck: LEG XXXIX, spiegelverkehrt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "veraendert"
   },
   "lehmhund": {
    "n": "Der Lehmhund",
@@ -262,7 +267,8 @@
    },
    "beute": null,
    "beute_satz": "Vom Hund bleibt ein Haufen Lehm, und darin die Pfoten, sauber, wie in einen Ziegel gedrückt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "brennofen": {
    "n": "Der Brennofen",
@@ -293,6 +299,10 @@
      "v": 16
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 24
+   },
    "sprite": "brennofen",
    "varianten": [
     "brennofen"
@@ -340,7 +350,8 @@
    },
    "beute": "gebrannter_finger",
    "beute_satz": "Die Feuertür schlägt zu. Dahinter wird es still, dann kalt, und in der Asche liegt ein einzelner Finger aus gebranntem Ton.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "neununddreissigste": {
    "n": "Die Neununddreißigste",
@@ -374,6 +385,10 @@
      "h": 4
     }
    ],
+   "gesehen": {
+    "t": "blk",
+    "v": 20
+   },
    "sprite": "neununddreissigste",
    "varianten": [
     "neununddreissigste"
@@ -392,7 +407,8 @@
    },
    "beute": "legionsstempel",
    "beute_satz": "Die Schildkröte öffnet sich. Darunter stehen keine Männer, nur Füße aus Lehm in einer Reihe, und das Feldzeichen fällt um. Der kleine Ofen oben brennt weiter.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   }
  },
  "events": [
@@ -694,6 +710,51 @@
      ]
     }
    ]
+  },
+  {
+   "id": "ziegelgruben_ringgang",
+   "t": "Der Ringgang",
+   "d": "Der Rauch riecht nach heißem Lehm, und er zieht nicht ab, er geht im Kreis. Der Gang des Ofens hat keinen Anfang: Der Ziegel in der ersten Kammer trägt den Stempel der letzten, und die Glut dahinter ist noch warm von dem, was gerade kommt. Zwischen den Kammern fehlt keine Tür.",
+   "bild": "Ein runder, gewölbter Ofengang aus rußigen Ziegeln, die Kammern hintereinander im Kreis, im Vordergrund ein Ziegel mit sichtbarem Stempel.",
+   "o": [
+    {
+     "l": "Den Stempel der letzten Kammer in die erste drücken: eine Karte kostet dauerhaft 1 weniger, −5 Leben",
+     "fx": [
+      {
+       "op": "schleifen"
+      },
+      {
+       "op": "lose_hp",
+       "v": 5
+      }
+     ],
+     "if": {
+      "hp_min": 7
+     }
+    },
+    {
+     "l": "Einen Ziegel aus der Kette brechen: +1 Kerbe an einem Item, −6 max. Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "max_hp",
+       "v": -6
+      }
+     ]
+    },
+    {
+     "l": "Dem Rauch einmal im Kreis folgen, bis du wieder hier stehst: +10 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 10
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

@@ -1,0 +1,24 @@
+/* Auftrag 3 M10: Metaebene. Erbe-Rahmen „alte Handschrift“ (nur Optik), Notizen des Vorgängers, Pausen-Zeile, Fehlzeit-Angebot, Tagebuch-Seiten.
+   Harte Pixelkanten wie überall: keine Weichzeichner. */
+/* Karte in der Hand: abgegriffener Rand, Ecken dunkel, leicht vergilbt */
+.karte.erbe{filter:sepia(.35)}
+.karte.erbe::before{content:'';position:absolute;inset:2px;pointer-events:none;border:1px dashed #6a5434;z-index:1}
+.karte.erbe::after{content:'';position:absolute;inset:-2px;pointer-events:none;border:2px solid #4a3a22;
+ clip-path:polygon(0 0,18% 0,22% 4px,40% 0,100% 0,100% 30%,calc(100% - 4px) 36%,100% 42%,100% 100%,64% 100%,58% calc(100% - 4px),52% 100%,0 100%,0 70%,4px 64%,0 58%)}
+.pick[data-erbe]{filter:sepia(.4);border-style:dashed!important;border-color:#6a5434!important}
+.box.erbe .zwei,.fehlzeit .zwei{display:flex;gap:calc(var(--u)*4);justify-content:center;margin-top:calc(var(--u)*4)}
+/* Notizen an der Rast und im Tagebuch: Fremde Hand, schräger, enger */
+.notizen{margin:calc(var(--u)*3) auto;padding:calc(var(--u)*4) calc(var(--u)*6);max-width:calc(var(--u)*220)}
+p.hand{font-style:italic;letter-spacing:-.02em;transform:rotate(-.6deg);margin:calc(var(--u)*2) 0}
+.seiten .seite{margin:calc(var(--u)*3) 0;padding-top:calc(var(--u)*2);border-top:1px dashed #7a6040}
+.seiten .seite.fehlzeit p.hand{transform:rotate(.5deg)}
+/* Pausen-Zeile auf dem Titel, Ankunftszeile nach dem ersten Umkehren */
+.titel p.pause{font-style:italic;opacity:.85;max-width:calc(var(--u)*240);margin:calc(var(--u)*4) auto 0;text-align:center}
+.lead.ankunftzeile{font-style:italic}
+.fehlzeit{margin:calc(var(--u)*4) 0;padding:calc(var(--u)*3);border:1px dashed currentColor;text-align:center}
+/* Die fremde Fassung (07-begegnungen-meta-wuerze.md Abschnitt 5): eigener Rahmen, dunkler, Schrift leicht anders geneigt, Name bleibt.
+   Gilt für Diener (0 Kosten), Fehlzeit und später Barmherzige Trennung. */
+.karte.fremd{filter:brightness(.78) saturate(.8)}
+.karte.fremd::before{content:'';position:absolute;inset:1px;pointer-events:none;border:2px solid #1a1410;outline:1px solid #5a2a3a;z-index:1}
+.karte.fremd b,.karte.fremd .kt,.karte.fremd div{font-style:italic}
+.karte.fremd b{transform:skewX(-6deg);display:inline-block}

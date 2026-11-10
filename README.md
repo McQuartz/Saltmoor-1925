@@ -37,6 +37,7 @@ prototype/          Browser-Prototyp (reines HTML/CSS/JS, kein Build-Schritt)
   effekte.html      Effekt-Labor (pixelfx)
   musik.html        Musik-Labor: dynamische Layer-Musik, alle sieben Biome
   klangliste.html   Audiodateien, die wir selbst aufnehmen oder bauen (data/audio.json)
+  studio.html       Aufnahme-Studio: alle Soundeffekte mit dem Mund neu aufnehmen; Spiel mit ?mund=1 spielt sie (js/audio/mund.js)
   ideen.html        Ideenkiste
   lab.html          altes Sprite-Labor (prozedurale Teile, nur noch zum Nachsehen)
   data/             alle Spielwerte als JSON, Formate in data/README.md

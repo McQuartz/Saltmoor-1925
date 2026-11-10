@@ -368,7 +368,7 @@ B.szene = function (K) {
     w: W, h: H, rand: M,
     ebenen: [0, 1, 2, 3, 4].map(i => ({ canvas: can[i], parallax: par[i], x: -M, y: -M })),
     vorne: { canvas: can[5], parallax: par[5], x: -M, y: -M },
-    reihen: K.reihen, lichter: K.lichter, biom: K.o.biom, variante: K.o.variante, art: K.o.art,
+    reihen: K.reihen, lichter: K.lichter, biom: K.o.biom, variante: K.o.variante, art: K.o.art, kulisse: K.kulisse,
     zeichneEbene(ctx, i, kam) { const L = i < 5 ? S.ebenen[i] : S.vorne; const [ox, oy] = off(kam, L.parallax); ctx.drawImage(L.canvas, ox - M, oy - M); },
     zeichneAnimiert(ctx, t, kam) { ctx.imageSmoothingEnabled = false; for (const a of K.anim) { const [ox, oy] = off(kam, a.p); a.f(ctx, t, ox, oy); } },
     zeichneVordergrund(ctx, t, kam, ohneEbene5) {
@@ -515,30 +515,396 @@ World.palette = function (biom) {
   const p = (World._biome[biom] || World._biome.hafen).pal;
   return { koerper: p.koerper.slice(), rand: p.rand.slice(), augen: p.augen, nebel: p.nebel.slice() };
 };
-World.relief = function (biom, seed) {
+// motiv: 'prozession' (Vorgabe), 'treppe', 'welle', 'auge', 'glocke', 'schiff', 'baum', 'rad', 'tuer', 'hand', 'turm', 'kette', 'waage'.
+// Ohne oder mit unbekanntem Motiv malt es die Prozession.
+World.relief = function (biom, seed, motiv) {
   const def = World._biome[biom] || World._biome.hafen;
-  return B.relief(def.pal, seed || 1, def.reliefStil || {});
+  return B.relief(def.pal, seed || 1, def.reliefStil || {}, motiv);
 };
 
 // ---------- Wandbild-Relief 160×100 (Ritzlinien mit Randlicht) ----------
-B.relief = function (pal, seed, stil) {
+// Hilfen der Motive: alles Ritzmasken (Maske m, Wert 1 = geritzt), Pixelkoordinaten im Bild 160×100.
+const rStrich = (m, x1, y1, x2, y2, r) => m.kap(x1, y1, x2, y2, r, r);
+const rZug = (m, pts, r) => m.pfad(pts, r, r);
+// Ellipsenring (Wandstärke t), optional gedreht um w
+function rRing(m, cx, cy, rx, ry, t, w) {
+  const c = Math.cos(w || 0), s = Math.sin(w || 0), R = Math.max(rx, ry) + 1, ix = Math.max(.4, rx - t), iy = Math.max(.4, ry - t);
+  m.fn(cx - R, cy - R, cx + R, cy + R, (x, y) => {
+    const dx = x - cx, dy = y - cy, u = dx * c + dy * s, v = -dx * s + dy * c;
+    return (u / rx) ** 2 + (v / ry) ** 2 <= 1 && (u / ix) ** 2 + (v / iy) ** 2 >= 1;
+  });
+}
+// Bogen als Linienzug (Winkel in Bogenmaß, y nach unten: π..2π ist die obere Hälfte)
+function rBogen(m, cx, cy, rx, ry, a0, a1, r) {
+  const n = Math.max(4, Math.ceil(Math.abs(a1 - a0) * Math.max(rx, ry) / 2.2)), pts = [];
+  for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; pts.push([cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]); }
+  return m.pfad(pts, r, r);
+}
+// Umriss der Dicke t einer gefüllten Maske f nach m
+function rKontur(f, m, t) {
+  t = t || 1; if (f.leer()) return;
+  const nb = []; for (let j = -t; j <= t; j++) for (let i = -t; i <= t; i++) if (Math.abs(i) + Math.abs(j) <= t && (i || j)) nb.push([i, j]);
+  for (let y = f.y0; y <= f.y1; y++) for (let x = f.x0; x <= f.x1; x++) {
+    if (!f.has(x, y)) continue;
+    for (const o of nb) if (!f.has(x + o[0], y + o[1])) { m.put(x, y, 1); break; }
+  }
+}
+// Kleine Gestalt (Füße bei x,y, Höhe ≈ 11·s); arm: 'hoch' | 'beide' | 'zeig' | undefined
+function rMensch(m, x, y, s, arm, dir) {
+  s = s || 1; dir = dir || 1;
+  m.ell(x, y - 10 * s, 1.7 * s, 1.9 * s);
+  m.kap(x, y - 8 * s, x, y - 4 * s, 1.1 * s, .9 * s);
+  m.kap(x, y - 4 * s, x - 1.8 * s, y, .8, .8); m.kap(x, y - 4 * s, x + 1.8 * s, y, .8, .8);
+  if (arm === 'hoch') m.kap(x, y - 7.5 * s, x + 3 * dir * s, y - 13 * s, .8, .8);
+  else if (arm === 'beide') { m.kap(x, y - 7.5 * s, x - 3 * s, y - 13 * s, .8, .8); m.kap(x, y - 7.5 * s, x + 3 * s, y - 13 * s, .8, .8); }
+  else if (arm === 'zeig') m.kap(x, y - 7.5 * s, x + 4 * dir * s, y - 8 * s, .8, .8);
+  else m.kap(x, y - 7.5 * s, x + 1.5 * dir * s, y - 4.5 * s, .7, .7);
+}
+// Steinfugen in eine gefüllte Fläche f: Lagen alle hz Pixel, Stoßfugen alle bw Pixel versetzt
+function rFugen(f, m, hz, bw, y0) {
+  for (let y = f.y0; y <= f.y1; y++) {
+    if (y < y0 || (y - y0) % hz) continue;
+    const k = Math.floor((y - y0) / hz);
+    for (let x = f.x0; x <= f.x1; x++) {
+      if (!f.has(x, y) || !f.has(x, y - 2) || !f.has(x, y + 2)) continue;
+      m.put(x, y, 1);
+      if ((x + k * (bw >> 1)) % bw === 0) for (let j = 1; j < hz && f.has(x, y + j); j++) m.put(x, y + j, 1);
+    }
+  }
+}
+
+const MOTIV = {};
+B.reliefMotive = MOTIV;
+
+// Treppe, die in dunkles Wasser hinabführt; Gestalten gehen Hand in Hand hinunter
+MOTIV.treppe = function (m, r) {
+  const n = r.i(8, 9), x0 = Math.round(r.f(10, 16)), y0 = Math.round(r.f(20, 25)), dx = r.f(8.6, 9.4), dy = r.f(5.6, 6.2), f = B.maske();
+  const top = [];
+  for (let i = 0; i < n; i++) { top.push([x0 + i * dx, y0 + i * dy], [x0 + (i + 1) * dx, y0 + i * dy]); }
+  top.push([x0 + n * dx, y0 + n * dy], [x0 + n * dx, 84], [x0, 84]);
+  f.poly(top); rKontur(f, m, 1);
+  // Unterseite der Stufenplatten: zweiter Stufenzug, 8 Pixel tiefer, nur innerhalb der Masse
+  const g = B.maske(); const un = []; for (let i = 0; i < n; i++) un.push([x0 + i * dx, y0 + i * dy + 8], [x0 + (i + 1) * dx, y0 + i * dy + 8]);
+  rZug(g, un, .6); g.fn(0, 0, 159, 99, (x, y) => !f.has(x, y), 0);
+  for (let y = 0; y < 100; y++) for (let x = 0; x < 160; x++) if (g.has(x, y)) m.put(x, y, 1);
+  // Mauerfugen nur links unten unter dem Stufenzug
+  for (let y = Math.round(y0) + 24; y < 84; y += 7) for (let x = x0 + 2; x < x0 + 5 * dx && f.has(x, y) && f.has(x, y + 2); x++) if (y + 2 > y0 + (x - x0) / dx * dy + 14) m.put(x, y, 1);
+  // Wasserlinie: die unteren drei Stufen liegen darunter, rechts davon Schuppenwellen
+  const yw = Math.round(y0 + (n - 3) * dy) + 1, xw = x0 + (n - 3) * dx;
+  for (let x = Math.ceil(xw); x < 156; x++) if (x % 10 < 7) m.put(x, yw + Math.round(Math.sin(x * .4) * .8), 1);
+  for (let k = 0; k < 3; k++) {
+    const rr = 5, off = (k % 2) * rr;
+    for (let x = Math.ceil(xw) + 2 - off; x < 154; x += rr * 2) rBogen(m, x + rr, yw + 9 + k * 6, rr, rr * .6, Math.PI, Math.PI * 2, .6);
+  }
+  // Gestalten, Hand in Hand, auf den Stufen
+  const a = r.i(1, 2), gz = r.i(3, 4);
+  for (let k = 0; k < gz; k++) { const i = a + k * 1.7, x = x0 + (Math.floor(i) + .5) * dx, y = y0 + Math.floor(i) * dy; rMensch(m, x, y, 1.05, 'beide'); }
+  return [Math.min(148, xw + r.f(28, 40)), Math.min(80, yw + 14)];
+};
+
+// Wasser: Wellenreihen und eine große überschlagende Welle
+MOTIV.welle = function (m, r) {
+  const fl = r.ja(.5), X = x => fl ? 159 - x : x, cx = X(r.f(66, 90)), cy = r.f(36, 40), dir = fl ? -1 : 1;
+  // Schuppenwellen unten, groß und in versetzten Reihen
+  for (let k = 0; k < 3; k++) {
+    const y = 68 + k * 6, rr = 8, off = (k % 2) * rr;
+    for (let x = 4 - off; x < 160; x += rr * 2) for (let j = 0; j < 2; j++) rBogen(m, x + rr, y + 3, rr - j * 3, (rr - j * 3) * .75, Math.PI, Math.PI * 2, .6);
+  }
+  // der große Brecher: Rücken von der Seite, steigt, rollt über
+  const sp = [], R0 = 30;
+  for (let i = 0; i <= 28; i++) { const a = -Math.PI * 1.05 + i * 0.205; const rad = R0 * (1 - i * .027); sp.push([cx + dir * Math.cos(a) * rad * .9, cy + Math.sin(a) * rad]); }
+  const back = [[X(6), 66], [X(26), 64], [X(44), 58], [sp[0][0] - dir * 6, sp[0][1] + 8], sp[0]];
+  rZug(m, back, 1.2); rZug(m, sp, 1.2);
+  rZug(m, sp.slice(6, 20).map(p => [cx + (p[0] - cx) * .78, cy + (p[1] - cy) * .78 + 1]), .8);
+  // Gischtfinger an der Spitze und Schaumpunkte
+  const tip = sp[sp.length - 1];
+  for (let k = 0; k < 4; k++) rStrich(m, tip[0] + dir * k * 2, tip[1] + 1, tip[0] + dir * (k * 2 + 1), tip[1] + 4 + k * 2.2, .8);
+  for (let k = 0; k < 9; k++) m.ell(cx + dir * (r.f(-26, 26) + 4), cy - 32 + r.f(0, 12) + Math.abs(k - 4) * 1.5, 1, 1);
+  rMensch(m, X(r.f(128, 142)), 66, .9, 'hoch', -dir);
+  return [cx - dir * 2, cy + 1];
+};
+
+// Ein großes Auge: Mandel, Lid, Iris, Strahlen; unten kleine Gestalten, die hinaufsehen
+MOTIV.auge = function (m, r) {
+  const cx = r.f(68, 92), cy = r.f(42, 48), rw = r.f(40, 48), oben = r.f(15, 20), unten = r.f(11, 15);
+  const obenPts = [], untenPts = [];
+  for (let i = 0; i <= 24; i++) { const u = i / 24 * 2 - 1, s = 1 - u * u; obenPts.push([cx + u * rw, cy - oben * Math.pow(s, .8)]); untenPts.push([cx + u * rw, cy + unten * Math.pow(s, .9)]); }
+  rZug(m, obenPts, 1.2); rZug(m, untenPts, 1.2);
+  // Lidfalte
+  rZug(m, obenPts.filter((p, i) => i >= 3 && i <= 21).map(p => [cx + (p[0] - cx) * 1.02, p[1] - 6 - Math.abs(p[0] - cx) * .05]), .9);
+  // Iris und Pupille
+  rRing(m, cx, cy, 15, 15, 1.7); rRing(m, cx, cy, 7, 7, 1.3);
+  for (let k = 0; k < 16; k++) { const a = k * Math.PI / 8; rStrich(m, cx + Math.cos(a) * 8.5, cy + Math.sin(a) * 8.5, cx + Math.cos(a) * 13, cy + Math.sin(a) * 13, .5); }
+  // Wimpernstrahlen nach oben
+  for (let k = 0; k < 9; k++) { const a = -Math.PI + (k + .5) * Math.PI / 9, ex = cx + Math.cos(a) * rw * .9, ey = cy - oben * Math.pow(Math.max(0, 1 - (Math.cos(a) * .9) ** 2), .8); rStrich(m, ex, ey - 2, ex + Math.cos(a) * 6, ey - 4 + Math.sin(a) * 6, .6); }
+  // Gestalten unten, alle blicken hinauf
+  const g = r.i(5, 7); for (let k = 0; k < g; k++) rMensch(m, 16 + k * 128 / (g - 1) + r.j(2), 84, .9, k % 3 === 1 ? 'hoch' : undefined, k % 2 ? 1 : -1);
+  return [cx, cy];
+};
+
+// Glocke im Gerüst, Schallbögen, ein Mensch daneben
+MOTIV.glocke = function (m, r) {
+  const cx = Math.round(r.f(70, 90)), top = 28, hw = [[5, 28], [7, 31], [9, 36], [10, 43], [11, 50], [13, 58], [16, 64], [20, 69], [24, 73], [25.5, 76]];
+  const f = B.maske(), L = hw.map(p => [cx - p[0], p[1]]), Rr = hw.slice().reverse().map(p => [cx + p[0], p[1]]);
+  f.poly(L.concat(Rr)); rKontur(f, m, 1);
+  const halb = y => { for (let i = 0; i < hw.length - 1; i++) if (y >= hw[i][1] && y <= hw[i + 1][1]) return hw[i][0] + (hw[i + 1][0] - hw[i][0]) * (y - hw[i][1]) / (hw[i + 1][1] - hw[i][1]); return hw[hw.length - 1][0]; };
+  for (const y of [36, 40, 68, 72]) { const w = halb(y); rStrich(m, cx - w, y, cx + w, y, .5); }
+  for (let k = 0; k < 7; k++) { const y = 50 + (k % 2) * 3, x = cx - 10 + k * 3.4; m.rect(x, y, 1, 4); }
+  // Mund und Klöppel
+  rStrich(m, cx - 25, 76, cx + 25, 76, 1);
+  rRing(m, cx, 80, 3.5, 3.5, 1.1); rStrich(m, cx, 77, cx, 76, .8);
+  // Krone, Joch, Balken
+  for (let k = -1; k <= 1; k++) rRing(m, cx + k * 4.5, 25, 2.4, 3, 1);
+  const bx = 48; rStrich(m, cx - bx, 21, cx + bx, 21, 1.4); rStrich(m, cx - 6, 22, cx - 6, 24, .8); rStrich(m, cx + 6, 22, cx + 6, 24, .8);
+  for (const s of [-1, 1]) { rStrich(m, cx + s * bx, 21, cx + s * bx, 84, 1.4); rStrich(m, cx + s * bx, 36, cx + s * (bx - 14), 21, .8); }
+  // Schallbögen
+  for (const s of [-1, 1]) for (let k = 0; k < 3; k++) rBogen(m, cx + s * 26, 56, 4 + k * 5, 8 + k * 6, s > 0 ? -1 : Math.PI - 1, s > 0 ? 1 : Math.PI + 1, .6);
+  rMensch(m, cx + 36 + r.i(-2, 2), 84, 1, 'hoch', -1);
+  return [cx, 80];
+};
+
+// Schiff mit Segeln, kleine Schiffe hinter ihm, Wellen davor
+MOTIV.schiff = function (m, r) {
+  const sx = Math.round(r.f(8, 18)), f = B.maske();
+  const hull = [[sx, 54], [sx + 12, 60], [sx + 80, 60], [sx + 96, 49], [sx + 90, 64], [sx + 72, 72], [sx + 16, 72], [sx + 4, 64]];
+  f.poly(hull); rKontur(f, m, 1);
+  for (const y of [64, 68]) for (let x = sx; x < sx + 96; x++) if (f.has(x, y) && f.has(x, y - 1) && f.has(x, y + 2) && f.has(x - 3, y) && f.has(x + 3, y)) m.put(x, y, 1);
+  for (let k = 0; k < 6; k++) m.rect(sx + 22 + k * 10, 61, 1, 2);
+  // Masten, Rahen, gebauschte Segel
+  const mx = [sx + 22, sx + 46, sx + 68], mh = [r.i(26, 30), r.i(15, 19), r.i(26, 30)];
+  const segel = (x, ya, yb, w) => {
+    const q = B.maske(), mid = (ya + yb) / 2;
+    q.poly([[x - w / 2, ya], [x + w / 2, ya], [x + w / 2 + 2, mid], [x + w / 2, yb], [x, yb - 2.5], [x - w / 2, yb], [x - w / 2 - 2, mid]]);
+    m.fn(x - w, ya - 1, x + w, yb + 1, (px, py) => q.has(px, py), 0); rKontur(q, m, 1);
+  };
+  for (let i = 0; i < 3; i++) rStrich(m, mx[i], mh[i], mx[i], 60, 1);
+  for (let i = 0; i < 3; i++) {
+    const x = mx[i], y0 = mh[i], w = i === 1 ? 22 : 18;
+    let ya = y0 + 3; for (let s = 0; s < 2; s++) { segel(x, ya + 1, ya + 13, w); rStrich(m, x - w / 2 - 1.5, ya, x + w / 2 + 1.5, ya, .7); ya += 16; }
+  }
+  // Takelage
+  rStrich(m, mx[0], mh[0], sx + 2, 56, .6); rStrich(m, mx[2], mh[2], sx + 95, 49, .6);
+  rStrich(m, mx[0], mh[0], mx[1], mh[1], .6); rStrich(m, mx[1], mh[1], mx[2], mh[2], .6);
+  rStrich(m, sx + 95, 49, sx + 108, 41, .8);
+  // kleine Schiffe in der Ferne: Rumpf, Mast, Dreieckssegel
+  for (const fx of [r.i(124, 130), r.i(144, 148)]) {
+    const fy = fx > 140 ? 52 : 58, sf = B.maske(), sg = B.maske();
+    sf.poly([[fx - 9, fy], [fx + 9, fy], [fx + 6, fy + 5], [fx - 6, fy + 5]]); rKontur(sf, m, 1);
+    rStrich(m, fx, fy - 18, fx, fy, .7); sg.poly([[fx + 1, fy - 17], [fx + 9, fy - 2], [fx + 1, fy - 2]]); rKontur(sg, m, 1); rStrich(m, fx - 1, fy - 12, fx - 6, fy - 2, .6);
+  }
+  // Wellen
+  for (let k = 0; k < 3; k++) for (let x = 4 + (k % 2) * 6; x < 154; x += 12) rBogen(m, x + 5, 78 + k * 3, 5, 2.6, Math.PI, Math.PI * 2, .5);
+  rMensch(m, sx + 36, 60, .8, 'zeig');
+  return [mx[0], mh[0] - 3];
+};
+
+// Baum: Krone aus Ästen, kräftiger Stamm mit Hohlraum und Kerben, Wurzeln unter der Erde
+MOTIV.baum = function (m, r) {
+  const cx = Math.round(r.f(66, 94)), f = B.maske(), gy = 62;
+  const br = (x, y, a, len, rad, d) => {
+    const nx = x + Math.cos(a) * len, ny = y + Math.sin(a) * len;
+    f.kap(x, y, nx, ny, rad, Math.max(1.3, rad * .72));
+    if (d >= 4) { f.kap(nx, ny, nx + Math.cos(a) * 3, ny + Math.sin(a) * 3, 1.2, 1); return; }
+    const k = d === 0 ? 2 : (r.ja(.3) ? 3 : 2);
+    for (let i = 0; i < k; i++) { const da = k === 2 ? (i ? 1 : -1) * r.f(.5, .8) : (i - 1) * r.f(.55, .8); br(nx, ny, a + da, len * r.f(.72, .82), Math.max(1.3, rad * .66), d + 1); }
+  };
+  br(cx, gy, -Math.PI / 2 + r.j(.04), 15, 5.6, 0);
+  f.poly([[cx - 8, gy + 2], [cx - 5, gy - 8], [cx + 5, gy - 8], [cx + 8, gy + 2]]);
+  rKontur(f, m, 1);
+  rRing(m, cx, gy - 4, 2.6, 3.8, 1);
+  for (let k = 0; k < 5; k++) rStrich(m, cx + 5.5, gy - 1 - k * 2.4, cx + 8, gy - 1 - k * 2.4, .5);
+  // Erde mit Lücke am Stamm, Wurzeln darunter nach außen
+  for (let x = 4; x < 156; x++) if (Math.abs(x - cx) > 9 && x % 11 < 8) m.put(x, gy + 1 + Math.round(Math.sin(x * .3) * .6), 1);
+  for (let k = 0; k < 6; k++) {
+    const sd = k < 3 ? -1 : 1, kk = k % 3, pts = [[cx + sd * 3, gy + 2]]; let px = pts[0][0], py = pts[0][1], aa = (sd < 0 ? Math.PI : 0) + sd * -(.35 + kk * .55) * 1 + (sd < 0 ? 0 : 0);
+    aa = sd < 0 ? Math.PI - (.3 + kk * .5) : (.3 + kk * .5);
+    for (let s = 0; s < 6; s++) { aa += sd * r.j(.25) * 0 + r.j(.25); px += Math.cos(aa) * 6; py += Math.sin(aa) * 5; pts.push([px, py]); }
+    m.pfad(pts.filter(p => p[1] < 84), 1.4, .5);
+  }
+  rMensch(m, cx - r.i(30, 38), gy, 1, 'hoch', 1); rMensch(m, cx + r.i(28, 36), gy, 1);
+  return [cx, gy - 4];
+};
+
+// Zahnrad mit Speichen und Skala, ein kleineres greift hinein
+MOTIV.rad = function (m, r) {
+  const cx = Math.round(r.f(52, 68)), cy = 49, n = r.i(14, 18), Rb = 27, Rt = 32, f = B.maske();
+  const zahn = (cx, cy, Rb, Rt, n, w0) => {
+    const pts = [], p = Math.PI * 2 / n;
+    for (let i = 0; i < n; i++) { const a = w0 + i * p; for (const q of [[Rb, -.40], [Rt, -.24], [Rt, .24], [Rb, .40], [Rb, .5]]) pts.push([cx + Math.cos(a + q[1] * p) * q[0], cy + Math.sin(a + q[1] * p) * q[0]]); }
+    const t = B.maske(); t.poly(pts); return t;
+  };
+  rKontur(zahn(cx, cy, Rb, Rt, n, 0), m, 1);
+  rRing(m, cx, cy, Rb - 4, Rb - 4, 1.2);
+  for (let k = 0; k < 24; k++) { const a = k * Math.PI / 12, l = k % 6 ? 2.5 : 4.5; rStrich(m, cx + Math.cos(a) * (Rb - 6), cy + Math.sin(a) * (Rb - 6), cx + Math.cos(a) * (Rb - 6 - l), cy + Math.sin(a) * (Rb - 6 - l), .5); }
+  const sp = r.i(5, 7), w0 = r.f(0, 1);
+  for (let k = 0; k < sp; k++) { const a = w0 + k * Math.PI * 2 / sp; m.kap(cx + Math.cos(a) * 6, cy + Math.sin(a) * 6, cx + Math.cos(a) * (Rb - 7), cy + Math.sin(a) * (Rb - 7), 1.5, 1.1); }
+  rRing(m, cx, cy, 7, 7, 1.4);
+  // kleines Rad rechts, greift ein
+  const c2x = cx + 40, c2y = cy + r.i(-6, 6), n2 = Math.round(n * 9 / Rb * .95) + 2;
+  rKontur(zahn(c2x, c2y, 9, 13, Math.max(6, Math.round(n * 13 / 32)), .3), m, 1);
+  rRing(m, c2x, c2y, 5, 5, 1.2);
+  for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + .5; rStrich(m, c2x, c2y, c2x + Math.cos(a) * 6, c2y + Math.sin(a) * 6, .8); }
+  void n2;
+  // Welle und Lager, Gestalten am Fuß
+  m.rect(cx - 1, cy + Rt - 2, 2, 84 - cy - Rt + 2); rStrich(m, cx - 14, 84, cx + 14, 84, 1);
+  rMensch(m, c2x + 26 + r.i(0, 8), 84, 1, 'hoch', -1); rMensch(m, c2x + 38 + r.i(0, 8), 84, .9);
+  return [cx, cy];
+};
+
+// Tür mit Rundbogen, Bogensteinen, Füllungen; Licht im Schlüsselloch; Gestalten davor
+MOTIV.tuer = function (m, r) {
+  const cx = Math.round(r.f(60, 90)), hw = r.i(17, 20), bogen = r.ja(.7), f = B.maske(), g = B.maske(), yb = 84, yt = bogen ? 34 : 26;
+  const form = (b, w) => {
+    const pts = [[cx - w, yb], [cx - w, yt]];
+    if (bogen) for (let i = 1; i < 16; i++) { const a = Math.PI + i * Math.PI / 16; pts.push([cx + Math.cos(a) * w, yt + Math.sin(a) * w]); }
+    else pts.push([cx - w, yt - 1], [cx + w, yt - 1]);
+    pts.push([cx + w, yt], [cx + w, yb]); b.poly(pts);
+  };
+  form(f, hw); form(g, hw + 6);
+  rKontur(g, m, 1); rKontur(f, m, 1);
+  // Bogensteine
+  if (bogen) for (let k = 1; k < 9; k++) { const a = Math.PI + k * Math.PI / 9; rStrich(m, cx + Math.cos(a) * (hw + .5), yt + Math.sin(a) * (hw + .5), cx + Math.cos(a) * (hw + 5), yt + Math.sin(a) * (hw + 5), .5); }
+  else for (let k = -2; k <= 2; k++) rStrich(m, cx + k * (hw + 3) / 2.2, yt - 7, cx + k * (hw + 3) / 2.2, yt - 1, .5);
+  for (let y = yt + 8; y < yb; y += 9) { rStrich(m, cx - hw - 6, y, cx - hw, y, .5); rStrich(m, cx + hw, y + 4, cx + hw + 6, y + 4, .5); }
+  // Füllungen: zwei Reihen
+  const py = yt + (bogen ? 12 : 8), ph = (yb - 8 - py - 4) / 2;
+  for (let j = 0; j < 2; j++) for (let i = 0; i < 2; i++) { const w = hw - 4, x = cx - hw + 3 + i * (w + 2.5 - 1), pw = w - 1; m.rect(x, py + j * (ph + 4), pw, 1); m.rect(x, py + j * (ph + 4) + ph, pw, 1); m.rect(x, py + j * (ph + 4), 1, ph + 1); m.rect(x + pw - 1, py + j * (ph + 4), 1, ph + 1); }
+  // Bänder, Angeln, Klinke, Schlüsselloch
+  for (const y of [yt + 6, yb - 9]) rStrich(m, cx - hw, y, cx - hw + 7, y, .8);
+  rRing(m, cx + hw - 6, 58, 2.2, 2.2, 1); rStrich(m, cx + hw - 6, 54, cx + hw - 6, 52, .6);
+  // Schwelle
+  for (let k = 0; k < 3; k++) rStrich(m, cx - hw - 6 - k * 4, yb - 1 - 0, cx + hw + 6 + k * 4, yb - 1, .0 + .5), void k;
+  rStrich(m, 6, yb, 154, yb, .6);
+  const ndir = r.ja(.5) ? 1 : -1, nx = ndir > 0 ? cx + hw + 14 : cx - hw - 14, k0 = r.i(2, 3);
+  for (let k = 0; k < k0; k++) rMensch(m, nx + ndir * k * 9 + r.i(-1, 1), yb, 1, k === 0 ? 'zeig' : undefined, -ndir);
+  return [cx + hw - 6, 58];
+};
+
+// Offene Hand mit Fingern und Handlinien, Gestalt zum Maßstab
+MOTIV.hand = function (m, r) {
+  const fl = r.ja(.5), s = fl ? -1 : 1, cx = Math.round(r.f(62, 96)), py = 62, f = B.maske(), tilt = r.j(.12);
+  const P = (x, y) => [cx + s * (x * Math.cos(tilt) - (y - py) * Math.sin(tilt)), py + x * Math.sin(tilt) + (y - py) * Math.cos(tilt)];
+  const fing = (x, y, a, len, r1, r2) => { const p = P(x, y), q = P(x + Math.cos(a) * len, y + Math.sin(a) * len); f.kap(p[0], p[1], q[0], q[1], r1, r2); return [p, q]; };
+  const pa = P(0, py); f.ell(pa[0], pa[1], 16.5, 13.5); const w1 = P(0, py + 6), w2 = P(0, 92); f.kap(w1[0], w1[1], w2[0], w2[1], 10.5, 10);
+  const lens = [r.i(27, 31), r.i(34, 38), r.i(31, 35), r.i(24, 28)], xs = [-11.5, -4, 3.5, 11], fi = [];
+  for (let i = 0; i < 4; i++) fi.push(fing(xs[i], py - 10, -Math.PI / 2 + (i - 1.5) * .12, lens[i], 3, 2.3));
+  const dau = fing(-12.5, py + 1, -Math.PI + .75 + r.j(.1), 21, 3.8, 3);
+  rKontur(f, m, 1);
+  // Gelenkfalten
+  for (const [p, q] of fi.concat([dau])) for (const t of [.38, .68]) { const x = p[0] + (q[0] - p[0]) * t, y = p[1] + (q[1] - p[1]) * t; rStrich(m, x - 2, y, x + 2, y, .5); }
+  // Handlinien
+  const L = [[-9, py - 3], [-4, py + 1], [0, py + 5], [4, py + 8], [5, py + 13]].map(p => P(p[0], p[1])); rZug(m, L, .5);
+  const H = [[-11, py - 4], [-4, py - 6], [4, py - 5], [11, py - 2]].map(p => P(p[0], p[1])); rZug(m, H, .5);
+  rMensch(m, fl ? 24 : 134, 84, 1, 'hoch', fl ? 1 : -1);
+  const pm = P(0, py - 1); return [pm[0], pm[1] + 2];
+};
+
+// Turm mit Galerie und Laterne, Lichtstrahlen, Steinlagen, Felsfuß
+MOTIV.turm = function (m, r) {
+  const cx = Math.round(r.f(60, 100)), f = B.maske(), yb = 80, yg = 36, wb = r.i(15, 18), wt = r.i(8, 10);
+  f.poly([[cx - wb, yb], [cx - wt, yg], [cx + wt, yg], [cx + wb, yb]]);
+  f.rect(cx - wt - 5, yg - 4, 2 * wt + 10, 4);
+  f.rect(cx - 6, yg - 14, 12, 11);
+  f.poly([[cx - 8, yg - 14], [cx, yg - 24], [cx + 8, yg - 14]]);
+  rKontur(f, m, 1);
+  rFugen(f, m, 8, 10, yg + 3);
+  // Fenster und Tür (Fugen dahinter weg)
+  for (const y of [yg + 10, yg + 24]) { m.fn(cx - 3, y - 5, cx + 3, y + 5, () => true, 0); rRing(m, cx, y, 2.6, 4, 1.1); }
+  m.fn(cx - 4, yb - 12, cx + 4, yb, () => true, 0); rRing(m, cx, yb - 6, 3.4, 6, 1.2);
+  m.rect(cx - 6, yg - 11, 1, 6); m.rect(cx + 5, yg - 11, 1, 6); m.rect(cx - 1, yg - 12, 2, 8);
+  for (let x = cx - wt - 4; x <= cx + wt + 4; x += 3) m.put(x, yg - 5, 1);
+  // Strahlen aus der Laterne, gestrichelt und gefächert
+  const ly = yg - 8;
+  for (const sd of [-1, 1]) for (let k = -1; k <= 1; k++) {
+    const t = k * .2, x0 = cx + sd * (wt + 9);
+    for (let d = 0; d < 46; d += 9) rStrich(m, x0 + sd * d, ly + Math.tan(t) * (d + wt + 9), x0 + sd * (d + 5), ly + Math.tan(t) * (d + wt + 14), .5);
+  }
+  // Felsfuß
+  for (let x = 4; x < 156; x++) { const d = Math.abs(x - cx), y = yb + Math.max(0, Math.round(Math.sin(x * .55) + (d > 30 ? (d - 30) * .08 : 0))) + (d < wb + 3 ? 0 : 1); if (d > wb - 1) m.put(x, Math.min(84, y), 1); }
+  for (let x = cx - 40; x < cx + 40; x += 11) if (Math.abs(x - cx) > wb) rStrich(m, x, 83, x + 5, 83, .5);
+  rMensch(m, cx + wb + r.i(10, 18), 80, .9, 'hoch', -1); rMensch(m, cx - wb - r.i(12, 20), 80, .9);
+  return [cx, ly + 1];
+};
+
+// Hängende Kette aus Gliedern zwischen zwei Pfosten, ein Gewicht an einem Kettenstrang
+MOTIV.kette = function (m, r) {
+  const xa = r.i(18, 24), xb = r.i(136, 142), ya = r.i(20, 24), sag = r.i(34, 40), xm = (xa + xb) / 2, hwid = (xb - xa) / 2;
+  const Y = x => ya + sag * (1 - ((x - xm) / hwid) ** 2);
+  for (const x of [xa - 6, xb + 6]) { const f = B.maske(); f.rect(x - 4, ya - 8, 8, 84 - ya + 8); rKontur(f, m, 1); rRing(m, x + (x < xm ? 4 : -4), ya, 2.4, 2.4, 1); }
+  // Glieder in gleichen Abständen entlang des Bogens
+  const pts = []; for (let x = xa; x <= xb; x += .5) pts.push([x, Y(x)]);
+  let acc = 0, nxt = 0, idx = 0; const mitte = [];
+  for (let i = 1; i < pts.length; i++) {
+    acc += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+    if (acc >= nxt) {
+      nxt += 8.2; const p = pts[i], a = Math.atan2(pts[i][1] - pts[i - 1][1], pts[i][0] - pts[i - 1][0]);
+      if (idx % 2 === 0) rRing(m, p[0], p[1], 5, 3, 1.1, a); else m.kap(p[0] - Math.cos(a) * 3.4, p[1] - Math.sin(a) * 3.4, p[0] + Math.cos(a) * 3.4, p[1] + Math.sin(a) * 3.4, 1.2, 1.2);
+      mitte.push([Math.abs(p[0] - xm), p[0], p[1], a, idx]); idx++;
+    }
+  }
+  mitte.sort((p, q) => p[0] - q[0]);
+  const c = mitte.find(p => p[4] % 2 === 0), cxm = c[1], cym = c[2];
+  m.fn(cxm - 8, cym - 8, cxm + 8, cym + 8, (x, y) => Math.hypot(x - cxm, y - cym) < 5.6 && Math.hypot(x - cxm, y - cym) > 1.8, 0);
+  rRing(m, cxm, cym, 6.5, 4.5, 1.4, c[3]);
+  // senkrechter Strang mit Gewicht
+  const ys = cym + 5; let yy = ys, k = 0;
+  while (yy < 64) { if (k % 2) rRing(m, cxm, yy + 3, 2.4, 3.6, 1); else m.kap(cxm, yy, cxm, yy + 6, 1.2, 1.2); yy += 6.5; k++; }
+  const g = B.maske(); g.poly([[cxm - 11, 77], [cxm - 8, 66], [cxm + 8, 66], [cxm + 11, 77]]); g.rect(cxm - 13, 77, 26, 7); rKontur(g, m, 1);
+  rStrich(m, cxm - 6, 71, cxm + 6, 71, .5);
+  rMensch(m, xa + r.i(18, 26), 84, 1, 'hoch', -1); rMensch(m, xb - r.i(18, 26), 84, 1, 'zeig', -1);
+  return [cxm, cym];
+};
+
+// Balkenwaage auf Säule; die schwere Schale hängt tief, darin eine Gestalt
+MOTIV.waage = function (m, r) {
+  const cx = Math.round(r.f(70, 90)), s = r.ja(.5) ? 1 : -1, ty = 24, L = 45, tilt = r.f(6, 9), f = B.maske();
+  // Fuß und Säule
+  f.poly([[cx - 12, 84], [cx - 9, 77], [cx + 9, 77], [cx + 12, 84]]); f.rect(cx - 3, 30, 6, 48); f.poly([[cx - 6, 33], [cx - 3, 29], [cx + 3, 29], [cx + 6, 33]]);
+  rKontur(f, m, 1); for (const y of [82]) rStrich(m, cx - 10, y, cx + 10, y, .5);
+  rRing(m, cx, ty, 3.4, 3.4, 1.2); rStrich(m, cx, ty + 3, cx, 30, 1);
+  // Balken
+  const ax = cx - L, ay = ty + s * tilt, bx = cx + L, by = ty - s * tilt;
+  rStrich(m, ax, ay, bx, by, 1.2); rStrich(m, cx, ty - 7, cx, ty - 3, .8); rRing(m, cx, ty - 9, 2, 2, .9);
+  const schale = (x, y, g) => {
+    // Ketten, Schale, Inhalt
+    rStrich(m, x, y, x - 15, y + 28, .5); rStrich(m, x, y, x + 15, y + 28, .5); rStrich(m, x, y, x, y + 28, .4);
+    rRing(m, x, y, 1.8, 1.8, 1);
+    const p = []; for (let i = 0; i <= 12; i++) { const a = i * Math.PI / 12; p.push([x + Math.cos(a) * 16, y + 28 + Math.sin(a) * 5.2]); }
+    const t = B.maske(); t.poly(p); rKontur(t, m, 1); rStrich(m, x - 16, y + 28, x + 16, y + 28, .8);
+    if (g === 'mensch') rMensch(m, x, y + 28, 1, 'beide');
+    else if (g === 'haufen') { for (let k = 0; k < 4; k++) m.ell(x - 8 + k * 5.5 + r.j(1), y + 26 - (k % 2) * 2, 2.6, 2.2); }
+  };
+  schale(ax, ay, s > 0 ? 'mensch' : null); schale(bx, by, s > 0 ? null : 'mensch');
+  return [cx, ty];
+};
+
+B.relief = function (pal, seed, stil, motiv) {
   const r = B.rng(seed * 977 + 3), e = new Ebene(), w = 160, h = 100;
   const stein = stil.stein || [B.mix(pal.koerper[2], pal.nebel[1], .5), B.mix(pal.koerper[3], pal.nebel[1], .6), B.mix(pal.koerper[3], pal.rand[0], .45), B.mix(pal.rand[0], pal.nebel[1], .3)];
   const P = stein.map(B.pk);
   B.feld(e, 0, 0, w, h, stein, (x, y) => .38 + .25 * B.fbm(x * .05, y * .05, seed, 3) - y / h * .12);
-  // Ritzung: Figuren entlang eines Bandes, die sich einem Großen zuwenden
-  const ritz = B.maske(), gx = stil.grossX || r.f(100, 130);
-  const fig = stil.figuren || 4;
-  for (let i = 0; i < fig; i++) {
-    const x = 14 + i * (gx - 40) / Math.max(1, fig - 1) + r.j(4), y = 76, gl = (stil.gelenke || 3) + r.i(0, 2);
-    let px = x, py = y, a = -Math.PI / 2 + .5 + i * .05; const pts = [[px, py]];
-    for (let k = 0; k < gl; k++) { a += (k % 2 ? .9 : -.7) * (stil.knick || .6); px += Math.cos(a) * 9; py += Math.sin(a) * 9; pts.push([px, py]); }
-    ritz.pfad(pts, 1.2, 1); ritz.ell(px + 2, py - 2, 2.5, 2.5);
-    ritz.kap(x - 4, y, x + 4, y, 1, 1);
+  const ritz = B.maske(); let auge;
+  if (motiv && motiv !== 'prozession' && MOTIV[motiv]) {
+    // eigene Komposition; Rand um den Bildinhalt freihalten, dann Rahmenbänder
+    auge = MOTIV[motiv](ritz, r, stil);
+    ritz.fn(-M, -M, w + M, 11, () => true, 0); ritz.fn(-M, 85, w + M, h + M, () => true, 0);
+    ritz.fn(-M, -M, 3, h + M, () => true, 0); ritz.fn(156, -M, w + M, h + M, () => true, 0);
+  } else {
+    // Ritzung: Figuren entlang eines Bandes, die sich einem Großen zuwenden
+    const gx = stil.grossX || r.f(100, 130);
+    const fig = stil.figuren || 4;
+    for (let i = 0; i < fig; i++) {
+      const x = 14 + i * (gx - 40) / Math.max(1, fig - 1) + r.j(4), y = 76, gl = (stil.gelenke || 3) + r.i(0, 2);
+      let px = x, py = y, a = -Math.PI / 2 + .5 + i * .05; const pts = [[px, py]];
+      for (let k = 0; k < gl; k++) { a += (k % 2 ? .9 : -.7) * (stil.knick || .6); px += Math.cos(a) * 9; py += Math.sin(a) * 9; pts.push([px, py]); }
+      ritz.pfad(pts, 1.2, 1); ritz.ell(px + 2, py - 2, 2.5, 2.5);
+      ritz.kap(x - 4, y, x + 4, y, 1, 1);
+    }
+    ritz.ell(gx + 12, 46, 22, 30); ritz.ell(gx + 12, 46, 18, 26, 0);
+    for (let k = 0; k < 5; k++) { const a = -2.6 + k * .55; ritz.kap(gx + 12 + Math.cos(a) * 22, 46 + Math.sin(a) * 30, gx + 12 + Math.cos(a) * 34, 46 + Math.sin(a) * 42, 1, .8); }
+    ritz.ell(gx + 12, 44, 3, 3);
+    auge = [gx + 12, 44];
   }
-  ritz.ell(gx + 12, 46, 22, 30); ritz.ell(gx + 12, 46, 18, 26, 0);
-  for (let k = 0; k < 5; k++) { const a = -2.6 + k * .55; ritz.kap(gx + 12 + Math.cos(a) * 22, 46 + Math.sin(a) * 30, gx + 12 + Math.cos(a) * 34, 46 + Math.sin(a) * 42, 1, .8); }
-  ritz.ell(gx + 12, 44, 3, 3);
   ritz.rect(4, 86, 152, 2); ritz.rect(4, 8, 152, 2);
   // Ritzlinie: dunkel, mit Licht an der Unterkante links (die Kante gegenüber dem Licht fängt es)
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
@@ -546,7 +912,7 @@ B.relief = function (pal, seed, stil) {
     if (!ritz.has(x - 1, y + 1)) e.set(x - 1, y + 1, P[3]);
     if (!ritz.has(x + 1, y - 1) && !ritz.has(x + 1, y)) e.set(x + 1, y - 1, B.pk(pal.koerper[0]));
   }
-  e.set(gx + 12, 44, B.pk(pal.augen)); B.gluehen(e, gx + 12, 44, 8, B.mix(pal.augen, '#000', .6), .8);
+  e.set(auge[0], auge[1], B.pk(pal.augen)); B.gluehen(e, auge[0], auge[1], 8, B.mix(pal.augen, '#000', .6), .8);
   const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(e.leinwand(), -M, -M); return c;
 };
 })();

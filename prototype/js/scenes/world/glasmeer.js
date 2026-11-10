@@ -379,6 +379,7 @@ function abstieg(K, x, y) {
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante, info;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'kraemer' ? 0 : art === 'rast' || art === 'werkstatt' ? 1 : art === 'ereignis' || art === 'fund' ? 1 : art === 'uebergang' ? 0 : art === 'wandbild' ? 2 : (o.seed + v) % 3;
+  K.kulisse = art === 'waechter' ? 'waechter' : v; // M3: welche Kulisse die Szene zeigt (Schlüssel für die Fahrt, data/fahrt.json)
   if (art === 'waechter') info = spiegelwand(K);
   else info = [ebene, lager, bruch][v](K);
   if (art === 'kraemer') kraemerSpiegel(K, 250, 206);

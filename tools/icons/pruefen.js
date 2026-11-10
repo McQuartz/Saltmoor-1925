@@ -21,12 +21,12 @@ const lum = (d, i) => (0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]) / 
 
 function pruefe(datei, art) {
   const b = L.S.pngLesen(datei); const { W, H, data: d } = b; const fehler = []; const werte = {};
-  const soll = art === 'items' ? [48, 48] : [48, 32];
+  const soll = art !== 'handgriffe' ? [48, 48] : [48, 32];
   if (W !== soll[0] || H !== soll[1]) fehler.push(`Größe ${W}×${H} statt ${soll.join('×')}`);
   let voll = 0, x0 = W, y0 = H, x1 = 0, y1 = 0; const farben = new Set();
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const i = (y * W + x) * 4; const a = d[i + 3]; if (a !== 0 && a !== 255) { fehler.push(`Alpha ${a} bei ${x},${y}`); break; } if (a) { voll++; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); farben.add((d[i] << 16) | (d[i + 1] << 8) | d[i + 2]); } }
   const anteil = voll / (W * H); werte.flaeche = Math.round(anteil * 100);
-  const [amin, amax] = art === 'items' ? [0.08, 0.75] : [0.1, 0.9];
+  const [amin, amax] = art !== 'handgriffe' ? [0.08, 0.75] : [0.1, 0.9];
   if (anteil < amin || anteil > amax) fehler.push(`Fläche ${werte.flaeche} %`);
   if (Math.max((x1 - x0 + 1) / W, (y1 - y0 + 1) / H) < 0.6) fehler.push('Motiv zu klein');
   werte.farben = farben.size; if (farben.size > 48) fehler.push(`${farben.size} Farben`);
@@ -53,10 +53,10 @@ function pruefe(datei, art) {
 if (require.main === module) {
   const namen = process.argv.slice(2);
   let verstoesse = 0, n = 0; const zeilen = [];
-  for (const art of ['items', 'handgriffe']) {
+  for (const art of ['items', 'handgriffe', 'karten']) {
     const dir = path.join(L.WURZEL, 'prototype/assets', art); if (!fs.existsSync(dir)) continue;
     const pngs = fs.readdirSync(dir).filter(f => f.endsWith('.png')).map(f => f.slice(0, -4)).sort();
-    try { const idx = JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8'))[art] || []; const a = pngs.join(','), b = [...idx].sort().join(','); if (a !== b) { verstoesse++; console.log(`${art}/index.json passt nicht zu den PNGs`); } } catch (e) { verstoesse++; console.log(`${art}/index.json fehlt oder ist kaputt`); }
+    if (art !== 'karten') try { const idx = JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8'))[art] || []; const a = pngs.join(','), b = [...idx].sort().join(','); if (a !== b) { verstoesse++; console.log(`${art}/index.json passt nicht zu den PNGs`); } } catch (e) { verstoesse++; console.log(`${art}/index.json fehlt oder ist kaputt`); }
     for (const id of pngs) {
       if (namen.length && !namen.includes(id)) continue; n++;
       const r = pruefe(path.join(dir, id + '.png'), art);

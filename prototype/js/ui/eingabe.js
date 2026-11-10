@@ -21,30 +21,35 @@ document.addEventListener('pointermove',e=>{
   else{d.el.style.transform=`translate(${(e.clientX-d.x0)/(BU.s||1)}px,${(e.clientY-d.y0)/(BU.s||1)}px) rotate(${(e.clientX-d.x0)*.03}deg) scale(1.06)`;$('szene').classList.toggle('drop',inScene(e.clientX,e.clientY));}
   return;}
  if(!down&&e.target.closest){const sl=e.target.closest('.slot[data-loc]');const cd=e.target.closest('[data-card]');
-  const hv=hoverVorschau(e.target);const fd=S.phase==='fight'&&e.target.closest('.feind[data-ei]');if(hv)showTip(hv,e.clientX,e.clientY);else if(fd&&!cd)showTip(feindTip(+fd.dataset.ei),e.clientX,e.clientY);else if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
+  const hv=hoverVorschau(e.target);const fd=S.phase==='fight'&&e.target.closest('.feind[data-ei]');const kt=e.target.closest('.kn,.kstart,.kbieg');const ktt=kt?karteTip(kt):'';if(ktt)showTip(ktt,e.clientX,e.clientY);else if(hv)showTip(hv,e.clientX,e.clientY);else if(fd&&!cd)showTip(feindTip(+fd.dataset.ei),e.clientX,e.clientY);else if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
   const hi=cd?+cd.dataset.card:-1;if(hi!==hoverCard){hoverCard=hi;setVorschau(hi,-1);}}
  if(!down||!down.has)return;if(!down.drag&&Math.hypot(e.clientX-down.x,e.clientY-down.y)>5){down.drag=true;hideTip();$('ghost').src=itemBild(getAt(down.loc).id);$('ghost').style.display='block';}
  if(down.drag){$('ghost').style.left=(e.clientX-20)+'px';$('ghost').style.top=(e.clientY-20)+'px';}});
 document.addEventListener('pointerup',e=>{
  if(cdrag){const d=cdrag;cdrag=null;$('aim').style.display='none';const ei=AIM.ei;AIM.ei=-1;$('szene').classList.remove('drop');vorschau=null;hoverCard=-1;
-  if(!d.moved){playCard(d.i);return;}
+  if(!d.moved){if(spiegelWahl){spiegelWahl=false;Bieg.spiegelTausch(d.i);render();return;}playCard(d.i);return;}
   if(d.tg){if(ei>=0)playCard(d.i,ei);else if(alive().length===1&&inScene(e.clientX,e.clientY))playCard(d.i);else render();}
   else{if(inScene(e.clientX,e.clientY))playCard(d.i);else render();}return;}
  if(!down)return;const d=down;down=null;$('ghost').style.display='none';
  const t=document.elementFromPoint(e.clientX,e.clientY);const sl=t&&t.closest('[data-loc]');
  if(d.drag){if(sl)move(d.loc,sl.dataset.loc);S.sel=null;render();return;}
  if(!sl||sl.dataset.loc!==d.loc)return;const loc=d.loc;
- if(S.sel){const s=S.sel;S.sel=null;if(s!==loc)move(s,loc);else render();}else if(loc!=='trash'&&getAt(loc)){S.sel=loc;sfx.click();render();}});
+ // Spieltest 2026-11-09: Tauschen nur noch per Ziehen. Ein Klick wählt nur aus (zeigt das Item rechts, Verkaufen beim Krämer).
+ if(S.sel===loc){S.sel=null;if(typeof KOE!=='undefined'&&KOE)KOE.zeig=null;render();}else if(loc!=='trash'&&getAt(loc)){S.sel=loc;sfx.click();render();}});
 document.addEventListener('click',e=>{
  const en=e.target.closest('.feind[data-ei]');if(en&&S.phase==='fight'){S.target=+en.dataset.ei;sfx.click();render();return;}
  const a=e.target.closest('[data-act]');if(a){aktion(a.dataset.act,a);return;}
  const bw=e.target.closest('[data-biom]');if(bw){chooseBiom(+bw.dataset.biom);return;}
- const w=e.target.closest('[data-weg]');if(w){chooseWeg(+w.dataset.weg);return;}
+ const w=e.target.closest('[data-weg]');if(w){hideTip();chooseWeg(+w.dataset.weg);return;}
  const bu=e.target.closest('[data-buy]');if(bu){buy(bu.dataset.buy);return;}
- const rsl=e.target.closest('[data-rs]');if(rsl){rsKlick(rsl.dataset.rs);return;}
+ const ks=e.target.closest('[data-ksel]');if(ks){S.sel=S.sel===ks.dataset.ksel?null:ks.dataset.ksel;sfx.click();render();return;}
+ const kz=e.target.closest('[data-kzeig]');if(kz&&KOE){KOE.zeig=+kz.dataset.kzeig;koerperRender();return;}
  const hgp=e.target.closest('[data-hg]');if(hgp){takeHandgriff(hgp.dataset.hg);return;}
  const rz=e.target.closest('[data-ritz]');if(rz){const uid=+rz.dataset.ritz;if(rz.dataset.k!=null){S.ueberschreiben={uid,k:+rz.dataset.k,alt:hgVon(itemByUid(uid))[+rz.dataset.k]};render();}else placeHandgriff(uid);return;}
+ const ms=e.target.closest('[data-masken]');if(ms){const[u,k]=ms.dataset.masken.split(':');Wuerze.bezahlen(+u,+k);render();return;} const an=e.target.closest('[data-anschreiben]');if(an){Wuerze.anschreiben(+an.dataset.anschreiben);render();return;} // Zugabe
+ const tn=e.target.closest('[data-trennen]');if(tn){const[u,k]=tn.dataset.trennen.split(':');Wuerze.trennen(+u,+k);render();return;} // M11
  const kb=e.target.closest('[data-kerbe]');if(kb){kerbeDazu(+kb.dataset.kerbe);return;}
+ const tg=e.target.closest('[data-tilgen]');if(tg){if(Farbe.tilgen(+tg.dataset.tilgen))wahlFertig();return;} // M8
  const sl2=e.target.closest('[data-schleif]');if(sl2){schleifen(+sl2.dataset.schleif,sl2.dataset.key);return;}
  const uq=e.target.closest('[data-umquelle]');if(uq){S.umritzQuelle={uid:+uq.dataset.umquelle,k:+uq.dataset.k};render();return;}
  const uz=e.target.closest('[data-umziel]');if(uz){const q=S.umritzQuelle;S.umritzQuelle=null;umritzen(q.uid,q.k,+uz.dataset.umziel);return;}
@@ -52,38 +57,39 @@ document.addEventListener('click',e=>{
  const en3=e.target.closest('[data-entf]');if(en3){entferneHandgriff(+en3.dataset.entf,+en3.dataset.k);return;}
  const tk=e.target.closest('[data-take]');if(tk){takeReward(tk.dataset.take);return;}
  const ev=e.target.closest('[data-ev]');if(ev&&!ev.disabled){chooseEvent(+ev.dataset.ev);return;}
- const st=e.target.closest('[data-strike]');if(st){const uid=+st.dataset.strike;if(S.phase==='kraemer_streichen')kraemerStrike(uid);else strikeItem(uid);return;}
+ const st=e.target.closest('[data-strike]');if(st){const sv=st.dataset.strike;const uid=sv.startsWith('lose')?sv:+sv;if(S.phase==='kraemer_streichen')kraemerStrike(uid);else strikeItem(uid);return;}
  const j=e.target.closest('[data-job]');if(j){starteRun(j.dataset.job);return;}
  const sv=e.target.closest('[data-start]');if(sv){S.wahlStart=sv.dataset.start||null;render();return;}
  const sf=e.target.closest('[data-stufe]');if(sf){S.wahlStufe=+sf.dataset.stufe;render();return;}
  const en2=e.target.closest('[data-ende]');if(en2){chooseEnde(en2.dataset.ende);return;}});
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.einst;if(!k)return;const v=e.target.type==='checkbox'?e.target.checked:e.target.tagName==='SELECT'?+e.target.value:+e.target.value;Einst.set(k,v);});
 function aktion(k,el){switch(k){
- case'end':endTurn();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
- case'weiter':leaveUebergang();break;case'neu':S={phase:'figur',wahlStufe:Meta.get().stufe||0};render();break;case'titel':S={phase:'titel'};render();break;
+ case'end':spiegelWahl=false;endTurn();break;case'hinsehen':Blick.waehlen(true);break;case'weitergehen':Tiefe.weiter();render();break;case'wegsehen':Blick.waehlen(false);break;case'spiegel':spiegelWahl=!spiegelWahl;render();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
+ case'karte':karteUmschalten();break; case'weiter':leaveUebergang();break;case'neu':S={phase:'figur',wahlStufe:Meta.get().stufe||0};render();break;case'titel':S={phase:'titel'};render();break;
  case'fortsetzen':loadRun();render();break;case'rastHeil':rastHeal();break;case'fund':takeFund();break;
  case'skipstrike':skipStrike();break;case'kstrike0':kraemerStrike(null);break;
  case'buch':zeigeOverlay(buchHtml());break;case'tagebuch':zeigeOverlay(tagebuchHtml());break;case'einst':zeigeOverlay(einstHtml());break;case'zu':closeOv();break;
+ case'erbeNehmen':Metaebene.erbeWahl(true);render();break;case'erbeLassen':Metaebene.erbeWahl(false);render();break;case'briefNehmen':Wuerze.briefNehmen(true);render();break;case'briefLassen':Wuerze.briefNehmen(false);render();break;case'fehlzeitJa':Metaebene.fehlzeitWahl(true);render();break;case'fehlzeitNein':Metaebene.fehlzeitWahl(false);render();break; // M10
  case'gleicherSeed':{const sd=S.seed,jb=S.job;newRun(jb,sd,{});render();break;}
  case'bildSpeichern':endbildSpeichern();break;
- case'rucksack':rucksackAuf();break;case'rsUebernehmen':rucksackUebernehmen();break;case'rsZu':RS=null;closeOv();break;
- case'rsVerkaufen':{const l=RS.sel;const it=rsGet(l);if(!it)break;rsSet(l,null);const[k,i]=l.split(':');setAt(l,null);const v=Math.floor(preisVon(def(it))*.4);S.gold+=v;S.stats.gold+=v;Bus.emit('toast',{a:'VERKAUFT',b:`${def(it).n} · +${v} Gold`});RS.sel=null;zeigeRucksack();break;}
+ case'rucksack':rucksackAuf();break;case'koeDeck':if(KOE){KOE.zeig=null;S.sel=null;render();}break;case'rucksackZu':rucksackZu();break;
  case'hgSkip':skipHandgriff();break;case'hgVerwerfen':hgVerwerfen();break;
  case'ueberJa':{const u=S.ueberschreiben;S.ueberschreiben=null;placeHandgriff(u.uid,u.k);break;}case'ueberNein':S.ueberschreiben=null;render();break;
- case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;
+ case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;case'wsTilgen':wahlStart('tilgen','werkstatt');break;
  case'rastSchleifen':wahlStart('schleifen','rast');break;case'rastUmritzen':S.umritzQuelle=null;wahlStart('umritzen','rast');break;case'wahlAbbruch':S.umritzQuelle=null;wahlAbbrechen();break;
  case'verkaufen':if(S.sel){verkaufen(S.sel);S.sel=null;render();}break;
  case'devToggle':if(typeof Dev!=='undefined')Dev.toggle();break;}}
 function starteRun(job){const st=S.wahlStufe||0;const q=new URLSearchParams(location.search);const seed=q.get('seed')!=null&&!S.seedUsed?+q.get('seed'):neuerSeed();
  const start=S.wahlStart||null;newRun(job,seed,{dev:typeof Dev!=='undefined'&&Dev.cheat,stufe:st,start});Meta.get().stufe=st;Meta.save();render();}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
- if(e.key==='Escape'){S.sel=null;closeOv();render();}
+ if(e.key==='Escape'){if(KOE){rucksackZu();return;}S.sel=null;karteZu();closeOv();render();}
+ if((e.key==='m'||e.key==='M')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.repeat)karteUmschalten();
  if(e.key==='d'||e.key==='D'){if(typeof Dev!=='undefined')Dev.toggle();}
- if((e.key==='r'||e.key==='R')&&S.route&&canEquip()){if(RS){RS=null;closeOv();}else rucksackAuf();}
+ if((e.key==='r'||e.key==='R')&&!e.ctrlKey&&!e.metaKey&&!e.repeat&&S.route&&(canEquip()||S.phase==='fight')){if(KOE)rucksackZu();else rucksackAuf();}
  if(S.phase==='fight'&&!busy){if(e.key===' '||e.key==='e'){e.preventDefault();endTurn();}const n=+e.key;if(n>=1&&n<=9)playCard(n-1);}
  if(S.phase==='uebergang'&&!['Shift','Control','Alt','Meta','d','D'].includes(e.key))leaveUebergang();});
 // Tooltips
-function showTip(h,x,y){const tip=$('tip');tip.innerHTML=h;tip.style.display='block';const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
+function showTip(h,x,y){const tip=$('tip');tip.innerHTML=h;tip.style.display='block';if(tip.querySelector('.karte')&&typeof kartenEinpassen==='function')kartenEinpassen();const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
 function hideTip(){$('tip').style.display='none';}
 function itemTip(loc){const it=getAt(loc);if(!it)return'';const d=def(it);const[k]=loc.split(':');
  let h=`<div class="tn">${esc(d.n)}</div><div>${d.st.map(k=>gi(k,18)).join('')}</div><div class="hint">${AREA_N[d.a]}${d.hp?' · +'+d.hp+' max. Leben':''}</div>`;

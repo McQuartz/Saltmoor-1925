@@ -334,6 +334,7 @@ function fundbuero(K, x, y) {
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'rast' || art === 'werkstatt' || art === 'kraemer' ? 2 : art === 'ereignis' || art === 'fund' ? 0 : (o.seed + v) % 3;
+  K.kulisse = art === 'waechter' ? 'waechter' : v; // M3: welche Kulisse die Szene zeigt (Schlüssel für die Fahrt, data/fahrt.json)
   let info;
   if (art === 'waechter') info = tunnelSzene(K);
   else if (art === 'uebergang') info = tunnelHinab(K);

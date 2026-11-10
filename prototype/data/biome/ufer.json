@@ -149,7 +149,8 @@
    },
    "beute": "nasser_mantel",
    "beute_satz": "Er fällt nicht. Er setzt sich in den Sand, mit dem Rücken zu dir, und schaut weiter aufs Wasser.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   }
  },
  "events": [
@@ -275,6 +276,47 @@
      ]
     }
    ]
+  },
+  {
+   "id": "ufer_brandung",
+   "t": "Die Brandung",
+   "d": "Es riecht nach Tang und nach Regen, der nicht fällt, sondern steigt. Die Wellen schlagen von oben auf den Strand, rollen unter den Sand und kommen nie zurück. Was sie ans Ufer legen, schiebt die nächste Welle darunter, und gemischt wird dabei nichts. Am Spülsaum stehen Dinge in einer Reihe, so ordentlich wie in einem Regal.",
+   "bild": "Ein flacher Strand, über dem Wasser wie ein Vorhang von oben nach unten fällt, im Sand eine ordentliche Reihe angespülter Gegenstände.",
+   "o": [
+    {
+     "l": "Etwas in die Welle legen, es kommt unter dem Sand wieder hervor: ein Item wird getauscht",
+     "fx": [
+      {
+       "op": "item_tausch"
+      }
+     ]
+    },
+    {
+     "l": "Der Welle auf Brusthöhe entgegenstehen: +1 Kerbe an einem Item, −6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 8
+     }
+    },
+    {
+     "l": "Die Wellen zählen, bis die Reihe wieder von vorn anfängt: +8 Leben",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

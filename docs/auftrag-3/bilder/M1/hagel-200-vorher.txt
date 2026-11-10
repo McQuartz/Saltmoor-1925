@@ -1,0 +1,2 @@
+hagel        Siege 71/200 (36 %) · Ø Tiefe 25.3 · Ø Deck 21.4 · Reaktionen/Zug 2.01 · als Build erkannt 77 % · Niederlagen je Akt 6/26/28/21/48 · Fehler 0
+[{"build":"hagel","siege":71,"rate":0.355,"deck":21.37,"rx":2.006791168658035,"erkannt":0.765,"akte":[6,26,28,21,48],"fehler":0,"tiefe":25.28}]

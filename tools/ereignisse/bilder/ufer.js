@@ -148,5 +148,54 @@ module.exports = {
       for (const [x, y] of [[fx + 1, ty + 13], [fx, ty + 17], [fx - 1, ty + 21]]) { K.set(x, y, SEE); K.set(x, y - 1, WASSER[6]); }
       K.vignette(.75, { cx: 80, cy: 50 });
     },
+
+    // Ein flacher Strand im Morgenlicht, über ihm hängt das Wasser wie ein Vorhang von oben herab und bricht am Sand; im Spülsaum liegt eine ordentliche Reihe angespülter Dinge, alle gleich ausgerichtet.
+    ufer_brandung(K) {
+      const { B } = K;
+      const hy = 46, lx = 112;
+      meerDecke(K, hy, { lx, baender: 5 });
+      sand(K, hy, { lx });
+      K.feld(0, hy + 2, 160, 90, SAND, (x, y) => .27 + (y - hy) / 44 * .1 + Math.exp(-(((x - lx) / 70) ** 2)) * .1 + (Math.sin(y * 1.3 + Math.sin(x * .05) * 3) > .8 ? .06 : 0) + (B.hash(x, y, 7) > .97 ? .08 : 0));
+      K.lichtquelle(lx, 44);
+      // Der Vorhang: senkrechte Wasserfäden von der Decke bis zum Sand, nach unten durchscheinender, am Fuß Schaum
+      const len = x => 20 + B.rausch2(x * .09, 5, K.seed) * 16 + Math.sin(x * .05) * 3;
+      K.feld(0, hy - 18, 160, hy + 30, WASSER, (x, y) => {
+        const l = len(x), y0 = hy - 18; if (y < y0 || y > y0 + l) return -1;
+        const q = (y - y0) / l, faden = Math.sin(x * 1.7 + B.rausch2(x * .3, y * .05, 3) * 4);
+        if (faden > .55 && B.hash(x, y, 5) < q * .6) return -1;
+        const licht = Math.exp(-(((x - lx) / 46) ** 2));
+        return .22 + q * .1 + licht * .35 + (faden > .8 ? .22 : 0) + (B.hash(x, y, 6) > .96 ? .2 : 0);
+      });
+      for (let x = 0; x < 160; x++) {
+        const yf = Math.round(hy - 18 + len(x)), licht = Math.exp(-(((x - lx) / 46) ** 2)), v = B.rausch2(x * .4, 9, K.seed + 2);
+        if (v > .4) { K.set(x, yf, licht > .45 ? SCHAUM[1] : SCHAUM[0]); if (v > .65) K.set(x, yf + 1, licht > .3 ? SCHAUM[0] : WASSER[7]); }
+      }
+      // Nasser, dunkler Sand unter dem Saum: die Welle rollt darunter
+      K.dith(0, hy + 14, 160, hy + 26, SAND[0], (x, y) => Math.max(0, 1 - (y - hy - 14) / 11) * .75);
+      // Die Reihe: sechs Dinge im gleichen Abstand und in gleicher Richtung, Schatten zum Betrachter hin; eine feine Linie im Sand unter ihnen
+      const yr = 77;
+      K.linie(8, yr + 4, 152, yr + 4, SAND[3], .7);
+      const kant = (m, x) => K.kante(m, lx, 44, 130, [SAND[6], MORGEN], { min: .3, nah: .3 });
+      const schatten = (x0, x1) => { for (let x = x0; x <= x1; x++) if (B.bay(x, yr + 1) < .8) K.set(x, yr + 1, SAND[0]); K.rect(x0 + 1, yr + 2, x1 - x0, 1, SAND[1]); };
+      // 1 Flasche, grün
+      { const m = K.maske(); m.kap(15, yr - 3, 24, yr - 3, 3, 2.8); m.kap(24, yr - 3, 31, yr - 3, 1.2, 1.1); m.rect(30, yr - 5, 2, 4);
+        K.form(m, 0, { k: ['#04100c', '#0a2a20', '#14503c', '#2a8a64', '#6ac8a0'], r: [SEE, '#e8fff4'], ton: 1.9, fase: 1, rand: 1, L: [0, -1] }); kant(m); schatten(11, 32); }
+      // 2 Stiefel
+      { const x = 46, m = K.maske(); m.poly([[x - 5, yr], [x - 5, yr - 9], [x - 1, yr - 10], [x, yr - 4], [x + 7, yr - 3], [x + 8, yr]]);
+        K.form(m, 0, { k: ['#0a0705', '#1a100a', '#2c1c12', '#4a3020'], r: SANDRAND, ton: 1.8, fase: 1, rand: 1, L: [0, -1] }); kant(m); schatten(x - 6, x + 9); }
+      // 3 Blechbecher mit Henkel
+      { const x = 74, m = K.maske(); m.rect(x - 4, yr - 7, 8, 7); m.kap(x + 4, yr - 6, x + 7, yr - 5, .9, .9); m.kap(x + 7, yr - 5, x + 4, yr - 2, .9, .9);
+        K.form(m, 0, { k: ['#1a1a18', '#36362e', '#5e5e50', '#9a9a86'], r: [MORGEN, '#fff8e4'], ton: 2, fase: 1, rand: 1, L: [0, -1] }); kant(m); K.rect(x - 4, yr - 7, 8, 1, '#0a0a08'); schatten(x - 5, x + 8); }
+      // 4 Muschel, Fächer
+      { const x = 100, m = K.maske(); m.poly([[x - 6, yr], [x - 5, yr - 5], [x - 2, yr - 8], [x + 2, yr - 8], [x + 5, yr - 5], [x + 6, yr]]);
+        K.form(m, 0, { k: ['#2a2218', '#5a4c38', '#9a8a6a', '#d8cca8'], r: [MORGEN, '#fff8e4'], ton: 2.2, fase: 1, rand: 1, L: [0, -1], muster: (px, py) => (((px - x) + 6) % 3 === 0 ? -.8 : 0) }); kant(m); schatten(x - 7, x + 7); }
+      // 5 Kamm
+      { const x = 126, m = K.maske(); m.rect(x - 7, yr - 4, 14, 2); for (let i = 0; i < 6; i++) m.rect(x - 7 + i * 2.6, yr - 2, 1, 3);
+        K.form(m, 0, { k: ['#1a1410', '#3a2e22', '#6a5a44', '#a08c6a'], r: SANDRAND, ton: 2, fase: 0, rand: 1, L: [0, -1] }); kant(m); schatten(x - 8, x + 8); }
+      // 6 Löffel
+      { const x = 146, m = K.maske(); m.kap(x - 8, yr - 2, x + 2, yr - 2, .8, .8); m.ell(x + 5, yr - 2, 3.4, 2.2);
+        K.form(m, 0, { k: ['#1a1c1c', '#3a3e3e', '#6a7072', '#aab2b4'], r: [MORGEN, '#ffffff'], ton: 2, fase: 0, rand: 1, L: [0, -1] }); kant(m); schatten(x - 9, x + 9); }
+      K.vignette(.65, { cx: 90, cy: 50 });
+    },
   },
 };

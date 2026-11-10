@@ -43,7 +43,8 @@
    "oilcoat",
    "deepscale",
    "minerlamp",
-   "boathook"
+   "boathook",
+   "resonator"
   ],
   "ereignisse": [],
   "kraemer": {
@@ -151,7 +152,8 @@
    },
    "beute": "bronzezahn",
    "beute_satz": "Das Rad steht still. Einer seiner Zähne ist noch warm von deiner Hand.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "kanalaal": {
    "n": "Der Kanalaal",
@@ -187,7 +189,8 @@
    },
    "beute": null,
    "beute_satz": "Der Aal sinkt in den Kanal zurück. Die Hand bleibt offen über dem Wasser, bis sie untergeht.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "oelerin": {
    "n": "Die Ölerin",
@@ -224,7 +227,8 @@
    },
    "beute": "oellappen",
    "beute_satz": "Aus dem Ausguss läuft das Öl weiter, nach oben, in die Fugen.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "nachahmer"
   },
   "gewicht": {
    "n": "Das Gewicht",
@@ -261,7 +265,8 @@
    },
    "beute": null,
    "beute_satz": "Die Kette spannt sich zum ersten Mal, als nichts mehr daran hängt.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   },
   "regulator": {
    "n": "Der Regulator",
@@ -293,6 +298,11 @@
      "v": 9
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
    "sprite": "regulator",
    "varianten": [
     "regulator"
@@ -314,7 +324,8 @@
    "beute": "gezeitenrad",
    "beute_satz": "Das Pendel steht senkrecht. Irgendwo oben bleibt die Flut aus, nur dieses eine Mal.",
    "quelle": "skript",
-   "pendel": true
+   "pendel": true,
+   "art": "tiefe"
   },
   "griff": {
    "n": "Der Griff",
@@ -345,6 +356,10 @@
      "v": 2
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 20
+   },
    "sprite": "griff",
    "varianten": [
     "griff"
@@ -390,7 +405,8 @@
    },
    "beute": "siebenfingerschluessel",
    "beute_satz": "Die Hand öffnet sich ein letztes Mal und sinkt in den Kanal zurück. Auf dem Beckenrand bleibt ein Abdruck, blank gegriffen, sieben Finger.",
-   "quelle": "skript"
+   "quelle": "skript",
+   "art": "tiefe"
   }
  },
  "events": [
@@ -500,7 +516,8 @@
        "op": "lose_hp",
        "v": 8
       }
-     ]
+     ],
+     "tiefe": 1
     },
     {
      "l": "Einen gebrochenen Zahn aus dem Wasser ziehen: Bronzezahn, Kampf gegen das Gewicht",
@@ -573,7 +590,8 @@
        "op": "lose_hp",
        "v": 4
       }
-     ]
+     ],
+     "tiefe": 1
     }
    ]
   },
@@ -698,6 +716,60 @@
      ]
     }
    ]
+  },
+  {
+   "id": "gezeitenwerk_staubecken",
+   "t": "Das Staubecken",
+   "d": "Ein tiefes Brummen steht im Kanal wie ein gehaltener Atem. Hinter dem Schütz drückt das Wasser, schwarz und glatt bis an die Kante, und auf dem Pegelstab steht Flut, obwohl draußen Ebbe ist. Das Handrad am Schütz ist warm, und es dreht sich nur, wenn du es loslässt.",
+   "bild": "Ein gemauertes Staubecken mit einem eisernen Schütz und einem Handrad, dahinter schwarzes Wasser bis zum Rand, daneben ein Pegelstab aus Messing.",
+   "o": [
+    {
+     "l": "Das Schütz einen Spalt öffnen und das Wasser abfließen lassen: +8 Leben, −6 Gold",
+     "fx": [
+      {
+       "op": "heal",
+       "v": 8
+      },
+      {
+       "op": "gold",
+       "v": -6
+      }
+     ],
+     "if": {
+      "gold_min": 6
+     }
+    },
+    {
+     "l": "Das Handrad halten, bis die Arme zittern: +1 Kerbe an einem Item, −6 Leben",
+     "fx": [
+      {
+       "op": "kerbe"
+      },
+      {
+       "op": "lose_hp",
+       "v": 6
+      }
+     ],
+     "if": {
+      "hp_min": 8
+     }
+    },
+    {
+     "l": "Das Wehr ganz aufziehen: ein zufälliges Item, Kampf gegen den Kanalaal",
+     "fx": [
+      {
+       "op": "give_random"
+      },
+      {
+       "op": "fight",
+       "foes": [
+        "kanalaal"
+       ]
+      }
+     ]
+    }
+   ],
+   "entwurf": true
   }
  ],
  "items": {

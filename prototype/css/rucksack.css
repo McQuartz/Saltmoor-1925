@@ -1,0 +1,94 @@
+/* Rucksack „Am Körper“ (Auftrag 3 M4, docs/auftrag-3/05-oberflaeche.md Abschnitt 8, Vorlage docs/auftrag-3/vorlagen/rucksack-b-am-koerper.png).
+   Liegt über Szene und Leiste (480 × 362 Szenen-Pixel), alle Maße in --u. */
+#koerper{position:absolute;left:0;top:0;width:calc(var(--u)*480);height:calc(var(--u)*362);z-index:20;display:none;
+ background:radial-gradient(ellipse 34% 52% at 36% 55%,rgba(40,34,26,.55),rgba(0,0,0,.0) 70%),linear-gradient(rgba(6,5,4,.94),rgba(6,5,4,.97))}
+#spiel.koe #hud{visibility:hidden}
+#koerper.an{display:block}
+#koerper .kkopf{position:absolute;left:0;right:0;top:0;height:calc(var(--u)*18);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*10);
+ background:linear-gradient(#0b0907,#050403);border-bottom:1px solid #3a2c18}
+#koerper .kkopf .tz{font-family:var(--fk);font-size:calc(var(--u)*7);letter-spacing:.08em;color:#efe4c8}
+#koerper .kkopf .tz .sub{font-family:var(--ft);font-style:italic;font-size:calc(var(--u)*5);color:var(--dim);margin-left:calc(var(--u)*5);letter-spacing:0}
+#koerper .kkopf .kr{display:flex;gap:calc(var(--u)*6);font-family:var(--fk);font-size:calc(var(--u)*5);color:var(--dim)}
+#koerper .kkopf .kr b{color:#efe4c8}#koerper .kkopf .gold b{color:var(--gold)}
+#koerper .kmitte{position:absolute;left:0;top:calc(var(--u)*18);width:calc(var(--u)*480);height:calc(var(--u)*252);overflow:hidden}
+/* Figur: 1 Pixel der Silhouette = 1 Pixel der Szene */
+#koerper .kfigur{position:absolute;width:calc(var(--u)*110);height:calc(var(--u)*172);image-rendering:pixelated;pointer-events:none}
+#koeNebel,#koeNebelVorn{position:absolute;width:calc(var(--u)*200);image-rendering:pixelated;pointer-events:none}
+#koeNebel{height:calc(var(--u)*70)}#koeNebelVorn{height:calc(var(--u)*40);z-index:1}
+#koerper .klinien{position:absolute;left:0;top:calc(var(--u)*-18);width:calc(var(--u)*480);height:calc(var(--u)*362);pointer-events:none;z-index:1}
+#koerper .klinien line{stroke:#c8a24a;stroke-width:.6;stroke-dasharray:1.2 1.6;opacity:.75}#koerper .klinien .pkt{fill:var(--gold)}
+#koerper .kname{position:absolute;left:calc(var(--u)*14);top:calc(var(--u)*12);width:calc(var(--u)*96)}
+#koerper .kname h3{margin:0;font-family:var(--fk);font-weight:400;font-size:calc(var(--u)*7);letter-spacing:.12em;color:#efe4c8}
+#koerper .khp{font-style:italic;font-size:calc(var(--u)*4.6);color:var(--dim)}
+#koerper .kaus{font-style:italic;font-size:calc(var(--u)*4.6);color:#cfc4a8;margin-top:calc(var(--u)*3);line-height:1.2}
+#koerper .krollen{font-size:calc(var(--u)*4.2);color:var(--dim);margin-top:calc(var(--u)*3);line-height:1.25}#koerper .krollen .an{color:var(--gold)}
+/* Fächer: Rahmen wie die Vorlage, eigene Form je Art */
+#koerper .fach{position:absolute;z-index:2;background:linear-gradient(#17120c,#0b0907);border:1px solid #4a3a20;box-shadow:inset 0 0 0 1px #000,inset 0 0 0 2px #2a2012,1px 2px 0 #000;padding:calc(var(--u)*3) calc(var(--u)*4) calc(var(--u)*4)}
+#koerper .fach h4{margin:0 0 calc(var(--u)*3);font-family:var(--fk);font-weight:400;font-size:calc(var(--u)*4.4);letter-spacing:.14em;color:#cfc4a8;line-height:1.1}
+#koerper .fach h4 em{font-style:normal;color:var(--dim)}
+#koerper .fp{display:flex;gap:calc(var(--u)*3)}
+#koerper .fach.saeule{width:calc(var(--u)*46)}#koerper .fach.saeule .fp{flex-direction:column}
+#koerper .fach.block .fp{display:grid;grid-template-columns:repeat(2,calc(var(--u)*24))}
+/* Plätze */
+#koerper .kslot{position:relative;width:calc(var(--u)*24);height:calc(var(--u)*24);border:1px solid #3a2e1a;background:#0a0806;box-shadow:inset 0 0 0 1px #000;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#koerper.lesen .kslot{cursor:default}#koerper.lesen .kslot[data-kzeig]{cursor:pointer}
+#koerper .kslot>img{width:calc(var(--u)*18);height:calc(var(--u)*18);image-rendering:pixelated;pointer-events:none}
+#koerper .kslot .kss{position:absolute;right:1px;top:1px;display:flex;pointer-events:none}
+#koerper .kslot .kkb{position:absolute;left:50%;bottom:calc(var(--u)*1.5);transform:translateX(-50%);display:flex;gap:calc(var(--u)*1);pointer-events:none}
+#koerper .kslot .kkb i{display:block;width:calc(var(--u)*3);height:calc(var(--u)*1);background:#1a140c;box-shadow:0 0 0 1px #000;opacity:.9}
+#koerper .kslot .kkb i.voll{background:var(--k)}
+#koerper .kslot.zu{background:repeating-linear-gradient(45deg,#0a0806 0 calc(var(--u)*1.5),#110d08 calc(var(--u)*1.5) calc(var(--u)*3));cursor:default}
+#koerper .kslot .schloss{width:calc(var(--u)*7);height:calc(var(--u)*8);opacity:.85}
+#koerper .kslot.selten{border-color:#8a6a2a}#koerper .kslot.reliquie{border-color:var(--gold)}
+#koerper .kslot.sel,#koerper .kslot.zeig{border-color:var(--gold);box-shadow:inset 0 0 0 1px #000,0 0 calc(var(--u)*3) rgba(232,197,71,.45)}
+#koerper .kslot.ziel{border-color:var(--eld);box-shadow:inset 0 0 0 1px #000,0 0 calc(var(--u)*4) rgba(122,255,200,.35);animation:kziel 1.1s ease-in-out infinite}
+@keyframes kziel{50%{box-shadow:inset 0 0 0 1px #000,0 0 calc(var(--u)*1) rgba(122,255,200,.15)}}
+#koerper .kslot.gestrichen img{opacity:.35}
+#koerper .kslot.trash{color:#6a4a3a;font-size:calc(var(--u)*7)}
+#koerper .kslot:hover:not(.zu){border-color:var(--messing)}
+/* Rechts: Item und Deck */
+#koerper .krechts{position:absolute;left:calc(var(--u)*318);top:calc(var(--u)*8);width:calc(var(--u)*150);height:calc(var(--u)*236);z-index:2;display:flex;flex-direction:column;justify-content:space-between;
+ background:rgba(8,6,4,.78);border:1px solid #3a2c18;box-shadow:inset 0 0 0 1px #000;padding:calc(var(--u)*6)}
+#koerper .klead{font-style:italic;font-size:calc(var(--u)*4.8);color:#cfc4a8;margin:0;line-height:1.25}
+#koerper .kin{font-family:var(--fk);font-size:calc(var(--u)*6.2);color:#efe4c8}#koerper .kin img{vertical-align:middle}
+#koerper .kia{font-size:calc(var(--u)*4.3);color:var(--dim);margin-top:calc(var(--u)*1)}
+#koerper .kie{font-size:calc(var(--u)*4.5);color:#cfc4a8;margin-top:calc(var(--u)*2)}
+#koerper .kfl{font-style:italic;font-size:calc(var(--u)*4.2);color:var(--dim);margin-top:calc(var(--u)*3)}
+#koerper .kkarten{display:flex;flex-wrap:wrap;gap:calc(var(--u)*4);margin-top:calc(var(--u)*5)}
+#koerper .kkw{position:relative}#koerper .kkw .anz{position:absolute;right:calc(var(--u)*-2);bottom:calc(var(--u)*-2);font-family:var(--fk);font-size:calc(var(--u)*5);color:var(--gold);background:#000;padding:0 calc(var(--u)*1)}
+#koerper .karte.mini{width:calc(var(--u)*40);height:calc(var(--u)*56);transform:none;cursor:default;animation:none}
+#koerper .karte.mini .kn{font-size:calc(var(--u)*3.4);min-height:calc(var(--u)*8);padding:0 calc(var(--u)*2);margin-top:calc(var(--u)*7);justify-content:center}
+#koerper .karte.mini .bogen{width:calc(var(--u)*22);height:calc(var(--u)*19)}#koerper .karte.mini .bogen img{width:calc(var(--u)*17);height:calc(var(--u)*17)}
+#koerper .karte.mini .kt{font-size:calc(var(--u)*3.6)}
+#koerper .karte.mini .kost{width:calc(var(--u)*8);height:calc(var(--u)*8);left:calc(var(--u)*-3);top:calc(var(--u)*-3)}#koerper .karte.mini .kost span{font-size:calc(var(--u)*4.4)}
+#koerper .kdeck{border-top:1px solid #3a2c18;padding-top:calc(var(--u)*4)}
+#koerper .kdz{font-family:var(--fk);font-size:calc(var(--u)*4.6);letter-spacing:.14em;color:#cfc4a8}#koerper .kdz b{font-size:calc(var(--u)*8);color:#efe4c8;margin:0 calc(var(--u)*2);letter-spacing:0}
+#koerper .kbalken{display:flex;height:calc(var(--u)*3);margin-top:calc(var(--u)*3);border:1px solid #3a2c18;gap:1px;background:#000}
+#koerper .kbalken i{display:block;height:100%}
+#koerper .kleg{display:flex;flex-wrap:wrap;gap:calc(var(--u)*4);margin-top:calc(var(--u)*2);font-family:var(--fk);font-size:calc(var(--u)*5);color:var(--dim)}#koerper .kleg img{vertical-align:middle}
+#koerper .kdiff{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1) calc(var(--u)*4);margin-top:calc(var(--u)*3);font-size:calc(var(--u)*4.3)}
+#koerper .kdiff .gr{color:#7dd88a}#koerper .kdiff .rt{color:#e8685a}
+/* Unten: Rucksack im Holz-Footer */
+#koerper .rkfuss{position:absolute;left:0;top:calc(var(--u)*270);width:calc(var(--u)*480);height:calc(var(--u)*92);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*20);
+ background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 0 calc(var(--u)*23),rgba(0,0,0,.18) calc(var(--u)*23) calc(var(--u)*24)),linear-gradient(#2a1d10,#1a120a 40%,#0e0905);
+ border-top:1px solid var(--messing);box-shadow:inset 0 1px 0 #5a4626,0 calc(var(--u)*-1) calc(var(--u)*3) rgba(0,0,0,.7)}
+#koerper .kbag h4{margin:0 0 calc(var(--u)*3);font-family:var(--fk);font-weight:400;font-size:calc(var(--u)*4.4);letter-spacing:.16em;color:#cfc4a8}
+#koerper .rkfuss .kslot{background:#0c0805}
+#koerper .kknopf{margin-left:auto;display:flex;align-items:center;gap:calc(var(--u)*6)}#koerper .kknopf .hint{font-size:calc(var(--u)*4.6)}
+/* Tisch außerhalb des Kampfes (ersetzt die alte Itemleiste) */
+#leiste.tisch{background:linear-gradient(#17120c,#0b0907 30%,#060504);border-top:1px solid var(--messing);box-shadow:inset 0 1px 0 #5a4626;align-items:center;justify-content:center}
+#leiste .tischreihe{display:flex;align-items:center;gap:calc(var(--u)*8)}
+#leiste .tangelegt{display:flex;gap:calc(var(--u)*2)}#leiste .tangelegt img{width:calc(var(--u)*14);height:calc(var(--u)*14);image-rendering:pixelated;opacity:.8}
+.kverk{display:flex;flex-wrap:wrap;gap:calc(var(--u)*2);margin:calc(var(--u)*2) 0}
+
+/* Spieltest 2026-11-09: ganzes Deck rechts, solange kein Item gewählt ist */
+#koerper .kdeckliste{flex:1;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#5a4626 transparent;padding-right:calc(var(--u)*2);margin-bottom:calc(var(--u)*3)}
+#koerper .kdlk{font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.16em;color:#a89c80;margin-bottom:calc(var(--u)*2)}
+#koerper .kdr{display:flex;align-items:center;gap:calc(var(--u)*2);padding:calc(var(--u)*.8) 0;border-bottom:1px solid #1e1810;font-size:calc(var(--u)*5);color:var(--txt);pointer-events:auto;cursor:default}
+#koerper .kdr:hover{background:#15110b}
+#koerper .kdc{flex:none;width:calc(var(--u)*7);height:calc(var(--u)*7);display:flex;align-items:center;justify-content:center;font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*4.4);color:#efe4c8;border:1px solid var(--messing2)}
+#koerper .kds{flex:none;display:flex;gap:1px;min-width:calc(var(--u)*10)}
+#koerper .kdn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#koerper .kdr .anz{flex:none;font-family:var(--fk);font-size:calc(var(--u)*4.4);color:var(--gold)}
+#koerper .kdr.hg .kdn{color:#d8c890}#koerper .kdr.fremd .kdn{font-style:italic;color:#b8b2a6}
+#koerper .kdz .kganz{margin-left:calc(var(--u)*4);vertical-align:middle}

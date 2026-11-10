@@ -14,7 +14,7 @@
   "gegner": ["giesser", "formerin", "kloeppelmann", "gussnaht"],
   "waechter": "ungetaufte",
   "waechter_alt": ["tretrad"],
-  "fundpool": ["giesskelle", "lehmmaske", "stimmeisen", "candle", "cross", "rosary", "minerlamp", "shovel", "pick", "tartorch"],
+  "fundpool": ["giesskelle", "lehmmaske", "stimmeisen", "candle", "cross", "rosary", "minerlamp", "shovel", "pick", "tartorch", "linse"],
   "ereignisse": [],
   "kraemer": {
    "n": "Der Wandergießer",
@@ -65,6 +65,7 @@
   "ort": "Gewölbe unter dem Kirchhof, Zugluft im Schacht, der Ofen atmet, ferne Glockenschläge", "rhyN": "Meißel und Hammer auf Bronze, Pauke"},
  "foes": {
   "tretrad": {
+   "art": "tiefe",
    "n": "Das Tretrad",
    "biom": "glockengiesserei",
    "rang": "waechter",
@@ -89,6 +90,11 @@
      "v": 19
     }
    ],
+   "gesehen": {
+    "t": "atk",
+    "v": 7,
+    "h": 4
+   },
    "sprite": "tretrad",
    "varianten": [
     "tretrad"
@@ -112,6 +118,7 @@
    "quelle": "skript"
   },
   "giesser": {
+   "art": "veraendert", "asche": true,
    "n": "Der Gießer", "biom": "glockengiesserei", "rang": "normal", "hp": 25, "weak": "W",
    "pat": [{"t": "atk", "v": 8}, {"t": "blk", "v": 6}, {"t": "atk", "v": 4, "h": 2}],
    "sprite": "giesser_a", "varianten": ["giesser_a", "giesser_b"],
@@ -122,6 +129,7 @@
    "quelle": "skript"
   },
   "formerin": {
+   "art": "veraendert",
    "n": "Die Formerin", "biom": "glockengiesserei", "rang": "normal", "hp": 21, "weak": "F",
    "pat": [{"t": "atk", "v": 6}, {"t": "blk", "v": 7}, {"t": "atk", "v": 3, "h": 2}],
    "sprite": "formerin_a", "varianten": ["formerin_a", "formerin_b"],
@@ -132,6 +140,7 @@
    "quelle": "skript"
   },
   "kloeppelmann": {
+   "art": "tiefe",
    "n": "Der Klöppel", "biom": "glockengiesserei", "rang": "normal", "hp": 22, "weak": "G",
    "pat": [{"t": "laedt", "v": 0}, {"t": "laedt", "v": 0}, {"t": "atk", "v": 13}],
    "sprite": "kloeppelmann_a", "varianten": ["kloeppelmann_a", "kloeppelmann_b"],
@@ -142,6 +151,7 @@
    "quelle": "skript"
   },
   "gussnaht": {
+   "art": "veraendert",
    "n": "Die Gussnaht", "biom": "glockengiesserei", "rang": "normal", "hp": 28, "weak": "B",
    "pat": [{"t": "atk", "v": 4, "h": 2}, {"t": "blk", "v": 8}, {"t": "atk", "v": 7}],
    "sprite": "gussnaht_a", "varianten": ["gussnaht_a", "gussnaht_b"],
@@ -152,8 +162,10 @@
    "quelle": "skript"
   },
   "ungetaufte": {
+   "art": "tiefe",
    "n": "Die Ungetaufte", "biom": "glockengiesserei", "rang": "waechter", "hp": 76, "weak": "W",
    "pat": [{"t": "atk", "v": 11}, {"t": "atk", "v": 3, "h": 4}, {"t": "blk", "v": 12}, {"t": "atk", "v": 16}, {"t": "buff", "v": 2}],
+   "gesehen": {"t": "blk", "v": 18},
    "sprite": "ungetaufte", "varianten": ["ungetaufte"],
    "konzept": "Die große Glocke für St. Brendan, so hoch wie ein Haus, nie geweiht, nie hinaufgezogen. Sie hängt am Galgen über ihrer Grube, halb noch im Lehmmantel. Aus ihrem glühenden Mund hängen zwei nackte Füße, groß wie Ruderblätter.",
    "stimme": "glockenmutter",

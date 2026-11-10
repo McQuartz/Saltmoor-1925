@@ -349,6 +349,7 @@ function arzneikasten(K, x, y) {
 function bauen(o) {
   const K = B.kontext(pal, o), art = o.art; let v = o.variante;
   if (art !== 'kampf' && art !== 'waechter') v = art === 'rast' ? 1 : art === 'kraemer' ? 0 : art === 'ereignis' || art === 'fund' ? 2 : (o.seed + v) % 3;
+  K.kulisse = art === 'waechter' ? 'waechter' : v; // M3: welche Kulisse die Szene zeigt (Schlüssel für die Fahrt, data/fahrt.json)
   let info;
   if (art === 'waechter') info = unterDerLaterne(K, {});
   else if (art === 'uebergang') info = unterDerLaterne(K, { treppe: true });
