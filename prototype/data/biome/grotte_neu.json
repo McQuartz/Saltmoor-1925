@@ -1,0 +1,92 @@
+{
+ "id": "grotte_neu",
+ "ergaenzt": "grotte",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "reliquientraeger"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "reliquiar"
+ ],
+ "foes": {
+  "reliquientraeger": {
+   "n": "Der Reliquienträger",
+   "biom": "grotte",
+   "rang": "elite",
+   "hp": 82,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 10,
+     "unverw": true,
+     "why": "Er schließt die Läden des Schreins"
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "reliquientraeger",
+   "konzept": "Der Bruder, der den Schrein von Ort zu Ort trug, damit die Kranken ihn berühren konnten. Er trägt ihn noch, doppelt so hoch wie er selbst, und ist darunter klein und krumm geworden. Hinter der Scheibe liegt eine Hand aus Wachs und Knochen, und in ihrer Fläche ist ein Auge.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Mit jedem Zug wird der Schrein schwerer, und er stößt fester."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": "wachshand",
+     "alle": 3,
+     "why": "Wo der Schrein steht, wachsen Hände aus dem Boden."
+    }
+   ],
+   "beute": "reliquiar",
+   "beute_satz": "Der Schrein ist leer. Auf der Scheibe ist innen ein Handabdruck.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "reliquiar": {
+   "n": "Reliquiar",
+   "a": "talisman",
+   "st": [
+    "G",
+    "E"
+   ],
+   "spr": "cross",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 46,
+   "eigen": {
+    "typ": "start_block",
+    "v": 6,
+    "t": "Zu Kampfbeginn 6 Block."
+   },
+   "flavor": "Ein Kästchen mit Glasdeckel. Was darin liegt, hat sich bewegt, seit du es hast.",
+   "cards": [
+    {
+     "n": "Berühren lassen",
+     "c": 1,
+     "blk": 7,
+     "str": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}
