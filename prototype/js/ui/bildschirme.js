@@ -50,15 +50,41 @@ function rewardHtml(){if(S.hgPending&&!S.hgPicked)return ritzenHtml('Wohin ritzt
  ${S.hgPicked?'':`<h3>${S.rewardHg.length>1?'EIN HANDGRIFF ZUR WAHL':'EIN HANDGRIFF'}</h3><div class="picks${S.rewardHg.length===1?' einzeln':''}">${S.rewardHg.map(id=>hgAngebotHtml(id)).join('')}</div><p><button class="deco klein" data-act="hgSkip">LIEGEN LASSEN (+${(BAL.belohnung&&BAL.belohnung.ueberspringen_gold)||10} GOLD)</button></p>`}
  ${S.reward.length&&!S.picked?`<h3>${wa?'EINE RELIQUIE':'EIN FUND'}</h3><div class="picks">${S.reward.map(id=>itemPick(id,`data-take="${id}"`)).join('')}</div><p><button class="deco klein" data-take="">NICHTS NEHMEN</button></p>`:''}
  <button class="deco" data-act="weiterReward">WEITER ›</button>`);}
-// Ritzen: Handgriff in ein Item. Zeigt je Item den Stoff, den er annimmt, und welche Reaktionen er dann auslösen kann.
-function ritzenHtml(frage){const id=S.hgPending;const H=HANDGRIFFE[id];if(!H)return'';const deckSt=new Set(allActive().flatMap(it=>def(it).st));
- const reih=st=>{const o=[];REACT.forEach(r=>{const[a,b]=[...r.k];if((st.includes(a)&&deckSt.has(b))||(st.includes(b)&&deckSt.has(a)))o.push(r.n);});return[...new Set(o)];};
- return box('ritzen',`<h2>${esc(H.n).toUpperCase()}</h2><p class="lead">${esc(cardText(H))}</p>${H.t?`<p class="hgspruch"><i>${esc(H.t)}</i></p>`:''}<p>${frage} Er nimmt den Stoff des Items an.</p>
- <div class="ritzliste">${besitz().map(({it,an})=>{const D=def(it);const hg=hgVon(it),cap=kerbenVon(it);const rx=reih(D.st);
-  return `<div class="ritz ${an?'':'rucksack'}"><img src="${itemBild(it.id)}"><div class="rn"><b>${esc(D.n)}</b> ${D.st.map(k=>gi(k,KZ())).join('')||'<span class="hint">stofflos</span>'}${an?'':' <span class="hint">(Rucksack)</span>'}<br><span class="hint">${rx.length?'reagiert mit: '+rx.join(', '):'keine Reaktion mit deinem Deck'}</span></div>
-  <div class="kerben">${[...Array(cap)].map((_,k)=>hg[k]?`<button class="kerbe voll" data-ritz="${it.uid}" data-k="${k}" title="überschreiben">${esc(HANDGRIFFE[hg[k]]?HANDGRIFFE[hg[k]].n:hg[k])}</button>`:`<button class="kerbe leer" data-ritz="${it.uid}">frei</button>`).join('')}</div></div>`;}).join('')}</div>
- ${S.ueberschreiben?`<p class="err">„${esc(HANDGRIFFE[S.ueberschreiben.alt].n)}“ wirklich überschreiben? <button class="deco klein" data-act="ueberJa">JA</button> <button class="deco klein" data-act="ueberNein">NEIN</button></p>`:''}
- <button class="deco klein" data-act="hgVerwerfen">VERWERFEN</button>`);}
+// Ritzen: Handgriff in ein Item. Spieltest 2026-11-10: alle Items als Kacheln (kein Scrollen), jede Karte im selben Look.
+// Fest (Karte des Items, fest_hg) liegt auf dunklem Holz mit Schild FEST, überritzbare Handgriffe im Messingrahmen, freie Kerben gestrichelt.
+// Oben steht der Vergleich alt gegen neu für die Kerbe unter der Maus (ritzVglHtml, gesetzt in eingabe.js).
+function ritzReih(st){const deckSt=new Set(allActive().flatMap(it=>def(it).st));const o=[];REACT.forEach(r=>{const[a,b]=[...r.k];if((st.includes(a)&&deckSt.has(b))||(st.includes(b)&&deckSt.has(a)))o.push(r.n);});return[...new Set(o)];}
+function rzKarte(cls,bild,c,n,t,tag='',attr=''){const kost=c==null||c===''?'<span class="rzkost leer"></span>':`<span class="rzkost"><span>${c}</span></span>`;
+ const tagN=attr?'button':'div';return `<${tagN} class="rzk ${cls}" ${attr}>${kost}${bild?`<img src="${bild}" alt="">`:''}<span class="rzx"><b>${esc(n)}</b><i>${esc(t)}</i></span>${tag}</${tagN}>`;}
+const RZ_FEST='<span class="rzfest"><i></i>FEST</span>';
+function rzHgKosten(H){return H.unspielbar?'':H.x?'X':(H.c||0);}
+function rzHgText(H){return H.unspielbar?'unspielbar':cardText(H).replace(/\.$/,'');}
+function ritzKachel(it,an){const D=def(it);const hg=hgVon(it),cap=kerbenVon(it),fest=D.fest_hg||[];const u=S.ueberschreiben;
+ const karten=D.cards.map(c=>rzKarte('fest',itemBild(it.id),c.x?'X':(c.c||0),c.n,cardText(c).replace(/\.$/,''),RZ_FEST)).join('');
+ const kerben=[...Array(Math.max(cap,hg.length))].map((_,k)=>{const id=hg[k];
+  if(!id)return `<button class="rzk frei" data-ritz="${it.uid}"><span class="rzplus">+</span><span class="rzx"><b>Freie Kerbe</b><i>hier ritzen</i></span></button>`;
+  const H=HANDGRIFFE[id];if(!H)return'';const Hs=hgVertieft(H,hgStufe(it,id));
+  if(fest.includes(id))return rzKarte('fest'+(H.unspielbar?' fluch':''),hgBild(id),rzHgKosten(Hs),Hs.n,rzHgText(Hs),RZ_FEST);
+  const raus=u&&u.uid===it.uid&&u.k===k;
+  return rzKarte('kerbe'+(raus?' raus':''),hgBild(id),rzHgKosten(Hs),Hs.n,rzHgText(Hs),'',`data-ritz="${it.uid}" data-k="${k}"`);}).join('');
+ return `<div class="rzz${an?'':' lose'}${u&&u.uid===it.uid?' sel':''}"><div class="rzzk"><img src="${itemBild(it.id)}" alt=""><span class="rzzn">${esc(D.n)}</span>${D.st.map(k=>gi(k,KZ())).join('')}${an?'':'<span class="rzrs">Rucksack</span>'}</div>${karten}${kerben||'<span class="rzkeine">keine Kerbe</span>'}</div>`;}
+// Vergleich für eine Kerbe (uid, k = belegte Kerbe oder null = frei). Ohne Ziel: kurzer Hinweis.
+function ritzVglHtml(uid,k){const H=HANDGRIFFE[S.hgPending];const it=uid!=null&&itemByUid(uid);
+ if(!H||!it)return `<div class="rzvk">IN WELCHES ITEM?</div><p class="rzvh">Fahr über eine Kerbe, dann steht hier, was rausfliegt und was reinkommt.</p>`;
+ const D=def(it);const alt=k!=null?hgVon(it)[k]:null;const A=alt&&HANDGRIFFE[alt];const As=A&&hgVertieft(A,hgStufe(it,alt));const rx=ritzReih(D.st);const an=besitz().some(b=>b.it===it&&b.an);
+ const stoff=D.st.length?D.st.map(s=>ST[s].n).join(' und '):'';
+ const links=As?rzKarte('kerbe raus',hgBild(alt),rzHgKosten(As),As.n,rzHgText(As)):`<div class="rzk frei"><span class="rzplus">+</span><span class="rzx"><b>Freie Kerbe</b><i>nichts fliegt raus</i></span></div>`;
+ const rechts=rzKarte('neu',hgBild(S.hgPending),rzHgKosten(H),H.n,stoff?`wird ${stoff}`:'bleibt stofflos');
+ const u=S.ueberschreiben;const frage=u&&u.uid===it.uid&&u.k===k;
+ return `<div class="rzvk">IN ${esc(D.n).toUpperCase()} ${D.st.map(s=>gi(s,KZ())).join('')}</div><div class="rzvz">${links}<span class="rzpf">›</span>${rechts}</div>
+ <p class="rzvh">${D.cards.map(c=>esc(c.n)).join(', ')} bleibt. ${rx.length?'Reagiert mit: '+esc(rx.join(', ')):'Keine Reaktion mit deinem Deck.'}${an?'':' Im Rucksack wirkt er erst, wenn du das Item anlegst.'}</p>
+ ${frage?`<p class="rzja">„${esc(A.n)}“ wirklich überschreiben? <button class="deco klein" data-act="ueberJa">JA</button> <button class="deco klein" data-act="ueberNein">NEIN</button></p>`:''}`;}
+function ritzenHtml(frage){const id=S.hgPending;const H=HANDGRIFFE[id];if(!H)return'';const u=S.ueberschreiben;const b=besitz();
+ return `<div class="rz${b.length>15?' sehrviele':b.length>8?' viele':''}"><div class="rzkopf">
+ <div class="rzneu"${H.t?` title="${esc(H.t)}"`:''}><div class="rzvk eld">NEUER HANDGRIFF</div><div class="rzneun">${hgBild(id)?`<img src="${hgBild(id)}" alt="">`:''}<b>${esc(H.n).toUpperCase()}</b>${H.unspielbar?'':`<span class="rzkost inl"><span>${rzHgKosten(H)}</span></span>`}</div><div class="rznt">${esc(cardText(H))}</div></div>
+ <div class="rzvgl" id="rzVgl">${u?ritzVglHtml(u.uid,u.k):ritzVglHtml(null,null)}</div></div>
+ <div class="rzfrage"><span>${frage} Er nimmt den Stoff des Items an.</span><span class="rzleg"><span><i class="lf"></i>fest, bleibt</span><span><i class="lk"></i>Handgriff, überritzbar</span><span><i class="lr"></i>freie Kerbe</span></span><button class="deco klein" data-act="hgVerwerfen">VERWERFEN</button></div>
+ <div class="rzgrid">${b.map(({it,an})=>ritzKachel(it,an)).join('')}</div></div>`;}
 // Wahl: Schleifen, Kerbe dazu, Umritzen
 function wahlHtml(){const w=S.wahl;if(!w)return'';
  // M8: Spur der Farbe tilgen (Werkstatt): je Item der letzte Tausch

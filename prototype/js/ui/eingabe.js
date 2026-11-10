@@ -103,3 +103,9 @@ function endbildSpeichern(){const c=document.createElement('canvas');c.width=960
  g.fillStyle='rgba(0,0,0,.78)';g.fillRect(40,40,880,460);g.fillStyle='#efe4c8';g.font='28px serif';const r=S.ergebnis||{},st=S.stats||{};g.fillText('SALTMOOR 1925 · '+(r.sieg?(r.ende==='bleiben'?'Geblieben':'Umgekehrt'):'Am Strand'),70,90);
  g.font='20px serif';const L=[`${S.jobN} · Seed ${S.seed} · ${dauerText((st.endeT||Date.now())-S.startT)}`,`Weg: ${S.route.filter(Boolean).map(b=>BIOMES[b].kurz).join(' → ')}`,`Tiefe ${r.tiefe||S.depth} · Kämpfe ${st.kaempfe||0} · Gold ${st.gold||0}`,`Schaden ${st.schadenRaus||0} / ${st.schadenRein||0} · höchster Treffer ${st.maxTreffer||0} · längste Kette ${st.maxKette||0}`,`Build: ${buildArchetyp().n} · Reaktionen ${S.disc.size}`,`Deck: ${allActive().map(it=>def(it).n).join(', ')}`];
  L.forEach((t,i)=>g.fillText(t,70,140+i*40,820));const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download=`saltmoor-${S.seed}.png`;a.click();}
+// Ritzen (Spieltest 2026-11-10): Vergleich alt gegen neu für die Kerbe unter der Maus. Während einer Nachfrage (überschreiben?) bleibt der Vergleich stehen.
+let rzVglKey=null,rzVglEl=null;
+document.addEventListener('pointerover',e=>{const v=document.getElementById('rzVgl');if(!v||S.ueberschreiben)return;
+ const z=e.target.closest&&e.target.closest('.rz [data-ritz]');const key=z?z.dataset.ritz+':'+(z.dataset.k??''):'';if(v!==rzVglEl){rzVglEl=v;rzVglKey=null;}if(key===rzVglKey)return;
+ if(!z&&!e.target.closest('.rzgrid'))return; // im Kopf oder Leerraum: Vergleich stehen lassen
+ rzVglKey=key;v.innerHTML=z?ritzVglHtml(+z.dataset.ritz,z.dataset.k!=null?+z.dataset.k:null):ritzVglHtml(null,null);});
