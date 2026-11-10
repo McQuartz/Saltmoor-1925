@@ -1,0 +1,93 @@
+{
+ "id": "hafen_neu4",
+ "ergaenzt": "hafen",
+ "waechter_dazu": [
+  "hafenkran"
+ ],
+ "foes": {
+  "hafenkran": {
+   "n": "Der Hafenkran",
+   "biom": "hafen",
+   "rang": "waechter",
+   "hp": 74,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "gesehen": {
+    "t": "blk",
+    "v": 16
+   },
+   "sprite": "hafenkran",
+   "varianten": [
+    "hafenkran"
+   ],
+   "konzept": "Der Dampfkran am Kai 4, der 1919 eine Ladung Ballast ins Hafenbecken fallen ließ und den Kranführer mit hinunterzog. Er hat ihn wieder heraufgeholt. Der Führer sitzt noch im Führerhaus, aufgedunsen, und der Kran läuft auf zwei Portalbeinen den Kai entlang. Am Ausleger hängt der Haken; wenn er ihn angesagt hat, kommt er herunter.",
+   "stimme": "lotse",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 3,
+    "v": 22,
+    "why": "Der Haken geht drei Züge lang nach oben. Dann lässt der Führer los."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "taucher",
+    "alle": 3
+   },
+   "beute": "kranhaken",
+   "beute_satz": "Der Ausleger knickt ein, und der Haken fällt dir vor die Füße. Er ist noch warm vom Seil.",
+   "quelle": "skript",
+   "art": "veraendert",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "kranhaken": {
+   "n": "Kranhaken",
+   "a": "waffe",
+   "st": [
+    "E",
+    "W"
+   ],
+   "spr": "boathook",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "mehrfach_plus1",
+    "t": "Mehrfachangriffe treffen einmal öfter."
+   },
+   "flavor": "Geschmiedet für zwei Tonnen. In einer Hand ist er zu schwer, und trotzdem lässt man ihn nicht los.",
+   "cards": [
+    {
+     "n": "Haken herunter",
+     "c": 2,
+     "atk": 14
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,208 @@
+{
+ "id": "walkathedrale_neu4",
+ "ergaenzt": "walkathedrale",
+ "gegner_dazu": [
+  "speckschneider"
+ ],
+ "elite_dazu": [
+  "walpredigerin"
+ ],
+ "waechter_dazu": [
+  "harpunier"
+ ],
+ "fundpool_dazu": [
+  "walbibel"
+ ],
+ "foes": {
+  "speckschneider": {
+   "n": "Der Speckschneider",
+   "biom": "walkathedrale",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "speckschneider_a",
+   "varianten": [
+    "speckschneider_a",
+    "speckschneider_b"
+   ],
+   "konzept": "Er hat an Bord den Speck vom Wal geschält, mit dem Spaten an der langen Stange, in breiten Streifen. Im Wal schält er weiter, die Wände, den Boden, und was im Weg steht. Er schneidet durch jede Deckung. Ein gebückter Mann im Ölzeug, die Stange doppelt so lang wie er.",
+   "stimme": "schmuggler",
+   "kniff": {
+    "art": "brecher",
+    "why": "Der Spaten schält jede Deckung in breiten Streifen ab."
+   },
+   "beute": "harpoon",
+   "beute_satz": "Die lange Stange fällt quer über den Boden. Die Wand dahinter wächst sofort wieder zu.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "walpredigerin": {
+   "n": "Die Walpredigerin",
+   "biom": "walkathedrale",
+   "rang": "elite",
+   "hp": 94,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "sprite": "walpredigerin",
+   "konzept": "Die Frau des Schiffspredigers, die nach ihm in den Wal kam und seine Predigt übernommen hat. Sie steht auf einer Kanzel aus Wirbelknochen und predigt dem Herzen, und wer zuhört, dem wachsen die Wunden zu. Was sie vorhat, sieht man nicht hinter dem aufgeschlagenen Buch.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Hinter dem aufgeschlagenen Buch sieht man nicht, was sie vorhat."
+   },
+   "kniffe": [
+    {
+     "art": "heiler",
+     "v": 4,
+     "why": "Wer ihr zuhört, dem wachsen die Wunden zu."
+    }
+   ],
+   "beute": "walbibel",
+   "beute_satz": "Das Buch klappt zu. Die Predigt ist zu Ende, und irgendwo im Gewölbe schlägt das Herz einmal langsamer.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "harpunier": {
+   "n": "Der Harpunier",
+   "biom": "walkathedrale",
+   "rang": "waechter",
+   "hp": 92,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    }
+   ],
+   "gesehen": {
+    "t": "atk",
+    "v": 6,
+    "h": 4
+   },
+   "sprite": "harpunier",
+   "varianten": [
+    "harpunier"
+   ],
+   "konzept": "Er hat den Wal getroffen, und die Leine ist nicht gerissen. Er ist ihr gefolgt, hinein. Jetzt steht er im Gewölbe aus Rippen, ein riesiger Mann im Ölzeug, die Harpune in der Faust, und die Leine geht von seinem Gürtel in die Wand. Er kündigt an, wohin er wirft.",
+   "stimme": "schmuggler",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 3,
+    "v": 28,
+    "why": "Er zeigt dir, wohin er wirft. Drei Züge lang, dann fliegt die Harpune."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "seepockenmann",
+    "alle": 3
+   },
+   "beute": "walleine",
+   "beute_satz": "Die Leine an seinem Gürtel wird schlaff. Irgendwo in der Wand hat der Wal losgelassen.",
+   "quelle": "skript",
+   "art": "mensch",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "walbibel": {
+   "n": "Bibel aus dem Wal",
+   "a": "talisman",
+   "st": [
+    "G",
+    "B"
+   ],
+   "spr": "bible",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "heil_nach_sieg",
+    "v": 5,
+    "t": "Nach jedem Sieg heilst du 5."
+   },
+   "flavor": "Ein Gesangbuch, durchtränkt von Tran. Die Seiten kleben, aber die Stelle, die man braucht, geht immer auf.",
+   "cards": [
+    {
+     "n": "Zuhören",
+     "c": 1,
+     "heal": 3,
+     "blk": 4
+    }
+   ],
+   "entwurf": true
+  },
+  "walleine": {
+   "n": "Walleine",
+   "a": "kleidung",
+   "st": [
+    "E",
+    "B"
+   ],
+   "spr": "harpoon",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "mehrfach_plus1",
+    "t": "Mehrfachangriffe treffen einmal öfter."
+   },
+   "flavor": "Hanf, geteert, hundert Faden lang. Ein Ende ist abgeschnitten, das andere geht irgendwohin.",
+   "cards": [
+    {
+     "n": "Leine werfen",
+     "c": 1,
+     "atk": 3,
+     "h": 3
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

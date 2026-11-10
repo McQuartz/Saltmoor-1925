@@ -1,0 +1,211 @@
+{
+ "id": "glasmeer_neu4",
+ "ergaenzt": "glasmeer",
+ "gegner_dazu": [
+  "glaslaeufer"
+ ],
+ "elite_dazu": [
+  "glasgefangener"
+ ],
+ "waechter_dazu": [
+  "untenlaeufer"
+ ],
+ "fundpool_dazu": [
+  "glasblock"
+ ],
+ "foes": {
+  "glaslaeufer": {
+   "n": "Der Glasläufer",
+   "biom": "glasmeer",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "glaslaeufer_a",
+   "varianten": [
+    "glaslaeufer_a",
+    "glaslaeufer_b"
+   ],
+   "konzept": "Er ist auf Stelzen über das Glas gegangen, damit es nicht bricht, und ist nie angekommen. Die Stelzen sind seine Beine geworden, dünn und lang, und unten sind sie Glas. Wo er hintritt, friert es zu: Deine Hand bleibt an der Karte kleben.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Wo er hintritt, friert es zu. Deine Hand bleibt an der Karte kleben."
+   },
+   "beute": null,
+   "beute_satz": "Eine Stelze bricht, dann die andere. Er steht trotzdem, ein Stück tiefer, im Glas.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "glasgefangener": {
+   "n": "Der Gefangene im Glas",
+   "biom": "glasmeer",
+   "rang": "elite",
+   "hp": 92,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "sprite": "glasgefangener",
+   "konzept": "Ein Mann der Expedition, der durch das Glas gebrochen ist, als es noch weich war, und darin erstarrt. Er steckt aufrecht in einem Block aus grünem Glas und schiebt ihn vor sich her. Nichts bleibt an ihm haften, das Glas ist glatt, und in seiner Nähe ist jede Bewegung zäh.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "rein",
+    "why": "Nichts bleibt an ihm haften, das Glas ist glatt."
+   },
+   "kniffe": [
+    {
+     "art": "teurer",
+     "v": 1,
+     "why": "In seiner Nähe ist jede Bewegung zäh wie Glas, das noch weich ist."
+    }
+   ],
+   "beute": "glasblock",
+   "beute_satz": "Der Block springt in einer langen Linie. Er steigt nicht heraus. Er sieht dich nur an, zum ersten Mal ohne Glas dazwischen.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "untenlaeufer": {
+   "n": "Der Untenläufer",
+   "biom": "glasmeer",
+   "rang": "waechter",
+   "hp": 86,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "gesehen": {
+    "t": "atk",
+    "v": 6,
+    "h": 4
+   },
+   "sprite": "untenlaeufer",
+   "varianten": [
+    "untenlaeufer"
+   ],
+   "konzept": "Der Expeditionsführer von 1903, der als Erster auf das Glas getreten ist und eingebrochen, als es noch weich war. Seitdem geht er darunter, kopfüber, Sohle an Sohle mit jedem, der oben geht, und macht jeden Schritt mit. Hier ist er heraufgestiegen, halb: Oben steht er, unten hängt noch seine Spiegelung. Er spielt deine letzte Karte gegen dich.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "kopie",
+    "why": "Er macht jeden Schritt mit, Sohle an Sohle. Was du eben gespielt hast, spielt er gegen dich."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "L",
+     "V"
+    ]
+   },
+   "beute": "glassohlen",
+   "beute_satz": "Er sinkt zurück ins Glas, kopfüber. Unter deinen Füßen geht er weiter mit, aber er ist jetzt ein Stück hinter dir.",
+   "quelle": "skript",
+   "art": "nachahmer",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "glasblock": {
+   "n": "Splitter vom Glasblock",
+   "a": "kleidung",
+   "st": [
+    "L",
+    "S"
+   ],
+   "spr": "deepscale",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "start_block",
+    "v": 8,
+    "t": "Zu Kampfbeginn 8 Block."
+   },
+   "flavor": "Grünes Glas mit einem Fingerabdruck innen. Es fühlt sich an wie eine Hand, die dagegen drückt.",
+   "cards": [
+    {
+     "n": "Einschließen",
+     "c": 1,
+     "blk": 10
+    }
+   ],
+   "entwurf": true
+  },
+  "glassohlen": {
+   "n": "Glassohlen",
+   "a": "kleidung",
+   "st": [
+    "L",
+    "W"
+   ],
+   "spr": "boots",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "block_haelt_halb",
+    "t": "Am Zugende bleibt die Hälfte deines Blocks."
+   },
+   "flavor": "Stiefel, deren Sohlen Glas geworden sind. Wer darin geht, hört unter sich einen zweiten Schritt.",
+   "cards": [
+    {
+     "n": "Mitgehen",
+     "c": 1,
+     "blk": 5,
+     "kette": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

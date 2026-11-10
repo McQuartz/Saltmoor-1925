@@ -1,0 +1,132 @@
+{
+ "id": "eis_neu4",
+ "ergaenzt": "eis",
+ "gegner_dazu": [
+  "schneeblinder"
+ ],
+ "waechter_dazu": [
+  "polarschiff"
+ ],
+ "foes": {
+  "schneeblinder": {
+   "n": "Der Schneeblinde",
+   "biom": "eis",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "schneeblinder_a",
+   "varianten": [
+    "schneeblinder_a",
+    "schneeblinder_b"
+   ],
+   "konzept": "Ein Matrose der Expedition, dem das Licht auf dem Eis die Augen verbrannt hat. Er trägt die Schneebrille aus Holz mit den schmalen Schlitzen und tastet mit vorgestreckten Armen. Was ihn befällt, merkt er nicht, die Kälte nimmt es ihm ab.",
+   "stimme": "nachgeher",
+   "kniff": {
+    "art": "rein",
+    "why": "Was ihn befällt, merkt er nicht. Die Kälte nimmt es ihm ab."
+   },
+   "beute": null,
+   "beute_satz": "Er tastet noch, als er fällt. Die Schneebrille rutscht ab, und dahinter ist nur Weiß.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "polarschiff": {
+   "n": "Das Expeditionsschiff",
+   "biom": "eis",
+   "rang": "waechter",
+   "hp": 80,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 4
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "gesehen": {
+    "t": "blk",
+    "v": 18
+   },
+   "sprite": "polarschiff",
+   "varianten": [
+    "polarschiff"
+   ],
+   "konzept": "Die Bark der Expedition von 1903, eingefroren, als der Winter zu früh kam. Das Eis hat sie nicht zerdrückt, es hat sie aufgerichtet: Sie steht auf dem Heck, der Bug ragt wie ein Kopf, die Masten sind Arme mit gefrorenen Segeln. Wo sie hinsieht, friert alles fest.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Wo sie hinsieht, friert alles fest. Eine deiner Karten bleibt diesen Zug im Eis."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "fahnentraeger",
+    "alle": 4
+   },
+   "beute": "barkkompass",
+   "beute_satz": "Der Bug sinkt ins Eis, langsam, wie ein Kopf, der sich verneigt. Der Kompass auf der Brücke zeigt nach unten.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "barkkompass": {
+   "n": "Kompass der Bark",
+   "a": "talisman",
+   "st": [
+    "W",
+    "L"
+   ],
+   "spr": "compass",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "erste_karte_billiger",
+    "t": "Die erste Karte jedes Zugs kostet 1 weniger."
+   },
+   "flavor": "Messing, mit Eis unter dem Glas. Die Nadel zeigt nicht nach Norden, sondern dorthin, wo du hinwillst.",
+   "cards": [
+    {
+     "n": "Kurs halten",
+     "c": 1,
+     "blk": 6,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

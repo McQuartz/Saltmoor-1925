@@ -1,0 +1,211 @@
+{
+ "id": "mond_neu4",
+ "ergaenzt": "mond",
+ "gegner_dazu": [
+  "staubmann"
+ ],
+ "elite_dazu": [
+  "mondgraeber"
+ ],
+ "waechter_dazu": [
+  "teleskop"
+ ],
+ "fundpool_dazu": [
+  "mondschaufel"
+ ],
+ "foes": {
+  "staubmann": {
+   "n": "Der Staubmann",
+   "biom": "mond",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "staubmann_a",
+   "varianten": [
+    "staubmann_a",
+    "staubmann_b"
+   ],
+   "konzept": "Aus dem Mondstaub, der sich in den Kratern sammelt, steht manchmal jemand auf. Er hat die Form des Gehilfen, aber nicht ganz, und er rieselt beim Gehen. Was er vorhat, sieht man nicht durch den Staub, den er aufwirbelt.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Was er vorhat, sieht man nicht durch den Staub, den er aufwirbelt."
+   },
+   "beute": null,
+   "beute_satz": "Er rieselt zusammen. Der Staub legt sich, und er hat fast die Form eines Gesichts.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "mondgraeber": {
+   "n": "Der Mondgräber",
+   "biom": "mond",
+   "rang": "elite",
+   "hp": 78,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "mondgraeber",
+   "konzept": "Er hat für die Sternwarte die Fundamente gegraben und ist nach dem kleinen Mond weitergegraben, durch das Eis, bis er hier war. Er gräbt immer noch, mit einer Schaufel, die mit seinen Händen verwachsen ist, und aus den Kratern ruft er die anderen herauf. Ein breiter Rücken voller Asche, der Kopf nach unten.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "brecher",
+    "why": "Die Schaufel bricht durch jede Deckung, wie durch das Eis über dem Mond."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": "laternenanzuender",
+     "alle": 4,
+     "why": "Aus den Kratern ruft er die anderen herauf."
+    }
+   ],
+   "beute": "mondschaufel",
+   "beute_satz": "Er gräbt noch, als er fällt, den Kopf nach unten. Dann ist das Loch tief genug für ihn.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "teleskop": {
+   "n": "Das Teleskop",
+   "biom": "mond",
+   "rang": "waechter",
+   "hp": 78,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "gesehen": {
+    "t": "blk",
+    "v": 18
+   },
+   "sprite": "teleskop",
+   "varianten": [
+    "teleskop"
+   ],
+   "konzept": "Der Refraktor der Sternwarte, mit dem der Gehilfe 1890 den kleinen Mond zum ersten Mal sah. Es hat ihn nicht mehr aus den Augen gelassen und ist ihm gefolgt, auf seinem Stativ wie auf drei Beinen. Im Okular sitzt das Auge des Gehilfen. Wer vor ihm steht, wird gemessen, und jede Bewegung kostet mehr.",
+   "stimme": "augen",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Wer vor ihm steht, wird gemessen. Jede Bewegung kostet mehr."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "astronom",
+    "alle": 4
+   },
+   "beute": "okular",
+   "beute_satz": "Das Rohr senkt sich. Das Auge im Okular blinzelt einmal und schaut dann wieder nach oben.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "mondschaufel": {
+   "n": "Schaufel des Mondgräbers",
+   "a": "waffe",
+   "st": [
+    "E",
+    "L"
+   ],
+   "spr": "pick",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "start_staerke",
+    "v": 1,
+    "t": "Zu Kampfbeginn 1 Stärke."
+   },
+   "flavor": "Das Blatt ist voller Asche, der Stiel hat zwei Griffmulden, die zu keiner Hand passen.",
+   "cards": [
+    {
+     "n": "Durchgraben",
+     "c": 1,
+     "atk": 7,
+     "vuln": 1
+    }
+   ],
+   "entwurf": true
+  },
+  "okular": {
+   "n": "Okular des Gehilfen",
+   "a": "talisman",
+   "st": [
+    "L",
+    "G"
+   ],
+   "spr": "watch",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "kette_start",
+    "v": 1,
+    "t": "Jeder Zug beginnt mit Kette 1."
+   },
+   "flavor": "Ein Messingring mit einer Linse, die immer etwas zeigt, auch wenn man sie vor einen Stein hält.",
+   "cards": [
+    {
+     "n": "Anvisieren",
+     "c": 0,
+     "vuln": 2
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

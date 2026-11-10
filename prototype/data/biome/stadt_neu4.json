@@ -1,0 +1,133 @@
+{
+ "id": "stadt_neu4",
+ "ergaenzt": "stadt",
+ "gegner_dazu": [
+  "eckenzaehler"
+ ],
+ "waechter_dazu": [
+  "torbogen"
+ ],
+ "foes": {
+  "eckenzaehler": {
+   "n": "Der Eckenzähler",
+   "biom": "stadt",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "eckenzaehler_a",
+   "varianten": [
+    "eckenzaehler_a",
+    "eckenzaehler_b"
+   ],
+   "konzept": "Der Mathematiker der Expedition von 1903 sollte die Ecken der Stadt zählen, und er kam jeden Tag auf eine mehr. Inzwischen hat er sie selbst: Arme und Beine knicken an Stellen, an denen kein Gelenk ist, und jedes neue Gelenk ist eine Ecke, die er gefunden hat. Er findet auch die Ecke in deiner Deckung, die du nicht siehst.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "brecher",
+    "why": "Er findet die Ecke in deiner Deckung, die du nicht siehst."
+   },
+   "beute": null,
+   "beute_satz": "Er klappt zusammen, Gelenk für Gelenk. Im Notizbuch steht eine Zahl, und sie ist um eins zu hoch.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "torbogen": {
+   "n": "Der Torbogen",
+   "biom": "stadt",
+   "rang": "waechter",
+   "hp": 88,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "gesehen": {
+    "t": "atk",
+    "v": 6,
+    "h": 4
+   },
+   "sprite": "torbogen",
+   "varianten": [
+    "torbogen"
+   ],
+   "konzept": "Die Expedition von 1903 hat das Tor vermessen und kam nicht auf dieselbe Zahl zweimal. Es ist ein Bogen aus Stein mit zu vielen Ecken, und er geht. Wer hindurchschaut, sieht den nächsten Augenblick: dort steht schon, was du gleich tun wirst, und der Bogen tut es zuerst.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "voraus",
+    "why": "Wer hindurchschaut, sieht den nächsten Augenblick. Der Bogen tut zuerst, was du gleich tust."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "saeulensteher",
+    "alle": 4
+   },
+   "beute": "schlussstein",
+   "beute_satz": "Der Schlussstein fällt heraus, und der Bogen steht trotzdem. Er hat keine Ecken mehr, nur noch eine.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "schlussstein": {
+   "n": "Schlussstein",
+   "a": "talisman",
+   "st": [
+    "E",
+    "G"
+   ],
+   "spr": "salt",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "block_haelt_halb",
+    "t": "Am Zugende bleibt die Hälfte deines Blocks."
+   },
+   "flavor": "Ein Stein, der in der Hand mal schwerer, mal leichter ist. Er zählt nie dieselbe Zahl Ecken zweimal.",
+   "cards": [
+    {
+     "n": "Vorausgehen",
+     "c": 1,
+     "blk": 5,
+     "kette": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

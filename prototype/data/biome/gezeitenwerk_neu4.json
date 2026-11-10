@@ -1,0 +1,216 @@
+{
+ "id": "gezeitenwerk_neu4",
+ "ergaenzt": "gezeitenwerk",
+ "gegner_dazu": [
+  "schmierer"
+ ],
+ "elite_dazu": [
+  "zahnradmann"
+ ],
+ "waechter_dazu": [
+  "grosspendel"
+ ],
+ "fundpool_dazu": [
+  "schraubenschluessel"
+ ],
+ "foes": {
+  "schmierer": {
+   "n": "Der Schmierer",
+   "biom": "gezeitenwerk",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "schmierer_a",
+   "varianten": [
+    "schmierer_a",
+    "schmierer_b"
+   ],
+   "konzept": "Er geht mit der Ölkanne durch das Werk und schmiert jedes Lager, damit nichts stockt. Wo er geht, gleiten die anderen: Er ölt ihre Gelenke und stellt sich mit dem breiten Rücken vor sie. Ein kleiner, dicker Mann, die Kanne mit langem Schnabel, die Hände schwarz bis zum Ellbogen.",
+   "stimme": "schmuggler",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 3,
+    "why": "Er stellt sich mit dem breiten Rücken vor die anderen."
+   },
+   "beute": "bottle",
+   "beute_satz": "Die Ölkanne gluckert aus. Für einen Augenblick läuft das ganze Werk leiser.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "zahnradmann": {
+   "n": "Der Zahnradmann",
+   "biom": "gezeitenwerk",
+   "rang": "elite",
+   "hp": 90,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "zahnradmann",
+   "konzept": "Der Mechaniker, der 1909 in das Werk gestiegen ist, um ein Zahnrad zu tauschen, und eins geworden ist. Er läuft im Takt des Werks, die Brust ein offenes Getriebe, auf dem Rücken ein großes Rad, das sich dreht. Bei jedem Einrasten schützt er die anderen.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "takt",
+    "v": 5,
+    "klang": "herz",
+    "why": "Er läuft im Takt des Werks. Bei jedem Einrasten stehen alle hinter seinem Rad."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Das Rad auf seinem Rücken dreht sich vor die anderen."
+    }
+   ],
+   "beute": "schraubenschluessel",
+   "beute_satz": "Das Getriebe in seiner Brust rastet ein letztes Mal ein. Dann steht er still, wie ein Teil, das passt.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "grosspendel": {
+   "n": "Das Großpendel",
+   "biom": "gezeitenwerk",
+   "rang": "waechter",
+   "hp": 90,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "gesehen": {
+    "t": "atk",
+    "v": 24
+   },
+   "sprite": "grosspendel",
+   "varianten": [
+    "grosspendel"
+   ],
+   "konzept": "Das Pendel, das das ganze Werk im Gang hält, hat sich aus der Aufhängung gelöst und hängt jetzt an sich selbst: ein Gestänge aus Bronze auf drei Beinen, unten die schwere Linse, in der ein Gesicht eingegossen ist. Es schwingt im Takt, und zwischen zwei Schlägen ist es offen.",
+   "stimme": "glockenmutter",
+   "kniff": {
+    "art": "takt",
+    "v": 7,
+    "klang": "glocke",
+    "why": "Es schwingt im Takt des Werks. Bei jedem Schlag stehen alle hinter der Linse, dazwischen ist es offen."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "S",
+     "W",
+     "E"
+    ]
+   },
+   "beute": "pendellinse",
+   "beute_satz": "Die Linse schwingt aus und bleibt stehen. Das Gesicht darin schaut auf die Uhrzeit, die jetzt nicht mehr stimmt.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "schraubenschluessel": {
+   "n": "Schraubenschlüssel von 1909",
+   "a": "waffe",
+   "st": [
+    "E",
+    "S"
+   ],
+   "spr": "poker",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "mehrfach_plus1",
+    "t": "Mehrfachangriffe treffen einmal öfter."
+   },
+   "flavor": "Ein Gabelschlüssel, auf jede Schraube im Werk eingestellt. Er dreht sich in der Hand, als suche er etwas.",
+   "cards": [
+    {
+     "n": "Einrasten",
+     "c": 1,
+     "atk": 5,
+     "blk": 4
+    }
+   ],
+   "entwurf": true
+  },
+  "pendellinse": {
+   "n": "Pendellinse",
+   "a": "talisman",
+   "st": [
+    "E",
+    "W"
+   ],
+   "spr": "watch",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "reaktion_schaden",
+    "v": 2,
+    "t": "Jede Reaktion macht 2 Schaden."
+   },
+   "flavor": "Eine Bronzescheibe, so groß wie ein Teller. Sie schwingt in der Tasche, auch wenn du stillstehst.",
+   "cards": [
+    {
+     "n": "Durchschwingen",
+     "c": 2,
+     "atk": 12
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

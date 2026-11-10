@@ -754,6 +754,270 @@
       "entwurf": true
      }
     ]
+   },
+   "hafenkran": {
+    "wahr": "Hafenkran: Salz frisst das Eisen. Drei Züge zieht er den Haken hoch, und dazwischen steigen Taucher aus dem Becken.",
+    "falsch": "Hafenkran: Feuer, der Kessel platzt. Der Haken kommt jeden Zug, also nie abwarten.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Hafenkran: Salz ist seine Schwäche. Er sagt den Haken drei Züge vorher an, die Zeit gehört dir, und alle drei Züge kommt ein Taucher.",
+      "falsch": "Hafenkran: Wasser, er hat Angst vor dem Becken. Der Haken fällt ohne Ansage, und Taucher ruft er nie.",
+      "entwurf": true
+     }
+    ]
+   },
+   "torfmutter": {
+    "wahr": "Torfmutter: Feuer in die Soden. Gift schluckt der Torf, da hilft nur Schlagen. Torfstecherinnen kommen nach.",
+    "falsch": "Torfmutter: Fäulnis, der Torf verrottet. Gift wirkt an ihr doppelt.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Torfmutter: Feuer ist ihre Schwäche. Sie ist rein, Gift wirkt nur halb, und alle drei Züge sticht eine Torfstecherin nach.",
+      "falsch": "Torfmutter: Wasser weicht sie auf. Gift frisst sie schnell, und sie kommt immer allein.",
+      "entwurf": true
+     }
+    ]
+   },
+   "fliessband": {
+    "wahr": "Fließband: Wasser bringt die Rollen zum Stocken, später Feuer. Bei jedem Takt haben alle Block, dazwischen ist es offen.",
+    "falsch": "Fließband: Eisen in die Rollen. Der Takt bedeutet nichts, schlag zu, wann du willst.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Fließband: Erst Wasser, dann Feuer, die Schwäche wechselt jeden Zug. Jeden zweiten Zug schlägt der Takt, und dann hat alles Block.",
+      "falsch": "Fließband: Licht blendet die Stempelaugen. Es läuft gleichmäßig, ohne Takt und ohne Block.",
+      "entwurf": true
+     }
+    ]
+   },
+   "kurdirektor": {
+    "wahr": "Kurdirektor: Licht, er mag die Saison nicht enden sehen. Neben ihm wird jede Karte teurer, und Kurgäste kommen dazu.",
+    "falsch": "Kurdirektor: Wasser aus dem eigenen Brunnen. Bei ihm ist alles billiger, er will dich halten.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Kurdirektor: Licht ist seine Schwäche. Er macht eine Karte teurer, und alle vier Züge kommt ein Kurgast an den Tisch.",
+      "falsch": "Kurdirektor: Glaube, er ist ein frommer Mann. Er verteilt Rabatt, und Gäste lädt er keine.",
+      "entwurf": true
+     }
+    ]
+   },
+   "schlafwagendame": {
+    "wahr": "Schlafwagendame: Licht weckt sie. Neben ihr schläft dir jeden Zug eine Karte ein, und ein Kind aus dem Schlafwagen kommt mit.",
+    "falsch": "Schlafwagendame: Feuer im Abteil. Sie lässt deine Karten in Ruhe, weck sie nur nicht.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Schlafwagendame: Licht ist ihre Schwäche. Jeden Zug friert eine Karte ein, und alle drei Züge kommt das Schlafwagenkind.",
+      "falsch": "Schlafwagendame: Blut, sie ist eine Dame. Deine Karten bleiben frei, und sie reist allein.",
+      "entwurf": true
+     }
+    ]
+   },
+   "schiffbruechige": {
+    "wahr": "Schiffbrüchige: Feuer ins Ölzeug, später Salz. Jeden Zug greifen sie fester, also schnell.",
+    "falsch": "Schiffbrüchige: Wasser, sie sind es gewohnt und werden müde. Sie greifen jeden Zug schwächer.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Schiffbrüchige: Erst Feuer, dann Salz, die Schwäche wechselt. Sie wachsen jeden Zug um 2, lange Kämpfe verlierst du.",
+      "falsch": "Schiffbrüchige: Licht vom Turm vertreibt sie. Sie werden mit der Zeit schwächer, warten lohnt sich.",
+      "entwurf": true
+     }
+    ]
+   },
+   "taufengel": {
+    "wahr": "Taufengel: Feuer ins Holz. Unter den Flügeln siehst du nur halb, was kommt. Messdiener schwenken Rauch.",
+    "falsch": "Taufengel: Wasser, er ist ja schon nass. Er zeigt dir alles, was er vorhat.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Taufengel: Feuer ist seine Schwäche. Seine Absicht ist verborgen, und alle drei Züge kommt ein Messdiener.",
+      "falsch": "Taufengel: Glaube, er ist ein Engel. Er sagt jeden Schlag ehrlich an und kommt allein.",
+      "entwurf": true
+     }
+    ]
+   },
+   "buecherwand": {
+    "wahr": "Bücherwand: Feuer, sie ist aus Papier. Was du eben gespielt hast, liest sie dir vor, gegen dich. Leser kommen dazu.",
+    "falsch": "Bücherwand: Wasser lässt das Papier quellen. Sie liest nur, was du nicht gespielt hast.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Bücherwand: Feuer ist ihre Schwäche. Sie spielt deine letzte Karte nach, und alle drei Züge kommt ein Leser aus dem Regal.",
+      "falsch": "Bücherwand: Licht, sie liest im Dunkeln. Sie spielt nie nach, was du tust, und kommt ohne Leser.",
+      "entwurf": true
+     }
+    ]
+   },
+   "kerzenkoenigin": {
+    "wahr": "Kerzenkönigin: Wasser löscht die Dochte. Wer sie schlägt, verbrennt sich, und Wachshände wachsen nach.",
+    "falsch": "Kerzenkönigin: Feuer, sie schmilzt. Schlagen kostet nichts.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Kerzenkönigin: Wasser ist ihre Schwäche. Jeder Treffer kostet dich 3 Dornen, und alle drei Züge wächst eine Wachshand.",
+      "falsch": "Kerzenkönigin: Feuer schmilzt das Wachs. Sie hat keine Dornen und ruft niemanden.",
+      "entwurf": true
+     }
+    ]
+   },
+   "gussform": {
+    "wahr": "Gussform: Wasser kühlt die Bronze. Drei Züge zählt er bis zum Guss, dann kommt es auf einmal. Gießer helfen ihm.",
+    "falsch": "Gussform: Feuer, dann springt der Lehm. Er gießt ohne Vorwarnung.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Gussform: Wasser ist ihre Schwäche. Er sagt den Guss drei Züge vorher an, und alle drei Züge kommt ein Gießer.",
+      "falsch": "Gussform: Eisen, gegen Eisen ist Lehm weich. Der Guss kommt ohne Zählen, Gießer kommen keine.",
+      "entwurf": true
+     }
+    ]
+   },
+   "wiege": {
+    "wahr": "Wiege: Salz, später Licht. Beim Schaukeln hat alles Block, dazwischen schreit es offen.",
+    "falsch": "Wiege: Feuer, die Wiege ist aus Holz. Sie schaukelt, aber Block gibt das nicht.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Wiege: Erst Salz, dann Licht, die Schwäche wechselt jeden Zug. Jeden zweiten Zug schaukelt sie, und dann hat alles Block.",
+      "falsch": "Wiege: Glaube beruhigt sie. Sie schaukelt ohne Takt, und Block hat sie nie.",
+      "entwurf": true
+     }
+    ]
+   },
+   "foerderkorb": {
+    "wahr": "Förderkorb: Feuer ins Grubenholz. Wenn das Gitter aufschlägt, geht es durch deine Deckung. Salzläufer steigen aus.",
+    "falsch": "Förderkorb: Salz, er kennt nichts anderes. Dein Block hält gegen das Gitter.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Förderkorb: Feuer ist seine Schwäche. Er bricht deinen Block, und alle drei Züge steigt ein Salzläufer aus.",
+      "falsch": "Förderkorb: Wasser flutet den Schacht. Dein Block hält, und aussteigen tut keiner.",
+      "entwurf": true
+     }
+    ]
+   },
+   "torbogen": {
+    "wahr": "Torbogen: Eisen bricht den Stein. Er tut zuerst, was du gleich tust, nur Seltenes sieht er nicht. Säulensteher kommen langsam.",
+    "falsch": "Torbogen: Glaube, er ist ein Tor. Er wiederholt nur, was du schon gespielt hast.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Torbogen: Eisen ist seine Schwäche. Er spielt deine nächste Karte voraus, und alle vier Züge kommt ein Säulensteher.",
+      "falsch": "Torbogen: Licht, durch ihn scheint die Sonne. Er sieht nichts voraus und steht allein.",
+      "entwurf": true
+     }
+    ]
+   },
+   "woelfin": {
+    "wahr": "Wölfin: Feuer in die Wurzeln. Ihr Biss geht durch jede Deckung. Selten kommt ein Harzfang nach.",
+    "falsch": "Wölfin: Eisen, sie ist ja Bronze. Block hält ihren Biss.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Wölfin: Feuer ist ihre Schwäche. Sie bricht deinen Block, und alle fünf Züge kommt ein Harzfang.",
+      "falsch": "Wölfin: Licht, sie ist ein Tier der Nacht. Dein Block hält, und sie jagt allein.",
+      "entwurf": true
+     }
+    ]
+   },
+   "grosspendel": {
+    "wahr": "Großpendel: Salz, dann Wasser, dann Eisen. Bei jedem Schlag hat alles Block, dazwischen ist es offen.",
+    "falsch": "Großpendel: Feuer, das Werk läuft heiß. Der Schlag bedeutet nichts.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Großpendel: Die Schwäche wechselt jeden Zug zwischen Salz, Wasser und Eisen. Jeden zweiten Zug schlägt es, und dann hat alles 7 Block.",
+      "falsch": "Großpendel: Glaube hält es an. Es schwingt ohne Takt, und Block gibt es keinen.",
+      "entwurf": true
+     }
+    ]
+   },
+   "zenturio": {
+    "wahr": "Zenturio: Wasser weicht die Ziegel auf, später Blut. Er ruft seine Wasserträger aus der Grube.",
+    "falsch": "Zenturio: Feuer brennt ihn hart. Er kämpft allein, wie es sich gehört.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Zenturio: Erst Wasser, dann Blut, die Schwäche wechselt. Alle drei Züge ruft er einen Amphorenträger.",
+      "falsch": "Zenturio: Eisen, er ist Soldat. Er ruft niemanden, er braucht keine Hilfe.",
+      "entwurf": true
+     }
+    ]
+   },
+   "tunnelschild": {
+    "wahr": "Vortriebsschild: Licht in den Tunnel. Er bricht durch jede Deckung. Streckengänger kommen hinterher.",
+    "falsch": "Vortriebsschild: Eisen gegen Stahl. Dein Block hält ihn auf.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Vortriebsschild: Licht ist seine Schwäche. Er bricht deinen Block, und alle vier Züge kommt ein Streckengänger.",
+      "falsch": "Vortriebsschild: Wasser flutet den Tunnel. Block hält, und hinter ihm kommt keiner.",
+      "entwurf": true
+     }
+    ]
+   },
+   "polarschiff": {
+    "wahr": "Expeditionsschiff: Feuer taut das Eis. Wo sie hinsieht, friert eine Karte fest. Fahnenträger steigen ab.",
+    "falsch": "Expeditionsschiff: Salz taut das Eis. Deine Karten bleiben frei.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Expeditionsschiff: Feuer ist ihre Schwäche. Jeden Zug friert eine Karte ein, und alle vier Züge steigt ein Fahnenträger ab.",
+      "falsch": "Expeditionsschiff: Wasser, sie will ins Meer zurück. Sie friert nichts ein und fährt allein.",
+      "entwurf": true
+     }
+    ]
+   },
+   "harpunier": {
+    "wahr": "Harpunier: Blut, er riecht es. Drei Züge zeigt er, wohin er wirft, die Zeit gehört dir. Seepockenmänner kommen.",
+    "falsch": "Harpunier: Eisen, die Harpune verbiegt. Er wirft ohne Ansage.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Harpunier: Blut ist seine Schwäche. Er sagt den Wurf drei Züge vorher an, und alle drei Züge kommt ein Seepockenmann.",
+      "falsch": "Harpunier: Wasser, er ist Seemann. Er wirft sofort und kommt allein.",
+      "entwurf": true
+     }
+    ]
+   },
+   "untenlaeufer": {
+    "wahr": "Untenläufer: Licht, dann Fäulnis. Er spielt deine letzte Karte gegen dich.",
+    "falsch": "Untenläufer: Eisen bricht das Glas. Er weiß nicht, was du eben getan hast.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Untenläufer: Erst Licht, dann Fäulnis, die Schwäche wechselt. Er spielt die Karte nach, die du zuletzt gespielt hast.",
+      "falsch": "Untenläufer: Wasser, er ist ja unten. Er kopiert nichts, nur deine Schritte.",
+      "entwurf": true
+     }
+    ]
+   },
+   "teleskop": {
+    "wahr": "Teleskop: Blut im Okular. Wer vor ihm steht, zahlt mehr für jede Karte. Astronomen kommen dazu.",
+    "falsch": "Teleskop: Licht blendet es. Bei ihm ist alles billiger.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Teleskop: Blut ist seine Schwäche. Es macht eine Karte teurer, und alle vier Züge kommt ein Astronom.",
+      "falsch": "Teleskop: Licht, dann sieht es nichts mehr. Es verteuert nichts und steht allein.",
+      "entwurf": true
+     }
+    ]
+   },
+   "empfaenger": {
+    "wahr": "Empfänger: Er dreht am Knopf, und jeden Zug trifft ihn anderes: Feuer, Wasser, Licht, Eisen. Funker kommen dazu.",
+    "falsch": "Empfänger: Immer Feuer, sonst nichts. Seine Frequenz bleibt.",
+    "entwurf": true,
+    "mehr": [
+     {
+      "wahr": "Empfänger: Die Schwäche wechselt jeden Zug zwischen Feuer, Wasser, Licht und Eisen. Alle drei Züge kommt ein Funker.",
+      "falsch": "Empfänger: Salz in die Röhren. Er dreht nie am Knopf und sendet allein.",
+      "entwurf": true
+     }
+    ]
    }
   },
   "biome": {
