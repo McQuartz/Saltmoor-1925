@@ -105,8 +105,14 @@
  },
  "belohnung": {
   "_doc": "Belohnung nach Kämpfen (04-deckbau.md Abschnitt 6)",
-  "item_chance": 0.25,
-  "ueberspringen_gold": 10
+  "_doc_item_chance": "Spieltest 2026-11-10: Items waren zu inflationär. Normale Kämpfe geben kein Item mehr (item_chance 0, vorher 0.25); nur nach Hinsehen (Blick) bleibt das Angebot sicher. Schwere Kämpfe: immer 1 aus 3 (zwei aus dem Fundpool, ein seltenes), schwer_item_chance 1. Wächter: Reliquie 1 aus 3.",
+  "item_chance": 0,
+  "schwer_item_chance": 1,
+  "ueberspringen_gold": 10,
+  "_doc_vertiefen": "Spieltest 2026-11-10: Ein Handgriff, den du schon hast, wird beim erneuten Nehmen vertieft (keine neue Karte). Höchstens max_stufe. chance_je_akt: Wahrscheinlichkeit, dass ein Platz im Angebot ein Vertiefen ist (Index = Akt).",
+  "vertiefen": {"max_stufe": 2, "chance_je_akt": [0.25, 0.45, 0.6, 0.7, 0.8]},
+  "_doc_riskant": "Spieltest 2026-11-10: Ein Platz im Angebot kann ein seltener Handgriff mit Preis sein. chance_je_akt wie oben; preise: Auswahl, die der Seed zieht.",
+  "riskant": {"chance_je_akt": [0.15, 0.4, 0.5, 0.55, 0.6], "preise": [{"art": "maxleben", "v": 5}, {"art": "gold", "v": 30}]}
  },
  "elite": {
   "_doc": "Zugabe: Chance, dass ein schwerer Kampf eine Elite des Bioms bringt (biom.elite / elite_dazu); sie ersetzt so viele normale Gegner",

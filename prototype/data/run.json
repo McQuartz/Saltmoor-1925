@@ -108,6 +108,9 @@
    "pool": [
     "kampf",
     "kampf",
+    "kampf",
+    "kampf",
+    "ereignis",
     "ereignis"
    ],
    "wege": [
@@ -121,22 +124,30 @@
   "e2": {
    "pool": [
     "kampf",
+    "kampf",
+    "kampf",
+    "kampf",
     "ereignis",
-    "wandbild",
+    "ereignis",
     "kraemer",
-    "fundstelle"
+    "fundstelle",
+    "wandbild"
    ],
    "wege": [
     2,
     3
    ],
-   "verschiedene": 2
+   "mindestens": {
+    "kampf": 1
+   }
   },
   "e3": {
    "pool": [
     "rast",
     "werkstatt",
-    "kraemer"
+    "kraemer",
+    "kampf",
+    "kampf"
    ],
    "wege": [
     2,
@@ -150,6 +161,8 @@
   "e4": {
    "pool": [
     "kampf",
+    "kampf",
+    "kampf_schwer",
     "kampf_schwer",
     "ereignis"
    ],
@@ -165,22 +178,30 @@
   "e5": {
    "pool": [
     "kampf",
+    "kampf",
+    "kampf",
+    "kampf",
     "ereignis",
-    "wandbild",
+    "ereignis",
+    "kraemer",
     "fundstelle",
-    "kraemer"
+    "wandbild"
    ],
    "wege": [
     2,
     3
    ],
-   "verschiedene": 2
+   "mindestens": {
+    "kampf": 1
+   }
   },
   "e6": {
    "pool": [
     "rast",
+    "werkstatt",
     "kraemer",
-    "werkstatt"
+    "kampf",
+    "kampf"
    ],
    "wege": [
     2,
@@ -211,7 +232,8 @@
     "ereignis"
    ],
    "_doc": "Akt V vor dem Finale: Rast oder ein Ereignis des Akt-V-Bioms (sonst kämen Pforte, Ufer und Waage nie zu ihren Ereignissen)"
-  }
+  },
+  "_doc_spieltest": "Spieltest 2026-11-10: mehr Kämpfe auf der Karte (vorher etwa 27 % der Knoten). e1/e2/e5 mit mehr Kampf, e4 öfter schwer, e3/e6 behalten Rast/Werkstatt sicher, dazu Kampf als Alternative."
  },
  "kaempfe": {
   "_doc": "Zahl der Gegner je Akt (Index 0 = Akt I) und Ebene. kampf_schwer: einer mehr und ein seltenes Item in der Auswahl.",
@@ -371,6 +393,29 @@
   "max": 5
  },
  "_doc_akte": "Jeder Akt bietet am Anfang zwei Biome aus seiner Liste zur Wahl (Akt I: die Vorliebe der Figur plus eins per Seed, sonst zwei per Seed). Biome, die es (noch) nicht gibt, werden übersprungen. Gibt es nur eins, entfällt die Wahl.",
- "karten": {"_doc": "Auftrag 3 M9: lose Karten ohne Item (Die Tiefe erkennt dich).", "zeichen": {"n": "Das Zeichen", "c": 0, "t": "Für den Rest des Runs: Die Tiefe lässt dich gehen. Die Menschen nicht.", "img": "assets/karten/zeichen.png", "entwurf": true}},
- "begegnungen": {"_doc": "Auftrag 3 M9: Zeilen der Begegnungen (Seitenwechsel).", "begegnung": {"t": "Sie stehen da und sehen dich an. Keiner hebt die Hand.", "entwurf": true}, "weiter": {"t": "WEITERGEHEN", "entwurf": true}, "kraemer_zu": {"t": "Der Laden ist zu, als du kommst. Hinter dem Glas dreht jemand das Schild um.", "entwurf": true}}
+ "karten": {
+  "_doc": "Auftrag 3 M9: lose Karten ohne Item (Die Tiefe erkennt dich).",
+  "zeichen": {
+   "n": "Das Zeichen",
+   "c": 0,
+   "t": "Für den Rest des Runs: Die Tiefe lässt dich gehen. Die Menschen nicht.",
+   "img": "assets/karten/zeichen.png",
+   "entwurf": true
+  }
+ },
+ "begegnungen": {
+  "_doc": "Auftrag 3 M9: Zeilen der Begegnungen (Seitenwechsel).",
+  "begegnung": {
+   "t": "Sie stehen da und sehen dich an. Keiner hebt die Hand.",
+   "entwurf": true
+  },
+  "weiter": {
+   "t": "WEITERGEHEN",
+   "entwurf": true
+  },
+  "kraemer_zu": {
+   "t": "Der Laden ist zu, als du kommst. Hinter dem Glas dreht jemand das Schild um.",
+   "entwurf": true
+  }
+ }
 }

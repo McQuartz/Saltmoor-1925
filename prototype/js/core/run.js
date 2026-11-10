@@ -118,11 +118,11 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  // Handgriff 1 aus 3 (zwei passend zum Deck, einer frei), Item je nach Knoten, Wächter: Reliquie 1 aus 3
  const RW=BAL.belohnung||{};const glueck=passive('glueck').length?1:0;
  const blickB=typeof Blick!=='undefined'&&Blick.aktiv(); // M7: nach Hinsehen 1 aus 4 und das Item-Angebot sicher
- const hg=handgriffAngebot(r,art==='waechter'?'selten':art==='schwer'?'mix':'gewoehnlich',blickB?4:3);
+ const hg=art==='waechter'?handgriffAngebot(r,'selten',blickB?4:3):handgriffAngebot(r,art==='schwer'?'mix':'gewoehnlich',blickB?2:1); // Spieltest 2026-11-10: ein Handgriff je Kampf
  let items=[];
  if(art==='waechter'||(S.spurenKampf&&S.spurenKampf.beute==='reliquie')){items=reliquienAngebot(r,3+glueck);} // M9: späte Spuren bringen eine Reliquie
- else if(art==='schwer'){items=r.sample(dropPool(),2+glueck);const rp=rarePool();if(rp.length)items.push(r.pick(rp));}
- else if(r.chance(RW.item_chance??.25)||blickB){items=r.sample(dropPool(),2+glueck);}
+ else if(art==='schwer'){if(r.chance(RW.schwer_item_chance??1)||blickB){items=r.sample(dropPool(),2+glueck);const rp=rarePool().filter(k=>!items.includes(k));items.push(...(rp.length?[r.pick(rp)]:r.sample(dropPool().filter(k=>!items.includes(k)),1)));}}
+ else if(r.chance(RW.item_chance??.25)||blickB){items=r.sample(dropPool(),2+glueck);} // Spieltest 2026-11-10: Fund seltener, zusätzlich zum Handgriff
  // Gegner-Beute: kleine Chance auf das eigene Stück eines Gegners (Kniff „nachlass: item“ sicher)
  if(S.halbeBeute)items=[];
  const beute=S.halbeBeute?[]:S.enemies.map(e=>FOES[e.id].beute).filter(id=>id&&ITEMS[id]);if(S.sicheresBeute&&ITEMS[S.sicheresBeute]){items[0]=S.sicheresBeute;S.sicheresBeute=null;}else if(beute.length&&r.chance(.15)){items[0]=r.pick(beute);}
@@ -266,11 +266,25 @@ function buildArchetyp(){const z={glutnest:0,brackwasser:0,bollwerk:0,aderlass:0
 // ---------- Handgriffe und Kerben (04-deckbau.md Abschnitt 2, 6, 8) ----------
 function handgriffPool(rar){return Object.keys(HANDGRIFFE).filter(id=>{const H=HANDGRIFFE[id];return !H.unspielbar&&!H.start&&(!rar||rar==='mix'||(H.rar||'gewoehnlich')===rar);});}
 // Angebot: zwei Handgriffe passend zu Stoffen/Build im Deck (gewichtet), einer frei
+function hgVertiefbar(){const RW=(BAL.belohnung||{}).vertiefen||{};const max=RW.max_stufe||2;const o=[];
+ besitz().forEach(({it})=>hgVon(it).forEach(id=>{if(HANDGRIFFE[id]&&!HANDGRIFFE[id].unspielbar&&hgStufe(it,id)<max&&!(def(it).fest_hg||[]).includes(id)&&!o.includes(id))o.push(id);}));return o;}
+function hauptStoffe(){const z={};allActive().forEach(it=>{const n=kartenVon(it).length;def(it).st.forEach(k=>z[k]=(z[k]||0)+n);});return Object.entries(z).sort((a,b)=>b[1]-a[1]).slice(0,2).map(e=>e[0]);}
+// Spieltest 2026-11-10: nach normalen und schweren Kämpfen genau EIN Handgriff (mit Blick zwei zur Wahl). Welcher, in dieser Reihenfolge:
+// mit belohnung.vertiefen-Chance (steigt je Akt) Vertiefen eines vorhandenen Handgriffs, sonst mit belohnung.riskant-Chance ein seltener mit Preis,
+// sonst einer passend zu Build/Hauptstoffen. Wächter (rar 'selten'): weiter n seltene zur Wahl. S.rewardHgMeta[id] trägt Vertiefen/Preis.
 function handgriffAngebot(r,rar,n){let pool=handgriffPool(rar);if(pool.length<n)pool=handgriffPool(null);if(!pool.length)return[];
- const b=buildArchetyp().id;const st=new Set(allActive().flatMap(it=>def(it).st));
+ const meta={};S.rewardHgMeta=meta;const b=buildArchetyp().id;const st=new Set(allActive().flatMap(it=>def(it).st));const haupt=hauptStoffe();
  const passt=pool.filter(id=>{const H=HANDGRIFFE[id];return H.build===b||(H.stoffe||[]).some(k=>st.has(k));});
- const o=[];const a=r.sample(passt.length>=2?passt:pool,Math.min(2,n));o.push(...a);const rest=pool.filter(id=>!o.includes(id));o.push(...r.sample(rest,n-o.length));
- if(rar==='mix'){const sel=handgriffPool('selten').filter(id=>!o.includes(id));if(sel.length)o[o.length-1]=r.pick(sel);}return o.slice(0,n);}
+ const gezielt=passt.filter(id=>(HANDGRIFFE[id].stoffe||[]).some(k=>haupt.includes(k)));
+ if(rar==='selten'){const o=[];o.push(...r.sample(passt.length?passt:pool,Math.min(1,n)));o.push(...r.sample(pool.filter(id=>!o.includes(id)),n-o.length));return o.slice(0,n);}
+ const RW=BAL.belohnung||{};const akt=Math.min(4,S.akt||0);const o=[];
+ const vt=hgVertiefbar();const cV=((RW.vertiefen||{}).chance_je_akt||[])[akt]||0;
+ const RK=RW.riskant||{};const cR=(RK.chance_je_akt||[])[akt]||0;const sel=handgriffPool('selten');
+ if(vt.length&&r.chance(cV)){const id=r.pick(vt);o.push(id);meta[id]={art:'vertiefen'};}
+ else if(sel.length&&(RK.preise||[]).length&&r.chance(cR)){let pr=r.pick(RK.preise);if(pr.art==='gold'&&S.gold<pr.v)pr=RK.preise.find(x=>x.art!=='gold');if(pr){const id=r.pick(sel);o.push(id);meta[id]={art:'riskant',preis:pr};}}
+ const frei=l=>l.filter(id=>!o.includes(id));
+ while(o.length<n){const l=frei(gezielt).length?frei(gezielt):frei(passt).length?frei(passt):frei(pool);if(!l.length)break;o.push(r.pick(l));}
+ return o.slice(0,n);}
 // Wächter-Reliquien: eine passt zum erkannten Build (über ihre Eigenschaft), die übrigen frei. Hält bei 39 Reliquien die Builds erreichbar (Zugabe, Balance).
 // Zweite Wächter (Zugabe): biom.waechter_alt (oder waechter_dazu im Ergänzungspaket) – der Seed entscheidet je Run und Akt, wer kommt.
 function waechterAlle(b){return [b.waechter,...(b.waechter_alt||[])].filter(id=>id&&FOES[id]);}
@@ -282,12 +296,20 @@ function reliquienPool(){const p=Object.keys(ITEMS).filter(k=>rarOf(ITEMS[k])===
 function besitz(){const o=[];AREAS.forEach(a=>S.areas[a].forEach((it,i)=>{if(it)o.push({it,loc:a+':'+i,an:i<S.slots[a]});}));S.bag.forEach((it,i)=>{if(it)o.push({it,loc:'bag:'+i,an:false});});return o;}
 function itemByUid(uid){const b=besitz().find(x=>x.it.uid===uid);return b?b.it:null;}
 // Handgriff wählen (Belohnung, Krämer, Ereignis): danach ins Item ritzen
-function takeHandgriff(id){if(!HANDGRIFFE[id])return;if(id===null){S.hgPicked=true;Bus.emit('changed');return;}S.hgPending=id;Bus.emit('changed');}
+function takeHandgriff(id){if(!HANDGRIFFE[id])return;if(id===null){S.hgPicked=true;Bus.emit('changed');return;}
+ const m=S.phase==='reward'&&S.rewardHgMeta&&S.rewardHgMeta[id];
+ if(m&&m.art==='vertiefen'){if(hgVertiefen(id)){S.hgPicked=true;S.stats.handgriffe=(S.stats.handgriffe||0)+1;Bus.emit('changed');return;}}
+ if(m&&m.art==='riskant'&&m.preis){const p=m.preis;if(p.art==='gold'){if(S.gold<p.v){Bus.emit('bad',{a:'ZU WENIG GOLD',b:''});return;}S.gold-=p.v;Bus.emit('gold',{v:-p.v,why:`${HANDGRIFFE[id].n}: Preis bezahlt`});}
+  if(p.art==='maxleben'){S.bonusHp-=p.v;S.hp=Math.max(1,Math.min(S.hp,maxHp()));Bus.emit('meta_hp',{v:-p.v,why:`${HANDGRIFFE[id].n}: −${p.v} max. Leben`});}delete S.rewardHgMeta[id];}
+ S.hgPending=id;Bus.emit('changed');}
+// Vertiefen: die niedrigste Stufe dieses Handgriffs im Besitz steigt um 1 (keine neue Karte)
+function hgVertiefen(id){const max=(((BAL.belohnung||{}).vertiefen||{}).max_stufe)||2;let ziel=null;besitz().forEach(({it})=>{if(hgVon(it).includes(id)&&!(def(it).fest_hg||[]).includes(id)&&hgStufe(it,id)<max&&(!ziel||hgStufe(it,id)<hgStufe(ziel,id)))ziel=it;});
+ if(!ziel)return false;ziel.tief=ziel.tief||{};ziel.tief[id]=(ziel.tief[id]||0)+1;Bus.emit('handgriff',{id,it:ziel,why:`${HANDGRIFFE[id].n} in ${def(ziel).n} vertieft: jetzt ${hgVertieft(HANDGRIFFE[id],ziel.tief[id]).n}`});return true;}
 function skipHandgriff(){S.hgPicked=true;S.hgPending=null;const g=(BAL.belohnung&&BAL.belohnung.ueberspringen_gold)||10;S.gold+=g;S.stats.gold+=g;Bus.emit('gold',{v:g,why:'Handgriff übersprungen'});Bus.emit('changed');}
 // Ritzen: in Item uid, optional Kerbe k überschreiben (wenn voll). Gibt true zurück, wenn es geklappt hat.
 function placeHandgriff(uid,k){const id=S.hgPending;const it=itemByUid(uid);if(!id||!it)return false;const hg=hgVon(it);const cap=kerbenVon(it);
  if(k==null){if(hg.length>=cap){Bus.emit('bad',{a:'KERBE VOLL',b:'Wähle einen Handgriff zum Überschreiben oder ein anderes Item.'});return false;}hg.push(id);}
- else{if((def(it).fest_hg||[]).includes(hg[k])){Bus.emit('bad',{a:'FEST EINGERITZT',b:'Dieser Handgriff lässt sich nicht lösen.'});return false;}const alt=hg[k];hg[k]=id;if(it.schliff)delete it.schliff['h'+k];log(`${HANDGRIFFE[alt]?HANDGRIFFE[alt].n:alt} überschrieben`);}
+ else{if((def(it).fest_hg||[]).includes(hg[k])){Bus.emit('bad',{a:'FEST EINGERITZT',b:'Dieser Handgriff lässt sich nicht lösen.'});return false;}const alt=hg[k];hg[k]=id;if(it.schliff)delete it.schliff['h'+k];if(it.tief&&!hg.includes(alt))delete it.tief[alt];log(`${HANDGRIFFE[alt]?HANDGRIFFE[alt].n:alt} überschrieben`);}
  S.hgPending=null;S.hgPicked=true;S.stats.handgriffe=(S.stats.handgriffe||0)+1;
  Bus.emit('handgriff',{id,it,why:`${HANDGRIFFE[id].n} in ${def(it).n} geritzt: wird ${def(it).st.map(x=>ST[x].n).join(' + ')||'stofflos'}`});
  if(S.pending&&S.pending[0]&&S.pending[0].hg){S.pending.shift();afterEventFx();return true;}
@@ -299,7 +321,7 @@ function kerbeDazu(uid){const it=itemByUid(uid);if(!it)return false;if(kerbenVon
 function schleifen(uid,key){const it=itemByUid(uid);if(!it)return false;it.schliff=it.schliff||{};if(it.schliff[key]){Bus.emit('bad',{a:'SCHON GESCHLIFFEN',b:''});return false;}it.schliff[key]=true;Bus.emit('schliff',{it,key,why:`${def(it).n}: Karte geschliffen, kostet dauerhaft 1 weniger`});wahlFertig();return true;}
 // Umritzen: Handgriff k aus Item a in Item b
 function umritzen(uidA,k,uidB){const a=itemByUid(uidA),b=itemByUid(uidB);if(!a||!b||a===b)return false;const id=hgVon(a)[k];if(!id)return false;if((def(a).fest_hg||[]).includes(id)){Bus.emit('bad',{a:'FEST EINGERITZT',b:''});return false;}
- if(hgVon(b).length>=kerbenVon(b)){Bus.emit('bad',{a:'KERBE VOLL',b:''});return false;}hgVon(a).splice(k,1);hgVon(b).push(id);if(a.schliff)delete a.schliff['h'+k];
+ if(hgVon(b).length>=kerbenVon(b)){Bus.emit('bad',{a:'KERBE VOLL',b:''});return false;}hgVon(a).splice(k,1);hgVon(b).push(id);if(a.schliff)delete a.schliff['h'+k];if(a.tief&&a.tief[id]){b.tief=b.tief||{};b.tief[id]=Math.max(b.tief[id]||0,a.tief[id]);if(!hgVon(a).includes(id))delete a.tief[id];}
  Bus.emit('umritzen',{why:`${HANDGRIFFE[id].n} von ${def(a).n} nach ${def(b).n} umgeritzt`});wahlFertig();return true;}
 // Wahl-Modus (Schleifen, Kerbe, Umritzen) aus Rast, Werkstatt oder Ereignis
 function wahlStart(art,quelle){S.wahl={art,quelle,phase:S.phase};S.phase='wahl';Bus.emit('changed');}

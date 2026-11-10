@@ -319,3 +319,7 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 #tip .tkw .anz{position:absolute;right:calc(var(--u)*-2);top:calc(var(--u)*-3);font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*6);color:var(--gold);text-shadow:0 0 calc(var(--u)*2) #000,1px 1px 0 #000}
 #tip .karte.vorschau{animation:none;transform:none;cursor:default;box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px #3a2c18,0 calc(var(--u)*2) calc(var(--u)*6) #000}
 #tip .tipzusatz{margin-top:4px;background:#000;border:1px solid var(--messing);padding:6px 10px;color:#e8d8a0;font-size:15px;max-width:420px}
+
+/* Spieltest 2026-11-10: Vertiefen und Preis im Handgriff-Angebot */
+.hgpick .hgmark{font-family:var(--fk);font-size:calc(var(--u)*3.8);letter-spacing:.1em;margin-top:calc(var(--u)*2)}.hgpick .hgmark.tief{color:var(--eld)}.hgpick .hgmark.preis{color:#ff8a7a}.pick.vertiefen{border-color:var(--eld)}
+.picks.einzeln .hgpick{width:calc(var(--u)*96);padding:calc(var(--u)*5)}.picks.einzeln .hgpick .hgimg{width:calc(var(--u)*40)}.picks.einzeln .hgpick .ps{font-size:calc(var(--u)*5)}

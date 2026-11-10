@@ -33,7 +33,7 @@ function vorschauKarte(c){const k=c.x?'X':c.opfer?'♥'+c.opfer:c.c;const img=c.
 function vorschauKartenReihe(karten,zusatz=''){const einm=[];const seen=new Map();karten.forEach(c=>{const k=c.n+'|'+(c.hg||'');if(seen.has(k))seen.get(k).anz++;else{const o={c,anz:1};seen.set(k,o);einm.push(o);}});
  return `<div class="tipkarten" style="zoom:${(BU.s||1).toFixed(3)}">${einm.map(o=>`<div class="tkw">${vorschauKarte(o.c)}${o.anz>1?`<span class="anz">×${o.anz}</span>`:''}</div>`).join('')}</div>${zusatz}`;}
 function hoverVorschau(el){const tk=el.closest('[data-take],[data-buy],[data-hg],[data-buyhg]');if(!tk)return null;
- if(tk.dataset.hg||tk.dataset.buyhg!=null){const id=tk.dataset.hg||(S.shop&&S.shop.hg[+tk.dataset.buyhg]||{}).id;const H=HANDGRIFFE[id];if(!H)return null;return vorschauKartenReihe([{...H,st:[],img:hgBild(id)||''}]);}
+ if(tk.dataset.hg||tk.dataset.buyhg!=null){const id=tk.dataset.hg||(S.shop&&S.shop.hg[+tk.dataset.buyhg]||{}).id;let H=HANDGRIFFE[id];if(!H)return null;const m=S.phase==='reward'&&(S.rewardHgMeta||{})[id];if(m&&m.art==='vertiefen'&&typeof hgVertiefenZiel==='function')H=hgVertieft(H,(hgVertiefenZiel(id)||0)+1);return vorschauKartenReihe([{...H,st:[],img:hgBild(id)||''}]);}
  const id=tk.dataset.take||(tk.dataset.buy!=null&&S.shop&&S.shop.items[+tk.dataset.buy]&&S.shop.items[+tk.dataset.buy].id);if(!id||!ITEMS[id])return null;
  const tmp={uid:-1,id};const D=ITEMS[id];
  const z=[D.hp?`+${D.hp} Leben`:'',D.passiv?passivText(D.passiv):'',D.eigen?eigenText(D.eigen):''].filter(Boolean);
