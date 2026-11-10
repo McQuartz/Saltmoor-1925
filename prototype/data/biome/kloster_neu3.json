@@ -1,0 +1,129 @@
+{
+ "id": "kloster_neu3",
+ "ergaenzt": "kloster",
+ "gegner_dazu": [
+  "rubrikator"
+ ],
+ "elite_dazu": [
+  "abt"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "krummstab"
+ ],
+ "foes": {
+  "rubrikator": {
+   "n": "Der Rubrikator",
+   "biom": "kloster",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "rubrikator_a",
+   "varianten": [
+    "rubrikator_a",
+    "rubrikator_b"
+   ],
+   "konzept": "Er malt die roten Anfangsbuchstaben in die Handschriften, und er malt sie mit dem, was er hat. Ein hagerer Mönch mit spitzer Feder, die Finger rot bis zum Handgelenk. Wo er hinschreibt, wird alles zur Überschrift.",
+   "stimme": "mumie",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Er setzt eine rote Initiale auf deine Karte, und sie wird schwer zu spielen."
+   },
+   "beute": "bible",
+   "beute_satz": "Die Feder schreibt allein weiter, eine Zeile, dann bricht sie ab.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "abt": {
+   "n": "Der Abt",
+   "biom": "kloster",
+   "rang": "elite",
+   "hp": 86,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "abt",
+   "konzept": "Er hat das Kloster nicht verlassen, als die Brüder gingen, und er ruft jeden Tag einen Novizen herbei, den es nicht gibt. Sie kommen trotzdem. Ein schwerer Mann in der Kukulle, in der Hand der Krummstab, dessen Krümme sich nach innen eindreht.",
+   "stimme": "mumie",
+   "kniff": {
+    "art": "heiler",
+    "v": 4,
+    "why": "Er segnet die Seinen, und sie heilen."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": "novize",
+     "alle": 3,
+     "why": "Er läutet, und ein Novize kommt den Gang herauf."
+    }
+   ],
+   "beute": "krummstab",
+   "beute_satz": "Der Stab fällt. Die Krümme dreht sich weiter ein, bis sie sich selbst berührt.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "krummstab": {
+   "n": "Krummstab",
+   "a": "waffe",
+   "st": [
+    "G"
+   ],
+   "spr": "scythe",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 46,
+   "eigen": {
+    "typ": "reaktion_heil",
+    "v": 2,
+    "t": "Jede Reaktion heilt 2."
+   },
+   "flavor": "Holz mit Silberbeschlag. Die Krümme ist eine Spur zu eng, als wäre sie gewachsen.",
+   "cards": [
+    {
+     "n": "Segen erteilen",
+     "c": 1,
+     "blk": 5,
+     "str": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

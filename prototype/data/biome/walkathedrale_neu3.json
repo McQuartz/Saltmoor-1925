@@ -1,0 +1,51 @@
+{
+ "id": "walkathedrale_neu3",
+ "ergaenzt": "walkathedrale",
+ "gegner_dazu": [
+  "ausguck"
+ ],
+ "elite_dazu": [],
+ "gegner_weg": [],
+ "fundpool_dazu": [],
+ "foes": {
+  "ausguck": {
+   "n": "Der Ausguck",
+   "biom": "walkathedrale",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "ausguck_a",
+   "varianten": [
+    "ausguck_a",
+    "ausguck_b"
+   ],
+   "konzept": "Er saß im Mastkorb und hat den Wal gemeldet, und jetzt sitzt er im Wal. Der Mastkorb ist ihm geblieben, auf einem Mast aus Walknochen, und er hält das Fernrohr auf dich, auch wenn du direkt vor ihm stehst.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Er meldet nur nach oben, was er sieht, nicht dir."
+   },
+   "beute": "compass",
+   "beute_satz": "Das Fernrohr fällt herunter. Die Linse zeigt noch das, was er zuletzt gesehen hat.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {}
+}

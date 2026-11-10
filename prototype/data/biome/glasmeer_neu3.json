@@ -1,0 +1,52 @@
+{
+ "id": "glasmeer_neu3",
+ "ergaenzt": "glasmeer",
+ "gegner_dazu": [
+  "eisfischer"
+ ],
+ "elite_dazu": [],
+ "gegner_weg": [],
+ "fundpool_dazu": [],
+ "foes": {
+  "eisfischer": {
+   "n": "Der Eisfischer",
+   "biom": "glasmeer",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "eisfischer_a",
+   "varianten": [
+    "eisfischer_a",
+    "eisfischer_b"
+   ],
+   "konzept": "Er sitzt auf dem Klappschemel über einem Loch im Glas und angelt. Was anbeißt, holt er nicht herauf, es zieht ihn hinunter, ein Stück jede Runde, und er wird davon größer.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Mit jedem Zupfen an der Schnur wird er schwerer."
+   },
+   "beute": null,
+   "beute_satz": "Die Schnur reißt. Im Loch schließt sich das Glas, langsam, wie Eis.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {}
+}

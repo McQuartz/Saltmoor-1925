@@ -1,0 +1,129 @@
+{
+ "id": "station_neu3",
+ "ergaenzt": "station",
+ "gegner_dazu": [
+  "zeitungsjunge"
+ ],
+ "elite_dazu": [
+  "ansagerin"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "fahrplan"
+ ],
+ "foes": {
+  "zeitungsjunge": {
+   "n": "Der Zeitungsjunge",
+   "biom": "station",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 5
+    }
+   ],
+   "sprite": "zeitungsjunge_a",
+   "varianten": [
+    "zeitungsjunge_a",
+    "zeitungsjunge_b"
+   ],
+   "konzept": "Er ruft auf dem Bahnsteig die Abendausgabe aus, und der Stapel unter seinem Arm wird nie kleiner. Es steht immer dieselbe Schlagzeile darauf, nur das Datum ändert sich, und es ist jedes Mal ein Tag später als heute.",
+   "stimme": "chorknabe",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Er hält dir die Zeitung vors Gesicht, und du musst erst lesen."
+   },
+   "beute": null,
+   "beute_satz": "Die Zeitungen fliegen auseinander. Auf jeder steht dein Name.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "ansagerin": {
+   "n": "Die Ansagerin",
+   "biom": "station",
+   "rang": "elite",
+   "hp": 82,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 10
+    }
+   ],
+   "sprite": "ansagerin",
+   "konzept": "Sie hat auf dem Bahnhof die Züge ausgerufen, und als der letzte nicht kam, hat sie weiter ausgerufen. Ihr Kopf ist ein Grammophontrichter geworden, und was er ansagt, kommt. Eine Frau in Uniform, steif, die Hände auf dem Pult.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 3,
+    "v": 22,
+    "why": "Sie sagt den Zug an. In drei Zügen fährt er ein."
+   },
+   "kniffe": [
+    {
+     "art": "teurer",
+     "v": 1,
+     "why": "Solange sie spricht, ist jede Bewegung zu spät."
+    }
+   ],
+   "beute": "fahrplan",
+   "beute_satz": "Der Trichter verstummt mit einem Knacken. Aus der Ferne kommt ein Pfiff, zu spät.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "fahrplan": {
+   "n": "Fahrplan",
+   "a": "talisman",
+   "st": [
+    "L",
+    "G"
+   ],
+   "spr": "tarot",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "erste_karte_billiger",
+    "t": "Die erste Karte im Kampf kostet 0."
+   },
+   "flavor": "Ein gefalteter Aushang. Ein Zug ist mit Bleistift nachgetragen, ohne Ankunftszeit.",
+   "cards": [
+    {
+     "n": "Pünktlich",
+     "c": 0,
+     "atk": 3,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

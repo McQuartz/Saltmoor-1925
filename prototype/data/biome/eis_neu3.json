@@ -1,0 +1,128 @@
+{
+ "id": "eis_neu3",
+ "ergaenzt": "eis",
+ "gegner_dazu": [
+  "eisbohrer"
+ ],
+ "elite_dazu": [
+  "zeltbewohner"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "zeltplane"
+ ],
+ "foes": {
+  "eisbohrer": {
+   "n": "Der Eisbohrer",
+   "biom": "eis",
+   "rang": "normal",
+   "hp": 28,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "eisbohrer_a",
+   "varianten": [
+    "eisbohrer_a",
+    "eisbohrer_b"
+   ],
+   "konzept": "Er hat für die Expedition von 1903 Löcher ins Eis gebohrt, um zu messen, wie dick es ist, und er hat keinen Grund gefunden. Kurbel und Schaft des Bohrers sind ihm aus dem Arm gewachsen, die Spirale reicht bis in den Boden.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "brecher",
+    "why": "Er bohrt durch deine Deckung wie durch Eis."
+   },
+   "beute": "pick",
+   "beute_satz": "Der Bohrer dreht sich noch eine halbe Umdrehung. Unten antwortet etwas.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "zeltbewohner": {
+   "n": "Der Zeltbewohner",
+   "biom": "eis",
+   "rang": "elite",
+   "hp": 90,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "zeltbewohner",
+   "konzept": "Das Zelt der Expedition von 1903 steht noch, und es ist bewohnt. Er ist das Zelt: Segeltuch über einem Gestell, starr vor Reif, und durch den Schlitz schauen drei Augen übereinander. Ab und zu greift ein langer Arm heraus.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 4,
+    "why": "Er nimmt die anderen unter seine Plane."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": "rufer",
+     "alle": 3,
+     "why": "Er ruft die herein, die draußen erfroren sind."
+    }
+   ],
+   "beute": "zeltplane",
+   "beute_satz": "Die Plane sinkt zusammen. Darunter ist es noch warm, und es riecht nach Menschen.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "zeltplane": {
+   "n": "Zeltplane",
+   "a": "kleidung",
+   "st": [
+    "E",
+    "S"
+   ],
+   "spr": "coat",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 46,
+   "eigen": {
+    "typ": "start_block",
+    "v": 7,
+    "t": "Zu Kampfbeginn 7 Block."
+   },
+   "flavor": "Segeltuch, geteert, mit Namen am Rand, die mit Kohle geschrieben sind.",
+   "cards": [
+    {
+     "n": "Unterkriechen",
+     "c": 1,
+     "blk": 8
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,52 @@
+{
+ "id": "glockengiesserei_neu3",
+ "ergaenzt": "glockengiesserei",
+ "gegner_dazu": [
+  "blasebalg"
+ ],
+ "elite_dazu": [],
+ "gegner_weg": [],
+ "fundpool_dazu": [],
+ "foes": {
+  "blasebalg": {
+   "n": "Der Balgtreter",
+   "biom": "glockengiesserei",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "blasebalg_a",
+   "varianten": [
+    "blasebalg_a",
+    "blasebalg_b"
+   ],
+   "konzept": "Er tritt den großen Blasebalg der Gießerei, Tag und Nacht, damit das Feuer nicht ausgeht. Ein Mann mit Beinen so dick wie Säulen, der Oberkörper verkümmert, und der Balg atmet für ihn.",
+   "stimme": "glockenmutter",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 3,
+    "why": "Er bläst den anderen heiße Luft vor, und sie stehen dahinter."
+   },
+   "beute": null,
+   "beute_satz": "Der Balg sinkt langsam zusammen, ein letzter warmer Atem.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {}
+}

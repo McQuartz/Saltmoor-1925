@@ -1,0 +1,52 @@
+{
+ "id": "mond_neu3",
+ "ergaenzt": "mond",
+ "gegner_dazu": [
+  "laternenanzuender"
+ ],
+ "elite_dazu": [],
+ "gegner_weg": [],
+ "fundpool_dazu": [],
+ "foes": {
+  "laternenanzuender": {
+   "n": "Der Laternenanzünder",
+   "biom": "mond",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "laternenanzuender_a",
+   "varianten": [
+    "laternenanzuender_a",
+    "laternenanzuender_b"
+   ],
+   "konzept": "Er geht die Kraterränder ab und zündet Laternen an, die niemand aufgestellt hat. Ein dürrer Mann im langen Mantel mit Schirmmütze, die Stange doppelt so hoch wie er. In seinem Licht schließen sich bei den anderen die Wunden.",
+   "stimme": "lotse",
+   "kniff": {
+    "art": "heiler",
+    "v": 3,
+    "why": "Wo seine Laternen brennen, flicken sich die anderen."
+   },
+   "beute": "lantern",
+   "beute_satz": "Die Flamme an der Stange geht aus. Die Laternen am Kraterrand brennen weiter.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {}
+}

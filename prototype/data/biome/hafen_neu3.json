@@ -1,0 +1,128 @@
+{
+ "id": "hafen_neu3",
+ "ergaenzt": "hafen",
+ "gegner_dazu": [
+  "fischhaendlerin"
+ ],
+ "elite_dazu": [
+  "ankermann"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "ankerkette"
+ ],
+ "foes": {
+  "fischhaendlerin": {
+   "n": "Die Fischhändlerin",
+   "biom": "hafen",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "V",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "fischhaendlerin_a",
+   "varianten": [
+    "fischhaendlerin_a",
+    "fischhaendlerin_b"
+   ],
+   "konzept": "Sie hat am Kai den Fang ausgerufen, bis die Fische ihr zu antworten anfingen. Eine breite Frau in der Gummischürze, den Korb auf der Hüfte, in der Faust einen Dorsch als Knüppel, der noch zuckt. Was sie verkauft, ist nicht ganz tot.",
+   "stimme": "netzflickerin",
+   "kniff": {
+    "art": "heiler",
+    "v": 3,
+    "why": "Sie reibt den anderen Fischtran in die Wunden."
+   },
+   "beute": "knife",
+   "beute_satz": "Der Korb kippt um. Die Fische darin schauen alle zu dir.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "ankermann": {
+   "n": "Der Ankermann",
+   "biom": "hafen",
+   "rang": "elite",
+   "hp": 80,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 11
+    }
+   ],
+   "sprite": "ankermann",
+   "konzept": "Er ist 1922 mit dem Anker über Bord gegangen und hat ihn nicht losgelassen. Jetzt trägt er ihn wieder herauf, die Kette um die Schultern geschlungen, und jedes Glied, das er heraufzieht, macht ihn schwerer. Auf seinem Rücken wachsen Seepocken.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "dornen",
+    "v": 3,
+    "why": "Wer ihn schlägt, schlägt auf Eisen und Seepocken."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Mit jedem Zug zieht er ein Kettenglied höher."
+    }
+   ],
+   "beute": "ankerkette",
+   "beute_satz": "Der Anker sinkt in den Schlick, die Kette rasselt hinterher. Er hält sie noch fest.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "ankerkette": {
+   "n": "Ankerkette",
+   "a": "kleidung",
+   "st": [
+    "E",
+    "W"
+   ],
+   "spr": "anchorchain",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "block_haelt_halb",
+    "t": "Am Zugende bleibt die Hälfte deines Blocks."
+   },
+   "flavor": "Fünf Glieder, rostig und schwer. Um die Schultern gelegt, steht man fester.",
+   "cards": [
+    {
+     "n": "Kette werfen",
+     "c": 1,
+     "atk": 6,
+     "blk": 3
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

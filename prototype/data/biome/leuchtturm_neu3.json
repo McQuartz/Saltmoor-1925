@@ -1,0 +1,88 @@
+{
+ "id": "leuchtturm_neu3",
+ "ergaenzt": "leuchtturm",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "waerterfrau"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "linsenstueck"
+ ],
+ "foes": {
+  "waerterfrau": {
+   "n": "Die Wärterfrau",
+   "biom": "leuchtturm",
+   "rang": "elite",
+   "hp": 84,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "waerterfrau",
+   "konzept": "Die Frau des letzten Wärters, die nach dem Sturm von 1921 oben geblieben ist und das Glas putzt. Auf dem Rücken trägt sie die Linse wie einen gläsernen Buckel, und ihr Blick hält dich fest wie das Feuer die Möwen.",
+   "stimme": "lotse",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Sie sieht dich an wie das Licht die Möwen, und du hältst still."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": "rueckmoewen",
+     "alle": 3,
+     "why": "Sie wischt das Glas, und die Möwen kommen zurück."
+    }
+   ],
+   "beute": "linsenstueck",
+   "beute_satz": "Die Linse auf ihrem Rücken erlischt. Ein Ring davon ist abgesprungen und noch warm.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "linsenstueck": {
+   "n": "Linsenring",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "lantern",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1,
+    "t": "Zu Kampfbeginn sind alle Gegner 1 Zug verwundbar."
+   },
+   "flavor": "Ein Ring aus der Fresnel-Linse. Wer hindurchsieht, sieht weiter, als gut ist.",
+   "cards": [
+    {
+     "n": "Bündeln",
+     "c": 1,
+     "atk": 6,
+     "vuln": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

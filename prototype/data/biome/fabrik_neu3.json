@@ -1,0 +1,127 @@
+{
+ "id": "fabrik_neu3",
+ "ergaenzt": "fabrik",
+ "gegner_dazu": [
+  "hakenmann"
+ ],
+ "elite_dazu": [
+  "dosenpresse"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "stempelplatte"
+ ],
+ "foes": {
+  "hakenmann": {
+   "n": "Der Hakenmann",
+   "biom": "fabrik",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 5
+    }
+   ],
+   "sprite": "hakenmann_a",
+   "varianten": [
+    "hakenmann_a",
+    "hakenmann_b"
+   ],
+   "konzept": "Er hat in der Konservenfabrik die Rinderhälften von der Schiene genommen, und eine Hälfte hat ihn mitgenommen. Jetzt hängt er selbst an der Schiene, der Haken ist ihm durch die Schulter gewachsen, und er zieht sich daran vorwärts.",
+   "stimme": "schmuggler",
+   "kniff": {
+    "art": "brecher",
+    "why": "Er reißt mit dem Haken deine Deckung herunter."
+   },
+   "beute": "harpoon",
+   "beute_satz": "Der Haken schaukelt noch an der Schiene, als er schon liegt.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "dosenpresse": {
+   "n": "Die Dosenpresse",
+   "biom": "fabrik",
+   "rang": "elite",
+   "hp": 80,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 10
+    }
+   ],
+   "sprite": "dosenpresse",
+   "konzept": "In der Konservenfabrik hat sie 1924 einen Arbeiter in ihre Form genommen und seither nicht mehr losgelassen. Er bedient sie noch, von innen. Ein Eisengestell auf zwei krummen Beinen, oben das Schwungrad, unten der Stempel, und sie zählt laut.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 18,
+    "why": "Sie zählt bis drei. Bei drei kommt der Stempel."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Wer neben ihr steht, steht hinter Eisen."
+    }
+   ],
+   "beute": "stempelplatte",
+   "beute_satz": "Der Stempel bleibt oben stehen. Drinnen klopft es, dreimal.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "stempelplatte": {
+   "n": "Stempelplatte",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "pan",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "start_staerke",
+    "v": 1,
+    "t": "Zu Kampfbeginn +1 Stärke."
+   },
+   "flavor": "Ein Eisenteller mit dem Abdruck einer Dose. Und einer Hand.",
+   "cards": [
+    {
+     "n": "Pressen",
+     "c": 2,
+     "atk": 13
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}
