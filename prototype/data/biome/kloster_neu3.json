@@ -54,7 +54,7 @@
    "n": "Der Abt",
    "biom": "kloster",
    "rang": "elite",
-   "hp": 86,
+   "hp": 76,
    "weak": "F",
    "pat": [
     {
@@ -80,7 +80,7 @@
    "stimme": "mumie",
    "kniff": {
     "art": "heiler",
-    "v": 4,
+    "v": 3,
     "why": "Er segnet die Seinen, und sie heilen."
    },
    "kniffe": [

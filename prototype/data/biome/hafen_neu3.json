@@ -16,16 +16,16 @@
    "n": "Die Fischhändlerin",
    "biom": "hafen",
    "rang": "normal",
-   "hp": 22,
+   "hp": 18,
    "weak": "V",
    "pat": [
     {
      "t": "atk",
-     "v": 6
+     "v": 5
     },
     {
      "t": "blk",
-     "v": 6
+     "v": 5
     },
     {
      "t": "atk",
@@ -42,7 +42,7 @@
    "stimme": "netzflickerin",
    "kniff": {
     "art": "heiler",
-    "v": 3,
+    "v": 2,
     "why": "Sie reibt den anderen Fischtran in die Wunden."
    },
    "beute": "knife",
@@ -54,25 +54,25 @@
    "n": "Der Ankermann",
    "biom": "hafen",
    "rang": "elite",
-   "hp": 80,
+   "hp": 66,
    "weak": "L",
    "pat": [
     {
      "t": "atk",
-     "v": 9
+     "v": 8
     },
     {
      "t": "blk",
-     "v": 10
+     "v": 9
     },
     {
      "t": "atk",
-     "v": 4,
+     "v": 3,
      "h": 2
     },
     {
      "t": "atk",
-     "v": 11
+     "v": 10
     }
    ],
    "sprite": "ankermann",
@@ -80,7 +80,7 @@
    "stimme": "ertrunkener",
    "kniff": {
     "art": "dornen",
-    "v": 3,
+    "v": 2,
     "why": "Wer ihn schlägt, schlägt auf Eisen und Seepocken."
    },
    "kniffe": [

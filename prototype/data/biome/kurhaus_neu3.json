@@ -16,7 +16,7 @@
    "n": "Die Inhalierende",
    "biom": "kurhaus",
    "rang": "normal",
-   "hp": 22,
+   "hp": 18,
    "weak": "E",
    "pat": [
     {
@@ -25,7 +25,7 @@
     },
     {
      "t": "atk",
-     "v": 6
+     "v": 5
     },
     {
      "t": "atk",
@@ -42,7 +42,7 @@
    "stimme": "opfernde",
    "kniff": {
     "art": "heiler",
-    "v": 3,
+    "v": 2,
     "why": "Sie hält den anderen die Schale unter die Nase, und es geht ihnen besser."
    },
    "beute": "bottle",
@@ -54,7 +54,7 @@
    "n": "Die Masseurin",
    "biom": "kurhaus",
    "rang": "elite",
-   "hp": 82,
+   "hp": 64,
    "weak": "G",
    "pat": [
     {
@@ -73,7 +73,7 @@
     },
     {
      "t": "atk",
-     "v": 11
+     "v": 10
     }
    ],
    "sprite": "masseurin",
@@ -86,9 +86,9 @@
    },
    "kniffe": [
     {
-     "art": "waechst",
-     "v": 1,
-     "why": "Mit jedem Zug greifen die Hände fester zu."
+     "art": "schuetzer",
+     "v": 2,
+     "why": "Ein paar Hände greifen immer nach den anderen und halten sie fest."
     }
    ],
    "beute": "massageoel",

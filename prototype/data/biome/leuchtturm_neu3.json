@@ -14,7 +14,7 @@
    "n": "Die Wärterfrau",
    "biom": "leuchtturm",
    "rang": "elite",
-   "hp": 84,
+   "hp": 66,
    "weak": "S",
    "pat": [
     {
@@ -32,7 +32,7 @@
     },
     {
      "t": "atk",
-     "v": 12
+     "v": 11
     }
    ],
    "sprite": "waerterfrau",
@@ -46,7 +46,7 @@
     {
      "art": "ruf",
      "gegner": "rueckmoewen",
-     "alle": 3,
+     "alle": 4,
      "why": "Sie wischt das Glas, und die Möwen kommen zurück."
     }
    ],

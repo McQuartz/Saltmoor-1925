@@ -16,12 +16,12 @@
    "n": "Der Eisbohrer",
    "biom": "eis",
    "rang": "normal",
-   "hp": 28,
+   "hp": 22,
    "weak": "F",
    "pat": [
     {
      "t": "atk",
-     "v": 7
+     "v": 6
     },
     {
      "t": "blk",
@@ -29,7 +29,7 @@
     },
     {
      "t": "atk",
-     "v": 4,
+     "v": 3,
      "h": 2
     }
    ],
@@ -53,7 +53,7 @@
    "n": "Der Zeltbewohner",
    "biom": "eis",
    "rang": "elite",
-   "hp": 90,
+   "hp": 80,
    "weak": "F",
    "pat": [
     {
@@ -71,7 +71,7 @@
     },
     {
      "t": "atk",
-     "v": 13
+     "v": 12
     }
    ],
    "sprite": "zeltbewohner",
