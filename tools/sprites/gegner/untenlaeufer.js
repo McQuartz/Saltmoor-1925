@@ -1,11 +1,11 @@
-// Glasmeer, dritter Wächter: Das Spiegelbild. Im Glas unter den Füßen geht jemand mit, der du bist, nur
-// andersherum. Hier ist er heraufgestiegen: eine Gestalt, die aus dem Glas wächst und es mitbringt,
-// der Unterleib noch Spiegelung, kopfüber. Er spielt deine letzte Karte gegen dich.
-// Angriff: er tut, was du getan hast.
+// Glasmeer, dritter Wächter: Der Untenläufer. Der Expeditionsführer von 1903, der als Erster auf das
+// Glas getreten ist und eingebrochen, als es noch weich war. Seitdem geht er darunter, kopfüber, Sohle
+// an Sohle mit jedem, der oben geht, und macht jeden Schritt mit. Hier ist er heraufgestiegen, halb:
+// Oben steht er, unten hängt noch seine Spiegelung. Er spielt deine letzte Karte gegen dich.
 'use strict';
 module.exports = {
-  id: 'spiegelbild', biom: 'glasmeer', zone: 'glasmeer', rang: 'waechter', w: 160, h: 180, fuss: [80, 176], kopf: [80, 30], rimBis: 172,
-  varianten: { spiegelbild: {} },
+  id: 'untenlaeufer', biom: 'glasmeer', zone: 'glasmeer', rang: 'waechter', w: 160, h: 180, fuss: [80, 176], kopf: [80, 30], rimBis: 172,
+  varianten: { untenlaeufer: {} },
   bild(p, v, A) {
     const { E, C, Pg, r, glied, saum } = A;
     const f = p.f;

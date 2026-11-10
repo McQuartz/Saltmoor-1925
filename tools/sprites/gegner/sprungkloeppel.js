@@ -4,8 +4,8 @@
 // Angriff: der Klöppel schlägt.
 'use strict';
 module.exports = {
-  id: 'kloeppel', biom: 'glockengiesserei', zone: 'glockengiesserei', w: 96, h: 120, fuss: [48, 115], kopf: [48, 70], rimBis: 112,
-  varianten: { kloeppel_a: { kugel: 1, lang: 1 }, kloeppel_b: { kugel: 1.2, lang: 0.9 } },
+  id: 'sprungkloeppel', biom: 'glockengiesserei', zone: 'glockengiesserei', w: 96, h: 120, fuss: [48, 115], kopf: [48, 70], rimBis: 112,
+  varianten: { sprungkloeppel_a: { kugel: 1, lang: 1 }, sprungkloeppel_b: { kugel: 1.2, lang: 0.9 } },
   bild(p, v, A) {
     const { E, C, Pg, r, glied } = A;
     const f = p.f;

@@ -1,9 +1,9 @@
 {
- "id": "brennmeisterin",
- "rang": "elite",
- "w": 128,
- "h": 160,
- "zone": "ziegelgruben",
+ "id": "eckenzaehler",
+ "rang": "normal",
+ "w": 96,
+ "h": 120,
+ "zone": "stadt",
  "anim": {
   "idle": {
    "zeile": 0,
@@ -28,22 +28,22 @@
   }
  },
  "fuss": [
-  64,
-  155
+  48,
+  115
  ],
  "kopf": [
-  60,
-  36
+  50,
+  26
  ],
  "augen": [
   [
-   62,
-   38
+   49,
+   35
   ],
   [
-   67,
-   38
+   52,
+   35
   ]
  ],
- "augenfarbe": "#fff1b0"
+ "augenfarbe": "#ffe060"
 }

@@ -1,9 +1,9 @@
 {
- "id": "kloeppel",
+ "id": "eckenzaehler",
  "rang": "normal",
  "w": 96,
  "h": 120,
- "zone": "glockengiesserei",
+ "zone": "stadt",
  "anim": {
   "idle": {
    "zeile": 0,
@@ -32,18 +32,18 @@
   115
  ],
  "kopf": [
-  48,
-  70
+  50,
+  26
  ],
  "augen": [
   [
-   45,
-   74
+   49,
+   35
   ],
   [
-   53,
-   74
+   52,
+   35
   ]
  ],
- "augenfarbe": "#ffd36a"
+ "augenfarbe": "#ffe060"
 }

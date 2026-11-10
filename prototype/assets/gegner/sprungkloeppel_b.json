@@ -1,9 +1,9 @@
 {
- "id": "spiegelbild",
- "rang": "waechter",
- "w": 160,
- "h": 180,
- "zone": "glasmeer",
+ "id": "sprungkloeppel",
+ "rang": "normal",
+ "w": 96,
+ "h": 120,
+ "zone": "glockengiesserei",
  "anim": {
   "idle": {
    "zeile": 0,
@@ -28,22 +28,22 @@
   }
  },
  "fuss": [
-  80,
-  176
+  48,
+  115
  ],
  "kopf": [
-  80,
-  30
+  48,
+  70
  ],
  "augen": [
   [
-   76,
-   30
+   45,
+   69
   ],
   [
-   84,
-   30
+   53,
+   69
   ]
  ],
- "augenfarbe": "#6dff9e"
+ "augenfarbe": "#ffd36a"
 }

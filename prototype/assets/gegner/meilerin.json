@@ -1,9 +1,9 @@
 {
- "id": "kloeppel",
- "rang": "normal",
- "w": 96,
- "h": 120,
- "zone": "glockengiesserei",
+ "id": "meilerin",
+ "rang": "elite",
+ "w": 128,
+ "h": 160,
+ "zone": "ziegelgruben",
  "anim": {
   "idle": {
    "zeile": 0,
@@ -28,22 +28,22 @@
   }
  },
  "fuss": [
-  48,
-  115
+  64,
+  155
  ],
  "kopf": [
-  48,
-  70
+  60,
+  36
  ],
  "augen": [
   [
-   45,
-   69
+   62,
+   38
   ],
   [
-   53,
-   69
+   67,
+   38
   ]
  ],
- "augenfarbe": "#ffd36a"
+ "augenfarbe": "#fff1b0"
 }

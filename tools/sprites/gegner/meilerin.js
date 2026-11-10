@@ -1,11 +1,11 @@
-// Die Brennmeisterin (Ziegelgruben, Elite). Sie hat den Feldbrand gehütet, den Meiler aus Rohlingen, der
+// Die Meilerin (Ziegelgruben, Elite). Sie hat den Feldbrand gehütet, den Meiler aus Rohlingen, der
 // tagelang glühen muss, und eines Nachts hat sie sich selbst daraufgelegt, weil das Feuer zu kalt war.
 // Jetzt ist sie gebrannt wie ein Ziegel, rot und hart, und in ihrem Bauch glüht es noch. Wer sie schlägt,
 // verbrennt sich, und sie wird jeden Zug heißer. Angriff: sie stößt die glühende Schaufel vor.
 'use strict';
 module.exports = {
-  id: 'brennmeisterin', biom: 'ziegelgruben', zone: 'ziegelgruben', w: 128, h: 160, fuss: [64, 155], kopf: [60, 36], rimBis: 152, rang: 'elite',
-  varianten: { brennmeisterin: {} },
+  id: 'meilerin', biom: 'ziegelgruben', zone: 'ziegelgruben', w: 128, h: 160, fuss: [64, 155], kopf: [60, 36], rimBis: 152, rang: 'elite',
+  varianten: { meilerin: {} },
   bild(p, v, A) {
     const { E, C, Pg, r, glied, saum } = A;
     const f = p.f;
