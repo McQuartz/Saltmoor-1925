@@ -1,0 +1,49 @@
+{
+ "id": "harpunier",
+ "rang": "waechter",
+ "w": 160,
+ "h": 180,
+ "zone": "walkathedrale",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  80,
+  176
+ ],
+ "kopf": [
+  76,
+  34
+ ],
+ "augen": [
+  [
+   75,
+   43
+  ],
+  [
+   82,
+   43
+  ]
+ ],
+ "augenfarbe": "#ff8c70"
+}
