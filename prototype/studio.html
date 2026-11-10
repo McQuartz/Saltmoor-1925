@@ -48,6 +48,7 @@ button.on{border-color:var(--gold);color:var(--gold)}
 .fort{font-family:var(--fd);font-size:9px;color:var(--dim)}
 .hinweis{font-size:17px;color:var(--dim)}
 .warn{color:#ff8a7a}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -56,6 +57,15 @@ button.on{border-color:var(--gold);color:var(--gold)}
  <p>Alle Soundeffekte des Spiels. Links aussuchen, rechts Original anhören und mit dem Mund nachmachen. Jede Aufnahme wird sofort gespeichert, die neueste ist die gewählte. Mit „Im Spiel benutzen“ spielt das Spiel deine Aufnahmen statt der Originale.</p>
  <p class="hinweis">Tasten: <kbd>Leertaste</kbd> aufnehmen / stoppen · <kbd>O</kbd> Original · <kbd>P</kbd> deine Aufnahme · <kbd>A</kbd> erst Original, dann deine · <kbd>Z</kbd> beide zusammen · <kbd>,</kbd><kbd>.</kbd> Spur schieben (mit Umschalt mehr) · <kbd>↑</kbd><kbd>↓</kbd> Sound wechseln</p>
 
+ <div class="reihe" style="margin-top:10px">
+  <button id="mEff" class="sm">Effekte</button><button id="mMus" class="sm">Musik</button>
+  <span class="nurMusik reihe"><select id="biom"></select>
+   <label><input type="checkbox" id="vorlage"> Vorlage beim Aufnehmen</label>
+   <label><input type="checkbox" id="klick"> Klick</label>
+   <label><input type="checkbox" id="mitspielen"> deine anderen Spuren mitspielen</label>
+   <button id="mix" class="sm">▶ Deine Musik (alle Spuren)</button></span>
+ </div>
+ <p class="hinweis nurMusik">Musik: Jede Spur ist ein Loop über 8 Takte bei 80 BPM (24 s). Mit Kopfhörern aufnehmen. Ein Takt wird eingezählt. Die Vorlage spielt den Layer so, wie das Spiel ihn erzeugt. Im Spiel ersetzen deine Spuren im Mund-Modus die Layer dieses Bioms, das Tempo bleibt dort dann fest bei 80.</p>
  <div class="oben">
   <div class="panel">
    <h2>Eingang</h2>
@@ -67,17 +77,17 @@ button.on{border-color:var(--gold);color:var(--gold)}
   </div>
   <div class="panel">
    <h2>Aufnahme</h2>
-   <div class="reihe"><label>Start <select id="ausloeser"><option value="stimme">sobald du lauter als die Schwelle bist</option><option value="zaehlen">nach Einzählen (3, 2, 1)</option></select></label></div>
-   <div class="reihe"><label>Schwelle <input type="range" id="schwelle" min="-60" max="-6" step="1" value="-36"></label><span id="schwelleWert">-36 dB</span></div>
-   <div class="reihe"><label>Länge <select id="laenge"><option value="wie">genau wie das Original</option><option value="frei">frei (bis Stille, höchstens 8 s)</option></select></label></div>
-   <div class="reihe"><label><input type="checkbox" id="vorher" checked> Original vorher abspielen</label><label><input type="checkbox" id="angleich" checked> Lautstärke ans Original angleichen</label><label><input type="checkbox" id="weiter"> danach zum nächsten Sound</label></div>
+   <div class="reihe nurEffekte"><label>Start <select id="ausloeser"><option value="stimme">sobald du lauter als die Schwelle bist</option><option value="zaehlen">nach Einzählen (3, 2, 1)</option></select></label></div>
+   <div class="reihe nurEffekte"><label>Schwelle <input type="range" id="schwelle" min="-60" max="-6" step="1" value="-36"></label><span id="schwelleWert">-36 dB</span></div>
+   <div class="reihe nurEffekte"><label>Länge <select id="laenge"><option value="wie">genau wie das Original</option><option value="frei">frei (bis Stille, höchstens 8 s)</option></select></label></div>
+   <div class="reihe"><label class="nurEffekte"><input type="checkbox" id="vorher" checked> Original vorher abspielen</label><label><input type="checkbox" id="angleich" checked> Lautstärke ans Original angleichen</label><label class="nurEffekte"><input type="checkbox" id="weiter"> danach zum nächsten Sound</label></div>
   </div>
   <div class="panel">
    <h2>Speichern und Spiel</h2>
    <div class="reihe"><button id="ordner" class="sm">Ordner verbinden</button><span id="ordnerName" class="hinweis">Aufnahmen liegen im Browser. Mit Ordner zusätzlich als WAV auf der Platte.</span></div>
    <div class="reihe"><button id="zip" class="sm">Alle gewählten als ZIP</button><span class="fort" id="fort"></span></div>
    <div class="reihe"><label><input type="checkbox" id="mundAn"> Im Spiel benutzen</label><label>Fehlt eine Aufnahme <select id="fehlt"><option value="original">Original spielen</option><option value="stumm">still bleiben</option></select></label></div>
-   <div class="reihe"><label><input type="checkbox" id="musikAus"> Musik im Spiel aus</label><label>Tonhöhe streuen <select id="streuung"><option value="0">nein</option><option value="0.03">leicht</option><option value="0.07">deutlich</option></select></label></div>
+   <div class="reihe"><label><input type="checkbox" id="musikAus"> Musik im Spiel ganz aus</label><label>Tonhöhe streuen <select id="streuung"><option value="0">nein</option><option value="0.03">leicht</option><option value="0.07">deutlich</option></select></label></div>
    <div class="reihe"><button id="spiel" class="sm">Spiel mit Mund-Sounds öffnen</button></div>
   </div>
  </div>
@@ -110,6 +120,7 @@ button.on{border-color:var(--gold);color:var(--gold)}
 </div>
 <script>window.MUND_STUDIO=true;</script>
 <script src="js/audio/sfx.js"></script>
+<script src="js/audio/music.js"></script>
 <script src="js/audio/mund.js"></script>
 <script src="js/studio.js"></script>
 </body>

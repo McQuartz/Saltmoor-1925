@@ -70,8 +70,8 @@ const Mund=(()=>{
 
  // --- Abspielen über den SFX-Bus aus sfx.js (gleicher Hall, gleicher Limiter, Effekt-Lautstärke aus den Einstellungen) ---
  const bufCache=new Map(); // take-id -> AudioBuffer
- function puffer(t){if(!AC)return null;let b=bufCache.get(t.id);if(b&&b.sampleRate===t.sr)return b;
-  b=AC.createBuffer(1,t.pcm.length,t.sr);b.copyToChannel(t.pcm instanceof Float32Array?t.pcm:new Float32Array(t.pcm),0);bufCache.set(t.id,b);return b;}
+ function puffer(t,ac=AC){if(!ac)return null;let b=bufCache.get(t.id);if(b&&b.sampleRate===t.sr)return b;
+  b=ac.createBuffer(1,t.pcm.length,t.sr);b.copyToChannel(t.pcm instanceof Float32Array?t.pcm:new Float32Array(t.pcm),0);bufCache.set(t.id,b);return b;}
  // Eine Aufnahme enthält Luft davor und danach. Benutzt wird der Ausschnitt start … start+laenge (Sekunden),
  // mit kurzem Ein- und Ausblenden. Alte Aufnahmen ohne start/laenge: alles.
  const FADE_EIN=.004,FADE_AUS=.03;
@@ -86,9 +86,38 @@ const Mund=(()=>{
   const fi=Math.round(FADE_EIN*t.sr),fo=Math.round(FADE_AUS*t.sr);
   for(let i=0;i<n;i++){let g=v;if(i<fi)g*=i/fi;if(i>n-fo)g*=(n-i)/fo;y[i]=(t.pcm[a+i]||0)*g;}return y;}
 
+ // --- Musik: Loops pro Biom und Layer, 8 Takte bei 80 BPM, Schlüssel „musik:<biom>:<loop>:<variante>“ ---
+ // take.phase = Taktnummer im 8-Takt-Zyklus, auf der die Aufnahme beginnt (Harmonie wechselt pro Takt, Melodie läuft über 8).
+ const MUSIK_BPM=80,MUSIK_TAKTE=8;
+ const LAYER=[
+  {k:0,id:'l0_grund',wahl:z=>['normal']},
+  {k:1,id:'l1_puls',wahl:z=>z.dark?['gekippt','normal']:(z.wucht>.55?['dicht','normal']:['normal'])},
+  {k:2,id:'l2_rhythmus',wahl:z=>z.drive?['treibend','ruhig']:['ruhig','treibend']},
+  {k:3,id:'l3_flaeche',wahl:z=>z.dark?['gekippt','normal']:['normal']},
+  {k:4,id:'l4_tutti',wahl:z=>z.dark?['gekippt','normal']:['normal']}];
+ const musikKey=(biom,loop,v)=>`musik:${biom}:${loop}:${v}`;
+ // Startet einen Loop so, dass Takt „bar“ des Spiels (Zeit t) an der richtigen Stelle im 8-Takt-Zyklus liegt
+ function loopStarten(t,zeit,bar,barLen,ziel,o={}){const ac=ziel.context,s=ac.createBufferSource();s.buffer=puffer(t,ac);
+  const {st}=fenster(t),zyk=barLen*MUSIK_TAKTE,off=(((bar-(t.phase||0))%MUSIK_TAKTE)+MUSIK_TAKTE)%MUSIK_TAKTE*barLen;
+  s.loop=true;s.loopStart=st;s.loopEnd=Math.min(st+zyk,s.buffer.duration);s.playbackRate.value=(o.bpm||MUSIK_BPM)/MUSIK_BPM;
+  const g=ac.createGain(),v=Math.pow(10,(t.pegel||0)/20);g.gain.setValueAtTime(0,zeit);g.gain.linearRampToValueAtTime(v,zeit+.02);
+  s.connect(g).connect(ziel);s.start(zeit,st+off);return {s,g,take:t};}
+ function loopStoppen(l,zeit){if(!l)return;try{l.g.gain.cancelScheduledValues(zeit);l.g.gain.setValueAtTime(l.g.gain.value,zeit);l.g.gain.linearRampToValueAtTime(0,zeit+.04);l.s.stop(zeit+.06);}catch(e){}}
+ // Im Spiel: zu jedem Taktanfang die passenden Loops des Bioms wählen, die prozeduralen Layer dafür stumm schalten
+ let musikTakes={},laeuft=[null,null,null,null,null],musikBiom=null;
+ function musikTakt(z){
+  const hat=Object.keys(musikTakes).some(k=>k.startsWith(`musik:${z.biome}:`));
+  if(z.biome!==musikBiom){laeuft.forEach(l=>loopStoppen(l,z.t));laeuft=[null,null,null,null,null];musikBiom=z.biome;}
+  Music.mund.tempo(hat?MUSIK_BPM:0);
+  LAYER.forEach(L=>{let t=null;if(hat){for(const v of L.wahl(z)){t=musikTakes[musikKey(z.biome,L.id,v)];if(t)break;}}
+   Music.mund.prozedural(L.k,!t);
+   const alt=laeuft[L.k];if(alt&&alt.take===t)return;
+   loopStoppen(alt,z.t);laeuft[L.k]=t?loopStarten(t,z.t,z.bar,z.barLen,Music.mund.eingang(L.k)):null;});}
+
  // --- Im Spiel: sfx-Funktionen umhüllen ---
  let geladen={},original=null; // key -> take
- async function ladeGewaehlte(){const w=await ablage.wahl(),m={};for(const k in w){const t=await ablage.take(w[k]);if(t)m[k]=t;}geladen=m;return m;}
+ async function ladeGewaehlte(){const w=await ablage.wahl(),m={},mu={};for(const k in w){const t=await ablage.take(w[k]);if(!t)continue;if(k.startsWith('musik:'))mu[k]=t;else m[k]=t;}
+  geladen=m;musikTakes=mu;return m;}
  function installiere(){
   if(typeof sfx==='undefined')return;
   const orig={};
@@ -98,12 +127,13 @@ const Mund=(()=>{
      if(o.fehlt==='stumm')return;}
     return orig[name].apply(this,arguments);};});
   original=orig;
-  if(optionen().aktiv){ladeGewaehlte().then(m=>zeigeMarke(Object.keys(m).length)).catch(e=>console.warn('Mund-Modus: Aufnahmen nicht geladen',e));
+  if(optionen().aktiv){ladeGewaehlte().then(m=>{zeigeMarke(Object.keys(m).length,Object.keys(musikTakes).length);
+    if(Object.keys(musikTakes).length&&typeof Music!=='undefined'&&Music.mund)Music.mund.takt(musikTakt);}).catch(e=>console.warn('Mund-Modus: Aufnahmen nicht geladen',e));
    if(optionen().musikAus&&typeof Music!=='undefined'&&Music.volume){const v=Music.volume;Music.volume=()=>v.call(Music,0);v.call(Music,0);}}
  }
  // Kleine Marke unten rechts, damit man sieht, dass der Mund-Modus läuft
- function zeigeMarke(n){const go=()=>{const d=document.createElement('div');d.id='mundMarke';
-   d.textContent=`MUND-MODUS · ${n}/${MUND_KATALOG.length}`;d.title='Eigene Aufnahmen statt der Soundeffekte (Studio: studio.html, aus: ?mund=0)';
+ function zeigeMarke(n,nm=0){const go=()=>{const d=document.createElement('div');d.id='mundMarke';
+   d.textContent=`MUND-MODUS · ${n}/${MUND_KATALOG.length}`+(nm?` · Musik ${nm}`:'');d.title='Eigene Aufnahmen statt der Soundeffekte (Studio: studio.html, aus: ?mund=0)';
    d.style.cssText='position:fixed;right:8px;bottom:6px;z-index:9999;font:11px/1.2 monospace;letter-spacing:.08em;color:#e8c070;background:rgba(10,8,6,.72);border:1px solid #6a5020;padding:3px 7px;pointer-events:none;opacity:.8';
    document.body.appendChild(d);};document.body?go():addEventListener('DOMContentLoaded',go);}
 
@@ -111,5 +141,5 @@ const Mund=(()=>{
  if(!window.MUND_STUDIO){try{const q=new URLSearchParams(location.search).get('mund');if(q==='1')setze('aktiv',true);if(q==='0')setze('aktiv',false);}catch(e){}
   installiere();}
 
- return {optionen,setze,ablage,spiele,ausschnitt,fenster,ladeGewaehlte,installiere,KATALOG:MUND_KATALOG,get original(){return original;}};
+ return {optionen,setze,ablage,spiele,ausschnitt,fenster,LAYER,MUSIK_BPM,MUSIK_TAKTE,musikKey,loopStarten,loopStoppen,ladeGewaehlte,installiere,KATALOG:MUND_KATALOG,get original(){return original;}};
 })();
