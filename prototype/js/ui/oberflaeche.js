@@ -12,16 +12,25 @@ function render(){
  $('gegner').innerHTML=ph==='fight'||ph==='reward'?gegnerHtml(ph==='fight'):'';
  if($('spieler'))$('spieler').innerHTML=''; // M2: der eigene Balken sitzt im Footer (leisteKampf)
  $('panel').innerHTML=panelHtml(ph);$('panel').className=ph==='fight'?'':'an p-'+ph;
- $('leiste').innerHTML=ph==='fight'?leisteKampf():S.route&&canEquip()?tischHtml():'';
- $('leiste').className=ph==='fight'?'kampf':S.route&&canEquip()?'tisch':'';
- dealAnim=false;karteNach();if(typeof koeNachRender==='function')koeNachRender();if(typeof Dev!=='undefined'&&Dev.an)Dev.render();}
+ $('leiste').innerHTML=ph==='fight'?leisteKampf():'';
+ $('leiste').className=ph==='fight'?'kampf':'';
+ dealAnim=false;karteNach();kartenEinpassen();if(typeof koeNachRender==='function')koeNachRender();if(typeof Dev!=='undefined'&&Dev.an)Dev.render();}
+
+// Spieltest 2026-11-09: Kartentitel passen in die Karte (lange Wörter werden kleiner statt über den Rand zu laufen),
+// und die Hand rückt zusammen, sobald sie breiter als ihr Platz wäre. So bleibt der Knopf ZUG BEENDEN immer an seiner Stelle.
+function kartenEinpassen(){
+ for(const el of document.querySelectorAll('.karte .kn')){el.style.fontSize='';let fs=parseFloat(getComputedStyle(el).fontSize),min=fs*.55;
+  while((el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1)&&fs>min){fs-=.5;el.style.fontSize=fs+'px';}}
+ const h=$('hand');if(!h)return;const ks=[...h.querySelectorAll(':scope>.karte')],n=ks.length;h.style.setProperty('--ov',0);if(n<2)return;
+ const gap=parseFloat(getComputedStyle(h).columnGap)||0,cw=ks[0].offsetWidth,platz=h.clientWidth,braucht=n*cw+(n-1)*gap;
+ if(braucht>platz)h.style.setProperty('--ov',((braucht-platz)/(n-1)/BU.k).toFixed(2));}
 
 // ---------- Kopfzeile ----------
 function kopfHtml(){const f=S.phase==='fight';const m=maxHp();const inc=f?incoming():0;const lose=Math.max(0,inc-S.block);
  const total=allRx().length;
  // Auftrag 3 M2 (Variante 2): links Tiefe/Zug und Biom kursiv, rechts Gold, Buch und Deck in gleicher Größe
  return `<div class="tz">TIEFE ${romanN(Math.max(1,S.depth))}${f?` · ZUG ${S.turnNo}`:''}<span class="sub">${esc(biom().n)}</span>${biegKopfHtml()}</div>
- <div class="kr"><span class="gold">${gi('gold',KZ())} <b>${S.gold}</b> Gold</span>${S.netz&&S.netz.akt===S.akt&&S.phase!=='weg'?'<a data-act="karte" title="Karte (M)">Karte</a>':''}<a data-act="buch">Buch <b>${S.disc.size}/${total}</b></a><span>Deck <b>${deckListe().length}</b></span></div>
+ <div class="kr"><span class="gold">${gi('gold',KZ())} <b>${S.gold}</b> Gold</span>${S.netz&&S.netz.akt===S.akt&&S.phase!=='weg'?'<a data-act="karte" title="Karte (M)">Karte</a>':''}${!f&&canEquip()?'<a data-act="rucksack" class="amk" title="Rucksack: Am Körper (R)">Am Körper</a>':''}<a data-act="buch">Buch <b>${S.disc.size}/${total}</b></a><span>Deck <b>${deckListe().length}</b></span></div>
  ${f?'':`<div class="du">DU · ${esc(S.jobN).toUpperCase()}</div>${barHtml(S.hp,m,0,null,'gross')}<div class="zahlen">${S.hp}/${m}</div>`}`;}
 // Auftrag 3 M5: Zeichen und Name der Regelbiegung rechts neben dem Biom-Namen, Tooltip mit dem Regeltext.
 // Pforte: die Biegung dieses Zuges, klein die des nächsten. Ebbe und Flut: ob dieser Zug Ebbe oder Flut ist.

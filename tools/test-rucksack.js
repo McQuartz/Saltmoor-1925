@@ -22,7 +22,7 @@ const MESSEN = () => {
   const img = k.querySelector('.kfigur');
   return { an: k.classList.contains('an'), fach, rechts, name, fuss, figurOk: img && img.complete && img.naturalWidth === 110, figurSrc: img && img.getAttribute('src'), text: k.innerText,
     kerben: [...k.querySelectorAll('.kslot:not(.zu) .kkb')].map(x => x.children.length), lesen: k.classList.contains('lesen'), dataLoc: k.querySelectorAll('[data-loc]').length,
-    leiste: document.getElementById('leiste').className, alteLeiste: !!document.querySelector('#leiste .areas'), punkte: k.querySelectorAll('.klinien .pkt').length };
+    leiste: document.getElementById('leiste').className, alteLeiste: !!document.querySelector('#leiste .areas'), amk: !!document.querySelector('#kopf [data-act="rucksack"]'), punkte: k.querySelectorAll('.klinien .pkt').length };
 };
 const lap = (a, b) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
 (async () => {
@@ -64,25 +64,29 @@ const lap = (a, b) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
       ok(m.fach.every(f => f.b <= m.fuss.t + .5) && m.rechts.b <= m.fuss.t + .5, `${tag}: nichts ragt in den Holz-Footer`);
       ok(!/\?/.test(m.text), `${tag}: kein Fragezeichen`);
       ok(m.punkte === 6, `${tag}: drei gepunktete Linien mit Endpunkten`);
-      ok(m.leiste === 'tisch' && !m.alteLeiste, `${tag}: alte Itemleiste ist weg`);
+      ok(m.leiste === '' && !m.alteLeiste && m.amk, `${tag}: alte Itemleiste ist weg, unten kein leerer Platz, „Am Körper“ in der Kopfleiste`);
       ok(m.kerben.every(n => n >= 1), `${tag}: jedes Item zeigt seine Kerben`);
       if (fotos && (W === 1440 || j.id === 'fischer')) await p.screenshot({ path: path.join(AUS, `rucksack-${j.id}-${W}x${H}.png`) });
       await p.close();
     }
-    // 3. Bedienung: Klick, Ziele, Tausch, Grün/Rot
+    // 3. Bedienung: Klick wählt aus, Ziehen tauscht, Grün/Rot
     {
       const p = await seite(1440, 900, 'rast');
       await p.keyboard.press('r'); await p.waitForTimeout(300);
       ok(await p.evaluate(() => !!KOE && !KOE.lesen), 'Taste R öffnet den Rucksack an der Rast');
       const bi = await p.evaluate(() => S.bag.findIndex(it => it && def(it).a === 'waffe'));
       await p.click(`#koerper [data-loc="bag:${bi}"]`); await p.waitForTimeout(150);
-      const ziele = await p.$$eval('#koerper .kslot.ziel', e => e.map(x => x.dataset.loc));
-      ok(ziele.includes('waffe:0') && ziele.includes('waffe:1') && !ziele.some(z => z.startsWith('kleidung') || z.startsWith('talisman')), `passende Ziele leuchten (${ziele.join(', ')})`);
+      ok(await p.evaluate(() => document.querySelectorAll('#koerper .kslot.ziel').length === 0), 'Klick wählt nur aus, es leuchten keine Ziele (Tauschen nur per Ziehen, Spieltest 2026-11-09)');
       ok(await p.evaluate(() => document.querySelectorAll('#koerper .krechts .karte.mini').length > 0), 'rechts stehen die Karten des gewählten Items');
       if (fotos) await p.screenshot({ path: path.join(AUS, 'rucksack-gewaehlt-1440x900.png') });
-      await p.click('#koerper [data-loc="waffe:0"]'); await p.waitForTimeout(200);
+      const vorKlick = await p.evaluate(() => JSON.stringify([S.areas, S.bag.map(x => x && x.uid)]));
+      await p.click('#koerper [data-loc="waffe:0"]'); await p.waitForTimeout(150);
+      ok(await p.evaluate(v => JSON.stringify([S.areas, S.bag.map(x => x && x.uid)]) === v, vorKlick), 'Klick auf einen zweiten Platz tauscht nicht');
+      await p.keyboard.press('Escape'); await p.keyboard.press('r'); await p.waitForTimeout(200);
+      { const q = await (await p.$(`#koerper [data-loc="bag:${bi}"]`)).boundingBox(), z = await (await p.$('#koerper [data-loc="waffe:0"]')).boundingBox();
+        await p.mouse.move(q.x + 10, q.y + 10); await p.mouse.down(); await p.mouse.move(q.x + 40, q.y + 40, { steps: 5 }); await p.mouse.move(z.x + 10, z.y + 10, { steps: 10 }); await p.mouse.up(); await p.waitForTimeout(200); }
       const d = await p.evaluate(() => ({ gr: document.querySelectorAll('#koerper .kdiff .gr').length, rt: document.querySelectorAll('#koerper .kdiff .rt').length, w0: def(S.areas.waffe[0]).a }));
-      ok(d.gr > 0 && d.rt > 0 && d.w0 === 'waffe', `Tausch: Deck zeigt rein grün (${d.gr}) und raus rot (${d.rt})`);
+      ok(d.gr > 0 && d.rt > 0 && d.w0 === 'waffe', `Tausch per Ziehen: Deck zeigt rein grün (${d.gr}) und raus rot (${d.rt})`);
       if (fotos) await p.screenshot({ path: path.join(AUS, 'rucksack-tausch-1440x900.png') });
       // Gesperrter Platz nimmt nichts
       const vor = await p.evaluate(() => JSON.stringify(S.areas)); await p.click('#koerper [data-loc="waffe:0"]'); await p.click('#koerper .kslot.zu'); await p.waitForTimeout(100);
@@ -115,7 +119,9 @@ const lap = (a, b) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
       const p = await seite(1440, 900, 'werkstatt');
       await p.evaluate(() => rucksackAuf()); await p.waitForTimeout(200);
       ok(await p.$$eval('#koerper [data-loc^="bench:"]', e => e.length) === 2, 'in der Werkstatt hat der Rucksack zwei Werkbank-Plätze');
-      await p.click('#koerper [data-loc="bag:0"]'); await p.click('#koerper [data-loc="bench:0"]'); await p.click('#koerper [data-loc="bag:1"]'); await p.click('#koerper [data-loc="bench:1"]'); await p.waitForTimeout(150);
+      const zieh = async (von, nach) => { const q = await (await p.$(`#koerper [data-loc="${von}"]`)).boundingBox(), z = await (await p.$(`#koerper [data-loc="${nach}"]`)).boundingBox();
+        await p.mouse.move(q.x + 10, q.y + 10); await p.mouse.down(); await p.mouse.move(q.x + 40, q.y + 40, { steps: 5 }); await p.mouse.move(z.x + 10, z.y + 10, { steps: 10 }); await p.mouse.up(); await p.waitForTimeout(150); };
+      await zieh('bag:0', 'bench:0'); await zieh('bag:1', 'bench:1');
       ok(await p.evaluate(() => !!S.bench[0] && !!S.bench[1]), 'zwei Items liegen auf der Werkbank');
       if (fotos) await p.screenshot({ path: path.join(AUS, 'rucksack-werkbank-1440x900.png') });
       await p.click('#koerper [data-act="rucksackZu"]'); await p.waitForTimeout(150);

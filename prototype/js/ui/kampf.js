@@ -51,9 +51,14 @@ const GZ=()=>9*U(),KZ=()=>9*Math.max(1,Math.round(U()/2));
 
 // ---------- Untere Leiste im Kampf (Footer als Tisch): eigener Balken und Stoff-Baum, Hand, Energie ----------
 function leisteKampf(){const n=S.hand.length;
- return `<div id="links"><div id="spieler2">${spielerHtml()}</div><div id="baum">${stoffBaumHtml()}</div></div>${blickWahlHtml()}${begegnungHtml()}<div id="hand" class="${S.blickWahl||S.begegnung?'verdeckt':''}" style="--ov:${S.hand.length>6?((S.hand.length-6)*59/(S.hand.length-1)).toFixed(2):0}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
+ return `<div id="links"><div id="spieler2">${spielerHtml()}</div><div id="baum">${stoffBaumHtml()}</div><div id="letzteRx">${letzteRxHtml()}</div></div>${blickWahlHtml()}${begegnungHtml()}<div id="hand" class="${S.blickWahl||S.begegnung?'verdeckt':''}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
  <div id="rechts"><div class="en-l">ENERGIE</div><div class="rauten">${[...Array(Math.max(BAL.energy_per_turn,S.energy))].map((_,i)=>`<i class="${i<S.energy?'voll':''}"></i>`).join('')}</div>
  <button id="endBtn" class="deco" data-act="end" ${busy||S.blickWahl||S.begegnung?'disabled':''}>ZUG<br>BEENDEN</button>${stapelHtml()}${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
+// Spieltest 2026-11-09: die letzte Reaktion steht unten links unter dem Stoff-Baum, bis die nächste kommt (statt oben als Meldung).
+// LETZTE_RX setzt feedback.js beim Bus-Ereignis „reaction“, ein neuer Kampf leert sie.
+let LETZTE_RX=null;
+function letzteRxHtml(){const x=LETZTE_RX;if(!x)return'';const c=(ST[x.keys[0]]||{}).c||'#e8c547';
+ return `<div class="lrx${x.hoch?' hoch':''}${x.neu?' neu':''}" style="--c:${c}" title="${esc(x.n+': '+x.t)}"><span class="lrx-k">${x.keys.map(k=>gi(k,KZ())).join('<i>+</i>')}<b>${esc(x.n.toUpperCase())}</b>${x.hoch?'<em>HOCHREAKTION</em>':''}${x.neu?'<em>NEU</em>':''}</span>${esc(x.t)}</div>`;}
 // M9: Begegnung nach dem Seitenwechsel: die Wesen stehen da, man geht weiter (halbe Beute)
 function begegnungHtml(){if(!S.begegnung)return'';const B=RUN.begegnungen;return `<div class="blickwahl begegnung"><p>${esc(B.begegnung.t)}</p><button class="deco haupt" data-act="weitergehen" autofocus>${esc(B.weiter.t)}</button></div>`;}
 // M7: Wahl zu Kampfbeginn mit Blick-Item, liegt über der Hand, bis gewählt ist (Standard: Nicht hinsehen)
@@ -67,10 +72,28 @@ function stapelHtml(){const B=typeof Bieg!=='undefined';const top=S.draw.length?
  else if(B&&Bieg.ist('keiner_faehrt')&&top&&top.zurueck)h+=`<div class="voraus">Oben: ${esc(top.n)}</div>`;
  else if(jobFaehigkeit()==='voraus'&&top)h+=`<div class="voraus">Als Nächstes: ${esc(top.n)}</div>`;
  return h;}
+// Spieltest 2026-11-09: Sonderwirkungen ohne eigenen Text (sonder.t) standen auf der Karte gar nicht, die Karte wirkte leer.
+// Der Text kommt aus der Art der Wirkung, dieselben Werte wie sonderAtk/sonderWirkung in combat.js.
+const SONDER_KLEIN=new Set(['zugende_hand','block_verdoppeln','gift_wandert','lebensraub','stoff_joker','wiederholen']); // Satzanfang klein, wenn davor schon etwas steht
+function sonderText(s){if(!s)return'';const fk=fx=>typeof fxKurz==='function'?fxKurz(fx):'';
+ switch(s.art){
+  case'fx':return fk(s.fx);
+  case'zugende_hand':return `Liegt sie am Zugende auf der Hand: ${fk(s.fx)}`;
+  case'brand_verdoppeln':return s.alle?'Brand aller Gegner verdoppeln':'Brand des Ziels verdoppeln';
+  case'gift_verdoppeln':return 'Gift des Ziels verdoppeln';
+  case'block_verdoppeln':return 'Deinen Block verdoppeln';
+  case'gift_wandert':return 'Stirbt das Ziel, wandert sein Gift weiter';
+  case'schaden_gleich_block':return (s.anteil||1)===1?'Schaden in Höhe deines Blocks':`Schaden: ${Math.round((s.anteil||1)*100)} % deines Blocks`;
+  case'schaden_je_fehlleben':return `+1 Schaden je ${s.je||5} fehlende Leben`;
+  case'lebensraub':return `Heilt dich um ${Math.round((s.anteil||.5)*100)} % des Schadens`;
+  case'stoff_joker':return 'Die nächste Karte reagiert auch mit der Karte davor';
+  case'wiederholen':return 'Wiederholt die vorige Karte';
+  case'x_plus':return `X +${s.v||1}`;
+  default:return'';}}
 // m: Reaktionsfaktor, den die Karte jetzt bekäme (Fix 6: Ziehen, Stärke und Gold zeigen den verstärkten Wert)
 function cardText(c,m=1){const vs=v=>typeof verstaerkt==='function'?verstaerkt(v,m):v;if(c.unspielbar)return typeof werfbar==='function'&&werfbar(c)?`Über Bord werfen: ${passive('ballast_werfen').map(p=>fxKurz(p.fx)).join(', ')}.`:'Unspielbar.';const p=[];const kw=[];if(c.funke)kw.push('Funke');if(c.zoll)kw.push(`Zoll ${c.zoll}`);if(c.behalten)kw.push('Behalten');if(c.x)kw.push('X');if(c.kette)kw.push(`Kette ${c.kette}`);if(c.opfer)kw.push(`Opfer ${c.opfer}`);
  if(c.atk)p.push(`${c.atk}${c.x?'×X':c.h?'×'+c.h:''} Schaden${c.all?' an allen':''}`);if(c.blk)p.push(`${c.blk} Block`);if(c.heal)p.push(`+${c.heal} Leben`);if(c.poison)p.push(`Gift ${c.poison}`);if(c.burn)p.push(`Brand ${c.burn}`);if(c.weak)p.push('Geschwächt');if(c.vuln)p.push(`Verwundbar ${c.vuln}`);if(c.str)p.push(`Stärke ${vs(c.str)}`);if(c.strip)p.push('Block weg');if(c.draw)p.push(`Ziehe ${vs(c.draw)}`);if(c.en)p.push(`+${c.en} Energie`);if(c.self)p.push(`−${c.self} Leben`);if(c.gold)p.push(`+${c.gold} Gold`.replace(String(c.gold),String(vs(c.gold))));
- if(c.sonder&&c.sonder.t)p.push(c.sonder.t);
+ if(c.sonder){let st=c.sonder.t||sonderText(c.sonder);if(st&&p.length&&!c.sonder.t&&SONDER_KLEIN.has(c.sonder.art))st=st[0].toLowerCase()+st.slice(1);if(st)p.push(st);}
  let s=(kw.length?kw.join(', ')+'. ':'')+(p.join(', ')||(c.t&&!c.atk&&!c.blk?'':'–'));if(c.eroeffnung)s+=`. Eröffnung: ${Object.entries(c.eroeffnung).map(([k,v])=>k==='atk'?`+${v} Schaden`:k==='blk'?`+${v} Block`:k==='draw'?`ziehe ${v}`:k==='heal'?`+${v} Leben`:k==='en'?`+${v} Energie`:k==='burn'?`Brand ${v}`:k==='poison'?`Gift ${v}`:`${k} ${v}`).join(', ')}`;if(c.verbraucht)s=s.replace(/\.$/,'')+'. Verbraucht';return s;}
 function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.st);const self=c.st.length>1?rx.filter(r=>r.k&&[...r.k].every(k=>c.st.includes(k))):[];const vor=rx.filter(r=>!self.includes(r));
  // M2: Reaktionen stehen immer mit Namen als Band unten an der Karte (kein Fragezeichen); die Karte leuchtet in der Farbe ihres reagierenden Stoffs
@@ -86,6 +109,4 @@ function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.s
 // ---------- Ausrüstung unter der Szene ----------
 function slotHtml(loc,locked){const it=locked?null:getAt(loc);const d=it?def(it):null;const ibi=it?itemBild(it.id):'';
  return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${ibi}" alt="" data-fuid="${it.uid}">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}<span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;}
-// Auftrag 3 M4: die alte Itemleiste ist entfernt. Außerhalb des Kampfes liegt unten nur der Tisch mit dem Weg zum Rucksack „Am Körper“ (js/ui/rucksack.js).
-function tischHtml(){const an=allActive();return `<div class="tischreihe"><div class="tangelegt">${an.map(it=>`<img src="${itemBild(it.id)}" alt="${esc(def(it).n)}" title="${esc(def(it).n)}" draggable="false" data-fuid="${it.uid}">`).join('')}</div><button class="deco" data-act="rucksack">AM KÖRPER (R)</button><span class="hint">${S.bag.filter(Boolean).length} im Rucksack</span></div>`;}
 

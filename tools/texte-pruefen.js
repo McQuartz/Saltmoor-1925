@@ -23,7 +23,7 @@ function alleJs(d) { let o = ''; for (const f of fs.readdirSync(d, { withFileTyp
 const js = alleJs(path.join(T.P, 'js'));
 // Bewusst entfernte Oberflächen-Texte (alte Anzeigen, die der Auftrag ersetzt), mit Grund: docs/auftrag-3/texte-entfernt.json
 const ENTF = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'docs', 'auftrag-3', 'texte-entfernt.json'), 'utf8')).entfernt || []; } catch (e) { return []; } })();
-const entfernt = new Set(ENTF.map(x => x.s));
+const entfernt = new Set(ENTF.map(x => x.s ?? x.text));
 for (const x of B.ui) if (!js.includes(x.s) && !entfernt.has(x.s)) fehler.push(`UI-TEXT FEHLT (war in ${x.f}): ${x.s}`);
 // Neue Texte: Entwurf?
 const basisSet = new Set(B.daten.map(x => x.f + '|' + x.s));

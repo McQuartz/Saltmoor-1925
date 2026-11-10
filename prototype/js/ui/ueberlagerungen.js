@@ -25,12 +25,16 @@ function reliefMalen(){const c=$('relief');if(!c)return;const x=c.getContext('2d
  x.fillStyle=B.rand[1];x.fillRect(78,12,4,4);}
 
 // Rucksackmodus aus Auftrag 2 entfernt (Auftrag 3 M4): der Rucksack „Am Körper“ steht in js/ui/rucksack.js.
-// ---------- Hover-Vorschau am Cursor: welche Karten ins Deck kämen, welche Reaktionen dadurch möglich würden ----------
-function vorschauKarten(karten,titel){const deckSt=new Set(allActive().flatMap(it=>def(it).st));const st=new Set(karten.flatMap(c=>c.st));const rx=[];
- REACT.forEach(r=>{const[a,b]=[...r.k];if((st.has(a)&&deckSt.has(b))||(st.has(b)&&deckSt.has(a)))rx.push(r.n);});
- const einm=[];const seen=new Set();karten.forEach(c=>{const k=c.n+c.hg;if(!seen.has(k)){seen.add(k);einm.push({...c,anz:karten.filter(x=>x.n===c.n&&x.hg===c.hg).length});}});
- return `<div class="tn">${titel}</div><div class="vkr">${einm.map(c=>`<div class="vk"><div class="vkc">${c.x?'X':c.opfer?'♥'+c.opfer:c.c}</div><b>${esc(c.n)}${c.anz>1?' ×'+c.anz:''}</b><div>${c.st.map(k=>gi(k,9)).join('')||'<span class="hint">Stoff des Items</span>'}</div><div class="vkt">${esc(cardText(c))}</div></div>`).join('')}</div>${rx.length?`<div class="hint">Reagiert mit deinem Deck: ${[...new Set(rx)].join(', ')}</div>`:''}`;}
+// ---------- Hover-Vorschau am Cursor: die Karten, die ins Deck kämen ----------
+// Spieltest 2026-11-09: Beim Hovern über Fund, Reliquie oder Handgriff stehen die echten Karten, so wie sie auf der Hand aussehen.
+function vorschauKarte(c){const k=c.x?'X':c.opfer?'♥'+c.opfer:c.c;const img=c.img||(typeof spr==='function'&&c.spr?spr(c.spr):'');
+ return `<div class="karte vorschau${c.st.length>1?' duo':''}"><div class="kost"><span>${k}</span></div><div class="kst">${c.st.map(s=>gi(s,KZ())).join('')}</div>
+ <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen">${img?`<img src="${img}" alt="">`:''}</div><div class="kt">${esc(cardText(c))}</div></div>`;}
+function vorschauKartenReihe(karten,zusatz=''){const einm=[];const seen=new Map();karten.forEach(c=>{const k=c.n+'|'+(c.hg||'');if(seen.has(k))seen.get(k).anz++;else{const o={c,anz:1};seen.set(k,o);einm.push(o);}});
+ return `<div class="tipkarten" style="zoom:${(BU.s||1).toFixed(3)}">${einm.map(o=>`<div class="tkw">${vorschauKarte(o.c)}${o.anz>1?`<span class="anz">×${o.anz}</span>`:''}</div>`).join('')}</div>${zusatz}`;}
 function hoverVorschau(el){const tk=el.closest('[data-take],[data-buy],[data-hg],[data-buyhg]');if(!tk)return null;
- if(tk.dataset.hg||tk.dataset.buyhg!=null){const id=tk.dataset.hg||(S.shop&&S.shop.hg[+tk.dataset.buyhg]||{}).id;const H=HANDGRIFFE[id];if(!H)return null;return vorschauKarten([{...H,st:[]}],'Kommt als 1 Karte ins Deck, mit dem Stoff des Items, in das du ihn ritzt');}
+ if(tk.dataset.hg||tk.dataset.buyhg!=null){const id=tk.dataset.hg||(S.shop&&S.shop.hg[+tk.dataset.buyhg]||{}).id;const H=HANDGRIFFE[id];if(!H)return null;return vorschauKartenReihe([{...H,st:[],img:hgBild(id)||''}]);}
  const id=tk.dataset.take||(tk.dataset.buy!=null&&S.shop&&S.shop.items[+tk.dataset.buy]&&S.shop.items[+tk.dataset.buy].id);if(!id||!ITEMS[id])return null;
- const tmp={uid:-1,id};return vorschauKarten(kartenVon(tmp),'Angelegt kommen ins Deck:');}
+ const tmp={uid:-1,id};const D=ITEMS[id];
+ const z=[D.hp?`+${D.hp} Leben`:'',D.passiv?passivText(D.passiv):'',D.eigen?eigenText(D.eigen):''].filter(Boolean);
+ return vorschauKartenReihe(kartenVon(tmp),z.length?`<div class="tipzusatz">${z.map(esc).join(' · ')}</div>`:'');}
