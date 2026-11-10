@@ -1,0 +1,61 @@
+/* Ritzen (Spieltest 2026-11-10, Mockup „Handgriff ritzen: alt gegen neu“): liegt über der ganzen Szene (480 × 270 Szenen-Pixel, außerhalb des Kampfes gibt es keine Leiste), alle Maße in --u.
+   Jede Karte sieht gleich aus. Fest = dunkles Holz mit Schild FEST, überritzbar = Messingrahmen, frei = gestrichelt grün. */
+.rz{position:absolute;left:0;top:0;width:calc(var(--u)*480);height:calc(var(--u)*270);box-sizing:border-box;padding:calc(var(--u)*5) calc(var(--u)*8);display:flex;flex-direction:column;gap:calc(var(--u)*4);
+ background:linear-gradient(rgba(6,5,4,.96),rgba(6,5,4,.985));text-align:left;overflow:auto;scrollbar-width:thin;scrollbar-color:#4a3a20 #000}
+.rz img{image-rendering:pixelated}
+.rzkopf{display:flex;gap:calc(var(--u)*6);flex:none}
+.rzneu{width:calc(var(--u)*112);flex:none;box-sizing:border-box;border:1px solid var(--eld);background:#060504;box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px #1e4a3a,0 0 calc(var(--u)*4) rgba(122,255,200,.2);padding:calc(var(--u)*3) calc(var(--u)*4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*1.5);text-align:center}
+.rzneun{display:flex;align-items:center;gap:calc(var(--u)*3)}.rzneun img{width:calc(var(--u)*12);height:calc(var(--u)*12)}
+.rzneun b{font-family:var(--fk);font-size:calc(var(--u)*5.4);letter-spacing:.06em;color:#efe4c8}
+.rznt{font-size:calc(var(--u)*5);color:#cfc4a8;line-height:1.2}
+.rznf{font-style:italic;font-size:calc(var(--u)*5);color:var(--dim);line-height:1.2}
+.rzvk{font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.14em;color:#efe4c8;display:flex;align-items:center;gap:calc(var(--u)*2)}.rzvk.eld{color:var(--eld);font-size:calc(var(--u)*3.8)}
+.rzvgl{flex:1;min-width:0;box-sizing:border-box;border:1px solid #3a2c18;background:rgba(8,6,4,.85);padding:calc(var(--u)*3) calc(var(--u)*5);display:flex;flex-direction:column;justify-content:center;gap:calc(var(--u)*2.5)}
+.rzvz{display:flex;align-items:center;gap:calc(var(--u)*5)}.rzvz>.rzk{flex:1;margin-left:calc(var(--u)*3)}
+.rzpf{font-family:var(--fk);font-size:calc(var(--u)*8);color:var(--messing)}
+.rzvh{margin:0;font-size:calc(var(--u)*5);color:#a89c80;line-height:1.25}
+.rzja{margin:0;font-size:calc(var(--u)*5);color:#ff9a8a}
+.rzfrage{display:flex;align-items:center;gap:calc(var(--u)*6);font-size:calc(var(--u)*5.6);color:#efe4c8;flex:none}.rzfrage>span:first-child{flex:1}
+.rzleg{display:flex;gap:calc(var(--u)*5);font-size:calc(var(--u)*4.4);color:#a89c80;white-space:nowrap}.rzleg>span{display:flex;align-items:center;gap:calc(var(--u)*2)}
+.rzleg i{display:inline-block;width:calc(var(--u)*6);height:calc(var(--u)*5);box-sizing:border-box}
+.rzleg .lf{border:1px solid #4a3e2c;background:#120e09}.rzleg .lk{border:1px solid var(--messing);background:#060504}.rzleg .lr{border:1px dashed #3a6a58}
+.rzgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:calc(var(--u)*3);align-items:start}
+.rz.viele .rzgrid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.rz.sehrviele .rzgrid{grid-template-columns:repeat(6,minmax(0,1fr))}
+.rzz{box-sizing:border-box;background:#0b0907;border:1px solid #3a2e1a;padding:calc(var(--u)*2.5) calc(var(--u)*3);display:flex;flex-direction:column;gap:calc(var(--u)*2);min-width:0}
+.rzz:hover{border-color:var(--messing)}.rzz.sel{border-color:var(--gold);box-shadow:0 0 calc(var(--u)*4) rgba(232,197,71,.2)}
+.rzz.lose{opacity:.6}.rzz.lose:hover{opacity:.85}
+.rzzk{display:flex;align-items:center;gap:calc(var(--u)*3)}.rzzk>img{width:calc(var(--u)*10);height:calc(var(--u)*10)}.rzzk .ico{width:calc(var(--u)*6);height:calc(var(--u)*6)}
+.rzzn{font-family:var(--fl);font-size:calc(var(--u)*5.4);color:#efe4c8;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rzrs{font-family:var(--fk);font-size:calc(var(--u)*3.6);letter-spacing:.12em;color:var(--dim)}
+/* Eine Karte in Zeilenform */
+.rzk{position:relative;display:flex;align-items:center;gap:calc(var(--u)*3);min-height:calc(var(--u)*14);box-sizing:border-box;width:auto;margin:0 0 0 calc(var(--u)*2.5);padding:calc(var(--u)*1) calc(var(--u)*3) calc(var(--u)*1) calc(var(--u)*6);
+ border:1px solid var(--messing);background:#060504;box-shadow:inset 0 0 0 1px #060504,inset 0 0 0 2px #3a2c18,1px 1px 0 #000;color:#efe4c8;font:inherit;text-align:left}
+button.rzk{cursor:pointer}
+.rzk>img{width:calc(var(--u)*9);height:calc(var(--u)*9);flex:none}
+.rzkost{position:absolute;left:calc(var(--u)*-3);top:50%;margin-top:calc(var(--u)*-3);width:calc(var(--u)*5.5);height:calc(var(--u)*5.5);transform:rotate(45deg);background:#000;border:1px solid var(--messing2);display:flex;align-items:center;justify-content:center}
+.rzkost span{transform:rotate(-45deg);font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*3.8);color:#efe4c8}
+.rzkost.leer{border-color:#5a3a66}
+.rzkost.inl{position:relative;left:auto;top:auto;margin:0 calc(var(--u)*2)}
+.rzx{display:flex;flex-direction:column;line-height:1.1;flex:1;min-width:0}
+.rzx b{font-family:var(--fl);font-weight:400;font-size:calc(var(--u)*5.2);color:#efe4c8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rzx i{font-style:normal;font-size:calc(var(--u)*4.8);color:#bfb49a}
+.rzz:hover button.rzk.kerbe,button.rzk.kerbe:hover{border-color:var(--messing2)}
+.rzk.fest{border-color:#4a3e2c;background:repeating-linear-gradient(90deg,#120e09 0 calc(var(--u)*3),#0e0b07 calc(var(--u)*3) calc(var(--u)*6));box-shadow:inset 0 0 0 1px #0e0b07,inset 0 0 0 2px #241c10,1px 1px 0 #000;cursor:default}
+.rzk.fest .rzkost{border-color:#6a5a3a}.rzk.fest .rzkost span{color:#a89c80}
+.rzk.fest .rzx b{color:#b8ad94}.rzk.fest .rzx i{color:var(--dim)}.rzk.fest>img{opacity:.75}
+.rzk.fluch{border-color:#4a2e52}.rzk.fluch .rzx b{color:#b898d0}
+.rzfest{display:flex;align-items:center;gap:calc(var(--u)*1);font-family:var(--fk);font-size:calc(var(--u)*3.2);letter-spacing:.12em;color:#a89c80;flex:none}
+.rzfest i{display:block;width:calc(var(--u)*3);height:calc(var(--u)*3);border-radius:50%;background:radial-gradient(circle at 40% 40%,#a89878 0 30%,#4a3e2c 35%);box-shadow:0 0 0 1px #000}
+.rzk.raus{border-color:#e8685a;box-shadow:inset 0 0 0 1px #060504,inset 0 0 0 2px #5a2018,0 0 calc(var(--u)*3) rgba(232,104,90,.3),1px 1px 0 #000}
+.rzk.raus .rzx b,.rzk.raus .rzx i{text-decoration:line-through;text-decoration-color:#e8685a}
+.rzk.neu{border-color:var(--eld);box-shadow:inset 0 0 0 1px #060504,inset 0 0 0 2px #1e4a3a,0 0 calc(var(--u)*4) rgba(122,255,200,.25),1px 1px 0 #000}
+.rzk.frei{border:1px dashed #3a6a58;background:transparent;box-shadow:none;padding-left:calc(var(--u)*4)}
+.rzplus{width:calc(var(--u)*9);text-align:center;font-family:var(--fk);font-size:calc(var(--u)*7);line-height:1;color:var(--eld);flex:none}
+.rzk.frei .rzx b{color:var(--eld)}.rzk.frei .rzx i{color:#5aa88a;font-style:italic}
+.rzz:hover button.rzk.frei,button.rzk.frei:hover{border-color:var(--eld);box-shadow:0 0 calc(var(--u)*3) rgba(122,255,200,.25)}
+.rzkeine{font-style:italic;font-size:calc(var(--u)*4.5);color:#6a6050;padding:calc(var(--u)*2) calc(var(--u)*3)}
+
+.rz.viele .rzrs,.rz.sehrviele .rzrs{display:none}
+.rz.sehrviele .rzfest{font-size:0;gap:0}
+.rz.viele .rzx b,.rz.sehrviele .rzx b{white-space:normal;line-height:1}
