@@ -3,7 +3,8 @@
 // sie im Browser ab (IndexedDB, Datenbank „saltmoor-mund“, gleiche Adresse wie das Spiel, also http://localhost:8000).
 // Im Spiel (index.html) hängt sich diese Datei vor jede Funktion in sfx: Ist der Mund-Modus an und gibt es für den Sound
 // eine Aufnahme, spielt die Aufnahme (über denselben SFX-Bus mit Hall und Limiter), sonst das Original (oder Stille).
-// Einschalten: im Studio der Schalter „Im Spiel benutzen“ oder index.html?mund=1 (aus: ?mund=0).
+// Eingebaut: audio/mund/<key>.wav (exportiert aus dem Studio). Standard ist an („Alpha-Sounds“); umschalten in den Einstellungen
+// (Sounds: Alpha / Standard), im Studio („Im Spiel benutzen“) oder mit index.html?mund=0 / ?mund=1.
 // Die Liste MUND_KATALOG ist die eine Stelle, an der steht, welche Sounds es gibt. Neue sfx-Funktion = neuer Eintrag hier.
 const MUND_KATALOG=[
  // Kampf
@@ -40,7 +41,7 @@ function mundSchluessel(name,arg){
 
 const Mund=(()=>{
  const DB='saltmoor-mund',VER=1,OPT_KEY='saltmoor.mund.v1';
- const STD={aktiv:false,fehlt:'original',musikAus:false,streuung:.03};
+ const STD={aktiv:true,fehlt:'original',musikAus:false,streuung:.03};
  let opt=null;
  function optionen(){if(opt)return opt;try{opt=Object.assign({},STD,JSON.parse(localStorage.getItem(OPT_KEY)||'{}'));}catch(e){opt=Object.assign({},STD);}return opt;}
  function setze(k,v){optionen()[k]=v;try{localStorage.setItem(OPT_KEY,JSON.stringify(opt));}catch(e){}}
@@ -106,7 +107,7 @@ const Mund=(()=>{
  // Im Spiel: zu jedem Taktanfang die passenden Loops des Bioms wählen, die prozeduralen Layer dafür stumm schalten
  let musikTakes={},laeuft=[null,null,null,null,null],musikBiom=null;
  function musikTakt(z){
-  const hat=Object.keys(musikTakes).some(k=>k.startsWith(`musik:${z.biome}:`));
+  const hat=optionen().aktiv&&Object.keys(musikTakes).some(k=>k.startsWith(`musik:${z.biome}:`));
   if(z.biome!==musikBiom){laeuft.forEach(l=>loopStoppen(l,z.t));laeuft=[null,null,null,null,null];musikBiom=z.biome;}
   Music.mund.tempo(hat?MUSIK_BPM:0);
   LAYER.forEach(L=>{let t=null;if(hat){for(const v of L.wahl(z)){t=musikTakes[musikKey(z.biome,L.id,v)];if(t)break;}}
@@ -116,7 +117,24 @@ const Mund=(()=>{
 
  // --- Im Spiel: sfx-Funktionen umhüllen ---
  let geladen={},original=null; // key -> take
- async function ladeGewaehlte(){const w=await ablage.wahl(),m={},mu={};for(const k in w){const t=await ablage.take(w[k]);if(!t)continue;if(k.startsWith('musik:'))mu[k]=t;else m[k]=t;}
+ // Eingebaute Aufnahmen: audio/mund/<key>.wav (aus dem Studio exportiert, liegen im Repo). Aufnahmen im Browser (IndexedDB) gehen vor.
+ const DATEIEN='audio/mund/';
+ function leseWav(buf){const v=new DataView(buf);if(v.getUint32(0,false)!==0x52494646)return null;
+  let o=12,sr=44100,ch=1,bits=16,fmt=1,data=null;
+  while(o+8<=v.byteLength){const id=String.fromCharCode(v.getUint8(o),v.getUint8(o+1),v.getUint8(o+2),v.getUint8(o+3)),n=v.getUint32(o+4,true);
+   if(id==='fmt '){fmt=v.getUint16(o+8,true);ch=v.getUint16(o+10,true);sr=v.getUint32(o+12,true);bits=v.getUint16(o+22,true);}
+   if(id==='data'){data={a:o+8,n:Math.min(n,v.byteLength-o-8)};break;}o+=8+n+(n&1);}
+  if(!data)return null;const bps=bits/8,fr=Math.floor(data.n/(bps*ch)),pcm=new Float32Array(fr);
+  for(let i=0;i<fr;i++){let s=0;for(let c=0;c<ch;c++){const p=data.a+(i*ch+c)*bps;
+    s+=fmt===3&&bits===32?v.getFloat32(p,true):bits===16?v.getInt16(p,true)/32768:bits===24?((v.getUint8(p)|v.getUint8(p+1)<<8|v.getInt8(p+2)<<16)/8388608):bits===32?v.getInt32(p,true)/2147483648:(v.getUint8(p)-128)/128;}
+   pcm[i]=s/ch;}
+  return {sr,pcm};}
+ async function ladeDateien(){const m={};
+  await Promise.all(MUND_KATALOG.map(async e=>{try{const r=await fetch(DATEIEN+e.key+'.wav');if(!r.ok)return;const w=leseWav(await r.arrayBuffer());
+   if(w)m[e.key]={id:'datei:'+e.key,key:e.key,sr:w.sr,pcm:w.pcm,dauer:w.pcm.length/w.sr,pegel:0,datei:true};}catch(x){}}));
+  return m;}
+ async function ladeGewaehlte(){const m=await ladeDateien(),mu={};
+  try{const w=await ablage.wahl();for(const k in w){const t=await ablage.take(w[k]);if(!t)continue;if(k.startsWith('musik:'))mu[k]=t;else m[k]=t;}}catch(e){console.warn('Mund-Modus: Browser-Aufnahmen nicht gelesen',e);}
   geladen=m;musikTakes=mu;return m;}
  function installiere(){
   if(typeof sfx==='undefined')return;
@@ -127,19 +145,19 @@ const Mund=(()=>{
      if(o.fehlt==='stumm')return;}
     return orig[name].apply(this,arguments);};});
   original=orig;
-  if(optionen().aktiv){ladeGewaehlte().then(m=>{zeigeMarke(Object.keys(m).length,Object.keys(musikTakes).length);
-    if(Object.keys(musikTakes).length&&typeof Music!=='undefined'&&Music.mund)Music.mund.takt(musikTakt);}).catch(e=>console.warn('Mund-Modus: Aufnahmen nicht geladen',e));
-   if(optionen().musikAus&&typeof Music!=='undefined'&&Music.volume){const v=Music.volume;Music.volume=()=>v.call(Music,0);v.call(Music,0);}}
+  // Aufnahmen immer laden, damit man im Spiel live zwischen Alpha (eigene Aufnahmen) und Standard umschalten kann
+  ladeGewaehlte().then(m=>{console.info(`Alpha-Sounds: ${Object.keys(m).length}/${MUND_KATALOG.length} Effekte, ${Object.keys(musikTakes).length} Musik-Loops`);
+    if(Object.keys(musikTakes).length&&typeof Music!=='undefined'&&Music.mund)Music.mund.takt(z=>musikTakt(z));}).catch(e=>console.warn('Mund-Modus: Aufnahmen nicht geladen',e));
+  if(optionen().aktiv&&optionen().musikAus&&typeof Music!=='undefined'&&Music.volume){const v=Music.volume;Music.volume=()=>v.call(Music,0);v.call(Music,0);}
+  // Schalter in den Einstellungen (ueberlagerungen.js: <select data-mund>)
+  document.addEventListener('change',e=>{if(!e.target.matches||!e.target.matches('[data-mund]'))return;setze('aktiv',e.target.value==='alpha');});
  }
- // Kleine Marke unten rechts, damit man sieht, dass der Mund-Modus läuft
- function zeigeMarke(n,nm=0){const go=()=>{const d=document.createElement('div');d.id='mundMarke';
-   d.textContent=`MUND-MODUS · ${n}/${MUND_KATALOG.length}`+(nm?` · Musik ${nm}`:'');d.title='Eigene Aufnahmen statt der Soundeffekte (Studio: studio.html, aus: ?mund=0)';
-   d.style.cssText='position:fixed;right:8px;bottom:6px;z-index:9999;font:11px/1.2 monospace;letter-spacing:.08em;color:#e8c070;background:rgba(10,8,6,.72);border:1px solid #6a5020;padding:3px 7px;pointer-events:none;opacity:.8';
-   document.body.appendChild(d);};document.body?go():addEventListener('DOMContentLoaded',go);}
+ // Für die Einstellungen: Auswahl „Sounds“ (Alpha = eigene Aufnahmen, Standard = generiert)
+ function einstHtml(){const a=optionen().aktiv;return `<label>Sounds<select data-mund><option value="alpha"${a?' selected':''}>Alpha (Mund-Aufnahmen)</option><option value="standard"${a?'':' selected'}>Standard (generiert)</option></select></label>`;}
 
  // Spiel-Seite: ?mund=1 / ?mund=0 setzt den Schalter, dann umhüllen. Das Studio setzt window.MUND_STUDIO und umhüllt nicht.
  if(!window.MUND_STUDIO){try{const q=new URLSearchParams(location.search).get('mund');if(q==='1')setze('aktiv',true);if(q==='0')setze('aktiv',false);}catch(e){}
   installiere();}
 
- return {optionen,setze,ablage,spiele,ausschnitt,fenster,LAYER,MUSIK_BPM,MUSIK_TAKTE,musikKey,loopStarten,loopStoppen,ladeGewaehlte,installiere,KATALOG:MUND_KATALOG,get original(){return original;}};
+ return {optionen,setze,ablage,spiele,einstHtml,ausschnitt,fenster,LAYER,MUSIK_BPM,MUSIK_TAKTE,musikKey,loopStarten,loopStoppen,ladeGewaehlte,installiere,KATALOG:MUND_KATALOG,get original(){return original;}};
 })();
