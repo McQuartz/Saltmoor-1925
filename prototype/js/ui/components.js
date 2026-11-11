@@ -18,7 +18,7 @@ function blockBadgeHtml(v){return `<div class="blockbadge">${v?'◆ '+v+' BLOCK'
 // --- Statuswerte eines Gegners (Block, Stärke, Brand, Gift, Geschwächt) ---
 function tagsHtml(e){let s='';if(e.block)s+=`<span style="color:#9cc3ff">Block ${e.block}</span>`;if(e.str)s+=`<span style="color:#ff9a8a">Stärke +${e.str}</span>`;if(e.burn)s+=`<span style="color:#ffb35a">Brand ${e.burn}</span>`;if(e.poison)s+=`<span style="color:#9be07a">Gift ${e.poison}</span>`;if(e.weak2)s+=`<span style="color:#c9b8e8">Geschwächt</span>`;return s;}
 // --- Absicht des Gegners für den nächsten Zug ---
-function intentOf(e,it){it=it||e.pat[e.pi%e.pat.length];if(it.t==='atk'){let v=it.v+e.str;if(e.weak2)v=Math.floor(v/2);return{k:'atk',t:`${v}${it.h?'×'+it.h:''}`,l:`Angriff ${v}${it.h?'×'+it.h:''}`};}if(it.t==='blk')return{k:'blk',t:`${it.v}`,l:`Schutz ${it.v}`};return{k:'buff',t:`+${it.v}`,l:`Kraft +${it.v}`};}
+function intentOf(e,it){it=it||e.pat[e.pi%e.pat.length];if(it.t==='atk'){let v=it.v+e.str;if(e.weak2)v=Math.floor(v/2);return{k:'atk',t:`${v}${it.h?'×'+it.h:''}`,l:`Angriff ${v}${it.h?'×'+it.h:''}`};}if(it.t==='blk')return{k:'blk',t:`${it.v}`,l:`Block ${it.v}`};return{k:'buff',t:`+${it.v}`,l:`Kraft +${it.v}`};}
 function intentHtml(it){return `<div class="intent ${it.k}"><img src="${ico(it.k)}" alt="">${it.t}</div>`;}
 // --- Gegner-Info über dem Sprite: Absicht, Name, Schwachstelle, Leben, Status ---
 function enemyInfoHtml(e,showIntent){return `<div class="info">${showIntent?intentHtml(intentOf(e)):''}<div class="nm">${e.n} <span title="Schwachstelle">${chip(e.weak)}</span></div>${hpBarHtml(e.hp,e.max)}<div class="tags">${tagsHtml(e)}</div></div>`;}
