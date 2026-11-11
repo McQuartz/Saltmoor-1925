@@ -261,8 +261,8 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 #spieler2 .sbar{position:relative;flex:1;height:100%;background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20;display:flex}
 #spieler2 .sbar i{display:block;height:100%}#spieler2 .sbar .hp{background:linear-gradient(#d0463e,#9a2a24)}
 #spieler2 .sbar .schraffur{background:repeating-linear-gradient(-45deg,#c8463a 0 2px,#3a0a08 2px 5px);box-shadow:inset 0 0 0 1px #ff8a7a55}
-#spieler2 .sblock{position:absolute;top:0;bottom:0;min-width:calc(var(--u)*2);display:flex;opacity:.85;box-shadow:inset 0 0 0 1px #cfe0ff,0 0 calc(var(--u)*2) #6a9ae088}
-#spieler2 .sblock i{display:block;height:100%}#spieler2 .sblock .bk{background:linear-gradient(#6a9ae0,#3a64a8)}#spieler2 .sblock .bricht{background:repeating-linear-gradient(-45deg,#9ac0ff 0 2px,#2a4a80 2px 5px)}
+#spieler2 .sblock{position:absolute;top:calc(var(--u)*-1.5);bottom:calc(var(--u)*-1.5);min-width:calc(var(--u)*3);display:flex;border:1px solid #0a1424;outline:1px solid #9ac0ffaa;outline-offset:-2px;box-shadow:0 calc(var(--u)*.8) 0 #0008,0 0 calc(var(--u)*2) #6a9ae066}
+#spieler2 .sblock i{display:block;height:100%}#spieler2 .sblock .bk{background:linear-gradient(#dcebff80 0 18%,#6a9ae073 18% 60%,#3a64a899 60%)}#spieler2 .sblock .bricht{background:repeating-linear-gradient(-45deg,#9ac0ff99 0 2px,#2a4a8033 2px 5px)}
 #spieler2 .schild{position:absolute;right:calc(var(--u)*-3);top:50%;transform:translateY(-50%);display:flex;align-items:center;font-family:var(--fp);font-size:calc(var(--u)*4.5);color:#cfe0ff;text-shadow:0 0 calc(var(--u)*2) #000}
 #baum{flex:1;min-height:calc(var(--u)*40)}
 #hand{margin-top:calc(var(--u)*-16)}
