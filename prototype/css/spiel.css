@@ -323,3 +323,11 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 /* Spieltest 2026-11-10: Vertiefen und Preis im Handgriff-Angebot */
 .hgpick .hgmark{font-family:var(--fk);font-size:calc(var(--u)*3.8);letter-spacing:.1em;margin-top:calc(var(--u)*2)}.hgpick .hgmark.tief{color:var(--eld)}.hgpick .hgmark.preis{color:#ff8a7a}.pick.vertiefen{border-color:var(--eld)}
 .picks.einzeln .hgpick{width:calc(var(--u)*96);padding:calc(var(--u)*5)}.picks.einzeln .hgpick .hgimg{width:calc(var(--u)*40)}.picks.einzeln .hgpick .ps{font-size:calc(var(--u)*5)}
+/* Menü-Knopf (2026-11-11): immer sichtbar oben rechts im Spiel, außer auf dem Titel (dort steht das Menü schon). Die Kopfzeile rückt dafür nach links. */
+#menueBtn{position:absolute;right:calc(var(--u)*6);top:calc(var(--u)*5);z-index:25;width:calc(var(--u)*13);height:calc(var(--u)*12);padding:calc(var(--u)*2.5) calc(var(--u)*2.5);display:flex;flex-direction:column;justify-content:space-between;background:rgba(0,0,0,.72);border:1px solid var(--messing);box-shadow:inset 0 0 0 1px #000;cursor:pointer}
+#menueBtn i{display:block;height:calc(var(--u)*1.2);background:var(--messing2);box-shadow:0 1px 0 #000}
+#menueBtn:hover{border-color:#fff3c8;box-shadow:inset 0 0 0 1px #000,0 0 calc(var(--u)*4) rgba(224,192,128,.35)}#menueBtn:hover i{background:#fff3c8}
+body[data-phase="titel"] #menueBtn{display:none}
+#kopf{right:calc(var(--u)*24)}
+.box.menue .menue{display:flex;flex-direction:column;gap:calc(var(--u)*4);align-items:center;margin-top:calc(var(--u)*4)}
+.box.menue .menue .hint{max-width:calc(var(--u)*170);text-align:center;margin:0}
