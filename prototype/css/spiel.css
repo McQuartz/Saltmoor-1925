@@ -261,9 +261,9 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 #spieler2 .sbar{position:relative;flex:1;height:100%;background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20;display:flex}
 #spieler2 .sbar i{display:block;height:100%}#spieler2 .sbar .hp{background:linear-gradient(#d0463e,#9a2a24)}
 #spieler2 .sbar .schraffur{background:repeating-linear-gradient(-45deg,#c8463a 0 2px,#3a0a08 2px 5px);box-shadow:inset 0 0 0 1px #ff8a7a55}
-#spieler2 .sblock{position:absolute;top:calc(var(--u)*-1.5);bottom:calc(var(--u)*-1.5);min-width:calc(var(--u)*3);display:flex;border:1px solid #0a1424;outline:1px solid #9ac0ffaa;outline-offset:-2px;box-shadow:0 calc(var(--u)*.8) 0 #0008,0 0 calc(var(--u)*2) #6a9ae066}
-#spieler2 .sblock i{display:block;height:100%}#spieler2 .sblock .bk{background:linear-gradient(#dcebff80 0 18%,#6a9ae073 18% 60%,#3a64a899 60%)}#spieler2 .sblock .bricht{background:repeating-linear-gradient(-45deg,#9ac0ff99 0 2px,#2a4a8033 2px 5px)}
-#spieler2 .schild{position:absolute;right:calc(var(--u)*-3);top:50%;transform:translateY(-50%);display:flex;align-items:center;font-family:var(--fp);font-size:calc(var(--u)*4.5);color:#cfe0ff;text-shadow:0 0 calc(var(--u)*2) #000}
+#spieler2 .sbar.block{border-color:#0a1424;box-shadow:0 0 0 calc(var(--u)*.8) #6a9ae0,0 0 0 calc(var(--u)*1.2) #0a1424,0 0 calc(var(--u)*3) #6a9ae088}
+#spieler2 .schild{position:absolute;left:calc(var(--u)*-5);top:50%;transform:translateY(-50%);min-width:calc(var(--u)*9);height:calc(var(--u)*10.5);padding:0 calc(var(--u)*1.5) calc(var(--u)*2);box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*.6);background:linear-gradient(#6a9ae0,#2a4a80);clip-path:polygon(0 0,100% 0,100% 62%,50% 100%,0 62%);filter:drop-shadow(0 0 1px #000);font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*5);color:#fff;text-shadow:1px 1px 0 #000;z-index:2}
+#spieler2 .schild small{font-size:calc(var(--u)*3.4);color:#cfe0ff;font-weight:400}
 #baum{flex:1;min-height:calc(var(--u)*40)}
 #hand{margin-top:calc(var(--u)*-16)}
 .karte .rx{position:absolute;left:50%;top:calc(100% - var(--u)*3);transform:translateX(-50%);white-space:normal;width:max-content;max-width:calc(100% - var(--u)*2);box-sizing:border-box;text-align:center;background:#0b0907;border:1px solid var(--c,var(--gold));padding:0 calc(var(--u)*2.5);color:var(--c,var(--gold));font-size:calc(var(--u)*3.6);letter-spacing:.1em;line-height:calc(var(--u)*5.5)}
