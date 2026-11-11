@@ -28,7 +28,7 @@ Jedes Biom bekommt ein Ergänzungspaket `prototype/data/biome/<biom>_neu4.json` 
 | I | Der Leuchtturmhof | Die Schiffbrüchigen | 88 | Feuer | waechst 2 | Schwäche wechselt (F/S) | Rettungsring der Margarethe | 35/40 | 37/40 |
 | II | Die überflutete Kapelle | Der Taufengel | 78 | Feuer | verborgen | ruft messdiener (alle 3) | Schale des Taufengels | 38/39 | 35/39 |
 | II | Das Kloster der Abschrift | Die Bücherwand | 76 | Feuer | kopie | ruft leser (alle 3) | Die Zweitschrift | 37/39 | 33/36 |
-| II | Die Grotte der Gaben | Die Kerzenkönigin | 74 | Wasser | dornen 3 | ruft wachshand (alle 3) | Dochtkrone | 34/39 | 32/38 |
+| II | Die Grotte der Gaben | Die Kerzenkönigin | 66 | Wasser | dornen 2 | ruft wachshand (alle 3) | Dochtkrone | 34/39 | 32/38 |
 | II | Die Glockengießerei | Die Gussform | 80 | Wasser | ansage (3 Züge, 24) | ruft giesser (alle 3) | Eingusstrichter | 35/39 | 34/39 |
 | II | Das Waisenhaus am Deich | Die Wiege | 86 | Salz | takt 6 | Schwäche wechselt (S/L) | Spieluhr aus der Wiege | 32/39 | 35/39 |
 | III | Die Salzstollen | Der Förderkorb | 92 | Feuer | brecher | ruft salzlaeufer (alle 3) | Lampe der letzten Schicht | 37/39 | 31/38 |
@@ -47,7 +47,7 @@ Jedes Biom bekommt ein Ergänzungspaket `prototype/data/biome/<biom>_neu4.json` 
 
 | Akt | Biom | Elite | Leben | Schwäche | Kniff + zweiter | Beute (neu) | vorher | erzwungen |
 |---|---|---|---|---|---|---|---|---|
-| II | Die Grotte der Gaben | Der Bußgänger | 72 | Blut | waechst 1 + ruf (wachshand) | Kreuz des Bußgängers | 34/39 | 31/37 |
+| II | Die Grotte der Gaben | Der Bußgänger | 66 | Blut | waechst 1 + ruf (wachshand) | Kreuz des Bußgängers | 34/39 | 31/37 |
 | II | Die Glockengießerei | Der Glockenseiler | 78 | Feuer | einfrieren + waechst 1 | Unfertiges Glockenseil | 35/39 | 34/39 |
 | III | Das Gezeitenwerk | Der Zahnradmann | 90 | Salz | takt 5 + schuetzer 3 | Schraubenschlüssel von 1909 | 37/39 | 38/39 |
 | III | Die Ziegelgruben | Die Meilerin | 88 | Wasser | dornen 3 + waechst 1 | Schaufel der Meilerin | 35/39 | 34/37 |
@@ -131,3 +131,11 @@ Die meisten neuen Bosse liegen jetzt gleichauf mit dem Biom vorher. Am leichtest
 - `node tools/sprites/pruefen.js`: 407 Sprites, 0 Verstöße.
 - `node tools/texte-pruefen.js`: alle bestehenden Texte unverändert, alle neuen als Entwurf markiert.
 - `sh tools/alle-tests.sh`: alles gut bis auf `test-karte` (48 Fehler, schon auf der Basis rot). `test-meta` verlangt für jeden Wächter eine wahre und eine falsche Notiz des Vorgängers. Dafür stehen in `prototype/data/meta.json` jetzt 22 neue Einträge unter `notizen.waechter`, alle als Entwurf, bestehende Notizen unverändert. `test-welle1` war in einem Durchlauf einmal rot und beim Wiederholen grün.
+
+## Nachtrag 2026-11-11: auf den aktuellen main-Stand gebracht
+
+Philip wollte alles ins aktuelle Spiel. Der Branch enthält jetzt main bis PR #24 (Vitrine, Handgriffe, Spieltest-Fixes, Mund-Sounds) und dazu alle Charaktere aus den Runden 1 bis 4. Konflikte gab es nur bei zwei Testbildern (`plakette-*.png`), dort gilt der main-Stand.
+
+Gemessen mit `biom-test` (40 Läufe je Biom), main gegen main mit allen Charakteren: Die meisten Biome liegen gleichauf oder ein paar Läufe darunter. Deutlich schwerer sind Grotte und Moorwald, die auf main fast immer überstanden werden (80 Läufe: Grotte 77 gegen 60, Moor 79 gegen 67). Die Tode verteilen sich dort auf viele alte Gegner, es ist also der Verschleiß durch die neuen Eliten in den schweren Kämpfen und kein einzelner zu starker Charakter. Kerzenkönigin (66 Leben, Dornen 2) und Bußgänger (66 Leben) sind danach noch einmal etwas leichter geworden.
+
+Die Tests, die auf diesem Stand rot sind (`test-run` „Run ohne Sieg trotz viel Leben“, `test-kern`, `test-karte`, zwei UI-Texte in `texte-pruefen`), sind auf main genauso rot.
