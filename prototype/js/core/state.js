@@ -22,7 +22,14 @@ function rarOf(D){return D.rar||(D.rare?'selten':'gewoehnlich');}
 function kerbenVon(it){const D=def(it);const b=D.kerben!=null?D.kerben:(rarOf(D)==='gewoehnlich'?1:2);return Math.min(3,b+(it.kerbenPlus||0));}
 function hgVon(it){if(!it.hg)it.hg=[...(def(it).fest_hg||[])];return it.hg;}
 // Karte eines Handgriffs in einem Item: nimmt die Stoffe des Items an
-function hgKarte(id,it,k){const H=HANDGRIFFE[id];if(!H)return null;const D=def(it);const geschliffen=it.schliff&&it.schliff['h'+k];
+// Spieltest 2026-11-10: vertiefte Handgriffe (it.tief[id] = Stufe 1..2). Zahlen steigen um rund ein Drittel (mindestens 1); Karten ohne Zahl kosten 1 weniger.
+function hgStufe(it,id){return (it&&it.tief&&it.tief[id])||0;}
+function hgVertieft(H,n){if(!n)return H;const c={...H,n:H.n+'+'.repeat(n),stufe:n};let zahl=false;const up=v=>v+n*Math.max(1,Math.round(v*.34));
+ ['atk','blk','heal','poison','burn','vuln','gold'].forEach(k=>{if(c[k]){c[k]=up(c[k]);zahl=true;}});
+ if(c.sonder){const s=c.sonder={...c.sonder};if(s.fx){s.fx=s.fx.map(f=>f.v&&f.op!=='ballast'?{...f,v:up(f.v)}:f);if(s.fx.some(f=>f.op!=='ballast'))zahl=true;}
+  if(s.art==='schaden_je_fehlleben'){s.je=Math.max(2,(s.je||5)-n);zahl=true;}if(s.anteil&&s.anteil<1){s.anteil=Math.min(1,s.anteil+.25*n);zahl=true;}if(s.art==='x_plus'){s.v=(s.v||1)+n;zahl=true;}if(s.t&&zahl)delete s.t;}
+ if(!zahl)c.c=Math.max(0,(c.c||0)-n);return c;}
+function hgKarte(id,it,k){const H0=HANDGRIFFE[id];if(!H0)return null;const H=hgVertieft(H0,hgStufe(it,id));const D=def(it);const geschliffen=it.schliff&&it.schliff['h'+k];
  return{...H,c:Math.max(0,(H.c||0)-(geschliffen?1:0)),st:[...D.st],src:D.n,spr:H.spr||D.spr,img:(typeof hgBild==='function'&&hgBild(id))||(typeof itemBild==='function'?itemBild(it.id):''),uid:it.uid,hg:id,hgk:k,fest:(D.fest_hg||[]).includes(id),schliff:!!geschliffen};}
 // Alle Karten eines Items (Stammkarten × Kopien, dann Handgriffe), gleiche Rechnung für Deck, Vorschau und Rucksackmodus
 function kartenVon(it){if(it.x)return hgVon(it).map((id,k)=>hgKarte(id,it,k)).filter(Boolean);const D=def(it);const o=[];

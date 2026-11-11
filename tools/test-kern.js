@@ -81,10 +81,10 @@ let fehler = 0; const ok = (c, m) => { console.log((c ? 'ok    ' : 'FEHLER ') + 
     // Wächter: ein stärkerer Zug direkt nach dem aktuellen Schritt
     const wa = J(`(()=>{const b='kloster';const id=BIOMES[b].waechter;T.blick(b,[id],'waechter');const e=S.enemies[0];const n=e.pat.length,pi=e.pi;const n0=S.enemies.length;Blick.waehlen(true);const st=e.pat[(pi%n)+1];return{n,neu:e.pat.length,gesehen:!!st.gesehen,gegner:S.enemies.length===n0,quelle:S.blickZusatz.quelle};})()`);
     ok(wa.neu === wa.n + 1 && wa.gesehen && wa.gegner, `Wächter: ein Musterschritt mehr (${wa.n} → ${wa.neu}), kein Gesehener (Quelle ${wa.quelle})`);
-    // Beute: 1 aus 4 und sicher ein Item-Angebot; ohne Hinsehen 1 aus 3
+    // Beute: 2 Handgriffe zur Wahl und sicher ein Item-Angebot; ohne Hinsehen genau 1 (Spieltest 2026-11-10)
     const be = J(`(()=>{const o=[];for(const h of [true,false]){let items=0,hg=0;for(let s=1;s<=12;s++){T.blick('kloster',[BIOMES.kloster.gegner[0]],'kampf',s);Blick.waehlen(h);S.enemies.forEach(e=>e.hp=0);fightWon();items+=S.reward.length?1:0;hg=Math.max(hg,S.rewardHg.length);}o.push({items,hg});}return o;})()`);
-    ok(be[0].hg === 4 && be[0].items === 12, `nach Hinsehen: Handgriffe 1 aus ${be[0].hg}, Item-Angebot in ${be[0].items} von 12 Siegen`);
-    ok(be[1].hg === 3 && be[1].items < 12, `ohne Hinsehen: 1 aus ${be[1].hg}, Item-Angebot in ${be[1].items} von 12`);
+    ok(be[0].hg === 2 && be[0].items === 12, `nach Hinsehen: Handgriffe ${be[0].hg} zur Wahl, Item-Angebot in ${be[0].items} von 12 Siegen`);
+    ok(be[1].hg === 1 && be[1].items < 12, `ohne Hinsehen: ${be[1].hg} Handgriff, Item-Angebot in ${be[1].items} von 12`);
     // Schatten: höchstens einmal je Akt, nur ohne Hinsehen
     const sc = J(`(()=>{let n=0;const h=()=>n++;Bus.on('blick_schatten',h);T.blick('kloster',[BIOMES.kloster.gegner[0]],'kampf',11);const bs=[];for(let i=0;i<12;i++){S.depth=9+i;S.blickWahl=true;Blick.waehlen(false);}const a=n;S.akt=2;S.route[2]='salz';for(let i=0;i<12;i++){S.depth=20+i;S.blickWahl=true;Blick.waehlen(false);}const b2=n-a;for(let i=0;i<12;i++){S.akt=3;S.depth=30+i;S.blickWahl=true;S.kampfArt='kampf';Blick.waehlen(true);S.enemies=S.enemies.filter(e=>!e.gesehener);}Bus.off&&Bus.off('blick_schatten',h);return[a,b2,n-a-b2];})()`);
     ok(sc[0] === 1 && sc[1] === 1 && sc[2] === 0, `Schatten: Akt II ${sc[0]}×, Akt III ${sc[1]}× in je 12 Kämpfen, mit Hinsehen ${sc[2]}×`);

@@ -34,7 +34,8 @@ document.addEventListener('pointerup',e=>{
  const t=document.elementFromPoint(e.clientX,e.clientY);const sl=t&&t.closest('[data-loc]');
  if(d.drag){if(sl)move(d.loc,sl.dataset.loc);S.sel=null;render();return;}
  if(!sl||sl.dataset.loc!==d.loc)return;const loc=d.loc;
- if(S.sel){const s=S.sel;S.sel=null;if(s!==loc)move(s,loc);else render();}else if(loc!=='trash'&&getAt(loc)){S.sel=loc;sfx.click();render();}});
+ // Spieltest 2026-11-09: Tauschen nur noch per Ziehen. Ein Klick wählt nur aus (zeigt das Item rechts, Verkaufen beim Krämer).
+ if(S.sel===loc){S.sel=null;if(typeof KOE!=='undefined'&&KOE)KOE.zeig=null;render();}else if(loc!=='trash'&&getAt(loc)){S.sel=loc;sfx.click();render();}});
 document.addEventListener('click',e=>{
  const en=e.target.closest('.feind[data-ei]');if(en&&S.phase==='fight'){S.target=+en.dataset.ei;sfx.click();render();return;}
  const a=e.target.closest('[data-act]');if(a){aktion(a.dataset.act,a);return;}
@@ -71,7 +72,7 @@ function aktion(k,el){switch(k){
  case'erbeNehmen':Metaebene.erbeWahl(true);render();break;case'erbeLassen':Metaebene.erbeWahl(false);render();break;case'briefNehmen':Wuerze.briefNehmen(true);render();break;case'briefLassen':Wuerze.briefNehmen(false);render();break;case'fehlzeitJa':Metaebene.fehlzeitWahl(true);render();break;case'fehlzeitNein':Metaebene.fehlzeitWahl(false);render();break; // M10
  case'gleicherSeed':{const sd=S.seed,jb=S.job;newRun(jb,sd,{});render();break;}
  case'bildSpeichern':endbildSpeichern();break;
- case'rucksack':rucksackAuf();break;case'rucksackZu':rucksackZu();break;
+ case'rucksack':rucksackAuf();break;case'koeDeck':if(KOE){KOE.zeig=null;S.sel=null;render();}break;case'rucksackZu':rucksackZu();break;
  case'hgSkip':skipHandgriff();break;case'hgVerwerfen':hgVerwerfen();break;
  case'ueberJa':{const u=S.ueberschreiben;S.ueberschreiben=null;placeHandgriff(u.uid,u.k);break;}case'ueberNein':S.ueberschreiben=null;render();break;
  case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;case'wsTilgen':wahlStart('tilgen','werkstatt');break;
@@ -88,7 +89,7 @@ document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
  if(S.phase==='fight'&&!busy){if(e.key===' '||e.key==='e'){e.preventDefault();endTurn();}const n=+e.key;if(n>=1&&n<=9)playCard(n-1);}
  if(S.phase==='uebergang'&&!['Shift','Control','Alt','Meta','d','D'].includes(e.key))leaveUebergang();});
 // Tooltips
-function showTip(h,x,y){const tip=$('tip');tip.innerHTML=h;tip.style.display='block';const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
+function showTip(h,x,y){const tip=$('tip');tip.innerHTML=h;tip.style.display='block';if(tip.querySelector('.karte')&&typeof kartenEinpassen==='function')kartenEinpassen();const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
 function hideTip(){$('tip').style.display='none';}
 function itemTip(loc){const it=getAt(loc);if(!it)return'';const d=def(it);const[k]=loc.split(':');
  let h=`<div class="tn">${esc(d.n)}</div><div>${d.st.map(k=>gi(k,18)).join('')}</div><div class="hint">${AREA_N[d.a]}${d.hp?' · +'+d.hp+' max. Leben':''}</div>`;
@@ -102,3 +103,9 @@ function endbildSpeichern(){const c=document.createElement('canvas');c.width=960
  g.fillStyle='rgba(0,0,0,.78)';g.fillRect(40,40,880,460);g.fillStyle='#efe4c8';g.font='28px serif';const r=S.ergebnis||{},st=S.stats||{};g.fillText('SALTMOOR 1925 · '+(r.sieg?(r.ende==='bleiben'?'Geblieben':'Umgekehrt'):'Am Strand'),70,90);
  g.font='20px serif';const L=[`${S.jobN} · Seed ${S.seed} · ${dauerText((st.endeT||Date.now())-S.startT)}`,`Weg: ${S.route.filter(Boolean).map(b=>BIOMES[b].kurz).join(' → ')}`,`Tiefe ${r.tiefe||S.depth} · Kämpfe ${st.kaempfe||0} · Gold ${st.gold||0}`,`Schaden ${st.schadenRaus||0} / ${st.schadenRein||0} · höchster Treffer ${st.maxTreffer||0} · längste Kette ${st.maxKette||0}`,`Build: ${buildArchetyp().n} · Reaktionen ${S.disc.size}`,`Deck: ${allActive().map(it=>def(it).n).join(', ')}`];
  L.forEach((t,i)=>g.fillText(t,70,140+i*40,820));const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download=`saltmoor-${S.seed}.png`;a.click();}
+// Ritzen (Spieltest 2026-11-10): Vergleich alt gegen neu für die Kerbe unter der Maus. Während einer Nachfrage (überschreiben?) bleibt der Vergleich stehen.
+let rzVglKey=null,rzVglEl=null;
+document.addEventListener('pointerover',e=>{const v=document.getElementById('rzVgl');if(!v||S.ueberschreiben)return;
+ const z=e.target.closest&&e.target.closest('.rz [data-ritz]');const key=z?z.dataset.ritz+':'+(z.dataset.k??''):'';if(v!==rzVglEl){rzVglEl=v;rzVglKey=null;}if(key===rzVglKey)return;
+ if(!z&&!e.target.closest('.rzgrid'))return; // im Kopf oder Leerraum: Vergleich stehen lassen
+ rzVglKey=key;v.innerHTML=z?ritzVglHtml(+z.dataset.ritz,z.dataset.k!=null?+z.dataset.k:null):ritzVglHtml(null,null);});

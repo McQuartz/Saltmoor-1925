@@ -65,8 +65,10 @@ Bus.on('reaction',({r,k,isNew,keys,live,hoch})=>{if(FAST)return;
  if(hoch)pfx('hochreaktion',{x:240,y:150,palette:keys[0],seed:k});else if(!pfx('reaktion',{x:lp.x,y:lp.y-Math.round(lp.h*.5),palette:keys[0],seed:k})){FX.ring(keys[0],live);if(keys[1])setTimeout(()=>FX.ring(keys[1],live),90);}
  if(keys[1]&&!hoch)setTimeout(()=>pfx('reaktion',{x:lp.x,y:lp.y-Math.round(lp.h*.5),palette:keys[1],seed:k+7}),120);
  if(hoch){FX.flash(ST[keys[0]].c,.35);FX.shake(8);sfx.hoch();zwischentitel(r.n.toUpperCase()+'!');}else sfx.react(k);
- toast((hoch?'HOCHREAKTION · ':'')+r.n.toUpperCase()+(isNew?' · NEU':''),keys.map(k2=>gi(k2,16)).join(' + ')+' '+esc(r.t),hoch);
+ // Spieltest 2026-11-09: statt der Meldung oben steht die Reaktion unten links unter dem Stoff-Baum, bis die nächste kommt
+ LETZTE_RX={n:r.n,t:r.t||'',keys:[...keys],hoch:!!hoch,neu:!!isNew};const lx=document.getElementById('letzteRx');if(lx){lx.innerHTML=letzteRxHtml();const d=lx.firstElementChild;if(d)d.classList.add('frisch');}
  if(isNew)setTimeout(sfx.disc,150);if(typeof Music!=='undefined'&&audioOn)try{Music.reaction(hoch);}catch(x){}});
+Bus.on('fight_start',()=>{LETZTE_RX=null;});
 Bus.on('boss_phase',({e})=>{FX.flash('#ff6ad8',.3);FX.shake(10);toast(String(e.n||'').toUpperCase(),'verändert sich',true);});
 Bus.on('victory',()=>{sfx.win();if(typeof Music!=='undefined'&&audioOn)try{Music.victory();}catch(x){}});
 // M8: die Farbe meldet sich mit einem kurzen Hinweis (wohin sie springt, gebunden, Spur getilgt)
@@ -86,11 +88,10 @@ Bus.on('reward',({items,hg})=>{if(FAST)return;const n=(hg||[]).length+(items||[]
 // Herzschlag (Kniff „takt“, Walkathedrale): doppelter tiefer Schlag, kurzes Pulsieren, der Gegner bekommt Block
 // Mit kniff.klang = 'glocke' (Glockengießerei): ein Glockenschlag statt des Herzschlags, ein Ruck, bronzenes Aufleuchten
 Bus.on('herzschlag',({e,klang})=>{if(FAST)return;if(klang==='glocke'){if(typeof sfx!=='undefined'&&sfx.glocke)sfx.glocke();FX.shake(4);FX.flash('#6a4a1a',.16);return;}
- if(typeof thump==='function'){thump(70,34,.35,.5,0,true);thump(64,30,.3,.38,.24,true);}FX.shake(3);FX.flash('#5a0a0a',.18);setTimeout(()=>FX.shake(2),240);});
+ if(typeof sfx!=='undefined'&&sfx.herz)sfx.herz();FX.shake(3);FX.flash('#5a0a0a',.18);setTimeout(()=>FX.shake(2),240);});
 // Peilkarte (M3): Ein brüchiger Gang hinter dem Nebel stürzt ein: nur zu hören, dumpf und tief (kein Bild, keine Meldung). Das Wandbild hebt den Nebel: ein langer Luftzug.
-Bus.on('rumpeln',()=>{thump(54,26,.95,.5,0,true);nzx({f:190,fEnd:70,type:'lowpass',q:.7,v:.26,dur:1.2,a:.08,sat:true});
- thump(46,24,.75,.34,.42,true);nzx({f:150,fEnd:60,type:'lowpass',q:.7,v:.16,dur:.9,a:.05,delay:.4});nzx({f:2400,type:'highpass',q:.7,v:.03,dur:.3,delay:.5});});
-Bus.on('nebel_weg',()=>{nz(600,1.8,.07,.7,{fEnd:2800,a:.55});nz(1400,1.4,.03,1.2,{fEnd:4200,a:.7,delay:.25});tn(mf(harm().root+12),1.8,'sine',.035,0,.1,{a:.7,pan:-.2});tn(mf(harm().root+19),1.8,'sine',.025,0,.3,{a:.7,pan:.2});});
+Bus.on('rumpeln',()=>sfx.rumpeln());
+Bus.on('nebel_weg',()=>sfx.nebel());
 // Auftrag 3 M6: Hören statt sehen. Die Musik bekommt bei jeder Änderung die hörbaren Absichten der stummen Gegner (hoeren.js);
 // sie setzt die Einsätze zum Zugbeginn ein und lässt sie über den Spielerzug laufen. Außerhalb des Kampfes: leer.
 function hoerenMusik(){if(typeof Music==='undefined'||typeof Music.hoeren!=='function'||typeof hoerbareAbsichten!=='function')return;Music.hoeren(S&&S.phase==='fight'?hoerbareAbsichten():[]);}

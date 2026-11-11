@@ -12,7 +12,7 @@ function tagebuchHtml(){const M=Meta.get();const st=M.biome;
 function tagebuchSeitenHtml(M){const l=(M.seiten||[]).slice().reverse();if(!l.length||typeof Metaebene==='undefined'||!Metaebene.an())return'';const U=META.ui||{};
  return `<h3>${esc(U.notizen_titel||'')}</h3><div class="seiten">${l.map(s=>`<div class="seite ${s.art}"><b>${esc(s.art==='fehlzeit'?U.seite_fehlzeit:U.seite_vorgaenger)}</b>${s.zeilen.map(z=>`<p class="hand">${esc(z)}</p>`).join('')}</div>`).join('')}</div>`;}
 function einstHtml(){const E=Einst.all();const sl=(k,n)=>`<label>${n}<input type="range" min="0" max="1" step="0.05" value="${E[k]}" data-einst="${k}"></label>`;const cb=(k,n)=>`<label><input type="checkbox" ${E[k]?'checked':''} data-einst="${k}"> ${n}</label>`;
- return box('einst',`<h2>EINSTELLUNGEN</h2><div class="formular">${sl('musik','Musik')}${sl('effekte','Effekte')}${cb('stummfilm','Stummfilm-Rauschen bei besonderen Anlässen')}${cb('jumpscare','Jumpscare (höchstens einmal pro Abstieg)')}${cb('wackeln','Bildschirmwackeln')}${cb('fahrtkurz','Übergänge kürzer')}${cb('klangzeichen','Klänge als Zeichen')}
+ return box('einst',`<h2>EINSTELLUNGEN</h2><div class="formular">${sl('musik','Musik')}${sl('effekte','Effekte')}${cb('stummfilm','Stummfilm-Rauschen bei besonderen Anlässen')}${cb('jumpscare','Jumpscare (höchstens einmal pro Abstieg)')}${cb('wackeln','Bildschirmwackeln')}${cb('fahrtkurz','Übergänge kürzer')}${cb('klangzeichen','Klänge als Zeichen')}${typeof Mund!=='undefined'?Mund.einstHtml():''}
  <label>Textgeschwindigkeit<select data-einst="text"><option value="0.6" ${E.text==.6?'selected':''}>langsam</option><option value="1" ${E.text==1?'selected':''}>normal</option><option value="1.6" ${E.text==1.6?'selected':''}>schnell</option></select></label>
  <label><input type="checkbox" ${typeof Dev!=='undefined'&&Dev.an?'checked':''} data-act="devToggle"> Dev-Modus</label></div><button class="deco klein" data-act="zu">SCHLIESSEN</button>`);}
 function zeigeOverlay(html){if(typeof hideTip==='function')hideTip();const o=$('overlay');o.innerHTML=html;o.classList.add('an');}
@@ -25,12 +25,16 @@ function reliefMalen(){const c=$('relief');if(!c)return;const x=c.getContext('2d
  x.fillStyle=B.rand[1];x.fillRect(78,12,4,4);}
 
 // Rucksackmodus aus Auftrag 2 entfernt (Auftrag 3 M4): der Rucksack „Am Körper“ steht in js/ui/rucksack.js.
-// ---------- Hover-Vorschau am Cursor: welche Karten ins Deck kämen, welche Reaktionen dadurch möglich würden ----------
-function vorschauKarten(karten,titel){const deckSt=new Set(allActive().flatMap(it=>def(it).st));const st=new Set(karten.flatMap(c=>c.st));const rx=[];
- REACT.forEach(r=>{const[a,b]=[...r.k];if((st.has(a)&&deckSt.has(b))||(st.has(b)&&deckSt.has(a)))rx.push(r.n);});
- const einm=[];const seen=new Set();karten.forEach(c=>{const k=c.n+c.hg;if(!seen.has(k)){seen.add(k);einm.push({...c,anz:karten.filter(x=>x.n===c.n&&x.hg===c.hg).length});}});
- return `<div class="tn">${titel}</div><div class="vkr">${einm.map(c=>`<div class="vk"><div class="vkc">${c.x?'X':c.opfer?'♥'+c.opfer:c.c}</div><b>${esc(c.n)}${c.anz>1?' ×'+c.anz:''}</b><div>${c.st.map(k=>gi(k,9)).join('')||'<span class="hint">Stoff des Items</span>'}</div><div class="vkt">${esc(cardText(c))}</div></div>`).join('')}</div>${rx.length?`<div class="hint">Reagiert mit deinem Deck: ${[...new Set(rx)].join(', ')}</div>`:''}`;}
+// ---------- Hover-Vorschau am Cursor: die Karten, die ins Deck kämen ----------
+// Spieltest 2026-11-09: Beim Hovern über Fund, Reliquie oder Handgriff stehen die echten Karten, so wie sie auf der Hand aussehen.
+function vorschauKarte(c){const k=c.x?'X':c.opfer?'♥'+c.opfer:c.c;const img=c.img||(typeof spr==='function'&&c.spr?spr(c.spr):'');
+ return `<div class="karte vorschau${c.st.length>1?' duo':''}"><div class="kost"><span>${k}</span></div><div class="kst">${c.st.map(s=>gi(s,KZ())).join('')}</div>
+ <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen">${img?`<img src="${img}" alt="">`:''}</div><div class="kt">${esc(cardText(c))}</div></div>`;}
+function vorschauKartenReihe(karten,zusatz=''){const einm=[];const seen=new Map();karten.forEach(c=>{const k=c.n+'|'+(c.hg||'');if(seen.has(k))seen.get(k).anz++;else{const o={c,anz:1};seen.set(k,o);einm.push(o);}});
+ return `<div class="tipkarten" style="zoom:${(BU.s||1).toFixed(3)}">${einm.map(o=>`<div class="tkw">${vorschauKarte(o.c)}${o.anz>1?`<span class="anz">×${o.anz}</span>`:''}</div>`).join('')}</div>${zusatz}`;}
 function hoverVorschau(el){const tk=el.closest('[data-take],[data-buy],[data-hg],[data-buyhg]');if(!tk)return null;
- if(tk.dataset.hg||tk.dataset.buyhg!=null){const id=tk.dataset.hg||(S.shop&&S.shop.hg[+tk.dataset.buyhg]||{}).id;const H=HANDGRIFFE[id];if(!H)return null;return vorschauKarten([{...H,st:[]}],'Kommt als 1 Karte ins Deck, mit dem Stoff des Items, in das du ihn ritzt');}
+ if(tk.dataset.hg||tk.dataset.buyhg!=null){const id=tk.dataset.hg||(S.shop&&S.shop.hg[+tk.dataset.buyhg]||{}).id;let H=HANDGRIFFE[id];if(!H)return null;const m=S.phase==='reward'&&(S.rewardHgMeta||{})[id];if(m&&m.art==='vertiefen'&&typeof hgVertiefenZiel==='function')H=hgVertieft(H,(hgVertiefenZiel(id)||0)+1);return vorschauKartenReihe([{...H,st:[],img:hgBild(id)||''}]);}
  const id=tk.dataset.take||(tk.dataset.buy!=null&&S.shop&&S.shop.items[+tk.dataset.buy]&&S.shop.items[+tk.dataset.buy].id);if(!id||!ITEMS[id])return null;
- const tmp={uid:-1,id};return vorschauKarten(kartenVon(tmp),'Angelegt kommen ins Deck:');}
+ const tmp={uid:-1,id};const D=ITEMS[id];
+ const z=[D.hp?`+${D.hp} Leben`:'',D.passiv?passivText(D.passiv):'',D.eigen?eigenText(D.eigen):''].filter(Boolean);
+ return vorschauKartenReihe(kartenVon(tmp),z.length?`<div class="tipzusatz">${z.map(esc).join(' · ')}</div>`:'');}

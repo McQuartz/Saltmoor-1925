@@ -80,3 +80,15 @@
 #leiste .tischreihe{display:flex;align-items:center;gap:calc(var(--u)*8)}
 #leiste .tangelegt{display:flex;gap:calc(var(--u)*2)}#leiste .tangelegt img{width:calc(var(--u)*14);height:calc(var(--u)*14);image-rendering:pixelated;opacity:.8}
 .kverk{display:flex;flex-wrap:wrap;gap:calc(var(--u)*2);margin:calc(var(--u)*2) 0}
+
+/* Spieltest 2026-11-09: ganzes Deck rechts, solange kein Item gewählt ist */
+#koerper .kdeckliste{flex:1;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#5a4626 transparent;padding-right:calc(var(--u)*2);margin-bottom:calc(var(--u)*3)}
+#koerper .kdlk{font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.16em;color:#a89c80;margin-bottom:calc(var(--u)*2)}
+#koerper .kdr{display:flex;align-items:center;gap:calc(var(--u)*2);padding:calc(var(--u)*.8) 0;border-bottom:1px solid #1e1810;font-size:calc(var(--u)*5);color:var(--txt);pointer-events:auto;cursor:default}
+#koerper .kdr:hover{background:#15110b}
+#koerper .kdc{flex:none;width:calc(var(--u)*7);height:calc(var(--u)*7);display:flex;align-items:center;justify-content:center;font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*4.4);color:#efe4c8;border:1px solid var(--messing2)}
+#koerper .kds{flex:none;display:flex;gap:1px;min-width:calc(var(--u)*10)}
+#koerper .kdn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#koerper .kdr .anz{flex:none;font-family:var(--fk);font-size:calc(var(--u)*4.4);color:var(--gold)}
+#koerper .kdr.hg .kdn{color:#d8c890}#koerper .kdr.fremd .kdn{font-style:italic;color:#b8b2a6}
+#koerper .kdz .kganz{margin-left:calc(var(--u)*4);vertical-align:middle}

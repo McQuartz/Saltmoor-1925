@@ -28,31 +28,69 @@ function uebergangHtml(){const a=RUN.akte[S.akt];const b=biom();let satz=S.akt==
  return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p>${zeitungHtml()}<div class="hint spaet">Klicken oder Taste drücken</div></div>`;}
 // Auftrag 3 M3: die Phase 'weg' zeigt die Peilkarte (js/ui/karte.js); die alte „1 aus 3“-Wegwahl ist entfernt
 function wegHtml(){return kartenHtml('haupt');}
-function itemPick(id,attr,extra=''){const d=ITEMS[id];const ex=d.st.length>1?BAL.forge.double_cost_extra:0;
- return `<div class="pick ${rarOf(d)!=='gewoehnlich'?'selten':''} ${rarOf(d)==='reliquie'?'reliquie':''}" ${attr}><img src="${itemBild(id)}"><div class="pn">${esc(d.n)}</div><div class="pst">${d.st.map(k=>gi(k,KZ())).join('')}</div>
- <div class="ps">${AREA_N[d.a]}${d.hp?` · +${d.hp} Leben`:''}${d.passiv?' · passiv':''}<br>${d.cards.map(c=>`${esc(c.n)} (${c.c+ex}): ${esc(cardText(c))}`).join('<br>')}${d.passiv?esc(passivText(d.passiv)):''}${d.eigen?`${d.cards.length?'<br>':''}<i>${esc(eigenText(d.eigen))}</i>`:''}</div>${extra}</div>`;}
+// Spieltest 2026-11-11 (Variante F): Items stehen in einer Vitrine (Glas, Holzsockel mit Namensschild), Handgriffe sind violette Karten mit Hand.
+// So sieht man ohne Lesen, ob es ein Ding für den Rucksack oder ein Handgriff für eine Kerbe ist.
+function itemPick(id,attr,extra=''){const d=ITEMS[id];const k=(d.cards||[])[0];
+ return `<div class="pick vit ${rarOf(d)!=='gewoehnlich'?'selten':''} ${rarOf(d)==='reliquie'?'reliquie':''}" ${attr}><div class="vglas"><img src="${itemBild(id)}" alt=""></div><div class="vsockel"><div class="pn">${esc(d.n)} <span class="pst">${d.st.map(k=>gi(k,KZ())).join('')}</span></div>${k?`<div class="ps">${esc(k.n)} (${k.x?'X':k.c||0}): ${esc(cardText(k))}</div>`:`<div class="ps">${AREA_N[d.a]}</div>`}${extra}</div></div>`;} // Leben und Eigenschaft stehen im Hover (hoverVorschau)
+const HG_HAND='<svg class="wzh" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 9V3.5a1 1 0 0 1 2 0V8M7 7.5V2.5a1 1 0 0 1 2 0V8M9 7.5V3a1 1 0 0 1 2 0v5M11 8V5a1 1 0 0 1 2 0v4.5c0 3-2 5-5 5S4 13 3 11L1.8 8.6a1 1 0 0 1 1.7-1L5 9.5" fill="currentColor"/></svg>';
+const IC_HAND='<svg class="bic" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 9V3.5a1 1 0 0 1 2 0V8M7 7.5V2.5a1 1 0 0 1 2 0V8M9 7.5V3a1 1 0 0 1 2 0v5M11 8V5a1 1 0 0 1 2 0v4.5c0 3-2 5-5 5S4 13 3 11L1.8 8.6a1 1 0 0 1 1.7-1L5 9.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>';
+const IC_SACK='<svg class="bic" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 5V4a3 3 0 0 1 6 0v1M3 5.5h10l-.8 9H3.8z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 8.5h4" stroke="currentColor" stroke-width="1.2"/></svg>';
 // Kurztext für Effektlisten (Ballaststein, Korkweste: was ein Wurf über Bord bewirkt)
 function fxKurz(fx){return(fx||[]).map(f=>f.op==='damage'?`${f.v} Schaden${f.to==='all'?' an allen':''}`:f.op==='block'?`${f.v} Block`:f.op==='ward'?`Schutz ${f.v}`:f.op==='heal'?`+${f.v} Leben`:f.op==='status'?`${({burn:'Brand',poison:'Gift',vuln:'Verwundbar',weak:'Geschwächt'})[f.status]||f.status} ${f.v}${f.to==='all'?' an allen':''}`:f.op==='ballast'?`${f.n||1} Ballast`:f.op).join(', ');}
 // Eigenschaft eines Items in einem Satz: eigener Text (eigen.t) oder aus dem Typ
 function eigenText(e){if(!e)return'';if(e.t)return e.t;return{brand_haelt:'Brand verfällt am Zugende nur um 1',brand_springt:'Stirbt ein Gegner mit Brand, springt der Brand auf alle anderen',gift_doppelt:'Gift wirkt am Zugende zweimal',block_haelt_halb:'Block verfällt nur zur Hälfte',reaktion_block:`Jede Reaktion gibt ${e.v||1} Block`,reaktion_heil:`Jede Reaktion heilt ${e.v||1}`,reaktion_schaden:`Jede Reaktion macht ${e.v||2} Schaden an einem Gegner`,hoch_zweimal:'Hochreaktionen zweimal pro Zug',opfer_staerke:'Jedes gezahlte Leben gibt 1 Stärke',mehrfach_plus1:'Mehrfachangriffe treffen einmal mehr',start_staerke:`Stärke ${e.v} zu Kampfbeginn`,start_block:`${e.v} Block zu Kampfbeginn`,verwundbar_start:`Alle Gegner verwundbar ${e.v} zu Kampfbeginn`,energie_bleibt:`${e.v||1} ungenutzte Energie bleibt`,energie_plus:`+${e.v||1} Energie je Zug${e.preis==='hand'?', eine Karte weniger auf der Hand':e.preis==='heil'?', keine Heilung nach dem Sieg':''}`,kette_start:`Kette zählt jeden Zug ab ${e.v||1}`,behalten_eine:'Eine Handkarte bleibt am Zugende liegen',hand_plus:`+${e.v||1} Karte auf der Hand`,kampfstart_fx:`Zu Kampfbeginn: ${fxKurz(e.fx)}`,gold_bonus:`+${e.v} Gold nach jedem Sieg`,heil_nach_sieg:`+${e.v} Leben nach jedem Sieg`,blick:'Zu Kampfbeginn: hinsehen oder nicht'}[e.typ]||e.typ;}
 function passivText(p){return{gold_bonus:`+${p.v} Gold nach jedem Sieg`,start_block:`${p.v} Block zu Kampfbeginn`,heil_nach_sieg:`+${p.v} Leben nach jedem Sieg`,erste_karte_billiger:'Die erste Karte im Kampf kostet 0',glueck:'Ein Fund mehr zur Auswahl'}[p.typ]||p.typ;}
-function hgKarteHtml(id,attr,extra=''){const H=HANDGRIFFE[id];if(!H)return'';return `<div class="pick hgpick ${H.rar==='selten'?'selten':''}" ${attr}><div class="hgk">${H.c>0||!H.opfer?`<span class="hgc">${H.x?'X':H.c}</span>`:''}<b>${esc(H.n).toUpperCase()}</b></div>${hgBild(id)?`<img class="hgimg" src="${hgBild(id)}" alt="">`:''}<div class="ps">${esc(cardText(H))}</div>${H.t?`<div class="hgt">${esc(H.t)}</div>`:''}<div class="hgb">${esc(BUILD_N[H.build]||'')}</div>${extra}</div>`;}
+function hgKarteHtml(id,attr,extra='',Hz){const H=Hz||HANDGRIFFE[id];if(!H)return'';const kost=H.c>0||!H.opfer?`<span class="hgc"><span>${H.x?'X':H.c}</span></span>`:'';
+ return `<div class="pick hgpick wz ${H.rar==='selten'?'selten':''}${Hz?' vertiefen':''}" ${attr}>${HG_HAND}${kost}<div class="hgk"><b>${esc(H.n)}</b></div><div class="hgbogen">${hgBild(id)?`<img class="hgimg" src="${hgBild(id)}" alt="">`:''}</div><div class="ps">${esc(cardText(H))}</div><div class="hgb">${esc(BUILD_N[H.build]||'')}</div>${extra}</div>`;}
+// Spieltest 2026-11-10: Angebotskachel mit Vertiefen (zeigt die nächste Stufe) oder Preis (riskant)
+function hgVertiefenZiel(id){let n=null;besitz().forEach(({it})=>{if(hgVon(it).includes(id)){const s=hgStufe(it,id);if(n==null||s<n)n=s;}});return n;}
+function hgAngebotHtml(id){const m=(S.rewardHgMeta||{})[id];const at=`data-hg="${id}"`;
+ if(m&&m.art==='vertiefen'){const s=hgVertiefenZiel(id)||0;return hgKarteHtml(id,at,`<div class="hgmark tief">VERTIEFEN · keine neue Karte</div>`,hgVertieft(HANDGRIFFE[id],s+1));}
+ if(m&&m.art==='riskant'&&m.preis){const p=m.preis;return hgKarteHtml(id,at,`<div class="hgmark preis">PREIS: ${p.art==='gold'?p.v+' Gold':'−'+p.v+' max. Leben'}</div>`);}
+ return hgKarteHtml(id,at);}
 const BUILD_N={glutnest:'Glutnest',brackwasser:'Brackwasser',bollwerk:'Bollwerk',aderlass:'Aderlass',kettenwerk:'Kettenwerk',hagel:'Hagel',ballast:'Ballast',kollekte:'Kollekte',neutral:''};
 function rewardHtml(){if(S.hgPending&&!S.hgPicked)return ritzenHtml('Wohin ritzt du ihn?');
  const wa=S.kampfArt==='waechter';
+ const hgTeil=S.hgPicked?'':`<div class="bspalte hg"><div class="band">${IC_HAND} ${S.rewardHg.length>1?'EIN HANDGRIFF ZUR WAHL':'EIN HANDGRIFF'}</div><div class="picks${S.rewardHg.length===1?' einzeln':''}">${S.rewardHg.map(id=>hgAngebotHtml(id)).join('')}</div><button class="deco klein" data-act="hgSkip">LIEGEN LASSEN (+${(BAL.belohnung&&BAL.belohnung.ueberspringen_gold)||10} GOLD)</button></div>`;
+ const fundTeil=S.reward.length&&!S.picked?`<div class="bspalte fund"><div class="band">${IC_SACK} ${wa?'EINE RELIQUIE':'EIN FUND'}</div><div class="picks">${S.reward.map(id=>itemPick(id,`data-take="${id}"`)).join('')}</div><button class="deco klein" data-take="">NICHTS NEHMEN</button></div>`:'';
  return box('reward',`<h2>${wa?'DER WÄCHTER FÄLLT':'STILLE'}</h2><p class="lead">${S.goldGain?`+${S.goldGain} Gold. `:''}${esc(S.beuteSatz||'Unter dem, was übrig ist, liegt etwas.')}</p>
- ${S.hgPicked?'':`<h3>EIN HANDGRIFF</h3><div class="picks">${S.rewardHg.map(id=>hgKarteHtml(id,`data-hg="${id}"`)).join('')}</div><p><button class="deco klein" data-act="hgSkip">ÜBERSPRINGEN (+${(BAL.belohnung&&BAL.belohnung.ueberspringen_gold)||10} GOLD)</button></p>`}
- ${S.reward.length&&!S.picked?`<h3>${wa?'EINE RELIQUIE':'EIN FUND'}</h3><div class="picks">${S.reward.map(id=>itemPick(id,`data-take="${id}"`)).join('')}</div><p><button class="deco klein" data-take="">NICHTS NEHMEN</button></p>`:''}
+ ${hgTeil||fundTeil?`<div class="beute">${hgTeil}${hgTeil&&fundTeil?'<div class="btrenn"></div>':''}${fundTeil}</div>`:''}
  <button class="deco" data-act="weiterReward">WEITER ›</button>`);}
-// Ritzen: Handgriff in ein Item. Zeigt je Item den Stoff, den er annimmt, und welche Reaktionen er dann auslösen kann.
-function ritzenHtml(frage){const id=S.hgPending;const H=HANDGRIFFE[id];if(!H)return'';const deckSt=new Set(allActive().flatMap(it=>def(it).st));
- const reih=st=>{const o=[];REACT.forEach(r=>{const[a,b]=[...r.k];if((st.includes(a)&&deckSt.has(b))||(st.includes(b)&&deckSt.has(a)))o.push(r.n);});return[...new Set(o)];};
- return box('ritzen',`<h2>${esc(H.n).toUpperCase()}</h2><p class="lead">${esc(cardText(H))}${H.t?` · <i>${esc(H.t)}</i>`:''}</p><p>${frage} Er nimmt den Stoff des Items an.</p>
- <div class="ritzliste">${besitz().map(({it,an})=>{const D=def(it);const hg=hgVon(it),cap=kerbenVon(it);const rx=reih(D.st);
-  return `<div class="ritz ${an?'':'rucksack'}"><img src="${itemBild(it.id)}"><div class="rn"><b>${esc(D.n)}</b> ${D.st.map(k=>gi(k,KZ())).join('')||'<span class="hint">stofflos</span>'}${an?'':' <span class="hint">(Rucksack)</span>'}<br><span class="hint">${rx.length?'reagiert mit: '+rx.join(', '):'keine Reaktion mit deinem Deck'}</span></div>
-  <div class="kerben">${[...Array(cap)].map((_,k)=>hg[k]?`<button class="kerbe voll" data-ritz="${it.uid}" data-k="${k}" title="überschreiben">${esc(HANDGRIFFE[hg[k]]?HANDGRIFFE[hg[k]].n:hg[k])}</button>`:`<button class="kerbe leer" data-ritz="${it.uid}">frei</button>`).join('')}</div></div>`;}).join('')}</div>
- ${S.ueberschreiben?`<p class="err">„${esc(HANDGRIFFE[S.ueberschreiben.alt].n)}“ wirklich überschreiben? <button class="deco klein" data-act="ueberJa">JA</button> <button class="deco klein" data-act="ueberNein">NEIN</button></p>`:''}
- <button class="deco klein" data-act="hgVerwerfen">VERWERFEN</button>`);}
+// Ritzen: Handgriff in ein Item. Spieltest 2026-11-10: alle Items als Kacheln (kein Scrollen), jede Karte im selben Look.
+// Fest (Karte des Items, fest_hg) liegt auf dunklem Holz mit Schild FEST, überritzbare Handgriffe im Messingrahmen, freie Kerben gestrichelt.
+// Oben steht der Vergleich alt gegen neu für die Kerbe unter der Maus (ritzVglHtml, gesetzt in eingabe.js).
+function ritzReih(st){const deckSt=new Set(allActive().flatMap(it=>def(it).st));const o=[];REACT.forEach(r=>{const[a,b]=[...r.k];if((st.includes(a)&&deckSt.has(b))||(st.includes(b)&&deckSt.has(a)))o.push(r.n);});return[...new Set(o)];}
+function rzKarte(cls,bild,c,n,t,tag='',attr=''){const kost=c==null||c===''?'<span class="rzkost leer"></span>':`<span class="rzkost"><span>${c}</span></span>`;
+ const tagN=attr?'button':'div';return `<${tagN} class="rzk ${cls}" ${attr}>${kost}${bild?`<img src="${bild}" alt="">`:''}<span class="rzx"><b>${esc(n)}</b><i>${esc(t)}</i></span>${tag}</${tagN}>`;}
+const RZ_FEST='<span class="rzfest"><i></i>FEST</span>';
+function rzHgKosten(H){return H.unspielbar?'':H.x?'X':(H.c||0);}
+function rzHgText(H){return H.unspielbar?'unspielbar':cardText(H).replace(/\.$/,'');}
+function ritzKachel(it,an){const D=def(it);const hg=hgVon(it),cap=kerbenVon(it),fest=D.fest_hg||[];const u=S.ueberschreiben;
+ const karten=D.cards.map(c=>rzKarte('fest',itemBild(it.id),c.x?'X':(c.c||0),c.n,cardText(c).replace(/\.$/,''),RZ_FEST)).join('');
+ const kerben=[...Array(Math.max(cap,hg.length))].map((_,k)=>{const id=hg[k];
+  if(!id)return `<button class="rzk frei" data-ritz="${it.uid}"><span class="rzplus">+</span><span class="rzx"><b>Freie Kerbe</b><i>hier ritzen</i></span></button>`;
+  const H=HANDGRIFFE[id];if(!H)return'';const Hs=hgVertieft(H,hgStufe(it,id));
+  if(fest.includes(id))return rzKarte('fest'+(H.unspielbar?' fluch':''),hgBild(id),rzHgKosten(Hs),Hs.n,rzHgText(Hs),RZ_FEST);
+  const raus=u&&u.uid===it.uid&&u.k===k;
+  return rzKarte('kerbe'+(raus?' raus':''),hgBild(id),rzHgKosten(Hs),Hs.n,rzHgText(Hs),'',`data-ritz="${it.uid}" data-k="${k}"`);}).join('');
+ return `<div class="rzz${an?'':' lose'}${u&&u.uid===it.uid?' sel':''}"><div class="rzzk"><img src="${itemBild(it.id)}" alt=""><span class="rzzn">${esc(D.n)}</span>${D.st.map(k=>gi(k,KZ())).join('')}${an?'':'<span class="rzrs">Rucksack</span>'}</div>${karten}${kerben||'<span class="rzkeine">keine Kerbe</span>'}</div>`;}
+// Vergleich für eine Kerbe (uid, k = belegte Kerbe oder null = frei). Ohne Ziel: kurzer Hinweis.
+function ritzVglHtml(uid,k){const H=HANDGRIFFE[S.hgPending];const it=uid!=null&&itemByUid(uid);
+ if(!H||!it)return `<div class="rzvk">IN WELCHES ITEM?</div><p class="rzvh">Fahr über eine Kerbe, dann steht hier, was rausfliegt und was reinkommt.</p>`;
+ const D=def(it);const alt=k!=null?hgVon(it)[k]:null;const A=alt&&HANDGRIFFE[alt];const As=A&&hgVertieft(A,hgStufe(it,alt));const rx=ritzReih(D.st);const an=besitz().some(b=>b.it===it&&b.an);
+ const stoff=D.st.length?D.st.map(s=>ST[s].n).join(' und '):'';
+ const links=As?rzKarte('kerbe raus',hgBild(alt),rzHgKosten(As),As.n,rzHgText(As)):`<div class="rzk frei"><span class="rzplus">+</span><span class="rzx"><b>Freie Kerbe</b><i>nichts fliegt raus</i></span></div>`;
+ const rechts=rzKarte('neu',hgBild(S.hgPending),rzHgKosten(H),H.n,stoff?`wird ${stoff}`:'bleibt stofflos');
+ const u=S.ueberschreiben;const frage=u&&u.uid===it.uid&&u.k===k;
+ return `<div class="rzvk">IN ${esc(D.n).toUpperCase()} ${D.st.map(s=>gi(s,KZ())).join('')}</div><div class="rzvz">${links}<span class="rzpf">›</span>${rechts}</div>
+ <p class="rzvh">${D.cards.map(c=>esc(c.n)).join(', ')} bleibt. ${rx.length?'Reagiert mit: '+esc(rx.join(', ')):'Keine Reaktion mit deinem Deck.'}${an?'':' Im Rucksack wirkt er erst, wenn du das Item anlegst.'}</p>
+ ${frage?`<p class="rzja">„${esc(A.n)}“ wirklich überschreiben? <button class="deco klein" data-act="ueberJa">JA</button> <button class="deco klein" data-act="ueberNein">NEIN</button></p>`:''}`;}
+function ritzenHtml(frage){const id=S.hgPending;const H=HANDGRIFFE[id];if(!H)return'';const u=S.ueberschreiben;const b=besitz();
+ return `<div class="rz${b.length>15?' sehrviele':b.length>8?' viele':''}"><div class="rzkopf">
+ <div class="rzneu"${H.t?` title="${esc(H.t)}"`:''}><div class="rzvk eld">NEUER HANDGRIFF</div><div class="rzneun">${hgBild(id)?`<img src="${hgBild(id)}" alt="">`:''}<b>${esc(H.n).toUpperCase()}</b>${H.unspielbar?'':`<span class="rzkost inl"><span>${rzHgKosten(H)}</span></span>`}</div><div class="rznt">${esc(cardText(H))}</div></div>
+ <div class="rzvgl" id="rzVgl">${u?ritzVglHtml(u.uid,u.k):ritzVglHtml(null,null)}</div></div>
+ <div class="rzfrage"><span>${frage} Er nimmt den Stoff des Items an.</span><span class="rzleg"><span><i class="lf"></i>fest, bleibt</span><span><i class="lk"></i>Handgriff, überritzbar</span><span><i class="lr"></i>freie Kerbe</span></span><button class="deco klein" data-act="hgVerwerfen">VERWERFEN</button></div>
+ <div class="rzgrid">${b.map(({it,an})=>ritzKachel(it,an)).join('')}</div></div>`;}
 // Wahl: Schleifen, Kerbe dazu, Umritzen
 function wahlHtml(){const w=S.wahl;if(!w)return'';
  // M8: Spur der Farbe tilgen (Werkstatt): je Item der letzte Tausch

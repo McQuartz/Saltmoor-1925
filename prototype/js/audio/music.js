@@ -126,6 +126,7 @@ const S={scene:'menu',biome:'hafen',hp:40,hpMax:40,foes:[],role:'fischer',stoff:
  lastAbgesang:null,fin:null,finPending:null,peak:0,log:[]};
 
 let ctx=null,NBUF=null,timer=null,running=false,step=0,nextT=0,lastUpd=0;
+let MP=[],MM=[],TAKT=[],FEST=0; // Mund-Modus: prozedurale Layer-Schalter, Eingänge für Aufnahmen, Takt-Zuhörer, festes Tempo
 let dropF,drones=[],dissO,flirrO=[],tuned=[],master,duckG,dropG,shaper,driveG,toneF,pkF,hsF,dryG,wetG,hall,comp,L=[],voiceBus,flirrG,dissG,droneG;
 let beds={},farIn,echoIn,echoD,peakA,peakBuf;
 // Hören statt sehen (M6): eigener Bus für die Einsätze (hoerG), Messknoten am Bus (hoerA) und an der Summe vor der Kette (sumA)
@@ -143,7 +144,7 @@ Object.values(LV).forEach(e=>e.raw=e.tgt);
 function lvAt(k,t){const e=LV[k];return t<=e.t0?e.v0:e.tgt+(e.v0-e.tgt)*Math.exp(-(t-e.t0)/e.tc);}
 // raw = Wunschpegel des Dirigenten; tgt = tatsächlicher Pegel (bei laufenden Einsätzen sind Layer 2, 3 und Stimmen leicht abgesenkt)
 const duckF=k=>(k===2||k===3||k==='v')?H.duck:1;
-function lv(k,raw,t,tc){const tgt=raw*duckF(k);LV[k]={v0:lvAt(k,t),tgt,raw,t0:t,tc};(k==='v'?voiceBus:L[k]).gain.setTargetAtTime(tgt,t,tc);}
+function lv(k,raw,t,tc){const tgt=raw*duckF(k);LV[k]={v0:lvAt(k,t),tgt,raw,t0:t,tc};(k==='v'?voiceBus:L[k]).gain.setTargetAtTime(tgt,t,tc);if(k!=='v'&&MM[k])MM[k].gain.setTargetAtTime(tgt,t,tc);}
 const mtof=m=>440*Math.pow(2,(m-69)/12);
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const spb=()=>60/S.bpm/4; // Sekunden pro 16tel
@@ -186,7 +187,9 @@ function build(){
  comp.connect(master).connect(out);
  // Pegelmessung am gemeinsamen Ausgang (Musik + SFX, vor dem Limiter)
  peakA=ctx.createAnalyser();peakA.fftSize=2048;peakBuf=new Float32Array(peakA.fftSize);out.connect(peakA);
- for(let i=0;i<5;i++){const g=ctx.createGain();g.gain.value=i===0?1:0;g.connect(dropG);L.push(g);}
+ for(let i=0;i<5;i++){const g=ctx.createGain();g.gain.value=i===0?1:0;L.push(g);
+  // Mund-Modus (mund.js): P = prozedurale Fassung an/aus, M = eigene Aufnahmen mit demselben Gate wie L
+  const p=ctx.createGain();g.connect(p).connect(dropG);MP.push(p);const m=ctx.createGain();m.gain.value=g.gain.value;m.connect(dropG);MM.push(m);}
  hoerG=ctx.createGain();hoerG.gain.value=1;hoerG.connect(dropG); // Einsätze der stummen Gegner
  hoerA=ctx.createAnalyser();hoerA.fftSize=32768;hoerA.smoothingTimeConstant=0;hoerBuf=new Float32Array(32768);hoerG.connect(hoerA);
  sumA=ctx.createAnalyser();sumA.fftSize=32768;sumA.smoothingTimeConstant=0;dropG.connect(sumA); // Summe aller Layer und Einsätze vor der Kette
@@ -551,7 +554,7 @@ function bedLevels(t){const b=BIOME[S.biome],menu=S.scene==='menu',nl=S.fin==='n
 function barStart(t,bar){
  S.bar=bar;S.chord=bar%4;
  // Tempo: kleine Spanne (80 bis 88), höchstens 1 BPM pro Takt, damit man es spürt statt hört
- const bt=S.solo?80:Math.round(80+8*S.gefahr);S.bpm=clamp(S.bpm+Math.sign(bt-S.bpm),80,88);
+ const bt=S.solo?80:Math.round(80+8*S.gefahr);S.bpm=FEST||clamp(S.bpm+Math.sign(bt-S.bpm),80,88);
  echoD.delayTime.setTargetAtTime(spb()*3,t,.3);
  // Harmonie kippt nur auf Taktgrenzen, mit Hysterese
  if(S.finPending){S.fin=S.finPending;S.finPending=null;finish(t,S.fin);}
@@ -621,11 +624,11 @@ function finish(t,art){
 }
 function clearFin(){if(!S.fin&&!S.finPending)return;const n=ctx?ctx.currentTime:0;S.fin=null;S.finPending=null;
  if(!ctx)return;dropF.frequency.cancelScheduledValues(n);dropF.frequency.setTargetAtTime(18000,n,.4);dropG.gain.cancelScheduledValues(n);dropG.gain.setTargetAtTime(1,n,.3);
- droneG.gain.cancelScheduledValues(n);droneG.gain.setTargetAtTime(.05,n,1);L[0].gain.cancelScheduledValues(n);lv(0,1,n,1);flirrG.gain.cancelScheduledValues(n);bedLevels(n);}
+ droneG.gain.cancelScheduledValues(n);droneG.gain.setTargetAtTime(.05,n,1);L[0].gain.cancelScheduledValues(n);if(MM[0])MM[0].gain.cancelScheduledValues(n);lv(0,1,n,1);flirrG.gain.cancelScheduledValues(n);bedLevels(n);}
 
 function schedule(st,t){
  const s=st%16,bar=Math.floor(st/16),root=BIOME[S.biome].root;
- if(s===0)barStart(t,bar);
+ if(s===0){barStart(t,bar);}
  if(st===S.bellStep){bigBell(t);S.bellStep=-1;}
  if(S.fin){S.dropStep=S.hitStep=-1;if(S.fin==='umkehren'&&s===0)ambEvent(t,s,bar,chordNow());return;}
  const ch=chordNow(),barLen=spb()*16;
@@ -682,7 +685,7 @@ function victoryCadence(t){
 }
 function tick(){
  update();
- while(nextT<ctx.currentTime+.12){schedule(step,nextT);nextT+=spb();step++;}
+ while(nextT<ctx.currentTime+.12){schedule(step,nextT);if(step%16===0&&TAKT.length){const z={t:nextT,bar:Math.floor(step/16),barLen:spb()*16,biome:S.biome,dark:S.dark,drive:S.drive,wucht:S.wucht,gate:[...S.gate],fin:S.fin};TAKT.forEach(f=>{try{f(z);}catch(e){}});}nextT+=spb();step++;}
 }
 // nächste Zählzeit (Viertel) im Planungsraster
 const nextBeat=()=>Math.ceil((step+1)/4)*4;
@@ -749,6 +752,14 @@ return {
  // Messknoten für Labor und Prüfung: Analyser am Einsatz-Bus und an der Summe vor der Kette
  hoerenMessung(){return ctx?{einsatz:hoerA,summe:sumA,gain:hoerG}:null;},
  // Für tonale SFX: Grundton und aktueller Akkord, damit Effekte in der Tonart klingen
+ // Mund-Modus (mund.js / studio.html): eigene Aufnahmen statt prozeduraler Layer
+ mund:{
+  eingang(k){if(!ctx)build();return MM[k]||null;},            // hier hängen die Loops eines Layers dran (gleiches Gate wie der Layer)
+  prozedural(k,an){if(!ctx)build();const p=MP[k];if(p)p.gain.setTargetAtTime(an?1:0,ctx.currentTime,.05);},
+  takt(fn){TAKT.push(fn);return ()=>{const i=TAKT.indexOf(fn);if(i>=0)TAKT.splice(i,1);};}, // fn({t,bar,barLen,biome,dark,drive,wucht,gate}) zu jedem Taktanfang, kurz vorher
+  tempo(bpm){FEST=bpm?clamp(bpm,40,200):0;if(FEST)S.bpm=FEST;},
+  ctx(){if(!ctx)build();return ctx;}
+ },
  harmony(){const c=chordNow();return {root:BIOME[S.biome].root,chord:c.c,scale:c.scale};},
  stoff(k){if(!STOFFE[k])return;if(k!==S.stoff)note('stoff',STOFFE[k].n);S.stoff=k;if(!ctx)return;const st=STOFFE[k],n=ctx.currentTime;
   toneF.frequency.setTargetAtTime(st.lp,n,.4);wetG.gain.setTargetAtTime(st.wet,n,.4);shaper.curve=curve(st.drive);driveG.gain.setTargetAtTime(1/(1+st.drive*.45),n,.2);

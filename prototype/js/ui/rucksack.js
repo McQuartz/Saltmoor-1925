@@ -4,7 +4,7 @@
 // Fächer am Körper (Talismane Reihe am Hals, Kleidung 2×2 am Leib, Waffen Säule an der Hand) mit gepunkteten Linien zu den
 // Anschlusspunkten aus jobs.json → koerper. Rechts das gewählte Item mit seinen Karten und das Deck mit Stoff-Balken und
 // Änderungen seit dem Öffnen (grün rein, rot raus). Unten der Rucksack als Holz-Footer.
-// Bedienung über die gleichen Orte wie überall (data-loc, S.sel, move() in run.js): Klicken oder Ziehen. Im Kampf nur lesend.
+// Bedienung über die gleichen Orte wie überall (data-loc, S.sel, move() in run.js): Ziehen tauscht, Klicken wählt nur aus (Spieltest 2026-11-09). Im Kampf nur lesend.
 // Liest den Zustand, ändert ihn nie selbst; jede Änderung läuft über move(), verkaufen() usw.
 let KOE=null; // {lesen, alt: Kartenzählung beim Öffnen, zeig: uid des gezeigten Items}
 const KOE_GROESSE={w:110,h:172}; // Leinwand der Silhouetten (tools/sprites/figuren.js)
@@ -25,7 +25,7 @@ function koeItemByUid(uid){if(uid==null)return null;for(const b of besitz())if(b
 
 // Ein Platz: data-loc nur, wenn nicht lesend; „ziel“, wenn das gewählte Item hierher passt
 function koeSlot(loc,{zu=false,klein=false}={}){const it=zu?null:getAt(loc);const D=it&&def(it);const sel=S.sel===loc;
- let ziel=false;if(!KOE.lesen&&S.sel&&S.sel!==loc&&!zu){const a=getAt(S.sel);ziel=!!a&&canPlace(a,loc)&&canPlace(it,S.sel);}
+ const ziel=false; // Spieltest 2026-11-09: kein Tausch per Klick mehr, also keine Ziel-Markierung nach dem Auswählen
  const rar=D?rarOf(D):'';const zeig=it&&KOE.zeig===it.uid;
  const kerben=it&&!it.x?[...Array(kerbenVon(it))].map((_,k)=>{const st=D.st[k%Math.max(1,D.st.length)];const col=st&&ST[st]?ST[st].c:'#b08a4a';return `<i class="${hgVon(it)[k]?'voll':''}" style="--k:${col}"></i>`;}).join(''):'';
  const attr=zu?'':KOE.lesen?(it?`data-kzeig="${it.uid}"`:''):`data-loc="${loc}"`;
@@ -51,14 +51,19 @@ function koeRechts(){const b=koeItemByUid(KOE.zeig);let oben='';
   ${D.eigen?`<div class="kie"><i>${esc(eigenText(D.eigen))}</i></div>`:''}${D.passiv?`<div class="kie">${esc(passivText(D.passiv))}</div>`:''}${rs2.length?`<div class="kia">Teil von: ${rs2.map(r=>esc(r.n)).join(', ')}</div>`:''}
   ${ort?`<div class="kia">${ort}</div>`:''}<div class="kkarten">${einm.map(o=>`<div class="kkw">${koeKarte(o.c)}${o.anz>1?`<span class="anz">×${o.anz}</span>`:''}</div>`).join('')}</div>
   ${D.flavor?`<div class="kfl">${esc(D.flavor)}</div>`:''}</div>`;}
- else oben=`<p class="klead">Klick ein Item, dann den Platz, an den es soll. Rechts siehst du, was das mit deinem Deck macht.</p>`;
+ else oben=koeDeckListe(); // Spieltest 2026-11-09: ohne gewähltes Item steht hier das ganze Deck
  // Deck: Kartenzahl, Stoff-Balken, Änderung seit dem Öffnen
  const deck=deckListe();const z={};let summe=0;deck.forEach(c=>c.st.forEach(k=>{z[k]=(z[k]||0)+1;summe++;}));const ks=Object.keys(ST).filter(k=>z[k]);
  const{rein,raus}=koeDiff();const nm=k=>esc(k.split('\u0001')[0]);
- return `<div class="krechts">${oben}<div class="kdeck"><div class="kdz">DECK <b>${deck.length}</b> KARTEN</div>
+ return `<div class="krechts">${oben}<div class="kdeck"><div class="kdz">DECK <b>${deck.length}</b> KARTEN${b?' <button class="deco klein kganz" data-act="koeDeck">GANZES DECK</button>':''}</div>
  <div class="kbalken">${ks.map(k=>`<i style="flex:${z[k]};background:${ST[k].c}" title="${esc(ST[k].n)} ${z[k]}"></i>`).join('')||'<i style="flex:1;background:#2a2218"></i>'}</div>
  <div class="kleg">${ks.map(k=>`<span>${gi(k,KZ())}${z[k]}</span>`).join('')}</div>
  ${rein.length||raus.length?`<div class="kdiff">${rein.map(r=>`<span class="gr">+ ${nm(r.k)}${r.n>1?' ×'+r.n:''}</span>`).join('')}${raus.map(r=>`<span class="rt">− ${nm(r.k)}${r.n>1?' ×'+r.n:''}</span>`).join('')}</div>`:''}</div></div>`;}
+
+// Spieltest 2026-11-09: das ganze Deck auf einen Blick, gleiche Karten zusammengefasst, nach Kosten sortiert. Die Wirkung steht im Tooltip.
+function koeDeckListe(){const g=new Map();for(const c of deckListe()){const k=c.n+'\u0001'+(c.hg||'')+'\u0001'+c.st.join('');const o=g.get(k);if(o)o.anz++;else g.set(k,{c,anz:1});}
+ const L=[...g.values()].sort((a,b)=>(cardCost(a.c)-cardCost(b.c))||a.c.n.localeCompare(b.c.n,'de'));
+ return `<div class="kdeckliste"><div class="kdlk">DEIN DECK</div>${L.map(({c,anz})=>{const k=cardCost(c);return `<div class="kdr${c.hg?' hg':''}${c.fremd?' fremd':''}" title="${esc(c.n+': '+cardText(c))}"><span class="kdc">${k>=99?'–':c.x?'X':k}</span><span class="kds">${c.st.map(s=>gi(s,KZ())).join('')}</span><span class="kdn">${esc(c.n)}</span>${anz>1?`<span class="anz">×${anz}</span>`:''}</div>`;}).join('')}</div>`;}
 
 // Linien von den Fächern zu den Anschlusspunkten der Figur (Szenen-Pixel)
 function koeLinien(){const J=koeFigur();const K=J.koerper||{hals:[55,62],leib:[58,92],hand:[24,106]};
@@ -79,7 +84,7 @@ function koeFuss(){const bag=S.bag.map((_,i)=>koeSlot('bag:'+i)).join('');const 
  return `<div class="rkfuss"><div class="kbag"><h4>RUCKSACK</h4><div class="fp">${bag}${KOE.lesen?'':`<div class="kslot trash" data-loc="trash" title="Wegwerfen">✕</div>`}</div></div>
  ${ws?`<div class="kbag kbank"><h4>WERKBANK</h4><div class="fp">${koeSlot('bench:0')}${koeSlot('bench:1')}</div></div>`:''}
  <div class="kknopf">${kr?`<button class="deco klein" data-act="verkaufen">${esc(def(selIt).n).toUpperCase()} FÜR ${Math.floor(preisVon(def(selIt))*((BAL.shop&&BAL.shop.verkauf_anteil)||.4))} GOLD</button>`:''}
- ${KOE.lesen?'':'<span class="hint">· Ziehen oder anklicken zum Tauschen.</span>'}<button class="deco" data-act="rucksackZu">${KOE.lesen?'ZURÜCK':'WEITER ›'}</button></div></div>`;}
+ ${KOE.lesen?'':'<span class="hint">· Ziehen zum Tauschen.</span>'}<button class="deco" data-act="rucksackZu">${KOE.lesen?'ZURÜCK':'WEITER ›'}</button></div></div>`;}
 
 function koerperHtml(){const J=koeFigur();
  return `${koeKopf()}<div class="kmitte"><canvas id="koeNebel" width="200" height="70" style="left:calc(var(--u)*${KOE_FIG.x-45});top:calc(var(--u)*${KOE_FIG.y+112})"></canvas>

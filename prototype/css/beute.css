@@ -1,0 +1,64 @@
+/* Spieltest 2026-11-11, Variante F: Item und Handgriff ohne Lesen unterscheiden.
+   Item = Ding in einer Vitrine (Glas, Holzsockel mit Namensschild). Handgriff = violette Karte mit Hand im Hintergrund.
+   Maße in --u (ein Szenenpixel). Gilt überall, wo itemPick und hgKarteHtml stehen (Belohnung, Krämer, Fund, Brief, Masken, Erbe). */
+
+/* ---- Item: Vitrine ---- */
+.pick.vit,.box.reward .pick.vit{position:relative;width:calc(var(--u)*63);background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;box-shadow:none}
+.pick.vit .vglas{position:relative;width:calc(var(--u)*55);height:calc(var(--u)*46);box-sizing:border-box;border:1px solid #8a6a3a;border-bottom:0;
+ background:linear-gradient(135deg,rgba(255,255,255,.07) 0 18%,rgba(255,255,255,0) 18% 60%,rgba(255,255,255,.04) 60% 66%,rgba(255,255,255,0) 66%),linear-gradient(#0e0c0a,#1a150e);
+ display:flex;align-items:center;justify-content:center}
+.pick.vit .vglas img,.box.reward .pick.vit .vglas img{width:calc(var(--u)*32);height:calc(var(--u)*32);max-height:none;image-rendering:pixelated}
+.pick.vit .vsockel{width:100%;box-sizing:border-box;background:linear-gradient(#5a4020,#2a1d10);border:1px solid #8a6a3a;padding:calc(var(--u)*2.5) calc(var(--u)*3);text-align:center;box-shadow:0 calc(var(--u)*1.5) 0 #000;flex:1}
+.pick.vit .pn{font-family:var(--ft);font-size:calc(var(--u)*6.5);color:#f0e0b8;line-height:1}
+.pick.vit .pst{display:inline-flex;vertical-align:middle;gap:1px}
+.pick.vit .ps,.box.reward .pick.vit .ps{font-style:italic;font-size:calc(var(--u)*5.2);color:#d8c49a;line-height:1.1;margin-top:calc(var(--u)*1.5)}
+.pick.vit .preis{color:var(--gold)}
+.pick.vit:hover .vglas{border-color:#e0c080}.pick.vit:hover .vsockel{border-color:#e0c080}
+.pick.vit.selten .vglas,.pick.vit.selten .vsockel{border-color:#c8a04a}
+.pick.vit.reliquie{box-shadow:none}.pick.vit.reliquie .vglas{border-color:var(--gold);box-shadow:inset 0 0 calc(var(--u)*8) rgba(232,197,71,.25)}.pick.vit.reliquie .vsockel{border-color:var(--gold)}
+
+/* ---- Handgriff: violette Karte mit Hand ---- */
+.pick.hgpick.wz,.box.reward .pick.hgpick.wz{position:relative;width:calc(var(--u)*66);min-height:calc(var(--u)*80);box-sizing:border-box;
+ background:radial-gradient(ellipse at 50% 60%,#1a1426,#07060a 70%);border:1px solid #8a78c8;
+ box-shadow:inset 0 0 0 1px #07060a,inset 0 0 0 1.5px #3a2e5a,1px calc(var(--u)*1.5) 0 #000;
+ display:flex;flex-direction:column;align-items:center;padding:calc(var(--u)*7) calc(var(--u)*4) calc(var(--u)*4);gap:calc(var(--u)*2)}
+.pick.hgpick.wz:hover{border-color:#c8b8f0}
+.pick.hgpick.wz.selten{border-color:#b8a0f0;box-shadow:inset 0 0 0 1px #07060a,inset 0 0 0 1.5px #3a2e5a,0 0 calc(var(--u)*4) rgba(184,160,240,.25),1px calc(var(--u)*1.5) 0 #000}
+.pick.hgpick.wz.vertiefen{border-color:var(--eld)}
+.pick.hgpick.wz .wzh{position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);width:calc(var(--u)*55);height:calc(var(--u)*55);color:rgba(200,184,240,.07);pointer-events:none}
+.pick.hgpick.wz .hgc{position:absolute;left:calc(var(--u)*-4);top:calc(var(--u)*-4);width:calc(var(--u)*11);height:calc(var(--u)*11);transform:rotate(45deg);background:#000;border:1px solid #c8b8f0;display:flex;align-items:center;justify-content:center}
+.pick.hgpick.wz .hgc span{transform:rotate(-45deg);font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*6);color:#efe4c8}
+.pick.hgpick.wz .hgk{font-family:var(--fl);font-size:calc(var(--u)*6.5);color:#efe4c8;line-height:1.05;min-height:calc(var(--u)*14);display:flex;align-items:center;justify-content:center}
+.pick.hgpick.wz .hgk b{font-weight:400}
+.pick.hgpick.wz .hgbogen{width:calc(var(--u)*30);height:calc(var(--u)*26);box-sizing:border-box;border:1px solid #3a2e5a;border-radius:calc(var(--u)*15) calc(var(--u)*15) 0 0;background:radial-gradient(ellipse at 50% 70%,#1a1426,#050408);display:flex;align-items:center;justify-content:center}
+.pick.hgpick.wz .hgimg,.box.reward .pick.hgpick.wz .hgimg{display:block;margin:0;width:calc(var(--u)*23);height:calc(var(--u)*23);max-height:none;image-rendering:pixelated}
+.pick.hgpick.wz .ps,.box.reward .pick.hgpick.wz .ps{font-size:calc(var(--u)*6);line-height:1.1;color:#ddd4bc;margin-top:0;flex:1;display:flex;align-items:center;justify-content:center}
+.pick.hgpick.wz .hgb{font-family:var(--fk);font-size:calc(var(--u)*4);letter-spacing:.14em;color:#8f8672;margin-top:0;text-transform:uppercase}
+.pick.hgpick.wz .hgmark,.pick.hgpick.wz .preis,.pick.hgpick.wz .hint{margin-top:0}
+.picks.einzeln .pick.hgpick.wz{width:calc(var(--u)*88);min-height:calc(var(--u)*104);padding-top:calc(var(--u)*10)}
+.picks.einzeln .pick.hgpick.wz .hgk{font-size:calc(var(--u)*8.5)}
+.picks.einzeln .pick.hgpick.wz .hgbogen{width:calc(var(--u)*42);height:calc(var(--u)*36);border-radius:calc(var(--u)*21) calc(var(--u)*21) 0 0}
+.picks.einzeln .pick.hgpick.wz .hgimg{width:calc(var(--u)*32);height:calc(var(--u)*32)}
+.picks.einzeln .pick.hgpick.wz .ps{font-size:calc(var(--u)*7)}
+.picks.einzeln .pick.hgpick.wz .hgc{width:calc(var(--u)*14);height:calc(var(--u)*14);left:calc(var(--u)*-5);top:calc(var(--u)*-5)}
+.picks.einzeln .pick.hgpick.wz .hgc span{font-size:calc(var(--u)*7.5)}
+
+/* ---- Belohnung: zwei Spalten nebeneinander, Kopfband mit Hand bzw. Rucksack ---- */
+.box.reward{max-width:calc(var(--u)*468)}
+.box.reward .innen{padding:calc(var(--u)*3) calc(var(--u)*6)}
+.box.reward .lead{margin:calc(var(--u)*1) 0 calc(var(--u)*3)}
+.beute{display:flex;gap:calc(var(--u)*8);justify-content:center;align-items:stretch;margin-bottom:calc(var(--u)*4)}
+.beute .bspalte{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*3)}
+.beute .btrenn{width:1px;background:linear-gradient(rgba(176,138,74,0),#b08a4a,rgba(176,138,74,0))}
+.beute .band{display:flex;align-items:center;gap:calc(var(--u)*3);font-family:var(--fk);font-size:calc(var(--u)*5.5);letter-spacing:.16em}
+.beute .hg .band{color:#c8b8f0}.beute .fund .band{color:#e0c080}
+.beute .bic{width:calc(var(--u)*7);height:calc(var(--u)*7)}
+.box.reward .beute .picks{margin:calc(var(--u)*1) 0 0;gap:calc(var(--u)*4);flex-wrap:nowrap;align-items:stretch;flex:1}
+.box.reward .beute .picks{align-items:flex-start}
+.pick.vit .vsockel{flex:none}
+
+/* Krämer: Handgriff-Karten flacher, damit der Laden nicht länger wird als vorher (Krämer-Umbau mit Rucksack kommt eigens) */
+.box.kraemer .pick.hgpick.wz{min-height:0;padding-top:calc(var(--u)*5);gap:calc(var(--u)*1.5)}
+.box.kraemer .pick.hgpick.wz .hgk{min-height:0}
+.box.kraemer .pick.hgpick.wz .hgbogen{width:calc(var(--u)*24);height:calc(var(--u)*20);border-radius:calc(var(--u)*12) calc(var(--u)*12) 0 0}
+.box.kraemer .pick.hgpick.wz .hgimg{width:calc(var(--u)*18);height:calc(var(--u)*18)}
