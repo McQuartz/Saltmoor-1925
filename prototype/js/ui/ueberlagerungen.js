@@ -22,6 +22,7 @@ function menueHtml(){const lauf=!!S.route&&!['strand','ende'].includes(S.phase);
  <button class="deco" data-act="zu">WEITERSPIELEN</button>
  <button class="deco klein" data-act="vollbild" data-vollbild>${vollbildAn()?'VOLLBILD BEENDEN':'VOLLBILD'}</button>
  <button class="deco klein" data-act="einst">EINSTELLUNGEN</button>
+ ${typeof MundAufnahme!=='undefined'?'<button class="deco klein" data-mauf="auf">MUND-SOUNDS</button>':''}
  <button class="deco klein" data-act="tagebuch">TAGEBUCH</button>
  ${S.phase!=='titel'?`<button class="deco klein" data-act="menueTitel">ZUM TITEL</button>${lauf?'<p class="hint">Der Abstieg ist gespeichert und lässt sich vom Titel aus fortsetzen.</p>':''}`:''}</div>`);}
 // Vollbild: ganzes Dokument, damit Overlays, Tooltips und Dev-Menü mitkommen. Der Browser verlangt dafür einen Klick oder Tastendruck.
