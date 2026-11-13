@@ -14,7 +14,23 @@ function tagebuchSeitenHtml(M){const l=(M.seiten||[]).slice().reverse();if(!l.le
 function einstHtml(){const E=Einst.all();const sl=(k,n)=>`<label>${n}<input type="range" min="0" max="1" step="0.05" value="${E[k]}" data-einst="${k}"></label>`;const cb=(k,n)=>`<label><input type="checkbox" ${E[k]?'checked':''} data-einst="${k}"> ${n}</label>`;
  return box('einst',`<h2>EINSTELLUNGEN</h2><div class="formular">${sl('musik','Musik')}${sl('effekte','Effekte')}${cb('stummfilm','Stummfilm-Rauschen bei besonderen Anlässen')}${cb('jumpscare','Jumpscare (höchstens einmal pro Abstieg)')}${cb('wackeln','Bildschirmwackeln')}${cb('fahrtkurz','Übergänge kürzer')}${cb('klangzeichen','Klänge als Zeichen')}${typeof Mund!=='undefined'?Mund.einstHtml():''}
  <label>Textgeschwindigkeit<select data-einst="text"><option value="0.6" ${E.text==.6?'selected':''}>langsam</option><option value="1" ${E.text==1?'selected':''}>normal</option><option value="1.6" ${E.text==1.6?'selected':''}>schnell</option></select></label>
+ <label><input type="checkbox" ${vollbildAn()?'checked':''} data-act="vollbild" data-vollbild> Vollbild (F)</label>
  <label><input type="checkbox" ${typeof Dev!=='undefined'&&Dev.an?'checked':''} data-act="devToggle"> Dev-Modus</label></div><button class="deco klein" data-act="zu">SCHLIESSEN</button>`);}
+// Menü (2026-11-11): immer erreichbar über den Knopf oben rechts oder Esc. Der Abstieg speichert sich selbst an jedem Knoten.
+function menueHtml(){const lauf=!!S.route&&!['strand','ende'].includes(S.phase);
+ return box('menue',`<h2>MENÜ</h2><div class="menue">
+ <button class="deco" data-act="zu">WEITERSPIELEN</button>
+ <button class="deco klein" data-act="vollbild" data-vollbild>${vollbildAn()?'VOLLBILD BEENDEN':'VOLLBILD'}</button>
+ <button class="deco klein" data-act="einst">EINSTELLUNGEN</button>
+ <button class="deco klein" data-act="tagebuch">TAGEBUCH</button>
+ ${S.phase!=='titel'?`<button class="deco klein" data-act="menueTitel">ZUM TITEL</button>${lauf?'<p class="hint">Der Abstieg ist gespeichert und lässt sich vom Titel aus fortsetzen.</p>':''}`:''}</div>`);}
+// Vollbild: ganzes Dokument, damit Overlays, Tooltips und Dev-Menü mitkommen. Der Browser verlangt dafür einen Klick oder Tastendruck.
+const vollbildAn=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+function vollbildUmschalten(){const d=document,el=d.documentElement;try{
+ if(vollbildAn())(d.exitFullscreen||d.webkitExitFullscreen).call(d);
+ else{const r=(el.requestFullscreen||el.webkitRequestFullscreen).call(el,{navigationUI:'hide'});if(r&&r.catch)r.catch(()=>{});}}catch(e){}}
+function vollbildAnzeigen(){const an=vollbildAn();document.querySelectorAll('[data-vollbild]').forEach(x=>{if(x.type==='checkbox')x.checked=an;else x.textContent=an?'VOLLBILD BEENDEN':'VOLLBILD';});}
+document.addEventListener('fullscreenchange',vollbildAnzeigen);document.addEventListener('webkitfullscreenchange',vollbildAnzeigen);
 function zeigeOverlay(html){if(typeof hideTip==='function')hideTip();const o=$('overlay');o.innerHTML=html;o.classList.add('an');}
 function closeOv(){$('overlay').classList.remove('an');}
 // Wandbild-Relief zeichnen (prozedural; im Stil der Hintergründe, sobald World.relief da ist)
