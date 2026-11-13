@@ -1,0 +1,128 @@
+{
+ "id": "nachtzug_neu3",
+ "ergaenzt": "nachtzug",
+ "gegner_dazu": [
+  "heizer"
+ ],
+ "elite_dazu": [
+  "lokfuehrer"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "dampfpfeife"
+ ],
+ "foes": {
+  "heizer": {
+   "n": "Der Heizer",
+   "biom": "nachtzug",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 7
+    }
+   ],
+   "sprite": "heizer_a",
+   "varianten": [
+    "heizer_a",
+    "heizer_b"
+   ],
+   "konzept": "Er schaufelt Kohle in den Kessel des Zuges, der nicht ankommt, und mit jeder Schaufel wird er heißer. Ein krummer Mann, nackter Oberkörper voller Ruß, die Augen weiß wie Asche. Er hat lange nicht mehr gezwinkert.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Jede Schaufel Kohle macht ihn heißer."
+   },
+   "beute": "shovel",
+   "beute_satz": "Die Schaufel ist noch warm, als du sie aufhebst.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "lokfuehrer": {
+   "n": "Der Lokführer",
+   "biom": "nachtzug",
+   "rang": "elite",
+   "hp": 76,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 11
+    }
+   ],
+   "sprite": "lokfuehrer",
+   "konzept": "Er fährt den Zug, der nicht ankommt, und er hält den Fahrplan. Ein Mann in der Latzhose, die Schutzbrille auf der Stirn, und wo die Brust war, steht die Feuertür offen. In der Hand die Kohlenschaufel.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "takt",
+    "v": 4,
+    "klang": "herz",
+    "why": "Er pfeift nach Fahrplan, und bei jedem Pfiff steht der Zug unter Dampf."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Bei jedem Pfiff ist der Kessel heißer."
+    }
+   ],
+   "beute": "dampfpfeife",
+   "beute_satz": "Die Feuertür fällt zu. Drinnen glüht es weiter, einen Halt lang.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "dampfpfeife": {
+   "n": "Dampfpfeife",
+   "a": "talisman",
+   "st": [
+    "F",
+    "E"
+   ],
+   "spr": "musicbox",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "energie_bleibt",
+    "t": "Nicht genutzte Energie bleibt einen Zug."
+   },
+   "flavor": "Messing, angelaufen. Wenn man hineinbläst, kommt ein Pfiff, der zu lang ist.",
+   "cards": [
+    {
+     "n": "Volldampf",
+     "c": 0,
+     "blk": 2,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,89 @@
+{
+ "id": "moor_neu",
+ "ergaenzt": "moor",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "irrlichttraegerin"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "irrlichtglas"
+ ],
+ "foes": {
+  "irrlichttraegerin": {
+   "n": "Die Irrlichtträgerin",
+   "biom": "moor",
+   "rang": "elite",
+   "hp": 88,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "irrlichttraegerin",
+   "konzept": "Die man früher die Lichtermuhme nannte. Sie führt Leute vom Bohlenweg, damit das Moor satt bleibt. Über der Schulter eine krumme Weidenstange mit Einmachgläsern, in jedem ein Licht. Unter dem Tuch ist kein Gesicht: Ihre Augen trägt sie in den Gläsern.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Man sieht nur die Lichter, nicht, wohin sie zeigen."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Jedes Licht, das du aus den Augen lässt, kommt ein Stück näher."
+    }
+   ],
+   "beute": "irrlichtglas",
+   "beute_satz": "Ein Glas ist heil geblieben. Das Licht darin dreht sich nach dir um.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "irrlichtglas": {
+   "n": "Irrlicht im Glas",
+   "a": "talisman",
+   "st": [
+    "L",
+    "V"
+   ],
+   "spr": "lantern",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1,
+    "t": "Zu Kampfbeginn sind alle Gegner 1 Zug verwundbar."
+   },
+   "flavor": "Es leuchtet nur, wenn man nicht hinsieht. Wenn man hinsieht, sieht es zurück.",
+   "cards": [
+    {
+     "n": "Vom Weg locken",
+     "c": 1,
+     "atk": 4,
+     "vuln": 1,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

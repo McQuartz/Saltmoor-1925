@@ -1,0 +1,126 @@
+{
+ "id": "wald_neu3",
+ "ergaenzt": "wald",
+ "gegner_dazu": [
+  "pilzsammler"
+ ],
+ "elite_dazu": [
+  "baumfrau"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "harzzopf"
+ ],
+ "foes": {
+  "pilzsammler": {
+   "n": "Der Pilzsammler",
+   "biom": "wald",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "pilzsammler_a",
+   "varianten": [
+    "pilzsammler_a",
+    "pilzsammler_b"
+   ],
+   "konzept": "Er ist mit dem Korb in den Wald gegangen und hat gesammelt, was am Boden wuchs, und dann hat der Wald gesammelt. Aus seinem Hut, den Ärmeln und dem Korb wachsen dieselben Pilze. Er isst sie, und sie wachsen nach.",
+   "stimme": "hirte",
+   "kniff": {
+    "art": "rein",
+    "why": "Was ihn befällt, verdaut er, und davon wird er nur satter."
+   },
+   "beute": null,
+   "beute_satz": "Der Korb kippt. Die Pilze kriechen langsam in den Boden zurück.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "baumfrau": {
+   "n": "Die Baumfrau",
+   "biom": "wald",
+   "rang": "elite",
+   "hp": 84,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "baumfrau",
+   "konzept": "Sie hängt kopfüber im Geäst, die Füße in die Rinde eingewachsen, das Haar fällt bis zum Waldboden und schlägt dort Wurzeln. Sie pendelt, ganz langsam, und Harz tropft von ihren Fingerspitzen.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Wer ihrem Pendeln zusieht, dem werden die Hände starr."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Die Wurzeln ihres Haars gehen jeden Zug tiefer."
+    }
+   ],
+   "beute": "harzzopf",
+   "beute_satz": "Das Haar reißt am Boden ab. Die Wurzeln darin bewegen sich noch.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "harzzopf": {
+   "n": "Harzzopf",
+   "a": "talisman",
+   "st": [
+    "V",
+    "F"
+   ],
+   "spr": "harefoot",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "brand_haelt",
+    "t": "Brand verfällt nur um 1."
+   },
+   "flavor": "Ein geflochtener Zopf, steif von Harz. Er brennt langsam und sehr lange.",
+   "cards": [
+    {
+     "n": "Harz anzünden",
+     "c": 1,
+     "burn": 3,
+     "blk": 3
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

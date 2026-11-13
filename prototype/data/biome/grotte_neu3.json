@@ -1,0 +1,52 @@
+{
+ "id": "grotte_neu3",
+ "ergaenzt": "grotte",
+ "gegner_dazu": [
+  "kruecken"
+ ],
+ "elite_dazu": [],
+ "gegner_weg": [],
+ "fundpool_dazu": [],
+ "foes": {
+  "kruecken": {
+   "n": "Die Krückenträgerin",
+   "biom": "grotte",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "kruecken_a",
+   "varianten": [
+    "kruecken_a",
+    "kruecken_b"
+   ],
+   "konzept": "An der Grottenwand hängen die Krücken der Geheilten, hunderte. Sie trägt sie alle, auf dem Rücken festgebunden wie ein Reisigbündel, und sie selbst geht ohne. Ihre Beine sind die einzigen in der Grotte, die nie geheilt wurden.",
+   "stimme": "opfernde",
+   "kniff": {
+    "art": "dornen",
+    "v": 2,
+    "why": "Die Krücken stehen in alle Richtungen ab."
+   },
+   "beute": null,
+   "beute_satz": "Die Krücken fallen klappernd auseinander. Eine steht von allein.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {}
+}

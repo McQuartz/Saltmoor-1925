@@ -1,0 +1,91 @@
+{
+ "id": "leuchtturm_neu4",
+ "ergaenzt": "leuchtturm",
+ "waechter_dazu": [
+  "schiffbruechige"
+ ],
+ "foes": {
+  "schiffbruechige": {
+   "n": "Die Schiffbrüchigen",
+   "biom": "leuchtturm",
+   "rang": "waechter",
+   "hp": 88,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 9
+    }
+   ],
+   "gesehen": {
+    "t": "blk",
+    "v": 14
+   },
+   "sprite": "schiffbruechige",
+   "varianten": [
+    "schiffbruechige"
+   ],
+   "konzept": "Die Besatzung der „Margarethe“, die 1921 im Sturm auf die Klippe lief, weil das Feuer aus war. Sie sind auf ihrem Floß angetrieben und nicht abgestiegen: fünf Mann, ineinander verkeilt, die Arme umeinander, ein einziger Klumpen aus Ölzeug. Jeden Zug klammern sie sich fester.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "waechst",
+    "v": 2,
+    "why": "Jeden Zug klammern sie sich fester aneinander, und jeder Griff ist stärker als der letzte."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "F",
+     "S"
+    ]
+   },
+   "beute": "rettungsring",
+   "beute_satz": "Die Arme lassen nacheinander los. Am Ende hält nur noch einer das Floß, und dann lässt auch er los.",
+   "quelle": "skript",
+   "art": "mensch",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "rettungsring": {
+   "n": "Rettungsring der Margarethe",
+   "a": "kleidung",
+   "st": [
+    "W",
+    "S"
+   ],
+   "spr": "sealskin",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "reaktion_heil",
+    "v": 1,
+    "t": "Jede Reaktion heilt 1."
+   },
+   "flavor": "Kork in Segeltuch, der Name halb abgewaschen. Er ist nie benutzt worden, das Feuer war ja aus.",
+   "cards": [
+    {
+     "n": "Festklammern",
+     "c": 1,
+     "blk": 9
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

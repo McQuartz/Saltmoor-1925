@@ -33,6 +33,7 @@ async function loadData(base='data/',fetchJson){
    if(p.fundpool_dazu)b.fundpool=[...new Set((b.fundpool||[]).concat(p.fundpool_dazu))];
    if(p.waechter_dazu)b.waechter_alt=[...new Set((b.waechter_alt||[]).concat(p.waechter_dazu))];
    if(p.elite_dazu)b.elite=[...new Set((b.elite||[]).concat(p.elite_dazu))];
+   if(p.vorraum_elite)b.vorraum_elite=p.vorraum_elite; // Runde 3: Ergänzung darf den Vorraum-Gegner in Akt V setzen (Fährmann vor der Pforte)
    Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.ergaenzt,...e})));continue;}
   BIOMES[p.id]={...p.biom,akt:p.akt};Object.assign(FOES,p.foes||{});Object.assign(ITEMS,p.items||{});Object.assign(HANDGRIFFE,p.handgriffe||{});evAll=evAll.concat((p.events||[]).map(e=>({biom:p.id,...e})));}
  if(typeof BIEGUNGEN!=='undefined'){BIEGUNGEN.length=0;for(const b of (bieg&&bieg.biegungen)||[]){BIEGUNGEN.push(b);if(BIOMES[b.biom])BIOMES[b.biom].biegung=b.id;(b.reaktionen||[]).forEach(r=>r.biegung=b.id);if(b.reaktion)b.reaktion.biegung=b.id;}}

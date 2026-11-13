@@ -1,0 +1,135 @@
+{
+ "id": "salz_neu4",
+ "ergaenzt": "salz",
+ "gegner_dazu": [
+  "solesiederin"
+ ],
+ "waechter_dazu": [
+  "foerderkorb"
+ ],
+ "foes": {
+  "solesiederin": {
+   "n": "Die Solesiederin",
+   "biom": "salz",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "solesiederin_a",
+   "varianten": [
+    "solesiederin_a",
+    "solesiederin_b"
+   ],
+   "konzept": "Sie hat in der Siedehütte die Sole gekocht, bis das Salz ausfiel, und sich dabei über die Pfanne gebeugt, Jahr um Jahr. Das Salz ist an ihr ausgefallen: Kristalle stehen ihr aus Rücken und Armen wie Dornen. Sie rührt mit der Krücke in einer Pfanne, die sie vor sich herträgt.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "dornen",
+    "v": 2,
+    "why": "Das Salz steht ihr aus Rücken und Armen wie Dornen."
+   },
+   "beute": "salt",
+   "beute_satz": "Die Pfanne kippt, und die Sole läuft aus. Das Salz bleibt in ihrer Form stehen.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "foerderkorb": {
+   "n": "Der Förderkorb",
+   "biom": "salz",
+   "rang": "waechter",
+   "hp": 92,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
+   "sprite": "foerderkorb",
+   "varianten": [
+    "foerderkorb"
+   ],
+   "konzept": "Der Korb, der 1911 die letzte Schicht hinunterbrachte und leer wieder heraufkam. Er fährt noch, ohne Seil, auf Beinen aus Grubenholz, und im Gitter stehen die Männer der letzten Schicht, dicht an dicht, die Lampen an. Wenn er hält, steigt einer aus.",
+   "stimme": "salzlaeufer",
+   "kniff": {
+    "art": "brecher",
+    "why": "Das Gitter schlägt auf, und alle drängen nach vorn, durch jede Deckung."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "salzlaeufer",
+    "alle": 3
+   },
+   "beute": "grubenlampe",
+   "beute_satz": "Der Korb sackt auf das Grubenholz. Die Lampen gehen aus, eine nach der anderen, nur eine nicht.",
+   "quelle": "skript",
+   "art": "veraendert",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "grubenlampe": {
+   "n": "Lampe der letzten Schicht",
+   "a": "talisman",
+   "st": [
+    "S",
+    "E"
+   ],
+   "spr": "minerlamp",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "start_block",
+    "v": 7,
+    "t": "Zu Kampfbeginn 7 Block."
+   },
+   "flavor": "Eine Karbidlampe mit eingeritzter Marke Nr. 31. Sie brennt ohne Karbid, solange du unter Tage bist.",
+   "cards": [
+    {
+     "n": "Anfahren",
+     "c": 1,
+     "blk": 6,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

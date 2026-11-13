@@ -1,0 +1,83 @@
+{
+ "id": "stadt_neu",
+ "ergaenzt": "stadt",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "abklatscherin"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "klopfbuerste"
+ ],
+ "foes": {
+  "abklatscherin": {
+   "n": "Die Abklatscherin",
+   "biom": "stadt",
+   "rang": "elite",
+   "hp": 90,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 8
+    }
+   ],
+   "sprite": "abklatscherin",
+   "konzept": "Sie kam 1903 mit der Expedition, um die Reliefs abzunehmen: nasses Papier auf den Stein, mit der Bürste hineingeklopft, bis es jede Kerbe hat. Sie hat nicht aufgehört. Die Bögen hängen an ihr wie Schuppen, auf jedem ein Erbauer, und über ihr Gesicht ist einer geklebt.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "kopie",
+    "why": "Sie nimmt einen Abklatsch von dem, was du tust, und hat ihn dann."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Sie hängt nasse Bögen vor die anderen."
+    }
+   ],
+   "beute": "klopfbuerste",
+   "beute_satz": "Von ihr bleiben nur Bögen. Auf dem obersten bist du, mitten in der Bewegung.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "klopfbuerste": {
+   "n": "Klopfbürste",
+   "a": "waffe",
+   "st": [
+    "E",
+    "L"
+   ],
+   "spr": "plank",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 30,
+   "flavor": "Borsten aus Rosshaar, steif von Kalk. Sie hat mehr Gesichter berührt als ein Bader.",
+   "cards": [
+    {
+     "n": "Abklopfen",
+     "c": 1,
+     "atk": 2,
+     "h": 3
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

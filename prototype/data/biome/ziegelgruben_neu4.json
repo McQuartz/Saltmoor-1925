@@ -1,0 +1,213 @@
+{
+ "id": "ziegelgruben_neu4",
+ "ergaenzt": "ziegelgruben",
+ "gegner_dazu": [
+  "formstreicher"
+ ],
+ "elite_dazu": [
+  "meilerin"
+ ],
+ "waechter_dazu": [
+  "zenturio"
+ ],
+ "fundpool_dazu": [
+  "meilerschaufel"
+ ],
+ "foes": {
+  "formstreicher": {
+   "n": "Der Formstreicher",
+   "biom": "ziegelgruben",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 7
+    }
+   ],
+   "sprite": "formstreicher_a",
+   "varianten": [
+    "formstreicher_a",
+    "formstreicher_b"
+   ],
+   "konzept": "Er hat den Lehm in die Holzform geschlagen und abgestrichen, tausend Ziegel am Tag, und mit jedem ist er ein bisschen mehr Lehm geworden. Jetzt formt er sich selbst nach, jeden Zug eine Schicht dicker, und wird stärker davon. Breit, nackter Oberkörper aus nassem Lehm, die Form in der Hand.",
+   "stimme": "mumie",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Er formt sich selbst nach, jeden Zug eine Schicht dicker."
+   },
+   "beute": null,
+   "beute_satz": "Er sackt in sich zusammen, nasser Lehm. In der Holzform liegt ein Ziegel mit einem Gesicht.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "meilerin": {
+   "n": "Die Meilerin",
+   "biom": "ziegelgruben",
+   "rang": "elite",
+   "hp": 88,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "meilerin",
+   "konzept": "Sie hat den Feldbrand gehütet, den Meiler aus Rohlingen, der tagelang glühen muss, und eines Nachts hat sie sich selbst daraufgelegt, weil das Feuer zu kalt war. Jetzt ist sie gebrannt wie ein Ziegel, rot und hart, und in ihrem Bauch glüht es noch. Wer sie schlägt, verbrennt sich, und sie wird jeden Zug heißer.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "dornen",
+    "v": 3,
+    "why": "Wer sie schlägt, schlägt auf gebrannten Ton, der noch glüht."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Das Feuer in ihrem Bauch wird jeden Zug heißer."
+    }
+   ],
+   "beute": "meilerschaufel",
+   "beute_satz": "Die Glut in ihrem Bauch wird dunkelrot, dann schwarz. Die Schaufel ist noch zu heiß zum Anfassen, und du nimmst sie trotzdem.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "zenturio": {
+   "n": "Der Zenturio",
+   "biom": "ziegelgruben",
+   "rang": "waechter",
+   "hp": 96,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "blk",
+     "v": 14
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "gesehen": {
+    "t": "blk",
+    "v": 20
+   },
+   "sprite": "zenturio",
+   "varianten": [
+    "zenturio"
+   ],
+   "konzept": "Er hat die Ziegelei für das Lager beaufsichtigt, und jeden Ziegel hat er gestempelt, mit seiner Legion und seinem Namen. Dann hat man ihn in die Mauer gesetzt, als Opfer für den Bau. Er ist herausgekommen, und die Mauer mit ihm: Schild und Rücken sind ein Stück Ziegelwand. Er ruft seine Wasserträger.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "ruf",
+    "gegner": "amphorentraeger",
+    "alle": 3,
+    "why": "Er ruft seine Wasserträger, und sie kommen aus der Grube."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "W",
+     "B"
+    ]
+   },
+   "beute": "zenturiostempel",
+   "beute_satz": "Die Mauer an seinem Rücken bricht in Ziegel. Auf jedem steht sein Name, und auf dem letzten steht deiner.",
+   "quelle": "skript",
+   "art": "mensch",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "meilerschaufel": {
+   "n": "Schaufel der Meilerin",
+   "a": "waffe",
+   "st": [
+    "F",
+    "E"
+   ],
+   "spr": "shovel",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "brand_haelt",
+    "t": "Brand an Gegnern nimmt nicht ab."
+   },
+   "flavor": "Eisen, rot angelaufen, der Stiel verkohlt. Sie hält die Hitze, als hätte sie sie lieb.",
+   "cards": [
+    {
+     "n": "Glut schaufeln",
+     "c": 1,
+     "burn": 5
+    }
+   ],
+   "entwurf": true
+  },
+  "zenturiostempel": {
+   "n": "Stempel des Zenturios",
+   "a": "waffe",
+   "st": [
+    "E",
+    "F"
+   ],
+   "spr": "poker",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1,
+    "t": "Zu Kampfbeginn sind alle Gegner 1 Zug verwundbar."
+   },
+   "flavor": "Ein Eisenstempel mit Legionsnummer, der Griff blank von einer Hand, die nicht mehr da ist.",
+   "cards": [
+    {
+     "n": "Stempeln",
+     "c": 1,
+     "atk": 6,
+     "weak": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

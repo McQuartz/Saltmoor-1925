@@ -1,0 +1,139 @@
+{
+ "id": "fabrik_neu4",
+ "ergaenzt": "fabrik",
+ "gegner_dazu": [
+  "etikettiererin"
+ ],
+ "waechter_dazu": [
+  "fliessband"
+ ],
+ "foes": {
+  "etikettiererin": {
+   "n": "Die Etikettiererin",
+   "biom": "fabrik",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "etikettiererin_a",
+   "varianten": [
+    "etikettiererin_a",
+    "etikettiererin_b"
+   ],
+   "konzept": "Sie hat die Etiketten auf die Dosen geklebt, mit dem Pinsel und dem Leimtopf, und irgendwann hat sie angefangen, sie auf alles zu kleben. Ihr Kittel ist voll davon, ihr Gesicht auch: auf jedem steht „Inhalt“. Was sie beklebt, ist teurer.",
+   "stimme": "netzflickerin",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Sie klebt dir ein Etikett auf die Karte, und was beklebt ist, kostet mehr."
+   },
+   "beute": null,
+   "beute_satz": "Der Leimtopf kippt. Auf dem letzten Etikett steht dein Inhalt, und er stimmt.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "fliessband": {
+   "n": "Das Fließband",
+   "biom": "fabrik",
+   "rang": "waechter",
+   "hp": 80,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    }
+   ],
+   "gesehen": {
+    "t": "atk",
+    "v": 4,
+    "h": 4
+   },
+   "sprite": "fliessband",
+   "varianten": [
+    "fliessband"
+   ],
+   "konzept": "Das Band läuft seit der Nachtschicht vom 4. November, und es hat sich aufgerichtet: ein langer Rücken aus Rollen und Gurt, der sich wie eine Raupe aufbäumt, vorn die Verschließmaschine als Kopf mit zwei Stempelaugen. Es läuft im Takt, und im Takt kommen die Dosen.",
+   "stimme": "nest",
+   "kniff": {
+    "art": "takt",
+    "v": 6,
+    "klang": "herz",
+    "why": "Das Band läuft im Takt der Nachtschicht. Bei jedem Schlag schiebt es Dosen vor die anderen."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "W",
+     "F"
+    ]
+   },
+   "beute": "dosenstempel",
+   "beute_satz": "Das Band steht. Die letzte Dose rollt herunter, und auf dem Deckel steht ein Datum, das noch nicht war.",
+   "quelle": "skript",
+   "art": "veraendert",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "dosenstempel": {
+   "n": "Dosenstempel",
+   "a": "talisman",
+   "st": [
+    "E",
+    "F"
+   ],
+   "spr": "pan",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "erste_karte_billiger",
+    "t": "Die erste Karte jedes Zugs kostet 1 weniger."
+   },
+   "flavor": "Ein Messingstempel mit Datum und Losnummer. Die Zahlen lassen sich nicht verstellen, sie zählen von selbst weiter.",
+   "cards": [
+    {
+     "n": "Im Takt",
+     "c": 0,
+     "atk": 3,
+     "blk": 3
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,49 @@
+{
+ "id": "mondgraeber",
+ "rang": "elite",
+ "w": 128,
+ "h": 160,
+ "zone": "mond",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  64,
+  155
+ ],
+ "kopf": [
+  40,
+  70
+ ],
+ "augen": [
+  [
+   36,
+   73
+  ],
+  [
+   41,
+   73
+  ]
+ ],
+ "augenfarbe": "#efe07c"
+}

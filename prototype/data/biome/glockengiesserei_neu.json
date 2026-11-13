@@ -1,0 +1,88 @@
+{
+ "id": "glockengiesserei_neu",
+ "ergaenzt": "glockengiesserei",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "stimmer"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "stimmgabel"
+ ],
+ "foes": {
+  "stimmer": {
+   "n": "Der Glockenstimmer",
+   "biom": "glockengiesserei",
+   "rang": "elite",
+   "hp": 78,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "buff",
+     "v": 2
+    }
+   ],
+   "sprite": "stimmer",
+   "konzept": "Er hat 1641 jede Glocke abgedreht, bis sie den Ton traf, und am Ende sich selbst. Ein hagerer Mann im Lederschurz, statt des Kopfes eine Stimmgabel aus Bronze, so lang wie sein Oberkörper. Am Grund der Gabel sitzen die Augen. Mit einem kleinen Hammer schlägt er dagegen.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Der Ton fährt dir in die Hand, und sie hört eine Weile nicht auf zu summen."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Er hält die Handglocke vor die anderen, und was sie trifft, klingt ab."
+    }
+   ],
+   "beute": "stimmgabel",
+   "beute_satz": "Die Gabel summt noch, als er schon still ist. Sie hört erst auf, als du sie anfasst.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "stimmgabel": {
+   "n": "Stimmgabel",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "pick",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "reaktion_block",
+    "v": 2,
+    "t": "Jede Reaktion gibt 2 Block."
+   },
+   "flavor": "Bronze vom Guss der großen Glocke. Sie stimmt auf einen Ton, den keine Orgel hat.",
+   "cards": [
+    {
+     "n": "Anschlagen",
+     "c": 1,
+     "atk": 3,
+     "h": 2,
+     "weak": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

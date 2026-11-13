@@ -1,0 +1,128 @@
+{
+ "id": "pforte_neu3",
+ "ergaenzt": "pforte",
+ "gegner_dazu": [
+  "nachgeherin"
+ ],
+ "elite_dazu": [],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "stakruder"
+ ],
+ "foes": {
+  "nachgeherin": {
+   "n": "Die Nachgeherin",
+   "biom": "pforte",
+   "rang": "normal",
+   "hp": 30,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "nachgeherin_a",
+   "varianten": [
+    "nachgeherin_a",
+    "nachgeherin_b"
+   ],
+   "konzept": "Unten ist alles seitenverkehrt, auch sie: Sie geht rückwärts, und ihr Gesicht sitzt am Hinterkopf, unter dem Haarknoten. Sie weiß, was du als Nächstes tust, weil sie es schon getan hat.",
+   "stimme": "nachgeher",
+   "kniff": {
+    "art": "voraus",
+    "why": "Sie hat deinen nächsten Zug schon gemacht, nur andersherum."
+   },
+   "beute": null,
+   "beute_satz": "Sie bleibt stehen und dreht sich zum ersten Mal um. Auf der anderen Seite ist auch ein Hinterkopf.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "faehrmann": {
+   "n": "Der Fährmann",
+   "biom": "pforte",
+   "rang": "elite",
+   "hp": 104,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "sprite": "faehrmann",
+   "konzept": "Vor der Pforte liegt ein Wasser, das es oben nicht gibt, und wer hinüber will, muss mit ihm fahren. Er fragt nicht nach Geld. Ein sehr langer, dünner Mann im Kahn, der Kahn ist mit ihm verwachsen; am Bug brennt eine Laterne mit dem blassen Licht der Pforte.",
+   "stimme": "ruft",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 3,
+    "v": 26,
+    "why": "Er stakt hinüber. Am anderen Ufer legt er an."
+   },
+   "kniffe": [
+    {
+     "art": "teurer",
+     "v": 1,
+     "why": "Auf seinem Wasser kostet alles etwas mehr."
+    }
+   ],
+   "beute": "stakruder",
+   "beute_satz": "Der Kahn treibt ab, ohne ihn. Das Ruder liegt quer über dem Wasser und geht nicht unter.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "stakruder": {
+   "n": "Stakruder",
+   "a": "waffe",
+   "st": [
+    "W",
+    "L"
+   ],
+   "spr": "boathook",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 50,
+   "eigen": {
+    "typ": "start_staerke",
+    "v": 1,
+    "t": "Zu Kampfbeginn +1 Stärke."
+   },
+   "flavor": "Schwarzes Holz, unten nass, oben warm von einer Hand. Es zeigt immer zum anderen Ufer.",
+   "cards": [
+    {
+     "n": "Übersetzen",
+     "c": 1,
+     "atk": 6,
+     "blk": 4
+    }
+   ],
+   "entwurf": true
+  }
+ },
+ "vorraum_elite": "faehrmann"
+}

@@ -1,0 +1,92 @@
+{
+ "id": "station_neu",
+ "ergaenzt": "station",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "vorsteher"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "befehlskelle"
+ ],
+ "foes": {
+  "vorsteher": {
+   "n": "Der Stationsvorsteher",
+   "biom": "station",
+   "rang": "elite",
+   "hp": 94,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    }
+   ],
+   "sprite": "vorsteher",
+   "konzept": "Er sollte am Eröffnungstag um zwölf die Kelle heben. Seither ist es fünf vor zwölf. Steif wie ein Mast in der Uniform; wo der Kopf sein sollte, hängt die Bahnsteiguhr an ihrem Ausleger, und die Augen sitzen bei der Zwölf.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "takt",
+    "v": 5,
+    "why": "Der große Zeiger springt. Bei jedem Sprung steht der Bahnsteig still und hart; dazwischen ist er offen."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": [
+      "wartende",
+      "sperrenschaffner"
+     ],
+     "alle": 4,
+     "why": "Er gibt den Bahnsteig frei. Jemand kommt durch die Sperre."
+    }
+   ],
+   "beute": "befehlskelle",
+   "beute_satz": "Die Uhr steht. Fünf vor zwölf, wie immer, nur jetzt still.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "befehlskelle": {
+   "n": "Befehlskelle",
+   "a": "waffe",
+   "st": [
+    "E",
+    "L"
+   ],
+   "spr": "pan",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 46,
+   "eigen": {
+    "typ": "erste_karte_billiger",
+    "t": "Die erste Karte im Kampf kostet 0."
+   },
+   "flavor": "Grün auf der einen Seite, weiß auf der anderen. Die grüne ist nie benutzt worden.",
+   "cards": [
+    {
+     "n": "Abfahrt",
+     "c": 1,
+     "atk": 7,
+     "vuln": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

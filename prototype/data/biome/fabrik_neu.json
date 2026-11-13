@@ -1,0 +1,88 @@
+{
+ "id": "fabrik_neu",
+ "ergaenzt": "fabrik",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "etikettenmann"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "leimtopf"
+ ],
+ "foes": {
+  "etikettenmann": {
+   "n": "Der Etikettenmann",
+   "biom": "fabrik",
+   "rang": "elite",
+   "hp": 86,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 2
+    }
+   ],
+   "sprite": "etikettenmann",
+   "konzept": "Er hat in der Klebestube die Etiketten auf die Dosen gebracht, Saltmoorer Hering in Tomate, zwanzigtausend am Tag, bis eines Nachts der Leim auf ihn überging. Jetzt klebt er an sich selbst, Schicht über Schicht. Auf seiner Brust lacht der Fisch vom Etikett, und der Fisch hat die Augen.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "wechsel",
+    "stoffe": [
+     "F",
+     "W",
+     "S"
+    ],
+    "why": "Er klebt ein neues Etikett über das alte. Was drauf steht, ist jetzt wahr."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Mit jeder Schicht wird er dicker."
+    }
+   ],
+   "beute": "leimtopf",
+   "beute_satz": "Unter dem letzten Etikett ist noch eins. Darauf steht dein Name.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "leimtopf": {
+   "n": "Leimtopf",
+   "a": "kleidung",
+   "st": [
+    "S"
+   ],
+   "spr": "pan",
+   "hp": 3,
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 28,
+   "flavor": "Knochenleim, warm gehalten im Wasserbad. Was du damit klebst, löst sich nicht mehr.",
+   "cards": [
+    {
+     "n": "Festkleben",
+     "c": 1,
+     "blk": 5,
+     "weak": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

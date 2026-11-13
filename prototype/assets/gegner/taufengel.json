@@ -1,0 +1,49 @@
+{
+ "id": "taufengel",
+ "rang": "waechter",
+ "w": 160,
+ "h": 180,
+ "zone": "kapelle",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  80,
+  176
+ ],
+ "kopf": [
+  80,
+  34
+ ],
+ "augen": [
+  [
+   76,
+   44
+  ],
+  [
+   83,
+   44
+  ]
+ ],
+ "augenfarbe": "#fff4d0"
+}

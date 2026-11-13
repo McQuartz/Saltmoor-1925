@@ -1,0 +1,133 @@
+{
+ "id": "moor_neu4",
+ "ergaenzt": "moor",
+ "gegner_dazu": [
+  "bohlenleger"
+ ],
+ "waechter_dazu": [
+  "torfmutter"
+ ],
+ "foes": {
+  "bohlenleger": {
+   "n": "Der Bohlenleger",
+   "biom": "moor",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "bohlenleger_a",
+   "varianten": [
+    "bohlenleger_a",
+    "bohlenleger_b"
+   ],
+   "konzept": "Er hat den Bohlenweg übers Moor gelegt, Brett für Brett, und das Moor hat jedes Brett genommen. Er legt weiter. Ein krummer Mann, die Bohle quer über der Schulter, so lang, dass sie an beiden Seiten aus dem Bild ragt; die Beine sind bis zum Knie schwarz vom Torf. Er stellt die Bohle vor die anderen.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 3,
+    "why": "Er stellt die Bohle vor die anderen."
+   },
+   "beute": null,
+   "beute_satz": "Die Bohle sinkt ins Moor. Er legt sich daneben, als wäre er das nächste Brett.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "torfmutter": {
+   "n": "Die Torfmutter",
+   "biom": "moor",
+   "rang": "waechter",
+   "hp": 82,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "gesehen": {
+    "t": "buff",
+    "v": 3
+   },
+   "sprite": "torfmutter",
+   "varianten": [
+    "torfmutter"
+   ],
+   "konzept": "Die Torfstecher haben ihr jedes Jahr die ersten Soden gegeben, aufgeschichtet am Rand des Stichs. Sie hat sich daraus gebaut: eine riesige, gebückte Frau aus gestapelten Torfsoden, in der Schürze trägt sie, was das Moor bewahrt hat. Was sie trifft, hält nicht an ihr, der Torf schluckt es.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "rein",
+    "why": "Der Torf schluckt, was sie trifft, und bewahrt es. Gift findet an ihr nichts, das faulen kann."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "torfstecherin",
+    "alle": 3
+   },
+   "beute": "torfschuerze",
+   "beute_satz": "Die Soden rutschen auseinander. In der Schürze liegt, was das Moor aufgehoben hat, und es ist für dich.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "torfschuerze": {
+   "n": "Schürze der Torfmutter",
+   "a": "kleidung",
+   "st": [
+    "V",
+    "E"
+   ],
+   "spr": "coat",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "start_block",
+    "v": 7,
+    "t": "Zu Kampfbeginn 7 Block."
+   },
+   "flavor": "Grobes Leinen, schwarz vom Torf. In den Taschen ist es immer feucht und immer ein bisschen warm.",
+   "cards": [
+    {
+     "n": "Im Torf bewahren",
+     "c": 1,
+     "blk": 8
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

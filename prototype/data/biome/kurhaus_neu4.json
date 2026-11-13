@@ -1,0 +1,94 @@
+{
+ "id": "kurhaus_neu4",
+ "ergaenzt": "kurhaus",
+ "waechter_dazu": [
+  "kurdirektor"
+ ],
+ "foes": {
+  "kurdirektor": {
+   "n": "Der Kurdirektor",
+   "biom": "kurhaus",
+   "rang": "waechter",
+   "hp": 70,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 11
+    }
+   ],
+   "gesehen": {
+    "t": "blk",
+    "v": 16
+   },
+   "sprite": "kurdirektor",
+   "varianten": [
+    "kurdirektor"
+   ],
+   "konzept": "Er hat das Kurhaus 1899 eröffnet und hält jedes Jahr die Rede zum Saisonende, nur dass die Saison nicht mehr endet. Ein dicker Herr im Gehrock, der Bauch ein Kurbrunnen mit Messinghahn, aus dem warmes Wasser läuft. In der Hand die Kurtaxliste: wer bleiben will, zahlt mehr.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Er trägt dich in die Kurtaxliste ein. Wer bleiben will, zahlt mehr."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "kurgast",
+    "alle": 4
+   },
+   "beute": "kurtaxliste",
+   "beute_satz": "Der Brunnenhahn tropft noch, als er umfällt. Die Liste fällt aus seiner Hand, und dein Name steht schon darauf, bezahlt.",
+   "quelle": "skript",
+   "art": "mensch",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "kurtaxliste": {
+   "n": "Kurtaxliste",
+   "a": "talisman",
+   "st": [
+    "G",
+    "W"
+   ],
+   "spr": "bible",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "gold_bonus",
+    "v": 8,
+    "t": "Nach jedem Kampf 8 Gold mehr."
+   },
+   "flavor": "Ein Buch mit Namen und Beträgen, seit 1899. Die frühen Seiten sind gelb, die späten sind noch nicht geschrieben und trotzdem voll.",
+   "cards": [
+    {
+     "n": "Abkassieren",
+     "c": 1,
+     "atk": 6,
+     "gold": 5
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

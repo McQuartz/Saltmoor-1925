@@ -1,0 +1,220 @@
+{
+ "id": "grotte_neu4",
+ "ergaenzt": "grotte",
+ "gegner_dazu": [
+  "wasserschoepferin"
+ ],
+ "elite_dazu": [
+  "bussgaenger"
+ ],
+ "waechter_dazu": [
+  "kerzenkoenigin"
+ ],
+ "fundpool_dazu": [
+  "bussgaengerkreuz"
+ ],
+ "foes": {
+  "wasserschoepferin": {
+   "n": "Die Wasserschöpferin",
+   "biom": "grotte",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "wasserschoepferin_a",
+   "varianten": [
+    "wasserschoepferin_a",
+    "wasserschoepferin_b"
+   ],
+   "konzept": "Sie füllt an der Quelle die Flaschen für die Pilger ab, seit hundert Jahren, und trägt sie an einem Joch, so viele, dass sie klirren. Das Wasser darin heilt, nur nicht sie. Sie gibt es den anderen.",
+   "stimme": "opfernde",
+   "kniff": {
+    "art": "heiler",
+    "v": 3,
+    "why": "Das Wasser in ihren Flaschen heilt, nur nicht sie. Sie gibt es den anderen."
+   },
+   "beute": "holywater",
+   "beute_satz": "Das Joch rutscht ihr von den Schultern. Eine Flasche ist heil geblieben.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "bussgaenger": {
+   "n": "Der Bußgänger",
+   "biom": "grotte",
+   "rang": "elite",
+   "hp": 66,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "bussgaenger",
+   "konzept": "Er ist auf den Knien zur Grotte gekommen, von der Küste her, und auf den Knien geblieben. Die Knie sind Stümpfe geworden, auf denen er rutscht, und auf dem Rücken trägt er das Kreuz, das mit jedem Schritt schwerer wird. Aus dem Boden hinter ihm wachsen die Wachshände.",
+   "stimme": "opfernde",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Das Kreuz wird mit jedem Schritt schwerer, und er mit ihm."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": "wachshand",
+     "alle": 4,
+     "why": "Hinter ihm wachsen die Wachshände aus dem Boden."
+    }
+   ],
+   "beute": "bussgaengerkreuz",
+   "beute_satz": "Er legt das Kreuz ab, zum ersten Mal seit der Küste. Er steht nicht auf. Er bleibt einfach knien.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "kerzenkoenigin": {
+   "n": "Die Kerzenkönigin",
+   "biom": "grotte",
+   "rang": "waechter",
+   "hp": 66,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "gesehen": {
+    "t": "atk",
+    "v": 20
+   },
+   "sprite": "kerzenkoenigin",
+   "varianten": [
+    "kerzenkoenigin"
+   ],
+   "konzept": "Hundert Jahre lang haben die Pilger ihre Kerzen vor der Nische angezündet, und das Wachs ist heruntergelaufen und hat sich gestaut. Jetzt steht es auf: ein Kegel aus Wachs, so hoch wie die Nische, mit einem Kranz aus brennenden Dochten als Krone. Wer sie schlägt, verbrennt sich.",
+   "stimme": "glockenmutter",
+   "kniff": {
+    "art": "dornen",
+    "v": 2,
+    "why": "Wer sie schlägt, greift in heißes Wachs."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "wachshand",
+    "alle": 3
+   },
+   "beute": "dochtkrone",
+   "beute_satz": "Die Dochte gehen nacheinander aus. Der letzte brennt weiter, auch als du die Krone aufhebst.",
+   "quelle": "skript",
+   "art": "veraendert",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "bussgaengerkreuz": {
+   "n": "Kreuz des Bußgängers",
+   "a": "talisman",
+   "st": [
+    "G",
+    "B"
+   ],
+   "spr": "cross",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "reaktion_block",
+    "v": 2,
+    "t": "Jede Reaktion gibt 2 Block."
+   },
+   "flavor": "Zwei Balken, mit Strick gebunden, die Kanten blank von Schultern. Es wird schwerer, wenn man es abstellen will.",
+   "cards": [
+    {
+     "n": "Auf Knien",
+     "c": 1,
+     "blk": 8
+    }
+   ],
+   "entwurf": true
+  },
+  "dochtkrone": {
+   "n": "Dochtkrone",
+   "a": "kleidung",
+   "st": [
+    "F",
+    "G"
+   ],
+   "spr": "candle",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "kampfstart_fx",
+    "fx": [
+     {
+      "op": "status",
+      "to": "all",
+      "status": "burn",
+      "v": 3
+     }
+    ],
+    "t": "Zu Kampfbeginn haben alle Gegner 3 Brand."
+   },
+   "flavor": "Ein Kranz aus Wachs mit hundert Dochten. Er brennt, wenn du ihn trägst, und tut dir nicht weh.",
+   "cards": [
+    {
+     "n": "Wachs gießen",
+     "c": 1,
+     "atk": 3,
+     "burn": 4
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "id": "gespann",
+ "rang": "elite",
+ "w": 128,
+ "h": 160,
+ "zone": "eis",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  64,
+  155
+ ],
+ "kopf": [
+  92,
+  52
+ ],
+ "augen": [
+  [
+   17,
+   82
+  ],
+  [
+   7,
+   97
+  ],
+  [
+   21,
+   108
+  ]
+ ],
+ "augenfarbe": "#ff4a4a"
+}

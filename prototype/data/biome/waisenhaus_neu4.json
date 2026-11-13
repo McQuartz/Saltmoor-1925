@@ -1,0 +1,138 @@
+{
+ "id": "waisenhaus_neu4",
+ "ergaenzt": "waisenhaus",
+ "gegner_dazu": [
+  "puppenkind"
+ ],
+ "waechter_dazu": [
+  "wiege"
+ ],
+ "foes": {
+  "puppenkind": {
+   "n": "Das Puppenkind",
+   "biom": "waisenhaus",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "puppenkind_a",
+   "varianten": [
+    "puppenkind_a",
+    "puppenkind_b"
+   ],
+   "konzept": "Ein Mädchen, das die Puppe aus dem Spendenpaket bekommen hat, die zu groß für es war. Es trägt sie immer noch, und die Puppe ist größer geworden, das Kind nicht. Man sieht nur die Puppe mit dem Porzellangesicht, die Füße des Kindes schauen unten heraus. Was es vorhat, verdeckt die Puppe.",
+   "stimme": "chorknabe",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Die Puppe verdeckt, was das Kind vorhat."
+   },
+   "beute": "musicbox",
+   "beute_satz": "Die Puppe kippt nach vorn. Darunter ist niemand, nur zwei kleine Schuhe.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "wiege": {
+   "n": "Die Wiege",
+   "biom": "waisenhaus",
+   "rang": "waechter",
+   "hp": 86,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 4
+    }
+   ],
+   "gesehen": {
+    "t": "buff",
+    "v": 3
+   },
+   "sprite": "wiege",
+   "varianten": [
+    "wiege"
+   ],
+   "konzept": "Im Säuglingszimmer stand eine Wiege für alle, und alle haben darin gelegen. Sie ist gewachsen, mit jedem Kind ein Stück, und schaukelt von allein, im Takt. Unter dem Himmel aus Leinen liegt etwas, das nie größer geworden ist und viele Hände hat. Bei jedem Schaukeln wird es ruhig, dazwischen schreit es.",
+   "stimme": "nachgeher",
+   "kniff": {
+    "art": "takt",
+    "v": 6,
+    "klang": "herz",
+    "why": "Bei jedem Schaukeln wird es ruhig, und alles im Zimmer liegt geschützt. Dazwischen schreit es."
+   },
+   "besonders": {
+    "art": "schwach_wechsel",
+    "stoffe": [
+     "S",
+     "L"
+    ]
+   },
+   "beute": "wiegenlied",
+   "beute_satz": "Die Wiege schaukelt aus. Unter dem Leinenhimmel ist es still, und eine kleine Hand winkt.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "wiegenlied": {
+   "n": "Spieluhr aus der Wiege",
+   "a": "talisman",
+   "st": [
+    "G",
+    "L"
+   ],
+   "spr": "musicbox",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "reaktion_block",
+    "v": 2,
+    "t": "Jede Reaktion gibt 2 Block."
+   },
+   "flavor": "Eine Walze mit drei Tönen, immer dieselben. Man summt sie mit, bevor man weiß, dass man sie kennt.",
+   "cards": [
+    {
+     "n": "Einschaukeln",
+     "c": 1,
+     "blk": 5,
+     "weak": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,128 @@
+{
+ "id": "waisenhaus_neu3",
+ "ergaenzt": "waisenhaus",
+ "gegner_dazu": [
+  "fensterkind"
+ ],
+ "elite_dazu": [
+  "kinderfrau"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "kinderdecke"
+ ],
+ "foes": {
+  "fensterkind": {
+   "n": "Das Fensterkind",
+   "biom": "waisenhaus",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 5
+    }
+   ],
+   "sprite": "fensterkind_a",
+   "varianten": [
+    "fensterkind_a",
+    "fensterkind_b"
+   ],
+   "konzept": "Ein Kind, das am Fenster des Waisenhauses steht und wartet, dass es abgeholt wird. Es trägt den Fensterrahmen mit sich, wohin es auch geht, und schaut durch das Glas, auch wenn auf der anderen Seite nur du stehst.",
+   "stimme": "chorknabe",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Es haucht ans Glas, und deine Hand bleibt daran kleben."
+   },
+   "beute": null,
+   "beute_satz": "Das Glas beschlägt ein letztes Mal. Jemand hat einen Namen hineingeschrieben.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "kinderfrau": {
+   "n": "Die Kinderfrau",
+   "biom": "waisenhaus",
+   "rang": "elite",
+   "hp": 84,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 11
+    }
+   ],
+   "sprite": "kinderfrau",
+   "konzept": "Sie schiebt den Kinderwagen durch die Gänge, seit 1918, und unter der Decke bewegt sich etwas, das sie zudeckt, wann immer es herausschaut. Eine lange Frau in Schwesterntracht, den Kopf schräg, der Wagen hoch und schwarz.",
+   "stimme": "glockenmutter",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 4,
+    "why": "Sie stellt sich vor die anderen wie vor den Wagen."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": "zugedeckte",
+     "alle": 3,
+     "why": "Sie schlägt die Decke zurück, und eins steigt heraus."
+    }
+   ],
+   "beute": "kinderdecke",
+   "beute_satz": "Der Wagen rollt allein weiter, bis er an der Wand steht. Die Decke ist leer und warm.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "kinderdecke": {
+   "n": "Kinderdecke",
+   "a": "kleidung",
+   "st": [
+    "G",
+    "L"
+   ],
+   "spr": "woolcoat",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "start_block",
+    "v": 6,
+    "t": "Zu Kampfbeginn 6 Block."
+   },
+   "flavor": "Wolle, mit einem Namen bestickt, den jemand wieder aufgetrennt hat.",
+   "cards": [
+    {
+     "n": "Zudecken",
+     "c": 1,
+     "blk": 8
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

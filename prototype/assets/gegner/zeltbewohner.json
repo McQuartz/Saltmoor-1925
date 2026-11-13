@@ -1,0 +1,53 @@
+{
+ "id": "zeltbewohner",
+ "rang": "elite",
+ "w": 128,
+ "h": 160,
+ "zone": "eis",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  64,
+  155
+ ],
+ "kopf": [
+  60,
+  80
+ ],
+ "augen": [
+  [
+   64,
+   90
+  ],
+  [
+   65,
+   104
+  ],
+  [
+   64,
+   120
+  ]
+ ],
+ "augenfarbe": "#ff4a4a"
+}

@@ -1,0 +1,56 @@
+{
+ "id": "funkstation_neu3",
+ "ergaenzt": "funkstation",
+ "gegner_dazu": [
+  "meteorologe"
+ ],
+ "elite_dazu": [],
+ "gegner_weg": [],
+ "fundpool_dazu": [],
+ "foes": {
+  "meteorologe": {
+   "n": "Der Meteorologe",
+   "biom": "funkstation",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 6
+    }
+   ],
+   "sprite": "meteorologe_a",
+   "varianten": [
+    "meteorologe_a",
+    "meteorologe_b"
+   ],
+   "konzept": "Er hat die Wetterberichte von der Küste aufgezeichnet, bis das Wetter angefangen hat, ihm zu antworten. Wo bei anderen der Kopf ist, dreht sich ein Schalenkreuz, und je nachdem, woher der Wind kommt, ist er gegen etwas anderes empfindlich.",
+   "stimme": "windgestalt",
+   "kniff": {
+    "art": "wechsel",
+    "stoffe": [
+     "F",
+     "W",
+     "L"
+    ],
+    "why": "Der Wind dreht, und mit ihm seine schwache Seite."
+   },
+   "beute": null,
+   "beute_satz": "Das Schalenkreuz dreht weiter, als er schon still ist. Auf dem Klemmbrett steht die Vorhersage für morgen: dasselbe.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {}
+}

@@ -1,0 +1,132 @@
+{
+ "id": "station_neu4",
+ "ergaenzt": "station",
+ "gegner_dazu": [
+  "gepaecktraeger"
+ ],
+ "waechter_dazu": [
+  "tunnelschild"
+ ],
+ "foes": {
+  "gepaecktraeger": {
+   "n": "Der Gepäckträger",
+   "biom": "station",
+   "rang": "normal",
+   "hp": 28,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 8
+    },
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "gepaecktraeger_a",
+   "varianten": [
+    "gepaecktraeger_a",
+    "gepaecktraeger_b"
+   ],
+   "konzept": "Er wartet seit dem Tag der Eröffnung auf Reisende, mit der Karre voll Koffern, die niemandem gehören. Er stellt die Koffer vor die anderen wie eine Mauer. Ein Mann in Uniformjacke mit der Nummer an der Mütze, hinter einem Turm aus Gepäck auf zwei Rädern.",
+   "stimme": "lotse",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 3,
+    "why": "Er stellt die Koffer vor die anderen wie eine Mauer."
+   },
+   "beute": "watch",
+   "beute_satz": "Der Turm aus Koffern kippt. Auf jedem Anhänger steht dasselbe Ziel, und es ist diese Station.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "tunnelschild": {
+   "n": "Der Vortriebsschild",
+   "biom": "station",
+   "rang": "waechter",
+   "hp": 90,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "gesehen": {
+    "t": "blk",
+    "v": 18
+   },
+   "sprite": "tunnelschild",
+   "varianten": [
+    "tunnelschild"
+   ],
+   "konzept": "Mit ihm wurde 1925 der Tunnel gegraben, ein runder Stahlschild, hinter dem die Mineure arbeiteten. Er gräbt weiter, auch wo kein Tunnel hin soll, und hinter dem Schild schieben ihn die Männer auf ihren Knien. Er bricht durch jede Wand und jede Deckung.",
+   "stimme": "wurm",
+   "kniff": {
+    "art": "brecher",
+    "why": "Er bricht durch jede Wand und jede Deckung. Dafür ist er gebaut."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "streckengaenger",
+    "alle": 4
+   },
+   "beute": "schneidring",
+   "beute_satz": "Der Schneidring dreht aus. Hinter dem Schild stehen die Mineure auf und gehen nach Hause.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "schneidring": {
+   "n": "Zahn vom Schneidring",
+   "a": "waffe",
+   "st": [
+    "E"
+   ],
+   "spr": "boardaxe",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "block_haelt_halb",
+    "t": "Am Zugende bleibt die Hälfte deines Blocks."
+   },
+   "flavor": "Ein Stahlzahn, so lang wie ein Unterarm. An der Schneide klebt Erde von einer Strecke, die es nicht gibt.",
+   "cards": [
+    {
+     "n": "Vortrieb",
+     "c": 1,
+     "atk": 4,
+     "h": 2
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

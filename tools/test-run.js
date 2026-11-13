@@ -18,7 +18,7 @@ const {ladeKern}=require('./kern');
  for(let s=1;s<=100;s++){run(`newRun('pfarrerin',${s},{dev:true});for(let i=0;i<5;i++)S.route[i]=RUN.akte[i].biome.find(b=>BIOMES[b]);`);
   for(let akt=0;akt<5;akt++){const eb=RUN.akte[akt].ebenen;for(let e=0;e<eb.length;e++){run(`S.akt=${akt};S.ebene=${e};S.netz=null;genWeg()`);const arten=JSON.parse(run(`JSON.stringify(S.netz.ebenen[${e}].map(o=>o.art))`));const E=RUN.ebenen[eb[e]];geprueft++;
    if(E.fest)ok(arten.length===1&&arten[0]===E.fest,`Seed ${s} Akt ${akt} Ebene ${e}: fest ${E.fest}, ist ${arten}`);
-   else if(E.fest_wahl)ok(JSON.stringify(arten)===JSON.stringify(E.fest_wahl),`Vorraum falsch ${arten}`);
+   else if(E.fest_wahl){const ve=run(`(BIOMES[S.route[${akt}]]||{}).vorraum_elite||''`);ok(JSON.stringify(arten)===JSON.stringify(ve&&eb[e]==='vorraum'?['kampf_schwer']:E.fest_wahl),`Vorraum falsch ${arten}`);} // Biome mit vorraum_elite (Ufer, Waage, Pforte ab Runde 3) haben nur den schweren Kampf
    else{ok(arten.length>=E.wege[0]&&arten.length<=E.wege[1],`Seed ${s} ${eb[e]}: ${arten.length} Wege`);
     if(E.mindestens)for(const[k,v]of Object.entries(E.mindestens))ok(arten.filter(x=>x===k).length>=v,`Seed ${s} ${eb[e]}: zu wenig ${k} (${arten})`);
     if(E.verschiedene)ok(new Set(arten).size>=E.verschiedene,`Seed ${s} ${eb[e]}: zu wenig verschiedene (${arten})`);

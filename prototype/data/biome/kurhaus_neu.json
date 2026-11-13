@@ -1,0 +1,92 @@
+{
+ "id": "kurhaus_neu",
+ "ergaenzt": "kurhaus",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "badearzt"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "hoerrohr"
+ ],
+ "foes": {
+  "badearzt": {
+   "n": "Der Badearzt",
+   "biom": "kurhaus",
+   "rang": "elite",
+   "hp": 78,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "buff",
+     "v": 3
+    }
+   ],
+   "sprite": "badearzt",
+   "konzept": "Dr. Ahlers hat jedem Gast vor der Abreise noch einmal die Brust abgehört. Seit dem Sommer 1900 hört er etwas, das tiefer liegt als die Brust. Die Schläuche seines Hörrohrs laufen von den Ohren in den Boden, drei Trichter liegen auf den Fliesen und horchen; das Bruststück schwingt er wie ein Pendel.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "heiler",
+    "v": 4,
+    "why": "Er verordnet. Wer bei ihm in Behandlung ist, wird gesund, ob er will oder nicht."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": [
+      "genesender"
+     ],
+     "alle": 5,
+     "why": "Er bestellt den nächsten Patienten herein."
+    }
+   ],
+   "beute": "hoerrohr",
+   "beute_satz": "Die Trichter horchen weiter in den Boden. Einer hat etwas gehört.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "hoerrohr": {
+   "n": "Hörrohr",
+   "a": "talisman",
+   "st": [
+    "W",
+    "S"
+   ],
+   "spr": "shell",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 45,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1,
+    "t": "Zu Kampfbeginn sind alle Gegner 1 Zug verwundbar."
+   },
+   "flavor": "Holz und Gummi, an den Ohrstücken warm. Wenn du es auf den Boden setzt, schlägt dort etwas.",
+   "cards": [
+    {
+     "n": "Abhorchen",
+     "c": 0,
+     "draw": 1,
+     "vuln": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

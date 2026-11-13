@@ -1,0 +1,128 @@
+{
+ "id": "salz_neu3",
+ "ergaenzt": "salz",
+ "gegner_dazu": [
+  "grubenpony"
+ ],
+ "elite_dazu": [
+  "salzbraut"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "salzstrauss"
+ ],
+ "foes": {
+  "grubenpony": {
+   "n": "Das Grubenpony",
+   "biom": "salz",
+   "rang": "normal",
+   "hp": 28,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 8
+    }
+   ],
+   "sprite": "grubenpony_a",
+   "varianten": [
+    "grubenpony_a",
+    "grubenpony_b"
+   ],
+   "konzept": "Die Ponys haben ihr Leben lang die Hunte gezogen und das Tageslicht nie gesehen. Dieses zieht seinen Hunt noch, und es ist blind geworden, aber es kennt den Weg. Es weiß genau, wann es anläuft.",
+   "stimme": "salzlaeufer",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 12,
+    "why": "Es scharrt zweimal, dann zieht es an."
+   },
+   "beute": "minerlamp",
+   "beute_satz": "Der Hunt rollt noch ein Stück weiter, dann steht er. Das Pony auch.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "salzbraut": {
+   "n": "Die Salzbraut",
+   "biom": "salz",
+   "rang": "elite",
+   "hp": 84,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "salzbraut",
+   "konzept": "Eine Braut, die 1907 in den Stollen gestiegen ist, um ihren Bräutigam heraufzuholen, und unten geblieben ist. Das Salz hat ihr Kleid zu Kristall gemacht, der Schleier ist eine Kruste bis zum Boden. In den Händen hält sie einen Strauß aus Salz.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "rein",
+    "why": "An ihr bleibt nichts haften, das Salz wäscht alles ab."
+   },
+   "kniffe": [
+    {
+     "art": "heiler",
+     "v": 4,
+     "why": "Sie tupft den anderen Sole auf die Wunden."
+    }
+   ],
+   "beute": "salzstrauss",
+   "beute_satz": "Der Strauß bricht auseinander. Jeder Splitter ist ein kleiner Würfel, glatt wie Glas.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "salzstrauss": {
+   "n": "Salzstrauß",
+   "a": "talisman",
+   "st": [
+    "S",
+    "G"
+   ],
+   "spr": "salt",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "heil_nach_sieg",
+    "v": 4,
+    "t": "Nach jedem Sieg heilst du 4."
+   },
+   "flavor": "Kristallblüten aus der Sole, von einer Hand gepflückt, die man nicht gefunden hat.",
+   "cards": [
+    {
+     "n": "Abwaschen",
+     "c": 1,
+     "blk": 6,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

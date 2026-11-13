@@ -1,0 +1,49 @@
+{
+ "id": "abt",
+ "rang": "elite",
+ "w": 128,
+ "h": 160,
+ "zone": "kloster",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  64,
+  155
+ ],
+ "kopf": [
+  56,
+  40
+ ],
+ "augen": [
+  [
+   58,
+   45
+  ],
+  [
+   63,
+   45
+  ]
+ ],
+ "augenfarbe": "#e6aa4a"
+}

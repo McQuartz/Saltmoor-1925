@@ -1,0 +1,88 @@
+{
+ "id": "salz_neu",
+ "ergaenzt": "salz",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "obersteiger"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "kanarienkaefig"
+ ],
+ "foes": {
+  "obersteiger": {
+   "n": "Der Obersteiger",
+   "biom": "salz",
+   "rang": "elite",
+   "hp": 80,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 8
+    }
+   ],
+   "sprite": "obersteiger",
+   "konzept": "Er hat die letzte Schicht 1911 eingefahren und nicht mehr ausgefahren. Ein schwerer Mann in der Lederjoppe, die Karbidlampe auf dem Hut ist das eine Auge, das ihm geblieben ist. Seine rechte Seite ist ins Salz gewachsen. Im Käfig in seiner Hand sitzt etwas mit zu vielen Augen, das nicht mehr singt.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "brecher",
+    "why": "Er schlägt den Verbau weg, hinter dem du stehst."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": "salzlaeufer",
+     "alle": 3,
+     "why": "Er schwenkt die Lampe, und aus dem Stoß kommt etwas Weißes gekrochen."
+    }
+   ],
+   "beute": "kanarienkaefig",
+   "beute_satz": "Der Käfig ist offen. Was darin saß, ist nicht weggeflogen, es ist hineingewachsen.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "kanarienkaefig": {
+   "n": "Kanarienkäfig",
+   "a": "talisman",
+   "st": [
+    "S"
+   ],
+   "spr": "minerlamp",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "start_staerke",
+    "v": 1,
+    "t": "Zu Kampfbeginn +1 Stärke."
+   },
+   "flavor": "Ein Vogelkäfig aus Messingdraht. Solange es darin still ist, ist die Luft gut.",
+   "cards": [
+    {
+     "n": "Wetter prüfen",
+     "c": 0,
+     "blk": 3,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "id": "gezeitenwerk_neu3",
+ "ergaenzt": "gezeitenwerk",
+ "gegner_dazu": [
+  "wasseruhr"
+ ],
+ "elite_dazu": [],
+ "gegner_weg": [],
+ "fundpool_dazu": [],
+ "foes": {
+  "wasseruhr": {
+   "n": "Die Wasseruhr",
+   "biom": "gezeitenwerk",
+   "rang": "normal",
+   "hp": 28,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "wasseruhr_a",
+   "varianten": [
+    "wasseruhr_a",
+    "wasseruhr_b"
+   ],
+   "konzept": "Ein Uhrwerk aus Bronze und Glas, das die Gezeiten misst, auf zwei Beinen. In der oberen Kammer steht das Wasser und tropft in die untere, und wenn die untere voll ist, schlägt es an. Du siehst den Pegel steigen.",
+   "stimme": "ertrunkener",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 3,
+    "v": 14,
+    "why": "Tropfen für Tropfen läuft die Kammer voll, dann schlägt es."
+   },
+   "beute": "watch",
+   "beute_satz": "Das Glas springt. Das Wasser läuft heraus und fließt bergauf zurück ins Meer.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {}
+}

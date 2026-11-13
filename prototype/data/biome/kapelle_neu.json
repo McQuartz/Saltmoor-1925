@@ -1,0 +1,94 @@
+{
+ "id": "kapelle_neu",
+ "ergaenzt": "kapelle",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "taeufer"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "taufschale"
+ ],
+ "foes": {
+  "taeufer": {
+   "n": "Der Täufer",
+   "biom": "kapelle",
+   "rang": "elite",
+   "hp": 90,
+   "weak": "B",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "sprite": "taeufer",
+   "konzept": "Der Kaplan, der 1634 die Kinder taufte, während das Wasser stieg, und nicht aufhörte. Er steht bis zum Gürtel im Taufstein, der viel zu klein für ihn ist und trotzdem tief genug. Die eine Hand segnet, die andere liegt flach auf dem Wasser und drückt etwas hinunter.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "takt",
+    "v": 4,
+    "klang": "glocke",
+    "why": "Zu jeder Taufe schlägt die Glocke, auch die, die unter Wasser hängt."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": [
+      "gepruefte",
+      "ertrunkener"
+     ],
+     "alle": 3,
+     "why": "Wen er getauft hat, steigt wieder herauf."
+    }
+   ],
+   "beute": "taufschale",
+   "beute_satz": "Das Wasser im Becken ist ganz still geworden. Unten liegt etwas und schaut hinauf.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "taufschale": {
+   "n": "Taufschale",
+   "a": "talisman",
+   "st": [
+    "G",
+    "W"
+   ],
+   "spr": "shell",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "heil_nach_sieg",
+    "v": 4,
+    "t": "Nach jedem Sieg heilst du 4."
+   },
+   "flavor": "Zinn, eingedellt vom Rand eines Taufsteins. Sie wird nie ganz trocken.",
+   "cards": [
+    {
+     "n": "Untertauchen",
+     "c": 1,
+     "blk": 6,
+     "weak": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

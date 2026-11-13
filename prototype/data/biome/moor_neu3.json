@@ -1,0 +1,130 @@
+{
+ "id": "moor_neu3",
+ "ergaenzt": "moor",
+ "gegner_dazu": [
+  "weidenmann"
+ ],
+ "elite_dazu": [
+  "moorkoenig"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "wurzelkrone"
+ ],
+ "foes": {
+  "weidenmann": {
+   "n": "Der Weidenmann",
+   "biom": "moor",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 7
+    }
+   ],
+   "sprite": "weidenmann_a",
+   "varianten": [
+    "weidenmann_a",
+    "weidenmann_b"
+   ],
+   "konzept": "Ein Flechtwerk aus Weidenruten in Menschengestalt, so wie man sie früher ins Moor gestellt hat, damit es satt bleibt. Es ist nie jemand hineingesetzt worden. Er hat sich selbst gefüllt, und hinter den Ruten glimmt es.",
+   "stimme": "hirte",
+   "kniff": {
+    "art": "dornen",
+    "v": 2,
+    "why": "Wer in die Ruten schlägt, bleibt mit der Hand hängen."
+   },
+   "beute": null,
+   "beute_satz": "Die Ruten fallen auseinander. Drinnen ist nichts, nur Wärme.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "moorkoenig": {
+   "n": "Der Moorkönig",
+   "biom": "moor",
+   "rang": "elite",
+   "hp": 84,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "moorkoenig",
+   "konzept": "Eine Moorleiche, die man 1898 gefunden und wieder versenkt hat, weil sie eine Krone trug, die niemand anfassen wollte. Er steht bis zur Hüfte im Torf, die Haut wie Leder, den Strick noch um den Hals. Um ihn stehen die Pflöcke wie ein Hofstaat.",
+   "stimme": "mumie",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 4,
+    "why": "Er hält seine Hand über die Seinen."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": "gepfaehlter",
+     "alle": 3,
+     "why": "Er ruft, und aus dem Moor steigt einer, der gepfählt wurde."
+    }
+   ],
+   "beute": "wurzelkrone",
+   "beute_satz": "Die Krone rutscht ihm vom Kopf. Die Wurzeln daran tasten nach deinem.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "wurzelkrone": {
+   "n": "Wurzelkrone",
+   "a": "talisman",
+   "st": [
+    "V",
+    "G"
+   ],
+   "spr": "cultmask",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 46,
+   "eigen": {
+    "typ": "start_block",
+    "v": 6,
+    "t": "Zu Kampfbeginn 6 Block."
+   },
+   "flavor": "Geflochtene Wurzeln, braun vom Torf. Sie passt jedem, der sie aufsetzt.",
+   "cards": [
+    {
+     "n": "Hof halten",
+     "c": 1,
+     "blk": 7,
+     "weak": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

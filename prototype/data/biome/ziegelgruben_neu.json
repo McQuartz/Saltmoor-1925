@@ -1,0 +1,88 @@
+{
+ "id": "ziegelgruben_neu",
+ "ergaenzt": "ziegelgruben",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "lehmmutter"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "streichform"
+ ],
+ "foes": {
+  "lehmmutter": {
+   "n": "Die Lehmmutter",
+   "biom": "ziegelgruben",
+   "rang": "elite",
+   "hp": 88,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "blk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 2
+    }
+   ],
+   "sprite": "lehmmutter",
+   "konzept": "Die Grube selbst, so wie die Legion sie sich vorstellte, als sie ihr opferte: eine Frau aus nassem Lehm, breit wie ein Ofen, auf den Fersen hockend. Ihr Kopf ist ein gebrannter Ziegel mit dem Stempel der Legion, durch dessen Löcher sie sieht. Aus ihrem Schoß drängen halbfertige Lehmhunde.",
+   "stimme": "opfernde",
+   "kniff": {
+    "art": "nachlass",
+    "was": "teilt",
+    "gegner": "lehmhund",
+    "why": "Fällt sie, laufen die beiden letzten Hunde heraus."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Sie streicht den anderen nassen Lehm über die Wunden."
+    }
+   ],
+   "beute": "streichform",
+   "beute_satz": "Wo sie saß, ist eine Mulde im Boden, warm und genau so groß wie du.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "streichform": {
+   "n": "Streichform",
+   "a": "kleidung",
+   "st": [
+    "S",
+    "E"
+   ],
+   "spr": "plank",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "block_haelt_halb",
+    "t": "Die Hälfte deines Blocks bleibt in den nächsten Zug."
+   },
+   "flavor": "Ein Holzrahmen für einen Ziegel. Innen ist das Holz glatt wie Haut.",
+   "cards": [
+    {
+     "n": "In Form streichen",
+     "c": 1,
+     "blk": 8
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}
