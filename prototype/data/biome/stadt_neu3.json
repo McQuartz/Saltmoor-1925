@@ -1,0 +1,128 @@
+{
+ "id": "stadt_neu3",
+ "ergaenzt": "stadt",
+ "gegner_dazu": [
+  "saeulensteher"
+ ],
+ "elite_dazu": [
+  "erbauer"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "senklot"
+ ],
+ "foes": {
+  "saeulensteher": {
+   "n": "Der Säulensteher",
+   "biom": "stadt",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "saeulensteher_a",
+   "varianten": [
+    "saeulensteher_a",
+    "saeulensteher_b"
+   ],
+   "konzept": "Ein Mann, der seit der Expedition auf einer Säule der Stadt steht, weil er dort oben etwas gesehen hat. Er ist nicht mehr heruntergekommen. Die Säule ist mit ihm gewachsen, und er beschirmt die anderen mit seinem Schatten.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 3,
+    "why": "Sein Schatten fällt über die anderen wie ein Dach."
+   },
+   "beute": null,
+   "beute_satz": "Die Säule bleibt stehen, als er fällt. Oben ist ein Abdruck seiner Füße.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "erbauer": {
+   "n": "Der Erbauer-Priester",
+   "biom": "stadt",
+   "rang": "elite",
+   "hp": 86,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 9
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 2
+    }
+   ],
+   "sprite": "erbauer",
+   "konzept": "Er hat die Stadt nicht gebaut, er baut sie noch: jede Nacht einen Stein höher, nach Plänen, die keine rechten Winkel kennen. Er steht hinter einem Gerüst aus schiefen Latten, die Mitra aus Ziegeln, und lässt das Lot herab.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Hinter dem Gerüst siehst du nicht, was er als Nächstes setzt."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Jeden Zug ein Stein höher."
+    }
+   ],
+   "beute": "senklot",
+   "beute_satz": "Das Lot pendelt aus und bleibt schräg hängen, als zöge es nach etwas unter der Stadt.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "senklot": {
+   "n": "Senklot",
+   "a": "talisman",
+   "st": [
+    "E",
+    "L"
+   ],
+   "spr": "watch",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 46,
+   "eigen": {
+    "typ": "verwundbar_start",
+    "v": 1,
+    "t": "Zu Kampfbeginn sind alle Gegner 1 Zug verwundbar."
+   },
+   "flavor": "Bronze an einer Schnur. Es hängt nie ganz senkrecht, egal wo man steht.",
+   "cards": [
+    {
+     "n": "Ins Lot bringen",
+     "c": 1,
+     "atk": 5,
+     "vuln": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,127 @@
+{
+ "id": "kapelle_neu3",
+ "ergaenzt": "kapelle",
+ "gegner_dazu": [
+  "messdiener"
+ ],
+ "elite_dazu": [
+  "orgel"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "orgelpfeife"
+ ],
+ "foes": {
+  "messdiener": {
+   "n": "Der Messdiener",
+   "biom": "kapelle",
+   "rang": "normal",
+   "hp": 20,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "messdiener_a",
+   "varianten": [
+    "messdiener_a",
+    "messdiener_b"
+   ],
+   "konzept": "Ein Junge im Chorrock mit dem Weihrauchfass, der den Rauch schwenkt, bis man nichts mehr sieht. Er ist der kleine Bruder des Chorknaben, und er hat dessen Gesicht nicht. Er hat überhaupt keins, nur Rauch, der aus dem Kragen steigt.",
+   "stimme": "chorknabe",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Im Weihrauch siehst du nicht, was er vorhat."
+   },
+   "beute": "candle",
+   "beute_satz": "Das Fass rollt aus. Der Rauch bleibt noch eine Weile stehen, in seiner Form.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "orgel": {
+   "n": "Die Orgel",
+   "biom": "kapelle",
+   "rang": "elite",
+   "hp": 88,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "orgel",
+   "konzept": "Die Pfeifen sind gewachsen, seit der Organist nicht mehr kommt. Jetzt steht sie auf eigenen Beinen, ein Gehäuse mit Pfeifen wie Zähne. Wo der Spieltisch war, sitzt noch der Organist, eingewachsen bis zur Brust, und spielt.",
+   "stimme": "chor",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Sie hält den tiefsten Ton, und dir friert die Hand an der Karte fest."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Der Ton legt sich wie eine Wand vor die anderen."
+    }
+   ],
+   "beute": "orgelpfeife",
+   "beute_satz": "Die Pfeifen verstummen nacheinander, die tiefste zuletzt. Sie summt noch, wenn du sie berührst.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "orgelpfeife": {
+   "n": "Orgelpfeife",
+   "a": "waffe",
+   "st": [
+    "G",
+    "E"
+   ],
+   "spr": "pick",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "reaktion_block",
+    "v": 2,
+    "t": "Jede Reaktion gibt 2 Block."
+   },
+   "flavor": "Zinn, so lang wie ein Arm. Wenn Wind darüber geht, klingt sie nach Kirche.",
+   "cards": [
+    {
+     "n": "Registerzug",
+     "c": 1,
+     "atk": 4,
+     "blk": 4
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

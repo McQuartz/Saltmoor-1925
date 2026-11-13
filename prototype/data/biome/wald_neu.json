@@ -1,0 +1,88 @@
+{
+ "id": "wald_neu",
+ "ergaenzt": "wald",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "koehlerin"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "holzkohle"
+ ],
+ "foes": {
+  "koehlerin": {
+   "n": "Die Köhlerin",
+   "biom": "wald",
+   "rang": "elite",
+   "hp": 92,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 9
+    }
+   ],
+   "sprite": "koehlerin",
+   "konzept": "Sie hat für die Legion Holzkohle gebrannt, als der Wald noch oben wuchs, und sie brennt immer noch. Den Meiler trägt sie auf dem Rücken, einen Hügel aus Erde und Scheiten, größer als sie, durch dessen Zuglöcher die Glut schaut. Ihre Augen sind zwei Zuglöcher mehr.",
+   "stimme": "torfstecherin",
+   "kniff": {
+    "art": "dornen",
+    "v": 3,
+    "why": "Wer sie anfasst, fasst den Meiler an."
+   },
+   "kniffe": [
+    {
+     "art": "ansage",
+     "zuege": 3,
+     "v": 22,
+     "why": "Sie macht die Zuglöcher zu. Wenn sie sie aufreißt, kommt alles auf einmal."
+    }
+   ],
+   "beute": "holzkohle",
+   "beute_satz": "Der Meiler glimmt weiter, ohne sie. Er hat Zeit.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "holzkohle": {
+   "n": "Legionskohle",
+   "a": "talisman",
+   "st": [
+    "F"
+   ],
+   "spr": "bottle",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "brand_haelt",
+    "t": "Brand verfällt nur um 1."
+   },
+   "flavor": "Ein Beutel Holzkohle mit dem Stempel der Legio II. Sie ist nach neunzehnhundert Jahren noch warm.",
+   "cards": [
+    {
+     "n": "Glut nachlegen",
+     "c": 1,
+     "burn": 4,
+     "blk": 3
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

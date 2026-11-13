@@ -5,6 +5,9 @@
 // eine Aufnahme, spielt die Aufnahme (über denselben SFX-Bus mit Hall und Limiter), sonst das Original (oder Stille).
 // Eingebaut: audio/mund/<key>.wav (exportiert aus dem Studio). Standard ist an („Alpha-Sounds“); umschalten in den Einstellungen
 // (Sounds: Alpha / Standard), im Studio („Im Spiel benutzen“) oder mit index.html?mund=0 / ?mund=1.
+// Profile (2026-11-13): drei Mund-Profile, im Spiel aufnehmbar (js/audio/mund-aufnahme.js, Menü → Mund-Sounds).
+// Profil 1 benutzt dieselben Einträge wie das Studio (Schlüssel „hit“ …), Profil 2 und 3 eigene („p2/hit“, „p3/hit“).
+// Fehlt in einem Profil ein Sound, spielt die eingebaute Aufnahme (audio/mund/), sonst der generierte Klang.
 // Die Liste MUND_KATALOG ist die eine Stelle, an der steht, welche Sounds es gibt. Neue sfx-Funktion = neuer Eintrag hier.
 const MUND_KATALOG=[
  // Kampf
@@ -41,7 +44,10 @@ function mundSchluessel(name,arg){
 
 const Mund=(()=>{
  const DB='saltmoor-mund',VER=1,OPT_KEY='saltmoor.mund.v1';
- const STD={aktiv:true,fehlt:'original',musikAus:false,streuung:.03};
+ const STD={aktiv:true,fehlt:'original',musikAus:false,streuung:.03,profil:1,profilNamen:['Profil 1','Profil 2','Profil 3']};
+ const PROFILE=3;
+ // Schlüssel eines Sounds in einem Profil (Ablage „wahl“ und take.key)
+ const profilKey=(key,p)=>(p||optionen().profil||1)>1?`p${p||optionen().profil}/${key}`:key;
  let opt=null;
  function optionen(){if(opt)return opt;try{opt=Object.assign({},STD,JSON.parse(localStorage.getItem(OPT_KEY)||'{}'));}catch(e){opt=Object.assign({},STD);}return opt;}
  function setze(k,v){optionen()[k]=v;try{localStorage.setItem(OPT_KEY,JSON.stringify(opt));}catch(e){}}
@@ -134,8 +140,15 @@ const Mund=(()=>{
    if(w)m[e.key]={id:'datei:'+e.key,key:e.key,sr:w.sr,pcm:w.pcm,dauer:w.pcm.length/w.sr,pegel:0,datei:true};}catch(x){}}));
   return m;}
  async function ladeGewaehlte(){const m=await ladeDateien(),mu={};
-  try{const w=await ablage.wahl();for(const k in w){const t=await ablage.take(w[k]);if(!t)continue;if(k.startsWith('musik:'))mu[k]=t;else m[k]=t;}}catch(e){console.warn('Mund-Modus: Browser-Aufnahmen nicht gelesen',e);}
+  try{const w=await ablage.wahl(),p=optionen().profil||1;
+   for(const k in w){if(!k.startsWith('musik:'))continue;const t=await ablage.take(w[k]);if(t)mu[k]=t;}
+   for(const e of MUND_KATALOG){const id=w[profilKey(e.key,p)];if(id==null)continue;const t=await ablage.take(id);if(t)m[e.key]=t;}}catch(e){console.warn('Mund-Modus: Browser-Aufnahmen nicht gelesen',e);}
   geladen=m;musikTakes=mu;return m;}
+ // Was spielt im aktuellen Profil für einen Sound? 'eigen' (im Profil aufgenommen), 'datei' (eingebaut) oder null (generiert)
+ function quelle(key){const t=geladen[key];return t?(t.datei?'datei':'eigen'):null;}
+ async function profilWaehlen(p){p=Math.max(1,Math.min(PROFILE,+p||1));setze('profil',p);setze('aktiv',true);await ladeGewaehlte();}
+ function profilName(p){const l=optionen().profilNamen||STD.profilNamen;return l[p-1]||STD.profilNamen[p-1];}
+ function profilBenennen(p,n){const l=(optionen().profilNamen||STD.profilNamen).slice();l[p-1]=String(n||'').trim().slice(0,24)||STD.profilNamen[p-1];setze('profilNamen',l);}
  function installiere(){
   if(typeof sfx==='undefined')return;
   const orig={};
@@ -151,13 +164,18 @@ const Mund=(()=>{
   if(optionen().aktiv&&optionen().musikAus&&typeof Music!=='undefined'&&Music.volume){const v=Music.volume;Music.volume=()=>v.call(Music,0);v.call(Music,0);}
   // Schalter in den Einstellungen (ueberlagerungen.js: <select data-mund>)
   document.addEventListener('change',e=>{if(!e.target.matches||!e.target.matches('[data-mund]'))return;setze('aktiv',e.target.value==='alpha');});
+  document.addEventListener('change',e=>{if(!e.target.matches||!e.target.matches('[data-mundprofil]'))return;profilWaehlen(e.target.value);
+   const m=document.querySelector('[data-mund]');if(m)m.value='alpha';});
  }
  // Für die Einstellungen: Auswahl „Sounds“ (Alpha = eigene Aufnahmen, Standard = generiert)
- function einstHtml(){const a=optionen().aktiv;return `<label>Sounds<select data-mund><option value="alpha"${a?' selected':''}>Alpha (Mund-Aufnahmen)</option><option value="standard"${a?'':' selected'}>Standard (generiert)</option></select></label>`;}
+ function einstHtml(){const a=optionen().aktiv;return `<label>Sounds<select data-mund><option value="alpha"${a?' selected':''}>Alpha (Mund-Aufnahmen)</option><option value="standard"${a?'':' selected'}>Standard (generiert)</option></select></label>`+profilHtml();}
+ // Profilwahl und Weg zur Aufnahme im Spiel (mund-aufnahme.js)
+ function profilHtml(){const p=optionen().profil||1;let h=`<label>Mund-Profil<select data-mundprofil>`;for(let i=1;i<=PROFILE;i++)h+=`<option value="${i}"${i===p?' selected':''}>${String(profilName(i)).replace(/[<&"]/g,c=>({'<':'&lt;','&':'&amp;','"':'&quot;'})[c])}</option>`;
+  return h+`</select></label>`+(typeof MundAufnahme!=='undefined'?`<button class="deco klein" data-mauf="auf">MUND-SOUNDS AUFNEHMEN</button>`:'');}
 
  // Spiel-Seite: ?mund=1 / ?mund=0 setzt den Schalter, dann umhüllen. Das Studio setzt window.MUND_STUDIO und umhüllt nicht.
  if(!window.MUND_STUDIO){try{const q=new URLSearchParams(location.search).get('mund');if(q==='1')setze('aktiv',true);if(q==='0')setze('aktiv',false);}catch(e){}
   installiere();}
 
- return {optionen,setze,ablage,spiele,einstHtml,ausschnitt,fenster,LAYER,MUSIK_BPM,MUSIK_TAKTE,musikKey,loopStarten,loopStoppen,ladeGewaehlte,installiere,KATALOG:MUND_KATALOG,get original(){return original;}};
+ return {optionen,setze,ablage,spiele,einstHtml,ausschnitt,fenster,LAYER,MUSIK_BPM,MUSIK_TAKTE,musikKey,loopStarten,loopStoppen,ladeGewaehlte,installiere,profilKey,quelle,profilWaehlen,profilName,profilBenennen,PROFILE,mundSchluessel,KATALOG:MUND_KATALOG,get original(){return original;}};
 })();

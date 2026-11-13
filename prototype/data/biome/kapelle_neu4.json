@@ -1,0 +1,134 @@
+{
+ "id": "kapelle_neu4",
+ "ergaenzt": "kapelle",
+ "gegner_dazu": [
+  "kuester"
+ ],
+ "waechter_dazu": [
+  "taufengel"
+ ],
+ "foes": {
+  "kuester": {
+   "n": "Der Küster",
+   "biom": "kapelle",
+   "rang": "normal",
+   "hp": 22,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "kuester_a",
+   "varianten": [
+    "kuester_a",
+    "kuester_b"
+   ],
+   "konzept": "Er hat die Kapelle abgeschlossen, als das Wasser kam, mit allen drin, damit keiner in Panik hinausläuft. Er hat den Schlüsselbund noch, und der Talar klebt nass an ihm. Wo er hinschaut, wird es kalt wie Wasser im Turm.",
+   "stimme": "kultist",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Wo er hinschaut, wird es kalt wie das Wasser im Turm. Eine Karte bleibt liegen."
+   },
+   "beute": null,
+   "beute_satz": "Der Schlüsselbund fällt ins Wasser. Irgendwo im Turm geht eine Tür auf.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "taufengel": {
+   "n": "Der Taufengel",
+   "biom": "kapelle",
+   "rang": "waechter",
+   "hp": 78,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
+   "sprite": "taufengel",
+   "varianten": [
+    "taufengel"
+   ],
+   "konzept": "Ein hölzerner Engel, der früher an Ketten von der Decke hing und bei der Taufe die Schale herabließ. Die Ketten sind gerissen, als das Wasser kam, und er steht jetzt selbst im Wasser, die Flügel nass und schwer, die Schale vor der Brust. Unter seinen Flügeln sieht man nicht, was er vorhat.",
+   "stimme": "chorknabe",
+   "kniff": {
+    "art": "verborgen",
+    "why": "Unter den nassen Flügeln sieht man nicht, was er vorhat."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "messdiener",
+    "alle": 3
+   },
+   "beute": "engelsschale",
+   "beute_satz": "Die Flügel sinken ins Wasser. Die Schale hält er noch hoch, bis du sie nimmst.",
+   "quelle": "skript",
+   "art": "veraendert",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "engelsschale": {
+   "n": "Schale des Taufengels",
+   "a": "talisman",
+   "st": [
+    "W",
+    "G"
+   ],
+   "spr": "holywater",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "heil_nach_sieg",
+    "v": 5,
+    "t": "Nach jedem Sieg heilst du 5."
+   },
+   "flavor": "Messing, innen verzinnt. Das Wasser darin wird nie weniger, egal wie viel man ausgießt.",
+   "cards": [
+    {
+     "n": "Taufen",
+     "c": 1,
+     "heal": 4,
+     "blk": 3
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

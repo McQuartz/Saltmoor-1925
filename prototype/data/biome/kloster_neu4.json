@@ -1,0 +1,132 @@
+{
+ "id": "kloster_neu4",
+ "ergaenzt": "kloster",
+ "gegner_dazu": [
+  "siegelmoench"
+ ],
+ "waechter_dazu": [
+  "buecherwand"
+ ],
+ "foes": {
+  "siegelmoench": {
+   "n": "Der Siegelmönch",
+   "biom": "kloster",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 7
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    }
+   ],
+   "sprite": "siegelmoench_a",
+   "varianten": [
+    "siegelmoench_a",
+    "siegelmoench_b"
+   ],
+   "konzept": "Er versiegelt jede Abschrift, wenn sie fertig ist, mit Wachs und dem Klostersiegel. Der Siegelstempel ist ihm in die Faust gewachsen, so groß wie ein Hammer, und er siegelt alles, was offen ist. Was er schlägt, ist zu.",
+   "stimme": "hirte",
+   "kniff": {
+    "art": "brecher",
+    "why": "Er siegelt, was offen ist, und deine Deckung ist offen."
+   },
+   "beute": "candle",
+   "beute_satz": "Der Stempel löst sich aus seiner Faust. Das Wachs darauf ist noch weich.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "buecherwand": {
+   "n": "Die Bücherwand",
+   "biom": "kloster",
+   "rang": "waechter",
+   "hp": 76,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 4
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "gesehen": {
+    "t": "blk",
+    "v": 18
+   },
+   "sprite": "buecherwand",
+   "varianten": [
+    "buecherwand"
+   ],
+   "konzept": "Das Regal der Bibliothek, in dem jede Abschrift steht, die je gemacht wurde, und jede steht doppelt. Es hat sich von der Wand gelöst und geht auf geschnitzten Löwenfüßen; aus den Fächern greifen Arme aus gebundenem Papier. Was du tust, steht schon in einem seiner Bücher, und es liest es dir vor.",
+   "stimme": "schatten",
+   "kniff": {
+    "art": "kopie",
+    "why": "Was du tust, steht schon in einem ihrer Bücher. Sie liest es dir vor, einen Zug später."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "leser",
+    "alle": 3
+   },
+   "beute": "zweitschrift",
+   "beute_satz": "Die Fächer kippen nach vorn, und die Bücher fallen zu. Eins bleibt offen liegen, und es ist über dich.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "zweitschrift": {
+   "n": "Die Zweitschrift",
+   "a": "talisman",
+   "st": [
+    "G",
+    "L"
+   ],
+   "spr": "bible",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 48,
+   "eigen": {
+    "typ": "hand_plus",
+    "v": 1,
+    "t": "Du ziehst jeden Zug 1 Karte mehr."
+   },
+   "flavor": "Ein Buch, in dem steht, was du heute getan hast. Morgen steht dort, was du morgen tust.",
+   "cards": [
+    {
+     "n": "Nachlesen",
+     "c": 1,
+     "draw": 2
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

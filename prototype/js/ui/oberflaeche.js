@@ -42,10 +42,9 @@ function biegKopfHtml(){if(typeof Bieg==='undefined')return'';const k=Bieg.kopf(
 // Die Worte stehen nur noch im Tooltip des Balkens.
 // M2 (Variante 2): Name links, Leben groß rechts darüber; Rot = Leben, Blau = Block als Verlängerung nach rechts mit dem Wert im Schild am Ende.
 function spielerHtml(){const m=maxHp(),inc=incomingSichtbar(),lose=Math.min(S.hp,Math.max(0,inc-S.block)),bricht=Math.min(S.block,inc);const W=v=>Math.max(0,Math.min(100,v/m*100)).toFixed(3)+'%';
- const BW=v=>Math.min(32,v/m*100).toFixed(3);
  const tip=alive().some(e=>absichtSichtbar(e)&&e.kniff&&e.kniff.art==='verborgen'&&e.pat[e.pi%e.pat.length].t==='atk')?`${inc} und mehr kommen, wie viel, siehst du nicht`:inc?`${inc} kommen → ${lose?'−'+lose+' Leben':'alles geblockt'}`:'nichts kommt';
  return `<div class="skopf"><span class="snm">${esc(S.jobN).toUpperCase()}</span><span class="shp"><b>${S.hp}</b>/${m}</span></div>
- <div class="szeile" title="${esc(tip)}"><div class="sbar"><i class="hp" style="width:${W(S.hp-lose)}"></i>${lose?`<i class="schraffur" style="width:${W(lose)}"></i>`:''}</div>${S.block?`<div class="sblock" style="--bw:${BW(S.block)}"><i class="bk" style="flex:${S.block-bricht}"></i>${bricht?`<i class="bricht" style="flex:${bricht}"></i>`:''}</div><div class="schild an" title="Block">${gi('blk',KZ())}<b>${S.block}</b></div>`:''}</div>`;}
+ <div class="szeile" title="${esc(tip)}"><div class="sbar${S.block?' block':''}"><i class="hp" style="width:${W(S.hp-lose)}"></i>${lose?`<i class="schraffur" style="width:${W(lose)}"></i>`:''}${S.block?`<div class="schild an" title="Block"><b>${S.block}</b>${bricht?`<small>→${S.block-bricht}</small>`:''}</div>`:''}</div></div>`;}
 // Lebensbalken mit Block-Schraffur direkt hinter dem Leben; pv = Vorschau {d, ab}
 function barHtml(hp,max,block,pv,cls=''){const W=v=>Math.max(0,Math.min(100,v/max*100)).toFixed(1)+'%';const d=pv?Math.min(hp,pv.d):0,ab=pv?Math.min(block,pv.ab):0;
  return `<div class="bar ${cls}"><i class="hp" style="width:${W(hp-d)}"></i>${d?`<i class="pv" style="width:${W(d)}"></i>`:''}${block-ab>0?`<i class="bk" style="width:${W(block-ab)}"></i>`:''}${ab?`<i class="pvb" style="width:${W(ab)}"></i>`:''}</div>`;}

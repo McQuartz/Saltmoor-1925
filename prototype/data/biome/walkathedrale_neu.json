@@ -1,0 +1,85 @@
+{
+ "id": "walkathedrale_neu",
+ "ergaenzt": "walkathedrale",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "trankocher"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "tranlampe"
+ ],
+ "foes": {
+  "trankocher": {
+   "n": "Der Trankocher",
+   "biom": "walkathedrale",
+   "rang": "elite",
+   "hp": 96,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 7,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 15
+    }
+   ],
+   "sprite": "trankocher",
+   "konzept": "Er hat an Bord den Speck ausgekocht, Tag und Nacht, und im Wal hat er weitergemacht. Sein Leib ist der Trankessel geworden, ein bauchiger Topf auf zwei krummen Beinen, unter dem ein Feuer aus Walknochen glimmt. Oben schaut er aus dem Rand und rührt mit der Kelle in sich selbst.",
+   "stimme": "schlundtraeger",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 22,
+    "why": "Er heizt an, bis es überkocht."
+   },
+   "kniffe": [
+    {
+     "art": "heiler",
+     "v": 4,
+     "why": "Zwischendurch löffelt er den anderen etwas Tran zu."
+    }
+   ],
+   "beute": "tranlampe",
+   "beute_satz": "Der Kessel kühlt ab und tickt. Drinnen ist es noch lange warm.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "tranlampe": {
+   "n": "Tranlampe",
+   "a": "talisman",
+   "st": [
+    "F",
+    "V"
+   ],
+   "spr": "lantern",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 46,
+   "eigen": {
+    "typ": "brand_haelt",
+    "t": "Brand verfällt nur um 1."
+   },
+   "flavor": "Sie brennt mit Walöl, rußt und riecht, und sie geht nie aus, egal wie kalt es ist.",
+   "cards": [
+    {
+     "n": "Tran ins Feuer",
+     "c": 1,
+     "burn": 3,
+     "blk": 4
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

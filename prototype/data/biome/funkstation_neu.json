@@ -1,0 +1,92 @@
+{
+ "id": "funkstation_neu",
+ "ergaenzt": "funkstation",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "expeditionsleiter"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "expeditionsfahne"
+ ],
+ "foes": {
+  "expeditionsleiter": {
+   "n": "Der Expeditionsleiter",
+   "biom": "funkstation",
+   "rang": "elite",
+   "hp": 90,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 14
+    },
+    {
+     "t": "blk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    }
+   ],
+   "sprite": "expeditionsleiter",
+   "konzept": "Kapitän Brede führte die Expedition von 1912 und gab den Befehl, dem Signal nach unten zu folgen. Er steht noch im Pelzparka, steifgefroren, die Fahne an der Stange. Die Kapuze ist leer bis auf zwei Senderöhren, die darin glühen wie Augen.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Wo er steht, friert eine deiner Karten an der Hand fest."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": [
+      "funker",
+      "mastkletterer"
+     ],
+     "alle": 4,
+     "why": "Er ruft die Mannschaft zum Appell. Einer meldet sich noch."
+    }
+   ],
+   "beute": "expeditionsfahne",
+   "beute_satz": "Die Röhren in der Kapuze glühen nach. Das Signal ist noch nicht zu Ende.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "expeditionsfahne": {
+   "n": "Expeditionsfahne",
+   "a": "talisman",
+   "st": [
+    "E",
+    "F"
+   ],
+   "spr": "cross",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 48,
+   "eigen": {
+    "typ": "start_staerke",
+    "v": 1,
+    "t": "Zu Kampfbeginn +1 Stärke."
+   },
+   "flavor": "Ein Kreuz auf Rot, am Rand zerrissen. Sie hat am Pol gestanden, aber nicht dort, wo es auf der Karte steht.",
+   "cards": [
+    {
+     "n": "Vorwärts",
+     "c": 1,
+     "atk": 5,
+     "str": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

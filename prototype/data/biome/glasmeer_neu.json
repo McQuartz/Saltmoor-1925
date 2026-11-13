@@ -1,0 +1,90 @@
+{
+ "id": "glasmeer_neu",
+ "ergaenzt": "glasmeer",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "glasblaeser"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "glasperle"
+ ],
+ "foes": {
+  "glasblaeser": {
+   "n": "Der Glasbläser",
+   "biom": "glasmeer",
+   "rang": "elite",
+   "hp": 90,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 15
+    },
+    {
+     "t": "blk",
+     "v": 8
+    }
+   ],
+   "sprite": "glasblaeser",
+   "konzept": "Er kam mit der Expedition, um Probengläser zu blasen, und hat gesehen, dass das ganze Meer aus Glas ist. Seitdem bläst er es. An der Pfeife hängt eine Blase, größer als sein Oberkörper, und darin hängt grünes Licht wie Nordlicht unter dem Eis. Seine Wangen sind schon Glas.",
+   "stimme": "augen",
+   "kniff": {
+    "art": "nachlass",
+    "was": "explodiert",
+    "v": 8,
+    "why": "Wenn er fällt, platzt die Blase. Das Glas fliegt in alle Richtungen."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Jeder Atemzug geht in die Blase. Sie wird größer, und er stärker."
+    }
+   ],
+   "beute": "glasperle",
+   "beute_satz": "Von der Blase ist eine einzige Perle übrig. Das Nordlicht ist darin.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "glasperle": {
+   "n": "Glasperle mit Nordlicht",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "shell",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "reaktion_heil",
+    "v": 2,
+    "t": "Jede Reaktion heilt 2."
+   },
+   "flavor": "Kaum größer als eine Erbse. Wenn du sie gegen das Licht hältst, ist das Licht in ihr heller.",
+   "cards": [
+    {
+     "n": "Gegen das Licht halten",
+     "c": 0,
+     "blk": 3,
+     "draw": 1,
+     "verbraucht": true
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,52 @@
+{
+ "id": "ziegelgruben_neu3",
+ "ergaenzt": "ziegelgruben",
+ "gegner_dazu": [
+  "amphorentraeger"
+ ],
+ "elite_dazu": [],
+ "gegner_weg": [],
+ "fundpool_dazu": [],
+ "foes": {
+  "amphorentraeger": {
+   "n": "Der Wasserträger der Legion",
+   "biom": "ziegelgruben",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "amphorentraeger_a",
+   "varianten": [
+    "amphorentraeger_a",
+    "amphorentraeger_b"
+   ],
+   "konzept": "Ein Legionär aus der Zeit, als hier Ziegel für das Lager gebrannt wurden, mit der Amphore auf der Schulter. Er bringt den anderen Wasser, seit achtzehnhundert Jahren, und der Lehm hat ihn längst zu einem der Seinen gebrannt.",
+   "stimme": "mumie",
+   "kniff": {
+    "art": "heiler",
+    "v": 3,
+    "why": "Er gibt den anderen aus der Amphore zu trinken."
+   },
+   "beute": null,
+   "beute_satz": "Die Amphore zerbricht. Darin ist kein Wasser, sondern Lehm, und er ist noch feucht.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {}
+}

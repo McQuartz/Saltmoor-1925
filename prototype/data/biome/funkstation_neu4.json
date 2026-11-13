@@ -1,0 +1,224 @@
+{
+ "id": "funkstation_neu4",
+ "ergaenzt": "funkstation",
+ "gegner_dazu": [
+  "kartenzeichner"
+ ],
+ "elite_dazu": [
+  "antennenmann"
+ ],
+ "waechter_dazu": [
+  "empfaenger"
+ ],
+ "fundpool_dazu": [
+  "antennendraht"
+ ],
+ "foes": {
+  "kartenzeichner": {
+   "n": "Der Kartenzeichner",
+   "biom": "funkstation",
+   "rang": "normal",
+   "hp": 24,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 7
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "kartenzeichner_a",
+   "varianten": [
+    "kartenzeichner_a",
+    "kartenzeichner_b"
+   ],
+   "konzept": "Er hat für die Expedition von 1912 die Karte des Eises gezeichnet, und jeden Tag war sie falsch, weil das Eis sich bewegte. Er zeichnet weiter, die Rolle wird länger und schleppt hinter ihm. Er hält dir die Karte hin, und bis du sie gelesen hast, ist alles teurer.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Er hält dir die Karte hin, und bis du sie gelesen hast, ist alles teurer."
+   },
+   "beute": "compass",
+   "beute_satz": "Die Rolle rollt sich aus, bis zu deinen Füßen. Du stehst schon darauf, eingezeichnet.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "antennenmann": {
+   "n": "Der Antennenmann",
+   "biom": "funkstation",
+   "rang": "elite",
+   "hp": 92,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "antennenmann",
+   "konzept": "Der zweite Funker, der 1912 auf den Mast stieg, um die Antenne zu verlängern, damit das Signal deutlicher wird. Er ist selbst die Verlängerung geworden: Aus seinem Rücken wächst der Mast, Drähte spannen sich zu den Händen, und er kündigt an, was das Signal gleich sagt. Je nach Frequenz trifft ihn anderes.",
+   "stimme": "rufer",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 20,
+    "why": "Er kündigt an, was das Signal gleich sagt. Nach zwei Zügen springt der Funke."
+   },
+   "kniffe": [
+    {
+     "art": "wechsel",
+     "stoffe": [
+      "E",
+      "W",
+      "G"
+     ],
+     "why": "Je nach Frequenz trifft ihn anderes."
+    }
+   ],
+   "beute": "antennendraht",
+   "beute_satz": "Der Mast in seinem Rücken knickt. Die Drähte summen noch, dann sind sie still, und das Signal ist kurz ganz deutlich.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "empfaenger": {
+   "n": "Der Empfänger",
+   "biom": "funkstation",
+   "rang": "waechter",
+   "hp": 92,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 4
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "buff",
+     "v": 3
+    },
+    {
+     "t": "atk",
+     "v": 16
+    }
+   ],
+   "gesehen": {
+    "t": "atk",
+    "v": 5,
+    "h": 4
+   },
+   "sprite": "empfaenger",
+   "varianten": [
+    "empfaenger"
+   ],
+   "konzept": "Das Gerät, auf dem 1912 das Signal zum ersten Mal kam. Es hat sich die Funker genommen, einen nach dem anderen, und ist mit ihnen gewachsen: ein Schrank aus Holz und Kupfer auf Beinen aus Kabel, mit Röhren auf dem Rücken, und wo der Lautsprecher war, spricht ein Mund. Er dreht am Knopf, und mit der Frequenz ändert sich, was ihn verletzt.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "wechsel",
+    "stoffe": [
+     "F",
+     "W",
+     "L",
+     "E"
+    ],
+    "why": "Er dreht am Knopf, und mit der Frequenz ändert sich, was ihn verletzt."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "funker",
+    "alle": 3
+   },
+   "beute": "detektor",
+   "beute_satz": "Das Signal bricht ab. Im Rauschen sagt jemand noch ein Wort, und es ist dein Vorname.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "antennendraht": {
+   "n": "Antennendraht",
+   "a": "kleidung",
+   "st": [
+    "E",
+    "L"
+   ],
+   "spr": "collar",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "reaktion_schaden",
+    "v": 2,
+    "t": "Jede Reaktion macht 2 Schaden."
+   },
+   "flavor": "Kupferlitze, um den Hals gelegt. Man hört darin ein leises Ticken, wie Morsezeichen, sehr weit weg.",
+   "cards": [
+    {
+     "n": "Überspringen",
+     "c": 1,
+     "atk": 3,
+     "h": 2
+    }
+   ],
+   "entwurf": true
+  },
+  "detektor": {
+   "n": "Kristalldetektor",
+   "a": "talisman",
+   "st": [
+    "L",
+    "E"
+   ],
+   "spr": "shell",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "energie_bleibt",
+    "v": 1,
+    "t": "Bis zu 1 übrige Energie bleibt für den nächsten Zug."
+   },
+   "flavor": "Ein Bleiglanzkristall mit Katzenhaar-Draht. Wer die richtige Stelle findet, hört die Station am Pol.",
+   "cards": [
+    {
+     "n": "Frequenz suchen",
+     "c": 1,
+     "blk": 4,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

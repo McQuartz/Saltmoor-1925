@@ -1,0 +1,87 @@
+{
+ "id": "mond_neu",
+ "ergaenzt": "mond",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "mondsuechtige"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "nachthaube"
+ ],
+ "foes": {
+  "mondsuechtige": {
+   "n": "Die Mondsüchtige",
+   "biom": "mond",
+   "rang": "elite",
+   "hp": 86,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 12
+    }
+   ],
+   "sprite": "mondsuechtige",
+   "konzept": "Die Frau des Gehilfen, die 1890 jede Vollmondnacht aus dem Haus ging und eines Nachts nicht mehr zurückkam. Sie ist im Nachthemd bis hierher gelaufen, die Arme vorgestreckt, die Augen zu. Der kleine Mond zieht an ihr: Sie schwebt über dem Staub, Haar und Saum steigen nach oben.",
+   "stimme": "eisgesicht",
+   "kniff": {
+    "art": "voraus",
+    "why": "Sie träumt schon, was du als Nächstes tust, und tut es vor dir."
+   },
+   "kniffe": [
+    {
+     "art": "teurer",
+     "v": 1,
+     "why": "In ihrer Nähe ist jede Bewegung schwer wie im Traum."
+    }
+   ],
+   "beute": "nachthaube",
+   "beute_satz": "Sie liegt im Staub und schläft endlich richtig. Ihre Hände zeigen noch nach oben.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "nachthaube": {
+   "n": "Nachthaube",
+   "a": "kleidung",
+   "st": [
+    "L",
+    "G"
+   ],
+   "spr": "veil",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "erste_karte_billiger",
+    "t": "Die erste Karte im Kampf kostet 0."
+   },
+   "flavor": "Leinen mit Spitze. Wer sie trägt, träumt vom Mond, und morgens sind die Füße staubig.",
+   "cards": [
+    {
+     "n": "Im Schlaf gehen",
+     "c": 1,
+     "blk": 5,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,93 @@
+{
+ "id": "gezeitenwerk_neu",
+ "ergaenzt": "gezeitenwerk",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "schleusenwaerter"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "schleusenschluessel"
+ ],
+ "foes": {
+  "schleusenwaerter": {
+   "n": "Der Schleusenwärter",
+   "biom": "gezeitenwerk",
+   "rang": "elite",
+   "hp": 94,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 12
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 7,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "schleusenwaerter",
+   "konzept": "Jemand musste die Schützen ziehen, als das Werk noch lief, und das Werk hat ihn dafür gebaut. Ein gebeugter Leib zwischen zwei Pfosten; wo die Beine wären, hebt sich das Schütz und lässt Wasser durch. Statt des Kopfes das Handrad aus Bronze, in der Nabe die Augen. Er dreht sich selbst auf und zu.",
+   "stimme": "lotse",
+   "kniff": {
+    "art": "wechsel",
+    "stoffe": [
+     "W",
+     "S",
+     "E"
+    ],
+    "why": "Je nachdem, wie weit er sich aufgedreht hat, ist er gegen anderes schwach."
+   },
+   "kniffe": [
+    {
+     "art": "heiler",
+     "v": 4,
+     "why": "Was durch das Schütz läuft, ölt die anderen."
+    }
+   ],
+   "beute": "schleusenschluessel",
+   "beute_satz": "Das Rad dreht sich noch eine halbe Umdrehung allein weiter. Dann steht das Wasser.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "schleusenschluessel": {
+   "n": "Schleusenschlüssel",
+   "a": "waffe",
+   "st": [
+    "E",
+    "W"
+   ],
+   "spr": "anchorchain",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "energie_bleibt",
+    "v": 1,
+    "t": "1 nicht genutzte Energie bleibt bis zum nächsten Zug."
+   },
+   "flavor": "Ein Vierkant aus Bronze, für eine Welle, die keine Hand drehen kann.",
+   "cards": [
+    {
+     "n": "Aufdrehen",
+     "c": 1,
+     "atk": 6,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

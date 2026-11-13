@@ -1,0 +1,83 @@
+{
+ "id": "kloster_neu",
+ "ergaenzt": "kloster",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "buchbinderin"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "falzbein"
+ ],
+ "foes": {
+  "buchbinderin": {
+   "n": "Die Buchbinderin",
+   "biom": "kloster",
+   "rang": "elite",
+   "hp": 86,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 6,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "buff",
+     "v": 2
+    }
+   ],
+   "sprite": "buchbinderin",
+   "konzept": "Schwester Agathe bindet ein, was der Armarius abschreibt. Die fertigen Bände trägt sie mit Hanfschnur auf dem Rücken, ein Turm, höher als sie selbst, der sich über ihren Kopf neigt; oben brennt eine Kerze auf dem letzten Band. Ihre Hände stecken in der Buchpresse, unter der Haube zwei Lesesteine.",
+   "stimme": "mumie",
+   "kniff": {
+    "art": "waechst",
+    "v": 1,
+    "why": "Jeden Zug bindet sie einen Band mehr. Der Turm wird schwerer, und sie mit ihm."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Sie legt Bände wie Bretter vor die anderen."
+    }
+   ],
+   "beute": "falzbein",
+   "beute_satz": "Der Turm steht noch, ohne sie. Die Kerze oben ist nicht ausgegangen.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "falzbein": {
+   "n": "Falzbein",
+   "a": "waffe",
+   "st": [
+    "G"
+   ],
+   "spr": "bone",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 28,
+   "flavor": "Ein Knochen, glatt gerieben von zehntausend Bögen. Wessen Knochen, steht in keinem der Bücher.",
+   "cards": [
+    {
+     "n": "Falzen",
+     "c": 1,
+     "atk": 6,
+     "weak": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

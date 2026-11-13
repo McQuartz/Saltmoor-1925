@@ -1,0 +1,88 @@
+{
+ "id": "hafen_neu",
+ "ergaenzt": "hafen",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "hafenmeister"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "pegellatte"
+ ],
+ "foes": {
+  "hafenmeister": {
+   "n": "Der Hafenmeister",
+   "biom": "hafen",
+   "rang": "elite",
+   "hp": 76,
+   "weak": "S",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "buff",
+     "v": 2
+    }
+   ],
+   "sprite": "hafenmeister",
+   "konzept": "Er schreibt seit 1919 den Pegel an, jede Stunde, auch nachts, auch jetzt. Ein breiter Mann im Überzieher, die Mütze tief im Gesicht, in der Faust die Pegellatte, höher als er. An der Marke, wo das Wasser steht, glimmt sie, und das Wasser steht an ihm schon bis zum Knie.",
+   "stimme": "lotse",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 3,
+    "v": 16,
+    "why": "Er liest am Pegel ab, wann die Flut kommt. Bei der Marke kommt sie."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": [
+      "tiefling",
+      "schmuggler"
+     ],
+     "alle": 3,
+     "why": "Er pfeift, und vom Kai kommt jemand herauf."
+    }
+   ],
+   "beute": "pegellatte",
+   "beute_satz": "Die Latte steht noch im Schlick. Die Marke glimmt weiter, eine Kerbe höher als vorhin.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "pegellatte": {
+   "n": "Pegellatte",
+   "a": "waffe",
+   "st": [
+    "W"
+   ],
+   "spr": "boathook",
+   "rar": "gewoehnlich",
+   "kerben": 1,
+   "preis": 28,
+   "flavor": "Jede Kerbe ein Fuß. Die oberste hat jemand nachträglich eingeschnitten.",
+   "cards": [
+    {
+     "n": "Ausloten",
+     "c": 1,
+     "atk": 5,
+     "blk": 4
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

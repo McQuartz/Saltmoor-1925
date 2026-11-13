@@ -1,0 +1,130 @@
+{
+ "id": "kurhaus_neu3",
+ "ergaenzt": "kurhaus",
+ "gegner_dazu": [
+  "inhalierende"
+ ],
+ "elite_dazu": [
+  "masseurin"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "massageoel"
+ ],
+ "foes": {
+  "inhalierende": {
+   "n": "Die Inhalierende",
+   "biom": "kurhaus",
+   "rang": "normal",
+   "hp": 18,
+   "weak": "E",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 5
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 2
+    }
+   ],
+   "sprite": "inhalierende_a",
+   "varianten": [
+    "inhalierende_a",
+    "inhalierende_b"
+   ],
+   "konzept": "Ein Kurgast im Bademantel, der Kopf unter einem Handtuch über der Dampfschale, seit 1913. Sie atmet ein und atmet nie aus. Was in der Schale kocht, riecht nach Eukalyptus und nach etwas Tieferem, und sie gibt den anderen davon.",
+   "stimme": "opfernde",
+   "kniff": {
+    "art": "heiler",
+    "v": 2,
+    "why": "Sie hält den anderen die Schale unter die Nase, und es geht ihnen besser."
+   },
+   "beute": "bottle",
+   "beute_satz": "Die Schale dampft weiter. Unter dem Handtuch ist das Gesicht ganz weich geworden.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "masseurin": {
+   "n": "Die Masseurin",
+   "biom": "kurhaus",
+   "rang": "elite",
+   "hp": 64,
+   "weak": "G",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 10
+    }
+   ],
+   "sprite": "masseurin",
+   "konzept": "Sie hat im Kurhaus die Gäste geknetet, bis ihre Hände mehr wurden. Jetzt hat sie acht, und jede ist warm und fest. Eine runde Frau in weißer Schürze und Haube, die Arme fächern hinter ihr auf wie bei einem Heiligenbild.",
+   "stimme": "opfernde",
+   "kniff": {
+    "art": "dornen",
+    "v": 2,
+    "why": "Wer sie anfasst, wird angefasst."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 2,
+     "why": "Ein paar Hände greifen immer nach den anderen und halten sie fest."
+    }
+   ],
+   "beute": "massageoel",
+   "beute_satz": "Die Hände sinken eine nach der anderen. Die letzte klopft dir noch auf die Schulter.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "massageoel": {
+   "n": "Massageöl",
+   "a": "talisman",
+   "st": [
+    "G",
+    "W"
+   ],
+   "spr": "bottle",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 42,
+   "eigen": {
+    "typ": "reaktion_heil",
+    "v": 2,
+    "t": "Jede Reaktion heilt 2."
+   },
+   "flavor": "Kampfer und etwas Süßes. Es macht die Haut warm und die Glieder schwer.",
+   "cards": [
+    {
+     "n": "Durchkneten",
+     "c": 1,
+     "atk": 2,
+     "h": 3
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

@@ -1,0 +1,208 @@
+{
+ "id": "glockengiesserei_neu4",
+ "ergaenzt": "glockengiesserei",
+ "gegner_dazu": [
+  "sprungkloeppel"
+ ],
+ "elite_dazu": [
+  "seiler"
+ ],
+ "waechter_dazu": [
+  "gussform"
+ ],
+ "fundpool_dazu": [
+  "glockenseil"
+ ],
+ "foes": {
+  "sprungkloeppel": {
+   "n": "Der Klöppel",
+   "biom": "glockengiesserei",
+   "rang": "normal",
+   "hp": 26,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 6
+    },
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 7
+    }
+   ],
+   "sprite": "sprungkloeppel_a",
+   "varianten": [
+    "sprungkloeppel_a",
+    "sprungkloeppel_b"
+   ],
+   "konzept": "Der Klöppel der großen Glocke, die 1641 gesprungen ist. Er ist herausgefallen und hat sich auf den Weg gemacht, um eine neue Glocke zu finden: ein schwerer Bronzetropfen auf zwei dünnen Beinen, der Kopf ist die Kugel. Er holt zweimal aus, dann schlägt er an.",
+   "stimme": "glockenmutter",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 12,
+    "why": "Er holt zweimal aus, dann schlägt er an."
+   },
+   "beute": null,
+   "beute_satz": "Er rollt aus und bleibt liegen. Er hat keine Glocke gefunden, aber er klingt noch, ganz leise.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "seiler": {
+   "n": "Der Glockenseiler",
+   "biom": "glockengiesserei",
+   "rang": "elite",
+   "hp": 78,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 8
+    },
+    {
+     "t": "blk",
+     "v": 9
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 3
+    },
+    {
+     "t": "atk",
+     "v": 11
+    }
+   ],
+   "sprite": "seiler",
+   "konzept": "Er hat die Seile für die Glocken geschlagen, und für die große hat er eines geschlagen, das nie fertig wurde. Er schlägt es weiter, aus dem eigenen Haar und den eigenen Sehnen, und das Seil wickelt sich um alles, was ihm nahe kommt. Ein langer, dünner Mann, rückwärts gehend, vor ihm das Seilrad.",
+   "stimme": "netzflickerin",
+   "kniff": {
+    "art": "einfrieren",
+    "why": "Das Seil wickelt sich um deine Hand, und eine Karte bleibt diesen Zug liegen."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Er schlägt das Seil weiter, und es wird mit jedem Zug länger."
+    }
+   ],
+   "beute": "glockenseil",
+   "beute_satz": "Das Seilrad dreht aus. Das Seil ist immer noch nicht fertig, aber es reicht jetzt bis zu dir.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "gussform": {
+   "n": "Die Gussform",
+   "biom": "glockengiesserei",
+   "rang": "waechter",
+   "hp": 80,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 3
+    }
+   ],
+   "gesehen": {
+    "t": "blk",
+    "v": 18
+   },
+   "sprite": "gussform",
+   "varianten": [
+    "gussform"
+   ],
+   "konzept": "Die Form für die große Glocke von 1641, die nie gegossen wurde, weil der Meister in die Grube fiel. Sie hat ihn behalten. Ein Mantel aus Lehm, glockenförmig, mit Eisenreifen, steht in der Grube auf vier kurzen Beinen, und durch den Einguss oben schaut er heraus. Er zählt die Züge bis zum Guss.",
+   "stimme": "grabwaechter",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 3,
+    "v": 24,
+    "why": "Er zählt die Züge bis zum Guss. Bei drei läuft die Bronze ein."
+   },
+   "besonders": {
+    "art": "ruft",
+    "gegner": "giesser",
+    "alle": 3
+   },
+   "beute": "eingusstrichter",
+   "beute_satz": "Der Lehm springt in Platten ab. Drinnen ist keine Glocke, nur der Meister, und er nickt dir zu.",
+   "quelle": "skript",
+   "art": "tiefe",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "glockenseil": {
+   "n": "Unfertiges Glockenseil",
+   "a": "kleidung",
+   "st": [
+    "B",
+    "E"
+   ],
+   "spr": "collar",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "behalten_eine",
+    "t": "Am Zugende darfst du 1 Handkarte behalten."
+   },
+   "flavor": "Ein Seil aus Hanf und etwas Hellerem. Es hat kein Ende, nur einen Anfang.",
+   "cards": [
+    {
+     "n": "Zuschnüren",
+     "c": 1,
+     "atk": 4,
+     "weak": 2
+    }
+   ],
+   "entwurf": true
+  },
+  "eingusstrichter": {
+   "n": "Eingusstrichter",
+   "a": "waffe",
+   "st": [
+    "F",
+    "E"
+   ],
+   "spr": "pan",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "start_staerke",
+    "v": 1,
+    "t": "Zu Kampfbeginn 1 Stärke."
+   },
+   "flavor": "Gebrannter Lehm mit Eisenrand. Er riecht nach heißer Bronze, auch wenn seit 1641 nichts mehr hindurchgelaufen ist.",
+   "cards": [
+    {
+     "n": "Bronze läuft über",
+     "c": 2,
+     "atk": 7,
+     "all": true
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

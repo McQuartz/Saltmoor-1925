@@ -1,0 +1,49 @@
+{
+ "id": "buecherwand",
+ "rang": "waechter",
+ "w": 160,
+ "h": 180,
+ "zone": "kloster",
+ "anim": {
+  "idle": {
+   "zeile": 0,
+   "n": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "angriff": {
+   "zeile": 1,
+   "n": 4,
+   "fps": 10
+  },
+  "treffer": {
+   "zeile": 2,
+   "n": 2,
+   "fps": 12
+  },
+  "tod": {
+   "zeile": 3,
+   "n": 6,
+   "fps": 8
+  }
+ },
+ "fuss": [
+  80,
+  176
+ ],
+ "kopf": [
+  80,
+  30
+ ],
+ "augen": [
+  [
+   74,
+   76
+  ],
+  [
+   84,
+   76
+  ]
+ ],
+ "augenfarbe": "#e6aa4a"
+}

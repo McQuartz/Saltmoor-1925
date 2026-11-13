@@ -1,0 +1,89 @@
+{
+ "id": "eis_neu",
+ "ergaenzt": "eis",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "gespann"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "hundegeschirr"
+ ],
+ "foes": {
+  "gespann": {
+   "n": "Das Gespann",
+   "biom": "eis",
+   "rang": "elite",
+   "hp": 88,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 5,
+     "h": 2
+    },
+    {
+     "t": "blk",
+     "v": 12
+    },
+    {
+     "t": "atk",
+     "v": 13
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    }
+   ],
+   "sprite": "gespann",
+   "konzept": "Die Hunde der Expedition von 1903 sind weitergelaufen, als der Führer nicht mehr rief, und irgendwann zusammengewachsen: ein langer Leib mit zu vielen Beinen, vorn drei Köpfe im Geschirr. Hinten auf den Kufen steht noch der Schlittenführer, die Peitsche erhoben, mit Reif statt Gesicht.",
+   "stimme": "nachgeher",
+   "kniff": {
+    "art": "loeschen",
+    "why": "Sie wälzen sich im Schnee, bis nichts mehr brennt."
+   },
+   "kniffe": [
+    {
+     "art": "waechst",
+     "v": 1,
+     "why": "Der Führer treibt sie an, und mit jedem Zug laufen sie schneller."
+    }
+   ],
+   "beute": "hundegeschirr",
+   "beute_satz": "Die Köpfe liegen still im Geschirr. Der Führer steht noch auf den Kufen und wartet.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "hundegeschirr": {
+   "n": "Hundegeschirr",
+   "a": "kleidung",
+   "st": [
+    "B",
+    "E"
+   ],
+   "spr": "collar",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 44,
+   "eigen": {
+    "typ": "mehrfach_plus1",
+    "t": "Mehrfachtreffer treffen einmal mehr."
+   },
+   "flavor": "Leder und Messing, für drei Hälse auf einem Riemen.",
+   "cards": [
+    {
+     "n": "Anspringen",
+     "c": 1,
+     "atk": 3,
+     "h": 2,
+     "str": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

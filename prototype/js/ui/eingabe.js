@@ -69,6 +69,8 @@ function aktion(k,el){switch(k){
  case'fortsetzen':loadRun();render();break;case'rastHeil':rastHeal();break;case'fund':takeFund();break;
  case'skipstrike':skipStrike();break;case'kstrike0':kraemerStrike(null);break;
  case'buch':zeigeOverlay(buchHtml());break;case'tagebuch':zeigeOverlay(tagebuchHtml());break;case'einst':zeigeOverlay(einstHtml());break;case'zu':closeOv();break;
+ case'menue':if($('overlay').classList.contains('an'))closeOv();else{if(typeof KOE!=='undefined'&&KOE)rucksackZu();karteZu();zeigeOverlay(menueHtml());}break;
+ case'vollbild':vollbildUmschalten();break;case'menueTitel':closeOv();if(typeof KOE!=='undefined'&&KOE)rucksackZu();karteZu();S={phase:'titel'};render();break;
  case'erbeNehmen':Metaebene.erbeWahl(true);render();break;case'erbeLassen':Metaebene.erbeWahl(false);render();break;case'briefNehmen':Wuerze.briefNehmen(true);render();break;case'briefLassen':Wuerze.briefNehmen(false);render();break;case'fehlzeitJa':Metaebene.fehlzeitWahl(true);render();break;case'fehlzeitNein':Metaebene.fehlzeitWahl(false);render();break; // M10
  case'gleicherSeed':{const sd=S.seed,jb=S.job;newRun(jb,sd,{});render();break;}
  case'bildSpeichern':endbildSpeichern();break;
@@ -81,13 +83,15 @@ function aktion(k,el){switch(k){
  case'devToggle':if(typeof Dev!=='undefined')Dev.toggle();break;}}
 function starteRun(job){const st=S.wahlStufe||0;const q=new URLSearchParams(location.search);const seed=q.get('seed')!=null&&!S.seedUsed?+q.get('seed'):neuerSeed();
  const start=S.wahlStart||null;newRun(job,seed,{dev:typeof Dev!=='undefined'&&Dev.cheat,stufe:st,start});Meta.get().stufe=st;Meta.save();render();}
-document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
- if(e.key==='Escape'){if(KOE){rucksackZu();return;}S.sel=null;karteZu();closeOv();render();}
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'&&e.key!=='Escape')return;
+ // Esc schließt, was offen ist; ist nichts offen, öffnet es das Menü (2026-11-11)
+ if(e.key==='Escape'){if(KOE){rucksackZu();return;}const offen=$('overlay').classList.contains('an')||KARTE_AUF||S.sel!=null;S.sel=null;karteZu();closeOv();if(!offen&&S.phase!=='titel')zeigeOverlay(menueHtml());render();}
+ if((e.key==='f'||e.key==='F')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.repeat)vollbildUmschalten();
  if((e.key==='m'||e.key==='M')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.repeat)karteUmschalten();
  if(e.key==='d'||e.key==='D'){if(typeof Dev!=='undefined')Dev.toggle();}
  if((e.key==='r'||e.key==='R')&&!e.ctrlKey&&!e.metaKey&&!e.repeat&&S.route&&(canEquip()||S.phase==='fight')){if(KOE)rucksackZu();else rucksackAuf();}
  if(S.phase==='fight'&&!busy){if(e.key===' '||e.key==='e'){e.preventDefault();endTurn();}const n=+e.key;if(n>=1&&n<=9)playCard(n-1);}
- if(S.phase==='uebergang'&&!['Shift','Control','Alt','Meta','d','D'].includes(e.key))leaveUebergang();});
+ if(S.phase==='uebergang'&&!['Shift','Control','Alt','Meta','d','D','Escape','f','F'].includes(e.key))leaveUebergang();});
 // Tooltips
 function showTip(h,x,y){const tip=$('tip');tip.innerHTML=h;tip.style.display='block';if(tip.querySelector('.karte')&&typeof kartenEinpassen==='function')kartenEinpassen();const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
 function hideTip(){$('tip').style.display='none';}

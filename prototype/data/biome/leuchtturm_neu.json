@@ -1,0 +1,138 @@
+{
+ "id": "leuchtturm_neu",
+ "ergaenzt": "leuchtturm",
+ "gegner_dazu": [
+  "oeltraeger"
+ ],
+ "elite_dazu": [
+  "inspektor"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "pruefbuch"
+ ],
+ "foes": {
+  "oeltraeger": {
+   "n": "Der Ölträger",
+   "biom": "leuchtturm",
+   "rang": "normal",
+   "hp": 27,
+   "weak": "F",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 6
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 2
+    },
+    {
+     "t": "atk",
+     "v": 9
+    }
+   ],
+   "sprite": "oeltraeger_a",
+   "varianten": [
+    "oeltraeger_a",
+    "oeltraeger_b"
+   ],
+   "konzept": "Der zweite Hilfswärter trug jeden Abend zwei Kannen Petroleum die 212 Stufen hinauf. Er steigt immer noch, auch auf ebenem Hof: Sein Rücken hat die Windung der Treppe angenommen, der Kopf hängt unter dem Buckel, und in den Kannen brennt das Öl ohne Docht.",
+   "stimme": "salzlaeufer",
+   "kniff": {
+    "art": "ansage",
+    "zuege": 2,
+    "v": 14,
+    "why": "Er zählt die Stufen mit. Bei der letzten gießt er aus."
+   },
+   "beute": "lantern",
+   "beute_satz": "Die Kannen sind leer. Er hat sie trotzdem bis oben getragen.",
+   "quelle": "skript",
+   "entwurf": true
+  },
+  "inspektor": {
+   "n": "Der Feuerinspektor",
+   "biom": "leuchtturm",
+   "rang": "elite",
+   "hp": 88,
+   "weak": "W",
+   "pat": [
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 11
+    },
+    {
+     "t": "atk",
+     "v": 4,
+     "h": 3
+    },
+    {
+     "t": "buff",
+     "v": 2
+    },
+    {
+     "t": "atk",
+     "v": 14
+    }
+   ],
+   "sprite": "inspektor",
+   "konzept": "Der Inspektor vom Wasserbauamt kam im März 1918, um nachzusehen, warum das Feuer nach innen leuchtet. Er hat den Turm abgenommen. Statt des Kopfes trägt er einen Lampenzylinder auf dem Kragen, die Flamme darin hat zwei helle Punkte, und im Prüfbuch steht unter jedem Datum dasselbe Wort: ordnungsgemäß.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "schuetzer",
+    "v": 4,
+    "why": "Er nimmt die Wärter ab. Wer abgenommen ist, steht unter seinem Schutz."
+   },
+   "kniffe": [
+    {
+     "art": "ruf",
+     "gegner": [
+      "oeltraeger",
+      "lampenputzer",
+      "fensterzaehlerin"
+     ],
+     "alle": 3,
+     "why": "Er ruft das Personal zur Besichtigung, einen nach dem anderen."
+    }
+   ],
+   "beute": "pruefbuch",
+   "beute_satz": "Das Glas ist leer. Im Prüfbuch steht unter heute schon: ordnungsgemäß.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "pruefbuch": {
+   "n": "Prüfbuch",
+   "a": "talisman",
+   "st": [
+    "L"
+   ],
+   "spr": "bible",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 40,
+   "eigen": {
+    "typ": "reaktion_block",
+    "v": 3,
+    "t": "Jede Reaktion gibt 3 Block."
+   },
+   "flavor": "Dienstbuch des Wasserbauamts, Seite um Seite abgezeichnet. Die Unterschrift wird nach hinten hin gerader.",
+   "cards": [
+    {
+     "n": "Abzeichnen",
+     "c": 1,
+     "blk": 5,
+     "draw": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}

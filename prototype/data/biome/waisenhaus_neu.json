@@ -1,0 +1,88 @@
+{
+ "id": "waisenhaus_neu",
+ "ergaenzt": "waisenhaus",
+ "gegner_dazu": [],
+ "elite_dazu": [
+  "vormund"
+ ],
+ "gegner_weg": [],
+ "fundpool_dazu": [
+  "muendelakte"
+ ],
+ "foes": {
+  "vormund": {
+   "n": "Der Vormund",
+   "biom": "waisenhaus",
+   "rang": "elite",
+   "hp": 82,
+   "weak": "L",
+   "pat": [
+    {
+     "t": "atk",
+     "v": 10
+    },
+    {
+     "t": "blk",
+     "v": 10
+    },
+    {
+     "t": "atk",
+     "v": 3,
+     "h": 4
+    },
+    {
+     "t": "atk",
+     "v": 13
+    }
+   ],
+   "sprite": "vormund",
+   "konzept": "Der Amtsvormund kam nach der Sturmflut von 1913 und unterschrieb für alle Kinder auf einmal. Er hat sie alle bei sich: Der Gehrock steht vorne offen wie eine Tür, und wo sein Leib sein müsste, stehen sie in Reihen, klein und dicht. Man sieht nur ihre Augen.",
+   "stimme": "bote",
+   "kniff": {
+    "art": "teurer",
+    "v": 1,
+    "why": "Er verwaltet, was du in der Hand hast. Herausgeben kostet."
+   },
+   "kniffe": [
+    {
+     "art": "schuetzer",
+     "v": 3,
+     "why": "Er hält den Mantel vor seine Mündel."
+    }
+   ],
+   "beute": "muendelakte",
+   "beute_satz": "Der Mantel fällt leer zusammen. Die Augen darin sind schon woanders.",
+   "quelle": "skript",
+   "entwurf": true
+  }
+ },
+ "events": [],
+ "items": {
+  "muendelakte": {
+   "n": "Mündelakte",
+   "a": "talisman",
+   "st": [
+    "B"
+   ],
+   "spr": "bible",
+   "rar": "selten",
+   "kerben": 2,
+   "preis": 40,
+   "eigen": {
+    "typ": "gold_bonus",
+    "v": 6,
+    "t": "+6 Gold nach jedem Sieg."
+   },
+   "flavor": "Eine Akte für siebenundvierzig Kinder, ein Stempel, eine Unterschrift. Das Mündelgeld ist noch nicht ausgezahlt.",
+   "cards": [
+    {
+     "n": "Unterschreiben",
+     "c": 1,
+     "blk": 4,
+     "str": 1
+    }
+   ],
+   "entwurf": true
+  }
+ }
+}
