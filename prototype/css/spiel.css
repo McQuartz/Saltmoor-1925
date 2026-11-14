@@ -331,22 +331,12 @@ body[data-phase="titel"] #menueBtn{display:none}
 #kopf{right:calc(var(--u)*24)}
 .box.menue .menue{display:flex;flex-direction:column;gap:calc(var(--u)*4);align-items:center;margin-top:calc(var(--u)*4)}
 .box.menue .menue .hint{max-width:calc(var(--u)*170);text-align:center;margin:0}
-/* Mund-Sounds im Spiel aufnehmen (2026-11-13): drei Profile, Liste aller Effekte */
-.box.mundauf{width:calc(var(--u)*360);max-width:96vw}
-.mundauf .mprofile{display:flex;gap:calc(var(--u)*3);justify-content:center;margin:calc(var(--u)*2) 0}
-.mundauf .mprofile .an,.mundauf .rec.an{border-color:#fff3c8;color:#fff3c8;box-shadow:0 0 calc(var(--u)*4) rgba(224,192,128,.45)}
-.mundauf .mkopf{display:flex;flex-wrap:wrap;gap:calc(var(--u)*3) calc(var(--u)*8);align-items:center;justify-content:center;font-size:calc(var(--u)*5.2);margin:calc(var(--u)*2) 0}
-.mundauf .mkopf label{display:flex;gap:calc(var(--u)*2);align-items:center}
-.mundauf input[type=text]{background:#0b0907;border:1px solid var(--messing);color:#efe4c8;font:inherit;padding:calc(var(--u)*.8) calc(var(--u)*2);width:calc(var(--u)*50)}
-.mundauf .mpegel{position:relative;display:inline-block;width:calc(var(--u)*50);height:calc(var(--u)*3);background:#1a140c;border:1px solid #000;box-shadow:0 0 0 1px #4a3a20}
-.mundauf .mpegel i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3a8a50,#c8c050)}.mundauf .mpegel i.clip{background:#d0463e}
-.mundauf .mpegel em{position:absolute;top:calc(var(--u)*-1);bottom:calc(var(--u)*-1);width:2px;background:#fff3c8}
-.mundauf .hint.warn{color:#ff8a7a}
-.mundauf .mliste{text-align:left;max-height:calc(var(--u)*130);overflow:auto;scrollbar-width:thin;scrollbar-color:#4a3a20 #000;margin-bottom:calc(var(--u)*4)}
-.mundauf .mliste h3{margin:calc(var(--u)*4) 0 calc(var(--u)*1)}
-.mundauf .mzeile{display:flex;gap:calc(var(--u)*2);align-items:center;padding:calc(var(--u)*1.2) 0;border-bottom:1px solid #2a2014}
-.mundauf .mzeile.nimmt{background:rgba(208,70,62,.12)}
-.mundauf .mname{flex:1;display:flex;flex-direction:column;font-size:calc(var(--u)*5)}.mundauf .mname small{font-size:calc(var(--u)*3.6);color:#9a8a6a}
-.mundauf .mq{font-size:calc(var(--u)*3.6);letter-spacing:.08em;width:calc(var(--u)*30);text-align:center;color:#9a8a6a}.mundauf .mq.eigen{color:#7affc8}.mundauf .mq.datei{color:#d8c890}
-.mundauf .mzeile .deco.klein{padding:calc(var(--u)*1) calc(var(--u)*2.5);font-size:calc(var(--u)*3.6)}
-.mundauf .mzeile button[disabled]{opacity:.3;cursor:default}
+/* Wachswalze (2026-11-14): Aufnahme-Studio über dem Spiel */
+#wachswalze{position:fixed;inset:0;z-index:60;background:#050707}
+#wachswalze iframe{width:100%;height:100%;border:0;display:block}
+/* Menü (Spieltest 2026-11-14): Knöpfe gleich breit und größer */
+.box.menue .menue .deco{min-width:calc(var(--u)*110);font-size:calc(var(--u)*7)}
+.box.menue .menue .deco.klein{font-size:calc(var(--u)*6);padding:calc(var(--u)*3.5) calc(var(--u)*8)}
+.box.menue .menue .hint{font-size:calc(var(--u)*5.5)}
+/* Zusatz unten an der Karte (verstärkt, verbraucht …) besser lesbar (Spieltest 2026-11-14) */
+.karte .rx{font-size:calc(var(--u)*4.4);line-height:calc(var(--u)*6.5);letter-spacing:.06em;font-weight:700;background:#000;box-shadow:0 0 0 1px #000,0 calc(var(--u)*.8) calc(var(--u)*2) #000;text-shadow:none}

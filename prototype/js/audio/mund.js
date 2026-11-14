@@ -5,7 +5,7 @@
 // eine Aufnahme, spielt die Aufnahme (über denselben SFX-Bus mit Hall und Limiter), sonst das Original (oder Stille).
 // Eingebaut: audio/mund/<key>.wav (exportiert aus dem Studio). Standard ist an („Alpha-Sounds“); umschalten in den Einstellungen
 // (Sounds: Alpha / Standard), im Studio („Im Spiel benutzen“) oder mit index.html?mund=0 / ?mund=1.
-// Profile (2026-11-13): drei Mund-Profile, im Spiel aufnehmbar (js/audio/mund-aufnahme.js, Menü → Mund-Sounds).
+// Profile (2026-11-13): drei Mund-Profile, im Spiel aufnehmbar (js/audio/mund-aufnahme.js, Menü → Wachswalze).
 // Profil 1 benutzt dieselben Einträge wie das Studio (Schlüssel „hit“ …), Profil 2 und 3 eigene („p2/hit“, „p3/hit“).
 // Fehlt in einem Profil ein Sound, spielt die eingebaute Aufnahme (audio/mund/), sonst der generierte Klang.
 // Die Liste MUND_KATALOG ist die eine Stelle, an der steht, welche Sounds es gibt. Neue sfx-Funktion = neuer Eintrag hier.
@@ -146,6 +146,7 @@ const Mund=(()=>{
   geladen=m;musikTakes=mu;return m;}
  // Was spielt im aktuellen Profil für einen Sound? 'eigen' (im Profil aufgenommen), 'datei' (eingebaut) oder null (generiert)
  function quelle(key){const t=geladen[key];return t?(t.datei?'datei':'eigen'):null;}
+ async function neuLaden(){opt=null;return ladeGewaehlte();} // nach der Wachswalze: Optionen und Aufnahmen frisch lesen
  async function profilWaehlen(p){p=Math.max(1,Math.min(PROFILE,+p||1));setze('profil',p);setze('aktiv',true);await ladeGewaehlte();}
  function profilName(p){const l=optionen().profilNamen||STD.profilNamen;return l[p-1]||STD.profilNamen[p-1];}
  function profilBenennen(p,n){const l=(optionen().profilNamen||STD.profilNamen).slice();l[p-1]=String(n||'').trim().slice(0,24)||STD.profilNamen[p-1];setze('profilNamen',l);}
@@ -171,11 +172,11 @@ const Mund=(()=>{
  function einstHtml(){const a=optionen().aktiv;return `<label>Sounds<select data-mund><option value="alpha"${a?' selected':''}>Alpha (Mund-Aufnahmen)</option><option value="standard"${a?'':' selected'}>Standard (generiert)</option></select></label>`+profilHtml();}
  // Profilwahl und Weg zur Aufnahme im Spiel (mund-aufnahme.js)
  function profilHtml(){const p=optionen().profil||1;let h=`<label>Mund-Profil<select data-mundprofil>`;for(let i=1;i<=PROFILE;i++)h+=`<option value="${i}"${i===p?' selected':''}>${String(profilName(i)).replace(/[<&"]/g,c=>({'<':'&lt;','&':'&amp;','"':'&quot;'})[c])}</option>`;
-  return h+`</select></label>`+(typeof MundAufnahme!=='undefined'?`<button class="deco klein" data-mauf="auf">MUND-SOUNDS AUFNEHMEN</button>`:'');}
+  return h+`</select></label>`+(typeof MundAufnahme!=='undefined'?`<button class="deco klein" data-mauf="auf">WACHSWALZE: AUFNEHMEN</button>`:'');}
 
  // Spiel-Seite: ?mund=1 / ?mund=0 setzt den Schalter, dann umhüllen. Das Studio setzt window.MUND_STUDIO und umhüllt nicht.
  if(!window.MUND_STUDIO){try{const q=new URLSearchParams(location.search).get('mund');if(q==='1')setze('aktiv',true);if(q==='0')setze('aktiv',false);}catch(e){}
   installiere();}
 
- return {optionen,setze,ablage,spiele,einstHtml,ausschnitt,fenster,LAYER,MUSIK_BPM,MUSIK_TAKTE,musikKey,loopStarten,loopStoppen,ladeGewaehlte,installiere,profilKey,quelle,profilWaehlen,profilName,profilBenennen,PROFILE,mundSchluessel,KATALOG:MUND_KATALOG,get original(){return original;}};
+ return {optionen,setze,ablage,spiele,einstHtml,ausschnitt,fenster,LAYER,MUSIK_BPM,MUSIK_TAKTE,musikKey,loopStarten,loopStoppen,ladeGewaehlte,neuLaden,installiere,profilKey,quelle,profilWaehlen,profilName,profilBenennen,PROFILE,mundSchluessel,KATALOG:MUND_KATALOG,get original(){return original;}};
 })();

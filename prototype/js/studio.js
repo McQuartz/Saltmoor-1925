@@ -213,12 +213,12 @@ async function musikAufnahmeEnde(){
  t.id=await A.neuerTake(t);await aufDiePlatte(t,true);await lade();zeichne();
  status(`✓ gespeichert (${Mund.MUSIK_TAKTE} Takte)${z.clip?' · ACHTUNG: übersteuert':''} · mit „Zusammen“ prüfen, ob es auf dem Takt sitzt`,z.clip);}
 function setzeModus(m){if(aufn)abbruch();musikStopp();ST.modus=m;
- if(m==='musik'){K=musikKatalog(ST.biom);ST.sel=Math.min(ST.selM||0,K.length-1);}else{K=MUND_KATALOG;ST.sel=Math.min(ST.selE||0,K.length-1);}
+ if(m==='musik'){K=musikKatalog(ST.biom);ST.sel=Math.min(ST.selM||0,K.length-1);}else{K=effKatalog();ST.sel=Math.min(ST.selE||0,K.length-1);}
  merke();zeichne();}
 
 // ---------- Ordner und Dateien ----------
 let ordner=null;
-const datei=k=>k.replace(/:/g,'_'); // Doppelpunkte gehen unter Windows nicht
+const datei=k=>k.replace(/[:/]/g,'_'); // Doppelpunkte und Schrägstriche (Profile p2/…) gehen nicht in Dateinamen
 const dateiName=t=>`${datei(t.key)}.wav`;
 function wav(pcm,sr){const n=pcm.length,b=new ArrayBuffer(44+n*2),v=new DataView(b);let o=0;
  const s=t=>{for(let i=0;i<t.length;i++)v.setUint8(o++,t.charCodeAt(i));},u32=x=>{v.setUint32(o,x,true);o+=4;},u16=x=>{v.setUint16(o,x,true);o+=2;};
@@ -358,6 +358,7 @@ $('streuung').onchange=e=>Mund.setze('streuung',+e.target.value);
 $('spiel').onclick=()=>{Mund.setze('aktiv',true);$('mundAn').checked=true;window.open('index.html?mund=1','_blank');};
 document.addEventListener('keyup',ev=>{if(ev.key===' '&&ev.target.closest('button'))ev.preventDefault();});
 document.addEventListener('keydown',ev=>{const k=ev.key;
+ if(ev.target.matches('input[type=text]'))return; // Profilname tippen
  if(ev.target.closest('select'))return;if(ev.target.matches('input[type=range]')&&k.startsWith('Arrow'))return;
  if(k===' '&&ev.target.closest('button,input'))ev.target.blur(); // sonst „klickt“ die Leertaste zusätzlich den fokussierten Knopf
  if(k===' '){ev.preventDefault();aufnahme();}
@@ -382,6 +383,24 @@ if(navigator.mediaDevices)navigator.mediaDevices.addEventListener('devicechange'
   $('biom').innerHTML=AUDIO.biome.filter(b=>Music.BIOME[b.id]).map(b=>`<option value="${b.id}">${b.n} (${b.key})</option>`).join('');$('biom').value=ST.biom;
   if(!$('biom').value){ST.biom=$('biom').options[0].value;$('biom').value=ST.biom;}}
  catch(x){AUDIO=null;$('mMus').disabled=true;console.warn('data/audio.json fehlt',x);}
- if(ST.modus==='musik'&&AUDIO)K=musikKatalog(ST.biom);else{ST.modus='effekte';K=MUND_KATALOG;}ST.sel=Math.min(ST.sel,K.length-1);
+ for(const k of Object.keys(ORIG))for(let p=2;p<=Mund.PROFILE;p++)ORIG[Mund.profilKey(k,p)]=ORIG[k];
+ if(ST.modus==='musik'&&AUDIO)K=musikKatalog(ST.biom);else{ST.modus='effekte';K=effKatalog();}profileZeigen();ST.sel=Math.min(ST.sel,K.length-1);
  await lade();await ordnerPruefen();zeichne();
 })();
+
+// ---------- Profile (2026-11-14) ----------
+// Drei Mund-Profile. Profil 1 = die bisherigen Schlüssel („hit“), Profil 2/3 = „p2/hit“ … (Mund.profilKey). Gilt für die Effekte;
+// Musik-Loops sind für alle Profile dieselben. Das Spiel spielt das hier gewählte Profil.
+function effKatalog(){const p=Mund.optionen().profil||1;return p>1?MUND_KATALOG.map(e=>Object.assign({},e,{key:Mund.profilKey(e.key,p),basis:e.key})):MUND_KATALOG;}
+function profileZeigen(){const z=$('profile');if(!z)return;const p=Mund.optionen().profil||1;let h='<span class="hinweis">Profil</span>';
+ for(let i=1;i<=Mund.PROFILE;i++)h+=`<button class="sm${i===p?' on':''}" data-profil="${i}">${Mund.profilName(i).replace(/[<&]/g,c=>c==='<'?'&lt;':'&amp;')}</button>`;
+ h+=`<label>Name <input type="text" id="profilName" maxlength="24" value="${Mund.profilName(p).replace(/[<&"]/g,c=>({'<':'&lt;','&':'&amp;','"':'&quot;'})[c])}"></label>`;
+ z.innerHTML=h;
+ z.querySelectorAll('[data-profil]').forEach(b=>b.onclick=async()=>{if(aufn)abbruch();await Mund.profilWaehlen(b.dataset.profil);$('mundAn').checked=true;
+  if(ST.modus!=='musik'){K=effKatalog();}profileZeigen();zeichne();status('Profil „'+Mund.profilName(+b.dataset.profil)+'“');});
+ $('profilName').onchange=e=>{Mund.profilBenennen(p,e.target.value);profileZeigen();};}
+// Eingebettet im Spiel (Menü → Wachswalze): Zurück-Knopf, Esc schließt, kein „Spiel öffnen“
+if(new URLSearchParams(location.search).get('eingebettet')){document.documentElement.classList.add('eingebettet');
+ const zurueck=()=>{try{if(aufn)abbruch();musikStopp();mikroAus();}catch(e){}try{parent.MundAufnahme.zu();}catch(e){}};
+ $('zurueck').onclick=zurueck;
+ document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&!ev.target.closest('input[type=text]')){ev.preventDefault();zurueck();}},true);}

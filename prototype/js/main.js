@@ -10,7 +10,7 @@
 // Ist das Dev-Menü offen, nimmt es rechts seinen Platz ein und das Spiel füllt nur den Rest (Spieltest 2026-11-09).
 // Die Höhe wird gemessen: ohne Leiste (Titel, Figurwahl) ist #spiel nur die Szene hoch und füllt das Fenster trotzdem.
 function skala(){const dv=document.body.classList.contains('dev')&&document.getElementById('dev');const W=innerWidth-(dv?dv.offsetWidth:0),H=innerHeight;const k=Math.max(1,Math.min(Math.floor(W/480),Math.floor(H/(270+92))))||1;BU.k=Math.max(2,k);document.documentElement.style.setProperty('--u',BU.k+'px');
- const sp=document.getElementById('spiel'),w=480*BU.k,h=sp.offsetHeight||362*BU.k;const s=Math.min(W/w,H/h);BU.s=s;sp.style.transform=`translate(${Math.round((W-w*s)/2)}px,${Math.round((H-h*s)/2)}px) scale(${s})`;}
+ const sp=document.getElementById('spiel'),w=480*BU.k,h=sp.offsetHeight||362*BU.k;const s=Math.min(W/w,H/h);BU.s=s;{const ov=document.getElementById('overlay');if(ov)ov.style.setProperty('--u',(BU.k*s).toFixed(3)+'px');} /* Überlagerungen (Menü, Einstellungen …) liegen außerhalb von #spiel: gleiche Größe wie die skalierte Szene */sp.style.transform=`translate(${Math.round((W-w*s)/2)}px,${Math.round((H-h*s)/2)}px) scale(${s})`;}
 (async()=>{
  try{await loadData();}catch(err){document.body.insertAdjacentHTML('afterbegin',`<div style="padding:20px;color:#ff8a7a;font:16px monospace">Daten konnten nicht geladen werden (${err.message}).<br>Bitte über einen lokalen Server öffnen: cd prototype && python3 -m http.server 8000</div>`);return;}
  await paketeEinbinden();
