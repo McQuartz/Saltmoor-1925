@@ -49,14 +49,24 @@ button.on{border-color:var(--gold);color:var(--gold)}
 .hinweis{font-size:17px;color:var(--dim)}
 .warn{color:#ff8a7a}
 [hidden]{display:none!important}
+/* Profile und eingebettet im Spiel (Menü → Wachswalze, 2026-11-14) */
+#profile input[type=text]{font-family:var(--fb);font-size:18px;background:#111716;color:var(--txt);border:2px solid #2e3a35;padding:2px 6px;width:180px}
+#zurueck,.nurSpiel{display:none}
+html.eingebettet #zurueck{display:inline-block;float:right;font-size:10px;padding:10px 14px;border-color:var(--gold);color:var(--gold)}
+html.eingebettet .nurSpiel{display:inline}html.eingebettet .nurStudio{display:none}
+html.eingebettet #st{max-width:1500px}
+@media(min-width:1500px) and (min-height:850px){html.eingebettet{zoom:1.25}}
+@media(min-width:2200px) and (min-height:1200px){html.eingebettet{zoom:1.6}}
 </style>
 </head>
 <body>
 <div id="st">
- <h1>Aufnahme-Studio</h1>
+ <button id="zurueck" class="sm">ZURÜCK INS SPIEL (Esc)</button>
+ <h1><span class="nurStudio">Aufnahme-Studio</span><span class="nurSpiel">Wachswalze</span></h1>
  <p>Alle Soundeffekte des Spiels. Links aussuchen, rechts Original anhören und mit dem Mund nachmachen. Jede Aufnahme wird sofort gespeichert, die neueste ist die gewählte. Mit „Im Spiel benutzen“ spielt das Spiel deine Aufnahmen statt der Originale.</p>
  <p class="hinweis">Tasten: <kbd>Leertaste</kbd> aufnehmen / stoppen · <kbd>O</kbd> Original · <kbd>P</kbd> deine Aufnahme · <kbd>A</kbd> erst Original, dann deine · <kbd>Z</kbd> beide zusammen · <kbd>,</kbd><kbd>.</kbd> Spur schieben (mit Umschalt mehr) · <kbd>↑</kbd><kbd>↓</kbd> Sound wechseln</p>
 
+ <div class="reihe" id="profile" style="margin-top:10px"></div>
  <div class="reihe" style="margin-top:10px">
   <button id="mEff" class="sm">Effekte</button><button id="mMus" class="sm">Musik</button>
   <span class="nurMusik reihe"><select id="biom"></select>
@@ -88,7 +98,7 @@ button.on{border-color:var(--gold);color:var(--gold)}
    <div class="reihe"><button id="zip" class="sm">Alle gewählten als ZIP</button><span class="fort" id="fort"></span></div>
    <div class="reihe"><label><input type="checkbox" id="mundAn"> Im Spiel benutzen</label><label>Fehlt eine Aufnahme <select id="fehlt"><option value="original">Original spielen</option><option value="stumm">still bleiben</option></select></label></div>
    <div class="reihe"><label><input type="checkbox" id="musikAus"> Musik im Spiel ganz aus</label><label>Tonhöhe streuen <select id="streuung"><option value="0">nein</option><option value="0.03">leicht</option><option value="0.07">deutlich</option></select></label></div>
-   <div class="reihe"><button id="spiel" class="sm">Spiel mit Mund-Sounds öffnen</button></div>
+   <div class="reihe nurStudio"><button id="spiel" class="sm">Spiel mit Mund-Sounds öffnen</button></div>
   </div>
  </div>
 
