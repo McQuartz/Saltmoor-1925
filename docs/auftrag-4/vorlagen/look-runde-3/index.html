@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saltmoor Pixel-UI Runde 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&family=Pixelify+Sans:wght@400;600&family=Silkscreen&family=Jersey+10&display=swap" rel="stylesheet">
+<style>
+/* VOICE  Werkbuch: erst die saubere Fassung mit Maßen, dann drei freie Entwürfe
+   IDEA   ein Bogen aus der Setzerei: jedes Element einzeln, im Raster vermessen, dann im Satz
+   PICTURE das Kampfbild in Variante A, live, darunter Element-Bogen und Karten-Stresstest
+   COLOUR Spielschwarz, Knochenweiß, Messing; Kapellengrün als Randlicht
+   TYPE   Cinzel + IM Fell für die Seite; Jersey 10, Silkscreen, Pixelify Sans im Spiel
+   LAYOUT Bühnen volle Breite bis 1240px; Bögen als Raster; am Handy alles gestapelt */
+:root{color-scheme:dark;--bg:#09080b;--ink:#e9dfc6;--dim:#a39880;--gold:#c8a24a;--rim:#7dffc4;--line:#2a2530;--fk:'Cinzel',serif;--ft:'IM Fell English',Georgia,serif;--pf:'Pixelify Sans','Silkscreen',monospace;--ps:'Silkscreen','Pixelify Sans',monospace;--pj:'Jersey 10','Pixelify Sans',monospace}
+:root[data-theme=light]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 var(--ft);overflow-x:clip}
+.band{padding:clamp(28px,4vw,56px) max(4vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+h1{font:700 clamp(30px,4vw,48px)/1.05 var(--fk);margin:0 0 14px;text-wrap:balance}
+h2{font:700 clamp(23px,2.5vw,32px)/1.1 var(--fk);margin:0 0 10px;text-wrap:balance}
+h3{font:700 18px/1.2 var(--fk);margin:0 0 6px}
+p{margin:0 0 12px;max-width:70ch}
+.lead{font-size:19px}.dim{color:var(--dim)}.small{font-size:15px}
+hr{border:0;border-top:1px solid var(--line);margin:0}
+.stage{position:relative;aspect-ratio:16/9;overflow:hidden;background:#000;container-type:inline-size;user-select:none;outline:1px solid #1e1a22}
+.stage canvas.sc{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.two{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+.pl{font:700 14px var(--fk);color:var(--ink);background:#141117;border:0;padding:9px 14px;min-height:44px;cursor:pointer;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);box-shadow:inset 0 2px 0 #7dffc499,inset 0 -3px 0 #000,inset 0 0 0 1px #3a3340}
+.pl.on{box-shadow:inset 0 2px 0 #7dffc4,inset 0 -3px 0 #000,inset 0 0 0 1px #7dffc4;background:#221d27}
+.pl:focus-visible{outline:2px solid var(--gold)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+ul.r{margin:0 0 12px;padding-left:18px;font-size:16px}ul.r li{margin-bottom:5px}
+/* ======== Variante A: Bausteine im Spielraster. --px = 1 Spielpixel ======== */
+.ui{position:absolute;inset:0;pointer-events:none;--px:calc(100cqw / 480)}
+.ui .hit,.ui .karte,.ui button{pointer-events:auto}
+.px9{border-style:solid;border-width:calc(var(--px)*4);border-image:var(--s9) 4 fill / calc(var(--px)*4) stretch;image-rendering:pixelated}
+.g{position:absolute}
+/* Plakette: 76 × 34 */
+.plak{position:absolute;width:calc(var(--px)*76);transform:translateX(-50%);--s9:var(--s9plak)}
+.plak .row{display:flex;align-items:center;gap:calc(var(--px)*3);height:calc(var(--px)*12)}
+.plak .abs{display:flex;align-items:center;gap:calc(var(--px)*2);font:calc(var(--px)*16)/1 var(--pj);color:#fff;text-shadow:var(--px) var(--px) 0 #000}
+.plak .abs small{font:calc(var(--px)*9)/1 var(--pj);color:#e9dfc6}
+.ic{display:inline-block;width:calc(var(--px)*9);height:calc(var(--px)*9);background:var(--i) center/100% 100%;image-rendering:pixelated;flex:none}
+.plak .st{margin-left:auto;display:flex;gap:var(--px)}
+.st span{position:relative;display:inline-block;width:calc(var(--px)*9);height:calc(var(--px)*9);background:var(--i) center/100% 100%;image-rendering:pixelated}
+.st b{position:absolute;right:calc(var(--px)*-1);bottom:calc(var(--px)*-2);font:calc(var(--px)*7)/1 var(--pj);color:#fff;text-shadow:var(--px) 0 0 #000,0 var(--px) 0 #000,calc(var(--px)*-1) 0 0 #000}
+.plak .nm{display:flex;justify-content:space-between;font:calc(var(--px)*5)/1 var(--ps);color:#c8b890;margin:calc(var(--px)*1) 0 calc(var(--px)*2);white-space:nowrap}
+.plak .nm em{font-style:normal;color:#efe4c8}
+.plak:after{content:"";position:absolute;left:50%;bottom:calc(var(--px)*-7);width:calc(var(--px)*6);height:calc(var(--px)*4);transform:translateX(-50%);background:var(--zipfel) center/100% 100%;image-rendering:pixelated}
+.plak.ziel{--s9:var(--s9ziel)}
+.pbar{position:relative;height:calc(var(--px)*6);background:#140808;box-shadow:0 0 0 var(--px) #000}
+.pbar i{position:absolute;left:0;top:0;bottom:0;background:repeating-linear-gradient(90deg,#e0564a 0 calc(var(--px)*3),#8f2a22 calc(var(--px)*3) calc(var(--px)*4));box-shadow:inset 0 var(--px) 0 #ff9a8a}
+.pbar u{position:absolute;right:0;top:0;bottom:0;background:repeating-linear-gradient(90deg,#6fb4ff 0 calc(var(--px)*3),#2c5b9a calc(var(--px)*3) calc(var(--px)*4));box-shadow:inset 0 var(--px) 0 #cfe6ff}
+/* Leiste */
+.leiste{position:absolute;left:0;right:0;bottom:0;height:calc(var(--px)*58);background:var(--ledge) top/calc(var(--px)*480) auto repeat-x;image-rendering:pixelated}
+.who{position:absolute;left:calc(var(--px)*12);bottom:calc(var(--px)*24);width:calc(var(--px)*82)}
+.who .nm{display:flex;justify-content:space-between;align-items:flex-end;font:calc(var(--px)*6)/1 var(--ps);color:#c8b890;margin-bottom:calc(var(--px)*3)}
+.who .nm b{font:calc(var(--px)*16)/.8 var(--pj);color:#efe4c8}.who .nm b small{font-size:.6em;color:#a89c80}
+.schild{position:absolute;right:calc(var(--px)*-16);top:calc(var(--px)*12);width:calc(var(--px)*13);height:calc(var(--px)*15);display:grid;place-items:center;font:calc(var(--px)*10)/1 var(--pj);color:#fff;background:var(--schild) center/100% 100%;image-rendering:pixelated;text-shadow:var(--px) var(--px) 0 #000;padding-bottom:calc(var(--px)*2)}
+.who .st{display:flex;gap:calc(var(--px)*2);margin-top:calc(var(--px)*4)}
+.stapel{position:absolute;bottom:calc(var(--px)*14);width:calc(var(--px)*20);height:calc(var(--px)*26);--s9:var(--s9ruecken);display:grid;place-items:center;font:calc(var(--px)*11)/1 var(--pj);color:#efe4c8}
+.stapel span{position:absolute;bottom:calc(var(--px)*-10);left:50%;transform:translateX(-50%);font:calc(var(--px)*5)/1 var(--ps);color:#a89c80;white-space:nowrap}
+.ener{position:absolute;right:calc(var(--px)*22);bottom:calc(var(--px)*36);display:flex;gap:calc(var(--px)*4)}
+.ener i{width:calc(var(--px)*13);height:calc(var(--px)*13);background:var(--raute) center/100% 100%;image-rendering:pixelated}
+.ener i.aus{background-image:var(--rauteaus)}
+.knopf{--s9:var(--s9knopf);font:calc(var(--px)*7)/1 var(--ps);color:#f3e9cf;background:none;padding:calc(var(--px)*3) calc(var(--px)*7) calc(var(--px)*4);cursor:pointer;white-space:nowrap}
+.knopf:hover{--s9:var(--s9knopfh);color:#fff}
+.knopf:active{transform:translateY(var(--px));--s9:var(--s9knopfd)}
+.knopf:disabled{--s9:var(--s9knopfx);color:#6a6070;cursor:default}
+.zug{position:absolute;right:calc(var(--px)*12);bottom:calc(var(--px)*12)}
+/* Karte: 56 × 78 */
+.hand{position:absolute;left:50%;bottom:0;width:0;height:0}
+.karte{position:absolute;left:0;bottom:calc(var(--px)*14);width:calc(var(--px)*60);height:calc(var(--px)*84);margin-left:calc(var(--px)*-30);transform-origin:50% 130%}
+.karte .kin{position:absolute;inset:0;--s9:var(--s9karte);display:grid;grid-template-rows:calc(var(--px)*13) calc(var(--px)*var(--bh,26)) minmax(0,1fr) auto;justify-items:center;padding:calc(var(--px)*3) calc(var(--px)*2) calc(var(--px)*2);transition:transform .18s cubic-bezier(.2,.9,.3,1.2)}
+.karte.hg .kin{--s9:var(--s9hg)}
+.hand .karte:hover{z-index:60!important}
+.hand .karte:hover .kin{transform:translateY(-38%) scale(1.3) rotate(var(--unrot,0deg))}
+.karte .kn{align-self:center;font:calc(var(--px)*var(--ns,5.4))/1.1 var(--ps);color:#f3e9cf;text-align:center;text-transform:uppercase;padding:0 calc(var(--px)*8);max-height:calc(var(--px)*13);overflow:hidden;width:100%}
+.karte .bild{--s9:var(--s9fenster);width:calc(var(--px)*36);height:calc(var(--px)*(var(--bh,26) - 1));display:grid;place-items:center;overflow:hidden}
+.karte.kompakt{--bh:17}
+.karte.kompakt .bild img{width:calc(var(--px)*16)}
+.karte .bild img{width:calc(var(--px)*24);image-rendering:pixelated}
+.karte .kt{align-self:stretch;display:block;font:calc(var(--px)*var(--fs,5.6))/1.12 var(--pf);color:#e7dcc2;text-align:center;padding:calc(var(--px)*2) calc(var(--px)*1) 0;overflow:hidden;width:100%;hyphens:manual}
+.karte .kt b{font-weight:400;color:#fff}
+.karte .tags{display:flex;gap:calc(var(--px)*2);justify-content:center;min-height:calc(var(--px)*1)}
+.karte .tags span{font:calc(var(--px)*4.6)/1 var(--ps);color:#1a1208;background:#c8a24a;padding:var(--px) calc(var(--px)*2);box-shadow:0 var(--px) 0 #6a4a1a}
+.karte .ko{position:absolute;left:calc(var(--px)*-5);top:calc(var(--px)*-5);width:calc(var(--px)*15);height:calc(var(--px)*15);background:var(--raute) center/100% 100%;image-rendering:pixelated;display:grid;place-items:center;font:calc(var(--px)*12)/1 var(--pj);color:#1a1208;padding-top:var(--px)}
+.karte .sf{position:absolute;right:calc(var(--px)*3);top:calc(var(--px)*3);width:calc(var(--px)*7);height:calc(var(--px)*7);background:var(--i) center/100% 100%;image-rendering:pixelated}
+.karte.zu .kin{filter:brightness(.55) saturate(.5)}
+.karte.warn .kin{outline:calc(var(--px)*1) solid #ff3b3b}
+/* Element-Bogen */
+.bogen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.el{background:radial-gradient(120% 100% at 50% 0%,#11201b,#0b0a0d 70%);outline:1px solid #221e27;padding:14px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;min-height:250px}
+.el h3{font-size:15px;margin:0}
+.el .feld{position:relative;container-type:inline-size;display:grid;place-items:center;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:calc(100cqw/120) calc(100cqw/120)}
+.el .feld .ui{position:relative;inset:auto;width:100%;height:100%;--px:calc(100cqw / 120);display:flex;flex-wrap:wrap;gap:calc(var(--px)*6);align-items:center;justify-content:center;padding:calc(var(--px)*8) 0}
+.el .feld .plak,.el .feld .karte{position:relative;left:auto;bottom:auto;transform:none;margin:0}
+.el .feld .who,.el .feld .ener,.el .feld .stapel{position:relative;left:auto;right:auto;bottom:auto}
+.el p{font-size:14px;margin:0;color:var(--dim)}
+.mass{font:12px ui-monospace,monospace;color:#7dffc4}
+/* Stresstest */
+.stress{container-type:inline-size}
+.stress .ui{position:relative;--px:calc(100cqw / 330);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:calc(var(--px)*8) calc(var(--px)*6);padding:calc(var(--px)*10) calc(var(--px)*4)}
+.stress .zelle{display:grid;justify-items:center;gap:calc(var(--px)*4)}
+.stress .karte{position:relative;left:auto;bottom:auto;margin:0;transform:none}
+.stress .lbl{font:13px/1.3 var(--ft);color:var(--dim);text-align:center;max-width:16ch}
+.stress .lbl b{display:block;font:12px ui-monospace,monospace;color:#7dffc4}
+.stress .lbl b.x{color:#ff7a6a}
+.tab{width:100%;border-collapse:collapse;font-size:16px}
+.tab th{font:700 14px var(--fk);text-align:left;color:var(--dim);border-bottom:1px solid var(--line);padding:8px 10px 8px 0}
+.tab td{border-bottom:1px solid #1a171e;padding:9px 10px 9px 0;vertical-align:top}
+.tab td:first-child{font:700 15px var(--fk);white-space:nowrap}
+.scroll{overflow-x:auto}
+/* Menü A */
+.menue{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:calc(var(--px)*150);--s9:var(--s9panel);padding:calc(var(--px)*8) calc(var(--px)*12) calc(var(--px)*10);display:grid;gap:calc(var(--px)*4);justify-items:stretch;text-align:center}
+.menue h4{margin:0 0 calc(var(--px)*4);font:calc(var(--px)*12)/1 var(--pj);letter-spacing:calc(var(--px)*1);color:#f3e9cf}
+.menue .knopf{width:100%;font-size:calc(var(--px)*6.4)}
+.menue p{margin:calc(var(--px)*3) 0 0;font:calc(var(--px)*5)/1.3 var(--pf);color:#a89c80}
+/* Kreativ */
+.kreativ{display:grid;gap:44px}
+.kv h3{font-size:20px}
+@media(max-width:980px){.two{grid-template-columns:minmax(0,1fr)}.bogen{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.bogen{grid-template-columns:minmax(0,1fr)}.stress .ui{grid-template-columns:repeat(3,minmax(0,1fr));--px:calc(100cqw / 200)}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<section class="band"><div class="wrap">
+ <h1>Variante A, sauber gesetzt, und drei ganz andere Wege</h1>
+ <p class="lead">Oben steht die Fassung, die umgesetzt werden soll: Licht und Raum aus dem Lichtpult (ohne Vordergrund), dazu die Oberfläche A in einem festen Raster. Jedes Maß ist in Spielpixeln (480 × 270) angegeben. Darunter liegen der Element-Bogen, ein Stresstest mit den längsten echten Kartentexten und das Menü im selben Stil. Am Ende folgen drei freie Entwürfe, wie Kampf und Oberfläche auch ganz anders aussehen könnten.</p>
+</div></section>
+
+<hr>
+<section class="band"><div class="wrap">
+ <h2>Das Kampfbild in Variante A</h2>
+ <div class="two">
+  <div class="stage" id="stA"><canvas class="sc" width="480" height="270"></canvas><div class="ui" id="uiA"></div></div>
+  <div>
+   <div class="btns"><button class="pl on" id="a-kampf">Kampf</button><button class="pl" id="a-menue">Menü offen</button></div>
+   <h3>Das Raster</h3>
+   <ul class="r small">
+    <li>Leiste 58 px hoch, oben 1 px Randlicht in Zonenfarbe.</li>
+    <li>Karten 60 × 84, Abstand im Fächer 40, je 5° gedreht. Hover hebt die Karte und vergrößert sie auf 130 %.</li>
+    <li>Plaketten 76 px breit, Abstand zum Kopf 10 px. Die hintere Reihe sitzt höher, damit sich keine Plaketten überlappen.</li>
+    <li>Ränder 12 px links und rechts, alle Abstände in Vielfachen von 2.</li>
+    <li>Zahlen in Jersey 10, Namen in Silkscreen, Fließtext in Pixelify Sans.</li>
+   </ul>
+  </div>
+ </div>
+</div></section>
+
+<hr>
+<section class="band"><div class="wrap">
+ <h2>Element-Bogen</h2>
+ <p>Jedes Element ist einzeln gezeigt, mit Zuständen, im 4-fach vergrößerten Spielraster. Das Gitter im Hintergrund entspricht 1 Spielpixel.</p>
+ <div class="bogen" id="bogen"></div>
+</div></section>
+
+<hr>
+<section class="band"><div class="wrap">
+ <h2>Stresstest: die längsten echten Karten</h2>
+ <p>Die Texte kommen direkt aus dem Spiel (<code>cardText</code> über alle 297 Karten). Der Median liegt bei 18 Zeichen, 90 % sind kürzer als 32 Zeichen, die längste hat 85. Die Regeln unten laufen live: Ein rot umrandeter Text würde überlaufen.</p>
+ <div class="stress"><div class="ui" id="stress"></div></div>
+ <h3 style="margin-top:22px">Satzregeln für die Karte</h3>
+ <div class="scroll"><table class="tab"><thead><tr><th>Teil</th><th>Regel</th></tr></thead><tbody>
+  <tr><td>Name</td><td>Silkscreen 5,4 px, höchstens 2 Zeilen, mittig, 8 px Abstand zu Kosten und Stoffzeichen. Passt ein Wort nicht in die Breite oder werden es mehr als 2 Zeilen: 4,8, dann 4,2 px. Umbruch nur am Leerzeichen.</td></tr>
+  <tr><td>Schlagworte</td><td>„Behalten“, „Verbraucht“, „Funke“, „Kette n“, „Opfer n“ werden aus dem Text gezogen und als Messingmarke unten gezeigt. Das spart bis zu 2 Zeilen.</td></tr>
+  <tr><td>Text</td><td>Pixelify Sans 5,6 px, Zeilenhöhe 1,12, 52 px breit. Passt es nicht: 5,2, dann 4,8 px. Reicht das nicht, wird das Bildfenster von 26 auf 17 px flacher (kompakt) und es geht wieder bei 5,2 los. Zahlen in Weiß.</td></tr>
+  <tr><td>Lesen</td><td>Beim Darüberfahren wächst die Karte auf 130 %. Damit ist auch die kleinste Stufe gut lesbar.</td></tr>
+  <tr><td>Grenze</td><td>Wenn selbst 4,8 px nicht reichen, ist der Text zu lang für eine Karte. Dann sollte der Text gekürzt werden (Spielfrage, nicht Satzfrage).</td></tr>
+ </tbody></table></div>
+</div></section>
+
+<hr>
+<section class="band"><div class="wrap">
+ <h2>Kreativ anders</h2>
+ <p>Drei Entwürfe, die den Pixelstil behalten, aber Kampf und Oberfläche anders erzählen. Anregungen kamen aus Spielen, die ihre Oberfläche in die Welt legen: der Tisch in Inscryption, die Fackel in Darkest Dungeon, Kartenspiele, die auf einem Tisch liegen statt auf einem Bildschirm. Nachgebaut ist davon nichts, alle drei kommen aus Saltmoor selbst: Laterne, Séance und Stummfilm.</p>
+ <div class="kreativ">
+  <div class="kv two"><div class="stage" id="k1"><canvas class="sc" width="480" height="270"></canvas><div class="ui" id="k1ui"></div></div>
+   <div><h3>1 · Die Laterne</h3><p class="small">Du stehst im Dunkeln und siehst nur, was deine Laterne trifft. Das Leben ist das Öl im Glas, die Energie sind Streichhölzer in der Schachtel. Gegner sind außerhalb des Lichts nur Augen. Die Karten hältst du in der anderen Hand.</p><p class="small dim">Passt zum Lovecraft-Kern: Was du nicht siehst, ist da. Die Laterne könnte später eine eigene Mechanik tragen (Ölmangel macht das Bild enger).</p></div></div>
+  <div class="kv two"><div class="stage" id="k2"><canvas class="sc" width="480" height="270"></canvas><div class="ui" id="k2ui"></div></div>
+   <div><h3>2 · Die Séance</h3><p class="small">Der Kampf liegt in einem Spiegel auf dem Séancetisch. Die Karten liegen davor auf dem Holz, das Leben ist eine Kerze, die herunterbrennt, die Energie sind Messingmarken. Ein Zeiger wie bei einem Hexenbrett wandert zum Ziel. Die Absichten der Gegner stehen auf Messingschildern am Rahmen.</p><p class="small dim">Das Spiel wird zum Gegenstand. 1925 waren Séancen in Mode.</p></div></div>
+  <div class="kv two"><div class="stage" id="k3"><canvas class="sc" width="480" height="270"></canvas><div class="ui" id="k3ui"></div></div>
+   <div><h3>3 · Der Film</h3><p class="small">Breitbild mit Kinobalken. Du stehst als Silhouette groß im Vordergrund links, die Gegner gegenüber. Die Oberfläche lebt in den Balken: oben die Absichten als Zwischentitel, unten die Hand als Filmstreifen, der durchläuft.</p><p class="small dim">Baut auf dem Zwischentitel aus Runde 1 auf. Der Spieler ist endlich im Bild.</p></div></div>
+ </div>
+</div></section>
+
+<footer class="band"><div class="wrap small dim">Saltmoor 1925 · Look-Runde 3 · Ebenen, Sprites, Item- und Handgriff-Bilder sowie Kartentexte aus dem Spiel. Am Spielcode wurde nichts geändert.</div></footer>
+
+<script>
+{
+const $=(s,r=document)=>r.querySelector(s);
+const img=s=>{const i=new Image();i.src='img/'+s;return i;};
+const BAY=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5].map(v=>(v+.5)/16);
+const bay=(x,y)=>BAY[(y&3)*4+(x&3)];
+const hx=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+function frameOf(sh,row,i){const c=document.createElement('canvas');c.width=96;c.height=120;c.getContext('2d').drawImage(sh,i*96,row*120,96,120,0,0,96,120);return c;}
+
+/* ---------- Szenen ---------- */
+const SZ={
+ kapelle:{n:'kapelle',licht:[240,62],lc:'#8dffd0',amb:'#0b1a16',nebel:'#2c5a4a',wasser:true,boden:160,
+  feinde:[{s:'chorknabe_b.png',x:314,y:166,fx:48,fy:114,reihe:0,augen:[[44,54],[49,54],[46,44],[51,44],[44,33],[49,33]],ac:'#fff4d0',ph:1},
+          {s:'chorknabe_a.png',x:168,y:190,fx:48,fy:114,reihe:1,augen:[[45,55],[50,55],[46,44],[51,44],[45,32],[50,32]],ac:'#fff4d0',ph:0},
+          {s:'ertrunkener_a.png',x:268,y:213,fx:48,fy:115,reihe:2,augen:[[28,47],[32,47]],ac:'#fff4d0',ph:2,sway:2}],
+  saeule:[316,336,0,162]},
+ salz:{n:'salz',licht:[443,108],lc:'#ffd29a',amb:'#2a2420',nebel:'#9a8a78',wasser:false,boden:176,
+  feinde:[{s:'grabwaechter_a.png',x:300,y:176,fx:50,fy:115,reihe:0,augen:[[46,35],[51,35]],ac:'#ff9a5a',ph:1},
+          {s:'salzlaeufer_a.png',x:150,y:200,fx:52,fy:115,reihe:1,augen:[[14,105],[11,101]],ac:'#ff9a5a',ph:0},
+          {s:'grabwaechter_a.png',x:372,y:214,fx:50,fy:115,reihe:2,augen:[[46,35],[51,35]],ac:'#ff9a5a',ph:2}],
+  saeule:null}};
+for(const k in SZ){const s=SZ[k];s.E=[0,1,2,3,4,5].map(i=>img(`${k}-e${i}.png`));s.feinde.forEach(f=>{f.img=img(f.s);f.fr=null;f.relit={};});}
+
+const SCH=[
+ ['atmen','Atmen und Wiegen','aus Runde 1, zeilenweise über dem Sprite'],
+ ['licht','Szenenlicht auf den Gegnern','Randlicht kommt von der Lichtquelle der Szene, der Körper nimmt die Raumfarbe an'],
+ ['boden','Bodenkontakt','Schatten weg vom Licht, Spiegelung im Wasser, Füße stehen im Wasser'],
+ ['luft','Luft zwischen den Ebenen','gerasterter Nebel zwischen Wand, Säulen und Gegnern; hintere Reihe tiefer im Dunst'],
+ ['vorne','Vordergrund','dunkle Formen vor den Gegnern, hinterer Gegner steht hinter der Säule'],
+ ['strahlen','Lichtstrahlen','gerasterte Strahlen von der Lichtquelle, Staub darin, liegt vor den Gegnern'],
+ ['augen','Augen leuchten in den Raum','Lichtfleck auf Boden und Wasser unter den Augen']];
+const PRE={heute:[],licht:['atmen','licht','strahlen','augen'],raum:['atmen','boden','luft','vorne'],alles:SCH.map(s=>s[0])};
+
+function makeRenderer(cv,state){
+ const g=cv.getContext('2d');g.imageSmoothingEnabled=false;
+ const fogC=document.createElement('canvas');fogC.width=480;fogC.height=270;const fg=fogC.getContext('2d');const fogD=fg.createImageData(480,270);
+ const rayC=document.createElement('canvas');rayC.width=480;rayC.height=270;const rg=rayC.getContext('2d');const rayD=rg.createImageData(480,270);
+ const tmp=document.createElement('canvas');tmp.width=96;tmp.height=120;const tg=tmp.getContext('2d');
+ let rayMap=null,rayFor=null,vorneC=null,vorneFor=null;
+ function relit(f,i,sz){const key=i+(state.on.licht?'L':'');if(f.relit[key])return f.relit[key];
+  const src=f.fr[i];const c=document.createElement('canvas');c.width=96;c.height=120;const x=c.getContext('2d');x.drawImage(src,0,0);
+  if(state.on.licht){const id=x.getImageData(0,0,96,120),d=id.data,a=new Uint8Array(96*120);for(let k=0;k<a.length;k++)a[k]=d[k*4+3]>0;
+   const L=hx(sz.lc),A=hx(sz.amb);const dx=Math.sign(sz.licht[0]-f.x)||0;
+   const op=(xx,yy)=>xx>=0&&xx<96&&yy>=0&&yy<120&&a[yy*96+xx];
+   for(let yy=0;yy<120;yy++)for(let xx=0;xx<96;xx++){const k=yy*96+xx;if(!a[k])continue;const o=k*4;
+    const lum=(d[o]*.3+d[o+1]*.59+d[o+2]*.11);
+    let r=d[o]*.7+A[0]*.3,gg=d[o+1]*.7+A[1]*.3,b=d[o+2]*.7+A[2]*.3;
+    if(lum>90){const q=Math.min(1,(lum-90)/120)*.7;r=r*(1-q)+L[0]*q*lum/200;gg=gg*(1-q)+L[1]*q*lum/200;b=b*(1-q)+L[2]*q*lum/200;}
+    const top=!op(xx,yy-1),side=dx&&!op(xx+dx,yy)&&!op(xx+dx,yy-1);
+    if(top||side){const q=top&&side?.85:.6;r=r*(1-q)+L[0]*q;gg=gg*(1-q)+L[1]*q;b=b*(1-q)+L[2]*q;}
+    d[o]=r;d[o+1]=gg;d[o+2]=b;}
+   x.putImageData(id,0,0);}
+  return f.relit[key]=c;}
+ function sprite(f,c,x,y,t,fog){const sway=state.on.atmen?(f.sway||1):0;const br=state.on.atmen?1+Math.sin(t*1.9+f.ph)*.018:1;
+  let src=c;if(fog>0){tg.clearRect(0,0,96,120);tg.drawImage(c,0,0);const id=tg.getImageData(0,0,96,120),d=id.data,N=hx(state.sz.nebel);for(let k=0;k<96*120;k++){const o=k*4;if(!d[o+3])continue;if(fog>bay(k%96,k/96|0)){d[o]=(d[o]+N[0])>>1;d[o+1]=(d[o+1]+N[1])>>1;d[o+2]=(d[o+2]+N[2])>>1;}}tg.putImageData(id,0,0);src=tmp;}
+  for(let r=0;r<120;r++){const k=Math.max(0,(f.fy-r)/f.fy);const off=Math.round(Math.sin(t*1.6+f.ph+r*.045)*sway*k);const dy=Math.round(y-(f.fy-r)*br);g.drawImage(src,0,r,96,1,x-f.fx+off,dy,96,Math.ceil(br));}}
+ function spiegel(f,c,x,y,t){for(let r=1;r<46;r++){const sr=f.fy-r;if(sr<0)break;if(((r+(t*8|0))&1))continue;const off=Math.round(Math.sin(t*2.2+r*.55)*(1+r*.06));g.globalAlpha=.32*(1-r/46);g.drawImage(c,0,sr,96,1,x-f.fx+off,y+r,96,1);}g.globalAlpha=1;}
+ function schatten(f,c,x,y,sz){const dir=x<sz.licht[0]?-1:1;g.fillStyle='#000';
+  if(sz.wasser){for(let j=0;j<4;j++){const w=22-j*4;for(let i=-w;i<=w;i++)if(bay(x+i,y+j)<.55-j*.1)g.fillRect(x+i,y+j,1,1);}}
+  else{for(let j=0;j<14;j++){const w=Math.round(16*(1-j/18));const cx=Math.round(x-dir*j*1.6);for(let i=-w;i<=w;i++)if(bay(cx+i,y+j)<.6-j*.035)g.fillRect(cx+i,y+j,1,1);}}}
+ function fog(t,sz){const d=fogD.data;d.fill(0);const N=hx(sz.nebel);
+  const band=(y0,y1,dens)=>{for(let y=y0;y<y1;y++){const v=Math.sin((y-y0)/(y1-y0)*Math.PI)*dens;for(let x=0;x<480;x++){const n=Math.sin(x*.045+t*.35+y*.21)*.12+Math.sin(x*.013-t*.2)*.1;if(v+n>bay(x,y)){const o=(y*480+x)*4;d[o]=N[0];d[o+1]=N[1];d[o+2]=N[2];d[o+3]=255;}}}};
+  band(sz.boden-34,sz.boden+4,.24);fg.putImageData(fogD,0,0);}
+ function fog2(t,sz){const d=fogD.data;d.fill(0);const N=hx(sz.nebel);for(let y=sz.boden-14;y<sz.boden+26;y++){const v=Math.sin((y-sz.boden+14)/40*Math.PI)*.18;for(let x=0;x<480;x++){const n=Math.sin(x*.05-t*.4+y*.3)*.12;if(v+n>bay(x+1,y+2)){const o=(y*480+x)*4;d[o]=N[0];d[o+1]=N[1];d[o+2]=N[2];d[o+3]=255;}}}fg.putImageData(fogD,0,0);}
+ function rays(t,sz){if(rayFor!==sz.n){rayFor=sz.n;rayMap=new Float32Array(480*270);const [lx,ly]=sz.licht;
+   const beams=sz.n==='kapelle'?[[-.42,.05],[-.12,.06],[.2,.05],[.5,.04]]:[[2.2,.07],[2.6,.06]];
+   for(let y=0;y<270;y++)for(let x=0;x<480;x++){const dx=x-lx,dy=y-ly;if(sz.n==='kapelle'&&dy<10)continue;const dist=Math.hypot(dx,dy);if(dist<8)continue;const a=sz.n==='kapelle'?Math.atan2(dx,dy):Math.atan2(dy,dx);let v=0;for(const[b,w] of beams){const q=1-Math.abs(a-b)/w;if(q>0)v=Math.max(v,q);}const fall=Math.max(0,1-dist/(sz.n==='kapelle'?190:260));rayMap[y*480+x]=v*fall*.75;}}
+  const d=rayD.data;d.fill(0);const L=hx(sz.lc);for(let k=0;k<rayMap.length;k++){const v=rayMap[k];if(!v)continue;const x=k%480,y=k/480|0;const n=v*(.85+.15*Math.sin(t*.8+x*.03));if(n>bay(x,y)+.12){const o=k*4;d[o]=L[0]*.5;d[o+1]=L[1]*.5;d[o+2]=L[2]*.5;d[o+3]=255;}}rg.putImageData(rayD,0,0);
+  g.globalCompositeOperation='lighter';g.globalAlpha=.5;g.drawImage(rayC,0,0);g.globalAlpha=1;g.globalCompositeOperation='source-over';}
+ function vorne(sz){if(vorneFor===sz.n)return vorneC;vorneFor=sz.n;const c=document.createElement('canvas');c.width=480;c.height=270;const x=c.getContext('2d');const R=hx(sz.lc);x.fillStyle='#050405';
+  const poly=p=>{x.beginPath();p.forEach(([a,b],i)=>i?x.lineTo(a,b):x.moveTo(a,b));x.closePath();x.fill();};
+  if(sz.n==='kapelle'){poly([[0,236],[118,230],[122,236],[118,242],[112,270],[0,270]]);poly([[0,252],[92,248],[96,270],[0,270]]);poly([[372,232],[480,228],[480,270],[366,270],[370,240]]);
+   x.fillRect(84,0,3,64);poly([[78,64],[93,64],[96,72],[90,82],[81,82],[75,72]]);x.fillRect(420,0,2,40);}
+  else{poly([[0,270],[10,224],[26,240],[34,210],[52,246],[60,270]]);poly([[402,270],[418,232],[430,246],[446,214],[462,240],[480,226],[480,270]]);x.fillRect(214,0,2,30);poly([[206,30],[222,30],[226,40],[202,40]]);}
+  const id=x.getImageData(0,0,480,270),d=id.data;for(let k=0;k<480*270;k++){d[k*4+3]=d[k*4+3]>128?255:0;}
+  for(let y=1;y<270;y++)for(let xx=0;xx<480;xx++){const k=y*480+xx;if(d[k*4+3]&&!d[(k-480)*4+3]){d[k*4]=R[0]*.7;d[k*4+1]=R[1]*.7;d[k*4+2]=R[2]*.7;}}
+  x.putImageData(id,0,0);return vorneC=c;}
+ const motes=Array.from({length:40},(_,i)=>({x:Math.random()*480,y:Math.random()*220,s:Math.random()<.2?2:1,v:2+Math.random()*5,p:Math.random()*6}));
+ return function(t){const sz=state.sz,on=state.on;g.setTransform(1,0,0,1,0,0);g.imageSmoothingEnabled=false;
+  const E=sz.E;if(!E.every(i=>i.complete&&i.naturalWidth)){g.fillStyle='#000';g.fillRect(0,0,480,270);return;}
+  sz.feinde.forEach(f=>{if(!f.fr&&f.img.complete&&f.img.naturalWidth)f.fr=[0,1,2,3].map(i=>frameOf(f.img,0,i));});
+  const L=(i)=>g.drawImage(E[i],-12,-12);
+  L(0);
+  if(sz.n==='kapelle'){g.globalCompositeOperation='lighter';const gr=g.createRadialGradient(240,62,0,240,62,70);gr.addColorStop(0,'rgba(80,255,180,.16)');gr.addColorStop(1,'rgba(80,255,180,0)');g.fillStyle=gr;g.fillRect(170,0,140,140);g.globalCompositeOperation='source-over';}
+  L(1);L(2);
+  if(on.luft){fog(t,sz);g.drawImage(fogC,0,0);}
+  L(3);
+  const fi=f=>Math.floor(t*4+f.ph)%4;
+  const zeichne=(f)=>{if(!f.fr)return;const c=relit(f,fi(f),sz);const fogv=f.reihe===0?(on.luft?.55:.35):f.reihe===1?(on.luft?.12:.15):0;
+   if(on.boden){schatten(f,c,f.x,f.y,sz);if(sz.wasser)spiegel(f,c,f.x,f.y,t);}else{g.fillStyle='rgba(0,0,0,.5)';g.fillRect(f.x-14,f.y,28,1);g.fillRect(f.x-9,f.y+1,18,1);}
+   if(on.augen){f.augen.forEach(([ax,ay])=>{const ex=f.x+ax-f.fx;const A=hx(f.ac);g.fillStyle=`rgb(${A})`;for(let j=0;j<3;j++)for(let i=-5+j*2;i<=5-j*2;i++)if(bay(ex+i,f.y+1+j)<.18)g.fillRect(ex+i,f.y+1+j,1,1);if(sz.wasser&&!((t*6|0)&1)){g.globalAlpha=.6;g.fillRect(ex,f.y+(f.fy-ay)+Math.round(Math.sin(t*3)*1),1,1);g.globalAlpha=1;}});}
+   const ox=f.x,oy=f.y+(on.boden&&sz.wasser?2:0);
+   if(on.boden&&sz.wasser){g.save();g.beginPath();g.rect(0,0,480,f.y+1);g.clip();sprite(f,c,ox,oy,t,fogv);g.restore();
+    g.fillStyle=`rgb(${hx(sz.lc).map(v=>v*.6|0)})`;const w=13+Math.round(Math.sin(t*2+f.ph)*2);for(let i=-w;i<=w;i++)if(((i+(t*5|0))&3)===0)g.fillRect(f.x+i,f.y+1,1,1);}
+   else sprite(f,c,ox,oy,t,fogv);
+   f.ox=ox;f.oy=oy;
+   if(true){const A=f.ac;g.globalCompositeOperation='lighter';f.augen.forEach(([ax,ay])=>{const ex=ox+ax-f.fx,ey=oy-(f.fy-ay);const gr=g.createRadialGradient(ex,ey,0,ex,ey,5);gr.addColorStop(0,A+'aa');gr.addColorStop(1,A+'00');g.fillStyle=gr;g.fillRect(ex-5,ey-5,10,10);});g.globalCompositeOperation='source-over';}};
+  const hinten=sz.feinde.filter(f=>f.reihe===0),rest=sz.feinde.filter(f=>f.reihe>0);
+  if(on.vorne){hinten.forEach(zeichne);L(4);if(sz.saeule){}}else{L(4);hinten.forEach(zeichne);}
+  if(on.luft){fog2(t,sz);g.drawImage(fogC,0,0);}
+  rest.forEach(zeichne);
+  if(on.strahlen)rays(t,sz);
+  L(5);
+  if(on.vorne)g.drawImage(vorne(sz),0,0);
+  if(on.strahlen||on.luft){motes.forEach(m=>{const x=(m.x+Math.sin(t*.3+m.p)*12+480)%480,y=(m.y+t*m.v)%230;g.fillStyle=sz.n==='kapelle'?'#cfffe8':'#fff0d8';g.globalAlpha=.35+.25*Math.sin(t*1.3+m.p);g.fillRect(x|0,y|0,m.s,m.s);});g.globalAlpha=1;}
+  // Vignette leicht
+  if(on.luft||on.licht){const vg=g.createRadialGradient(240,140,140,240,140,300);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.55)');g.fillStyle=vg;g.fillRect(0,0,480,270);}
+ };}
+function loop(el,fn){let vis=true;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(el);const f=n=>{if(vis)fn(n/1000);requestAnimationFrame(f);};requestAnimationFrame(f);}
+
+
+function loop(el,fn){let vis=true;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(el);const f=n=>{if(vis)fn(n/1000);requestAnimationFrame(f);};requestAnimationFrame(f);}
+const ON={atmen:1,licht:1,boden:1,luft:1,strahlen:1,augen:1};
+
+/* ---------- Pixelgrafiken ---------- */
+function pxc(w,h,fn){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');fn(x,(a,b,cw,ch,col)=>{x.fillStyle=col;x.fillRect(a,b,cw||1,ch||1);});return c.toDataURL();}
+function slice9({fill,rim,edge,dark,out}){return pxc(12,12,(x,p)=>{p(0,0,12,12,out||'#000');p(1,1,10,10,edge);p(2,2,8,8,fill);p(2,1,8,1,rim);p(1,2,1,1,rim);p(10,2,1,1,rim);p(2,10,8,1,dark);
+ x.clearRect(0,0,1,1);x.clearRect(11,0,1,1);x.clearRect(0,11,1,1);x.clearRect(11,11,1,1);p(1,1,1,1,out||'#000');p(10,1,1,1,out||'#000');p(1,10,1,1,out||'#000');p(10,10,1,1,out||'#000');});}
+const bmp=(rows,pal)=>pxc(rows[0].length,rows.length,(x,p)=>rows.forEach((r,y)=>[...r].forEach((c,i)=>{if(pal[c])p(i,y,1,1,pal[c]);})));
+const R=document.documentElement.style,u=v=>`url(${v})`;
+R.setProperty('--s9plak',u(slice9({fill:'#0e0c12',rim:'#7dffc4',edge:'#2e2834',dark:'#000'})));
+R.setProperty('--s9ziel',u(slice9({fill:'#101a16',rim:'#c8ffe6',edge:'#7dffc4',dark:'#000'})));
+R.setProperty('--s9karte',u(slice9({fill:'#141119',rim:'#c8a24a',edge:'#3a3240',dark:'#000'})));
+R.setProperty('--s9hg',u(slice9({fill:'#14122a',rim:'#9a8cff',edge:'#3a3460',dark:'#000'})));
+R.setProperty('--s9fenster',u(slice9({fill:'#1c1822',rim:'#000',edge:'#0a080c',dark:'#3a3240'})));
+R.setProperty('--s9ruecken',u(slice9({fill:'#1a1520',rim:'#c8a24a',edge:'#3a3240',dark:'#000'})));
+R.setProperty('--s9panel',u(slice9({fill:'#0c0b0f',rim:'#7dffc4',edge:'#2e2834',dark:'#000'})));
+R.setProperty('--s9knopf',u(slice9({fill:'#16131a',rim:'#7dffc4',edge:'#3a3340',dark:'#000'})));
+R.setProperty('--s9knopfh',u(slice9({fill:'#1f2a26',rim:'#c8ffe6',edge:'#55706a',dark:'#000'})));
+R.setProperty('--s9knopfd',u(slice9({fill:'#0f1412',rim:'#3a7a62',edge:'#2e2834',dark:'#1f2a26'})));
+R.setProperty('--s9knopfx',u(slice9({fill:'#0e0d10',rim:'#2a2630',edge:'#1e1b22',dark:'#000'})));
+const RAUTE=a=>pxc(13,13,(x,p)=>{for(let y=0;y<13;y++){const w=6-Math.abs(6-y);p(6-w,y,w*2+1,1,'#000');if(w>0)p(7-w,y,w*2-1,1,a?(y<6?'#ffe9a6':'#c8a24a'):(y<6?'#3a3226':'#241e16'));}if(a)p(6,2,1,1,'#fff');});
+R.setProperty('--raute',u(RAUTE(1)));R.setProperty('--rauteaus',u(RAUTE(0)));
+R.setProperty('--zipfel',u(bmp(['######','#oooo#','.#oo#.','..##..'],{'#':'#000','o':'#7dffc4'})));
+R.setProperty('--schild',u(bmp(['.###########.','#bbbbbbbbbbb#','#bBBBBBBBBBb#','#bBBBBBBBBBb#','#bBBBBBBBBBb#','#bBBBBBBBBBb#','#bBBBBBBBBBb#','#bBBBBBBBBBb#','.#bBBBBBBBb#.','.#bBBBBBBBb#.','..#bBBBBBb#..','...#bBBBb#...','....#bBb#....','.....#b#.....','......#......'],{'#':'#000','b':'#cfe6ff','B':'#3f78c0'})));
+R.setProperty('--ledge',u(pxc(480,58,(x,p)=>{p(0,0,480,58,'#0d0b0e');p(0,0,480,1,'#000');p(0,1,480,1,'#7dffc4');p(0,2,480,1,'#2e5a4a');p(0,3,480,2,'#000');for(let i=0;i<480;i+=60){p(i,5,1,53,'#050405');p(i+1,5,1,53,'#1a171e');}for(let k=0;k<160;k++){const xx=(k*97)%480,yy=8+(k*37)%48;p(xx,yy,3+(k%5),1,k%3?'#141118':'#19161d');}})));
+const IC={
+ atk:bmp(['.......ww','......wWw','.....wWw.','r...wWw..','rr.wWw...','.rrWw....','..rr.....','.r.rr....','r...r....'],{w:'#fff',W:'#ff6a5a',r:'#ffd0c0'}),
+ blk:bmp(['.#######.','#bbbbbbb#','#bBBBBBb#','#bBBBBBb#','#bBBBBBb#','.#bBBBb#.','..#bBb#..','...#b#...','....#....'],{'#':'#000',b:'#cfe6ff',B:'#3f78c0'}),
+ mehr:bmp(['ww....ww.','wWw..wWw.','.wWwwWw..','..wWWw...','..wWWw...','.wWwwWw..','wWw..wWw.','ww....ww.','.........'],{w:'#fff',W:'#ff6a5a'}),
+ verw:bmp(['.#######.','#ooooooo#','#oo.ooo.#','#o.o.o.o#','#oo.o.oo#','#o.ooo.o#','#ooo.ooo#','.#######.','.........'],{'#':'#000',o:'#e8873a','.':'#3a1a08'}),
+ gift:bmp(['....#....','...#g#...','..#ggg#..','.#gGggg#.','#gGgggggg','#ggggggg#','#ggggggg#','.#ggggg#.','..#####..'],{'#':'#000',g:'#86c062',G:'#d6ffb0'}),
+ schutz:bmp(['#########','#yyyyyyy#','#yYYYYYy#','#yY...Yy#','#yY...Yy#','#yY...Yy#','#yYYYYYy#','#yyyyyyy#','#########'],{'#':'#000',y:'#6a5a2a',Y:'#e8c547','.':'#2a2410'}),
+ W:bmp(['.......','.ww.ww.','w..w..w','.......','.ww.ww.','w..w..w','.......'],{w:'#6d9be0'}),
+ S:bmp(['..sss..','.s...s.','s.....s','sssssss','s.....s','.s...s.','..sss..'],{s:'#f1ede2'}),
+ E:bmp(['.eeeee.','eeeeeee','..eee..','..eee..','.eeeee.','eeeeeee','.......'],{e:'#a6acb4'}),
+ L:bmp(['l..l..l','.l.l.l.','..lll..','lllLlll','..lll..','.l.l.l.','l..l..l'],{l:'#fff6b8',L:'#ffffff'}),
+ G:bmp(['...g...','...g...','ggggggg','...g...','...g...','...g...','...g...'],{g:'#e8c547'}),
+ V:bmp(['...v...','..vvv..','.vvVvv.','vvvVvvv','vvvvvvv','.vvvvv.','..vvv..'],{v:'#86c062',V:'#d6ffb0'}),
+ hg:bmp(['.h.h.h.','.h.h.h.','hh.h.h.','hhhhhhh','hhhhhhh','.hhhhh.','..hhh..'],{h:'#9a8cff'})};
+const ic=k=>`<span class="ic" style="--i:url(${IC[k]})"></span>`;
+const st=(k,n)=>`<span style="--i:url(${IC[k]})">${n!=null?`<b>${n}</b>`:''}</span>`;
+
+/* ---------- Karten ---------- */
+const KW=['Behalten','Verbraucht','Funke'];
+function karte(c,o={}){let t=c.t;const tags=[];KW.forEach(k=>{const re=new RegExp('(^|[.,]\\s*)'+k+'\\.?\\s*','');if(re.test(t)){tags.push(k);t=t.replace(re,'$1').replace(/^[.,\s]+|[.,\s]+$/g,'');}});
+ t=t.replace(/(\d+(?:×\d+)?)/g,'<b>$1</b>');
+ return `<div class="karte ${c.hg?'hg':''} ${o.cls||''}" ${o.style?`style="${o.style}"`:''}><div class="kin px9"><div class="kn">${c.n}</div><div class="bild px9"><img src="img/${c.i}" alt=""></div><div class="kt">${t}${/[.!?]$/.test(t)?'':'.'}</div><div class="tags">${tags.map(x=>`<span>${x.toUpperCase()}</span>`).join('')}</div><span class="ko">${c.c}</span><span class="sf" style="--i:url(${IC[c.s]})"></span></div></div>`;}
+function passen(root){root.querySelectorAll('.karte').forEach(k=>{const n=k.querySelector('.kn');for(const ns of [5.4,4.8,4.2]){n.style.setProperty('--ns',ns);if(n.scrollHeight<=n.clientHeight+1&&n.scrollWidth<=n.clientWidth+1)break;}const t=k.querySelector('.kt');k.classList.remove('warn','kompakt');let stufe=0;const st=[[5.6,0],[5.2,0],[4.8,0],[5.2,1],[4.8,1]];for(const [fs,ko] of st){k.classList.toggle('kompakt',!!ko);t.style.setProperty('--fs',fs);if(t.scrollHeight<=t.clientHeight+1)break;stufe++;}k.dataset.stufe=stufe;if(t.scrollHeight>t.clientHeight+1)k.classList.add('warn');});}
+const HAND=[
+ {n:'Harpunieren',c:2,i:'harpoon.png',t:'9 Schaden, Verwundbar 2',s:'W'},
+ {n:'Abperlen',c:1,i:'oilcoat.png',t:'5 Block. Eröffnung: +4 Block',s:'W'},
+ {n:'Salz streuen',c:0,i:'salt.png',t:'3 Block',s:'S'},
+ {n:'Wache halten',c:1,i:'wache.png',t:'Behalten. 4 Block, liegt sie am Zugende auf der Hand: Schutz 3',s:'hg',hg:1},
+ {n:'Stoßen',c:1,i:'stossen.png',t:'5 Schaden',s:'hg',hg:1}];
+const STRESS=[
+ [{n:'Stoßen',c:1,i:'stossen.png',t:'5 Schaden',s:'hg',hg:1},'kurz, 9 Zeichen'],
+ [{n:'Abperlen',c:1,i:'oilcoat.png',t:'5 Block. Eröffnung: +4 Block',s:'W'},'typisch, 28 Zeichen'],
+ [{n:'Gegen das Licht halten',c:0,i:'sichtglas.png',t:'3 Block, Ziehe 1. Verbraucht',s:'L'},'längster Name, 22 Zeichen'],
+ [{n:'Ansteckung',c:1,i:'ansteckung.png',t:'Gift 4, stirbt das Ziel, wandert sein Gift weiter',s:'hg',hg:1},'49 Zeichen'],
+ [{n:'Letzter Tropfen',c:2,i:'letzter_tropfen.png',t:'5 Schaden an allen, +1 Schaden je 4 fehlende Leben',s:'hg',hg:1},'50 Zeichen'],
+ [{n:'Gegenlauf',c:1,i:'gegenlauf.png',t:'Die nächste Karte reagiert auch mit der Karte davor',s:'hg',hg:1},'51 Zeichen, nur Regeltext'],
+ [{n:'Aufschlagen',c:0,i:'leere_seiten.png',t:'Ziehe 1, Mische 1 „Leere Seite“ in deinen Ziehstapel',s:'G'},'52 Zeichen, mit Kartenname'],
+ [{n:'Wache halten',c:1,i:'wache.png',t:'Behalten. 4 Block, liegt sie am Zugende auf der Hand: Schutz 3',s:'hg',hg:1},'62 Zeichen, Schlagwort'],
+ [{n:'Gewichte lösen',c:1,i:'bleiguertel.png',t:'6 Block, Wirf 1 unspielbare Karte von der Hand über Bord und ziehe 1',s:'E'},'68 Zeichen'],
+ [{n:'Ausschlagen',c:1,i:'zuenglein.png',t:'4×2 Schaden, Wirf 1 unspielbare Karte von der Hand über Bord; ziehe 1, wenn eine ging',s:'L'},'85 Zeichen, die längste']];
+
+/* ---------- Kampfbild A ---------- */
+const FE=[{n:'Chorknabe',ab:['atk',7],hp:38,max:38,x:168,y:190,top:118,st:[]},{n:'Der Ertrunkene',ab:['mehr','4×2'],hp:31,max:44,x:268,y:213,top:112,st:[['verw',2]],ziel:1},{n:'Chorknabe',ab:['blk',8],hp:20,max:38,x:330,y:166,top:118,st:[['gift',3]]}];
+function plakette(e,pos){const blk=e.blk||0;return `<div class="plak px9 ${e.ziel?'ziel':''}" ${pos?`style="left:calc(var(--px)*${e.x});top:calc(var(--px)*${e.y-e.top-38})"`:''}><div class="row"><div class="abs">${ic(e.ab[0])}${e.ab[1]}</div><div class="st">${e.st.map(([k,n])=>st(k,n)).join('')}</div></div><div class="nm"><span>${e.n.toUpperCase()}</span><em>${e.hp}/${e.max}</em></div><div class="pbar"><i style="width:${e.hp/e.max*100}%"></i>${blk?`<u style="width:${Math.min(100,blk/e.max*100)}%"></u>`:''}</div></div>`;}
+function leiste(){return `<div class="leiste"></div>
+ <div class="who"><div class="nm"><span>FISCHER</span><b>41<small>/52</small></b></div><div class="pbar"><i style="width:79%"></i><u style="width:12%"></u></div><div class="schild">6</div><div class="st">${st('schutz',2)}</div></div>
+ <div class="stapel px9" style="left:calc(var(--px)*104)">4<span>ZIEHEN</span></div>
+ <div class="stapel px9" style="right:calc(var(--px)*104)">3<span>ABLAGE</span></div>
+ <div class="ener"><i></i><i></i><i class="aus"></i></div>
+ <button class="knopf px9 zug">ZUG BEENDEN</button>`;}
+function hand(){const n=HAND.length;return `<div class="hand">${HAND.map((c,i)=>{const m=i-(n-1)/2;return karte(c,{cls:c.c>2?'zu':'',style:`transform:translate(calc(var(--px)*${m*40}),calc(var(--px)*${Math.abs(m)**2*1.5})) rotate(${m*5}deg);z-index:${10+i};--unrot:${-m*5}deg`});}).join('')}</div>`;}
+const SA={sz:SZ.kapelle,on:ON};const rA=makeRenderer($('#stA canvas'),SA);loop($('#stA'),rA);
+const uiA=$('#uiA');
+function zeigeA(menue){uiA.innerHTML=FE.map(e=>plakette(e,1)).join('')+leiste()+hand()+(menue?`<div style="position:absolute;inset:0;background:#000a;z-index:100"></div><div class="menue px9 hit" style="z-index:101"><h4>MENÜ</h4>${['WEITERSPIELEN','VOLLBILD','EINSTELLUNGEN','WACHSWALZE','TAGEBUCH','ZUM TITEL'].map(x=>`<button class="knopf px9">${x}</button>`).join('')}<p>Der Abstieg ist gespeichert und lässt sich vom Titel aus fortsetzen.</p></div>`:'');passen(uiA);
+ $('#a-kampf').classList.toggle('on',!menue);$('#a-menue').classList.toggle('on',!!menue);}
+$('#a-kampf').onclick=()=>zeigeA(0);$('#a-menue').onclick=()=>zeigeA(1);
+
+/* ---------- Element-Bogen ---------- */
+const BOGEN=[
+ ['Gegner-Plakette','76 × 34 px, Rand 4, Innenabstand 3',FE.map(e=>plakette(Object.assign({},e,{ziel:0}))).join('')+plakette(Object.assign({},FE[0],{ziel:1,n:'Ziel gewählt'})),'Absicht links (Angriff, Mehrfach, Block), Zustände rechts mit Zahl, darunter Name und Leben. Ziel: Rahmen ganz in Zonenlicht.'],
+ ['Leben und Block','Balken 6 px hoch, Kerbe alle 4 px',`<div class="who" style="width:calc(var(--px)*82)"><div class="nm"><span>FISCHER</span><b>41<small>/52</small></b></div><div class="pbar"><i style="width:79%"></i><u style="width:12%"></u></div><div class="schild">6</div><div class="st">${st('schutz',2)}${st('verw',1)}</div></div>`,'Block liegt als blaue Kerben am Ende des Balkens, dazu das Schild mit Zahl. Zustände als Pixelzeichen mit Zahl darunter.'],
+ ['Energie','Raute 13 × 13, Abstand 4',`<div class="ener" style="display:flex;gap:calc(var(--px)*4)"><i></i><i></i><i></i></div><div class="ener" style="display:flex;gap:calc(var(--px)*4)"><i></i><i class="aus"></i><i class="aus"></i></div>`,'Voll und verbraucht. Beim Bezahlen erlischt die Raute von rechts.'],
+ ['Knopf','Höhe 15 px, Seiten 7 px, Text Silkscreen 7',`<button class="knopf px9">ZUG BEENDEN</button><button class="knopf px9" style="--s9:var(--s9knopfh)">DARÜBER</button><button class="knopf px9" style="--s9:var(--s9knopfd);transform:translateY(var(--px))">GEDRÜCKT</button><button class="knopf px9" disabled>GESPERRT</button>`,'Vier Zustände. Gedrückt sinkt 1 px ein, das Randlicht wird dunkler.'],
+ ['Karte, Anatomie','60 × 84 px: Name 13, Bild 26 (kompakt 17), Text, Marke',karte(HAND[0])+karte(HAND[3]),'Item-Karte mit Messingkante, Handgriff mit violetter Kante. Kosten als Raute oben links, Stoff oben rechts.'],
+ ['Stapel','20 × 26 px',`<div class="stapel px9">4<span>ZIEHEN</span></div><div class="stapel px9">3<span>ABLAGE</span></div>`,'Kartenrücken mit Zahl. Ausgeteilte Karten fliegen von hier in die Hand (Runde 1).']];
+$('#bogen').innerHTML=BOGEN.map(([n,m,h,p])=>`<div class="el"><div><h3>${n}</h3><span class="mass">${m}</span></div><div class="feld"><div class="ui">${h}</div></div><p>${p}</p></div>`).join('');
+
+/* ---------- Stresstest ---------- */
+$('#stress').innerHTML=STRESS.map(([c,l])=>`<div class="zelle">${karte(c)}<div class="lbl"><b></b>${l}</div></div>`).join('');
+function stressFit(){passen($('#stress'));passen($('#bogen'));$('#stress').querySelectorAll('.zelle').forEach(z=>{const k=z.querySelector('.karte'),b=z.querySelector('.lbl b');const s=+k.dataset.stufe;const w=k.classList.contains('warn');b.textContent=w?'läuft über':['5,6 px','5,2 px','4,8 px','5,2 px, Bild klein','4,8 px, Bild klein'][s]||'';b.className=w?'x':'';});passen(uiA);}
+zeigeA(0);
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>{stressFit();setTimeout(stressFit,600);});
+new ResizeObserver(()=>stressFit()).observe($('#stress'));
+
+/* =========== Kreativ 1: Laterne =========== */
+{const cv=$('#k1 canvas'),g=cv.getContext('2d');g.imageSmoothingEnabled=false;
+ const off=document.createElement('canvas');off.width=480;off.height=270;
+ const LS=Object.assign({},SZ.kapelle,{n:'kapelle',licht:[96,214],lc:'#ffcf8a',amb:'#120c08'});LS.feinde=SZ.kapelle.feinde.map(f=>Object.assign({},f,{relit:{}}));
+ const st1={sz:LS,on:{atmen:1,licht:1,boden:1,luft:1,augen:1}};const r=makeRenderer(off,st1);
+ const dkc=document.createElement('canvas');dkc.width=480;dkc.height=270;const dk=dkc.getContext('2d');const dark=dk.createImageData(480,270);
+ $('#k1ui').innerHTML=`<div class="hand" style="left:78%">${HAND.slice(0,4).map((c,i)=>{const m=i-1.5;return karte(c,{style:`transform:translate(calc(var(--px)*${m*30}),calc(var(--px)*${18+Math.abs(m)*6})) rotate(${-14+m*9}deg);z-index:${10+i};--unrot:${14-m*9}deg`});}).join('')}</div>`;
+ setTimeout(()=>passen($('#k1ui')),800);
+ let oel=.62;
+ loop($('#k1'),t=>{r(t);g.drawImage(off,0,0);
+  const fl=Math.sin(t*9)*2+Math.sin(t*23)*1.5;const lx=110,ly=190,R=230+fl+oel*40;
+  const d=dark.data;for(let y=0;y<270;y++)for(let x=0;x<480;x++){const dist=Math.hypot((x-lx)*.85,(y-ly)*1.15);const k=(dist-R*.45)/(R*.6);const o=(y*480+x)*4;d[o]=6;d[o+1]=4;d[o+2]=8;d[o+3]=k>bay(x,y)?255:(k>bay(x,y)-.25?140:0);}
+  dk.putImageData(dark,0,0);g.drawImage(dkc,0,0);
+  g.globalCompositeOperation='lighter';{const gr=g.createRadialGradient(lx,ly,0,lx,ly,R*.7);gr.addColorStop(0,'rgba(255,160,70,.28)');gr.addColorStop(1,'rgba(255,160,70,0)');g.fillStyle=gr;g.fillRect(0,0,480,270);}g.globalCompositeOperation='source-over';
+  // Gegneraugen im Dunkeln
+  LS.feinde.forEach(f=>{if(!f.ox)return;f.augen.forEach(([ax,ay])=>{const ex=f.ox+ax-f.fx,ey=f.oy-(f.fy-ay);g.fillStyle='#fff4d0';g.fillRect(ex,ey,1,1);g.globalAlpha=.35;g.fillRect(ex-1,ey,3,1);g.fillRect(ex,ey-1,1,3);g.globalAlpha=1;});
+   // Absicht ohne Kasten
+   const kx=f.x,ky=f.y-(f.reihe===0?126:118);g.fillStyle='#000';g.fillRect(kx-8,ky-1,17,9);g.fillStyle='#ff6a5a';for(let i=0;i<6;i++)g.fillRect(kx-6+i,ky+5-i,1,1);g.fillStyle='#fff';g.font='9px "Jersey 10"';g.textBaseline='top';g.fillText(String([7,9,8][f.reihe]),kx+1,ky-2);});
+  // Arm und Laterne
+  g.fillStyle='#050405';g.beginPath();g.moveTo(0,270);g.lineTo(0,226);g.lineTo(40,232);g.lineTo(78,224);g.lineTo(88,234);g.lineTo(60,250);g.lineTo(48,270);g.fill();
+  g.fillStyle='#120e0a';g.fillRect(90,170,12,3);g.fillRect(95,166,2,4);g.fillStyle='#000';g.fillRect(82,173,28,4);g.fillRect(84,218,24,6);
+  g.fillStyle='#1a120a';g.fillRect(84,177,2,41);g.fillRect(106,177,2,41);
+  g.fillStyle='#2a1a0c';g.fillRect(86,177,20,41);
+  const lvl=Math.round(oel*30);g.fillStyle='#6a3a0a';g.fillRect(86,218-lvl,20,lvl);g.fillStyle='#c27a1a';g.fillRect(86,218-lvl,20,1);
+  g.fillStyle='#ffd27a';const fh=7+Math.round(fl*.6);g.fillRect(95,198-fh-(30-lvl)*0+0,3,fh);g.fillStyle='#fff6d0';g.fillRect(96,198-fh+2,1,fh-3);
+  g.fillStyle='#000';g.fillRect(88,190,16,1);g.fillStyle='#ffcf8a';g.fillRect(84,176,2,1);g.fillRect(106,176,2,1);
+  g.font='9px "Jersey 10"';g.fillStyle='#000';g.fillText('41',112,206);g.fillStyle='#ffcf8a';g.fillText('41',111,205);
+  // Streichholzschachtel
+  g.fillStyle='#000';g.fillRect(126,240,40,22);g.fillStyle='#5a1a14';g.fillRect(127,241,38,20);g.fillStyle='#c8a24a';g.fillRect(127,241,38,1);
+  for(let i=0;i<3;i++){const used=i===2;g.fillStyle=used?'#3a3030':'#d8c8a0';g.fillRect(132+i*10,232,2,14);g.fillStyle=used?'#111':'#c0302a';g.fillRect(131+i*10,230,4,3);}
+  // Zug beenden als Pusten
+  g.font='8px Silkscreen';g.fillStyle='#000';g.fillRect(392,6,82,14);g.fillStyle='#ffcf8a';g.fillRect(392,6,82,1);g.fillStyle='#efe4c8';g.fillText('ZUG BEENDEN',398,9);
+ });}
+
+/* =========== Kreativ 2: Séance =========== */
+{const cv=$('#k2 canvas'),g=cv.getContext('2d');g.imageSmoothingEnabled=false;
+ const off=document.createElement('canvas');off.width=480;off.height=270;const r=makeRenderer(off,{sz:SZ.kapelle,on:ON});
+ const CX=240,CY=88,RX=150,RY=80;
+ $('#k2ui').innerHTML=`<div class="hand" style="bottom:calc(var(--px)*-30)">${HAND.map((c,i)=>{const m=i-2;return karte(c,{style:`transform:translate(calc(var(--px)*${m*60}),calc(var(--px)*${-6+((i*7)%5)})) rotate(${[-4,3,-2,5,-3][i]}deg);z-index:${10+i};--unrot:${-[-4,3,-2,5,-3][i]}deg`});}).join('')}</div>`;
+ setTimeout(()=>passen($('#k2ui')),800);
+ const holz=document.createElement('canvas');holz.width=480;holz.height=270;{const h=holz.getContext('2d');h.fillStyle='#1a0f08';h.fillRect(0,0,480,270);for(let y=0;y<270;y++){for(let k=0;k<6;k++){const x=((y*37+k*83)%480);h.fillStyle=(y+k)%3?'#22140a':'#160c06';h.fillRect(x,y,20+(k*13)%40,1);}}for(let i=0;i<480;i+=96){h.fillStyle='#0a0603';h.fillRect(i,0,1,270);}}
+ let zi=0,zp=0;
+ loop($('#k2'),t=>{r(t);g.drawImage(holz,0,0);
+  // Kerzenlicht auf dem Holz
+  const fl=Math.sin(t*8)*3+Math.sin(t*19)*2;
+  g.globalCompositeOperation='lighter';const gr=g.createRadialGradient(40,190,0,40,190,160+fl);gr.addColorStop(0,'rgba(255,170,80,.30)');gr.addColorStop(1,'rgba(255,170,80,0)');g.fillStyle=gr;g.fillRect(0,0,480,270);g.globalCompositeOperation='source-over';
+  // Spiegel
+  g.save();g.beginPath();g.ellipse(CX,CY,RX,RY,0,0,Math.PI*2);g.clip();g.drawImage(off,0,-48);g.restore();
+  // Messingrahmen gerastert
+  for(let a=0;a<Math.PI*2;a+=.004){for(let w=0;w<7;w++){const x=Math.round(CX+Math.cos(a)*(RX+w)),y=Math.round(CY+Math.sin(a)*(RY+w*.6));const sh=Math.sin(a+2.2);g.fillStyle=w===0?'#000':w===1?(sh>.2?'#ffe9a6':'#c8a24a'):(w<5?(sh>0?'#a88432':'#6a4a1a'):'#2a1a08');g.fillRect(x,y,1,1);}}
+  // Schilder am Rahmen
+  const zielX=[168,268,330];const plx=[150,240,330];
+  plx.forEach((x,i)=>{const y=CY+RY+6;g.fillStyle='#000';g.fillRect(x-22,y,44,14);g.fillStyle='#8a6a26';g.fillRect(x-21,y+1,42,12);g.fillStyle='#e8c66a';g.fillRect(x-21,y+1,42,1);g.fillStyle='#1a1208';g.font='10px "Jersey 10"';g.textBaseline='top';g.fillText(['⚔ 7','⚔ 4×2','◆ 8'][i].replace('⚔','').replace('◆',''),x-4,y+2);
+   g.fillStyle='#ff6a5a';if(i<2){for(let k=0;k<5;k++)g.fillRect(x-16+k,y+9-k,1,1);}else{g.fillStyle='#3f78c0';g.fillRect(x-17,y+3,5,6);}
+   const hp=[1,.7,.53][i];for(let k=0;k<9;k++){g.fillStyle=k/9<hp?'#c0302a':'#2a1212';g.fillRect(x-18+k*4,y+16,3,2);}});
+  // Zeiger (Planchette)
+  if(t-zp>2.4){zp=t;zi=(zi+1)%3;}const tx=plx[zi];const px=Math.round(tx+0);const py=CY+RY-8;
+  g.fillStyle='#000';g.beginPath();g.moveTo(px,py-12);g.lineTo(px+12,py+4);g.lineTo(px,py+9);g.lineTo(px-12,py+4);g.closePath();g.fill();g.fillStyle='#c8a24a';g.beginPath();g.moveTo(px,py-10);g.lineTo(px+10,py+3);g.lineTo(px,py+7);g.lineTo(px-10,py+3);g.closePath();g.fill();g.fillStyle='#000';g.fillRect(px-2,py-1,5,4);g.fillStyle='#7dffc4';g.fillRect(px-1,py,3,2);
+  // Kerze = Leben
+  const hpk=Math.round(.79*60);g.fillStyle='#000';g.fillRect(24,250-hpk-1,16,hpk+2);g.fillStyle='#e8dcc0';g.fillRect(25,250-hpk,14,hpk);g.fillStyle='#fff6e0';g.fillRect(25,250-hpk,3,hpk);g.fillStyle='#000';g.fillRect(31,250-hpk-4,1,4);
+  g.fillStyle='#ff9a2a';g.fillRect(30,250-hpk-11+Math.round(fl*.3),3,7);g.fillStyle='#fff2b0';g.fillRect(31,250-hpk-9+Math.round(fl*.3),1,4);
+  g.fillStyle='#000';g.fillRect(18,250,28,6);g.fillStyle='#6a4a1a';g.fillRect(19,251,26,4);
+  g.font='9px "Jersey 10"';g.fillStyle='#efe4c8';g.fillText('41',46,250-hpk);
+  // Marken = Energie
+  for(let i=0;i<3;i++){const x=430,y=150+i*14;g.fillStyle='#000';g.beginPath();g.ellipse(x,y,10,5,0,0,Math.PI*2);g.fill();g.fillStyle=i<2?'#c8a24a':'#3a2a12';g.beginPath();g.ellipse(x,y-1,9,4,0,0,Math.PI*2);g.fill();if(i<2){g.fillStyle='#ffe9a6';g.fillRect(x-5,y-3,8,1);}}
+  g.fillStyle='#000';g.fillRect(402,206,72,16);g.fillStyle='#2a1a0c';g.fillRect(403,207,70,14);g.fillStyle='#c8a24a';g.fillRect(403,207,70,1);g.font='8px Silkscreen';g.fillStyle='#efe4c8';g.fillText('ZUG BEENDEN',407,210);
+ });}
+
+/* =========== Kreativ 3: Film =========== */
+{const cv=$('#k3 canvas'),g=cv.getContext('2d');g.imageSmoothingEnabled=false;
+ const off=document.createElement('canvas');off.width=480;off.height=270;
+ const FS=Object.assign({},SZ.kapelle);FS.feinde=SZ.kapelle.feinde.filter(f=>f.reihe>0).map(f=>Object.assign({},f,{relit:{},x:f.x+90}));
+ const r=makeRenderer(off,{sz:FS,on:ON});const FI=img('fischer.png');let fsil=null;
+ const TOP=34,BOT=212;
+ loop($('#k3'),t=>{r(t);g.fillStyle='#000';g.fillRect(0,0,480,270);
+  const jit=Math.random()<.04?1:0;
+  g.save();g.beginPath();g.rect(0,TOP,480,BOT-TOP);g.clip();g.drawImage(off,0,-30+jit);g.restore();
+  // Spieler-Silhouette groß vorn links
+  if(!fsil&&FI.complete&&FI.naturalWidth){const c=document.createElement('canvas');c.width=110;c.height=172;const x=c.getContext('2d');x.drawImage(FI,0,0);const id=x.getImageData(0,0,110,172),d=id.data;const a=k=>d[k*4+3]>0;
+   for(let y=0;y<172;y++)for(let i=0;i<110;i++){const k=y*110+i;if(!a(k))continue;const o=k*4;const rim=(i<109&&!a(k+1))||(y>0&&!a(k-110));if(rim){d[o]=141;d[o+1]=255;d[o+2]=208;}else{d[o]=6;d[o+1]=8;d[o+2]=8;}}x.putImageData(id,0,0);fsil=c;}
+  if(fsil){g.save();g.beginPath();g.rect(0,TOP,480,BOT-TOP);g.clip();const br=Math.round(Math.sin(t*1.5)*1);g.drawImage(fsil,-6,TOP+30+br,110*1,172*1);g.restore();}
+  // Korn
+  for(let i=0;i<60;i++){g.fillStyle=Math.random()<.5?'#ffffff':'#000';g.globalAlpha=.08;g.fillRect(Math.random()*480|0,TOP+(Math.random()*(BOT-TOP))|0,1,1);}g.globalAlpha=1;
+  // oberer Balken: Zwischentitel
+  FS.feinde.forEach((f,i)=>{const x=f.x;g.fillStyle='#0a0908';g.fillRect(x-30,6,60,22);g.strokeStyle='#c8b890';g.fillStyle='#c8b890';g.fillRect(x-30,6,60,1);g.fillRect(x-30,27,60,1);g.fillRect(x-30,6,1,22);g.fillRect(x+29,6,1,22);g.fillRect(x-27,9,54,1);g.fillRect(x-27,24,54,1);
+   g.font='12px "Jersey 10"';g.textBaseline='top';g.textAlign='center';g.fillStyle='#efe4c8';g.fillText(i?'4×2':'7',x,8);g.font='6px Silkscreen';g.fillStyle='#c8b890';g.fillText(i?'ERTRUNKENER':'CHORKNABE',x,18);g.textAlign='left';});
+  // unterer Balken: Filmstreifen
+  const sh=(t*6)%40;g.fillStyle='#14110e';g.fillRect(0,BOT+4,480,54);
+  for(let x=-40+sh;x<500;x+=10){g.fillStyle='#000';g.fillRect(Math.round(x),BOT+6,5,4);g.fillRect(Math.round(x),BOT+52,5,4);}
+  g.font='12px "Jersey 10"';g.fillStyle='#efe4c8';g.fillText('41',10,BOT+18);g.font='5px Silkscreen';g.fillStyle='#a89c80';g.fillText('FISCHER',10,BOT+32);
+  for(let i=0;i<3;i++){g.fillStyle=i<2?'#ffe9a6':'#3a3226';g.fillRect(440+i*10,BOT+20,6,6);}
+ });
+ $('#k3ui').innerHTML=`<div class="hand" style="bottom:calc(var(--px)*2)">${HAND.map((c,i)=>{const m=i-2;return karte(c,{style:`transform:translate(calc(var(--px)*${m*62}),0) scale(.62);z-index:${10+i};transform-origin:50% 100%`});}).join('')}</div>`;
+ setTimeout(()=>passen($('#k3ui')),800);}
+}
+</script>
+</body>
+</html>

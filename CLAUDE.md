@@ -5,5 +5,6 @@
 - Großer Auftrag „spielbarer Prototyp-Run“: alles in `docs/auftrag/` (Start: `docs/auftrag/README.md`, Prompt: `docs/auftrag/PROMPT.md`). Wer daran arbeitet, folgt `docs/auftrag/01-regeln.md`.
 - Folgeauftrag „Deckbau und Inhalte in Masse“: alles in `docs/auftrag-2/` (Start: `docs/auftrag-2/README.md`, Prompt: `docs/auftrag-2/PROMPT.md`). Wer daran arbeitet, folgt `docs/auftrag-2/01-regeln.md`.
 - Auftrag 3 „Die Tiefe verändert das Spiel“ (Fixes, neue Oberfläche, Lovecraft-Kern): alles in `docs/auftrag-3/` (Start: `docs/auftrag-3/README.md`, Prompt: `docs/auftrag-3/PROMPT.md`). Wer daran arbeitet, folgt `docs/auftrag-3/01-regeln.md` und `docs/auftrag-3/08-dirigent.md`.
+- Auftrag 4 „Der fertige Look“ (Tiefe im Kampf, Kampfoberfläche mit Fußleiste, Bewegung, Szenen statt Kästen, Momentum): alles in `docs/auftrag-4/` (Start: `docs/auftrag-4/README.md`, Prompt: `docs/auftrag-4/PROMPT.md`, Plan: `docs/auftrag-4/plan.md`). Wer daran arbeitet, folgt `docs/auftrag-3/01-regeln.md` und `docs/auftrag-3/08-dirigent.md`.
 - Nie direkt auf `main` pushen, Änderungen per Pull Request.
 - Spiel im Browser testen (auch Hintergrund-Tabs, Headless, Playwright): Musik und Sound sofort stummschalten (z. B. `audioOn=false` per JS) und Test-Tabs danach schließen.
