@@ -70,3 +70,6 @@ function zonenLicht(biom){bausteineFest();const B=(typeof BIOMES!=='undefined'&&
  const F=fussBild(fussForm(),rim,rimd);R.setProperty('--fussbild',u(F.src));}
 // Pixelzeichen (9 × 9, js/ui/zeichen.js) als Hintergrund eines Elements, scharf skaliert
 const icoStil=(k,col)=>typeof glyph==='function'?`--i:url(${glyph(k,col)})`:'';
+// Feste Bausteine (Kartenrahmen, Rauten, Schild) gleich beim Laden setzen, nicht erst beim ersten render().
+// Sonst bleiben Karten durchsichtig und Rauten unsichtbar, falls render() einmal nicht bis zonenLicht kommt.
+try{bausteineFest();}catch(e){console.warn('Bausteine',e);}
