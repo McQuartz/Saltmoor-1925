@@ -126,10 +126,11 @@
 .karte .sf img{display:block;width:calc(var(--u)*7)!important;height:calc(var(--u)*7)!important}
 .karte .mk{position:absolute;font:calc(var(--u)*5)/1 var(--ps);color:#cdb8ff;bottom:calc(var(--u)*3);left:calc(var(--u)*3)}
 .karte .mk.schl{left:auto;right:calc(var(--u)*3);color:#7dffc4}
-/* Reaktions-Band über der Unterkante des Bildfensters, die Karte leuchtet in der Farbe ihres reagierenden Stoffs */
-.karte .rxb{position:absolute;left:50%;bottom:calc(var(--u)*-4);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:var(--u);width:max-content;max-width:calc(var(--u)*46);z-index:2}
+/* Reaktions-Band im Bildfenster unten, die Karte leuchtet in der Farbe ihres reagierenden Stoffs */
+.karte .rxb{position:absolute;left:50%;bottom:calc(var(--u)*2);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:var(--u);width:max-content;max-width:calc(var(--u)*36);z-index:2}
 .karte .rx{position:static;transform:none;font:calc(var(--u)*4.4)/1 var(--ps);letter-spacing:0;color:var(--c,#e8c547);background:#000;box-shadow:0 0 0 var(--u) var(--c,#e8c547),0 0 0 calc(var(--u)*2) #000;padding:var(--u) calc(var(--u)*2);white-space:normal;text-align:center;max-width:100%;border:0;width:auto}
-.karte .rx.in{color:#9fc4ff;--c:#6a9ad8}
+.karte .rx.in{color:#9fc4ff;--c:#6a9ad8;display:flex;align-items:center;gap:var(--u)}
+.karte .rx.in .ico{width:calc(var(--u)*5)!important;height:calc(var(--u)*5)!important;flex:none}
 .karte.reagiert .kin{filter:drop-shadow(0 0 calc(var(--u)*3) var(--c,#e8c547))}
 #hand .karte.reagiert:hover .kin{filter:drop-shadow(0 0 calc(var(--u)*3) var(--c,#e8c547)) brightness(1.18)}
 .karte.teuer .kin{filter:brightness(.42) saturate(.5)}

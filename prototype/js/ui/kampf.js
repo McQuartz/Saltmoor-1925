@@ -117,11 +117,11 @@ function karteHtml(c,o={}){const T=karteTextTeile(o.text!=null?o.text:cardText(c
 function handLage(n){const h=(n-1)/2;const rot=h?Math.min(2,6/h):0;const th=rot*h*Math.PI/180;const step=h?Math.min(45,(236/2-25*Math.cos(th)-91*Math.sin(th))/h):0;const arc=h?6/(h*h):0;const slop=Math.ceil(25*Math.sin(th)+21*(1-Math.cos(th)));
  return{h,rot,step,arc,base:20+6+slop};}
 function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.st);const self=c.st.length>1?rx.filter(r=>r.k&&[...r.k].every(k=>c.st.includes(k))):[];const vor=rx.filter(r=>!self.includes(r));
- // M2: Reaktionen stehen immer mit Namen als Band an der Karte (kein Fragezeichen); Auftrag 4: das Band liegt über der Unterkante des Bildfensters
+ // M2: Reaktionen stehen immer mit Namen als Band an der Karte (kein Fragezeichen); Spieltest: das Band liegt im Bildfenster, In-sich-Reaktionen tragen ein Zeichen statt Text
  let rxl='';const km=rx.length?rx.reduce((m,r)=>m*(r.pre&&r.pre.mult||1),1):1;
  const glow=vor.length?(ST[c.st.find(k=>vor.some(r=>!r.k||String(r.k).includes(k)))||c.st[0]]||{}).c:null;
  if(vor.length)rxl=`<div class="rx">${vor.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
- if(self.length)rxl+=`<div class="rx in">IN SICH: ${self.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
+ if(self.length)rxl+=`<div class="rx in" title="Reagiert in sich (zwei Stoffe auf einer Karte)">${gi('insich',KZ(),'#9fc4ff')}${self.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
  const L=handLage(n||S.hand.length),m=i-L.h;
  const cls=`${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''} ${c.farbe?'farbe':''} ${c.erbe?'erbe':''} ${c.fremd?'fremd':''} ${dealAnim||c.frisch?'neu':''} ${c.frisch&&!dealAnim?'nachgezogen':''}`;
  const koCls=c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?'hoch':'tief'):'';
