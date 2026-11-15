@@ -108,7 +108,7 @@ function cardText(c,m=1){const vs=v=>typeof verstaerkt==='function'?verstaerkt(v
 const KARTE_MARKEN=['Behalten','Verbraucht','Funke'];
 function karteTextTeile(t){t=String(t||'');const tags=[];for(const k of KARTE_MARKEN){const re=new RegExp('(^|[.,]\\s*)'+k+'(?![a-zäöüß])\\.?\\s*');if(re.test(t)){tags.push(k);t=t.replace(re,'$1').replace(/^[.,\s]+|[.,\s]+$/g,'');}}
  return{t,tags};}
-function karteHtml(c,o={}){const T=karteTextTeile(o.text!=null?o.text:cardText(c,o.m||1));let t=esc(T.t).replace(/(\d+(?:×\d+)?)/g,'<b>$1</b>');if(t&&!/[.!?]$/.test(T.t))t+='.';
+function karteHtml(c,o={}){const T=karteTextTeile(o.text!=null?o.text:cardText(c,o.m||1));let t=esc(T.t).replace(/(\d+(?:×\d+)?)/g,m=>typeof pzHtml==='function'?pzHtml(m):'<b>'+m+'</b>');if(t&&!/[.!?]$/.test(T.t))t+='.';
  const ko=o.kost==null?'':String(o.kost);const img=o.img!=null?o.img:(c.img||(c.spr&&typeof spr==='function'?spr(c.spr):''));
  return `<div class="karte ${o.cls||''}" ${o.attr||''} ${o.style?`style="${o.style}"`:''}><div class="kin px9"><div class="kn">${esc(c.n).toUpperCase()}</div><div class="bild px9">${img?`<img src="${img}" alt="" draggable="false">`:''}${o.rx?`<div class="rxb">${o.rx}</div>`:''}</div>
   <div class="kt${o.verst?' verst':''}">${t}</div><div class="tags">${T.tags.map(x=>`<span>${x.toUpperCase()}</span>`).join('')}</div>

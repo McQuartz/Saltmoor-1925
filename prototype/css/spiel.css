@@ -261,3 +261,7 @@ body[data-phase="titel"] #menueBtn{display:none}
 .box.menue .menue .deco.klein{font-size:calc(var(--u)*6);padding:calc(var(--u)*3.5) calc(var(--u)*8)}
 .box.menue .menue .hint{font-size:calc(var(--u)*5.5)}
 .karte-geo{font-size:calc(var(--u)*5);color:#bfa870;font-style:italic;margin-bottom:calc(var(--u)*4)}
+/* Spieltest Auftrag 4 (C9): Pixel-Ziffern 4×6 als Maske, Farbe aus der Schrift */
+.pz{display:inline-flex;gap:var(--u);vertical-align:calc(var(--u)*-.5);margin:0 calc(var(--u)*.5)}
+.pz i{display:block;width:calc(var(--u)*var(--w));height:calc(var(--u)*6);background:currentColor;-webkit-mask:var(--m) 0 0/100% 100% no-repeat;mask:var(--m) 0 0/100% 100% no-repeat;image-rendering:pixelated}
+.karte .kt b.pz{font-size:inherit}
