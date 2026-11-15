@@ -6,7 +6,9 @@ function panelHtml(ph){switch(ph){
  case'kraemer':return kraemerHtml();case'kraemer_streichen':return streichenHtml(`Für ${BAL.shop.streichen_preis} Gold streicht ${esc(biom().kraemer.n)} eine Karte aus deinem Deck. Das Item bleibt angelegt.`,'kstrike0');
  case'werkstatt':return werkstattHtml();case'wahl':return wahlHtml();case'event_hg':case'kraemer_hg':return ritzenHtml('Wohin ritzt du den Handgriff?');case'rast':return rastHtml();case'wandbild':return wandbildHtml();case'fund':return fundHtml();
  case'erbe':return erbeHtml();case'brief':return briefHtml();case'strand':return strandHtml();case'ankunft':return ankunftHtml();case'ende':return endeHtml();}return'';}
-const box=(cls,inner)=>`<div class="box ${cls}"><div class="innen">${inner}</div></div>`;
+// Auftrag 4, Phase 4: Rast, Beute, Werkstatt, Fundstelle und Krämer sind Szenen statt Kasten (css/szenen.css)
+const SZENEN_PH=new Set(['rast','reward','werkstatt','fund','kraemer']);
+const box=(cls,inner)=>`<div class="box ${cls}${SZENEN_PH.has(S.phase)&&String(cls).split(' ')[0]===({reward:'reward'}[S.phase]||S.phase)?' szene':''}"><div class="innen">${inner}</div></div>`;
 function titelHtml(){const M=Meta.get();return `<div class="titel"><h1>SALTMOOR</h1><div class="jahr">NEUENGLAND · 1925</div>
  <div class="menue">${hasSave()?'<button class="deco" data-act="fortsetzen">FORTSETZEN</button>':''}<button class="deco" data-act="neu">${hasSave()?'NEUER ABSTIEG':'HINAB'}</button>
  <button class="deco klein" data-act="tagebuch">TAGEBUCH</button><button class="deco klein" data-act="einst">EINSTELLUNGEN</button></div>
@@ -25,7 +27,7 @@ function biomwahlHtml(){const a=RUN.akte[S.akt];const an=S.angebote[S.akt]||[];
  <div class="wege">${an.map((b,i)=>{const B=BIOMES[b];return `<div class="kbiom" data-biom="${i}">${karteMiniHtml(b)}<div class="wn">${esc(B.n).toUpperCase()}</div><div class="hinw">${esc(B.zeit||'')}</div><div class="ank">${esc(B.anreise||(B.weg_hinweise&&B.weg_hinweise.kampf&&B.weg_hinweise.kampf[0])||'')}</div>${karteBiegungHtml(b)}</div>`;}).join('')}</div>`);}
 function uebergangHtml(){const a=RUN.akte[S.akt];const b=biom();let satz=S.akt===0?ausredeVon(JOBS.find(j=>j.id===S.job)):BIOMES[S.route[S.akt-1]].uebergang;
  const fz=typeof Metaebene!=='undefined'&&Metaebene.übergangSatz();if(fz)satz=fz; // M10: Fehlzeit, das Stück davor ist schon gegangen
- return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2>${esc(b.n).toUpperCase()}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p>${zeitungHtml()}<div class="hint spaet">Klicken oder Taste drücken</div></div>`;}
+ return `<div class="zwischentitel klick" data-act="weiter"><div class="akt">${a.n.toUpperCase()}</div><h2 aria-label="${esc(b.n).toUpperCase()}">${[...esc(b.n).toUpperCase()].map((c,i)=>c===' '?' ':`<span class="bu" style="animation-delay:${(.6+((i*7)%11)*.07).toFixed(2)}s">${c}</span>`).join('')}</h2><div class="zeit">${esc(b.zeit)}</div><p>„${esc(satz)}“</p>${zeitungHtml()}<div class="hint spaet">Klicken oder Taste drücken</div></div>`;}
 // Auftrag 3 M3: die Phase 'weg' zeigt die Peilkarte (js/ui/karte.js); die alte „1 aus 3“-Wegwahl ist entfernt
 function wegHtml(){return kartenHtml('haupt');}
 // Spieltest 2026-11-11 (Variante F): Items stehen in einer Vitrine (Glas, Holzsockel mit Namensschild), Handgriffe sind violette Karten mit Hand.

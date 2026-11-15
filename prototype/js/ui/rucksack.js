@@ -71,7 +71,7 @@ function koeLinien(){const J=koeFigur();const K=J.koerper||{hals:[55,62],leib:[5
  return `<svg class="klinien" viewBox="0 0 480 362" preserveAspectRatio="none">${AREAS.map(a=>{const[s,t]=[start[a],ziele[a]];return `<line x1="${s[0]}" y1="${s[1]}" x2="${t[0]}" y2="${t[1]}"/><rect class="pkt" x="${t[0]-1}" y="${t[1]-1}" width="2" height="2"/><rect class="pkt" x="${s[0]-1}" y="${s[1]-1}" width="2" height="2"/>`;}).join('')}</svg>`;}
 
 function koeKopf(){const ph={rast:'RAST',werkstatt:'WERKSTATT',kraemer:'KRÄMER',reward:'FUND',fund:'FUND',fight:'KAMPF',event:'EREIGNIS',event_folge:'EREIGNIS',wandbild:'WANDBILD',weg:'KARTE'}[S.phase]||'';
- return `<div class="kkopf"><div class="tz">TIEFE ${romanN(Math.max(1,S.depth))}${ph?' · '+ph:''}<span class="sub">${esc(biom().n)}</span></div>
+ return `<div class="kkopf"><div class="tz">AM KÖRPER<span class="sub">Tiefe ${romanN(Math.max(1,S.depth))}${ph?' · '+ph[0]+ph.slice(1).toLowerCase():''} · ${esc(biom().n)}</span></div>
  <div class="kr"><span class="gold">${gi('gold',KZ())} <b>${S.gold}</b> Gold</span><span>Buch <b>${S.disc.size}/${allRx().length}</b></span><span>Deck <b>${deckListe().length}</b></span></div></div>`;}
 
 function koeLinks(){const J=koeFigur();const m=maxHp();const rs=roleState().filter(x=>x.have.length);
