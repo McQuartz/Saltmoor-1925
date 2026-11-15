@@ -32,7 +32,7 @@
 #spieler2 .schild{flex:none;width:calc(var(--u)*13);height:calc(var(--u)*15);display:grid;place-items:center;font:calc(var(--u)*10)/1 var(--pj);color:#fff;background:var(--schildaus) center/100% 100%;image-rendering:pixelated;text-shadow:var(--u) var(--u) 0 #000;padding-bottom:calc(var(--u)*2)}
 #spieler2 .schild.an{background-image:var(--schild)}
 #spieler2 .sbar{position:relative;flex:1;height:calc(var(--u)*8);background:#140808;box-shadow:0 0 0 var(--u) #000}
-.sbar i,.sbar s,.sbar u,.pl-bar i,.pl-bar u{position:absolute;top:0;bottom:0;display:block;text-decoration:none}
+.sbar i,.sbar .nach,.sbar u,.pl-bar i,.pl-bar u{position:absolute;top:0;bottom:0;display:block;text-decoration:none}
 .sbar .hp,.pl-bar .hp{left:0;background:repeating-linear-gradient(90deg,#e0564a 0 calc(var(--u)*3),#8f2a22 calc(var(--u)*3) calc(var(--u)*4));box-shadow:inset 0 var(--u) 0 #ff9a8a}
 .sbar .nach{left:0;background:#f4e6c8;opacity:.85;animation:nachlauf .55s cubic-bezier(.4,0,.6,1) .25s forwards}
 @keyframes nachlauf{to{width:var(--bis)}}
@@ -64,6 +64,8 @@
 #baum .sackgasse{position:absolute;font:calc(var(--u)*9)/1 var(--pj);color:#6d6458;letter-spacing:calc(var(--u)*.3)}
 #baum .eck{position:absolute;left:0;top:calc(var(--u)*-7);font:calc(var(--u)*4)/1 var(--ps);color:#5d5446;white-space:nowrap}
 #baum .eck.an{color:#d8c890}#baum .eck.leuchtet{color:#ffe9a8;text-shadow:0 0 calc(var(--u)*2) #e8c547}
+#baum .sb-kette{position:absolute;inset:0}
+#baum .sb-punkt{position:absolute;width:calc(var(--u)*3);height:calc(var(--u)*3);background:#7a6a48}
 #baum .rueck .glied.letzt{animation:sbein .22s ease-out}
 @keyframes sbein{from{opacity:0;transform:translateX(calc(var(--u)*6))}}
 #baum .funk .glied.letzt{animation:sbfunk 1s linear}
