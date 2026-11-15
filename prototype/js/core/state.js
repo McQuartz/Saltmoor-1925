@@ -16,7 +16,10 @@ function roleState(){return ROLES.map(r=>{const have=r.i.filter(id=>allActive().
 // aktive Rollen-Boni eines Typs (siehe data/roles.json)
 function bonuses(type){return roleState().filter(x=>x.on&&x.r.bonus&&x.r.bonus.type===type).map(x=>x.r.bonus);}
 // Eigenschaften angelegter Items (items.json → passiv aus Auftrag 1 und eigen aus Auftrag 2), z. B. passive('brand_haelt')
-function passive(typ){const o=[];for(const it of allActive()){const D=def(it);for(const p of [D.passiv,D.eigen])if(p&&p.typ===typ)o.push(p);}return o;}
+// Momentum Stufe 1 (Auftrag 4): Reliquien wirken auch aus dem Rucksack (BAL.momentum.reliquien_rucksack)
+function momentum(k){return !!(BAL.momentum&&BAL.momentum[k]);}
+function passivTraeger(){const an=allActive();if(!momentum('reliquien_rucksack')||typeof besitz!=='function')return an;return [...an,...besitz().filter(b=>!b.an&&rarOf(def(b.it))==='reliquie').map(b=>b.it)];}
+function passive(typ){const o=[];for(const it of passivTraeger()){const D=def(it);for(const p of [D.passiv,D.eigen])if(p&&p.typ===typ)o.push(p);}return o;}
 // Seltenheit und Kerben (04-deckbau.md Abschnitt 3): gewöhnlich 1 Kerbe, selten und Reliquie 2, Werkstatt höchstens 3
 function rarOf(D){return D.rar||(D.rare?'selten':'gewoehnlich');}
 function kerbenVon(it){const D=def(it);const b=D.kerben!=null?D.kerben:(rarOf(D)==='gewoehnlich'?1:2);return Math.min(3,b+(it.kerbenPlus||0));}
