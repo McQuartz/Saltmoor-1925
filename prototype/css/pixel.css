@@ -100,3 +100,28 @@ button.kk:hover{box-shadow:inset 0 0 0 var(--u) #9a8cff;color:#fff}
 .wskachel b{font:400 calc(var(--u)*5.6)/1 var(--fk)}
 .wskachel small{font:calc(var(--u)*4.6)/1.2 var(--ft);color:#c8bca0;text-align:center}
 .wskachel img.ico{width:calc(var(--u)*18)!important;height:calc(var(--u)*18)!important}
+
+/* ---------- Krämer auf einem Bildschirm (C4) ---------- */
+#panel .box.szene.kraemer>.innen{justify-content:flex-start;padding:calc(var(--u)*84) calc(var(--u)*10) calc(var(--u)*8);overflow:hidden}
+.box.kraemer .kr2{display:grid;grid-template-columns:calc(var(--u)*118) 1fr;gap:calc(var(--u)*8);width:100%;align-items:start}
+.box.kraemer .kr-links{border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9panel) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;padding:calc(var(--u)*2);display:flex;flex-direction:column;gap:calc(var(--u)*3)}
+.box.kraemer .kr-links h3{margin:0;text-align:left}
+.box.kraemer .kverk{display:grid;grid-template-columns:repeat(5,calc(var(--u)*20));gap:calc(var(--u)*2);justify-content:start}
+.box.kraemer .kr-sel{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--u)*2);font:calc(var(--u)*5)/1.2 var(--fk);color:#efe4c8;min-height:calc(var(--u)*20)}
+.box.kraemer .kr-sel b{font-weight:400}
+.box.kraemer .kr-sel .hint{font-size:calc(var(--u)*4.6)}
+.box.kraemer .kr-rechts{display:flex;flex-direction:column;gap:calc(var(--u)*3);min-width:0}
+.box.kraemer .kr-rechts>.hint{margin:0;text-align:left}
+#panel .box.szene.kraemer .kr-rechts .picks{display:flex;flex-wrap:wrap;gap:calc(var(--u)*3);justify-content:flex-start;margin:0;padding:0;background:none;box-shadow:none}
+.box.kraemer .kr-rechts .pick.vit{width:calc(var(--u)*46)}
+.box.kraemer .kr-rechts .pick.vit .vglas{width:calc(var(--u)*42);height:calc(var(--u)*30)}
+.box.kraemer .kr-rechts .pick.vit .vglas img{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.box.kraemer .kr-rechts .pick.vit .vsockel{padding:calc(var(--u)*1.5) calc(var(--u)*1)}
+.box.kraemer .kr-rechts .pick.vit .pn{font:calc(var(--u)*4.2)/1.05 var(--fk);white-space:normal;overflow-wrap:anywhere;hyphens:auto}
+.box.kraemer .kr-rechts .pick.vit .ps{display:none}
+.box.kraemer .kr-rechts .pick .preis{font:calc(var(--u)*7)/1 var(--pj);color:var(--gold);margin-top:var(--u)}
+.box.kraemer .kr-rechts .pick.laud{width:calc(var(--u)*46);min-height:calc(var(--u)*50);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*2);cursor:pointer}
+.box.kraemer .kr-rechts .pick.laud .pn{font:calc(var(--u)*5)/1 var(--fk)}.box.kraemer .kr-rechts .pick.laud .ps{font:calc(var(--u)*4.6)/1 var(--ft)}
+.box.kraemer .kr-rechts .picks.hgs .pick.hgpick.wz{width:calc(var(--u)*46);min-height:calc(var(--u)*52)}
+.box.kraemer .kr-rechts .pick.weg{opacity:.35;pointer-events:none}
+#panel .box.szene.kraemer .kr-weiter{position:absolute;right:calc(var(--u)*10);bottom:calc(var(--u)*8)}
