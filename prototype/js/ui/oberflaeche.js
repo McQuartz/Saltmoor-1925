@@ -15,6 +15,7 @@ function render(){
  if(typeof zonenLicht==='function')zonenLicht(biomId());
  $('leiste').innerHTML=ph==='fight'?leisteKampf():'';
  $('leiste').className=ph==='fight'?'kampf':'';
+ if(S.hand)S.hand.forEach(c=>{if(c.frisch)delete c.frisch;}); // Spieltest Auftrag 4: nur im ersten Bild nach dem Ziehen einfliegen
  dealAnim=false;karteNach();kartenEinpassen();if(typeof koeNachRender==='function')koeNachRender();if(typeof Dev!=='undefined'&&Dev.an)Dev.render();}
 
 // Auftrag 4: Karten passen sich in Stufen an (Look-Runde 7, passen()). Name 5 / 4,5 / 4, Text 5,4 / 5 / 4,6 / 4,6 / 4,2 mit Mindesthöhe des Bildfensters.

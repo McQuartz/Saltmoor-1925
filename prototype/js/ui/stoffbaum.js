@@ -76,8 +76,9 @@ function stoffBaumHtml(){
   d.aeste.forEach((a,i)=>{if(a.hell)p(tx,Math.min(my,rows[i]),1,Math.abs(rows[i]-my)+1,'#f1ede2');});
   d.aeste.forEach((a,i)=>p(tx+1,rows[i],bx-tx-1,1,a.hell?col(a):'#3a3328'));}):'';
  const glieder=zeig.map((g,i)=>glied(g,i).html.replace("top:calc(var(--u)*Y)",`top:calc(var(--u)*${(my-5.5).toFixed(1)})`)).join('');
- const af=n>4?Math.max(6,Math.round(zeile+1.5)):10;
- const aeste=d.sackgasse?`<div class="sackgasse sb-sack" style="${sbP(bx,my-4)}">Sackgasse</div>`:d.aeste.map((a,i)=>`<div class="sb-ast ast${a.hell?' hell':' dunkel'}${a.gold?' gold':''}${a.asche?' asche':''}" style="${sbP(bx+1,(rows[i]-af*.4).toFixed(1))};--c:${col(a)};--af:${af}" data-ast="${a.stoff.join('')}" data-rx="${sbEsc(a.rx.map(r=>r.n).join('|'))}" data-hell="${a.hell?1:0}" title="${sbEsc(a.rx.map(r=>r.t).join('\n'))}">${a.stoff.map(sbZeichen).join('')}<span class="sb-name">${sbEsc(a.n)}</span></div>`).join('');
+ // Spieltest Auftrag 4: Schrift immer gleich groß (10). Ab fünf Ästen stehen nur die spielbaren (hell, gold) mit Zeichen und Namen, die dunklen bleiben als Linie im Baum.
+ const af=10,still=a=>n>4&&!a.hell&&!a.gold;
+ const aeste=d.sackgasse?`<div class="sackgasse sb-sack" style="${sbP(bx,my-4)}">Sackgasse</div>`:d.aeste.map((a,i)=>`<div class="sb-ast ast${a.hell?' hell':' dunkel'}${a.gold?' gold':''}${a.asche?' asche':''}${still(a)?' still':''}" style="${sbP(bx+1,(rows[i]-af*.4).toFixed(1))};--c:${col(a)};--af:${af}" data-ast="${a.stoff.join('')}" data-rx="${sbEsc(a.rx.map(r=>r.n).join('|'))}" data-hell="${a.hell?1:0}" title="${sbEsc(a.rx.map(r=>r.t).join('\n'))}">${a.stoff.map(sbZeichen).join('')}<span class="sb-name">${sbEsc(a.n)}</span></div>`).join('');
  const eck=d.eck?`<div class="eck${d.eck.rx.length?' an':''}${d.eck.leuchtet?' leuchtet':''}" title="${sbEsc(d.eck.rx.length?'Über Eck beim Zugende: '+d.eck.t.join(' '):'Über Eck: ab drei Karten reagieren die erste und die letzte beim Zugende')}">ÜBER ECK${d.eck.rx.length?': '+sbEsc(d.eck.rx.join(' · ')):''}</div>`:'';
  const punkt=pfad.length?'':`<i class="sb-punkt" style="${sbP(3,my-1)}"></i>`;
  return `<div class="bk${Date.now()<sbFunkBis?' funk':''}">${bg?`<img class="bg" src="${bg}" alt="">`:''}${eck}<div class="sb-kette${rueck?' rueck':''}">${punkt}${glieder}</div>${aeste}</div>`;}

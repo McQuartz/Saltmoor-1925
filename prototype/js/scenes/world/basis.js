@@ -375,6 +375,8 @@ B.szene = function (K) {
     reihen: K.reihen, lichter: K.lichter, biom: K.o.biom, variante: K.o.variante, art: K.o.art, kulisse: K.kulisse,
     zeichneEbene(ctx, i, kam) { const L = i < 5 ? S.ebenen[i] : S.vorne; const [ox, oy] = off(kam, L.parallax); ctx.drawImage(L.canvas, ox - M, oy - M); },
     zeichneAnimiert(ctx, t, kam) { ctx.imageSmoothingEnabled = false; for (const a of K.anim) { const [ox, oy] = off(kam, a.p); a.f(ctx, t, ox, oy); } },
+    // Spieltest Auftrag 4: Animiertes je Ebene (Ebene = nächste Parallaxe), damit die Fahrt Flammen mit ihrer Kerze bewegt
+    zeichneAnimiertIn(ctx, t, i, ox, oy) { ctx.imageSmoothingEnabled = false; for (const a of K.anim) { let j = 0; for (let k = 1; k < 6; k++) if (Math.abs(par[k] - a.p) < Math.abs(par[j] - a.p)) j = k; if (j === i) a.f(ctx, t, ox, oy); } },
     zeichneVordergrund(ctx, t, kam, ohneEbene5) {
       ctx.imageSmoothingEnabled = false;
       if (!ohneEbene5) S.zeichneEbene(ctx, 5, kam);

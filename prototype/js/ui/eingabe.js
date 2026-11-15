@@ -6,12 +6,22 @@ function enemyAt(x,y){const els=document.elementsFromPoint(x,y);for(const t of e
  (S.enemies||[]).forEach((e,i)=>{if(e.hp<=0)return;const b=enemyBox(e);if(sx>b.x-b.w/2&&sx<b.x+b.w/2&&sy>b.kopf&&sy<b.y+6){const d=Math.abs(sx-b.x);if(d<bd){bd=d;best=i;}}});return best;}
 // Auftrag 4, Phase 3: Flug der gespielten Karte (nur wenn sie wirklich gespielt werden kann; die Regeln laufen sofort weiter)
 function bwSpiel(d,ei){if(typeof kartenFlug!=='function')return;const c=S.hand[d.i];if(!c||c.unspielbar||c.frost||cardCost(c)>S.energy||busy)return;kartenFlug(d.el,ei!=null?ei:needsTarget(c)?S.target:null);}
-function inScene(x,y){const r=$('szene').getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom-20;}
+// Spieltest Auftrag 4: Die Hand liegt im Bild (Fußleiste ab Zeile 190). Gespielt wird nur über der Ablegelinie, darunter geht die Karte zurück.
+const ABLEGE_LINIE=182;
+function inScene(x,y){const r=$('spiel').getBoundingClientRect();const s=r.width/480||1;const uy=(y-r.top)/s;return x>=r.left&&x<=r.right&&uy>=0&&uy<ABLEGE_LINIE;}
+// Ziehen abbrechen (Rechtsklick, Esc): Karte zurück, Pfeil und Vorschau weg
+function ziehenAbbrechen(){if(!cdrag)return false;cdrag=null;$('aim').style.display='none';AIM.ei=-1;$('szene').classList.remove('drop');vorschau=null;hoverCard=-1;render();return true;}
+// Rechtsklick ohne Ziehen schließt, was offen ist (Rucksack, Karte, Überlagerung, Auswahl), öffnet aber nie das Menü
+function rechtsSchliessen(){if(typeof KOE!=='undefined'&&KOE){rucksackZu();return;}const offen=$('overlay').classList.contains('an')||KARTE_AUF||S.sel!=null;if(!offen)return;S.sel=null;karteZu();closeOv();render();}
+// Kein Kontextmenü im Spiel (Eingabefelder ausgenommen); Rechtsklick bricht Ziehen ab, sonst wie Esc
+document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('input,textarea,select'))return;e.preventDefault();});
 // Vorschau für Handkarte i auf Ziel ei (oder aktuelles Ziel)
 function setVorschau(i,ei){if(S.phase!=='fight'||busy||i<0||!S.hand[i]){if(vorschau){vorschau=null;$('gegner').innerHTML=gegnerHtml(true);$('kopf').innerHTML=kopfHtml();}return;}
  const c=S.hand[i];const t=needsTarget(c)?(ei>=0?ei:S.target):null;vorschau=previewCard(i,t);if(vorschau)vorschau.i=i;$('gegner').innerHTML=gegnerHtml(true);
  if(typeof Dev!=='undefined'&&Dev.an)Dev.render();}
 document.addEventListener('pointerdown',e=>{startAudio();
+ if(e.button===2){if(!ziehenAbbrechen())rechtsSchliessen();e.preventDefault();return;}
+ if(e.button!=null&&e.button!==0)return;
  const cd=e.target.closest('[data-card]');
  if(cd&&S.phase==='fight'&&!busy){const i=+cd.dataset.card;const c=S.hand[i];if(!c)return;const r=cd.getBoundingClientRect();cdrag={i,el:cd,x0:e.clientX,y0:e.clientY,moved:false,tg:needsTarget(c),ox:r.left+r.width/2,oy:r.top+10};e.preventDefault();return;}
  const sl=e.target.closest('[data-loc]');if(!sl)return;const loc=sl.dataset.loc;down={loc,x:e.clientX,y:e.clientY,drag:false,has:loc!=='trash'&&!!getAt(loc)};});
@@ -23,11 +33,11 @@ document.addEventListener('pointermove',e=>{
   else{d.el.style.transform=`translate(${(e.clientX-d.x0)/(BU.s||1)}px,${(e.clientY-d.y0)/(BU.s||1)}px) rotate(${(e.clientX-d.x0)*.03}deg) scale(1.06)`;$('szene').classList.toggle('drop',inScene(e.clientX,e.clientY));}
   return;}
  if(!down&&e.target.closest){const sl=e.target.closest('.slot[data-loc]');const cd=e.target.closest('[data-card]');
-  const hv=hoverVorschau(e.target);const fd=S.phase==='fight'&&e.target.closest('.feind[data-ei]');const kt=e.target.closest('.kn,.kstart,.kbieg');const ktt=kt?karteTip(kt):'';if(ktt)showTip(ktt,e.clientX,e.clientY);else if(hv)showTip(hv,e.clientX,e.clientY);else if(fd&&!cd)showTip(feindTip(+fd.dataset.ei),e.clientX,e.clientY);else if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
+  const hv=hoverVorschau(e.target);const fd=S.phase==='fight'&&e.target.closest('.feind[data-ei]');const kt=e.target.closest('.kn,.kstart,.kbieg');const ktt=kt?karteTip(kt):'';if(ktt)showTip(ktt,e.clientX,e.clientY);else if(hv)showTipAm(hv,e.target.closest('[data-take],[data-buy],[data-hg],[data-buyhg]'));else if(fd&&!cd)showTip(feindTip(+fd.dataset.ei),e.clientX,e.clientY);else if(sl&&sl.dataset.loc!=='trash'&&getAt(sl.dataset.loc))showTip(itemTip(sl.dataset.loc),e.clientX,e.clientY);else hideTip();
   const hi=cd?+cd.dataset.card:-1;if(hi!==hoverCard){hoverCard=hi;setVorschau(hi,-1);}}
  if(!down||!down.has)return;if(!down.drag&&Math.hypot(e.clientX-down.x,e.clientY-down.y)>5){down.drag=true;hideTip();$('ghost').src=itemBild(getAt(down.loc).id);$('ghost').style.display='block';}
  if(down.drag){$('ghost').style.left=(e.clientX-20)+'px';$('ghost').style.top=(e.clientY-20)+'px';}});
-document.addEventListener('pointerup',e=>{
+document.addEventListener('pointerup',e=>{if(e.button!=null&&e.button!==0)return;
  if(cdrag){const d=cdrag;cdrag=null;$('aim').style.display='none';const ei=AIM.ei;AIM.ei=-1;$('szene').classList.remove('drop');vorschau=null;hoverCard=-1;
   if(!d.moved){if(spiegelWahl){spiegelWahl=false;Bieg.spiegelTausch(d.i);render();return;}bwSpiel(d);playCard(d.i);return;}
   if(d.tg){if(ei>=0){bwSpiel(d,ei);playCard(d.i,ei);}else if(alive().length===1&&inScene(e.clientX,e.clientY)){bwSpiel(d);playCard(d.i);}else render();}
@@ -88,7 +98,7 @@ function starteRun(job){const st=S.wahlStufe||0;const q=new URLSearchParams(loca
  const start=S.wahlStart||null;newRun(job,seed,{dev:typeof Dev!=='undefined'&&Dev.cheat,stufe:st,start});Meta.get().stufe=st;Meta.save();render();}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'&&e.key!=='Escape')return;
  // Esc schließt, was offen ist; ist nichts offen, öffnet es das Menü (2026-11-11)
- if(e.key==='Escape'){if(KOE){rucksackZu();return;}const offen=$('overlay').classList.contains('an')||KARTE_AUF||S.sel!=null;S.sel=null;karteZu();closeOv();if(!offen&&S.phase!=='titel')zeigeOverlay(menueHtml());render();}
+ if(e.key==='Escape'){if(ziehenAbbrechen())return;if(KOE){rucksackZu();return;}const offen=$('overlay').classList.contains('an')||KARTE_AUF||S.sel!=null;S.sel=null;karteZu();closeOv();if(!offen&&S.phase!=='titel')zeigeOverlay(menueHtml());render();}
  if((e.key==='f'||e.key==='F')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.repeat)vollbildUmschalten();
  if((e.key==='m'||e.key==='M')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.repeat)karteUmschalten();
  if(e.key==='d'||e.key==='D'){if(typeof Dev!=='undefined')Dev.toggle();}
@@ -96,8 +106,15 @@ document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'&&e.key!=='
  if(S.phase==='fight'&&!busy){if(e.key===' '||e.key==='e'){e.preventDefault();endTurn();}const n=+e.key;if(n>=1&&n<=9)playCard(n-1);}
  if(S.phase==='uebergang'&&!['Shift','Control','Alt','Meta','d','D','Escape','f','F'].includes(e.key))leaveUebergang();});
 // Tooltips
-function showTip(h,x,y){const tip=$('tip');tip.innerHTML=h;tip.style.display='block';if(tip.querySelector('.karte')&&typeof kartenEinpassen==='function')kartenEinpassen();const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
-function hideTip(){$('tip').style.display='none';}
+function showTip(h,x,y){TIP_AM=null;const tip=$('tip');tip.innerHTML=h;tip.style.display='block';if(tip.querySelector('.karte')&&typeof kartenEinpassen==='function')kartenEinpassen();const w=tip.offsetWidth,hh=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,x+16))+'px';tip.style.top=(y+hh+24>innerHeight?y-hh-12:y+18)+'px';}
+function hideTip(){$('tip').style.display='none';TIP_AM=null;}
+// Spieltest Auftrag 4: Kartenvorschau für Beute, Krämer und Handgriffe steht fest neben dem Angebot (rechts, sonst links), nicht am Zeiger über dem Item
+let TIP_AM=null;
+function showTipAm(h,el){if(!el){hideTip();return;}if(TIP_AM===el&&$('tip').style.display==='block')return;const tip=$('tip');tip.innerHTML=h;tip.style.display='block';TIP_AM=el;
+ if(tip.querySelector('.karte')&&typeof kartenEinpassen==='function')kartenEinpassen();const r=el.getBoundingClientRect(),w=tip.offsetWidth,hh=tip.offsetHeight,g=8;
+ let x=r.right+g;if(x+w>innerWidth-8)x=r.left-g-w;if(x<8)x=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2));
+ let y=r.top+r.height/2-hh/2;if(x===Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))&&!(x>=r.right||x+w<=r.left))y=r.bottom+g>innerHeight-hh?r.top-g-hh:r.bottom+g;
+ tip.style.left=Math.round(x)+'px';tip.style.top=Math.round(Math.max(8,Math.min(innerHeight-hh-8,y)))+'px';}
 function itemTip(loc){const it=getAt(loc);if(!it)return'';const d=def(it);const[k]=loc.split(':');
  let h=`<div class="tn">${esc(d.n)}</div><div>${d.st.map(k=>gi(k,18)).join('')}</div><div class="hint">${AREA_N[d.a]}${d.hp?' · +'+d.hp+' max. Leben':''}</div>`;
  h+=d.cards.map(c=>`<div>${esc(c.n)} (${c.c}): ${esc(cardText(c))}</div>`).join('');if(d.passiv)h+=`<div>${esc(passivText(d.passiv))}</div>`;

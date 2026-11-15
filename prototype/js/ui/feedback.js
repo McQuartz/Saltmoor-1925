@@ -2,7 +2,7 @@
 const hudEl=sel=>document.querySelector(S.phase==='fight'?'#spieler2 .sbar':'#kopf '+sel);
 const FLOAT_COL={dmg:'#e8d8c0',big:'#ffd23f',heal:'#9ae08a',block:'#9cc3ff',hurt:'#e8584a'};
 function floatAt(el,txt,col,k=0){if(!el||FAST)return;const r=el.getBoundingClientRect();const f=document.createElement('div');f.className='float';f.textContent=txt;f.style.color=col;
- f.style.left=(r.left+r.width/2+(Math.random()-.5)*30)+'px';f.style.top=(r.top+r.height*.3)+'px';f.style.fontSize=(BU.k*5+Math.min(12,k))+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),1000);}
+ f.style.left=(r.left+r.width/2+(Math.random()-.5)*30)+'px';f.style.top=(r.top+r.height*.3)+'px';f.style.fontSize=(8*Math.max(1,Math.round((BU.k*(BU.s||1)*5+Math.min(12,k))/8)))+'px'; /* Spieltest Auftrag 4: Press Start 2P nur in Vielfachen von 8 Pixeln, sonst läuft die 5 zu einer 8 zu */document.body.appendChild(f);setTimeout(()=>f.remove(),1000);}
 function floatScene(e,txt,col,k){const b=enemyBox(e);const r=BU.cv.getBoundingClientRect();const fake={getBoundingClientRect:()=>({left:r.left+uiX(b.x)/480*r.width-10,top:r.top+uiY(b.y-b.h*.6)/270*r.height,width:20,height:20})};floatAt(fake,txt,col,k);}
 // Meldungszeile (07-ui-und-gefuehl.md): höchstens 2 gleichzeitig, nebeneinander, mindestens 4 s (wichtige 6 s),
 // Warteschlange, gleiche Meldungen werden zusammengefasst (×n), Klick zeigt die letzten 20.
@@ -21,6 +21,9 @@ setInterval(meldTick,250);
 function meldVerlauf(){zeigeOverlay(box('buch',`<h2>MELDUNGEN</h2><div class="rliste" style="columns:1">${MELD.verlauf.map(m=>`<div><span class="hint">${m.t}</span> <b>${m.a}</b> ${m.b||''}</div>`).join('')||'<div class="u">noch nichts</div>'}</div><button class="deco klein" data-act="zu">SCHLIESSEN</button>`));}
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#toast'))meldVerlauf();});
 // Zwischentitel (nur Hochreaktionen, 0,6 s, Art déco)
+let HOCH_BIS=0;
+// Zusatz unter dem laufenden Zwischentitel (z. B. „+ BANNKREIS“)
+function zwischentitelDazu(txt){const d=$('zwt')&&$('zwt').firstElementChild;if(!d)return;let sm=d.querySelector('small');if(!sm){sm=document.createElement('small');d.appendChild(sm);}sm.textContent=(sm.textContent?sm.textContent+' ':'')+'+ '+txt;}
 function zwischentitel(txt){if(FAST)return;const z=$('zwt');z.innerHTML=`<div><span>${txt}</span></div>`;z.classList.remove('an');void z.offsetWidth;z.classList.add('an');setTimeout(()=>z.classList.remove('an'),650);}
 function vig(){const v=$('vig');if(!v)return;v.classList.remove('an');void v.offsetWidth;v.classList.add('an');}
 let audioOn=false;function startAudio(){au();if(AC&&AC.state==='suspended')AC.resume();if(!audioOn&&typeof Music!=='undefined'){audioOn=true;try{Music.volume(Einst.get('musik'));Music.start();musikSzene();}catch(e){console.warn(e);}}}
@@ -64,7 +67,8 @@ Bus.on('reaction',({r,k,isNew,keys,live,hoch})=>{if(FAST)return;
  const lp=live&&live.hp!==undefined?enemyBox(live):{x:240,y:180,h:0};
  if(hoch)pfx('hochreaktion',{x:240,y:150,palette:keys[0],seed:k});else if(!pfx('reaktion',{x:lp.x,y:lp.y-Math.round(lp.h*.5),palette:keys[0],seed:k})){FX.ring(keys[0],live);if(keys[1])setTimeout(()=>FX.ring(keys[1],live),90);}
  if(keys[1]&&!hoch)setTimeout(()=>pfx('reaktion',{x:lp.x,y:lp.y-Math.round(lp.h*.5),palette:keys[1],seed:k+7}),120);
- if(hoch){FX.flash(ST[keys[0]].c,.35);FX.shake(8);sfx.hoch();zwischentitel(r.n.toUpperCase()+'!');}else sfx.react(k);
+ // Spieltest Auftrag 4: löst dieselbe Karte neben der Hochreaktion noch eine Reaktion aus, steht sie klein im Zwischentitel und klingt nicht extra
+ if(hoch){HOCH_BIS=performance.now()+700;FX.flash(ST[keys[0]].c,.35);FX.shake(8);sfx.hoch();zwischentitel(r.n.toUpperCase()+'!');}else setTimeout(()=>{if(performance.now()<HOCH_BIS)return;sfx.react(k);},0);
  // Spieltest 2026-11-09: statt der Meldung oben steht die Reaktion unten links unter dem Stoff-Baum, bis die nächste kommt
  LETZTE_RX={n:r.n,t:r.t||'',keys:[...keys],hoch:!!hoch,neu:!!isNew};const lx=document.getElementById('letzteRx');if(lx){lx.innerHTML=letzteRxHtml();const d=lx.firstElementChild;if(d)d.classList.add('frisch');}
  if(isNew)setTimeout(sfx.disc,150);if(typeof Music!=='undefined'&&audioOn)try{Music.reaction(hoch);}catch(x){}});

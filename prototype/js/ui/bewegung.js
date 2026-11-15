@@ -34,8 +34,10 @@ function rautenKlassen(E){const alt=BW.en,neu=S.energy,zug=S.turnNo;BW.en=neu;co
   if(neuerZug&&an&&!bwAus())return{c:'zuend',d:i*110};
   if(!an&&i<alt&&!bwAus())return{c:'aus erlischt',d:0};if(an&&i>=alt&&!bwAus())return{c:'zuend',d:(i-alt)*110};return{c:an?'':'aus',d:0};});}
 // Reaktionen als Stempel über der Hand (Hochreaktionen haben ihren Zwischentitel)
-if(typeof Bus!=='undefined')Bus.on('reaction',({r,keys,hoch})=>{if(bwAus()||hoch||!r)return;const hud=document.getElementById('hud');if(!hud)return;
+if(typeof Bus!=='undefined')Bus.on('reaction',({r,keys,hoch})=>{if(bwAus()||hoch||!r)return;setTimeout(()=>bwStempel(r,keys),0);});
+// Spieltest Auftrag 4: kommt im selben Moment eine Hochreaktion, kein eigener Stempel (er lag genau unter dem Zwischentitel), sondern eine Zeile darin
+function bwStempel(r,keys){if(typeof HOCH_BIS!=='undefined'&&performance.now()<HOCH_BIS){if(typeof zwischentitelDazu==='function')zwischentitelDazu(String(r.n).toUpperCase());return;}const hud=document.getElementById('hud');if(!hud)return;
  const s=document.createElement('div');s.className='stempel px9';s.style.setProperty('--c',(ST[keys&&keys[0]]||{}).c||'#e8c547');s.style.setProperty('--sr',((Math.random()*6-3)|0)+'deg');
- s.innerHTML=`${(keys||[]).map(k=>gi(k,KZ())).join('<i>+</i>')}<b>${esc(String(r.n).toUpperCase())}</b>`;hud.querySelectorAll('.stempel').forEach(x=>x.remove());hud.appendChild(s);setTimeout(()=>s.remove(),1300);});
+ s.innerHTML=`${(keys||[]).map(k=>gi(k,KZ())).join('<i>+</i>')}<b>${esc(String(r.n).toUpperCase())}</b>`;hud.querySelectorAll('.stempel').forEach(x=>x.remove());hud.appendChild(s);setTimeout(()=>s.remove(),1300);}
 // Splitter in Zonenfarbe beim Aufprall
 if(typeof Bus!=='undefined')Bus.on('enemy_hit',({e,d})=>{if(bwAus()||!(d>0)||typeof burst!=='function')return;const b=enemyBox(e);const z=(typeof BST!=='undefined'&&BST.rim)||'#e8c547';burst(b.x,b.y-Math.round(b.h*.55),z,Math.min(14,4+d),2.2,.4);});

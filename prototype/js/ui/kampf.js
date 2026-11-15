@@ -123,11 +123,11 @@ function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.s
  if(vor.length)rxl=`<div class="rx">${vor.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
  if(self.length)rxl+=`<div class="rx in">IN SICH: ${self.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
  const L=handLage(n||S.hand.length),m=i-L.h;
- const cls=`${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''} ${c.farbe?'farbe':''} ${c.erbe?'erbe':''} ${c.fremd?'fremd':''} ${dealAnim?'neu':''}`;
+ const cls=`${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''} ${c.farbe?'farbe':''} ${c.erbe?'erbe':''} ${c.fremd?'fremd':''} ${dealAnim||c.frisch?'neu':''} ${c.frisch&&!dealAnim?'nachgezogen':''}`;
  const koCls=c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?'hoch':'tief'):'';
  return karteHtml(c,{cls,attr:`data-card="${i}"`,m:km,verst:km!==1&&(c.draw||c.str||c.gold),kost:cost>=99?'–':cost,koCls,rx:rxl,
   mk:(c.schliff?'<span class="mk schl" title="geschliffen">◇</span>':''),
-  style:`${glow?`--c:${glow};`:''}--fx:${(m*L.step).toFixed(2)};--fy:${(m*m*L.arc).toFixed(2)};--fr:${(m*L.rot).toFixed(2)}deg;z-index:${10+i};${dealAnim&&typeof austeilenStil==='function'?austeilenStil(i,n||S.hand.length,L,m):''}`});}
+  style:`${glow?`--c:${glow};`:''}--fx:${(m*L.step).toFixed(2)};--fy:${(m*m*L.arc).toFixed(2)};--fr:${(m*L.rot).toFixed(2)}deg;z-index:${10+i};${(dealAnim||c.frisch)&&typeof austeilenStil==='function'?austeilenStil(dealAnim?i:0,n||S.hand.length,L,m,i):''}`});}
 // ---------- Ausrüstung unter der Szene ----------
 function slotHtml(loc,locked){const it=locked?null:getAt(loc);const d=it?def(it):null;const ibi=it?itemBild(it.id):'';
  return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${ibi}" alt="" data-fuid="${it.uid}">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}<span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;}
