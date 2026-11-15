@@ -28,14 +28,19 @@ function absicht0(e){const it=e.pat[e.pi%e.pat.length];if(e.kniff&&e.kniff.art==
 // Plakette (Auftrag 3, M2): Absicht oben, Leben als roter Balken, Block/Panzer als blaue Verlängerung, Status darunter, Kniff am Rand, Spitze zum Kopf.
 // Die Höhenstaffelung (--dx, --dy) setzt plakettenOrdnen() in js/ui/plakette.js nach dem Einsetzen ins DOM.
 function plaketteHtml(e,i,f,pv,tg){
- const abs=f&&absichtSichtbar(e)?`<div class="abs">${absicht(e).html}</div>${typeof Bieg!=='undefined'&&Bieg.absichtenSichtbar(e)>1?`<div class="abs abs2" title="Die Rückseite: was ${esc(e.n)} im Zug danach vorhat">danach ${absicht0({...e,pi:e.pi+1}).html}</div>`:''}`:'';
+ // Auftrag 4: Plakette 50 × 26 im 9-Slice (Randlicht in Zonenfarbe). Oben die Absicht, rechts die Zustände, darunter der Balken mit der Zahl.
+ // Der Name steht darüber und erscheint bei Hover oder Ziel. Stumm: die Zeile der Absicht entfällt. Seltenes (danach, Panzer, Asche) in einer kleinen Zeile darunter.
+ const sicht=f&&absichtSichtbar(e),a=sicht?absicht(e):null,abs=a?`<div class="abs">${a.html}</div>`:'';
+ const danach=sicht&&typeof Bieg!=='undefined'&&Bieg.absichtenSichtbar(e)>1?`<div class="pl-x" title="Die Rückseite: was ${esc(e.n)} im Zug danach vorhat">danach <span class="abs abs2">${absicht0({...e,pi:e.pi+1}).html}</span></div>`:'';
  const d=pv?Math.min(e.hp,pv.d):0,ab=pv?Math.min(e.block,pv.ab):0,W=v=>Math.max(0,Math.min(100,v/e.max*100)).toFixed(1)+'%';
  const st=[e.burn&&['burn',e.burn,STN.burn],e.poison&&['poison',e.poison,STN.poison],e.weak2&&['weak',1,'Geschwächt: halber Schaden'],e.str&&['buff',e.str,STN.buff],e.vuln>0&&['atk2',e.vuln,`Verwundbar ${e.vuln} (+50 %)`]].filter(Boolean);
+ const sts=st.length?`<div class="sts">${st.map(([k,v,t])=>`<span title="${esc(t)}">${gi(k,KZ(),k==='atk2'?'#ffb070':undefined)}<b>${v}</b></span>`).join('')}</div>`:'';
  const blk=e.block-ab,ext=(blk>0||ab>0?`<b class="pl-blk ${ab?'pvb':''}" title="Block">${blk>0?blk:ab}</b>`:'')+(e.panzer>0?`<b class="pl-pz" title="${esc((BAL.panzer&&BAL.panzer.t)||'')}">${gi('blk',KZ())}${e.panzer}</b>`:'');
- return `<div class="plakette${e.verbuendet?' verb':''}"><div class="pl-box">${e.kniff||e.besonders?'<b class="knf" title="Kniff: Maus darüber">◆</b>':''}${e.ascheSpur||e.verbuendet?`<b class="pl-asche" title="${e.verbuendet?'Aus der Asche gerufen: kämpft für dich':'Dieselbe Asche-Spur: du hast ihn gerufen'}"></b>`:''}${abs}${f?klangzeichenHtml(e):''}
-  <div class="pl-nm"><span>${esc(e.n).toUpperCase()}</span>${e.weak?gi(e.weak,KZ()):''}</div>${e.verbuendet?'<div class="pl-verb">AUS DER ASCHE · FÜR DICH</div>':''}
-  <div class="pl-bar"><i class="hp" style="width:${W(e.hp-d)}"></i>${d?`<i class="pv" style="width:${W(d)}"></i>`:''}<span>${e.hp}/${e.max}${pv&&(pv.d||pv.ab)?` <em class="pvt">−${pv.d}</em>`:''}</span>${ext?`<div class="pl-ext">${ext}</div>`:''}</div></div>
-  ${st.length?`<div class="sts">${st.map(([k,v,t])=>`<span title="${esc(t)}">${gi(k,KZ(),k==='atk2'?'#ffb070':undefined)}${v}</span>`).join('')}</div>`:''}<div class="spitze"></div></div>`;}
+ const bk=e.block>0?`<u class="bk${ab?' pvb':''}" style="width:${W(e.block)}"></u>`:'';
+ return `<div class="plakette${e.verbuendet?' verb':''}"><div class="pl-box px9">${e.kniff||e.besonders?'<b class="knf" title="Kniff: Maus darüber">◆</b>':''}${e.ascheSpur||e.verbuendet?`<b class="pl-asche" title="${e.verbuendet?'Aus der Asche gerufen: kämpft für dich':'Dieselbe Asche-Spur: du hast ihn gerufen'}"></b>`:''}${f?klangzeichenHtml(e):''}
+  <div class="pl-nm"><span>${esc(e.n).toUpperCase()}</span>${e.weak?gi(e.weak,KZ()):''}</div>${abs||sts?`<div class="pl-row">${abs}${sts}</div>`:''}
+  <div class="pl-bar"><i class="hp" style="width:${W(e.hp-d)}"></i>${d?`<i class="pv" style="left:${W(e.hp-d)};width:${W(d)}"></i>`:''}${bk}<span>${e.hp}/${e.max}${pv&&(pv.d||pv.ab)?` <em class="pvt">−${pv.d}</em>`:''}</span>${ext?`<div class="pl-ext">${ext}</div>`:''}</div>
+  ${e.verbuendet?'<div class="pl-verb">AUS DER ASCHE · FÜR DICH</div>':''}${danach}</div><div class="spitze"></div></div>`;}
 function gegnerHtml(f){return S.enemies.map((e,i)=>{if(e.hp<=0)return'';const b={...enemyBox(e)};if(e.pendel)b.x=Math.round(e.x*SW);const pv=vorschau&&vorschau.foes[i];const tg=f&&i===S.target;
   return `<div class="feind ${tg?'ziel':''} ${e.rang}" data-ei="${i}" style="left:${(uiX(b.x)/4.8).toFixed(2)}%;top:${(uiY(b.kopf)/2.7).toFixed(2)}%;--fh:${(b.y-b.kopf)*6/7/2.7}">
    ${plaketteHtml(e,i,f,pv,tg)}<div class="treffer" style="height:calc(var(--u)*${((b.y-b.kopf)*6/7).toFixed(1)})"></div></div>`;}).join('')+(f?schutzLinien():'')+verbuendeterHtml(f);}
@@ -49,25 +54,28 @@ const U=()=>BU.k;
 // Pixelzeichen immer ganzzahlig: GROSS = 9 px × Skala, KLEIN = halb so groß (mindestens 9 px)
 const GZ=()=>9*U(),KZ=()=>9*Math.max(1,Math.round(U()/2));
 
-// ---------- Untere Leiste im Kampf (Footer als Tisch): eigener Balken und Stoff-Baum, Hand, Energie ----------
-function leisteKampf(){const n=S.hand.length;
- return `<div id="links"><div id="spieler2">${spielerHtml()}</div><div id="baum">${stoffBaumHtml()}</div><div id="letzteRx">${letzteRxHtml()}</div></div>${blickWahlHtml()}${begegnungHtml()}<div id="hand" class="${S.blickWahl||S.begegnung?'verdeckt':''}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
- <div id="rechts"><div class="en-l">ENERGIE</div><div class="rauten">${[...Array(Math.max(BAL.energy_per_turn,S.energy))].map((_,i)=>`<i class="${i<S.energy?'voll':''}"></i>`).join('')}</div>
- <button id="endBtn" class="deco" data-act="end" ${busy||S.blickWahl||S.begegnung?'disabled':''}>ZUG<br>BEENDEN</button>${stapelHtml()}${jobFaehigkeit()==='voraus'&&S.draw.length?`<div class="voraus">Als Nächstes: ${esc(S.draw[S.draw.length-1].n)}</div>`:''}</div>`;}
+// ---------- Fußleiste im Kampf (Auftrag 4): Schultern links und rechts, Leben unter der Hand ----------
+// Links außen der Ziehstapel, innen der Baum „Klar“; rechts innen Energie über ZUG BEENDEN, außen die Ablage. Lage in Oberflächenpixeln wie in Look-Runde 7.
+function leisteKampf(){const n=S.hand.length,E=Math.max(BAL.energy_per_turn,S.energy);
+ return `<div class="fussbild"></div>${stapelHtml()}<div id="baum">${stoffBaumHtml()}</div><div id="letzteRx">${letzteRxHtml()}</div>
+ <div id="spieler2">${spielerHtml()}</div>${blickWahlHtml()}${begegnungHtml()}
+ <div id="hand" class="${S.blickWahl||S.begegnung?'verdeckt':''}" style="--hb:${handLage(n).base}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
+ <div class="ener${E>3?' viel':''}" title="Energie">${[...Array(E)].map((_,i)=>`<i class="${i<S.energy?'':'aus'}"></i>`).join('')}</div>
+ <button id="endBtn" class="knopf px9" data-act="end" ${busy||S.blickWahl||S.begegnung?'disabled':''}>ZUG BEENDEN</button>`;}
 // Spieltest 2026-11-09: die letzte Reaktion steht unten links unter dem Stoff-Baum, bis die nächste kommt (statt oben als Meldung).
 // LETZTE_RX setzt feedback.js beim Bus-Ereignis „reaction“, ein neuer Kampf leert sie.
 let LETZTE_RX=null;
 function letzteRxHtml(){const x=LETZTE_RX;if(!x)return'';const c=(ST[x.keys[0]]||{}).c||'#e8c547';
  return `<div class="lrx${x.hoch?' hoch':''}${x.neu?' neu':''}" style="--c:${c}" title="${esc(x.n+': '+x.t)}"><span class="lrx-k">${x.keys.map(k=>gi(k,KZ())).join('<i>+</i>')}<b>${esc(x.n.toUpperCase())}</b>${x.hoch?'<em>HOCHREAKTION</em>':''}${x.neu?'<em>NEU</em>':''}</span>${esc(x.t)}</div>`;}
 // M9: Begegnung nach dem Seitenwechsel: die Wesen stehen da, man geht weiter (halbe Beute)
-function begegnungHtml(){if(!S.begegnung)return'';const B=RUN.begegnungen;return `<div class="blickwahl begegnung"><p>${esc(B.begegnung.t)}</p><button class="deco haupt" data-act="weitergehen" autofocus>${esc(B.weiter.t)}</button></div>`;}
+function begegnungHtml(){if(!S.begegnung)return'';const B=RUN.begegnungen;return `<div class="blickwahl begegnung px9"><p>${esc(B.begegnung.t)}</p><button class="knopf px9 haupt" data-act="weitergehen" autofocus>${esc(B.weiter.t)}</button></div>`;}
 // M7: Wahl zu Kampfbeginn mit Blick-Item, liegt über der Hand, bis gewählt ist (Standard: Nicht hinsehen)
 function blickWahlHtml(){if(!S.blickWahl)return'';const its=allActive().filter(it=>{const d=def(it);return d.eigen&&d.eigen.typ==='blick';});
- return `<div class="blickwahl"><div class="bw-items">${its.map(it=>`<img src="${itemBild(it.id)}" alt="${esc(def(it).n)}" title="${esc(def(it).n)}" draggable="false">`).join('')}</div><button class="deco" data-act="hinsehen">HINSEHEN</button><button class="deco haupt" data-act="wegsehen" autofocus>NICHT HINSEHEN</button></div>`;}
+ return `<div class="blickwahl px9"><div class="bw-items">${its.map(it=>`<img src="${itemBild(it.id)}" alt="${esc(def(it).n)}" title="${esc(def(it).n)}" draggable="false">`).join('')}</div><button class="knopf px9" data-act="hinsehen">HINSEHEN</button><button class="knopf px9 haupt" data-act="wegsehen" autofocus>NICHT HINSEHEN</button></div>`;}
 // Stapel und Ablage; Regelbiegungen ändern, was man davon sieht (M5): Spiegelbild (oberste Karte offen, Tausch), Keiner fährt ab (zurückgekommene Karte oben), Wellen von oben (keine Ablage)
 let spiegelWahl=false;
 function stapelHtml(){const B=typeof Bieg!=='undefined';const top=S.draw.length?S.draw[S.draw.length-1]:null;
- const ufer=B&&Bieg.ist('wellen_oben');let h=`<div class="stapel">Stapel ${S.draw.length}${ufer?'':` · Ablage ${S.discard.length}`}</div>`;
+ const ufer=B&&Bieg.ist('wellen_oben');let h=`<div id="ziehen" class="pile px9" title="Ziehstapel">${S.draw.length}<span>ZIEHEN</span></div>${ufer?'':`<div id="ablage" class="pile px9" title="Ablage">${S.discard.length}<span>ABLAGE</span></div>`}`;
  if(B&&Bieg.ist('spiegelbild')&&top){const kann=Bieg.spiegelKann();h+=`<div class="voraus spiegel${spiegelWahl?' wahl':''}${kann?'':' aus'}" ${kann?'data-act="spiegel"':''} title="${esc(kann?'Erst hier klicken, dann die Handkarte, die du gegen sie tauschst (einmal je Zug)':'In diesem Zug schon getauscht')}">Oben: ${esc(top.n)}${spiegelWahl?' · Handkarte wählen':''}</div>`;}
  else if(B&&Bieg.ist('keiner_faehrt')&&top&&top.zurueck)h+=`<div class="voraus">Oben: ${esc(top.n)}</div>`;
  else if(jobFaehigkeit()==='voraus'&&top)h+=`<div class="voraus">Als Nächstes: ${esc(top.n)}</div>`;
@@ -95,17 +103,31 @@ function cardText(c,m=1){const vs=v=>typeof verstaerkt==='function'?verstaerkt(v
  if(c.atk)p.push(`${c.atk}${c.x?'×X':c.h?'×'+c.h:''} Schaden${c.all?' an allen':''}`);if(c.blk)p.push(`${c.blk} Block`);if(c.heal)p.push(`+${c.heal} Leben`);if(c.poison)p.push(`Gift ${c.poison}`);if(c.burn)p.push(`Brand ${c.burn}`);if(c.weak)p.push('Geschwächt');if(c.vuln)p.push(`Verwundbar ${c.vuln}`);if(c.str)p.push(`Stärke ${vs(c.str)}`);if(c.strip)p.push('Block weg');if(c.draw)p.push(`Ziehe ${vs(c.draw)}`);if(c.en)p.push(`+${c.en} Energie`);if(c.self)p.push(`−${c.self} Leben`);if(c.gold)p.push(`+${c.gold} Gold`.replace(String(c.gold),String(vs(c.gold))));
  if(c.sonder){let st=c.sonder.t||sonderText(c.sonder);if(st&&p.length&&!c.sonder.t&&SONDER_KLEIN.has(c.sonder.art))st=st[0].toLowerCase()+st.slice(1);if(st)p.push(st);}
  let s=(kw.length?kw.join(', ')+'. ':'')+(p.join(', ')||(c.t&&!c.atk&&!c.blk?'':'–'));if(c.eroeffnung)s+=`. Eröffnung: ${Object.entries(c.eroeffnung).map(([k,v])=>k==='atk'?`+${v} Schaden`:k==='blk'?`+${v} Block`:k==='draw'?`ziehe ${v}`:k==='heal'?`+${v} Leben`:k==='en'?`+${v} Energie`:k==='burn'?`Brand ${v}`:k==='poison'?`Gift ${v}`:`${k} ${v}`).join(', ')}`;if(c.verbraucht)s=s.replace(/\.$/,'')+'. Verbraucht';return s;}
+// Auftrag 4: eine Karte für alle Stellen (Hand, Vorschau am Zeiger, Rucksack). Schlagwörter Behalten, Verbraucht und Funke stehen als Marke unten,
+// Zahlen im Text in Jersey 10. Der Wortlaut bleibt der von cardText, nur die Schlagwörter wandern aus dem Satz in die Marke.
+const KARTE_MARKEN=['Behalten','Verbraucht','Funke'];
+function karteTextTeile(t){t=String(t||'');const tags=[];for(const k of KARTE_MARKEN){const re=new RegExp('(^|[.,]\\s*)'+k+'(?![a-zäöüß])\\.?\\s*');if(re.test(t)){tags.push(k);t=t.replace(re,'$1').replace(/^[.,\s]+|[.,\s]+$/g,'');}}
+ return{t,tags};}
+function karteHtml(c,o={}){const T=karteTextTeile(o.text!=null?o.text:cardText(c,o.m||1));let t=esc(T.t).replace(/(\d+(?:×\d+)?)/g,'<b>$1</b>');if(t&&!/[.!?]$/.test(T.t))t+='.';
+ const ko=o.kost==null?'':String(o.kost);const img=o.img!=null?o.img:(c.img||(c.spr&&typeof spr==='function'?spr(c.spr):''));
+ return `<div class="karte ${o.cls||''}" ${o.attr||''} ${o.style?`style="${o.style}"`:''}><div class="kin px9"><div class="kn">${esc(c.n).toUpperCase()}</div><div class="bild px9">${img?`<img src="${img}" alt="" draggable="false">`:''}${o.rx?`<div class="rxb">${o.rx}</div>`:''}</div>
+  <div class="kt${o.verst?' verst':''}">${t}</div><div class="tags">${T.tags.map(x=>`<span>${x.toUpperCase()}</span>`).join('')}</div>
+  <span class="ko${o.koCls?' '+o.koCls:''}${ko===''?' leer':''}">${esc(ko)}</span><span class="sf">${(c.st||[]).map(k=>gi(k,KZ())).join('')}${c.farbe&&typeof FarbeUI!=='undefined'?FarbeUI.zeichen():''}</span>${o.mk||''}</div></div>`;}
+// Hand im Fächer: 236 breit in der Mitte, Abstand bis 45, höchstens 2° je Karte, leichter Bogen (Look-Runde 7, hand())
+function handLage(n){const h=(n-1)/2;const rot=h?Math.min(2,6/h):0;const th=rot*h*Math.PI/180;const step=h?Math.min(45,(236/2-25*Math.cos(th)-91*Math.sin(th))/h):0;const arc=h?6/(h*h):0;const slop=Math.ceil(25*Math.sin(th)+21*(1-Math.cos(th)));
+ return{h,rot,step,arc,base:20+6+slop};}
 function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.st);const self=c.st.length>1?rx.filter(r=>r.k&&[...r.k].every(k=>c.st.includes(k))):[];const vor=rx.filter(r=>!self.includes(r));
- // M2: Reaktionen stehen immer mit Namen als Band unten an der Karte (kein Fragezeichen); die Karte leuchtet in der Farbe ihres reagierenden Stoffs
+ // M2: Reaktionen stehen immer mit Namen als Band an der Karte (kein Fragezeichen); Auftrag 4: das Band liegt über der Unterkante des Bildfensters
  let rxl='';const km=rx.length?rx.reduce((m,r)=>m*(r.pre&&r.pre.mult||1),1):1;
  const glow=vor.length?(ST[c.st.find(k=>vor.some(r=>!r.k||String(r.k).includes(k)))||c.st[0]]||{}).c:null;
  if(vor.length)rxl=`<div class="rx">${vor.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
  if(self.length)rxl+=`<div class="rx in">IN SICH: ${self.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
- const rot=((i*37)%5-2)*1.3+(i-(n-1)/2)*.6,dy=((i*53)%3)*1.2;
- return `<div class="karte ${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''} ${c.farbe?'farbe':''} ${c.erbe?'erbe':''} ${c.fremd?'fremd':''}" data-card="${i}" style="${glow?`--c:${glow};`:''}--r:${rot.toFixed(1)}deg;--dy:${dy}px;${dealAnim?`animation-delay:${i*60}ms`:'animation:none'}">
-  <div class="kost${c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?' hoch':' tief'):''}"><span>${cost>=99?'–':cost}</span></div><div class="kst">${c.st.map(k=>gi(k,KZ())).join('')}${c.farbe?FarbeUI.zeichen():''}</div>
-  <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen"><img src="${c.img||spr(c.spr)}" alt="">${c.hg?'<span class="hgm" title="Handgriff">✋</span>':''}${c.schliff?'<span class="schl" title="geschliffen">◇</span>':''}</div>
-  <div class="kt${km!==1&&(c.draw||c.str||c.gold)?' verst':''}">${esc(cardText(c,km))}</div>${rxl}</div>`;}
+ const L=handLage(n||S.hand.length),m=i-L.h;
+ const cls=`${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''} ${c.farbe?'farbe':''} ${c.erbe?'erbe':''} ${c.fremd?'fremd':''} ${dealAnim?'neu':''}`;
+ const koCls=c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?'hoch':'tief'):'';
+ return karteHtml(c,{cls,attr:`data-card="${i}"`,m:km,verst:km!==1&&(c.draw||c.str||c.gold),kost:cost>=99?'–':cost,koCls,rx:rxl,
+  mk:(c.schliff?'<span class="mk schl" title="geschliffen">◇</span>':''),
+  style:`${glow?`--c:${glow};`:''}--fx:${(m*L.step).toFixed(2)};--fy:${(m*m*L.arc).toFixed(2)};--fr:${(m*L.rot).toFixed(2)}deg;z-index:${10+i};${dealAnim?`animation-delay:${i*60}ms`:''}`});}
 // ---------- Ausrüstung unter der Szene ----------
 function slotHtml(loc,locked){const it=locked?null:getAt(loc);const d=it?def(it):null;const ibi=it?itemBild(it.id):'';
  return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${ibi}" alt="" data-fuid="${it.uid}">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}<span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;}

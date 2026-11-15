@@ -46,13 +46,12 @@ function baumDaten(){
  return{pfad,farbe,letzter:last,aeste,sackgasse,quelle,eck};}
 
 // ---------- HTML ----------
-const SB_H=48,SB_PX=46,SB_AX=77; // Maße in u: Höhe, Anfang der Bögen, Anfang der Astzeichen (Breite 150)
+// Auftrag 4: Baum „Klar“ (Look-Runde 7, baumKlar): links die Kette, ein senkrechter Stamm, waagrechte Äste, keine Schrägen.
+// Der spielbare Weg ist hell, Namen in Jersey 10. Gold (Hochreaktion), Sackgasse, Mitrücken, Asche und die Regelbiegungen bleiben wie in Auftrag 3.
+const SB_W=88,SB_H=36;
 function sbEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function sbZeichen(k){
- const col=ST[k]?ST[k].c:'#fff';
- const src=typeof glyph==='function'?glyph(k):'';
- return `<img class="sb-z" data-st="${k}" src="${src}" alt="" style="--c:${col}">`;}
-
+function sbZeichen(k){return `<img src="${typeof glyph==='function'?glyph(k):''}" alt="" data-st="${k}">`;}
+const sbP=(x,y)=>`left:calc(var(--u)*${x});top:calc(var(--u)*${y})`;
 function stoffBaumHtml(){
  if(!sbImKampf()){sbPfadLaenge=-1;return '';}
  const d=baumDaten();
@@ -60,21 +59,24 @@ function stoffBaumHtml(){
  const len=d.pfad.length;
  const rueck=sbPfadLaenge>=0&&len===sbPfadLaenge+1;
  sbPfadLaenge=len;
- // Pfad: Kette von Gliedern, das letzte mit Rahmen in Stofffarbe
- const kette=!pfad.length?'<i class="sb-punkt"></i>':pfad.map((g,i)=>{const letzt=d.quelle&&d.pfad.length?d.quelle.includes(i):i===pfad.length-1;
-  return (i?'<i class="sb-ver"></i>':'')+`<span class="sb-glied${letzt?' letzt':''}${len&&d.farbe[i]?' farbe':''}" style="--c:${ST[g[0]]?ST[g[0]].c:'#fff'}">${g.map(sbZeichen).join('')}</span>`;}).join('');
- // Äste
- const mitte=SB_H/2,n=d.aeste.length;
- let bogen='',aeste='',sack='';
- if(d.sackgasse)sack='<div class="sb-sack">Sackgasse</div>';
- else{
-  const zeile=Math.min(10,(SB_H-2)/Math.max(1,n));
-  d.aeste.forEach((a,i)=>{
-   const y=n===1?mitte:mitte+(i-(n-1)/2)*zeile;
-   const col=a.gold?'#e8c547':(ST[a.stoff[0]]?ST[a.stoff[0]].c:'#fff');
-   const dx=SB_AX-2-SB_PX;
-   bogen+=`<path d="M${SB_PX} ${mitte} C${SB_PX+dx*.55} ${mitte} ${SB_PX+dx*.45} ${y.toFixed(2)} ${SB_AX-2} ${y.toFixed(2)}" fill="none" stroke="${col}" stroke-width=".8"${a.hell?'':' stroke-dasharray="1.6 1.4"'} stroke-linecap="round" opacity="${a.hell?1:.4}"/>`;
-   aeste+=`<div class="sb-ast${a.hell?'':' dunkel'}${a.gold?' gold':''}${a.asche?' asche':''}" style="top:calc(var(--u)*${y.toFixed(2)});--c:${col};font-size:calc(var(--u)*${n>6?3.4:4})" data-ast="${a.stoff.join('')}" data-rx="${sbEsc(a.rx.map(r=>r.n).join('|'))}" data-hell="${a.hell?1:0}" title="${sbEsc(a.rx.map(r=>r.t).join('\n'))}">${a.stoff.map(sbZeichen).join('')}<span class="sb-name">${sbEsc(a.n)}</span></div>`;});
- }
- const eck=d.eck?`<div class="sb-eck${d.eck.rx.length?' an':''}${d.eck.leuchtet?' leuchtet':''}" title="${sbEsc(d.eck.rx.length?'Über Eck beim Zugende: '+d.eck.t.join(' '):'Über Eck: ab drei Karten reagieren die erste und die letzte beim Zugende')}">${d.eck.rx.length?`<span>${sbEsc(d.eck.rx.join(' · '))}</span>`:''}</div>`:'';
- return `<div class="sb${d.eck?' mit-eck':''}${Date.now()<sbFunkBis?' funk':''}"><div class="sb-pfad"><div class="sb-kette${rueck?' rueck':''}">${eck}${kette}</div></div><svg class="sb-bogen" viewBox="0 0 150 ${SB_H}" aria-hidden="true">${bogen}</svg>${aeste}${sack}</div>`;}
+ // höchstens zwei Glieder sichtbar (das vorletzte und das letzte), davor ein Punkt je weiteres Glied
+ const zeig=pfad.slice(-2),vorn=pfad.length-zeig.length,off=Math.min(3,vorn)*3;
+ const glied=(g,i)=>{const gi_=vorn+i;const letzt=d.quelle&&d.pfad.length?d.quelle.includes(gi_):gi_===pfad.length-1;
+  return {letzt,html:`<div class="glied px9${letzt?' letzt':''}${len&&d.farbe[gi_]?' farbe':''}" style="${sbP(off+2+i*14,'Y')}">${g.length>1?sbZeichen(g[0]):sbZeichen(g[0])}</div>`};};
+ const n=d.aeste.length,my=Math.round(SB_H/2);
+ const cEnd=pfad.length?off+2+zeig.length*11+(zeig.length-1)*3:7,tx=cEnd+4,bx=tx+5;
+ const zeile=n?Math.min(9.5,(SB_H-4)/n):0;const rows=d.aeste.map((a,i)=>Math.round(my+(i-(n-1)/2)*zeile));
+ const col=a=>a.gold?'#e8c547':(ST[a.stoff[0]]?ST[a.stoff[0]].c:'#fff');
+ const bg=typeof pxc==='function'?pxc(SB_W,SB_H,(cx,p)=>{
+  if(!pfad.length){p(3,my-1,3,3,'#7a6a48');return;}
+  for(let i=0;i<Math.min(3,vorn);i++)p(1+i*3,my,2,1,'#5a4c34');
+  for(let i=1;i<zeig.length;i++)p(off+2+i*14-3,my,3,1,'#5a4c34');
+  if(d.sackgasse||!n){p(cEnd,my,4,1,'#3a3328');return;}
+  p(cEnd,my,tx-cEnd,1,'#8a7a58');p(tx,rows[0],1,rows[n-1]-rows[0]+1,'#3a3328');
+  d.aeste.forEach((a,i)=>{if(a.hell)p(tx,Math.min(my,rows[i]),1,Math.abs(rows[i]-my)+1,'#f1ede2');});
+  d.aeste.forEach((a,i)=>p(tx+1,rows[i],bx-tx-1,1,a.hell?col(a):'#3a3328'));}):'';
+ const glieder=zeig.map((g,i)=>glied(g,i).html.replace("top:calc(var(--u)*Y)",`top:calc(var(--u)*${(my-5.5).toFixed(1)})`)).join('');
+ const af=n>4?Math.max(6,Math.round(zeile+1.5)):10;
+ const aeste=d.sackgasse?`<div class="sackgasse" style="${sbP(bx,my-4)}">Sackgasse</div>`:d.aeste.map((a,i)=>`<div class="ast${a.hell?' hell':' dunkel'}${a.gold?' gold':''}${a.asche?' asche':''}" style="${sbP(bx+1,(rows[i]-af*.4).toFixed(1))};--c:${col(a)};--af:${af}" data-ast="${a.stoff.join('')}" data-rx="${sbEsc(a.rx.map(r=>r.n).join('|'))}" data-hell="${a.hell?1:0}" title="${sbEsc(a.rx.map(r=>r.t).join('\n'))}">${a.stoff.map(sbZeichen).join('')}<span class="sb-name">${sbEsc(a.n)}</span></div>`).join('');
+ const eck=d.eck?`<div class="eck${d.eck.rx.length?' an':''}${d.eck.leuchtet?' leuchtet':''}" title="${sbEsc(d.eck.rx.length?'Über Eck beim Zugende: '+d.eck.t.join(' '):'Über Eck: ab drei Karten reagieren die erste und die letzte beim Zugende')}">ÜBER ECK${d.eck.rx.length?': '+sbEsc(d.eck.rx.join(' · ')):''}</div>`:'';
+ return `<div class="bk${rueck?' rueck':''}${Date.now()<sbFunkBis?' funk':''}">${bg?`<img class="bg" src="${bg}" alt="">`:''}${eck}${glieder}${aeste}</div>`;}

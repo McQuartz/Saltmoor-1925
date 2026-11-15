@@ -39,8 +39,7 @@ function koeFach(a){const F=KOE_FACH[a];const M=BAL.max_slots;const n=act(a).len
  return `<div class="fach ${F.art}" data-fach="${a}" style="left:calc(var(--u)*${F.x});top:calc(var(--u)*${F.y})"><h4>${esc(AREA_N[a])} <em>${S.slots[a]}/${M}</em></h4><div class="fp">${plaetze}</div></div>`;}
 
 // Kleine Karte im Stil des HUD (ohne Hand-Index, ohne Reaktions-Band)
-function koeKarte(c){return `<div class="karte mini ${c.st.length>1?'duo':''} ${c.hg?'handgriff':''}"><div class="kost"><span>${c.x?'X':cardCost(c)}</span></div><div class="kst">${c.st.map(k=>gi(k,KZ())).join('')}</div>
- <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen"><img src="${c.img||(typeof spr==='function'?spr(c.spr):'')}" alt="">${c.hg?'<span class="hgm" title="Handgriff">✋</span>':''}${c.schliff?'<span class="schl" title="geschliffen">◇</span>':''}</div><div class="kt">${esc(cardText(c))}</div></div>`;}
+function koeKarte(c){return karteHtml(c,{cls:`mini ${c.st.length>1?'duo':''} ${c.hg?'handgriff':''}`,kost:c.x?'X':cardCost(c),mk:(c.schliff?'<span class="mk schl" title="geschliffen">◇</span>':'')});}
 
 function koeRechts(){const b=koeItemByUid(KOE.zeig);let oben='';
  if(b){const it=b.it,D=def(it);const rar={gewoehnlich:'Gewöhnlich',selten:'Selten',reliquie:'Reliquie'}[rarOf(D)]||'';
@@ -95,7 +94,7 @@ function koerperHtml(){const J=koeFigur();
 function koerperRender(){const el=$('koerper');if(!el)return;if(!KOE){el.classList.remove('an');return;}
  // Wer gerade ein Item gewählt hat, sieht es rechts; nach dem Ablegen bleibt es gezeigt
  if(S.sel&&getAt(S.sel))KOE.zeig=getAt(S.sel).uid;if(KOE.zeig!=null&&!koeItemByUid(KOE.zeig))KOE.zeig=null;
- el.innerHTML=koerperHtml();el.classList.add('an');$('spiel').classList.add('koe');el.classList.toggle('lesen',KOE.lesen);koeNebelStart();}
+ el.innerHTML=koerperHtml();el.classList.add('an');if(typeof kartenEinpassen==="function")kartenEinpassen(el);$('spiel').classList.add('koe');el.classList.toggle('lesen',KOE.lesen);koeNebelStart();}
 
 // ---------- Nebel um die Beine: Bayer-Dither, wandert langsam (kein Weichzeichner) ----------
 const KOE_BAY=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5].map(v=>(v+.5)/16);

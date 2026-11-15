@@ -12,18 +12,19 @@ function render(){
  $('gegner').innerHTML=ph==='fight'||ph==='reward'?gegnerHtml(ph==='fight'):'';
  if($('spieler'))$('spieler').innerHTML=''; // M2: der eigene Balken sitzt im Footer (leisteKampf)
  $('panel').innerHTML=panelHtml(ph);$('panel').className=ph==='fight'?'':'an p-'+ph;
+ if(typeof zonenLicht==='function')zonenLicht(biomId());
  $('leiste').innerHTML=ph==='fight'?leisteKampf():'';
  $('leiste').className=ph==='fight'?'kampf':'';
  dealAnim=false;karteNach();kartenEinpassen();if(typeof koeNachRender==='function')koeNachRender();if(typeof Dev!=='undefined'&&Dev.an)Dev.render();}
 
-// Spieltest 2026-11-09: Kartentitel passen in die Karte (lange Wörter werden kleiner statt über den Rand zu laufen),
-// und die Hand rückt zusammen, sobald sie breiter als ihr Platz wäre. So bleibt der Knopf ZUG BEENDEN immer an seiner Stelle.
-function kartenEinpassen(){
- for(const el of document.querySelectorAll('.karte .kn')){el.style.fontSize='';let fs=parseFloat(getComputedStyle(el).fontSize),min=fs*.55;
-  while((el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1)&&fs>min){fs-=.5;el.style.fontSize=fs+'px';}}
- const h=$('hand');if(!h)return;const ks=[...h.querySelectorAll(':scope>.karte')],n=ks.length;h.style.setProperty('--ov',0);if(n<2)return;
- const gap=parseFloat(getComputedStyle(h).columnGap)||0,cw=ks[0].offsetWidth,platz=h.clientWidth,braucht=n*cw+(n-1)*gap;
- if(braucht>platz)h.style.setProperty('--ov',((braucht-platz)/(n-1)/BU.k).toFixed(2));}
+// Auftrag 4: Karten passen sich in Stufen an (Look-Runde 7, passen()). Name 5 / 4,5 / 4, Text 5,4 / 5 / 4,6 / 4,6 / 4,2 mit Mindesthöhe des Bildfensters.
+// Läuft auf allen Karten im DOM (Hand, Vorschau am Zeiger, Rucksack). Eine Karte, die selbst in der kleinsten Stufe überläuft, bekommt .warn.
+const KARTE_STUFEN=[[5.4,16],[5,16],[4.6,16],[4.6,11],[4.2,10]];
+function kartenEinpassen(root){for(const k of (root||document).querySelectorAll('.karte')){const px=k.offsetWidth/50;if(!px)continue;const n=k.querySelector('.kn'),t=k.querySelector('.kt'),b=k.querySelector('.bild'),kin=k.querySelector('.kin');if(!n||!t||!b||!kin)continue;
+ for(const ns of [5,4.5,4]){n.style.setProperty('--ns',ns);if(n.scrollHeight<=n.clientHeight+1&&n.scrollWidth<=n.clientWidth+1)break;}
+ k.classList.remove('warn');let stufe=0;
+ for(const [fs,mb] of KARTE_STUFEN){t.style.setProperty('--fs',fs);if(b.offsetHeight>=mb*px-.5&&kin.scrollHeight<=kin.clientHeight+1)break;stufe++;}
+ k.dataset.stufe=Math.min(stufe,4);k.dataset.bild=Math.round(b.offsetHeight/px);if(b.offsetHeight<9*px||kin.scrollHeight>kin.clientHeight+1)k.classList.add('warn');}}
 
 // ---------- Kopfzeile ----------
 function kopfHtml(){const f=S.phase==='fight';const m=maxHp();const inc=f?incoming():0;const lose=Math.max(0,inc-S.block);
@@ -41,10 +42,16 @@ function biegKopfHtml(){if(typeof Bieg==='undefined')return'';const k=Bieg.kopf(
 // Fix 5 (Auftrag 3): keine Zeile „−x Leben“ mehr. Der drohende Verlust steht im Balken: Block (blau) bricht zuerst, der rote Rest ist schraffiert.
 // Die Worte stehen nur noch im Tooltip des Balkens.
 // M2 (Variante 2): Name links, Leben groß rechts darüber; Rot = Leben, Blau = Block als Verlängerung nach rechts mit dem Wert im Schild am Ende.
+// Auftrag 4: Leben unter der Hand. Schild mit Block-Zahl, Balken 224 × 8, Block als blaue Kerben am Ende, dahinter Zahl und Zustände (Schutz, Stärke).
+// Aus Auftrag 3 bleibt: bei drohendem Verlust bricht zuerst das Blau (hell gestreift), der rote Rest ist schraffiert. Neu: ein heller Rest läuft beim Schaden verzögert nach.
+const LEBEN_NACH={hp:null,von:0,t:0};
 function spielerHtml(){const m=maxHp(),inc=incomingSichtbar(),lose=Math.min(S.hp,Math.max(0,inc-S.block)),bricht=Math.min(S.block,inc);const W=v=>Math.max(0,Math.min(100,v/m*100)).toFixed(3)+'%';
  const tip=alive().some(e=>absichtSichtbar(e)&&e.kniff&&e.kniff.art==='verborgen'&&e.pat[e.pi%e.pat.length].t==='atk')?`${inc} und mehr kommen, wie viel, siehst du nicht`:inc?`${inc} kommen → ${lose?'−'+lose+' Leben':'alles geblockt'}`:'nichts kommt';
- return `<div class="skopf"><span class="snm">${esc(S.jobN).toUpperCase()}</span><span class="shp"><b>${S.hp}</b>/${m}</span></div>
- <div class="szeile" title="${esc(tip)}"><div class="sbar${S.block?' block':''}"><i class="hp" style="width:${W(S.hp-lose)}"></i>${lose?`<i class="schraffur" style="width:${W(lose)}"></i>`:''}${S.block?`<div class="schild an" title="Block"><b>${S.block}</b>${bricht?`<small>→${S.block-bricht}</small>`:''}</div>`:''}</div></div>`;}
+ const N=LEBEN_NACH,jetzt=performance.now();if(N.hp!=null&&S.hp<N.hp){N.von=N.hp;N.t=jetzt;}N.hp=S.hp;const alt=jetzt-N.t<800&&N.von>S.hp;
+ const st=[S.ward>0&&['blk',S.ward,'Schutz: kommt im nächsten Zug als Block','#7dffc4'],S.pstr>0&&['buff',S.pstr,'Stärke']].filter(Boolean);
+ return `<div class="schild${S.block?' an':''}" title="Block">${S.block||''}</div>
+ <div class="sbar${S.block?' block':''}" title="${esc(tip)}">${alt?`<s class="nach" style="width:${W(N.von)};--bis:${W(S.hp)};animation-delay:${(250-(jetzt-N.t)).toFixed(0)}ms"></s>`:''}<i class="hp" style="width:${W(S.hp-lose)}"></i>${lose?`<i class="schraffur" style="left:${W(S.hp-lose)};width:${W(lose)}"></i>`:''}${S.block?`<u class="bk" style="width:${W(S.block-bricht)};right:${W(bricht)}"></u>`:''}${bricht?`<u class="bricht" style="width:${W(bricht)}"></u>`:''}</div>
+ <div class="shp"><b>${S.hp}<small>/${m}</small></b>${st.length?`<span class="sts">${st.map(([k,v,t,c])=>`<span title="${esc(t)}">${gi(k,KZ(),c)}<b>${v}</b></span>`).join('')}</span>`:''}</div>`;}
 // Lebensbalken mit Block-Schraffur direkt hinter dem Leben; pv = Vorschau {d, ab}
 function barHtml(hp,max,block,pv,cls=''){const W=v=>Math.max(0,Math.min(100,v/max*100)).toFixed(1)+'%';const d=pv?Math.min(hp,pv.d):0,ab=pv?Math.min(block,pv.ab):0;
  return `<div class="bar ${cls}"><i class="hp" style="width:${W(hp-d)}"></i>${d?`<i class="pv" style="width:${W(d)}"></i>`:''}${block-ab>0?`<i class="bk" style="width:${W(block-ab)}"></i>`:''}${ab?`<i class="pvb" style="width:${W(ab)}"></i>`:''}</div>`;}
