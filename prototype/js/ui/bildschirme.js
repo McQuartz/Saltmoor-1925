@@ -51,7 +51,10 @@ function hgAngebotHtml(id){const m=(S.rewardHgMeta||{})[id];const at=`data-hg="$
  if(m&&m.art==='riskant'&&m.preis){const p=m.preis;return hgKarteHtml(id,at,`<div class="hgmark preis">PREIS: ${p.art==='gold'?p.v+' Gold':'−'+p.v+' max. Leben'}</div>`);}
  return hgKarteHtml(id,at);}
 const BUILD_N={glutnest:'Glutnest',brackwasser:'Brackwasser',bollwerk:'Bollwerk',aderlass:'Aderlass',kettenwerk:'Kettenwerk',hagel:'Hagel',ballast:'Ballast',kollekte:'Kollekte',neutral:''};
-function rewardHtml(){if(S.hgPending&&!S.hgPicked)return ritzenHtml('Wohin ritzt du ihn?');
+// Momentum Stufe 1 (Auftrag 4): eigener Moment nach dem Wächter, Knöpfe im Stil A (deco in der Szene)
+function slotWahlHtml(){const M=BAL.max_slots;return box('reward slotwahl',`<h2>EIN PLATZ MEHR</h2><p class="lead">Der Wächter liegt still. Wo trägst du künftig mehr?</p>
+ <div class="swahl">${AREAS.map(a=>{const n=S.slots[a],voll=n>=M;return `<button class="deco" data-slotwahl="${a}" ${voll?'disabled':''}><b>${esc(AREA_N[a])}</b><span class="swpl">${[...Array(M)].map((_,i)=>`<i class="${i<n?'an':i===n&&!voll?'neu':''}"></i>`).join('')}</span><span class="swz">${voll?'voll':`${n} › ${n+1}`}</span></button>`;}).join('')}</div>`);}
+function rewardHtml(){if(S.slotWahl)return slotWahlHtml();if(S.hgPending&&!S.hgPicked)return ritzenHtml('Wohin ritzt du ihn?');
  const wa=S.kampfArt==='waechter';
  const hgTeil=S.hgPicked?'':`<div class="bspalte hg"><div class="band">${IC_HAND} ${S.rewardHg.length>1?'EIN HANDGRIFF ZUR WAHL':'EIN HANDGRIFF'}</div><div class="picks${S.rewardHg.length===1?' einzeln':''}">${S.rewardHg.map(id=>hgAngebotHtml(id)).join('')}</div><button class="deco klein" data-act="hgSkip">LIEGEN LASSEN (+${(BAL.belohnung&&BAL.belohnung.ueberspringen_gold)||10} GOLD)</button></div>`;
  const fundTeil=S.reward.length&&!S.picked?`<div class="bspalte fund"><div class="band">${IC_SACK} ${wa?'EINE RELIQUIE':'EIN FUND'}</div><div class="picks">${S.reward.map(id=>itemPick(id,`data-take="${id}"`)).join('')}</div><button class="deco klein" data-take="">NICHTS NEHMEN</button></div>`:'';
@@ -67,17 +70,20 @@ function rzKarte(cls,bild,c,n,t,tag='',attr=''){const kost=c==null||c===''?'<spa
 const RZ_FEST='<span class="rzfest"><i></i>FEST</span>';
 function rzHgKosten(H){return H.unspielbar?'':H.x?'X':(H.c||0);}
 function rzHgText(H){return H.unspielbar?'unspielbar':cardText(H).replace(/\.$/,'');}
-function ritzKachel(it,an){const D=def(it);const hg=hgVon(it),cap=kerbenVon(it),fest=D.fest_hg||[];const u=S.ueberschreiben;
+function ritzKachel(it,an,v){const D=def(it);const hg=hgVon(it),cap=kerbenVon(it),fest=D.fest_hg||[];const u=S.ueberschreiben;let vor=!u&&v&&v.uid===it.uid;
  const karten=D.cards.map(c=>rzKarte('fest',itemBild(it.id),c.x?'X':(c.c||0),c.n,cardText(c).replace(/\.$/,''),RZ_FEST)).join('');
  const kerben=[...Array(Math.max(cap,hg.length))].map((_,k)=>{const id=hg[k];
+  if(!id&&vor){vor=false;const H=HANDGRIFFE[S.hgPending];return `<button class="rzk frei vorschlag" data-ritz="${it.uid}" title="${esc(v.grund)}"><span class="rzplus">›</span><span class="rzx"><b>${esc(H.n)}</b><i>Vorschlag: hier ritzen</i></span></button>`;} // Momentum Stufe 1: der Handgriff liegt schon hier
   if(!id)return `<button class="rzk frei" data-ritz="${it.uid}"><span class="rzplus">+</span><span class="rzx"><b>Freie Kerbe</b><i>hier ritzen</i></span></button>`;
   const H=HANDGRIFFE[id];if(!H)return'';const Hs=hgVertieft(H,hgStufe(it,id));
   if(fest.includes(id))return rzKarte('fest'+(H.unspielbar?' fluch':''),hgBild(id),rzHgKosten(Hs),Hs.n,rzHgText(Hs),RZ_FEST);
   const raus=u&&u.uid===it.uid&&u.k===k;
   return rzKarte('kerbe'+(raus?' raus':''),hgBild(id),rzHgKosten(Hs),Hs.n,rzHgText(Hs),'',`data-ritz="${it.uid}" data-k="${k}"`);}).join('');
- return `<div class="rzz${an?'':' lose'}${u&&u.uid===it.uid?' sel':''}"><div class="rzzk"><img src="${itemBild(it.id)}" alt=""><span class="rzzn">${esc(D.n)}</span>${D.st.map(k=>gi(k,KZ())).join('')}${an?'':'<span class="rzrs">Rucksack</span>'}</div>${karten}${kerben||'<span class="rzkeine">keine Kerbe</span>'}</div>`;}
+ return `<div class="rzz${an?'':' lose'}${u&&u.uid===it.uid?' sel':''}${!u&&v&&v.uid===it.uid?' vor':''}" data-rzz="${it.uid}"><div class="rzzk"><img src="${itemBild(it.id)}" alt=""><span class="rzzn">${esc(D.n)}</span>${D.st.map(k=>gi(k,KZ())).join('')}${an?'':'<span class="rzrs">Rucksack</span>'}</div>${karten}${kerben||'<span class="rzkeine">keine Kerbe</span>'}</div>`;}
 // Vergleich für eine Kerbe (uid, k = belegte Kerbe oder null = frei). Ohne Ziel: kurzer Hinweis.
-function ritzVglHtml(uid,k){const H=HANDGRIFFE[S.hgPending];const it=uid!=null&&itemByUid(uid);
+function ritzVglHtml(uid,k){const H=HANDGRIFFE[S.hgPending];
+ if(uid==null&&H&&!S.ueberschreiben){const v=ritzVorschlag();if(v)return ritzVglHtml(v.uid,null)+`<p class="rzvor"><b>VORSCHLAG</b> ${esc(v.grund)}. <button class="deco klein" data-ritz="${v.uid}">HIER RITZEN</button></p>`;} // Momentum Stufe 1
+ const it=uid!=null&&itemByUid(uid);
  if(!H||!it)return `<div class="rzvk">IN WELCHES ITEM?</div><p class="rzvh">Fahr über eine Kerbe, dann steht hier, was rausfliegt und was reinkommt.</p>`;
  const D=def(it);const alt=k!=null?hgVon(it)[k]:null;const A=alt&&HANDGRIFFE[alt];const As=A&&hgVertieft(A,hgStufe(it,alt));const rx=ritzReih(D.st);const an=besitz().some(b=>b.it===it&&b.an);
  const stoff=D.st.length?D.st.map(s=>ST[s].n).join(' und '):'';
@@ -87,12 +93,12 @@ function ritzVglHtml(uid,k){const H=HANDGRIFFE[S.hgPending];const it=uid!=null&&
  return `<div class="rzvk">IN ${esc(D.n).toUpperCase()} ${D.st.map(s=>gi(s,KZ())).join('')}</div><div class="rzvz">${links}<span class="rzpf">›</span>${rechts}</div>
  <p class="rzvh">${D.cards.map(c=>esc(c.n)).join(', ')} bleibt. ${rx.length?'Reagiert mit: '+esc(rx.join(', ')):'Keine Reaktion mit deinem Deck.'}${an?'':' Im Rucksack wirkt er erst, wenn du das Item anlegst.'}</p>
  ${frage?`<p class="rzja">„${esc(A.n)}“ wirklich überschreiben? <button class="deco klein" data-act="ueberJa">JA</button> <button class="deco klein" data-act="ueberNein">NEIN</button></p>`:''}`;}
-function ritzenHtml(frage){const id=S.hgPending;const H=HANDGRIFFE[id];if(!H)return'';const u=S.ueberschreiben;const b=besitz();
+function ritzenHtml(frage){const id=S.hgPending;const H=HANDGRIFFE[id];if(!H)return'';const u=S.ueberschreiben;const b=besitz();const v=ritzVorschlag();
  return `<div class="rz${b.length>15?' sehrviele':b.length>8?' viele':''}"><div class="rzkopf">
- <div class="rzneu"${H.t?` title="${esc(H.t)}"`:''}><div class="rzvk eld">NEUER HANDGRIFF</div><div class="rzneun">${hgBild(id)?`<img src="${hgBild(id)}" alt="">`:''}<b>${esc(H.n).toUpperCase()}</b>${H.unspielbar?'':`<span class="rzkost inl"><span>${rzHgKosten(H)}</span></span>`}</div><div class="rznt">${esc(cardText(H))}</div></div>
+ <div class="rzneu"${H.t?` title="${esc(H.t)}"`:''}${momentum('ritz_vorschlag')?' draggable="true"':''}><div class="rzvk eld">NEUER HANDGRIFF</div><div class="rzneun">${hgBild(id)?`<img src="${hgBild(id)}" alt="">`:''}<b>${esc(H.n).toUpperCase()}</b>${H.unspielbar?'':`<span class="rzkost inl"><span>${rzHgKosten(H)}</span></span>`}</div><div class="rznt">${esc(cardText(H))}</div></div>
  <div class="rzvgl" id="rzVgl">${u?ritzVglHtml(u.uid,u.k):ritzVglHtml(null,null)}</div></div>
  <div class="rzfrage"><span>${frage} Er nimmt den Stoff des Items an.</span><span class="rzleg"><span><i class="lf"></i>fest, bleibt</span><span><i class="lk"></i>Handgriff, überritzbar</span><span><i class="lr"></i>freie Kerbe</span></span><button class="deco klein" data-act="hgVerwerfen">VERWERFEN</button></div>
- <div class="rzgrid">${b.map(({it,an})=>ritzKachel(it,an)).join('')}</div></div>`;}
+ <div class="rzgrid">${b.map(({it,an})=>ritzKachel(it,an,v)).join('')}</div></div>`;}
 // Wahl: Schleifen, Kerbe dazu, Umritzen
 function wahlHtml(){const w=S.wahl;if(!w)return'';
  // M8: Spur der Farbe tilgen (Werkstatt): je Item der letzte Tausch

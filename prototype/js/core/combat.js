@@ -78,7 +78,7 @@ function startTurn(){S.nachGegnerzug=false;(S.enemies||[]).forEach(e=>{e.gehande
  Bus.emit('deal');Bus.emit('turn_start',{turn:S.turnNo,why:`Zug ${S.turnNo}: ${handSize()} Karten, ${S.energy} Energie`+(S.block?`, ${S.block} Block aus dem Bannkreis`:'')});Bus.emit('changed');}
 function healP(v,why=''){const m=maxHp(),b=S.hp;S.hp=Math.min(m,S.hp+v);if(S.hp>b)Bus.emit('player_heal',{v:S.hp-b,why});}
 function addBlock(v,why=''){S.block+=v;Bus.emit('player_block',{v,why});}
-function addSlot(a){if(S.slots[a]<BAL.max_slots){S.slots[a]++;log(`Neuer Slot: ${AREA_N[a]}`);Bus.emit('slot',{a,why:'Ereignis'});}}
+function addSlot(a,why='Ereignis'){if(S.slots[a]<BAL.max_slots){S.slots[a]++;log(`Neuer Slot: ${AREA_N[a]}`);Bus.emit('slot',{a,why});return true;}return false;}
 function tgt(){let e=S.enemies[S.target];if(!e||e.hp<=0){e=alive()[0];S.target=S.enemies.indexOf(e);}return e;}
 // Schaden an einem Gegner. Block fängt zuerst. Gibt den echten Schaden zurück.
 // opts.dot: Gift und Brand (wirken auch durch Unverwundbarkeit nicht, aber am Panzer vorbei). Fix 7 (Auftrag 3): unverw nur, solange ein Diener lebt.

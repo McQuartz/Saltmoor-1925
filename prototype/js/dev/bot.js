@@ -79,7 +79,8 @@ const Bot={
   case'biomwahl':{const an=S.angebote[S.akt];const job=JOBS.find(j=>j.id===S.job);let i=an.indexOf(job&&job.vorliebe);if(i<0)i=S.seed%an.length;chooseBiom(i);break;}
   case'weg':this.wegWahl();break;
   case'fight':this.kampfZug();break;
-  case'reward':if(S.hgPending&&!S.hgPicked){this.ritzen();break;}
+  case'reward':if(S.slotWahl){const frei=AREAS.filter(a=>S.slots[a]<BAL.max_slots);const w=a=>S.bag.filter(it=>it&&def(it).a===a).length*10-S.slots[a];waechterSlot(frei.sort((x,y)=>w(y)-w(x))[0]);break;} /* Momentum Stufe 1 */
+   if(S.hgPending&&!S.hgPicked){this.ritzen();break;}
    if(!S.hgPicked){const best=[...S.rewardHg].sort((a,c)=>this.hgWert(c)-this.hgWert(a))[0];if(best&&this.hgWert(best)>2){takeHandgriff(best);break;}skipHandgriff();break;}
    if(!S.picked&&S.reward.length){const P=this.profil;const w=id=>(P&&(P.items||[]).includes(id)?10:0)+(P?ITEMS[id].st.filter(k=>(P.stoffe||[]).includes(k)).length*3:0)+(rarOf(ITEMS[id])==='reliquie'?5:rarOf(ITEMS[id])==='selten'?2:0)+(ITEMS[id].wuerze?8:0); /* M11: die Geige probiert er aus */const best=[...S.reward].sort((a,c)=>w(c)-w(a))[0];takeReward(S.bag.includes(null)?best:'');}this.ausruesten();leaveReward();break;
   case'event':{const ev=curEvent();let k=ev.o.findIndex(o=>condOk(o.if)&&!(o.fx||[]).some(f=>f.op==='lose_hp'&&S.hp<f.v+10||f.op==='fight'&&S.hp<maxHp()*.5));if(k<0)k=ev.o.findIndex(o=>condOk(o.if));chooseEvent(Math.max(0,k));break;}

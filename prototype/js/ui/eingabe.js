@@ -47,6 +47,7 @@ document.addEventListener('click',e=>{
  const ks=e.target.closest('[data-ksel]');if(ks){S.sel=S.sel===ks.dataset.ksel?null:ks.dataset.ksel;sfx.click();render();return;}
  const kz=e.target.closest('[data-kzeig]');if(kz&&KOE){KOE.zeig=+kz.dataset.kzeig;koerperRender();return;}
  const hgp=e.target.closest('[data-hg]');if(hgp){takeHandgriff(hgp.dataset.hg);return;}
+ const sw=e.target.closest('[data-slotwahl]');if(sw){waechterSlot(sw.dataset.slotwahl);return;}
  const rz=e.target.closest('[data-ritz]');if(rz){const uid=+rz.dataset.ritz;if(rz.dataset.k!=null){S.ueberschreiben={uid,k:+rz.dataset.k,alt:hgVon(itemByUid(uid))[+rz.dataset.k]};render();}else placeHandgriff(uid);return;}
  const ms=e.target.closest('[data-masken]');if(ms){const[u,k]=ms.dataset.masken.split(':');Wuerze.bezahlen(+u,+k);render();return;} const an=e.target.closest('[data-anschreiben]');if(an){Wuerze.anschreiben(+an.dataset.anschreiben);render();return;} // Zugabe
  const tn=e.target.closest('[data-trennen]');if(tn){const[u,k]=tn.dataset.trennen.split(':');Wuerze.trennen(+u,+k);render();return;} // M11
@@ -112,6 +113,12 @@ function endbildSpeichern(){const c=document.createElement('canvas');c.width=960
 // Ritzen (Spieltest 2026-11-10): Vergleich alt gegen neu für die Kerbe unter der Maus. Während einer Nachfrage (überschreiben?) bleibt der Vergleich stehen.
 let rzVglKey=null,rzVglEl=null;
 document.addEventListener('pointerover',e=>{const v=document.getElementById('rzVgl');if(!v||S.ueberschreiben)return;
- const z=e.target.closest&&e.target.closest('.rz [data-ritz]');const key=z?z.dataset.ritz+':'+(z.dataset.k??''):'';if(v!==rzVglEl){rzVglEl=v;rzVglKey=null;}if(key===rzVglKey)return;
+ const z=e.target.closest&&e.target.closest('.rzgrid [data-ritz]');const key=z?z.dataset.ritz+':'+(z.dataset.k??''):'';if(v!==rzVglEl){rzVglEl=v;rzVglKey=null;}if(key===rzVglKey)return;
  if(!z&&!e.target.closest('.rzgrid'))return; // im Kopf oder Leerraum: Vergleich stehen lassen
  rzVglKey=key;v.innerHTML=z?ritzVglHtml(+z.dataset.ritz,z.dataset.k!=null?+z.dataset.k:null):ritzVglHtml(null,null);});
+// Momentum Stufe 1 (Auftrag 4): den neuen Handgriff auf ein anderes Item ziehen ändert den Vorschlag und ritzt dort in die erste freie Kerbe
+document.addEventListener('dragstart',e=>{if(e.target.closest&&e.target.closest('.rzneu')){try{e.dataTransfer.setData('text/plain','hg');e.dataTransfer.effectAllowed='move';}catch(er){}document.body.classList.add('rzzieht');}});
+document.addEventListener('dragend',()=>document.body.classList.remove('rzzieht'));
+document.addEventListener('dragover',e=>{const z=e.target.closest&&e.target.closest('.rz [data-rzz]');if(z&&S.hgPending){e.preventDefault();document.querySelectorAll('.rzz.ueber').forEach(x=>x!==z&&x.classList.remove('ueber'));z.classList.add('ueber');}});
+document.addEventListener('drop',e=>{const z=e.target.closest&&e.target.closest('.rz [data-rzz]');if(!z||!S.hgPending)return;e.preventDefault();document.body.classList.remove('rzzieht');
+ const uid=+z.dataset.rzz;const it=itemByUid(uid);if(!it)return;if(hgVon(it).length<kerbenVon(it)){S.ueberschreiben=null;placeHandgriff(uid);}else{z.classList.remove('ueber');Bus.emit('bad',{a:'KERBE VOLL',b:'Wähle einen Handgriff zum Überschreiben oder ein anderes Item.'});}});

@@ -8,9 +8,9 @@
 #panel .box.szene{position:absolute;inset:0;max-width:none;max-height:none;background:none;border:0;box-shadow:none;padding:0;overflow:visible;
  background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0) 28%,rgba(0,0,0,0) 46%,rgba(0,0,0,.82) 78%,rgba(0,0,0,.92))}
 #panel .box.szene>.innen{position:absolute;inset:0;padding:calc(var(--u)*44) calc(var(--u)*16) calc(var(--u)*10);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:calc(var(--u)*3);overflow:auto;scrollbar-width:none}
-#panel .box.szene>.innen>h2:first-child{position:absolute;left:calc(var(--u)*10);top:calc(var(--u)*42);margin:0;text-align:left;font:400 calc(var(--u)*12)/1 var(--fl);letter-spacing:.14em;color:#efe4c8;
+#panel .box.szene>.innen>h2:first-child{position:absolute;left:calc(var(--u)*10);top:calc(var(--u)*46);margin:0;text-align:left;font:400 calc(var(--u)*12)/1 var(--fl);letter-spacing:.14em;color:#efe4c8;
  background:#000;padding:calc(var(--u)*3) calc(var(--u)*8);box-shadow:0 calc(var(--u)*-1) 0 var(--zone),0 var(--u) 0 var(--zone),0 0 0 calc(var(--u)*2) #000}
-#panel .box.szene>.innen>h2:first-child+.lead{position:absolute;left:calc(var(--u)*10);top:calc(var(--u)*62);max-width:calc(var(--u)*230);margin:0;text-align:left;
+#panel .box.szene>.innen>h2:first-child+.lead{position:absolute;left:calc(var(--u)*10);top:calc(var(--u)*66);max-width:calc(var(--u)*230);margin:0;text-align:left;
  font:calc(var(--u)*6)/1.25 var(--pf);font-style:normal;color:#e7dcc2;text-shadow:var(--u) var(--u) 0 #000}
 #panel .box.szene p{font-family:var(--pf);font-size:calc(var(--u)*5.6)}
 #panel .box.szene h3{font:calc(var(--u)*5)/1 var(--ps);color:#c8bca0;letter-spacing:0;margin:calc(var(--u)*2) 0 0}
@@ -86,3 +86,11 @@
 #spiel.koe{height:calc(var(--u)*270)}
 #koerper{transform:scale(.7459);transform-origin:50% 0}
 @media (prefers-reduced-motion:reduce){.titel::before,.titel h1,#panel .zwischentitel,#panel .zwischentitel::after,#panel .box.szene::before,#panel .box.szene .pick{animation:none}}
+/* Momentum Stufe 1 (Auftrag 4): Slot-Wahl nach dem Wächter */
+.box.szene.slotwahl .swahl{display:flex;gap:calc(var(--u)*6);justify-content:center;margin-top:calc(var(--u)*14)}
+.box.szene.slotwahl .swahl button.deco{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*3);min-width:calc(var(--u)*82);padding:calc(var(--u)*4) calc(var(--u)*5)}
+.box.szene.slotwahl .swahl b{font-size:calc(var(--u)*6);letter-spacing:.04em}
+.swpl{display:flex;gap:calc(var(--u)*2)}.swpl i{width:calc(var(--u)*6);height:calc(var(--u)*6);background:#1a1712;box-shadow:inset 0 0 0 1px #4a4134}
+.swpl i.an{background:#8a7a5a;box-shadow:inset 0 0 0 1px #c8b48a}.swpl i.neu{background:transparent;box-shadow:inset 0 0 0 1px var(--gold)}
+button.deco:hover .swpl i.neu{background:var(--gold);box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.5)}
+.swz{font-size:calc(var(--u)*5);color:#a89c80}
