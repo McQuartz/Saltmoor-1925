@@ -11,7 +11,7 @@ Die Daten werden per `fetch` geladen, deshalb braucht der Prototyp einen kleinen
 * oder im Terminal:
 
 ```bash
-cd prototype && python3 -m http.server 8000
+cd prototype && python3 server.py 8000
 ```
 
 Dann http://localhost:8000 öffnen (Chrome, Firefox, Safari; ab 1280 × 720).
