@@ -1,5 +1,5 @@
 {
- "_doc": "Die sieben Biome. Paletten: koerper (4 dunkle Stufen), rand (Randlicht innen/außen), augen, nebel (fern/nah). Gegner verweisen auf foes.json, Ereignisse auf events.json (id), fundpool auf items.json.",
+ "_doc": "Die sieben Biome. Paletten: koerper (4 dunkle Stufen), rand (Randlicht innen/außen), augen, nebel (fern/nah). Gegner verweisen auf foes.json, Ereignisse auf events.json (id), fundpool auf items.json. licht (Auftrag 4, Phase 1): punkt [x,y] in Szenenpixeln, farbe (Randlicht auf den Gegnern), raum (Körper geht 30 % dorthin), wasser (Spiegelung, Füße im Wasser), strahlen [[Winkel, Breite]] nach unten (rad, 0 = senkrecht).",
  "hafen": {
   "n": "Das Hafenviertel",
   "kurz": "Hafen",
@@ -72,7 +72,16 @@
     "Treibgut, das die Flut dagelassen hat."
    ]
   },
-  "akt": 0
+  "akt": 0,
+  "licht": {
+   "punkt": [
+    392,
+    52
+   ],
+   "farbe": "#ffd8a0",
+   "raum": "#0e1628",
+   "wasser": true
+  }
  },
  "moor": {
   "n": "Der Moorwald",
@@ -143,7 +152,16 @@
     "Etwas glänzt im Torf."
    ]
   },
-  "akt": 0
+  "akt": 0,
+  "licht": {
+   "punkt": [
+    110,
+    70
+   ],
+   "farbe": "#d0f0a8",
+   "raum": "#141020",
+   "wasser": true
+  }
  },
  "kapelle": {
   "n": "Die überflutete Kapelle",
@@ -216,7 +234,34 @@
     "Der Opferstock ist aufgebrochen."
    ]
   },
-  "akt": 1
+  "akt": 1,
+  "licht": {
+   "punkt": [
+    240,
+    84
+   ],
+   "farbe": "#ffe0a0",
+   "raum": "#1a1008",
+   "wasser": true,
+   "strahlen": [
+    [
+     -0.42,
+     0.05
+    ],
+    [
+     -0.12,
+     0.06
+    ],
+    [
+     0.2,
+     0.05
+    ],
+    [
+     0.5,
+     0.04
+    ]
+   ]
+  }
  },
  "salz": {
   "n": "Die Salzstollen",
@@ -290,7 +335,30 @@
     "Eine umgekippte Lore."
    ]
   },
-  "akt": 2
+  "akt": 2,
+  "licht": {
+   "punkt": [
+    286,
+    64
+   ],
+   "farbe": "#ffd29a",
+   "raum": "#2a2420",
+   "wasser": false,
+   "strahlen": [
+    [
+     -0.5,
+     0.06
+    ],
+    [
+     0.1,
+     0.05
+    ],
+    [
+     0.55,
+     0.06
+    ]
+   ]
+  }
  },
  "stadt": {
   "n": "Die namenlose Stadt",
@@ -361,7 +429,16 @@
     "Eine Grabkammer, schon geöffnet."
    ]
   },
-  "akt": 2
+  "akt": 2,
+  "licht": {
+   "punkt": [
+    240,
+    40
+   ],
+   "farbe": "#ffc0a0",
+   "raum": "#1a0e0c",
+   "wasser": false
+  }
  },
  "eis": {
   "n": "Das schwarze Eis",
@@ -431,7 +508,16 @@
     "Eine Kiste der Expedition, halb im Eis."
    ]
   },
-  "akt": 3
+  "akt": 3,
+  "licht": {
+   "punkt": [
+    240,
+    30
+   ],
+   "farbe": "#e8f6ff",
+   "raum": "#0e1a28",
+   "wasser": false
+  }
  },
  "pforte": {
   "n": "Die Pforte",
@@ -487,6 +573,29 @@
    ]
   },
   "akt": 4,
-  "anreise": "Unten wartet ein Hafen, den du kennst. Er ist seitenverkehrt."
+  "anreise": "Unten wartet ein Hafen, den du kennst. Er ist seitenverkehrt.",
+  "licht": {
+   "punkt": [
+    240,
+    60
+   ],
+   "farbe": "#a0fff0",
+   "raum": "#08201c",
+   "wasser": false,
+   "strahlen": [
+    [
+     -0.3,
+     0.05
+    ],
+    [
+     0,
+     0.07
+    ],
+    [
+     0.3,
+     0.05
+    ]
+   ]
+  }
  }
 }
