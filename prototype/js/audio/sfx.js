@@ -6,15 +6,28 @@
 let AC=null,NB=null,OUT=null,SFXB=null;
 function au(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();
  NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
- // Ausgang: OUT -> Limiter -> Lautsprecher
- OUT=AC.createGain();const lim=AC.createDynamicsCompressor();lim.threshold.value=-4;lim.knee.value=2;lim.ratio.value=20;lim.attack.value=.001;lim.release.value=.12;
- OUT.connect(lim).connect(AC.destination);
+ // Ausgang: OUT -> Kopfraum -> sanfter Kompressor -> weicher Begrenzer (tanh) -> Lautsprecher
+ // Spieltest Auftrag 4 (E1): vorher ein harter Kompressor (−4 dB, 20:1, 1 ms), der bei Stimmen-Aufnahmen kratzte und Spitzen durchließ.
+ OUT=AC.createGain();const kopf=AC.createGain();kopf.gain.value=.8;
+ const lim=AC.createDynamicsCompressor();lim.threshold.value=-10;lim.knee.value=8;lim.ratio.value=4;lim.attack.value=.004;lim.release.value=.2;
+ const vor=AC.createGain();vor.gain.value=.5;const weich=AC.createWaveShaper();{const c=new Float32Array(1024);for(let i=0;i<1024;i++){const u=i/511.5-1;c[i]=Math.tanh(2*u);}weich.curve=c;weich.oversample='4x';}
+ OUT.connect(kopf).connect(lim).connect(vor).connect(weich).connect(AC.destination);
+ Pegel.an(lim);
  // SFX-Bus: trocken + etwas Hall
  SFXB=AC.createGain();SFXB.gain.value=.72*(typeof Einst!=='undefined'?Einst.get('effekte')/.8:1); // etwas leiser gemischt, damit der Limiter weniger arbeitet
  const rv=AC.createConvolver(),len=AC.sampleRate*1.4,ib=AC.createBuffer(2,len,AC.sampleRate);
  for(let c=0;c<2;c++){const x=ib.getChannelData(c);for(let i=0;i<len;i++)x[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);}
  rv.buffer=ib;const wet=AC.createGain();wet.gain.value=.16;SFXB.connect(OUT);SFXB.connect(rv).connect(wet).connect(OUT);
 }catch(e){}}
+// Spieltest Auftrag 4 (E1): Pegelanzeige für das Dev-Menü. Misst nach dem Kompressor (vor dem Begrenzer), merkt sich,
+// welche Sounds in den letzten 300 ms liefen, und schreibt jedes Übersteuern (Spitze über 0 dBFS) mit diesen Namen mit.
+const Pegel={an_:null,buf:null,spitze:-99,log:[],zuletzt:[],
+ an(knoten){try{this.an_=AC.createAnalyser();this.an_.fftSize=2048;this.buf=new Float32Array(2048);knoten.connect(this.an_);setInterval(()=>this.messen(),60);}catch(e){}},
+ klang(n){const t=performance.now();this.zuletzt.push({n,t});while(this.zuletzt.length&&t-this.zuletzt[0].t>300)this.zuletzt.shift();},
+ messen(){if(!this.an_||!document.body.classList.contains('dev'))return;this.an_.getFloatTimeDomainData(this.buf);let m=0;for(const v of this.buf){const a=Math.abs(v);if(a>m)m=a;}
+  const db=m>0?20*Math.log10(m):-99;this.spitze=Math.max(db,this.spitze-1.5);
+  if(db>0){const n=[...new Set(this.zuletzt.map(z=>z.n))].join(', ')||'?';const l=this.log[0];if(l&&performance.now()-l.ms<400){l.db=Math.max(l.db,db);return;}
+   this.log.unshift({ms:performance.now(),t:new Date().toLocaleTimeString(),db,n});this.log.length=Math.min(this.log.length,12);console.warn(`Übersteuert +${db.toFixed(1)} dB: ${n}`);}}};
 // Grundbausteine (werden auch von jumpscare.js benutzt)
 function nz(f,dur,v,q=3,o={}){if(!AC)return;const s=AC.createBufferSource();s.buffer=NB;const fl=AC.createBiquadFilter();fl.type=o.type||'bandpass';
  const n=AC.currentTime+(o.delay||0);fl.frequency.setValueAtTime(f,n);if(o.fEnd)fl.frequency.exponentialRampToValueAtTime(o.fEnd,n+dur);fl.Q.value=q;

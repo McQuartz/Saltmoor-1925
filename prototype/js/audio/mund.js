@@ -152,9 +152,11 @@ const Mund=(()=>{
  function profilBenennen(p,n){const l=(optionen().profilNamen||STD.profilNamen).slice();l[p-1]=String(n||'').trim().slice(0,24)||STD.profilNamen[p-1];setze('profilNamen',l);}
  function installiere(){
   if(typeof sfx==='undefined')return;
-  const orig={};
+  const orig={},zuletzt={};
   Object.keys(sfx).forEach(name=>{if(typeof sfx[name]!=='function')return;orig[name]=sfx[name];
    sfx[name]=function(arg){const o=optionen();
+    // Spieltest Auftrag 4 (E1): derselbe Klang zweimal innerhalb von 40 ms addiert sich phasengleich (+6 dB). Der zweite fällt weg.
+    const jetzt=performance.now();if(jetzt-(zuletzt[name]||-1e9)<40)return;zuletzt[name]=jetzt;if(typeof Pegel!=='undefined')Pegel.klang(name);
     if(o.aktiv){for(const k of mundSchluessel(name,arg)){const t=geladen[k];if(t){spiele(t,{streuung:o.streuung});return;}}
      if(o.fehlt==='stumm')return;}
     return orig[name].apply(this,arguments);};});
