@@ -79,6 +79,15 @@ function nebel(g,f,ph,pal){if(f<=0)return;const NW=g.canvas&&g.canvas.width||W,N
   const hell=n*.7+((BAY[(y&3)*4+(x&3)]+.5)/16)*.3>.5,c=hell?hl:dk;d[o]=c[0];d[o+1]=c[1];d[o+2]=c[2];d[o+3]=255;}
  FOG.x.putImageData(FOG.id,0,0);g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.imageSmoothingEnabled=false;g.drawImage(FOG.c,0,0);}
 
+// ---- Schwarzblende (Spieltest 2026-11-15): statt des fleckigen Nebels ein gleichmäßiges Bayer-Raster in Schwarz ----
+// Philip fand den Nebel irritierend („was soll das?“). Die Fahrt bleibt, der Schnitt wird eine ruhige Pixel-Blende.
+let BL=null;
+function blende(g,f){if(f<=0)return;const NW=g.canvas&&g.canvas.width||W,NH=g.canvas&&g.canvas.height||H;
+ if(!BL||BL.c.width!==NW||BL.c.height!==NH){const c=document.createElement('canvas');c.width=NW;c.height=NH;BL={c,x:c.getContext('2d'),id:null,f:-1};BL.id=BL.x.createImageData(NW,NH);}
+ if(BL.f!==f){const d=BL.id.data;for(let y=0;y<NH;y++)for(let x=0;x<NW;x++){const o=(y*NW+x)*4;d[o]=d[o+1]=d[o+2]=0;d[o+3]=(BAY[((y>>1)&3)*4+((x>>1)&3)]+.5)/16<f?255:0;}
+  BL.x.putImageData(BL.id,0,0);BL.f=f;}
+ g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.imageSmoothingEnabled=false;g.drawImage(BL.c,0,0);}
+
 // ---- Ablauf im Spiel ----
 let A=null;
 function ruf(){if(!A||A.gerufen)return;A.gerufen=true;clearTimeout(A.sicher);const f=A.fertig;
@@ -103,10 +112,10 @@ function zeichne1(g,now,t){
   A.f=1;A.phase='warte';setTimeout(ruf,0);return true;}        // voll im Nebel: jetzt den Knoten laden (außerhalb des Bildes, damit ein Fehler die Schleife nicht stoppt)
  if(A.phase==='warte'){A.f=1;bild(g,A.sz,A.e,1,{t});return true;}
  return false;}
-// Nach der normalen Szene gezeichnet: Nebel liegt über Fahrt und neuer Szene
+// Nach der normalen Szene gezeichnet: die Blende liegt über Fahrt und neuer Szene
 function deck(g,now,t){if(!A)return;try{deck1(g,t);}catch(er){console.warn('Fahrt',er);A=null;}}
 function deck1(g,t){let f=A.f;
  if(A.phase==='aus'){const q=(performance.now()-A.t2)/NEBEL_AUS;if(q>=1){clearTimeout(A.sicher);A=null;return;}f=1-sm(q);}
- nebel(g,f,t||0,A.pal);}
-return{start,bild,eintrag,dauer,zeichne,deck,nebel,nebelPalette,RICHTUNGEN,aktiv:()=>!!A,zustand:()=>A&&{phase:A.phase,f:A.f,r:A.e.r,ziel:A.e.ziel,d:A.d}};
+ blende(g,Math.round(f*16)/16);}
+return{start,bild,eintrag,dauer,zeichne,deck,nebel,blende,nebelPalette,RICHTUNGEN,aktiv:()=>!!A,zustand:()=>A&&{phase:A.phase,f:A.f,r:A.e.r,ziel:A.e.ziel,d:A.d}};
 })();
