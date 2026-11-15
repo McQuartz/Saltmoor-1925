@@ -220,7 +220,7 @@ function forge(){if(S.forged||S.phase!=='werkstatt')return;const p=forgePreview(
  S.bench=[{uid:++uidc,id},null];S.forged=true;netzTat('schmieden');Bus.emit('forged',{name:p.n,why:`Werkstatt: ${p.same?'Stufe':'Doppel-Item'} ${p.n}`});log(`Verschmolzen: ${p.n}`);
  p.rx.forEach(r=>{if(!S.disc.has(r.n)){S.disc.add(r.n);log(`Reaktion entdeckt: ${r.n}`);}});Bus.emit('changed');}
 function leaveBench(){for(let i=0;i<2;i++){const it=S.bench[i];if(it){const j=S.bag.indexOf(null);if(j<0){Bus.emit('bad',{a:'KEIN PLATZ',b:'Nimm die Items von der Werkbank erst weg.'});return false;}S.bag[j]=it;S.bench[i]=null;}}return true;}
-function leaveNode(){if(!leaveBench())return;finishNode();}
+function leaveNode(){if(!leaveBench())return;S.wsModus=null;finishNode();}
 
 // --- Inventar ---
 function giveItem(id,why=''){if(!ITEMS[id])return false;const it=mk(id);const i=S.bag.indexOf(null);if(i>=0){S.bag[i]=it;log(`Erhalten: ${ITEMS[id].n}`);Bus.emit('item',{id,why:why||'Item erhalten'});return true;}log('Rucksack voll, Item verloren.');return false;}

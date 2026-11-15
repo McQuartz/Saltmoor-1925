@@ -47,6 +47,7 @@ a[data-act]{color:inherit;cursor:pointer;pointer-events:auto;text-decoration:und
 #zwt.an{animation:zwt .62s steps(6) forwards}
 #zwt div{background:#000;border-top:1px solid var(--messing2);border-bottom:1px solid var(--messing2);box-shadow:0 0 0 3px #000,0 -6px 0 -2px #000,0 6px 0 -2px #000;padding:calc(var(--u)*6) calc(var(--u)*30)}
 #zwt span{font-family:var(--fl);font-size:calc(var(--u)*16);color:#efe4c8;letter-spacing:.12em}
+#zwt small{display:block;text-align:center;margin-top:calc(var(--u)*3);font:calc(var(--u)*6)/1 'Silkscreen','Pixelify Sans',monospace;color:#cdbf9c;letter-spacing:.06em}
 @keyframes zwt{0%{opacity:0}15%{opacity:1}80%{opacity:1}100%{opacity:0}}
 
 /* ---------- Untere Leiste ---------- */
@@ -148,7 +149,7 @@ button.deco small{font-family:var(--ft);font-size:.75em;letter-spacing:0}
 #overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:30}#overlay.an{display:flex}
 #vig{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 120px rgba(160,20,10,.6);opacity:0;z-index:20}#vig.an{animation:vig .5s}
 @keyframes vig{from{opacity:1}to{opacity:0}}
-.float{position:fixed;font-family:var(--fp);pointer-events:none;z-index:40;text-shadow:2px 2px 0 #000,-1px -1px 0 #000;animation:fl 1s ease-out forwards}
+.float{position:fixed;font-family:var(--fp);pointer-events:none;z-index:40;text-shadow:2px 2px 0 #000;-webkit-font-smoothing:none;font-smooth:never;line-height:1;animation:fl 1s ease-out forwards}
 @keyframes fl{to{transform:translateY(-40px);opacity:0}}
 #aim{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;display:none;z-index:45;overflow:visible}
 #szene.drop{outline:2px dashed var(--messing)}
@@ -260,3 +261,7 @@ body[data-phase="titel"] #menueBtn{display:none}
 .box.menue .menue .deco.klein{font-size:calc(var(--u)*6);padding:calc(var(--u)*3.5) calc(var(--u)*8)}
 .box.menue .menue .hint{font-size:calc(var(--u)*5.5)}
 .karte-geo{font-size:calc(var(--u)*5);color:#bfa870;font-style:italic;margin-bottom:calc(var(--u)*4)}
+/* Spieltest Auftrag 4 (C9): Pixel-Ziffern 4×6 als Maske, Farbe aus der Schrift */
+.pz{display:inline-flex;gap:var(--u);vertical-align:calc(var(--u)*-.5);margin:0 calc(var(--u)*.5)}
+.pz i{display:block;width:calc(var(--u)*var(--w));height:calc(var(--u)*6);background:currentColor;-webkit-mask:var(--m) 0 0/100% 100% no-repeat;mask:var(--m) 0 0/100% 100% no-repeat;image-rendering:pixelated}
+.karte .kt b.pz{font-size:inherit}

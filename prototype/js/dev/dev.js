@@ -56,6 +56,7 @@ const Dev={an:false,tab:'jetzt',log:[],treffer:[],warum:'',warumT:0,filter:'',ch
   h+=`<canvas id="devKurve" width="320" height="60"></canvas>`;
   h+=`<div><button data-cheat="musikStumm">${Music.running?'Musik aus':'Musik an'}</button> ${Object.keys(Music.BIOME).map(b=>`<button data-cheat="musikBiom" data-arg="${b}">${b}</button>`).join(' ')}</div>`;
   h+=`<h5>Entscheidungen</h5>${this.musikLog.slice(0,12).map(e=>`<div class="le">${esc(e.was||'')} ${esc(e.why||'')}</div>`).join('')||'<div class="dim">noch nichts</div>'}`;
+  if(typeof Pegel!=='undefined')h+=`<h5>Pegel (Ausgang)</h5><div>Spitze <b class="${Pegel.spitze>0?'un':''}">${Pegel.spitze>-90?Pegel.spitze.toFixed(1)+' dBFS':'–'}</b></div>${Pegel.log.map(l=>`<div class="le"><b class="un">+${l.db.toFixed(1)} dB</b> <span class="dim">${l.t}</span> ${esc(l.n)}</div>`).join('')||'<div class="dim">noch kein Übersteuern</div>'}`;
   setTimeout(()=>this.kurve(),0);return h;},
  kurve(){const c=document.getElementById('devKurve');if(!c||typeof Music==='undefined')return;this.mk=this.mk||[];const m=Music.state();this.mk.push([m.wucht||0,m.gefahr||0]);if(this.mk.length>320)this.mk.shift();const x=c.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,320,60);
   [['#7affc8',0],['#ff6a5a',1]].forEach(([col,k])=>{x.fillStyle=col;this.mk.forEach((v,i)=>x.fillRect(i,58-v[k]*56,1,1));});},

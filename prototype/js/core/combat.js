@@ -59,7 +59,7 @@ function startFight(ids,art='kampf'){
 // Energie je Zug: Grundwert, Reliquien mit Preis (energie_plus), Pfandschein (gold_energie: ab p.ab Gold), übrige Energie (energie_bleibt)
 function energieJeZug(){return BAL.energy_per_turn+(S.energiePlus||0)+passive('energie_plus').reduce((s,p)=>s+(p.v||1),0)+passive('gold_energie').reduce((s,p)=>s+((S.gold||0)>=(p.ab||100)?(p.v||1):0),0);}
 
-function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=Bieg.mischen(S.discard);S.discard=[];}const c=S.draw.pop();c.zurueck=false;S.hand.push(c);if(S.farbe&&typeof Farbe!=='undefined')Farbe.hand();S.gezogen=(S.gezogen||0)+1;
+function drawCards(n){for(let i=0;i<n;i++){if(!S.draw.length){if(!S.discard.length)return;S.draw=Bieg.mischen(S.discard);S.discard=[];}const c=S.draw.pop();c.zurueck=false;c.frisch=true;S.hand.push(c);if(S.farbe&&typeof Farbe!=='undefined')Farbe.hand();S.gezogen=(S.gezogen||0)+1;
  // Eigenschaft ballast_ziehen (Strandbuch): eine unspielbare Karte gezogen → eine nach und Block, höchstens 4-mal je Zug
  if(c.unspielbar&&S.phase==='fight'){const bz=passive('ballast_ziehen');if(bz.length&&(S.bzZug||0)<4){S.bzZug=(S.bzZug||0)+1;n+=bz.reduce((s,p)=>s+(p.v||1),0);const b=bz.reduce((s,p)=>s+(p.blk||0),0);if(b)addBlock(b,`Strandbuch: „${c.n}“ gezogen, ${b} Block und eine Karte nach`);}}}}
 function handSize(){return Math.max(BAL.hand_size,...bonuses('hand_size').map(b=>b.amount))+passive('hand_plus').reduce((s,p)=>s+(p.v||1),0)-passive('energie_plus').filter(p=>p.preis==='hand').length;}

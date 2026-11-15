@@ -31,12 +31,16 @@ function karteKurve(ax,ay,bx,by,yp=null){const n=Math.max(8,Math.ceil(Math.hypot
 // Modell der Karte für ein Netz N. o: {wahl: erreichbare Knoten anklickbar, mini: kleiner Ausschnitt (Biom-Wahl), W, H}
 function karteModell(N,o={}){const mini=!!o.mini,W=o.W||KW,H=o.H||KH;
  const L=N.ebenen.length,sicht=Math.min(L-1,netzSicht(N)),e0=N.pos?N.pos[0]:-1;
- const xc=mini?34:140,ym=mini?76:228,dxMax=mini?62:160,gapMax=mini?32:62,rN=mini?7:20,rA=mini?9:22,rH=mini?4:7,rand=mini?20:58;
- const dx=Math.min(dxMax,(W-rand-xc)/Math.max(1,sicht-e0));
- const hs=e0>1?Math.min(36,(xc-62-16)/(e0-1)):0; // gegangene Ebenen links vom aktuellen Knoten, eng gestaffelt
- const xs=e=>e>=e0?xc+(e-e0)*dx:xc-62-(e0-1-e)*hs;
- const ys=(e,i)=>{const n=N.ebenen[e].length,g=e<e0?gapMax*.6:gapMax;return ym+(i-(n-1)/2)*g;};
- const rv=e=>e<e0?rH:e===e0?rA:rN;
+ const xc0=mini?34:140,ym=mini?76:228,dxMax=mini?62:160,gapMax=mini?32:62,rN=mini?7:20,rA=mini?9:22,rH=mini?4:7,rand=mini?20:58,links=mini?20:44;
+ // Spieltest Auftrag 4 (C12): alle sichtbaren Ebenen teilen sich die Breite gleichmäßig (der Nebel zählt wie 1,2 Ebenen),
+ // die Ebenen vor einem bekommen mindestens 100 Pixel. Gegangene Ebenen nehmen den Rest links; solange er reicht, bleiben sie voll groß, sonst schrumpfen sie sanft.
+ const neb=sicht<L-1?1.2:0,past=e0>0&&!mini;
+ const dx=past?Math.max(100,Math.min(dxMax,(W-links-rand)/(sicht+neb))):Math.min(dxMax,(W-rand-xc0)/Math.max(1,sicht-e0));
+ const xc=past?Math.max(xc0,W-rand-(sicht-e0+neb)*dx):xc0;
+ const hs=e0>0?Math.min(dx,(xc-links)/e0):0;const voll=Math.max(0,Math.min(1,(hs-36)/(dx*.7-36)));
+ const xs=e=>e>=e0?xc+(e-e0)*dx:xc-(e0-e)*hs;
+ const ys=(e,i)=>{const n=N.ebenen[e].length,g=e<e0?gapMax*(.6+.4*voll):gapMax;return ym+(i-(n-1)/2)*g;};
+ const rv=e=>e<e0?Math.round(rH+(rN-rH)*voll):e===e0?rA:rN;
  const gi_=p=>N.gegangen.findIndex(q=>q[0]===p[0]&&q[1]===p[1]);
  const verloren=(e,i)=>e<=e0&&gi_([e,i])<0;
  const nebel=sicht<L-1?xs(sicht)+dx/2:null;

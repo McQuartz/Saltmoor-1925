@@ -173,9 +173,10 @@ const PFX = (() => {
   }
 
   // ------------------------------------------------------------------ Zeichnen
-  function flaechen(e, W, H) {
-    const ox = Math.max(0, e.opts.x + e.b[0]), oy = Math.max(0, e.opts.y + e.b[1]);
-    const x1 = Math.min(W, e.opts.x + e.b[2]), y1 = Math.min(H, e.opts.y + e.b[3]);
+  // X0/Y0: linke obere Ecke der Leinwand in Szenenkoordinaten (Bildraum 560 × 315: −40, 3)
+  function flaechen(e, W, H, X0 = 0, Y0 = 0) {
+    const ox = Math.max(X0, e.opts.x + e.b[0]), oy = Math.max(Y0, e.opts.y + e.b[1]);
+    const x1 = Math.min(W + X0, e.opts.x + e.b[2]), y1 = Math.min(H + Y0, e.opts.y + e.b[3]);
     const w = Math.max(1, x1 - ox), h = Math.max(1, y1 - oy);
     if (!e.frame || e.frame.w !== w || e.frame.h !== h || e.frame.ox !== ox || e.frame.oy !== oy) {
       e.frame = window.PixelFX.createFrame(w, h, ox, oy);
@@ -245,7 +246,9 @@ const PFX = (() => {
     const W = g.canvas ? g.canvas.width : 480, H = g.canvas ? g.canvas.height : 270;
     const glatt = g.imageSmoothingEnabled, alpha = g.globalAlpha;
     g.save();
-    g.setTransform(1, 0, 0, 1, 0, 0);
+    // Spieltest Auftrag 4: den Ursprung des Bildraums behalten (BILD.x/BILD.y in buehne.js), sonst liegen alle Effekte 40 Pixel links daneben
+    const T = g.getTransform ? g.getTransform() : { e: 0, f: 0 }, tx = Math.round(T.e), ty = Math.round(T.f);
+    g.setTransform(1, 0, 0, 1, tx, ty);
     g.imageSmoothingEnabled = false; g.globalAlpha = 1;
     for (let i = 0; i < laufend.length; i++) {
       const e = laufend[i];
@@ -254,7 +257,7 @@ const PFX = (() => {
         e.fx.update(Math.max(0, dt) * e.tempo);
         if (e.fx.done()) { laufend.splice(i--, 1); continue; }
         if (e.mitte && !e.mitteGerufen && e.fx.t >= (e.mod.meta.duration || 1) / 2) { e.mitteGerufen = true; try { e.mitte(); } catch (err) { console.warn('PFX mitte', err); } }
-        if (!flaechen(e, W, H)) continue;
+        if (!flaechen(e, W, H, -tx, -ty)) continue;
         window.PixelFX.clearFrame(e.frame);
         if (e.d.zeigeKoerper && e.akteur && e.mod.actorAlpha && e.mod.actorAlpha(e.fx.t, e.opts) > 0) koerperMalen(e);
         e.fx.draw(e.frame);

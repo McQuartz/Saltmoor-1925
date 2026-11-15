@@ -24,6 +24,10 @@ const GLY={
  fund:['.........','.#######.','#.......#','#########','#...#...#','#..###..#','#...#...#','#########','.........'],
  waechter:['#...#...#','##.###.##','#########','.#######.','.#.###.#.','.#######.','..#####..','...###...','.........'],
  finale:['...###...','.##...##.','#...#...#','#..###..#','#.##.##.#','#..###..#','#...#...#','.##...##.','...###...'],
+ kerbe:['.#.......','.##......','.###.....','.#.##....','.#..##...','.#...##..','.#....##.','.#######.','.........'],
+ schleifen:['........#','.......#.','......#..','.....#...','#########','#.#.#.#.#','#########','.........','.........'],
+ insich:['..####...','.#....#..','#......#.','#....####','#.....##.','#......#.','.#.......','..####...','.........'],
+ tilgen:['...###...','..#...#..','.#.#.#.#.','.#..#..#.','.#.#.#.#.','..#...#..','...###...','.........','.........'],
  gold:['..#####..','.#.....#.','#..###..#','#.#...#.#','#.#...#.#','#.#...#.#','#..###..#','.#.....#.','..#####..'],
 };
 GLY.burn=GLY.F;GLY.kampf=GLY.atk;GLY.kampf_schwer=GLY.atk2;
@@ -34,3 +38,17 @@ const _gc={};
 function glyph(k,col){col=col||(ST[k]?ST[k].c:FXC[k])||'#fff';const key=k+col;if(_gc[key])return _gc[key];const g=GLY[k]||GLY.ereignis;const c=document.createElement('canvas');c.width=9;c.height=9;const x=c.getContext('2d');x.fillStyle=col;g.forEach((r,y)=>[...r].forEach((ch,i)=>{if(ch==='#')x.fillRect(i,y,1,1);}));return _gc[key]=c.toDataURL();}
 // gi(k, Größe in Bildschirmpixeln, Farbe): Pixelzeichen als <img>
 const gi=(k,s=18,col)=>`<img class="ico" src="${glyph(k,col)}" width="${s}" height="${s}" alt="${ST[k]?ST[k].n:(STN[k]||k)}" title="${ST[k]?ST[k].n:(STN[k]||'')}">`;
+// Spieltest Auftrag 4 (C9): eigene Pixel-Ziffern 4×6, damit die 5 nicht wie 8 oder 2 aussieht.
+// pzHtml('4×2') gibt Masken-Spans zurück, die Farbe kommt aus der Schriftfarbe (currentColor), die Größe aus --u.
+const PZ={
+ '0':['.##.','#..#','#.##','##.#','#..#','.##.'],'1':['.#..','##..','.#..','.#..','.#..','###.'],
+ '2':['.##.','#..#','...#','..#.','.#..','####'],'3':['###.','...#','.##.','...#','...#','###.'],
+ '4':['..#.','.##.','#.#.','####','..#.','..#.'],'5':['####','#...','###.','...#','#..#','.##.'],
+ '6':['.##.','#...','###.','#..#','#..#','.##.'],'7':['####','...#','..#.','.#..','.#..','.#..'],
+ '8':['.##.','#..#','.##.','#..#','#..#','.##.'],'9':['.##.','#..#','#..#','.###','...#','.##.'],
+ '×':['....','#..#','.##.','.##.','#..#','....'],'%':['#..#','...#','..#.','.#..','#...','#..#'],
+ '+':['....','.#..','###.','.#..','....','....'],'−':['....','....','###.','....','....','....']};
+const _pz={};
+function pzBild(ch){if(_pz[ch])return _pz[ch];const g=PZ[ch];const w=g[0].length;const c=document.createElement('canvas');c.width=w;c.height=6;const x=c.getContext('2d');x.fillStyle='#fff';
+ g.forEach((r,y)=>[...r].forEach((p,i)=>{if(p==='#')x.fillRect(i,y,1,1);}));return _pz[ch]={u:c.toDataURL(),w};}
+function pzHtml(s){return `<b class="pz" aria-label="${s}">${[...String(s)].map(ch=>{if(!PZ[ch])return ch;const b=pzBild(ch);return `<i style="--w:${b.w};--m:url(${b.u})"></i>`;}).join('')}</b>`;}

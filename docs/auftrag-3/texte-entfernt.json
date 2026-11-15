@@ -24,6 +24,30 @@
   {
    "text": "Angelegt kommen ins Deck:",
    "grund": "Spieltest 2026-11-09 (Philip): Der Hover über Fund, Reliquie und Handgriff zeigt nur noch die echten Karten statt eines Textkastens."
+  },
+  {
+   "text": "GOLD · BIS ZUM NÄCHSTEN AKT",
+   "grund": "Spieltest Auftrag 4 (2026-11-15, Moriz): Der Krämer passt auf einen Bildschirm (links Am Körper, rechts Angebot); die Gold-Zeile steht nur noch in der Kopfleiste."
+  },
+  {
+   "text": "nichts gewählt",
+   "grund": "Spieltest Auftrag 4 (2026-11-15, Moriz): Krämer neu: ohne gewähltes Item steht links nur die Liste Am Körper, kein Platzhaltertext."
+  },
+  {
+   "text": "VERKAUFEN UND ENTFERNEN",
+   "grund": "Spieltest Auftrag 4 (2026-11-15, Moriz): Krämer neu: Verkaufen steht am gewählten Item, Entfernen als ✕ an jeder Karte; die gemeinsame Überschrift entfällt."
+  },
+  {
+   "text": "Eine Werkbank, die noch funktioniert. Einmal verschmelzen: gleicher Stoff gibt eine Stufe, zwei Stoffe, die reagieren, ein Doppel-Item.",
+   "grund": "Spieltest Auftrag 4 (2026-11-15, Moriz): Die Werkstatt zeigt ihre Möglichkeiten als Kacheln mit eigenem Kurztext; die Werkbank erscheint erst nach Wahl von Verschmelzen."
+  },
+  {
+   "text": "Oder statt zu verschmelzen:",
+   "grund": "Spieltest Auftrag 4 (2026-11-15, Moriz): Werkstatt als Kacheln: Verschmelzen ist eine Kachel unter mehreren, nicht mehr die Hauptsache."
+  },
+  {
+   "text": "EINE KARTE SCHLEIFEN",
+   "grund": "Spieltest Auftrag 4 (2026-11-15, Moriz): Werkstatt als Kacheln: die Kachel heißt SCHLEIFEN."
   }
  ]
 }

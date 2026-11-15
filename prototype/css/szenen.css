@@ -56,6 +56,8 @@
 
 /* ---------- Akt-Wechsel als Zwischentitel ---------- */
 #panel .zwischentitel{position:relative;background:#000;border:0;padding:calc(var(--u)*16) calc(var(--u)*34);animation:iris .9s steps(9) backwards;box-shadow:0 0 0 100vmax #000}
+/* Spieltest Auftrag 4: clip-path schneidet das Schwarz (box-shadow) mit ab, darunter sah man die neue Szene laden. Darum steht das Schwarz als eigener Grund hinter der Blende. */
+#panel.p-uebergang{background:#000}
 @keyframes iris{from{clip-path:circle(0% at 50% 50%)}to{clip-path:circle(75% at 50% 50%)}}
 #panel .zwischentitel::before{content:"";position:absolute;inset:calc(var(--u)*-200);pointer-events:none;background:var(--zone);mix-blend-mode:multiply;opacity:.35}
 #panel .zwischentitel::after{content:"";position:absolute;inset:calc(var(--u)*-200);pointer-events:none;background:var(--dither) 0 0/calc(var(--u)*2) calc(var(--u)*2),linear-gradient(90deg,transparent 31%,rgba(255,255,255,.12) 31.2%,transparent 31.5%,transparent 72%,rgba(255,255,255,.08) 72.1%,transparent 72.3%);opacity:.18;animation:korn .24s steps(3) infinite}

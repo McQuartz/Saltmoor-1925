@@ -126,10 +126,11 @@
 .karte .sf img{display:block;width:calc(var(--u)*7)!important;height:calc(var(--u)*7)!important}
 .karte .mk{position:absolute;font:calc(var(--u)*5)/1 var(--ps);color:#cdb8ff;bottom:calc(var(--u)*3);left:calc(var(--u)*3)}
 .karte .mk.schl{left:auto;right:calc(var(--u)*3);color:#7dffc4}
-/* Reaktions-Band über der Unterkante des Bildfensters, die Karte leuchtet in der Farbe ihres reagierenden Stoffs */
-.karte .rxb{position:absolute;left:50%;bottom:calc(var(--u)*-4);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:var(--u);width:max-content;max-width:calc(var(--u)*46);z-index:2}
+/* Reaktions-Band im Bildfenster unten, die Karte leuchtet in der Farbe ihres reagierenden Stoffs */
+.karte .rxb{position:absolute;left:50%;bottom:calc(var(--u)*2);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:var(--u);width:max-content;max-width:calc(var(--u)*36);z-index:2}
 .karte .rx{position:static;transform:none;font:calc(var(--u)*4.4)/1 var(--ps);letter-spacing:0;color:var(--c,#e8c547);background:#000;box-shadow:0 0 0 var(--u) var(--c,#e8c547),0 0 0 calc(var(--u)*2) #000;padding:var(--u) calc(var(--u)*2);white-space:normal;text-align:center;max-width:100%;border:0;width:auto}
-.karte .rx.in{color:#9fc4ff;--c:#6a9ad8}
+.karte .rx.in{color:#9fc4ff;--c:#6a9ad8;display:flex;align-items:center;gap:var(--u)}
+.karte .rx.in .ico{width:calc(var(--u)*5)!important;height:calc(var(--u)*5)!important;flex:none}
 .karte.reagiert .kin{filter:drop-shadow(0 0 calc(var(--u)*3) var(--c,#e8c547))}
 #hand .karte.reagiert:hover .kin{filter:drop-shadow(0 0 calc(var(--u)*3) var(--c,#e8c547)) brightness(1.18)}
 .karte.teuer .kin{filter:brightness(.42) saturate(.5)}
@@ -156,11 +157,13 @@
 .feind .abs .geschw,.feind .abs .laedt{display:inline-flex;align-items:center;gap:calc(var(--u)*2)}
 .feind .abs .geschw{color:#d8c0ff}
 .feind .pl-row .sts{margin-left:auto}
-.feind .pl-nm{position:absolute;left:50%;bottom:calc(100% + var(--u)*5);transform:translateX(-50%);display:flex;align-items:center;gap:calc(var(--u)*1);font:calc(var(--u)*5)/1 var(--ps);color:#efe4c8;white-space:nowrap;background:#000c;padding:var(--u) calc(var(--u)*2);opacity:0;transition:opacity .15s;pointer-events:none;letter-spacing:0;margin:0;text-shadow:none;z-index:3}
+.feind .pl-nm{position:absolute;left:50%;bottom:calc(100% + var(--u)*5);transform:translateX(-50%);display:flex;align-items:center;gap:calc(var(--u)*1);font:calc(var(--u)*5)/1 var(--ps);color:#efe4c8;white-space:nowrap;background:#000c;padding:var(--u) calc(var(--u)*2);opacity:.72;transition:opacity .15s;pointer-events:none;letter-spacing:0;margin:0;text-shadow:none;z-index:3}
 .feind .pl-nm span{overflow-wrap:normal;min-width:0}
 .feind .pl-nm img.ico{width:calc(var(--u)*5)!important;height:calc(var(--u)*5)!important}
 .feind .plakette:hover .pl-nm,.feind.ziel .pl-nm{opacity:1}
 .feind.ziel .pl-nm span{color:#fff}
+/* Spieltest Auftrag 4: Namen stehen immer da (gedämpft), das Ziel und der Gegner unter der Maus hell */
+.feind:not(.ziel) .pl-nm span{color:#b8ad92}
 .feind .pl-bar{position:relative;display:block;height:calc(var(--u)*7);margin:calc(var(--u)*2) 0 0;background:#140808;border:0;box-shadow:0 0 0 var(--u) #000}
 .feind .pl-row+.pl-bar{margin-top:calc(var(--u)*1)}
 .feind .pl-bar .pv{background:repeating-linear-gradient(-45deg,#ffd0a0 0 calc(var(--u)*1),#7a2a20 calc(var(--u)*1) calc(var(--u)*2.5));animation:puls .8s infinite alternate}
@@ -204,3 +207,9 @@
 #hud .stempel img{width:calc(var(--u)*9)!important;height:calc(var(--u)*9)!important}#hud .stempel i{font-style:normal;color:#8a7f68}
 @keyframes stempel{0%{transform:translateX(-50%) rotate(var(--sr)) scale(2.2);opacity:0}12%{transform:translateX(-50%) rotate(var(--sr)) scale(.92);opacity:1}20%{transform:translateX(-50%) rotate(var(--sr)) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) rotate(var(--sr)) translateY(calc(var(--u)*-6))}}
 @media (prefers-reduced-motion:reduce){#hand .karte.neu,#hand .karte.neu::after,#leiste .ener i,#hud .stempel{animation:none}}
+
+/* Spieltest Auftrag 4: bei vielen Ästen nur die spielbaren beschriftet */
+#baum .sb-ast.still{visibility:hidden}
+#hand .karte.nachgezogen .kin{animation:nachgezogen .9s steps(6) .3s backwards}
+@keyframes nachgezogen{0%{box-shadow:0 0 0 calc(var(--u)*1) #000,0 0 0 calc(var(--u)*2) var(--zone),0 0 calc(var(--u)*6) var(--zone)}100%{box-shadow:none}}
+@media (prefers-reduced-motion:reduce){#hand .karte.nachgezogen .kin{animation:none}}

@@ -43,10 +43,14 @@ function ebene(ctx,cv,ya,yb,pf,K,zx,zy,px){const sc=y=>1/(1-K.z*pf(y));px=px||pf
  const x0=Math.round(zx+(-M-zx)*s+sh),x1=Math.round(zx+(W+M-zx)*s+sh);
  ctx.drawImage(cv,0,ya+M,EW,yb-ya,x0,y0,x1-x0,y1-y0);}
 
+const FAHRT_KOPIE=[];function fahrtKopie(i,L){let c=FAHRT_KOPIE[i];if(!c){c=FAHRT_KOPIE[i]=document.createElement('canvas');}if(c.width!==L.width||c.height!==L.height){c.width=L.width;c.height=L.height;}return c;}
 function bild(ctx,sz,e,t,opt){opt=opt||{};const[UX,UY]=ursprung(ctx);ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.imageSmoothingEnabled=false;
  ctx.fillStyle='#000';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);ctx.setTransform(1,0,0,1,UX,UY);
  const zx=cl(e.ziel[0],0,W),zy=cl(Math.round(e.ziel[1]),60,200),K=kamera(e.r,cl(t,0,1));K.shy=K.shy||(()=>0);
- const Ls=sz.ebenen.map(L=>L.canvas);
+ // Spieltest Auftrag 4: Animiertes (Flammen, Augen …) wird in eine Kopie seiner Ebene gemalt und fährt mit ihr, statt gemeinsam mit einer festen Nähe zu schweben
+ const jeEbene=!!sz.zeichneAnimiertIn,ta0=opt.t||0;
+ const mitAnim=(L,i)=>{if(!jeEbene)return L;const c=fahrtKopie(i,L);const x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);x.drawImage(L,0,0);try{sz.zeichneAnimiertIn(x,ta0,i,M,M);}catch(er){}return c;};
+ const Ls=sz.ebenen.map((L,i)=>mitAnim(L.canvas,i));
  // Ebene 0 und 1 (Ferne) stehen zusätzlich unbewegt darunter: wandert eine nahe Ebene weg, schimmert dahinter die Ferne statt Schwarz durch
  ctx.drawImage(Ls[0],-M,-M);ctx.drawImage(Ls[1],-M,-M);
  ebene(ctx,Ls[0],-M,H+M,()=>PAR[0],K,zx,zy);
@@ -59,9 +63,9 @@ function bild(ctx,sz,e,t,opt){opt=opt||{};const[UX,UY]=ursprung(ctx);ctx.setTran
  // Animiertes (Flammen, Nebelschwaden …) fährt mit der mittleren Ebene mit
  const mit=(p,f)=>{const s=1/(1-K.z*p),sh=cl(K.shx(p),-((W-zx)*(s-1)+M*s),zx*(s-1)+M*s);ctx.save();ctx.setTransform(s,0,0,s,UX+Math.round(zx*(1-s)+sh),UY+Math.round(zy*(1-s)+K.shy(p)));ctx.imageSmoothingEnabled=false;try{f();}catch(er){}ctx.restore();};
  const kam0={x:0,y:0},ta=opt.t||0;
- if(sz.zeichneAnimiert)mit(PAR[3],()=>sz.zeichneAnimiert(ctx,ta,kam0));
+ if(sz.zeichneAnimiert&&!jeEbene)mit(PAR[3],()=>sz.zeichneAnimiert(ctx,ta,kam0));
  // Ebene 5 (vorne) und Luft: ganz nah
- ebene(ctx,sz.vorne.canvas,-M,H+M,()=>NAH,K,zx,zy);
+ ebene(ctx,mitAnim(sz.vorne.canvas,5),-M,H+M,()=>NAH,K,zx,zy);
  if(sz.zeichneVordergrund)mit(NAH,()=>sz.zeichneVordergrund(ctx,ta,kam0,true));
  ctx.setTransform(1,0,0,1,UX,UY);ctx.globalAlpha=1;}
 

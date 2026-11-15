@@ -32,14 +32,14 @@ function plaketteHtml(e,i,f,pv,tg){
  // Der Name steht darüber und erscheint bei Hover oder Ziel. Stumm: die Zeile der Absicht entfällt. Seltenes (danach, Panzer, Asche) in einer kleinen Zeile darunter.
  const sicht=f&&absichtSichtbar(e),a=sicht?absicht(e):null,abs=a?`<div class="abs">${a.html}</div>`:'';
  const danach=sicht&&typeof Bieg!=='undefined'&&Bieg.absichtenSichtbar(e)>1?`<div class="pl-x" title="Die Rückseite: was ${esc(e.n)} im Zug danach vorhat">danach <span class="abs abs2">${absicht0({...e,pi:e.pi+1}).html}</span></div>`:'';
- const d=pv?Math.min(e.hp,pv.d):0,ab=pv?Math.min(e.block,pv.ab):0,W=v=>Math.max(0,Math.min(100,v/e.max*100)).toFixed(1)+'%';
+ const d=pv?Math.min(e.hp,pv.d):0,ab=pv?Math.min(e.block,pv.ab):0,T=Math.max(e.max,e.hp+e.block),W=v=>Math.max(0,Math.min(100,v/T*100)).toFixed(1)+'%';
  const st=[e.burn&&['burn',e.burn,STN.burn],e.poison&&['poison',e.poison,STN.poison],e.weak2&&['weak',1,'Geschwächt: halber Schaden'],e.str&&['buff',e.str,STN.buff],e.vuln>0&&['atk2',e.vuln,`Verwundbar ${e.vuln} (+50 %)`]].filter(Boolean);
  const sts=st.length?`<div class="sts">${st.map(([k,v,t])=>`<span title="${esc(t)}">${gi(k,KZ(),k==='atk2'?'#ffb070':undefined)}<b>${v}</b></span>`).join('')}</div>`:'';
  const blk=e.block-ab,ext=(blk>0||ab>0?`<b class="pl-blk ${ab?'pvb':''}" title="Block">${blk>0?blk:ab}</b>`:'')+(e.panzer>0?`<b class="pl-pz" title="${esc((BAL.panzer&&BAL.panzer.t)||'')}">${gi('blk',KZ())}${e.panzer}</b>`:'');
- const bk=e.block>0?`<u class="bk${ab?' pvb':''}" style="width:${W(e.block)}"></u>`:'';
+ const bk=e.block>0?`<u class="bk${ab?' pvb':''}" style="left:${W(e.hp)};width:${W(e.block)}"></u>`:''; // Spieltest Auftrag 4: Block hinter dem Leben, Raster mit Bedeutung
  return `<div class="plakette${e.verbuendet?' verb':''}"><div class="pl-box px9">${e.kniff||e.besonders?'<b class="knf" title="Kniff: Maus darüber">◆</b>':''}${e.ascheSpur||e.verbuendet?`<b class="pl-asche" title="${e.verbuendet?'Aus der Asche gerufen: kämpft für dich':'Dieselbe Asche-Spur: du hast ihn gerufen'}"></b>`:''}${f?klangzeichenHtml(e):''}
   <div class="pl-nm"><span>${esc(e.n).toUpperCase()}</span>${e.weak?gi(e.weak,KZ()):''}</div>${abs||sts?`<div class="pl-row">${abs}${sts}</div>`:''}
-  <div class="pl-bar"><i class="hp" style="width:${W(e.hp-d)}"></i>${d?`<i class="pv" style="left:${W(e.hp-d)};width:${W(d)}"></i>`:''}${bk}<span>${e.hp}/${e.max}${pv&&(pv.d||pv.ab)?` <em class="pvt">−${pv.d}</em>`:''}</span>${ext?`<div class="pl-ext">${ext}</div>`:''}</div>
+  <div class="pl-bar"><i class="hp" style="width:${W(e.hp-d)}"></i>${d?`<i class="pv" style="left:${W(e.hp-d)};width:${W(d)}"></i>`:''}${bk}${rasterHtml(T,42)}<span>${e.hp}/${e.max}${pv&&(pv.d||pv.ab)?` <em class="pvt">−${pv.d}</em>`:''}</span>${ext?`<div class="pl-ext">${ext}</div>`:''}</div>
   ${e.verbuendet?'<div class="pl-verb">AUS DER ASCHE · FÜR DICH</div>':''}${danach}</div><div class="spitze"></div></div>`;}
 function gegnerHtml(f){return S.enemies.map((e,i)=>{if(e.hp<=0)return'';const b={...enemyBox(e)};if(e.pendel)b.x=Math.round(e.x*SW);const pv=vorschau&&vorschau.foes[i];const tg=f&&i===S.target;
   return `<div class="feind ${tg?'ziel':''} ${e.rang}" data-ei="${i}" style="left:${(uiX(b.x)/4.8).toFixed(2)}%;top:${(uiY(b.kopf)/2.7).toFixed(2)}%;--fh:${(b.y-b.kopf)*6/7/2.7}">
@@ -108,7 +108,7 @@ function cardText(c,m=1){const vs=v=>typeof verstaerkt==='function'?verstaerkt(v
 const KARTE_MARKEN=['Behalten','Verbraucht','Funke'];
 function karteTextTeile(t){t=String(t||'');const tags=[];for(const k of KARTE_MARKEN){const re=new RegExp('(^|[.,]\\s*)'+k+'(?![a-zäöüß])\\.?\\s*');if(re.test(t)){tags.push(k);t=t.replace(re,'$1').replace(/^[.,\s]+|[.,\s]+$/g,'');}}
  return{t,tags};}
-function karteHtml(c,o={}){const T=karteTextTeile(o.text!=null?o.text:cardText(c,o.m||1));let t=esc(T.t).replace(/(\d+(?:×\d+)?)/g,'<b>$1</b>');if(t&&!/[.!?]$/.test(T.t))t+='.';
+function karteHtml(c,o={}){const T=karteTextTeile(o.text!=null?o.text:cardText(c,o.m||1));let t=esc(T.t).replace(/(\d+(?:×\d+)?)/g,m=>typeof pzHtml==='function'?pzHtml(m):'<b>'+m+'</b>');if(t&&!/[.!?]$/.test(T.t))t+='.';
  const ko=o.kost==null?'':String(o.kost);const img=o.img!=null?o.img:(c.img||(c.spr&&typeof spr==='function'?spr(c.spr):''));
  return `<div class="karte ${o.cls||''}" ${o.attr||''} ${o.style?`style="${o.style}"`:''}><div class="kin px9"><div class="kn">${esc(c.n).toUpperCase()}</div><div class="bild px9">${img?`<img src="${img}" alt="" draggable="false">`:''}${o.rx?`<div class="rxb">${o.rx}</div>`:''}</div>
   <div class="kt${o.verst?' verst':''}">${t}</div><div class="tags">${T.tags.map(x=>`<span>${x.toUpperCase()}</span>`).join('')}</div>
@@ -117,17 +117,17 @@ function karteHtml(c,o={}){const T=karteTextTeile(o.text!=null?o.text:cardText(c
 function handLage(n){const h=(n-1)/2;const rot=h?Math.min(2,6/h):0;const th=rot*h*Math.PI/180;const step=h?Math.min(45,(236/2-25*Math.cos(th)-91*Math.sin(th))/h):0;const arc=h?6/(h*h):0;const slop=Math.ceil(25*Math.sin(th)+21*(1-Math.cos(th)));
  return{h,rot,step,arc,base:20+6+slop};}
 function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.st);const self=c.st.length>1?rx.filter(r=>r.k&&[...r.k].every(k=>c.st.includes(k))):[];const vor=rx.filter(r=>!self.includes(r));
- // M2: Reaktionen stehen immer mit Namen als Band an der Karte (kein Fragezeichen); Auftrag 4: das Band liegt über der Unterkante des Bildfensters
+ // M2: Reaktionen stehen immer mit Namen als Band an der Karte (kein Fragezeichen); Spieltest: das Band liegt im Bildfenster, In-sich-Reaktionen tragen ein Zeichen statt Text
  let rxl='';const km=rx.length?rx.reduce((m,r)=>m*(r.pre&&r.pre.mult||1),1):1;
  const glow=vor.length?(ST[c.st.find(k=>vor.some(r=>!r.k||String(r.k).includes(k)))||c.st[0]]||{}).c:null;
  if(vor.length)rxl=`<div class="rx">${vor.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
- if(self.length)rxl+=`<div class="rx in">IN SICH: ${self.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
+ if(self.length)rxl+=`<div class="rx in" title="Reagiert in sich (zwei Stoffe auf einer Karte)">${gi('insich',KZ(),'#9fc4ff')}${self.map(r=>r.n.toUpperCase()).join(' + ')}</div>`;
  const L=handLage(n||S.hand.length),m=i-L.h;
- const cls=`${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''} ${c.farbe?'farbe':''} ${c.erbe?'erbe':''} ${c.fremd?'fremd':''} ${dealAnim?'neu':''}`;
+ const cls=`${cost>S.energy?'teuer':''} ${vor.length?'reagiert':''} ${c.st.length>1?'duo':''} ${c.unspielbar&&!(typeof werfbar==='function'&&werfbar(c))?'unspielbar':''} ${c.frost?'frost':''} ${c.teuer?'verteuert':''} ${c.hg?'handgriff':''} ${c.farbe?'farbe':''} ${c.erbe?'erbe':''} ${c.fremd?'fremd':''} ${dealAnim||c.frisch?'neu':''} ${c.frisch&&!dealAnim?'nachgezogen':''}`;
  const koCls=c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?'hoch':'tief'):'';
  return karteHtml(c,{cls,attr:`data-card="${i}"`,m:km,verst:km!==1&&(c.draw||c.str||c.gold),kost:cost>=99?'–':cost,koCls,rx:rxl,
   mk:(c.schliff?'<span class="mk schl" title="geschliffen">◇</span>':''),
-  style:`${glow?`--c:${glow};`:''}--fx:${(m*L.step).toFixed(2)};--fy:${(m*m*L.arc).toFixed(2)};--fr:${(m*L.rot).toFixed(2)}deg;z-index:${10+i};${dealAnim&&typeof austeilenStil==='function'?austeilenStil(i,n||S.hand.length,L,m):''}`});}
+  style:`${glow?`--c:${glow};`:''}--fx:${(m*L.step).toFixed(2)};--fy:${(m*m*L.arc).toFixed(2)};--fr:${(m*L.rot).toFixed(2)}deg;z-index:${10+i};${(dealAnim||c.frisch)&&typeof austeilenStil==='function'?austeilenStil(dealAnim?i:0,n||S.hand.length,L,m,i):''}`});}
 // ---------- Ausrüstung unter der Szene ----------
 function slotHtml(loc,locked){const it=locked?null:getAt(loc);const d=it?def(it):null;const ibi=it?itemBild(it.id):'';
  return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${ibi}" alt="" data-fuid="${it.uid}">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}<span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;}
