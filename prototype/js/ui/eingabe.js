@@ -90,7 +90,7 @@ function aktion(k,el){switch(k){
  case'rucksack':rucksackAuf();break;case'koeDeck':if(KOE){KOE.zeig=null;S.sel=null;render();}break;case'rucksackZu':rucksackZu();break;
  case'hgSkip':skipHandgriff();break;case'hgVerwerfen':hgVerwerfen();break;
  case'ueberJa':{const u=S.ueberschreiben;S.ueberschreiben=null;placeHandgriff(u.uid,u.k);break;}case'ueberNein':S.ueberschreiben=null;render();break;
- case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;case'wsTilgen':wahlStart('tilgen','werkstatt');break;
+ case'wsKerbe':wahlStart('kerbe','werkstatt');break;case'wsSchmieden':S.wsModus='schmieden';render();break;case'wsZurueck':S.wsModus=null;render();break;case'wsSchleifen':wahlStart('schleifen','werkstatt');break;case'wsTilgen':wahlStart('tilgen','werkstatt');break;
  case'rastSchleifen':wahlStart('schleifen','rast');break;case'rastUmritzen':S.umritzQuelle=null;wahlStart('umritzen','rast');break;case'wahlAbbruch':S.umritzQuelle=null;wahlAbbrechen();break;
  case'verkaufen':if(S.sel){verkaufen(S.sel);S.sel=null;render();}break;
  case'devToggle':if(typeof Dev!=='undefined')Dev.toggle();break;}}

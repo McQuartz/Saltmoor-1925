@@ -1,0 +1,102 @@
+/* Spieltest Auftrag 4 (playtest-feedback.md C2, C3): eine Optik für alle Bildschirme.
+   Die alten Schriften (Cinzel, IM Fell English, Limelight) werden über die Variablen auf die Pixelschriften umgestellt,
+   die der Kampf schon benutzt: Titel Jersey 10, Köpfe und Knöpfe Silkscreen, Text Pixelify Sans.
+   Kästen (.box) bekommen den 9-Slice-Rahmen in Zonenfarbe, alle .deco-Knöpfe sind Plakettenknöpfe mit vier Zuständen.
+   Diese Datei wird als letzte geladen. */
+:root{--fk:'Silkscreen','Pixelify Sans',monospace;--ft:'Pixelify Sans','Silkscreen',monospace;--fl:'Jersey 10','Pixelify Sans',monospace}
+html,body{-webkit-font-smoothing:none;font-smooth:never}
+.hint{font-style:normal}
+em,i:not(.ico){font-style:normal}
+
+/* ---------- Kästen ---------- */
+.box:not(.szene){background:none;border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9panel) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;box-shadow:none;scrollbar-color:var(--zone2) #000}
+.box h2{font:400 calc(var(--u)*13)/1 var(--fl);letter-spacing:.06em}
+.box h3{font:400 calc(var(--u)*5)/1 var(--fk);letter-spacing:.02em;color:#c8bca0}
+.box p,.box .lead{font-family:var(--ft);font-size:calc(var(--u)*5.6);line-height:1.3;font-style:normal}
+.box .hint{font:calc(var(--u)*5)/1.25 var(--ft);color:#b8ac90}
+
+/* ---------- Knöpfe: überall Plakettenknöpfe ---------- */
+button.deco{border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9knopf) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;
+ background:none;box-shadow:none;font:calc(var(--u)*6)/1.15 var(--fk);letter-spacing:0;color:#f3e9cf;padding:calc(var(--u)*2) calc(var(--u)*7) calc(var(--u)*3)}
+button.deco:hover:not(:disabled){border-image-source:var(--s9knopfh);color:#fff;box-shadow:none}
+button.deco:active:not(:disabled){border-image-source:var(--s9knopfd);transform:translateY(var(--u))}
+button.deco:disabled{border-image-source:var(--s9knopfx);color:#6a6258;opacity:1}
+button.deco.klein{font-size:calc(var(--u)*5);padding:calc(var(--u)*1.5) calc(var(--u)*5) calc(var(--u)*2.5)}
+button.deco small{font:calc(var(--u)*4.6)/1.2 var(--ft);color:#c8bca0;display:block;margin-top:var(--u)}
+
+/* ---------- Meldungen, Zwischentitel, Tooltips ---------- */
+.tst{background:none;border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9panel) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;box-shadow:none;
+ font:calc(var(--u)*5)/1.1 var(--fk);letter-spacing:0;padding:calc(var(--u)*1) calc(var(--u)*4)}
+.tst small{font:calc(var(--u)*5)/1.2 var(--ft)}
+.tst.hoch{border-image-source:var(--s9ziel);color:var(--gold)}
+#zwt div{border:0;box-shadow:0 calc(var(--u)*-1) 0 var(--zone),0 var(--u) 0 var(--zone),0 0 0 calc(var(--u)*2) #000}
+#zwt span{font:400 calc(var(--u)*20)/1 var(--fl);letter-spacing:.08em}
+#tip{background:none;border-style:solid;border-width:8px;border-image:var(--s9panel) 4 fill / 8px stretch;image-rendering:pixelated;padding:2px 6px;font-family:var(--ft);font-size:14px;line-height:1.3}
+#tip .tn{font:14px/1.2 var(--fk);letter-spacing:0}
+#tip .hint{font-style:normal}
+
+/* ---------- Kopfleiste (C3) ---------- */
+#kopf{text-shadow:var(--u) var(--u) 0 #000}
+#kopf .tz{font:400 calc(var(--u)*11)/1 var(--fl);letter-spacing:.06em}
+#kopf .tz .sub{font:calc(var(--u)*5)/1 var(--ft);color:#cfc4a8;margin-left:calc(var(--u)*4)}
+#kopf .du{font:calc(var(--u)*4.5)/1 var(--fk);letter-spacing:.04em}
+#kopf .zahlen{font:400 calc(var(--u)*8)/1 var(--fl)}
+#kopf .kr{gap:calc(var(--u)*6);align-items:center;font:calc(var(--u)*5)/1 var(--fk);letter-spacing:0}
+#kopf .kr b{font:400 calc(var(--u)*9)/1 var(--fl);color:#efe4c8;margin-left:calc(var(--u)*1)}
+#kopf .kr a{text-decoration:none;border-bottom:var(--u) solid #5a4a30}
+#kopf .kr a:hover{color:#fff;border-color:var(--zone)}
+#kopf .kr .amk{border-bottom:var(--u) solid #8a6e3a}
+#kopf .kopfbieg b{font:calc(var(--u)*5)/1 var(--fk)}
+
+/* ---------- Überlagerungen (Buch, Tagebuch, Einstellungen) ---------- */
+#overlay .box label{font:calc(var(--u)*5)/1.3 var(--ft)}
+#overlay .box select{font:calc(var(--u)*4.6)/1 var(--fk);background:#0e0c12;color:#efe4c8;border:var(--u) solid var(--zone2)}
+#overlay .rliste{font:calc(var(--u)*5)/1.35 var(--ft)}
+
+/* ---------- Kacheln: Kerbe, Umritzen (C6) ---------- */
+.box.kachelwahl{max-width:calc(var(--u)*440)}
+.kacheln{display:flex;flex-wrap:wrap;justify-content:center;gap:calc(var(--u)*4);margin:calc(var(--u)*4) 0}
+.kachel{position:relative;width:calc(var(--u)*76);min-height:calc(var(--u)*70);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*2);padding:calc(var(--u)*2);
+ border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9plak) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;font:calc(var(--u)*5)/1.1 var(--fk);color:#efe4c8}
+.kachel[data-kerbe],.kachel[data-umziel]{cursor:pointer}
+.kachel[data-kerbe]:hover,.kachel[data-umziel]:hover{border-image-source:var(--s9ziel)}
+.kachel.aus{opacity:.45}
+.kachel.rucksack{filter:saturate(.6)}
+.kachel>img{width:calc(var(--u)*24);height:calc(var(--u)*24);image-rendering:pixelated}
+.kachel>b{font-weight:400;text-align:center}
+.kachel .kst{display:flex;gap:var(--u)}
+.kachel small{font:calc(var(--u)*4.4)/1 var(--ft);color:#a89c80}
+.kachel .kkerben{display:flex;flex-direction:column;gap:var(--u);width:100%}
+.kk{display:block;min-height:calc(var(--u)*8);font:calc(var(--u)*4.4)/1 var(--ft);color:#e7dcc2;text-align:center;padding:calc(var(--u)*1.5) calc(var(--u)*1);background:#14122a;box-shadow:inset 0 0 0 var(--u) #3a3460;border:0}
+.kk.frei{background:none;box-shadow:inset 0 0 0 var(--u) #5a8a6a;opacity:.7}
+.kk.fest{background:#1a150e;box-shadow:inset 0 0 0 var(--u) #5a4626}
+.kk.neu{background:none;box-shadow:inset 0 0 0 var(--u) var(--zone);color:var(--zone);font-family:var(--fk);animation:puls .8s infinite alternate}
+button.kk{cursor:pointer;width:100%}
+button.kk:hover{box-shadow:inset 0 0 0 var(--u) #9a8cff;color:#fff}
+.kk.quelle{box-shadow:inset 0 0 0 var(--u) var(--gold);color:var(--gold)}
+
+/* ---------- Schleifen: echte Karten je Item (C6) ---------- */
+.kacheln.karten{gap:calc(var(--u)*6);align-items:flex-start}
+.kgruppe{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*2)}
+.kgkopf{display:flex;align-items:center;gap:calc(var(--u)*2);font:calc(var(--u)*5)/1 var(--fk);color:#c8bca0}
+.kgkopf img{width:calc(var(--u)*10);height:calc(var(--u)*10);image-rendering:pixelated}
+.kgkopf b{font-weight:400}
+.kgkarten{display:flex;gap:calc(var(--u)*3)}
+.skachel{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*2)}
+.skachel[data-schleif]{cursor:pointer}
+.skachel[data-schleif]:hover .karte{transform:translateY(calc(var(--u)*-2));filter:brightness(1.15)}
+.skachel .karte{cursor:inherit;transition:transform .1s}
+.skachel.aus .karte{filter:grayscale(.7) brightness(.6)}
+.skachel.geschliffen .karte{filter:brightness(.75)}
+.sk-nach{font:calc(var(--u)*5)/1 var(--fk);color:var(--zone)}
+.skachel.aus .sk-nach{color:#6a6258}
+
+/* ---------- Werkstatt: Wahl als Kacheln (C5) ---------- */
+.wswahl{display:flex;gap:calc(var(--u)*6);justify-content:center;margin:calc(var(--u)*4) 0}
+.wskachel{width:calc(var(--u)*78);min-height:calc(var(--u)*56);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*3);padding:calc(var(--u)*3);
+ border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9knopf) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;background:none;color:#f3e9cf;cursor:pointer}
+.wskachel:hover{border-image-source:var(--s9knopfh);color:#fff}
+.wskachel:active{border-image-source:var(--s9knopfd);transform:translateY(var(--u))}
+.wskachel b{font:400 calc(var(--u)*5.6)/1 var(--fk)}
+.wskachel small{font:calc(var(--u)*4.6)/1.2 var(--ft);color:#c8bca0;text-align:center}
+.wskachel img.ico{width:calc(var(--u)*18)!important;height:calc(var(--u)*18)!important}
