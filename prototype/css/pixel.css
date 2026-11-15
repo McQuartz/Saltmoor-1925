@@ -125,3 +125,14 @@ button.kk:hover{box-shadow:inset 0 0 0 var(--u) #9a8cff;color:#fff}
 .box.kraemer .kr-rechts .picks.hgs .pick.hgpick.wz{width:calc(var(--u)*46);min-height:calc(var(--u)*52)}
 .box.kraemer .kr-rechts .pick.weg{opacity:.35;pointer-events:none}
 #panel .box.szene.kraemer .kr-weiter{position:absolute;right:calc(var(--u)*10);bottom:calc(var(--u)*8)}
+
+/* ---------- Lebensbalken (C7): glatte Füllung, Raster mit Bedeutung, Block hinter dem Leben ---------- */
+.sbar .hp,.pl-bar .hp{background:#d8483c;box-shadow:inset 0 var(--u) 0 #ff9a8a,inset 0 calc(var(--u)*-1) 0 #8f2a22}
+.sbar .bk,.pl-bar .bk{right:auto;background:#5a9ae8;box-shadow:inset 0 var(--u) 0 #cfe6ff,inset 0 calc(var(--u)*-1) 0 #2c5b9a}
+.sbar .bricht{right:auto}
+.sbar .raster,.pl-bar .raster{position:absolute;inset:0;pointer-events:none;z-index:1;
+ background:repeating-linear-gradient(90deg,transparent 0 calc(var(--seg5) - var(--u)),rgba(0,0,0,.85) calc(var(--seg5) - var(--u)) var(--seg5)),
+  repeating-linear-gradient(90deg,transparent 0 calc(var(--seg) - var(--u)),rgba(0,0,0,.4) calc(var(--seg) - var(--u)) var(--seg))}
+.sbar .maxm{position:absolute;top:calc(var(--u)*-2);bottom:calc(var(--u)*-2);width:var(--u);background:#efe4c8;z-index:2;pointer-events:none}
+.pl-bar span{position:relative;z-index:2}
+#spieler2 .shp .plusblk{font-style:normal;color:#8ec0ff;font-size:.6em;margin-left:calc(var(--u)*2)}

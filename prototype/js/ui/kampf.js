@@ -32,14 +32,14 @@ function plaketteHtml(e,i,f,pv,tg){
  // Der Name steht darüber und erscheint bei Hover oder Ziel. Stumm: die Zeile der Absicht entfällt. Seltenes (danach, Panzer, Asche) in einer kleinen Zeile darunter.
  const sicht=f&&absichtSichtbar(e),a=sicht?absicht(e):null,abs=a?`<div class="abs">${a.html}</div>`:'';
  const danach=sicht&&typeof Bieg!=='undefined'&&Bieg.absichtenSichtbar(e)>1?`<div class="pl-x" title="Die Rückseite: was ${esc(e.n)} im Zug danach vorhat">danach <span class="abs abs2">${absicht0({...e,pi:e.pi+1}).html}</span></div>`:'';
- const d=pv?Math.min(e.hp,pv.d):0,ab=pv?Math.min(e.block,pv.ab):0,W=v=>Math.max(0,Math.min(100,v/e.max*100)).toFixed(1)+'%';
+ const d=pv?Math.min(e.hp,pv.d):0,ab=pv?Math.min(e.block,pv.ab):0,T=Math.max(e.max,e.hp+e.block),W=v=>Math.max(0,Math.min(100,v/T*100)).toFixed(1)+'%';
  const st=[e.burn&&['burn',e.burn,STN.burn],e.poison&&['poison',e.poison,STN.poison],e.weak2&&['weak',1,'Geschwächt: halber Schaden'],e.str&&['buff',e.str,STN.buff],e.vuln>0&&['atk2',e.vuln,`Verwundbar ${e.vuln} (+50 %)`]].filter(Boolean);
  const sts=st.length?`<div class="sts">${st.map(([k,v,t])=>`<span title="${esc(t)}">${gi(k,KZ(),k==='atk2'?'#ffb070':undefined)}<b>${v}</b></span>`).join('')}</div>`:'';
  const blk=e.block-ab,ext=(blk>0||ab>0?`<b class="pl-blk ${ab?'pvb':''}" title="Block">${blk>0?blk:ab}</b>`:'')+(e.panzer>0?`<b class="pl-pz" title="${esc((BAL.panzer&&BAL.panzer.t)||'')}">${gi('blk',KZ())}${e.panzer}</b>`:'');
- const bk=e.block>0?`<u class="bk${ab?' pvb':''}" style="width:${W(e.block)}"></u>`:'';
+ const bk=e.block>0?`<u class="bk${ab?' pvb':''}" style="left:${W(e.hp)};width:${W(e.block)}"></u>`:''; // Spieltest Auftrag 4: Block hinter dem Leben, Raster mit Bedeutung
  return `<div class="plakette${e.verbuendet?' verb':''}"><div class="pl-box px9">${e.kniff||e.besonders?'<b class="knf" title="Kniff: Maus darüber">◆</b>':''}${e.ascheSpur||e.verbuendet?`<b class="pl-asche" title="${e.verbuendet?'Aus der Asche gerufen: kämpft für dich':'Dieselbe Asche-Spur: du hast ihn gerufen'}"></b>`:''}${f?klangzeichenHtml(e):''}
   <div class="pl-nm"><span>${esc(e.n).toUpperCase()}</span>${e.weak?gi(e.weak,KZ()):''}</div>${abs||sts?`<div class="pl-row">${abs}${sts}</div>`:''}
-  <div class="pl-bar"><i class="hp" style="width:${W(e.hp-d)}"></i>${d?`<i class="pv" style="left:${W(e.hp-d)};width:${W(d)}"></i>`:''}${bk}<span>${e.hp}/${e.max}${pv&&(pv.d||pv.ab)?` <em class="pvt">−${pv.d}</em>`:''}</span>${ext?`<div class="pl-ext">${ext}</div>`:''}</div>
+  <div class="pl-bar"><i class="hp" style="width:${W(e.hp-d)}"></i>${d?`<i class="pv" style="left:${W(e.hp-d)};width:${W(d)}"></i>`:''}${bk}${rasterHtml(T,42)}<span>${e.hp}/${e.max}${pv&&(pv.d||pv.ab)?` <em class="pvt">−${pv.d}</em>`:''}</span>${ext?`<div class="pl-ext">${ext}</div>`:''}</div>
   ${e.verbuendet?'<div class="pl-verb">AUS DER ASCHE · FÜR DICH</div>':''}${danach}</div><div class="spitze"></div></div>`;}
 function gegnerHtml(f){return S.enemies.map((e,i)=>{if(e.hp<=0)return'';const b={...enemyBox(e)};if(e.pendel)b.x=Math.round(e.x*SW);const pv=vorschau&&vorschau.foes[i];const tg=f&&i===S.target;
   return `<div class="feind ${tg?'ziel':''} ${e.rang}" data-ei="${i}" style="left:${(uiX(b.x)/4.8).toFixed(2)}%;top:${(uiY(b.kopf)/2.7).toFixed(2)}%;--fh:${(b.y-b.kopf)*6/7/2.7}">
