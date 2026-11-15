@@ -60,7 +60,7 @@ function leisteKampf(){const n=S.hand.length,E=Math.max(BAL.energy_per_turn,S.en
  return `<div class="fussbild"></div>${stapelHtml()}<div id="baum">${stoffBaumHtml()}</div><div id="letzteRx">${letzteRxHtml()}</div>
  <div id="spieler2">${spielerHtml()}</div>${blickWahlHtml()}${begegnungHtml()}
  <div id="hand" class="${S.blickWahl||S.begegnung?'verdeckt':''}" style="--hb:${handLage(n).base}">${S.hand.map((c,i)=>cardHtml(c,i,n)).join('')}</div>
- <div class="ener${E>3?' viel':''}" title="Energie">${[...Array(E)].map((_,i)=>`<i class="${i<S.energy?'':'aus'}"></i>`).join('')}</div>
+ <div class="ener${E>3?' viel':''}" title="Energie">${(typeof rautenKlassen==='function'?rautenKlassen(E):[...Array(E)].map((_,i)=>({c:i<S.energy?'':'aus',d:0}))).map(r=>`<i class="${r.c}"${r.d?` style="animation-delay:${r.d}ms"`:''}></i>`).join('')}</div>
  <button id="endBtn" class="knopf px9" data-act="end" ${busy||S.blickWahl||S.begegnung?'disabled':''}>ZUG BEENDEN</button>`;}
 // Spieltest 2026-11-09: die letzte Reaktion steht unten links unter dem Stoff-Baum, bis die nächste kommt (statt oben als Meldung).
 // LETZTE_RX setzt feedback.js beim Bus-Ereignis „reaction“, ein neuer Kampf leert sie.
@@ -127,7 +127,7 @@ function cardHtml(c,i,n){const cost=cardCost(c);const rx=reactionsFor(S.last,c.s
  const koCls=c.mod||c.teuer?((c.mod||0)+(c.teuer||0)>0?'hoch':'tief'):'';
  return karteHtml(c,{cls,attr:`data-card="${i}"`,m:km,verst:km!==1&&(c.draw||c.str||c.gold),kost:cost>=99?'–':cost,koCls,rx:rxl,
   mk:(c.schliff?'<span class="mk schl" title="geschliffen">◇</span>':''),
-  style:`${glow?`--c:${glow};`:''}--fx:${(m*L.step).toFixed(2)};--fy:${(m*m*L.arc).toFixed(2)};--fr:${(m*L.rot).toFixed(2)}deg;z-index:${10+i};${dealAnim?`animation-delay:${i*60}ms`:''}`});}
+  style:`${glow?`--c:${glow};`:''}--fx:${(m*L.step).toFixed(2)};--fy:${(m*m*L.arc).toFixed(2)};--fr:${(m*L.rot).toFixed(2)}deg;z-index:${10+i};${dealAnim&&typeof austeilenStil==='function'?austeilenStil(i,n||S.hand.length,L,m):''}`});}
 // ---------- Ausrüstung unter der Szene ----------
 function slotHtml(loc,locked){const it=locked?null:getAt(loc);const d=it?def(it):null;const ibi=it?itemBild(it.id):'';
  return `<div class="slot ${locked?'zu':''} ${S.sel===loc?'sel':''} ${d&&d.rare?'selten':''} ${it&&it.x?'gestrichen':''}" ${locked?'':`data-loc="${loc}"`}>${d?`<img src="${ibi}" alt="" data-fuid="${it.uid}">${d.st.length?`<span class="ss">${d.st.map(k=>gi(k,KZ())).join('')}</span>`:''}${d.lvl?`<span class="lv">+${d.lvl}</span>`:''}<span class="kb">${[...Array(kerbenVon(it))].map((_,k)=>`<i class="${hgVon(it)[k]?'voll':''}"></i>`).join('')}</span>`:''}</div>`;}

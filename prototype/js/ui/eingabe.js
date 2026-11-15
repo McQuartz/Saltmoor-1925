@@ -4,6 +4,8 @@ function enemyAt(x,y){const els=document.elementsFromPoint(x,y);for(const t of e
  // auch direkt auf dem Sprite (Canvas): nächster Gegner zur Mausposition
  const P=ausBildschirm(x,y),r=P.r;if(x<r.left||x>r.right||y<r.top||y>r.bottom)return-1;const sx=P.x,sy=P.y;let best=-1,bd=1e9;
  (S.enemies||[]).forEach((e,i)=>{if(e.hp<=0)return;const b=enemyBox(e);if(sx>b.x-b.w/2&&sx<b.x+b.w/2&&sy>b.kopf&&sy<b.y+6){const d=Math.abs(sx-b.x);if(d<bd){bd=d;best=i;}}});return best;}
+// Auftrag 4, Phase 3: Flug der gespielten Karte (nur wenn sie wirklich gespielt werden kann; die Regeln laufen sofort weiter)
+function bwSpiel(d,ei){if(typeof kartenFlug!=='function')return;const c=S.hand[d.i];if(!c||c.unspielbar||c.frost||cardCost(c)>S.energy||busy)return;kartenFlug(d.el,ei!=null?ei:needsTarget(c)?S.target:null);}
 function inScene(x,y){const r=$('szene').getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom-20;}
 // Vorschau für Handkarte i auf Ziel ei (oder aktuelles Ziel)
 function setVorschau(i,ei){if(S.phase!=='fight'||busy||i<0||!S.hand[i]){if(vorschau){vorschau=null;$('gegner').innerHTML=gegnerHtml(true);$('kopf').innerHTML=kopfHtml();}return;}
@@ -27,9 +29,9 @@ document.addEventListener('pointermove',e=>{
  if(down.drag){$('ghost').style.left=(e.clientX-20)+'px';$('ghost').style.top=(e.clientY-20)+'px';}});
 document.addEventListener('pointerup',e=>{
  if(cdrag){const d=cdrag;cdrag=null;$('aim').style.display='none';const ei=AIM.ei;AIM.ei=-1;$('szene').classList.remove('drop');vorschau=null;hoverCard=-1;
-  if(!d.moved){if(spiegelWahl){spiegelWahl=false;Bieg.spiegelTausch(d.i);render();return;}playCard(d.i);return;}
-  if(d.tg){if(ei>=0)playCard(d.i,ei);else if(alive().length===1&&inScene(e.clientX,e.clientY))playCard(d.i);else render();}
-  else{if(inScene(e.clientX,e.clientY))playCard(d.i);else render();}return;}
+  if(!d.moved){if(spiegelWahl){spiegelWahl=false;Bieg.spiegelTausch(d.i);render();return;}bwSpiel(d);playCard(d.i);return;}
+  if(d.tg){if(ei>=0){bwSpiel(d,ei);playCard(d.i,ei);}else if(alive().length===1&&inScene(e.clientX,e.clientY)){bwSpiel(d);playCard(d.i);}else render();}
+  else{if(inScene(e.clientX,e.clientY)){bwSpiel(d);playCard(d.i);}else render();}return;}
  if(!down)return;const d=down;down=null;$('ghost').style.display='none';
  const t=document.elementFromPoint(e.clientX,e.clientY);const sl=t&&t.closest('[data-loc]');
  if(d.drag){if(sl)move(d.loc,sl.dataset.loc);S.sel=null;render();return;}
@@ -64,7 +66,7 @@ document.addEventListener('click',e=>{
  const en2=e.target.closest('[data-ende]');if(en2){chooseEnde(en2.dataset.ende);return;}});
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.einst;if(!k)return;const v=e.target.type==='checkbox'?e.target.checked:e.target.tagName==='SELECT'?+e.target.value:+e.target.value;Einst.set(k,v);});
 function aktion(k,el){switch(k){
- case'end':spiegelWahl=false;endTurn();break;case'hinsehen':Blick.waehlen(true);break;case'weitergehen':Tiefe.weiter();render();break;case'wegsehen':Blick.waehlen(false);break;case'spiegel':spiegelWahl=!spiegelWahl;render();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
+ case'end':spiegelWahl=false;if(!busy&&typeof handAbwerfen==='function')handAbwerfen();endTurn();break;case'hinsehen':Blick.waehlen(true);break;case'weitergehen':Tiefe.weiter();render();break;case'wegsehen':Blick.waehlen(false);break;case'spiegel':spiegelWahl=!spiegelWahl;render();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
  case'karte':karteUmschalten();break; case'weiter':leaveUebergang();break;case'neu':S={phase:'figur',wahlStufe:Meta.get().stufe||0};render();break;case'titel':S={phase:'titel'};render();break;
  case'fortsetzen':loadRun();render();break;case'rastHeil':rastHeal();break;case'fund':takeFund();break;
  case'skipstrike':skipStrike();break;case'kstrike0':kraemerStrike(null);break;

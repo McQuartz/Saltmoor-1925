@@ -182,3 +182,23 @@
 .feind .spitze{position:absolute;left:calc(50% - var(--u)*var(--dx,0));top:calc(100% + var(--u)*4);width:0;height:calc(var(--u)*max(var(--dy,0),0));border-left:var(--u) dotted var(--zone2);pointer-events:none}
 .feind .spitze::after{display:none}
 .feind .klang{right:calc(100% + var(--u)*3);top:calc(var(--u)*-2)}
+
+/* ---------- Phase 3: Bewegung (js/ui/bewegung.js) ---------- */
+#flug{position:absolute;inset:0;pointer-events:none;z-index:40;overflow:visible}
+#flug .karte.flug{position:absolute;margin:0;rotate:none;translate:none;pointer-events:none;transform:rotate(var(--r0,0deg))}
+/* Austeilen vom Ziehstapel: klein und umgedreht los, die Rückseite verschwindet in der Mitte des Wegs */
+#hand .karte.neu{animation:austeilen .34s cubic-bezier(.2,.8,.3,1) var(--d,0ms) backwards}
+@keyframes austeilen{from{transform:translate(calc(var(--u)*var(--sx,0)),calc(var(--u)*var(--sy,0))) scale(.34) rotateY(180deg);opacity:.9}}
+#hand .karte.neu::after{content:"";position:absolute;inset:0;border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9ruecken) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;opacity:0;animation:rueckseite .34s steps(1) var(--d,0ms) backwards;pointer-events:none}
+@keyframes rueckseite{0%{opacity:1}50%{opacity:0}}
+/* Energie: erlischt beim Bezahlen, leuchtet zu Zugbeginn nacheinander auf */
+#leiste .ener i.erlischt{animation:erlischt .32s steps(4)}
+@keyframes erlischt{0%{background-image:var(--raute11);filter:brightness(2.2)}60%{background-image:var(--raute11);filter:brightness(.6)}}
+#leiste .ener i.zuend{animation:zuend .3s steps(3) backwards}
+@keyframes zuend{0%{background-image:var(--raute11aus);filter:none}50%{background-image:var(--raute11);filter:brightness(2.4)}}
+/* Reaktion als Stempel über der Hand */
+#hud .stempel{left:50%;top:calc(var(--u)*128);--s9:var(--s9panel);display:flex;align-items:center;gap:calc(var(--u)*2);padding:calc(var(--u)*2) calc(var(--u)*5);z-index:7;pointer-events:none;
+ font:calc(var(--u)*9)/1 var(--ps);color:var(--c);transform:translateX(-50%) rotate(var(--sr,0deg));animation:stempel 1.25s steps(16) forwards}
+#hud .stempel img{width:calc(var(--u)*9)!important;height:calc(var(--u)*9)!important}#hud .stempel i{font-style:normal;color:#8a7f68}
+@keyframes stempel{0%{transform:translateX(-50%) rotate(var(--sr)) scale(2.2);opacity:0}12%{transform:translateX(-50%) rotate(var(--sr)) scale(.92);opacity:1}20%{transform:translateX(-50%) rotate(var(--sr)) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) rotate(var(--sr)) translateY(calc(var(--u)*-6))}}
+@media (prefers-reduced-motion:reduce){#hand .karte.neu,#hand .karte.neu::after,#leiste .ener i,#hud .stempel{animation:none}}

@@ -58,7 +58,7 @@ function bausteineFest(){if(BST_FEST.ok)return;BST_FEST.ok=1;const R=document.do
  R.setProperty('--dither',u(DITHER()));}
 function zonenLicht(biom){bausteineFest();const B=(typeof BIOMES!=='undefined'&&BIOMES[biom])||{rand:['#2e5a4a','#7dffc4']};const rim=(B.rand&&B.rand[1])||'#7dffc4',rimd=bstMisch((B.rand&&B.rand[0])||'#2e5a4a','#000',.35);
  const key=biom+rim+fussForm();if(BST.zone===key)return;BST.zone=key;const R=document.documentElement.style,u=v=>`url(${v})`;
- R.setProperty('--zone',rim);R.setProperty('--zone2',rimd);
+ R.setProperty('--zone',rim);BST.rim=rim;R.setProperty('--zone2',rimd);
  R.setProperty('--s9plak',u(slice9({fill:'#0e0c12',rim,edge:'#2e2834',dark:'#000'})));
  R.setProperty('--s9ziel',u(slice9({fill:bstMisch(rim,'#0e0c12',.9),rim:bstMisch(rim,'#ffffff',.6),edge:rim,dark:'#000'})));
  R.setProperty('--s9panel',u(slice9({fill:'#0c0b0f',rim,edge:'#2e2834',dark:'#000'})));
