@@ -2,6 +2,8 @@
  "start_hp": 50,
  "energy_per_turn": 3,
  "hand_size": 5,
+ "_doc_momentum": "Auftrag 4, Momentum Stufe 1 (plan.md): drei Hebel für den Build-Flow, einzeln abschaltbar. reliquien_rucksack: Reliquien wirken auch aus dem Rucksack. ritz_vorschlag: beim Ritzen liegt der Handgriff schon im besten freien Item, mit Grund. waechter_slot: jeder besiegte Wächter gibt einen Slot im Bereich deiner Wahl (bis max_slots).",
+ "momentum": {"reliquien_rucksack": true, "ritz_vorschlag": true, "waechter_slot": true},
  "start_slots": 2,
  "max_slots": 4,
  "bag_size": 5,

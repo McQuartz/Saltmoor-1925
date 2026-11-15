@@ -2,8 +2,10 @@
 const AIM={ei:-1};let down=null,cdrag=null,hoverCard=-1;
 function enemyAt(x,y){const els=document.elementsFromPoint(x,y);for(const t of els){const en=t.closest&&t.closest('.feind[data-ei]');if(en)return +en.dataset.ei;}
  // auch direkt auf dem Sprite (Canvas): nächster Gegner zur Mausposition
- const r=BU.cv.getBoundingClientRect();if(x<r.left||x>r.right||y<r.top||y>r.bottom)return-1;const sx=(x-r.left)/r.width*SW,sy=(y-r.top)/r.height*SH;let best=-1,bd=1e9;
+ const P=ausBildschirm(x,y),r=P.r;if(x<r.left||x>r.right||y<r.top||y>r.bottom)return-1;const sx=P.x,sy=P.y;let best=-1,bd=1e9;
  (S.enemies||[]).forEach((e,i)=>{if(e.hp<=0)return;const b=enemyBox(e);if(sx>b.x-b.w/2&&sx<b.x+b.w/2&&sy>b.kopf&&sy<b.y+6){const d=Math.abs(sx-b.x);if(d<bd){bd=d;best=i;}}});return best;}
+// Auftrag 4, Phase 3: Flug der gespielten Karte (nur wenn sie wirklich gespielt werden kann; die Regeln laufen sofort weiter)
+function bwSpiel(d,ei){if(typeof kartenFlug!=='function')return;const c=S.hand[d.i];if(!c||c.unspielbar||c.frost||cardCost(c)>S.energy||busy)return;kartenFlug(d.el,ei!=null?ei:needsTarget(c)?S.target:null);}
 function inScene(x,y){const r=$('szene').getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom-20;}
 // Vorschau für Handkarte i auf Ziel ei (oder aktuelles Ziel)
 function setVorschau(i,ei){if(S.phase!=='fight'||busy||i<0||!S.hand[i]){if(vorschau){vorschau=null;$('gegner').innerHTML=gegnerHtml(true);$('kopf').innerHTML=kopfHtml();}return;}
@@ -27,9 +29,9 @@ document.addEventListener('pointermove',e=>{
  if(down.drag){$('ghost').style.left=(e.clientX-20)+'px';$('ghost').style.top=(e.clientY-20)+'px';}});
 document.addEventListener('pointerup',e=>{
  if(cdrag){const d=cdrag;cdrag=null;$('aim').style.display='none';const ei=AIM.ei;AIM.ei=-1;$('szene').classList.remove('drop');vorschau=null;hoverCard=-1;
-  if(!d.moved){if(spiegelWahl){spiegelWahl=false;Bieg.spiegelTausch(d.i);render();return;}playCard(d.i);return;}
-  if(d.tg){if(ei>=0)playCard(d.i,ei);else if(alive().length===1&&inScene(e.clientX,e.clientY))playCard(d.i);else render();}
-  else{if(inScene(e.clientX,e.clientY))playCard(d.i);else render();}return;}
+  if(!d.moved){if(spiegelWahl){spiegelWahl=false;Bieg.spiegelTausch(d.i);render();return;}bwSpiel(d);playCard(d.i);return;}
+  if(d.tg){if(ei>=0){bwSpiel(d,ei);playCard(d.i,ei);}else if(alive().length===1&&inScene(e.clientX,e.clientY)){bwSpiel(d);playCard(d.i);}else render();}
+  else{if(inScene(e.clientX,e.clientY)){bwSpiel(d);playCard(d.i);}else render();}return;}
  if(!down)return;const d=down;down=null;$('ghost').style.display='none';
  const t=document.elementFromPoint(e.clientX,e.clientY);const sl=t&&t.closest('[data-loc]');
  if(d.drag){if(sl)move(d.loc,sl.dataset.loc);S.sel=null;render();return;}
@@ -45,6 +47,7 @@ document.addEventListener('click',e=>{
  const ks=e.target.closest('[data-ksel]');if(ks){S.sel=S.sel===ks.dataset.ksel?null:ks.dataset.ksel;sfx.click();render();return;}
  const kz=e.target.closest('[data-kzeig]');if(kz&&KOE){KOE.zeig=+kz.dataset.kzeig;koerperRender();return;}
  const hgp=e.target.closest('[data-hg]');if(hgp){takeHandgriff(hgp.dataset.hg);return;}
+ const sw=e.target.closest('[data-slotwahl]');if(sw){waechterSlot(sw.dataset.slotwahl);return;}
  const rz=e.target.closest('[data-ritz]');if(rz){const uid=+rz.dataset.ritz;if(rz.dataset.k!=null){S.ueberschreiben={uid,k:+rz.dataset.k,alt:hgVon(itemByUid(uid))[+rz.dataset.k]};render();}else placeHandgriff(uid);return;}
  const ms=e.target.closest('[data-masken]');if(ms){const[u,k]=ms.dataset.masken.split(':');Wuerze.bezahlen(+u,+k);render();return;} const an=e.target.closest('[data-anschreiben]');if(an){Wuerze.anschreiben(+an.dataset.anschreiben);render();return;} // Zugabe
  const tn=e.target.closest('[data-trennen]');if(tn){const[u,k]=tn.dataset.trennen.split(':');Wuerze.trennen(+u,+k);render();return;} // M11
@@ -64,7 +67,7 @@ document.addEventListener('click',e=>{
  const en2=e.target.closest('[data-ende]');if(en2){chooseEnde(en2.dataset.ende);return;}});
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.einst;if(!k)return;const v=e.target.type==='checkbox'?e.target.checked:e.target.tagName==='SELECT'?+e.target.value:+e.target.value;Einst.set(k,v);});
 function aktion(k,el){switch(k){
- case'end':spiegelWahl=false;endTurn();break;case'hinsehen':Blick.waehlen(true);break;case'weitergehen':Tiefe.weiter();render();break;case'wegsehen':Blick.waehlen(false);break;case'spiegel':spiegelWahl=!spiegelWahl;render();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
+ case'end':spiegelWahl=false;if(!busy&&typeof handAbwerfen==='function')handAbwerfen();endTurn();break;case'hinsehen':Blick.waehlen(true);break;case'weitergehen':Tiefe.weiter();render();break;case'wegsehen':Blick.waehlen(false);break;case'spiegel':spiegelWahl=!spiegelWahl;render();break;case'forge':forge();break;case'leave':leaveNode();break;case'weiterReward':leaveReward();break;
  case'karte':karteUmschalten();break; case'weiter':leaveUebergang();break;case'neu':S={phase:'figur',wahlStufe:Meta.get().stufe||0};render();break;case'titel':S={phase:'titel'};render();break;
  case'fortsetzen':loadRun();render();break;case'rastHeil':rastHeal();break;case'fund':takeFund();break;
  case'skipstrike':skipStrike();break;case'kstrike0':kraemerStrike(null);break;
@@ -103,13 +106,19 @@ function itemTip(loc){const it=getAt(loc);if(!it)return'';const d=def(it);const[
  if(S.phase==='rast'&&!S.rastDone)h+='<div class="tn">Klicken: verbessern</div>';return h;}
 
 // Endbildschirm als PNG speichern (Szene + Statistik als Text)
-function endbildSpeichern(){const c=document.createElement('canvas');c.width=960;c.height=540;const g=c.getContext('2d');g.imageSmoothingEnabled=false;g.drawImage(BU.cv,0,0,960,540);
+function endbildSpeichern(){const c=document.createElement('canvas');c.width=960;c.height=540;const g=c.getContext('2d');g.imageSmoothingEnabled=false;g.drawImage(BU.bild,0,0,960,540);
  g.fillStyle='rgba(0,0,0,.78)';g.fillRect(40,40,880,460);g.fillStyle='#efe4c8';g.font='28px serif';const r=S.ergebnis||{},st=S.stats||{};g.fillText('SALTMOOR 1925 · '+(r.sieg?(r.ende==='bleiben'?'Geblieben':'Umgekehrt'):'Am Strand'),70,90);
  g.font='20px serif';const L=[`${S.jobN} · Seed ${S.seed} · ${dauerText((st.endeT||Date.now())-S.startT)}`,`Weg: ${S.route.filter(Boolean).map(b=>BIOMES[b].kurz).join(' → ')}`,`Tiefe ${r.tiefe||S.depth} · Kämpfe ${st.kaempfe||0} · Gold ${st.gold||0}`,`Schaden ${st.schadenRaus||0} / ${st.schadenRein||0} · höchster Treffer ${st.maxTreffer||0} · längste Kette ${st.maxKette||0}`,`Build: ${buildArchetyp().n} · Reaktionen ${S.disc.size}`,`Deck: ${allActive().map(it=>def(it).n).join(', ')}`];
  L.forEach((t,i)=>g.fillText(t,70,140+i*40,820));const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download=`saltmoor-${S.seed}.png`;a.click();}
 // Ritzen (Spieltest 2026-11-10): Vergleich alt gegen neu für die Kerbe unter der Maus. Während einer Nachfrage (überschreiben?) bleibt der Vergleich stehen.
 let rzVglKey=null,rzVglEl=null;
 document.addEventListener('pointerover',e=>{const v=document.getElementById('rzVgl');if(!v||S.ueberschreiben)return;
- const z=e.target.closest&&e.target.closest('.rz [data-ritz]');const key=z?z.dataset.ritz+':'+(z.dataset.k??''):'';if(v!==rzVglEl){rzVglEl=v;rzVglKey=null;}if(key===rzVglKey)return;
+ const z=e.target.closest&&e.target.closest('.rzgrid [data-ritz]');const key=z?z.dataset.ritz+':'+(z.dataset.k??''):'';if(v!==rzVglEl){rzVglEl=v;rzVglKey=null;}if(key===rzVglKey)return;
  if(!z&&!e.target.closest('.rzgrid'))return; // im Kopf oder Leerraum: Vergleich stehen lassen
  rzVglKey=key;v.innerHTML=z?ritzVglHtml(+z.dataset.ritz,z.dataset.k!=null?+z.dataset.k:null):ritzVglHtml(null,null);});
+// Momentum Stufe 1 (Auftrag 4): den neuen Handgriff auf ein anderes Item ziehen ändert den Vorschlag und ritzt dort in die erste freie Kerbe
+document.addEventListener('dragstart',e=>{if(e.target.closest&&e.target.closest('.rzneu')){try{e.dataTransfer.setData('text/plain','hg');e.dataTransfer.effectAllowed='move';}catch(er){}document.body.classList.add('rzzieht');}});
+document.addEventListener('dragend',()=>document.body.classList.remove('rzzieht'));
+document.addEventListener('dragover',e=>{const z=e.target.closest&&e.target.closest('.rz [data-rzz]');if(z&&S.hgPending){e.preventDefault();document.querySelectorAll('.rzz.ueber').forEach(x=>x!==z&&x.classList.remove('ueber'));z.classList.add('ueber');}});
+document.addEventListener('drop',e=>{const z=e.target.closest&&e.target.closest('.rz [data-rzz]');if(!z||!S.hgPending)return;e.preventDefault();document.body.classList.remove('rzzieht');
+ const uid=+z.dataset.rzz;const it=itemByUid(uid);if(!it)return;if(hgVon(it).length<kerbenVon(it)){S.ueberschreiben=null;placeHandgriff(uid);}else{z.classList.remove('ueber');Bus.emit('bad',{a:'KERBE VOLL',b:'Wähle einen Handgriff zum Überschreiben oder ein anderes Item.'});}});

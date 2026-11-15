@@ -1,0 +1,19 @@
+test-run → 1 FEHLER
+test-deckbau → Alles gut.
+test-ereignisse → Alles gut.
+test-vorschau → Gespielte Karten mit Vorschau: 441, Abweichungen: 0
+test-welle1 → Alles gut.
+test-stoffbaum → Alles gut (33 Prüfungen).
+test-karte → 31 FEHLER
+test-speicher → Alles gut.
+test-meta → Metaebene: 30 Prüfungen, alles gut
+test-plakette → Alles gut.
+test-oberflaeche → Alles gut.
+test-karte-ui → Alles gut.
+test-rucksack → Alles gut.
+test-biegungen → Alles gut.
+test-kern → 1 Fehler.
+test-klangzeichen → Alles gut.
+texte-pruefen → 2 Abweichungen (Basis: 3653 Datentexte, 120 UI-Texte, neu: 2117).
+sprites/pruefen → 407 Sprites geprüft, 0 Verstöße.
+icons/pruefen → 250 Bilder geprüft, 0 Verstöße.

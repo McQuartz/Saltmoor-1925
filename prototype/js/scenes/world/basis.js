@@ -5,7 +5,8 @@
 // Lichtquellen als hellste Punkte mit gedithertem Glühen. Keine Verläufe, kein Weichzeichner.
 (function () {
 'use strict';
-const W = 480, H = 270, M = 12, EW = W + 2 * M, EH = H + 2 * M;
+// Auftrag 4: Rand 48 statt 12, damit jede Ebene den Bildraum 560 × 315 (x −40 bis 520, y 3 bis 318 in Szenenkoordinaten) abdeckt
+const W = 480, H = 270, M = 48, EW = W + 2 * M, EH = H + 2 * M;
 const World = window.World = window.World || {};
 const B = World.B = { W, H, M, EW, EH };
 World._biome = World._biome || {};
@@ -362,6 +363,9 @@ B.kontext = function (pal, o) {
 // ---------- Szene zusammensetzen ----------
 B.PAR = [0, .05, .15, .3, .5, .8, 1];
 B.szene = function (K) {
+  // Auftrag 4: Stellen, die keine Ebene deckt (früher Schwarz am Bildrand oder in Fugen), bekommen in Ebene 0 die dunkelste Körperfarbe der Szene
+  if (K.e[0] && K.e[0].d && K.pal && K.pal.koerper) { const d0 = K.e[0].d, F = B.pk(K.pal.koerper[0]), Ls = K.e.slice(1).map(e => e.d);
+    for (let k = 0; k < d0.length; k++) if (!(d0[k] >>> 24)) { let leer = true; for (const d of Ls) if (d[k] >>> 24) { leer = false; break; } if (leer) d0[k] = F; } }
   const can = K.e.map(e => e.leinwand()), par = B.PAR;
   const off = (k, p) => [-Math.round((k ? k.x || 0 : 0) * p), -Math.round((k ? k.y || 0 : 0) * p)];
   const S = {

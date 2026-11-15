@@ -1,0 +1,96 @@
+/* Auftrag 4, Phase 4: andere Bildschirme als Szene statt Kasten (Look-Runde 1 und 3).
+   Rast, Beute, Werkstatt, Fundstelle und Krämer liegen frei über ihrer Szene: der Ortsname steht wie ein Zwischentitel oben links,
+   die Wahl unten im Bild, Knöpfe als Plakettenknöpfe im Stil A (vier Zustände), Angebote auf Pixelrahmen statt Schwarz und Messing.
+   Akt-Wechsel als Zwischentitel mit Irisblende, Viragierung in Zonenfarbe, Korn und Kratzern. Titel mit Leuchtturmkegel und Schriftmenü. */
+
+/* ---------- Szene statt Kasten ---------- */
+#panel.an:has(.box.szene){align-items:stretch;justify-content:stretch}
+#panel .box.szene{position:absolute;inset:0;max-width:none;max-height:none;background:none;border:0;box-shadow:none;padding:0;overflow:visible;
+ background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0) 28%,rgba(0,0,0,0) 46%,rgba(0,0,0,.82) 78%,rgba(0,0,0,.92))}
+#panel .box.szene>.innen{position:absolute;inset:0;padding:calc(var(--u)*44) calc(var(--u)*16) calc(var(--u)*10);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:calc(var(--u)*3);overflow:auto;scrollbar-width:none}
+#panel .box.szene>.innen>h2:first-child{position:absolute;left:calc(var(--u)*10);top:calc(var(--u)*46);margin:0;text-align:left;font:400 calc(var(--u)*12)/1 var(--fl);letter-spacing:.14em;color:#efe4c8;
+ background:#000;padding:calc(var(--u)*3) calc(var(--u)*8);box-shadow:0 calc(var(--u)*-1) 0 var(--zone),0 var(--u) 0 var(--zone),0 0 0 calc(var(--u)*2) #000}
+#panel .box.szene>.innen>h2:first-child+.lead{position:absolute;left:calc(var(--u)*10);top:calc(var(--u)*66);max-width:calc(var(--u)*230);margin:0;text-align:left;
+ font:calc(var(--u)*6)/1.25 var(--pf);font-style:normal;color:#e7dcc2;text-shadow:var(--u) var(--u) 0 #000}
+#panel .box.szene p{font-family:var(--pf);font-size:calc(var(--u)*5.6)}
+#panel .box.szene h3{font:calc(var(--u)*5)/1 var(--ps);color:#c8bca0;letter-spacing:0;margin:calc(var(--u)*2) 0 0}
+#panel .box.szene .hint{font:calc(var(--u)*5)/1.25 var(--pf);font-style:normal;color:#b8ac90}
+#panel .box.szene .gold{font:calc(var(--u)*9)/1 var(--pj)}
+/* Plakettenknöpfe: normal, Hover, gedrückt, aus */
+#panel .box.szene button.deco,.box.menue button.deco,#overlay .box button.deco{border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9knopf) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;
+ background:none;box-shadow:none;font:calc(var(--u)*6)/1.15 var(--ps);letter-spacing:0;color:#f3e9cf;padding:calc(var(--u)*2) calc(var(--u)*7) calc(var(--u)*3)}
+#panel .box.szene button.deco:hover:not(:disabled),.box.menue button.deco:hover:not(:disabled),#overlay .box button.deco:hover:not(:disabled){border-image-source:var(--s9knopfh);color:#fff;box-shadow:none}
+#panel .box.szene button.deco:active:not(:disabled),.box.menue button.deco:active:not(:disabled),#overlay .box button.deco:active:not(:disabled){border-image-source:var(--s9knopfd);transform:translateY(var(--u))}
+#panel .box.szene button.deco:disabled,.box.menue button.deco:disabled,#overlay .box button.deco:disabled{border-image-source:var(--s9knopfx);color:#6a6258;opacity:1}
+#panel .box.szene button.deco.klein{font-size:calc(var(--u)*5)}
+#panel .box.szene button.deco small{font:calc(var(--u)*4.6)/1.2 var(--pf);color:#c8bca0;display:block;margin-top:var(--u)}
+/* Angebote auf Pixelrahmen */
+#panel .box.szene .pick{border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9plak) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;background:none;box-shadow:none}
+#panel .box.szene .pick:hover{border-image-source:var(--s9ziel)}
+#panel .box.szene .pick .pn{font:calc(var(--u)*5.2)/1.1 var(--ps)}#panel .box.szene .pick .ps{font-family:var(--pf);font-style:normal}
+#panel .box.szene .pick .preis{font:calc(var(--u)*8)/1 var(--pj);color:#e8c547}
+#panel .box.szene .band{font-family:var(--ps)}
+
+/* Rast: die Wahl liegt ums Feuer, das Licht folgt dem Zeiger (--nah, szenen-ui.js) */
+#panel .box.szene.rast::before{content:"";position:absolute;left:50%;top:58%;width:calc(var(--u)*180);height:calc(var(--u)*120);transform:translate(-50%,-50%);pointer-events:none;
+ background:radial-gradient(closest-side,rgba(255,170,90,calc(.22 + var(--nah,0)*.3)),rgba(255,120,40,0));-webkit-mask:var(--dither) 0 0/calc(var(--u)*4) calc(var(--u)*4);mask:var(--dither) 0 0/calc(var(--u)*4) calc(var(--u)*4);animation:feuer 1.6s steps(5) infinite alternate}
+@keyframes feuer{to{transform:translate(-50%,-52%) scale(1.06)}}
+#panel .box.szene.rast .wahl{display:flex;gap:calc(var(--u)*30);align-items:flex-end;margin-bottom:calc(var(--u)*6)}
+#panel .box.szene.rast .wahl button:nth-child(2){margin-bottom:calc(var(--u)*16)}
+/* Beute: Lichtschacht, der Handgriff steigt auf, Gold fliegt zum Zähler */
+#panel .box.szene.reward::before{content:"";position:absolute;left:50%;top:0;width:calc(var(--u)*90);height:78%;transform:translateX(-50%) skewX(-6deg);pointer-events:none;
+ background:linear-gradient(180deg,rgba(255,240,200,.28),rgba(255,240,200,.08) 70%,transparent);-webkit-mask:var(--dither) 0 0/calc(var(--u)*4) calc(var(--u)*4);mask:var(--dither) 0 0/calc(var(--u)*4) calc(var(--u)*4);animation:schacht .9s steps(6) backwards}
+@keyframes schacht{from{opacity:0;height:0}}
+#panel .box.szene.reward .bspalte.hg .pick{animation:steigt .8s cubic-bezier(.2,.8,.3,1) .25s backwards}
+@keyframes steigt{from{transform:translateY(calc(var(--u)*30));opacity:0;filter:brightness(2.5)}}
+.goldflug{position:absolute;width:calc(var(--u)*7);height:calc(var(--u)*7);z-index:45;pointer-events:none;image-rendering:pixelated}
+/* Fundstelle: die Lore kippt das Fundstück heraus */
+#panel .box.szene.fund .pick{animation:lore .7s cubic-bezier(.3,1.4,.5,1) backwards}
+@keyframes lore{from{transform:translate(calc(var(--u)*-60),calc(var(--u)*-20)) rotate(-38deg);opacity:0}}
+/* Werkstatt: die Werkbank als Brett */
+#panel .box.szene.werkstatt .bench{border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9ruecken) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;padding:calc(var(--u)*4) calc(var(--u)*8);display:flex;align-items:center;gap:calc(var(--u)*4);flex-wrap:wrap;justify-content:center}
+/* Krämer: Ware auf dem Tisch */
+#panel .box.szene.kraemer .picks:first-of-type{padding:calc(var(--u)*6) calc(var(--u)*10) calc(var(--u)*4);background:linear-gradient(180deg,transparent 0 55%,#2a1c12 55%,#1a110a 80%,#0c0806);box-shadow:inset 0 calc(var(--u)*-1) 0 #000}
+#panel .box.szene.kraemer>.innen{justify-content:flex-start;padding-top:calc(var(--u)*86)}
+#panel .box.szene.kraemer>.innen>.gold{position:absolute;right:calc(var(--u)*24);top:calc(var(--u)*44);margin:0}
+
+/* ---------- Akt-Wechsel als Zwischentitel ---------- */
+#panel .zwischentitel{position:relative;background:#000;border:0;padding:calc(var(--u)*16) calc(var(--u)*34);animation:iris .9s steps(9) backwards;box-shadow:0 0 0 100vmax #000}
+@keyframes iris{from{clip-path:circle(0% at 50% 50%)}to{clip-path:circle(75% at 50% 50%)}}
+#panel .zwischentitel::before{content:"";position:absolute;inset:calc(var(--u)*-200);pointer-events:none;background:var(--zone);mix-blend-mode:multiply;opacity:.35}
+#panel .zwischentitel::after{content:"";position:absolute;inset:calc(var(--u)*-200);pointer-events:none;background:var(--dither) 0 0/calc(var(--u)*2) calc(var(--u)*2),linear-gradient(90deg,transparent 31%,rgba(255,255,255,.12) 31.2%,transparent 31.5%,transparent 72%,rgba(255,255,255,.08) 72.1%,transparent 72.3%);opacity:.18;animation:korn .24s steps(3) infinite}
+@keyframes korn{50%{background-position:calc(var(--u)*1) calc(var(--u)*1),calc(var(--u)*8) 0}}
+#panel .zwischentitel h2 .bu{display:inline-block;animation:flacker .5s steps(2) backwards}
+@keyframes flacker{0%{opacity:0}40%{opacity:1}60%{opacity:.2}100%{opacity:1}}
+#panel .zwischentitel .akt,#panel .zwischentitel .zeit,#panel .zwischentitel p{position:relative;z-index:1}
+
+/* ---------- Titel: Leuchtturmkegel, Nebel, Schriftmenü mit Licht ---------- */
+.titel{position:relative}
+.titel h1{position:relative;background:linear-gradient(100deg,#efe4c8 0 40%,#fffbe8 47%,#ffffff 50%,#fffbe8 53%,#efe4c8 60%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:kegelText 9s linear infinite}
+@keyframes kegelText{0%,70%{background-position:100% 0}85%{background-position:0 0}100%{background-position:0 0}}
+.titel::before{content:"";position:absolute;left:50%;top:-40%;width:calc(var(--u)*900);height:calc(var(--u)*900);transform:translate(-50%,-50%);pointer-events:none;z-index:-1;
+ background:conic-gradient(from 0deg,rgba(255,240,200,.16) 0deg,rgba(255,240,200,0) 14deg,rgba(255,240,200,0) 346deg,rgba(255,240,200,.16) 360deg);animation:kegel 9s linear infinite;
+ -webkit-mask:var(--dither) 0 0/calc(var(--u)*4) calc(var(--u)*4);mask:var(--dither) 0 0/calc(var(--u)*4) calc(var(--u)*4)}
+@keyframes kegel{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.titel .menue button.deco{background:none;border:0;box-shadow:none;font:calc(var(--u)*8)/1 var(--ps);letter-spacing:0;color:#bfb49a;padding:calc(var(--u)*1) calc(var(--u)*6);position:relative}
+.titel .menue button.deco.klein{font-size:calc(var(--u)*6)}
+.titel .menue button.deco:hover,.titel .menue button.deco:focus-visible{color:#fff;outline:none;box-shadow:none;text-shadow:0 0 calc(var(--u)*3) #ffe9a6}
+.titel .menue button.deco:hover::before,.titel .menue button.deco:focus-visible::before{content:"";position:absolute;left:calc(var(--u)*-8);top:50%;width:calc(var(--u)*7);height:calc(var(--u)*7);transform:translateY(-50%);background:var(--raute11) center/100% 100%;image-rendering:pixelated;animation:licht 1s steps(2) infinite}
+@keyframes licht{50%{filter:brightness(1.6)}}
+
+/* ---------- Spielmenü und Einstellungen: Plakettenrahmen statt Schwarz und Messing ---------- */
+#overlay .box,.box.menue{border-style:solid;border-width:calc(var(--u)*4);border-image:var(--s9panel) 4 fill / calc(var(--u)*4) stretch;image-rendering:pixelated;background:none;box-shadow:none}
+#overlay .box h2{font-family:var(--ps);font-weight:400;letter-spacing:0}
+
+/* ---------- Rucksack: passt in das 16:9-Bild (480 × 270) ---------- */
+#spiel.koe{height:calc(var(--u)*270)}
+#koerper{transform:scale(.7459);transform-origin:50% 0}
+@media (prefers-reduced-motion:reduce){.titel::before,.titel h1,#panel .zwischentitel,#panel .zwischentitel::after,#panel .box.szene::before,#panel .box.szene .pick{animation:none}}
+/* Momentum Stufe 1 (Auftrag 4): Slot-Wahl nach dem Wächter */
+.box.szene.slotwahl .swahl{display:flex;gap:calc(var(--u)*6);justify-content:center;margin-top:calc(var(--u)*14)}
+.box.szene.slotwahl .swahl button.deco{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*3);min-width:calc(var(--u)*82);padding:calc(var(--u)*4) calc(var(--u)*5)}
+.box.szene.slotwahl .swahl b{font-size:calc(var(--u)*6);letter-spacing:.04em}
+.swpl{display:flex;gap:calc(var(--u)*2)}.swpl i{width:calc(var(--u)*6);height:calc(var(--u)*6);background:#1a1712;box-shadow:inset 0 0 0 1px #4a4134}
+.swpl i.an{background:#8a7a5a;box-shadow:inset 0 0 0 1px #c8b48a}.swpl i.neu{background:transparent;box-shadow:inset 0 0 0 1px var(--gold)}
+button.deco:hover .swpl i.neu{background:var(--gold);box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.5)}
+.swz{font-size:calc(var(--u)*5);color:#a89c80}

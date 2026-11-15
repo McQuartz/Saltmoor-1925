@@ -129,6 +129,7 @@ function fightWon(){const art=S.kampfArt;S.stats.kaempfe++;
  const rare=art==='waechter'||art==='schwer';const pick=items;
  S.beuteSatz=beuteSatzWaehlen(r);
  S.reward=pick;S.picked=!pick.length;S.rewardHg=hg;S.hgPicked=!hg.length;S.hgPending=null;S.phase='reward';S.hand=[];
+ S.slotWahl=art==='waechter'&&momentum('waechter_slot')&&AREAS.some(a=>S.slots[a]<BAL.max_slots); // Momentum Stufe 1: ein Slot im Bereich deiner Wahl
  if(typeof Wuerze!=='undefined')Wuerze.nachSieg(); // M11: Barmherzige Trennung, ein Handgriff wird fremd
  Bus.emit('reward',{gold:gd,items:pick,hg,why:`Belohnung: ${gd} Gold, Handgriffe ${hg.map(id=>HANDGRIFFE[id].n).join('/')}${pick.length?', Items '+pick.map(id=>ITEMS[id].n).join('/'):''}${art==='waechter'?' (Reliquien)':''}`});Bus.emit('changed');}
 // Fix 2 (Auftrag 3): Satz über der Beute. Erst der stärkste besiegte Gegner mit eigenem beute_satz, sonst die beute_saetze des Bioms,
@@ -140,7 +141,9 @@ function beuteSatzWaehlen(r){const vor=S.letzterBeuteSatz||null;const frei=l=>l.
  if(!satz){const bi=biomId();const l=frei(Object.keys(FOES).filter(id=>FOES[id].biom===bi||(B.gegner||[]).includes(id)).map(id=>FOES[id].beute_satz));if(l.length)satz=r.pick(l);}
  S.letzterBeuteSatz=satz||vor;return satz;}
 function takeReward(id){if(S.picked)return;if(id){if(!S.bag.includes(null)){Bus.emit('bad',{a:'RUCKSACK VOLL',b:'Wirf vorher etwas in den Müll.'});return;}giveItem(id,'Fund nach dem Kampf');Bus.emit('pick');}S.picked=true;Bus.emit('changed');}
-function leaveReward(){if(!S.picked)S.picked=true;finishNode();}
+function leaveReward(){if(!S.picked)S.picked=true;S.slotWahl=false;finishNode();}
+// Momentum Stufe 1 (Auftrag 4): nach dem Wächter einen Slot in einem Bereich deiner Wahl (bis BAL.max_slots)
+function waechterSlot(a){if(!S.slotWahl||!AREAS.includes(a))return false;if(!addSlot(a,`Wächter: neuer Slot in ${AREA_N[a]}`))return false;S.slotWahl=false;Bus.emit('changed');return true;}
 function runLost(){if(typeof Wuerze!=='undefined')Wuerze.kampfEnde();S.phase='strand';busy=false;S.stats.endeT=Date.now();const res={sieg:false,tiefe:S.depth,akt:S.akt,biom:biomId(),gegner:S.enemies.filter(e=>e.hp>0).map(e=>e.id),job:S.job};
  S.ergebnis=res;Bus.emit('game_over',{...res,why:`Leben 0 auf Tiefe ${S.depth} in ${biom().kurz}`});
  if(typeof Meta!=='undefined'&&!S.dev)S.neu=Meta.runEnde(res,S);clearSave();Bus.emit('changed');}
@@ -314,6 +317,14 @@ function placeHandgriff(uid,k){const id=S.hgPending;const it=itemByUid(uid);if(!
  Bus.emit('handgriff',{id,it,why:`${HANDGRIFFE[id].n} in ${def(it).n} geritzt: wird ${def(it).st.map(x=>ST[x].n).join(' + ')||'stofflos'}`});
  if(S.pending&&S.pending[0]&&S.pending[0].hg){S.pending.shift();afterEventFx();return true;}
  if(S.phase==='kraemer_hg')S.phase='kraemer';Bus.emit('changed');return true;}
+// Momentum Stufe 1 (Auftrag 4): Vorschlag beim Ritzen. Bestes Item mit freier Kerbe: angelegt vor Rucksack, dann Reaktionen mit dem Deck, dann Stoffe.
+// Gibt {uid,grund} oder null (Schalter BAL.momentum.ritz_vorschlag). Ein Klick auf den Vorschlag bestätigt, jede andere Kerbe oder Ziehen ändert.
+function ritzVorschlag(){if(!momentum('ritz_vorschlag')||!S.hgPending)return null;const deck=new Set(allActive().flatMap(it=>def(it).st));
+ const kand=besitz().filter(b=>hgVon(b.it).length<kerbenVon(b.it)).map(b=>{const D=def(b.it);const rx=[...new Set(REACT.filter(r=>{const[a,c]=[...r.k];return(D.st.includes(a)&&deck.has(c))||(D.st.includes(c)&&deck.has(a));}).map(r=>r.n))];
+  return{...b,rx,w:(b.an?100:0)+rx.length*3+D.st.length};}).sort((a,b)=>b.w-a.w);
+ if(!kand.length)return null;const k=kand[0],D=def(k.it);const st=D.st.map(x=>ST[x].n).join(' und ');
+ const g=[k.an?'angelegt':'im Rucksack',st?'wird '+st:'bleibt stofflos'];if(k.rx.length)g.push('reagiert mit '+k.rx.slice(0,2).join(', '));if(kand.length===1)g.push('die einzige freie Kerbe');
+ const grund=g.join(', ');return{uid:k.it.uid,grund:grund[0].toUpperCase()+grund.slice(1)};}
 function hgVerwerfen(){if(S.phase==='event_hg'){S.hgPending=null;S.pending.shift();afterEventFx();return;}if(S.phase==='kraemer_hg'){S.hgPending=null;S.phase='kraemer';Bus.emit('changed');return;}skipHandgriff();}
 // Werkstatt/Ereignis: Kerbe dazu (höchstens 3)
 function kerbeDazu(uid){const it=itemByUid(uid);if(!it)return false;if(kerbenVon(it)>=3){Bus.emit('bad',{a:'HÖCHSTENS 3 KERBEN',b:''});return false;}it.kerbenPlus=(it.kerbenPlus||0)+1;Bus.emit('kerbe',{it,why:`${def(it).n} bekommt eine Kerbe (jetzt ${kerbenVon(it)})`});wahlFertig();return true;}

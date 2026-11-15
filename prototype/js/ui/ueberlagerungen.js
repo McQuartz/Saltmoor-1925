@@ -12,7 +12,7 @@ function tagebuchHtml(){const M=Meta.get();const st=M.biome;
 function tagebuchSeitenHtml(M){const l=(M.seiten||[]).slice().reverse();if(!l.length||typeof Metaebene==='undefined'||!Metaebene.an())return'';const U=META.ui||{};
  return `<h3>${esc(U.notizen_titel||'')}</h3><div class="seiten">${l.map(s=>`<div class="seite ${s.art}"><b>${esc(s.art==='fehlzeit'?U.seite_fehlzeit:U.seite_vorgaenger)}</b>${s.zeilen.map(z=>`<p class="hand">${esc(z)}</p>`).join('')}</div>`).join('')}</div>`;}
 function einstHtml(){const E=Einst.all();const sl=(k,n)=>`<label>${n}<input type="range" min="0" max="1" step="0.05" value="${E[k]}" data-einst="${k}"></label>`;const cb=(k,n)=>`<label><input type="checkbox" ${E[k]?'checked':''} data-einst="${k}"> ${n}</label>`;
- return box('einst',`<h2>EINSTELLUNGEN</h2><div class="formular">${sl('musik','Musik')}${sl('effekte','Effekte')}${cb('stummfilm','Stummfilm-Rauschen bei besonderen Anlässen')}${cb('jumpscare','Jumpscare (höchstens einmal pro Abstieg)')}${cb('wackeln','Bildschirmwackeln')}${cb('fahrtkurz','Übergänge kürzer')}${cb('klangzeichen','Klänge als Zeichen')}${typeof Mund!=='undefined'?Mund.einstHtml():''}
+ return box('einst',`<h2>EINSTELLUNGEN</h2><div class="formular">${sl('musik','Musik')}${sl('effekte','Effekte')}${cb('stummfilm','Stummfilm-Rauschen bei besonderen Anlässen')}${cb('jumpscare','Jumpscare (höchstens einmal pro Abstieg)')}${cb('wackeln','Bildschirmwackeln')}${cb('fahrtkurz','Übergänge kürzer')}${cb('klangzeichen','Klänge als Zeichen')}${cb('schultern_geschwungen','Fußleiste mit geschwungenen Schultern')}${typeof Mund!=='undefined'?Mund.einstHtml():''}
  <label>Textgeschwindigkeit<select data-einst="text"><option value="0.6" ${E.text==.6?'selected':''}>langsam</option><option value="1" ${E.text==1?'selected':''}>normal</option><option value="1.6" ${E.text==1.6?'selected':''}>schnell</option></select></label>
  <label><input type="checkbox" ${vollbildAn()?'checked':''} data-act="vollbild" data-vollbild> Vollbild (F)</label>
  <label><input type="checkbox" ${typeof Dev!=='undefined'&&Dev.an?'checked':''} data-act="devToggle"> Dev-Modus</label></div><button class="deco klein" data-act="zu">SCHLIESSEN</button>`);}
@@ -45,8 +45,7 @@ function reliefMalen(){const c=$('relief');if(!c)return;const x=c.getContext('2d
 // ---------- Hover-Vorschau am Cursor: die Karten, die ins Deck kämen ----------
 // Spieltest 2026-11-09: Beim Hovern über Fund, Reliquie oder Handgriff stehen die echten Karten, so wie sie auf der Hand aussehen.
 function vorschauKarte(c){const k=c.x?'X':c.opfer?'♥'+c.opfer:c.c;const img=c.img||(typeof spr==='function'&&c.spr?spr(c.spr):'');
- return `<div class="karte vorschau${c.st.length>1?' duo':''}"><div class="kost"><span>${k}</span></div><div class="kst">${c.st.map(s=>gi(s,KZ())).join('')}</div>
- <div class="kn">${esc(c.n).toUpperCase()}</div><div class="bogen">${img?`<img src="${img}" alt="">`:''}</div><div class="kt">${esc(cardText(c))}</div></div>`;}
+ return karteHtml(c,{cls:`vorschau${c.st.length>1?' duo':''}${c.hg?' handgriff':''}`,kost:k,img});}
 function vorschauKartenReihe(karten,zusatz=''){const einm=[];const seen=new Map();karten.forEach(c=>{const k=c.n+'|'+(c.hg||'');if(seen.has(k))seen.get(k).anz++;else{const o={c,anz:1};seen.set(k,o);einm.push(o);}});
  return `<div class="tipkarten" style="zoom:${(BU.s||1).toFixed(3)}">${einm.map(o=>`<div class="tkw">${vorschauKarte(o.c)}${o.anz>1?`<span class="anz">×${o.anz}</span>`:''}</div>`).join('')}</div>${zusatz}`;}
 function hoverVorschau(el){const tk=el.closest('[data-take],[data-buy],[data-hg],[data-buyhg]');if(!tk)return null;

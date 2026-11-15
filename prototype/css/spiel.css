@@ -4,7 +4,7 @@
  --fk:'Cinzel',serif;--ft:'IM Fell English',serif;--fl:'Limelight',serif;--fp:'Press Start 2P',monospace}
 *{box-sizing:border-box}
 html,body{margin:0;background:#000;color:var(--txt);font-family:var(--ft);user-select:none;-webkit-user-select:none;overflow:hidden;height:100%}
-#spiel{position:absolute;left:0;top:0;transform-origin:0 0;width:calc(var(--u)*480)}
+#spiel{position:absolute;left:0;top:0;transform-origin:0 0;width:calc(var(--u)*480);height:calc(var(--u)*270);overflow:hidden}
 #szene{position:relative;width:calc(var(--u)*480);height:calc(var(--u)*270);overflow:hidden;background:#000}
 #scene{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 #hud{position:absolute;inset:0;pointer-events:none;font-size:calc(var(--u)*6)}
@@ -33,8 +33,7 @@ a[data-act]{color:inherit;cursor:pointer;pointer-events:auto;text-decoration:und
 
 /* ---------- Gegner: Absicht über dem Kopf, Info unter den Füßen ---------- */
 #gegner{inset:0}
-.feind{position:absolute;transform:translateX(-50%);width:calc(var(--u)*64);pointer-events:auto}
-.feind .abs{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-family:var(--fp);font-size:calc(var(--u)*5);color:#fff;white-space:nowrap;margin-bottom:calc(var(--u)*2);
+.feind{position:absolute;transform:translateX(-50%);pointer-events:auto}
  text-shadow:1px 0 #000,-1px 0 #000,0 1px #000,0 -1px #000,1px 1px #000,-1px -1px #000,2px 2px 0 #000;display:flex;align-items:center;gap:calc(var(--u)*1.5)}
 .feind .treffer{width:100%}
 
@@ -51,41 +50,14 @@ a[data-act]{color:inherit;cursor:pointer;pointer-events:auto;text-decoration:und
 @keyframes zwt{0%{opacity:0}15%{opacity:1}80%{opacity:1}100%{opacity:0}}
 
 /* ---------- Untere Leiste ---------- */
-#leiste{position:relative;height:calc(var(--u)*92);background:#000;display:flex;align-items:flex-start;justify-content:space-between}
-#leiste.kampf{padding:0 calc(var(--u)*4)}
-#hand{flex:1;display:flex;justify-content:center;gap:calc(var(--u)*3);margin-top:calc(var(--u)*-14)}
-#rechts{width:calc(var(--u)*76);display:flex;flex-direction:column;align-items:center;padding-top:calc(var(--u)*4);gap:calc(var(--u)*3)}
-.en-l{font-family:var(--fk);font-size:calc(var(--u)*4.4);letter-spacing:.16em;color:#c8b890}
-.rauten{display:flex;gap:calc(var(--u)*3)}
-.rauten i{width:calc(var(--u)*7);height:calc(var(--u)*7);transform:rotate(45deg);border:1px solid var(--messing2);display:block}
-.rauten i.voll{background:linear-gradient(135deg,#ffe8a8,#d8a84a);box-shadow:0 0 calc(var(--u)*3) rgba(232,197,71,.35)}
-.stapel{font-size:calc(var(--u)*5);color:#bfb49a}
+#leiste{position:absolute;left:0;right:0;bottom:0;height:calc(var(--u)*92);background:#000;display:flex;align-items:flex-start;justify-content:space-between;z-index:4}
+#leiste:empty{display:none}
 button.deco{background:#000;border:1px solid var(--messing2);box-shadow:inset 0 0 0 2px #000,inset 0 0 0 3px var(--messing);color:#efe4c8;font-size:calc(var(--u)*6.5);letter-spacing:.1em;padding:calc(var(--u)*4) calc(var(--u)*10);line-height:1.15}
 button.deco:hover:not(:disabled){color:#fff;border-color:#fff3c8;box-shadow:inset 0 0 0 2px #000,inset 0 0 0 3px var(--messing2),0 0 calc(var(--u)*4) rgba(224,192,128,.3)}
 button.deco.klein{font-size:calc(var(--u)*4.6);padding:calc(var(--u)*2.5) calc(var(--u)*6)}
 button.deco small{font-family:var(--ft);font-size:.75em;letter-spacing:0}
-#endBtn{width:100%}
 
-/* ---------- Karten ---------- */
-.karte{position:relative;width:calc(var(--u)*56);height:calc(var(--u)*76);background:#060504;border:1px solid var(--messing);box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px #3a2c18,2px 3px 0 #000;
  transform:translateY(var(--dy)) rotate(var(--r));transition:transform .12s;cursor:grab;display:flex;flex-direction:column;align-items:center;padding:calc(var(--u)*5) calc(var(--u)*3) calc(var(--u)*3);animation:deal .3s backwards}
-@keyframes deal{from{transform:translateY(60px) rotate(0);opacity:0}}
-.karte:hover{transform:translateY(calc(var(--u)*-10)) rotate(0) scale(1.06);z-index:3}
-.karte.zielt{transform:translateY(calc(var(--u)*-14)) rotate(0) scale(1.06);z-index:4}
-.karte.zieht{z-index:9;transition:none;pointer-events:none}
-.karte .kost{position:absolute;left:calc(var(--u)*-4);top:calc(var(--u)*-4);width:calc(var(--u)*11);height:calc(var(--u)*11);transform:rotate(45deg);background:#000;border:1px solid var(--messing2);display:flex;align-items:center;justify-content:center}
-.karte .kost span{transform:rotate(-45deg);font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*6);color:#efe4c8}
-.karte .kost.hoch{border-color:#e8584a}.karte .kost.hoch span{color:#ff8a7a}.karte .kost.tief{border-color:var(--eld)}.karte .kost.tief span{color:var(--eld)}
-.karte .kst{position:absolute;right:calc(var(--u)*3);top:calc(var(--u)*3);display:flex;gap:1px}
-.karte .kn{font-family:var(--fl);font-size:calc(var(--u)*4.6);text-align:center;color:#efe4c8;line-height:1.05;min-height:calc(var(--u)*10);display:flex;align-items:center;letter-spacing:.04em;padding:0 calc(var(--u)*4)}
-.karte .bogen{width:calc(var(--u)*30);height:calc(var(--u)*26);border:1px solid #4a3a20;border-radius:calc(var(--u)*15) calc(var(--u)*15) 0 0;background:radial-gradient(ellipse at 50% 70%,#1c160e,#050403);display:flex;align-items:center;justify-content:center;margin:calc(var(--u)*1) 0}
-.karte .bogen img{width:calc(var(--u)*24);height:calc(var(--u)*24);image-rendering:pixelated}
-.karte .kt{font-size:calc(var(--u)*5);text-align:center;line-height:1.08;color:#ddd4bc;flex:1;display:flex;align-items:center}
-.karte .rx{font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*4);letter-spacing:.08em;color:var(--gold);text-align:center}
-.karte .rx.un{color:var(--violett)}.karte .rx.in{color:var(--blau)}
-.karte.reagiert{border-color:var(--gold);box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px #7a5a20,0 0 calc(var(--u)*6) rgba(232,197,71,.35),2px 3px 0 #000}
-.karte.teuer{filter:brightness(.42) saturate(.5)}
-.karte.duo{background:#07060a}
 
 /* ---------- Ausrüstung ---------- */
 #leiste.gear{flex-direction:column;align-items:center;justify-content:flex-start;padding-top:calc(var(--u)*5);gap:calc(var(--u)*3)}
@@ -183,8 +155,6 @@ button.deco small{font-family:var(--ft);font-size:.75em;letter-spacing:0}
 #scare{position:fixed;inset:0;display:none;z-index:99;background:#000}#scare.on{display:block}#scare canvas{width:100%;height:100%;image-rendering:pixelated}
 #devBtn{position:fixed;right:6px;bottom:6px;z-index:70;font-family:monospace;font-size:10px;background:#000;color:#4a5a50;border:1px solid #1a2420;padding:3px 6px}
 body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
-.voraus{font-size:calc(var(--u)*4.6);color:var(--violett);font-style:italic}
-.karte-geo{font-size:calc(var(--u)*5);color:#bfa870;font-style:italic;margin-bottom:calc(var(--u)*4)}
 .fig{width:calc(var(--u)*92)}
 /* Lesbarkeit auf hellen Orten (Salzstollen): dezente dunkle Unterlage, keine Box */
 #kopf{background:radial-gradient(ellipse at 30% 40%,rgba(0,0,0,.62),rgba(0,0,0,.35) 60%,transparent 75%);padding:calc(var(--u)*3);margin:calc(var(--u)*-3)}
@@ -214,8 +184,6 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 .deckende{display:flex;flex-wrap:wrap;gap:calc(var(--u)*3);font-size:calc(var(--u)*4.6)}.deckende .dk{width:calc(var(--u)*90);line-height:1.2}.deckende img{width:calc(var(--u)*10);height:calc(var(--u)*10);image-rendering:pixelated;vertical-align:middle;margin-right:4px}
 .endschirm .knoepfe{display:flex;gap:calc(var(--u)*4);justify-content:center;flex-wrap:wrap;margin-top:calc(var(--u)*6)}
 /* Auftrag 2, M3: Handgriffe, Kerben, Ritzen */
-.karte.handgriff{background:#07060a}.karte .hgm{position:absolute;left:calc(var(--u)*2);bottom:calc(var(--u)*2);font-size:calc(var(--u)*5);opacity:.6}.karte .schl{position:absolute;right:calc(var(--u)*2);bottom:calc(var(--u)*2);color:var(--eld);font-size:calc(var(--u)*5)}
-.karte .bogen{position:relative}.karte.unspielbar{filter:grayscale(1) brightness(.5);border-style:dashed}.karte.frost{filter:hue-rotate(160deg) brightness(.6)}.karte.verteuert .kost span{color:#ff6a50;text-shadow:0 0 6px #e05040}
 .hgpick{width:calc(var(--u)*76)}.hgpick .hgk{font-family:var(--fl);font-size:calc(var(--u)*5.2);color:#efe4c8;display:flex;gap:calc(var(--u)*3);align-items:center;justify-content:center}.hgpick .hgc{display:inline-flex;width:calc(var(--u)*9);height:calc(var(--u)*9);transform:rotate(45deg);border:1px solid var(--messing2);align-items:center;justify-content:center;font-family:var(--fk)}
 .hgpick .hgt{font-style:italic;color:#a89c80;font-size:calc(var(--u)*4.4);margin-top:calc(var(--u)*2)}.hgpick .hgb{font-family:var(--fk);font-size:calc(var(--u)*3.8);letter-spacing:.12em;color:var(--messing2);margin-top:calc(var(--u)*2)}
 .ritzliste{display:flex;flex-direction:column;gap:calc(var(--u)*2);text-align:left;margin:calc(var(--u)*4) 0}.ritz{display:flex;align-items:center;gap:calc(var(--u)*4);background:#060504;border:1px solid #2a2014;padding:calc(var(--u)*2) calc(var(--u)*4)}.ritz.rucksack{opacity:.7}
@@ -241,8 +209,6 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 /* Belohnung mit Handgriff und Reliquie: etwas dichter, damit „Nichts nehmen“ ohne Scrollen sichtbar bleibt (seit Reliquien ihren Eigenschaftstext zeigen) */
 .box.reward{max-height:calc(var(--u)*264)}.box.reward .innen{padding:calc(var(--u)*4) calc(var(--u)*8)}.box.reward h3{margin:calc(var(--u)*3) 0 calc(var(--u)*1)}.box.reward .picks{margin:calc(var(--u)*2) 0}.box.reward .hgpick .hgimg{width:calc(var(--u)*24)}.box.reward .pick img{max-height:calc(var(--u)*20)}.box.reward .pick{padding:calc(var(--u)*3)}.box.reward .pick .ps{margin-top:calc(var(--u)*1)}
 
-/* Mehr als 6 Handkarten (Ballast, Strandbuch, Wahrsagerin): Karten überlappen, damit die Hand nie aus dem Bild läuft; die Karte unter der Maus liegt oben */
-#hand .karte+.karte{margin-left:calc(var(--u)*-1*var(--ov,0))}#hand .karte:hover{z-index:5}
 .kt.verst{color:#ffe08a}
 /* ---------- Auftrag 3 M2: Kampf-HUD Variante 2 (05-oberflaeche.md Abschnitt 1) ---------- */
 #kopf{right:calc(var(--u)*8);width:auto}
@@ -251,40 +217,12 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 #kopf .kr b{font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*6.5);color:#efe4c8}
 #kopf .kr .gold b{color:#e8c547}#kopf .kr .gold img{vertical-align:middle}
 #kopf .kr a{text-decoration:none}
-#leiste.kampf{background:linear-gradient(#17120c,#0b0907 30%,#060504);border-top:1px solid var(--messing);box-shadow:inset 0 1px 0 #5a4626,0 calc(var(--u)*-1) calc(var(--u)*3) rgba(0,0,0,.7);padding:0 calc(var(--u)*8)}
-#links{width:calc(var(--u)*118);padding-top:calc(var(--u)*9);display:flex;flex-direction:column;gap:calc(var(--u)*4);margin-right:calc(var(--u)*8)}
-#spieler2{pointer-events:auto}
-#spieler2 .skopf{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:calc(var(--u)*1.5)}
-#spieler2 .snm{font-family:var(--fk);font-size:calc(var(--u)*4.2);letter-spacing:.18em;color:#a89c80}
-#spieler2 .shp{font-family:var(--fk);font-size:calc(var(--u)*4.5);color:#a89c80}#spieler2 .shp b{font-size:calc(var(--u)*7.5);color:#efe4c8;font-weight:700}
-#spieler2 .szeile{display:flex;align-items:center;height:calc(var(--u)*6)}
-#spieler2 .sbar{position:relative;flex:1;height:100%;background:#1a0e0c;border:1px solid #000;box-shadow:0 0 0 1px #5a3a20;display:flex}
-#spieler2 .sbar i{display:block;height:100%}#spieler2 .sbar .hp{background:linear-gradient(#d0463e,#9a2a24)}
-#spieler2 .sbar .schraffur{background:repeating-linear-gradient(-45deg,#c8463a 0 2px,#3a0a08 2px 5px);box-shadow:inset 0 0 0 1px #ff8a7a55}
-#spieler2 .sbar.block{border-color:#0a1424;box-shadow:0 0 0 calc(var(--u)*.8) #6a9ae0,0 0 0 calc(var(--u)*1.2) #0a1424,0 0 calc(var(--u)*3) #6a9ae088}
-#spieler2 .schild{position:absolute;left:calc(var(--u)*-5);top:50%;transform:translateY(-50%);min-width:calc(var(--u)*9);height:calc(var(--u)*10.5);padding:0 calc(var(--u)*1.5) calc(var(--u)*2);box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*.6);background:linear-gradient(#6a9ae0,#2a4a80);clip-path:polygon(0 0,100% 0,100% 62%,50% 100%,0 62%);filter:drop-shadow(0 0 1px #000);font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*5);color:#fff;text-shadow:1px 1px 0 #000;z-index:2}
-#spieler2 .schild small{font-size:calc(var(--u)*3.4);color:#cfe0ff;font-weight:400}
-#baum{flex:1;min-height:calc(var(--u)*40)}
-#hand{margin-top:calc(var(--u)*-16)}
-.karte .rx{position:absolute;left:50%;top:calc(100% - var(--u)*3);transform:translateX(-50%);white-space:normal;width:max-content;max-width:calc(100% - var(--u)*2);box-sizing:border-box;text-align:center;background:#0b0907;border:1px solid var(--c,var(--gold));padding:0 calc(var(--u)*2.5);color:var(--c,var(--gold));font-size:calc(var(--u)*3.6);letter-spacing:.1em;line-height:calc(var(--u)*5.5)}
-.karte .rx.in{bottom:calc(var(--u)*3);border-color:var(--blau);color:var(--blau)}
-.karte.reagiert{border-color:var(--c,var(--gold));box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px var(--c,#7a5a20),0 0 calc(var(--u)*7) calc(var(--u)*-1) var(--c,rgba(232,197,71,.6)),2px 3px 0 #000}
 /* Auftrag 3 M5: Regelbiegung in der Kopfleiste, zweite Absicht (Die Rückseite), Spiegelbild am Stapel */
 #kopf .kopfbieg{display:inline-flex;vertical-align:middle;margin-left:calc(var(--u)*5);gap:calc(var(--u)*1.5);font-size:calc(var(--u)*4.6);letter-spacing:.04em;font-weight:400;min-height:0;color:#d8c890;cursor:help}
 #kopf .kopfbieg .ico{width:calc(var(--u)*7);height:calc(var(--u)*7)}
 #kopf .kopfbieg .bz{font-family:var(--ft);font-style:italic;color:var(--dim);font-size:calc(var(--u)*4.2);letter-spacing:0;margin-left:calc(var(--u)*1)}
-.feind .plakette .abs.abs2{font-size:calc(var(--u)*4);min-height:calc(var(--u)*6);opacity:.7;margin-top:calc(var(--u)*-1);font-family:var(--fk);letter-spacing:.04em}
-.feind .plakette .abs.abs2 .ico{width:calc(var(--u)*5)!important;height:calc(var(--u)*5)!important}
-.voraus.spiegel{cursor:pointer;pointer-events:auto;color:#cfe6ff;text-decoration:underline dotted}
-.voraus.spiegel.wahl{color:#fff;text-shadow:0 0 calc(var(--u)*2) #9fc4ff}
-.voraus.spiegel.aus{cursor:default;opacity:.55;text-decoration:none}
-/* M7: Wahl zu Kampfbeginn (Blick-Item), liegt über der Hand */
-#leiste .blickwahl{position:absolute;left:50%;top:calc(var(--u)*-26);transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:calc(var(--u)*4);padding:calc(var(--u)*4) calc(var(--u)*6);background:rgba(0,0,0,.88);border:1px solid #3a3326}
-#leiste .blickwahl .bw-items{display:flex;gap:calc(var(--u)*1)}#leiste .blickwahl .bw-items img{width:calc(var(--u)*16);height:calc(var(--u)*16);image-rendering:pixelated}
-#hand.verdeckt{opacity:.35;pointer-events:none;filter:grayscale(.6)}
 .abs .gesehen{font-size:.8em;color:#d8f5ea;background:rgba(18,30,28,.8);padding:0 .3em;border:1px solid rgba(188,217,207,.5);border-radius:2px}
 .abs .diener{display:inline-flex;align-items:center;gap:.2em}.abs .diener .dk{width:calc(var(--u)*12);height:calc(var(--u)*12);image-rendering:pixelated;border:1px solid #d8c493;background:#120f0a}
-#leiste .blickwahl.begegnung p{margin:0;max-width:calc(var(--u)*150);font-family:var(--fk);font-size:calc(var(--u)*5);color:#d8ccb0;font-style:italic}
 
 /* ---------- Spieltest 2026-11-09 ---------- */
 /* Unten wird nur im Kampf Platz für Hand und Leiste reserviert. Sonst ist #spiel nur die Szene hoch (16:9) und füllt den Bildschirm.
@@ -292,22 +230,6 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 #leiste:empty{display:none}
 #spiel.koe{height:calc(var(--u)*362)}
 #kopf .kr .amk{color:#e6dcc0;border-bottom:1px solid #8a6e3a;cursor:pointer;pointer-events:auto}#kopf .kr .amk:hover{color:#fff;border-color:var(--messing2)}
-/* Hand: rückt per kartenEinpassen() zusammen, der rechte Block (Energie, ZUG BEENDEN) bleibt fest */
-#hand{min-width:0}#rechts{flex:none}
-/* Kartentitel: Platz links für die Kosten-Raute, rechts für die Stoffzeichen, bis zu zwei Zeilen, lange Wörter werden kleiner */
-.karte{padding-top:calc(var(--u)*6)}
-.karte .kn{position:static;transform:none;border-radius:0;margin:0;padding:0 calc(var(--u)*5);width:100%;box-sizing:border-box;justify-content:center;overflow:hidden;height:calc(var(--u)*10);min-height:0;white-space:normal;word-break:keep-all}
-/* Letzte Reaktion unten links unter dem Stoff-Baum */
-#links{padding-top:calc(var(--u)*4);gap:calc(var(--u)*2)}
-#letzteRx{height:calc(var(--u)*13)}
-#letzteRx .lrx{font-family:var(--ft);font-size:calc(var(--u)*4.8);color:var(--txt);line-height:1.12;max-height:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;border-top:1px solid #3a2c18;border-left:calc(var(--u)*1) solid var(--c);background:linear-gradient(90deg,#0c0a08,rgba(12,10,8,0));padding:calc(var(--u)*1.2) calc(var(--u)*3);pointer-events:auto}
-#letzteRx .lrx-k{display:inline-flex;align-items:center;gap:calc(var(--u)*1);vertical-align:-.15em;margin-right:calc(var(--u)*1.5)}
-#letzteRx .lrx-k b{font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*4.8);letter-spacing:.1em;color:var(--gold);margin-left:calc(var(--u)*.5)}
-#letzteRx .lrx-k i{font-style:normal;color:#8f8672;font-weight:400}
-#letzteRx .lrx-k em{font-style:normal;font-weight:400;font-size:calc(var(--u)*3.6);letter-spacing:.14em;color:#efe4c8;border:1px solid #8a6e3a;padding:0 calc(var(--u)*1.2);margin-left:calc(var(--u)*1)}
-#letzteRx .lrx.hoch{border-left-color:#ffe9a8;background:linear-gradient(90deg,#2a2010,rgba(12,10,8,0))}
-#letzteRx .lrx.frisch{animation:lrxEin .5s ease-out}
-@keyframes lrxEin{0%{background-color:rgba(232,197,71,.28);transform:translateX(calc(var(--u)*-3))}100%{background-color:transparent;transform:none}}
 /* DEV-Knopf liegt über dem Dev-Menü, damit man es wieder zu bekommt */
 #devBtn{z-index:90}
 /* Spruch des Handgriffs steht nach dem Nehmen (Ritzen), nicht mehr auf jeder Auswahlkarte */
@@ -317,7 +239,6 @@ body[data-phase="titel"] #leiste,body[data-phase="figur"] #leiste{display:none}
 #tip .tipkarten{display:flex;gap:calc(var(--u)*3);padding:calc(var(--u)*2)}
 #tip .tkw{position:relative}
 #tip .tkw .anz{position:absolute;right:calc(var(--u)*-2);top:calc(var(--u)*-3);font-family:var(--fk);font-weight:700;font-size:calc(var(--u)*6);color:var(--gold);text-shadow:0 0 calc(var(--u)*2) #000,1px 1px 0 #000}
-#tip .karte.vorschau{animation:none;transform:none;cursor:default;box-shadow:inset 0 0 0 2px #060504,inset 0 0 0 3px #3a2c18,0 calc(var(--u)*2) calc(var(--u)*6) #000}
 #tip .tipzusatz{margin-top:4px;background:#000;border:1px solid var(--messing);padding:6px 10px;color:#e8d8a0;font-size:15px;max-width:420px}
 
 /* Spieltest 2026-11-10: Vertiefen und Preis im Handgriff-Angebot */
@@ -338,5 +259,4 @@ body[data-phase="titel"] #menueBtn{display:none}
 .box.menue .menue .deco{min-width:calc(var(--u)*110);font-size:calc(var(--u)*7)}
 .box.menue .menue .deco.klein{font-size:calc(var(--u)*6);padding:calc(var(--u)*3.5) calc(var(--u)*8)}
 .box.menue .menue .hint{font-size:calc(var(--u)*5.5)}
-/* Zusatz unten an der Karte (verstärkt, verbraucht …) besser lesbar (Spieltest 2026-11-14) */
-.karte .rx{font-size:calc(var(--u)*4.4);line-height:calc(var(--u)*6.5);letter-spacing:.06em;font-weight:700;background:#000;box-shadow:0 0 0 1px #000,0 calc(var(--u)*.8) calc(var(--u)*2) #000;text-shadow:none}
+.karte-geo{font-size:calc(var(--u)*5);color:#bfa870;font-style:italic;margin-bottom:calc(var(--u)*4)}

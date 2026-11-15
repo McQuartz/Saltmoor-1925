@@ -3,7 +3,7 @@ const hudEl=sel=>document.querySelector(S.phase==='fight'?'#spieler2 .sbar':'#ko
 const FLOAT_COL={dmg:'#e8d8c0',big:'#ffd23f',heal:'#9ae08a',block:'#9cc3ff',hurt:'#e8584a'};
 function floatAt(el,txt,col,k=0){if(!el||FAST)return;const r=el.getBoundingClientRect();const f=document.createElement('div');f.className='float';f.textContent=txt;f.style.color=col;
  f.style.left=(r.left+r.width/2+(Math.random()-.5)*30)+'px';f.style.top=(r.top+r.height*.3)+'px';f.style.fontSize=(BU.k*5+Math.min(12,k))+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),1000);}
-function floatScene(e,txt,col,k){const b=enemyBox(e);const r=BU.cv.getBoundingClientRect();const fake={getBoundingClientRect:()=>({left:r.left+b.x/SW*r.width-10,top:r.top+(b.y-b.h*.6)/SH*r.height,width:20,height:20})};floatAt(fake,txt,col,k);}
+function floatScene(e,txt,col,k){const b=enemyBox(e);const r=BU.cv.getBoundingClientRect();const fake={getBoundingClientRect:()=>({left:r.left+uiX(b.x)/480*r.width-10,top:r.top+uiY(b.y-b.h*.6)/270*r.height,width:20,height:20})};floatAt(fake,txt,col,k);}
 // Meldungszeile (07-ui-und-gefuehl.md): höchstens 2 gleichzeitig, nebeneinander, mindestens 4 s (wichtige 6 s),
 // Warteschlange, gleiche Meldungen werden zusammengefasst (×n), Klick zeigt die letzten 20.
 const MELD={zeigt:[],queue:[],verlauf:[],sig:''};
