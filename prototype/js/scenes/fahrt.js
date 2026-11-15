@@ -9,7 +9,9 @@
 // Fahrt.bild(ctx, sz, eintrag, t) zeichnet ein Bild der Fahrt (t 0..1) auf ein 480×270-Canvas; die Animation im Spiel und der
 // Kontaktbogen (tools/fahrt-bogen.js) benutzen dieselbe Funktion.
 const Fahrt=(()=>{
-const W=480,H=270,M=12,EW=W+2*M;
+const W=480,H=270,M=(typeof World!=='undefined'&&World.B&&World.B.M)||12,EW=W+2*M; // Rand der Ebenen aus dem Generator (Auftrag 4: 48)
+// Auftrag 4: zeichnet in Szenenkoordinaten; ist die Leinwand der Bildraum (BILD, 560 × 315), liegt der Ursprung bei BILD.x/BILD.y
+const ursprung=ctx=>typeof BILD!=='undefined'&&ctx.canvas&&ctx.canvas.width===BILD.w?[BILD.x,BILD.y]:[0,0];
 const PAR=[.02,.06,.18,.35,.5];            // Nähe der Ebenen 0 bis 4 über dem Boden (Ebene 5 = vorne: NAH)
 const XMIX=.45,NAH=.95, BODEN0=.3, ZOOM=.55;         // Nähe von Ebene 5 und des Bodens am Zielpunkt; Stärke der Fahrt (nah: ×2,2 am Ende)
 const RICHTUNGEN=['vor','links','rechts','ab','auf'];
@@ -35,14 +37,14 @@ function kamera(r,t){const e=ease(t),d=r==='links'?-1:r==='rechts'?1:0;let z=ZOO
 
 // Eine Ebene (Zeilen ya..yb der Szene) mit Nähe p(y) zeichnen; Streifen: eigene Skala und Verschiebung je Zeilenband
 function ebene(ctx,cv,ya,yb,pf,K,zx,zy,px){const sc=y=>1/(1-K.z*pf(y));px=px||pf;
- const Y=y=>zy+(y-zy)*sc(y)+K.shy(pf(y)),y0=Math.round(Y(ya)),y1=Math.round(Y(yb));if(y1<=y0||y0>=H||y1<=0)return;
+ const Y=y=>zy+(y-zy)*sc(y)+K.shy(pf(y)),y0=Math.round(Y(ya)),y1=Math.round(Y(yb));if(y1<=y0||y0>=H+M||y1<=-M)return;
  const ym=(ya+yb)/2,s=1/(1-K.z*px(ym));let sh=K.shx(px(ym));                // Breite und Seitenverschiebung folgen px (weniger Schräglage stehender Dinge)
  sh=cl(sh,-((W-zx)*(s-1)+M*s),zx*(s-1)+M*s);                     // nie über den Bildrand hinaus
  const x0=Math.round(zx+(-M-zx)*s+sh),x1=Math.round(zx+(W+M-zx)*s+sh);
  ctx.drawImage(cv,0,ya+M,EW,yb-ya,x0,y0,x1-x0,y1-y0);}
 
-function bild(ctx,sz,e,t,opt){opt=opt||{};ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.imageSmoothingEnabled=false;
- ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+function bild(ctx,sz,e,t,opt){opt=opt||{};const[UX,UY]=ursprung(ctx);ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.imageSmoothingEnabled=false;
+ ctx.fillStyle='#000';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);ctx.setTransform(1,0,0,1,UX,UY);
  const zx=cl(e.ziel[0],0,W),zy=cl(Math.round(e.ziel[1]),60,200),K=kamera(e.r,cl(t,0,1));K.shy=K.shy||(()=>0);
  const Ls=sz.ebenen.map(L=>L.canvas);
  // Ebene 0 und 1 (Ferne) stehen zusätzlich unbewegt darunter: wandert eine nahe Ebene weg, schimmert dahinter die Ferne statt Schwarz durch
@@ -55,24 +57,24 @@ function bild(ctx,sz,e,t,opt){opt=opt||{};ctx.setTransform(1,0,0,1,0,0);ctx.glob
   for(let y=zy;y<H+M;y+=2)ebene(ctx,Ls[i],y,Math.min(H+M,y+2),boden,K,zx,zy,yy=>PAR[i]+(boden(yy)-PAR[i])*XMIX*sm((yy-zy)/40)); // Boden in Streifen
  }
  // Animiertes (Flammen, Nebelschwaden …) fährt mit der mittleren Ebene mit
- const mit=(p,f)=>{const s=1/(1-K.z*p),sh=cl(K.shx(p),-((W-zx)*(s-1)+M*s),zx*(s-1)+M*s);ctx.save();ctx.setTransform(s,0,0,s,Math.round(zx*(1-s)+sh),Math.round(zy*(1-s)+K.shy(p)));ctx.imageSmoothingEnabled=false;try{f();}catch(er){}ctx.restore();};
+ const mit=(p,f)=>{const s=1/(1-K.z*p),sh=cl(K.shx(p),-((W-zx)*(s-1)+M*s),zx*(s-1)+M*s);ctx.save();ctx.setTransform(s,0,0,s,UX+Math.round(zx*(1-s)+sh),UY+Math.round(zy*(1-s)+K.shy(p)));ctx.imageSmoothingEnabled=false;try{f();}catch(er){}ctx.restore();};
  const kam0={x:0,y:0},ta=opt.t||0;
  if(sz.zeichneAnimiert)mit(PAR[3],()=>sz.zeichneAnimiert(ctx,ta,kam0));
  // Ebene 5 (vorne) und Luft: ganz nah
  ebene(ctx,sz.vorne.canvas,-M,H+M,()=>NAH,K,zx,zy);
  if(sz.zeichneVordergrund)mit(NAH,()=>sz.zeichneVordergrund(ctx,ta,kam0,true));
- ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;}
+ ctx.setTransform(1,0,0,1,UX,UY);ctx.globalAlpha=1;}
 
 // ---- Nebel-Übergang: Dithering in den Nebelfarben des Bioms (kein Weichzeichner) ----
 const BAY=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
 let FOG=null;const hexA=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
 function nebelPalette(biom){const B=typeof BIOMES!=='undefined'&&(BIOMES[biom]||BIOMES.hafen);const n=B&&B.nebel?B.nebel:['#1c2228','#4a5560'];return[hexA(n[0]),hexA(n[1])];}
-function nebel(g,f,ph,pal){if(f<=0)return;
- if(!FOG){const c=document.createElement('canvas');c.width=W;c.height=H;FOG={c,x:c.getContext('2d'),id:null};FOG.id=FOG.x.createImageData(W,H);}
- const d=FOG.id.data,sx=new Float32Array(W),sy=new Float32Array(H),sd=new Float32Array(W+H);
- for(let x=0;x<W;x++)sx[x]=Math.sin(x*.021+ph*.8);for(let y=0;y<H;y++)sy[y]=Math.sin(y*.045-ph*.5);for(let i=0;i<W+H;i++)sd[i]=Math.sin(i*.017+ph*.3);
+function nebel(g,f,ph,pal){if(f<=0)return;const NW=g.canvas&&g.canvas.width||W,NH=g.canvas&&g.canvas.height||H; // Auftrag 4: deckt die ganze Leinwand (Bildraum 560 × 315)
+ if(!FOG||FOG.c.width!==NW||FOG.c.height!==NH){const c=document.createElement('canvas');c.width=NW;c.height=NH;FOG={c,x:c.getContext('2d'),id:null};FOG.id=FOG.x.createImageData(NW,NH);}
+ const d=FOG.id.data,sx=new Float32Array(NW),sy=new Float32Array(NH),sd=new Float32Array(NW+NH);
+ for(let x=0;x<NW;x++)sx[x]=Math.sin(x*.021+ph*.8);for(let y=0;y<NH;y++)sy[y]=Math.sin(y*.045-ph*.5);for(let i=0;i<NW+NH;i++)sd[i]=Math.sin(i*.017+ph*.3);
  const dk=pal[0],hl=pal[1];
- for(let y=0;y<H;y++)for(let x=0;x<W;x++){const o=(y*W+x)*4,b=(BAY[((y>>1)&3)*4+((x>>1)&3)]+.5)/16,n=(sx[x]+sy[y]+sd[x+y]+3)/6,th=b*.55+n*.45;
+ for(let y=0;y<NH;y++)for(let x=0;x<NW;x++){const o=(y*NW+x)*4,b=(BAY[((y>>1)&3)*4+((x>>1)&3)]+.5)/16,n=(sx[x]+sy[y]+sd[x+y]+3)/6,th=b*.55+n*.45;
   if(th>=f){d[o+3]=0;continue;}
   const hell=n*.7+((BAY[(y&3)*4+(x&3)]+.5)/16)*.3>.5,c=hell?hl:dk;d[o]=c[0];d[o+1]=c[1];d[o+2]=c[2];d[o+3]=255;}
  FOG.x.putImageData(FOG.id,0,0);g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.imageSmoothingEnabled=false;g.drawImage(FOG.c,0,0);}

@@ -2,7 +2,7 @@
 const AIM={ei:-1};let down=null,cdrag=null,hoverCard=-1;
 function enemyAt(x,y){const els=document.elementsFromPoint(x,y);for(const t of els){const en=t.closest&&t.closest('.feind[data-ei]');if(en)return +en.dataset.ei;}
  // auch direkt auf dem Sprite (Canvas): nächster Gegner zur Mausposition
- const r=BU.cv.getBoundingClientRect();if(x<r.left||x>r.right||y<r.top||y>r.bottom)return-1;const sx=(x-r.left)/r.width*SW,sy=(y-r.top)/r.height*SH;let best=-1,bd=1e9;
+ const P=ausBildschirm(x,y),r=P.r;if(x<r.left||x>r.right||y<r.top||y>r.bottom)return-1;const sx=P.x,sy=P.y;let best=-1,bd=1e9;
  (S.enemies||[]).forEach((e,i)=>{if(e.hp<=0)return;const b=enemyBox(e);if(sx>b.x-b.w/2&&sx<b.x+b.w/2&&sy>b.kopf&&sy<b.y+6){const d=Math.abs(sx-b.x);if(d<bd){bd=d;best=i;}}});return best;}
 function inScene(x,y){const r=$('szene').getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom-20;}
 // Vorschau für Handkarte i auf Ziel ei (oder aktuelles Ziel)
@@ -103,7 +103,7 @@ function itemTip(loc){const it=getAt(loc);if(!it)return'';const d=def(it);const[
  if(S.phase==='rast'&&!S.rastDone)h+='<div class="tn">Klicken: verbessern</div>';return h;}
 
 // Endbildschirm als PNG speichern (Szene + Statistik als Text)
-function endbildSpeichern(){const c=document.createElement('canvas');c.width=960;c.height=540;const g=c.getContext('2d');g.imageSmoothingEnabled=false;g.drawImage(BU.cv,0,0,960,540);
+function endbildSpeichern(){const c=document.createElement('canvas');c.width=960;c.height=540;const g=c.getContext('2d');g.imageSmoothingEnabled=false;g.drawImage(BU.bild,0,0,960,540);
  g.fillStyle='rgba(0,0,0,.78)';g.fillRect(40,40,880,460);g.fillStyle='#efe4c8';g.font='28px serif';const r=S.ergebnis||{},st=S.stats||{};g.fillText('SALTMOOR 1925 · '+(r.sieg?(r.ende==='bleiben'?'Geblieben':'Umgekehrt'):'Am Strand'),70,90);
  g.font='20px serif';const L=[`${S.jobN} · Seed ${S.seed} · ${dauerText((st.endeT||Date.now())-S.startT)}`,`Weg: ${S.route.filter(Boolean).map(b=>BIOMES[b].kurz).join(' → ')}`,`Tiefe ${r.tiefe||S.depth} · Kämpfe ${st.kaempfe||0} · Gold ${st.gold||0}`,`Schaden ${st.schadenRaus||0} / ${st.schadenRein||0} · höchster Treffer ${st.maxTreffer||0} · längste Kette ${st.maxKette||0}`,`Build: ${buildArchetyp().n} · Reaktionen ${S.disc.size}`,`Deck: ${allActive().map(it=>def(it).n).join(', ')}`];
  L.forEach((t,i)=>g.fillText(t,70,140+i*40,820));const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download=`saltmoor-${S.seed}.png`;a.click();}

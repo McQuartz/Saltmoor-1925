@@ -37,14 +37,14 @@ function plaketteHtml(e,i,f,pv,tg){
   <div class="pl-bar"><i class="hp" style="width:${W(e.hp-d)}"></i>${d?`<i class="pv" style="width:${W(d)}"></i>`:''}<span>${e.hp}/${e.max}${pv&&(pv.d||pv.ab)?` <em class="pvt">−${pv.d}</em>`:''}</span>${ext?`<div class="pl-ext">${ext}</div>`:''}</div></div>
   ${st.length?`<div class="sts">${st.map(([k,v,t])=>`<span title="${esc(t)}">${gi(k,KZ(),k==='atk2'?'#ffb070':undefined)}${v}</span>`).join('')}</div>`:''}<div class="spitze"></div></div>`;}
 function gegnerHtml(f){return S.enemies.map((e,i)=>{if(e.hp<=0)return'';const b={...enemyBox(e)};if(e.pendel)b.x=Math.round(e.x*SW);const pv=vorschau&&vorschau.foes[i];const tg=f&&i===S.target;
-  return `<div class="feind ${tg?'ziel':''} ${e.rang}" data-ei="${i}" style="left:${(b.x/SW*100).toFixed(2)}%;top:${(b.kopf/SH*100).toFixed(2)}%;--fh:${(b.y-b.kopf)/SH*100}">
-   ${plaketteHtml(e,i,f,pv,tg)}<div class="treffer" style="height:calc(var(--u)*${b.y-b.kopf})"></div></div>`;}).join('')+(f?schutzLinien():'')+verbuendeterHtml(f);}
+  return `<div class="feind ${tg?'ziel':''} ${e.rang}" data-ei="${i}" style="left:${(uiX(b.x)/4.8).toFixed(2)}%;top:${(uiY(b.kopf)/2.7).toFixed(2)}%;--fh:${(b.y-b.kopf)*6/7/2.7}">
+   ${plaketteHtml(e,i,f,pv,tg)}<div class="treffer" style="height:calc(var(--u)*${((b.y-b.kopf)*6/7).toFixed(1)})"></div></div>`;}).join('')+(f?schutzLinien():'')+verbuendeterHtml(f);}
 // M9: Plakette des Verbündeten aus der Asche (zeigt seinen nächsten Angriff; nicht anwählbar, Gegner greifen ihn nicht an)
 function verbuendeterHtml(f){const v=S.verbuendeter;if(!v||typeof Asche==='undefined')return'';const b=enemyBox(v);const z=Asche.naechster(v);const e={...v,pi:z?v.pi+z.j:v.pi};
- return `<div class="feind verbuendet" style="left:${(b.x/SW*100).toFixed(2)}%;top:${(b.kopf/SH*100).toFixed(2)}%;--fh:${(b.y-b.kopf)/SH*100}">${plaketteHtml(e,-1,f&&!!z,null,false)}</div>`;}
+ return `<div class="feind verbuendet" style="left:${(uiX(b.x)/4.8).toFixed(2)}%;top:${(uiY(b.kopf)/2.7).toFixed(2)}%;--fh:${(b.y-b.kopf)*6/7/2.7}">${plaketteHtml(e,-1,f&&!!z,null,false)}</div>`;}
 // Fix 7: im Unverwundbar-Zug je eine dünne Linie von der Plakette des Bosses zu jedem Diener, an dem der Schutz hängt
-function schutzLinien(){if(typeof unverwJetzt!=='function')return'';const l=[];for(const e of alive())if(unverwJetzt(e)){const a=enemyBox(e),ax=e.pendel?Math.round(e.x*SW):a.x;for(const d of dienerVon(e)){const b=enemyBox(d),bx=d.pendel?Math.round(d.x*SW):b.x;l.push(`<line x1="${ax}" y1="${a.y}" x2="${bx}" y2="${b.y}"/>`);}}
- return l.length?`<svg class="schutz" viewBox="0 0 ${SW} ${SH}" preserveAspectRatio="none">${l.join('')}</svg>`:'';}
+function schutzLinien(){if(typeof unverwJetzt!=='function')return'';const l=[];for(const e of alive())if(unverwJetzt(e)){const a=enemyBox(e),ax=e.pendel?Math.round(e.x*SW):a.x;for(const d of dienerVon(e)){const b=enemyBox(d),bx=d.pendel?Math.round(d.x*SW):b.x;l.push(`<line x1="${uiX(ax).toFixed(1)}" y1="${uiY(a.y).toFixed(1)}" x2="${uiX(bx).toFixed(1)}" y2="${uiY(b.y).toFixed(1)}"/>`);}}
+ return l.length?`<svg class="schutz" viewBox="0 0 480 270" preserveAspectRatio="none">${l.join('')}</svg>`:'';}
 const U=()=>BU.k;
 // Pixelzeichen immer ganzzahlig: GROSS = 9 px × Skala, KLEIN = halb so groß (mindestens 9 px)
 const GZ=()=>9*U(),KZ=()=>9*Math.max(1,Math.round(U()/2));

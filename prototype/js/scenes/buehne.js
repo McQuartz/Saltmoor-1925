@@ -1,6 +1,13 @@
 // Bühne: zeichnet die 480×270-Szene (Hintergrund aus js/scenes/world/, Gegner, Partikel, Effekte, Stummfilm).
 // Ganzzahlig skaliert, Pixel bleiben scharf. Sichtdaten der Gegner (vis) liegen hier, nicht im Spielzustand.
 const SW=480,SH=270;
+// Auftrag 4 Phase 0: Bildraum Mitte. Die Szene wird in 560 × 315 gerendert (Szenenkoordinaten bleiben 480 × 270, Ursprung bei x 40, y −3:
+// 40 Pixel mehr links und rechts, die Kamera 15 tiefer, 48 Zeilen mehr Boden) und als Ganzes unter die 480 × 270 große Oberfläche skaliert.
+// uiX/uiY rechnen Szenenkoordinaten in Oberflächenpixel um (Faktor 480/560 = 6/7). Plaketten, Karten und Leisten haben in jeder Bildgröße dieselben Maße.
+const BILD={w:560,h:315,x:40,y:-3};
+const uiX=x=>(x+BILD.x)*480/BILD.w,uiY=y=>(y+BILD.y)*270/BILD.h,ausUiX=u=>u*BILD.w/480-BILD.x,ausUiY=u=>u*BILD.h/270-BILD.y;
+// Bildschirmpunkt → Szenenkoordinaten (über das sichtbare Bild, #scene)
+function ausBildschirm(cx,cy){const r=BU.cv.getBoundingClientRect();return{x:ausUiX((cx-r.left)/r.width*480),y:ausUiY((cy-r.top)/r.height*270),r};}
 const BU={cv:null,g:null,k:2,cam:{x:0,y:0},sz:null,key:'',vis:new Map(),t:0,stumm:null,lastStumm:-1e9,stummKampf:null,shake:0,flashA:0,flashCol:'#fff',freeze:0,maus:{x:240,y:135}};
 const PT=[],FXL=[];
 // --- Sprite-Sheets (M6): prototype/assets/gegner/<name>.png + .json ---
@@ -10,8 +17,24 @@ function ladeSprite(name){if(!name||SPRITES[name])return SPRITES[name];const o=S
 
 // Alle Gegner-Sheets aus foes.json vorladen (klein), damit Positionen von Anfang an stimmen
 function spritesVorladen(){for(const id in FOES){const f=FOES[id];[f.sprite,...(f.varianten||[]),...((f.besonders&&f.besonders.sprites)||[])].filter(Boolean).forEach(ladeSprite);}}
-function buehneInit(){spritesVorladen();BU.cv=document.getElementById('scene');BU.cv.width=SW;BU.cv.height=SH;BU.g=BU.cv.getContext('2d');BU.g.imageSmoothingEnabled=false;
- BU.cv.addEventListener('pointermove',e=>{const r=BU.cv.getBoundingClientRect();BU.maus={x:(e.clientX-r.left)/r.width*SW,y:(e.clientY-r.top)/r.height*SH};});}
+// BU.bild: die Szene in ihrer echten Größe (560 × 315), dorthin zeichnet alles mit BU.g in Szenenkoordinaten.
+// BU.cv (#scene): das sichtbare Bild in Gerätepixeln. bildZeigen() vergrößert BU.bild dorthin (siehe dort).
+function buehneInit(){spritesVorladen();BU.cv=document.getElementById('scene');BU.ag=BU.cv.getContext('2d');
+ BU.bild=document.createElement('canvas');BU.bild.width=BILD.w;BU.bild.height=BILD.h;BU.g=BU.bild.getContext('2d',{willReadFrequently:true});BU.g.imageSmoothingEnabled=false;
+ BU.zw=document.createElement('canvas');BU.zg=BU.zw.getContext('2d');bildGroesse();
+ addEventListener('pointermove',e=>{if(!BU.cv)return;const p=ausBildschirm(e.clientX,e.clientY);BU.maus={x:p.x,y:p.y};});}
+// Größe des sichtbaren Bildes an das Fenster anpassen (von skala() in main.js gerufen)
+function bildGroesse(){if(!BU.cv)return;const r=BU.cv.getBoundingClientRect(),d=window.devicePixelRatio||1;const w=Math.max(BILD.w,Math.round(r.width*d)),h=Math.max(BILD.h,Math.round(r.height*d));
+ if(BU.cv.width!==w||BU.cv.height!==h){BU.cv.width=w;BU.cv.height=h;}
+ // Zwischenbild in der nächsten ganzen Vergrößerung (scharf), danach eine leichte Verkleinerung auf die Zielgröße: Pixel bleiben gleich breit
+ const n=Math.max(1,Math.ceil(w/BILD.w));if(BU.zw.width!==BILD.w*n){BU.zw.width=BILD.w*n;BU.zw.height=BILD.h*n;}}
+// Szene (560 × 315) ins sichtbare Bild. 3,43-fach (1080p) ist nicht ganzzahlig: reines Nächster-Nachbar-Skalieren gäbe ungleich breite Pixel
+// (Spalten mal 3, mal 4 Bildschirmpixel). Darum erst ganzzahlig scharf auf das nächstgrößere Vielfache, dann einmal auf die Zielgröße verkleinert.
+// Dabei wird nur die Kante jedes Pixels um höchstens einen Bildschirmpixel gemittelt, kein Weichzeichner über das Bild (BU.glatt=false: nur scharf).
+function bildZeigen(){const a=BU.ag,c=BU.cv;a.setTransform(1,0,0,1,0,0);
+ if(BU.glatt===false||c.width%BILD.w===0){a.imageSmoothingEnabled=false;a.drawImage(BU.bild,0,0,c.width,c.height);return;}
+ const z=BU.zg;z.imageSmoothingEnabled=false;z.drawImage(BU.bild,0,0,BU.zw.width,BU.zw.height);
+ a.imageSmoothingEnabled=true;a.imageSmoothingQuality='high';a.drawImage(BU.zw,0,0,c.width,c.height);}
 
 // Welche Szene gehört zum aktuellen Bildschirm?
 function szenenWahl(){const ph=S.phase||'titel';const b=S.route?biomId():'hafen';
@@ -88,7 +111,7 @@ function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.fr
  // Auftrag 3 M2: im Kampf keine Kamera (keine Mausfolge, kein Atmen); Wackeln bei Treffern (shake) bleibt
  const kampfSzene=S.phase==='fight'||S.phase==='reward';if(kampfSzene){BU.cam.x=0;BU.cam.y=0;}else{const atm=Math.sin(t*.35)*1.2;BU.cam.x+=(((BU.maus.x-240)/240)*4-BU.cam.x)*.05;BU.cam.y+=(((BU.maus.y-135)/135)*2+atm-BU.cam.y)*.05;}
  BU.shake*=Math.pow(.002,dt||.016);const sx=(Math.random()-.5)*BU.shake,sy=(Math.random()-.5)*BU.shake;const cam={x:BU.cam.x+sx,y:BU.cam.y+sy};
- g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.fillStyle='#000';g.fillRect(0,0,SW,SH);
+ g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.fillStyle='#000';g.fillRect(0,0,BILD.w,BILD.h);g.setTransform(1,0,0,1,BILD.x,BILD.y);
  // M3: während der Fahrt nach vorne zeichnet Fahrt das Bild (Ebenen mit Tiefe), keine Gegner, kein Wackeln der Szene
  const fahrtBild=typeof Fahrt!=='undefined'&&Fahrt.zeichne?Fahrt.zeichne(g,sz,now,t):false;
  if(!fahrtBild){
@@ -104,11 +127,12 @@ function frame(now){let dt=Math.min(.05,(now-lastT)/1000);lastT=now;if(now<BU.fr
   if(f.k==='slash'){const s=f.s,dir=f.flip?-1:1;const a=Math.min(1,p*2.2),b=Math.max(0,p*2.2-1.1);g.fillStyle=stc(f.col);for(let k=Math.floor(b*24);k<a*24;k++){const q=k/24;g.fillRect(Math.round(f.x+(q-.5)*s*2*dir),Math.round(f.y+(q-.5)*s*1.3),2,1);}}
   if(f.k==='ring'){const rr=f.r*(1-Math.pow(1-p,3));g.fillStyle=stc(f.col);for(let a=0;a<6.283;a+=1.5/Math.max(8,rr)){g.fillRect(Math.round(f.x+Math.cos(a)*rr),Math.round(f.y+Math.sin(a)*rr*.5),1,1);}}}
  for(let i=PT.length-1;i>=0;i--){const q=PT[i];q.life+=dt||.016;if(q.life>=q.max){PT.splice(i,1);continue;}q.vy+=q.g;q.x+=q.vx;q.y+=q.vy;if(q.life/q.max>.7&&bay(q.x,q.y)>.5)continue;g.fillStyle=q.col;g.fillRect(Math.round(q.x),Math.round(q.y),1,1);}
- if(BU.flashA>0){g.globalAlpha=Math.min(.5,BU.flashA);g.fillStyle=BU.flashCol;g.fillRect(0,0,SW,SH);g.globalAlpha=1;BU.flashA-=dt*2.5;}
+ if(BU.flashA>0){g.globalAlpha=Math.min(.5,BU.flashA);g.fillStyle=BU.flashCol;g.fillRect(-BILD.x,-BILD.y,BILD.w,BILD.h);g.globalAlpha=1;BU.flashA-=dt*2.5;}
  if(S.phase==='strand'&&S.ergebnis&&!S.ergebnis.sieg&&t-(BU.strandT||0)<0)0;
  if(BU.stumm){const q=(now-BU.stumm.t0)/BU.stumm.dur;if(q>=1)BU.stumm=null;else stummfilmMalen(g,q);}
- if(typeof Fahrt!=='undefined'&&Fahrt.deck)Fahrt.deck(g,now,t); // Nebel-Übergang nach der Fahrt
+ if(typeof Fahrt!=='undefined'&&Fahrt.deck){Fahrt.deck(g,now,t);g.setTransform(1,0,0,1,BILD.x,BILD.y);} // Nebel-Übergang nach der Fahrt
  if(typeof Dev!=='undefined'&&Dev.an)Dev.szene(g,t);
+ g.setTransform(1,0,0,1,0,0);bildZeigen();
  requestAnimationFrame(frame);}
 // M7: Ohne Hinsehen flackert höchstens einmal je Akt ein Schatten (Umriss des Gesehenen, dunkel, gedithert), kein Text
 Bus.on('blick_schatten',({gegner})=>{if(FAST)return;const f=FOES[gegner];const xs=(S.enemies||[]).filter(e=>e.hp>0).map(e=>e.x);const x=[.12,.88,.3,.7].reduce((a,b)=>Math.min(1,...xs.map(q=>Math.abs(q-b)))>Math.min(1,...xs.map(q=>Math.abs(q-a)))?b:a);BU.schatten={t0:performance.now(),dur:520,sprite:f&&f.sprite,x};if(f&&f.sprite)ladeSprite(f.sprite);});
@@ -171,9 +195,9 @@ function nachbearbeiten(tc,e,v,p){const w=tc.c.width,h=tc.c.height;const neb=p.n
 function dglowA(x,cx,cy,r,col,a){x.save();x.globalCompositeOperation='lighter';x.fillStyle=col;const R=Math.ceil(r);
  for(let j=-R;j<=R;j++)for(let i=-R;i<=R;i++){const d=Math.sqrt(i*i+j*j)/r;if(d>=1)continue;const v=a*(1-d)*(1-d)*.6;const X=Math.round(cx+i),Y=Math.round(cy+j);if(v>bay(X,Y))x.fillRect(X,Y,1,1);}x.restore();}
 function stummfilmMalen(g,q){const SF=BAL.stummfilm;const k=Math.sin(Math.min(1,q)*Math.PI);const B=BIOMES[biomId()]||BIOMES.hafen;const tint=hx(B.rand[1]);const vir=SF.viragierung*k;
- const id=g.getImageData(0,0,SW,SH),d=id.data;const fl=1-SF.flackern*k*(Math.random()<.5?1:0);
+ const id=g.getImageData(0,0,BILD.w,BILD.h),d=id.data;const fl=1-SF.flackern*k*(Math.random()<.5?1:0);
  for(let p=0;p<d.length;p+=4){const r=d[p],gg=d[p+1],b=d[p+2];const mx=Math.max(r,gg,b),mn=Math.min(r,gg,b);if(mx>200&&mx-mn>60)continue; // Augen und Lichter behalten ihre Farbe
   const l=(r*.3+gg*.59+b*.11)/255;const tr=l*tint[0],tg=l*tint[1],tb=l*tint[2];d[p]=(r+(tr-r)*vir)*fl;d[p+1]=(gg+(tg-gg)*vir)*fl;d[p+2]=(b+(tb-b)*vir)*fl;}
- g.putImageData(id,0,0);g.fillStyle='rgba(240,230,210,.35)';
- for(let i=0;i<SW*SH*SF.koernung*k*.01;i++)g.fillRect(Math.random()*SW|0,Math.random()*SH|0,1,1);
- if(Math.random()<SF.kratzer*k){const xx=Math.random()*SW|0;g.fillRect(xx,0,1,SH);}}
+ g.putImageData(id,0,0);g.fillStyle='rgba(240,230,210,.35)';g.save();g.setTransform(1,0,0,1,0,0);
+ for(let i=0;i<BILD.w*BILD.h*SF.koernung*k*.01;i++)g.fillRect(Math.random()*BILD.w|0,Math.random()*BILD.h|0,1,1);
+ if(Math.random()<SF.kratzer*k){const xx=Math.random()*BILD.w|0;g.fillRect(xx,0,1,BILD.h);}g.restore();}
